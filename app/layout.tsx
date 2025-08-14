@@ -2,6 +2,10 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo'
 import Link from 'next/link'
+import { Montserrat, Lora } from 'next/font/google'
+
+const mont = Montserrat({ subsets:['latin'], weight:['500','800'], variable:'--font-mont' })
+const lora = Lora({ subsets:['latin'], weight:['400'], variable:'--font-lora' })
 
 export const metadata: Metadata = {
   title: defaultSEO.title,
@@ -11,7 +15,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${mont.variable} ${lora.variable}`}>
       <body className="grain antialiased">
         <nav className="container py-6 flex items-center justify-between">
           <Link href="/" className="font-semibold tracking-tight">Summit Chronicles</Link>
