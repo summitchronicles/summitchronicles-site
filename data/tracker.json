@@ -1,0 +1,9 @@
+{
+  "runs": 100,
+  "run_km": 400,
+  "hikes": 500,
+  "hike_km": 500,
+  "walks": 120,
+  "walk_km": 350,
+  "elevation_m": 70000
+}
