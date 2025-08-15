@@ -10,11 +10,13 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "e2e": "playwright test",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "index:rag": "node scripts/index-rag.cjs"
   },
   "dependencies": {
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
+    "dotenv": "^17.2.1",
     "framer-motion": "11.3.30",
     "lucide-react": "0.452.0",
     "next": "^14.2.31",
