@@ -1,13 +1,25 @@
 import { NextResponse } from 'next/server'
-import OpenAI from 'openai'
 import index from '@/data/rag-index.json' assert { type: 'json' }
 
-// ---- Cohere embeddings (free tier) ----
+// ========== Config ==========
 const COHERE_API_KEY = process.env.COHERE_API_KEY
-const COHERE_MODEL =
+const COHERE_EMBED_MODEL =
   (index as any)?.model?.startsWith('cohere:') ? (index as any).model.split(':')[1] : 'embed-english-v3.0'
 
-async function cohereEmbedQ(text: string) {
+// Safety guard
+function requireEnv(name: string, val?: string) {
+  if (!val) throw new Error(`Missing ${name} env var`)
+}
+
+// Cosine similarity
+function cosine(a: number[], b: number[]) {
+  let dot = 0, na = 0, nb = 0
+  for (let i = 0; i < a.length; i++) { dot += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i] }
+  return dot / (Math.sqrt(na) * Math.sqrt(nb))
+}
+
+// ===== Embeddings (Cohere v1) =====
+async function cohereEmbed(text: string, inputType: 'search_document' | 'search_query') {
   const res = await fetch('https://api.cohere.ai/v1/embed', {
     method: 'POST',
     headers: {
@@ -15,69 +27,85 @@ async function cohereEmbedQ(text: string) {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: COHERE_MODEL,
-      input_type: 'search_query', // queries = search_query
+      model: COHERE_EMBED_MODEL,   // 'embed-english-v3.0' or 'embed-multilingual-v3.0'
+      input_type: inputType,
       texts: [text],
     }),
   })
-  if (!res.ok) throw new Error(`Cohere error ${res.status}: ${await res.text()}`)
+  if (!res.ok) throw new Error(`Cohere embed error ${res.status}: ${await res.text()}`)
   const json = await res.json()
-  let emb: any = null
-  if (Array.isArray(json.embeddings)) {
-    const e0 = json.embeddings[0]
-    emb = Array.isArray(e0) ? e0 : (e0?.embedding || e0?.values || e0?.float)
-  }
-  if (!Array.isArray(emb)) throw new Error('Unexpected Cohere embed shape for query')
-  return emb as number[]
+  const first = Array.isArray(json.embeddings) ? json.embeddings[0] : null
+  const vec = Array.isArray(first) ? first : (first?.embedding || first?.values || first?.float)
+  if (!Array.isArray(vec)) throw new Error('Unexpected Cohere embed response shape')
+  return vec as number[]
 }
 
-// ---- Optional OpenAI generation (leave key empty to use snippet fallback) ----
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
-function cosine(a: number[], b: number[]) {
-  let dot = 0, na = 0, nb = 0
-  for (let i = 0; i < a.length; i++) { dot += a[i] * b[i]; na += a[i]*a[i]; nb += b[i]*b[i] }
-  return dot / (Math.sqrt(na) * Math.sqrt(nb))
+// ===== Text generation (Cohere v1) =====
+// Model 'command' works well on the free tier. (You can try 'command-light' if you hit limits.)
+async function cohereGenerate(prompt: string) {
+  const res = await fetch('https://api.cohere.ai/v1/generate', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${COHERE_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'command',
+      prompt,
+      max_tokens: 400,
+      temperature: 0.2,
+      // Optional: stop_sequences: ["</answer>"]
+    }),
+  })
+  if (!res.ok) throw new Error(`Cohere generate error ${res.status}: ${await res.text()}`)
+  const json = await res.json()
+  // Cohere v1 returns { generations: [{ text: "..."}], ... }
+  const text = json?.generations?.[0]?.text
+  if (typeof text !== 'string') throw new Error('Unexpected Cohere generate response shape')
+  return text.trim()
 }
 
 export async function POST(req: Request) {
   try {
+    requireEnv('COHERE_API_KEY', COHERE_API_KEY)
+
     const { q } = await req.json()
-    if (!q) return NextResponse.json({ error: 'No question' }, { status: 400 })
-    if (!COHERE_API_KEY) return NextResponse.json({ error: 'Missing COHERE_API_KEY' }, { status: 500 })
-
-    // 1) Embed the user question
-    const queryVec = await cohereEmbedQ(q)
-
-    // 2) Retrieve top chunks from local index
-    const scored = (index as any).chunks
-      .map((ch: any) => ({ ...ch, score: cosine(queryVec, ch.embedding) }))
-      .sort((a: any, b: any) => b.score - a.score)
-      .slice(0, 6)
-
-    const context = scored.map((ch: any) => `Source: ${ch.source}\n${ch.content}`).join('\n---\n')
-    const sources = scored.map((s: any) => ({ source: s.source, url: s.url }))
-
-    // 3) If no OpenAI key, return snippets (still useful)
-    if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json({
-        answer: 'AI answer disabled (no OpenAI key). Here are the most relevant snippets:\n\n' + context,
-        sources
-      })
+    if (!q || typeof q !== 'string') {
+      return NextResponse.json({ error: 'No question provided' }, { status: 400 })
     }
 
-    // 4) Otherwise, compose an answer
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      temperature: 0.2,
-      messages: [
-        { role: 'system', content: 'Answer ONLY from the provided context. If not present, say you do not have that info yet.' },
-        { role: 'user', content: `Context:\n${context}\n\nQuestion: ${q}\n\nAnswer:` }
-      ]
-    })
-    const answer = completion.choices[0].message.content
+    // 1) Embed the user question
+    const qVec = await cohereEmbed(q, 'search_query')
+
+    // 2) Retrieve top chunks from the local index
+    const chunks: any[] = (index as any)?.chunks || []
+    const top = chunks
+      .map(ch => ({ ...ch, score: cosine(qVec, ch.embedding as number[]) }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 6)
+
+    // 3) Build a context block from top chunks
+    const context = top.map(ch => `Source: ${ch.source}\n${ch.content}`).join('\n---\n')
+    const sources = top.map(s => ({ source: s.source, url: s.url }))
+
+    // Keep prompt concise to avoid token waste
+    const prompt =
+`You are the assistant for the Summit Chronicles website.
+Answer the user's question ONLY using the context below. If the context does not contain the answer,
+say you don't have that information yet. Be concise and precise.
+
+Context:
+${context}
+
+Question: ${q}
+
+Answer:`
+
+    // 4) Generate an answer with Cohere (free)
+    const answer = await cohereGenerate(prompt)
+
     return NextResponse.json({ answer, sources })
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || 'failed' }, { status: 500 })
+    return NextResponse.json({ error: e?.message || 'failed' }, { status: 500 })
   }
 }
