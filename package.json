@@ -11,7 +11,9 @@
     "test:watch": "jest --watch",
     "e2e": "playwright test",
     "prepare": "husky install",
-    "index:rag": "node scripts/index-rag.cjs"
+    "index:rag": "node scripts/index-rag.cjs",
+    "release:preflight": "node scripts/release-check.cjs",
+    "release": "npm run release:preflight && vercel deploy --prod --force"
   },
   "dependencies": {
     "class-variance-authority": "0.7.0",
