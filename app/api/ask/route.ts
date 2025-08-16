@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import index from '@/data/rag-index.json' assert { type: 'json' }
+import facts from '@/data/facts.json' assert { type: 'json' }
 
 /* =======================
    Config (scales well)
@@ -15,11 +16,11 @@ const COHERE_EMBED_MODEL =
 // Rerank (precision)
 const COHERE_RERANK_MODEL = 'rerank-english-v3.0'
 
-// Retrieval knobs
-const MIN_SCORE_EMBED = 0.20   // gate low-quality matches
-const FIRST_PASS_K    = 20     // widen recall a bit
-const RERANK_TOP_K    = 5      // final context size
-const RERANK_MIN      = 0.35   // drop weak rerank matches
+// Retrieval knobs (kept reasonably strict)
+const MIN_SCORE_EMBED = 0.20
+const FIRST_PASS_K    = 20
+const RERANK_TOP_K    = 5
+const RERANK_MIN      = 0.35
 
 /* =======================
    Helpers
@@ -34,6 +35,23 @@ function cosine(a: number[], b: number[]) {
   return dot / (Math.sqrt(na) * Math.sqrt(nb))
 }
 
+// Very small intent detector for mission-critical answers
+function factMatch(q: string) {
+  const s = q.toLowerCase()
+  if (
+    /next\s+(expedition|climb|objective)/.test(s) ||
+    /(what|which)\s+is\s+the\s+next\s+(expedition|climb|objective)/.test(s)
+  ) {
+    return {
+      key: 'next_expedition',
+      answer: (facts as any)?.statement ||
+        `Next Expedition: ${(facts as any)?.next_expedition ?? '—'} — target year ${(facts as any)?.target_year ?? '—'}.`,
+      sources: [{ source: 'facts.json', url: '/expeditions' }]
+    }
+  }
+  return null
+}
+
 /* =======================
    Cohere APIs
    ======================= */
@@ -45,7 +63,7 @@ async function cohereEmbed(text: string, inputType: 'search_document' | 'search_
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: COHERE_EMBED_MODEL,   // 'embed-english-v3.0' or 'embed-multilingual-v3.0'
+      model: COHERE_EMBED_MODEL,
       input_type: inputType,
       texts: [text],
     }),
@@ -74,7 +92,6 @@ async function cohereRerank(query: string, documents: string[]) {
   })
   if (!res.ok) throw new Error(`Cohere rerank error ${res.status}: ${await res.text()}`)
   const json = await res.json()
-  // results: [{ index, relevance_score, ... }]
   return (json?.results ?? []) as Array<{ index: number; relevance_score: number }>
 }
 
@@ -114,7 +131,17 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No question provided' }, { status: 400 })
     }
 
-    // ---- First-pass: embeddings recall ----
+    // 0) FACTS-FIRST: deterministic answers for key intents
+    const hit = factMatch(q)
+    if (hit) {
+      return NextResponse.json({
+        answer: hit.answer,
+        sources: hit.sources,
+        ...(debug ? { debug: { route: 'facts-first' } } : {})
+      })
+    }
+
+    // 1) First-pass: embeddings recall
     const qVec = await cohereEmbed(q, 'search_query')
     const chunks: any[] = (index as any)?.chunks || []
 
@@ -132,15 +159,12 @@ export async function POST(req: Request) {
       })
     }
 
-    // ---- Precision step: rerank with cross-encoder ----
+    // 2) Precision: rerank
     const docs = firstPass.map(ch => `${ch.content}\n[Source: ${ch.source}]`)
     const reranked = await cohereRerank(q, docs)
 
     const selected = reranked
-      .map(r => ({
-        ...firstPass[r.index],
-        rerankScore: r.relevance_score,
-      }))
+      .map(r => ({ ...firstPass[r.index], rerankScore: r.relevance_score }))
       .filter(ch => ch.rerankScore >= RERANK_MIN)
       .sort((a, b) => b.rerankScore - a.rerankScore)
       .slice(0, RERANK_TOP_K)
@@ -153,7 +177,7 @@ export async function POST(req: Request) {
       })
     }
 
-    // ---- Build final context ----
+    // 3) Build final context
     const context = selected.map(ch => `Source: ${ch.source}\n${ch.content}`).join('\n---\n')
     const sources = selected.map(s => ({
       source: s.source,
@@ -165,7 +189,7 @@ export async function POST(req: Request) {
     const prompt =
 `You are the assistant for the Summit Chronicles website.
 Answer the user's question ONLY using the context below. If the context contains an explicit fact
-(e.g., "Next Expedition: Everest — 2027"), extract and state it directly. If the context does not
+(e.g., "Next Expedition: Everest — 2026"), extract and state it directly. If the context does not
 contain the answer, say you don't have that information yet. Be concise and precise.
 
 Context:
@@ -182,6 +206,7 @@ Answer:`
       sources,
       ...(debug ? {
         debug: {
+          route: 'rag',
           FIRST_PASS_K,
           MIN_SCORE_EMBED,
           RERANK_TOP_K,
