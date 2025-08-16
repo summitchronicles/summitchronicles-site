@@ -16,6 +16,7 @@
     "release": "npm run release:preflight && vercel deploy --prod --force"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.55.0",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "dotenv": "^17.2.1",
