@@ -2,26 +2,32 @@ import { NextResponse } from 'next/server'
 import index from '@/data/rag-index.json' assert { type: 'json' }
 
 /* =======================
-   Config (tunable knobs)
+   Config (scales well)
    ======================= */
 const COHERE_API_KEY = process.env.COHERE_API_KEY
+
+// Embeddings (first-pass recall)
 const COHERE_EMBED_MODEL =
   (index as any)?.model?.startsWith('cohere:')
     ? (index as any).model.split(':')[1]
     : 'embed-english-v3.0'
 
-// Retrieval knobs
-const TOP_K = 8;            // how many best chunks to keep
-const MIN_SCORE = 0.15;     // drop chunks below this cosine similarity
+// Rerank (precision)
+const COHERE_RERANK_MODEL = 'rerank-english-v3.0'
 
-// Safety guard
+// Retrieval knobs
+const MIN_SCORE_EMBED = 0.20   // gate low-quality matches
+const FIRST_PASS_K    = 20     // widen recall a bit
+const RERANK_TOP_K    = 5      // final context size
+const RERANK_MIN      = 0.35   // drop weak rerank matches
+
+/* =======================
+   Helpers
+   ======================= */
 function requireEnv(name: string, val?: string) {
   if (!val) throw new Error(`Missing ${name} env var`)
 }
 
-/* =======================
-   Utils
-   ======================= */
 function cosine(a: number[], b: number[]) {
   let dot = 0, na = 0, nb = 0
   for (let i = 0; i < a.length; i++) { dot += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i] }
@@ -29,7 +35,7 @@ function cosine(a: number[], b: number[]) {
 }
 
 /* =======================
-   Cohere v1 – Embeddings
+   Cohere APIs
    ======================= */
 async function cohereEmbed(text: string, inputType: 'search_document' | 'search_query') {
   const res = await fetch('https://api.cohere.ai/v1/embed', {
@@ -52,10 +58,26 @@ async function cohereEmbed(text: string, inputType: 'search_document' | 'search_
   return vec as number[]
 }
 
-/* =======================
-   Cohere v1 – Generation
-   ======================= */
-// 'command' is available on free tier; you can switch to 'command-light' if you hit limits.
+async function cohereRerank(query: string, documents: string[]) {
+  const res = await fetch('https://api.cohere.ai/v1/rerank', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${COHERE_API_KEY}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: COHERE_RERANK_MODEL,
+      query,
+      documents,
+      top_n: Math.min(RERANK_TOP_K, documents.length),
+    }),
+  })
+  if (!res.ok) throw new Error(`Cohere rerank error ${res.status}: ${await res.text()}`)
+  const json = await res.json()
+  // results: [{ index, relevance_score, ... }]
+  return (json?.results ?? []) as Array<{ index: number; relevance_score: number }>
+}
+
 async function cohereGenerate(prompt: string) {
   const res = await fetch('https://api.cohere.ai/v1/generate', {
     method: 'POST',
@@ -86,45 +108,65 @@ export async function POST(req: Request) {
 
     const body = await req.json().catch(() => ({}))
     const q = body?.q as string
-    const debug = !!body?.debug // send { debug: true } to see scores/slices
+    const debug = !!body?.debug
 
     if (!q || typeof q !== 'string') {
       return NextResponse.json({ error: 'No question provided' }, { status: 400 })
     }
 
-    // 1) Embed user question
+    // ---- First-pass: embeddings recall ----
     const qVec = await cohereEmbed(q, 'search_query')
-
-    // 2) Retrieve top chunks from local index
     const chunks: any[] = (index as any)?.chunks || []
-    let scored = chunks.map(ch => ({
-      ...ch,
-      score: cosine(qVec, ch.embedding as number[]),
-    }))
 
-    // filter + sort + slice
-    scored = scored
-      .filter(ch => ch.score >= MIN_SCORE)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, TOP_K)
+    const firstPass = chunks
+      .map(ch => ({ ...ch, embedScore: cosine(qVec, ch.embedding as number[]) }))
+      .filter(ch => ch.embedScore >= MIN_SCORE_EMBED)
+      .sort((a, b) => b.embedScore - a.embedScore)
+      .slice(0, FIRST_PASS_K)
 
-    // If nothing passes threshold, fail gracefully early
-    if (scored.length === 0) {
+    if (firstPass.length === 0) {
       return NextResponse.json({
         answer: "Sorry, I don't have that information yet.",
         sources: [],
-        ...(debug ? { debug: { note: 'no chunks met MIN_SCORE', MIN_SCORE } } : {}),
+        ...(debug ? { debug: { note: 'no chunks met MIN_SCORE_EMBED', MIN_SCORE_EMBED } } : {}),
       })
     }
 
-    // 3) Build context from selected chunks
-    const context = scored.map(ch => `Source: ${ch.source}\n${ch.content}`).join('\n---\n')
-    const sources = scored.map(s => ({ source: s.source, url: s.url, score: Number(s.score.toFixed(3)) }))
+    // ---- Precision step: rerank with cross-encoder ----
+    const docs = firstPass.map(ch => `${ch.content}\n[Source: ${ch.source}]`)
+    const reranked = await cohereRerank(q, docs)
+
+    const selected = reranked
+      .map(r => ({
+        ...firstPass[r.index],
+        rerankScore: r.relevance_score,
+      }))
+      .filter(ch => ch.rerankScore >= RERANK_MIN)
+      .sort((a, b) => b.rerankScore - a.rerankScore)
+      .slice(0, RERANK_TOP_K)
+
+    if (selected.length === 0) {
+      return NextResponse.json({
+        answer: "Sorry, I don't have that information yet.",
+        sources: [],
+        ...(debug ? { debug: { note: 'no chunks met RERANK_MIN', RERANK_MIN } } : {}),
+      })
+    }
+
+    // ---- Build final context ----
+    const context = selected.map(ch => `Source: ${ch.source}\n${ch.content}`).join('\n---\n')
+    const sources = selected.map(s => ({
+      source: s.source,
+      url: s.url,
+      embedScore: Number(s.embedScore.toFixed(3)),
+      rerankScore: Number(s.rerankScore.toFixed(3)),
+    }))
 
     const prompt =
 `You are the assistant for the Summit Chronicles website.
-Answer the user's question ONLY using the context below. If the context does not contain the answer,
-say you don't have that information yet. Be concise and precise.
+Answer the user's question ONLY using the context below. If the context contains an explicit fact
+(e.g., "Next Expedition: Everest — 2027"), extract and state it directly. If the context does not
+contain the answer, say you don't have that information yet. Be concise and precise.
 
 Context:
 ${context}
@@ -133,10 +175,23 @@ Question: ${q}
 
 Answer:`
 
-    // 4) Generate answer (Cohere free tier)
     const answer = await cohereGenerate(prompt)
 
-    return NextResponse.json({ answer, sources, ...(debug ? { debug: { TOP_K, MIN_SCORE } } : {}) })
+    return NextResponse.json({
+      answer,
+      sources,
+      ...(debug ? {
+        debug: {
+          FIRST_PASS_K,
+          MIN_SCORE_EMBED,
+          RERANK_TOP_K,
+          RERANK_MIN,
+          firstPassCount: firstPass.length,
+          rerankedCount: reranked.length,
+          selectedCount: selected.length,
+        }
+      } : {})
+    })
   } catch (e: any) {
     return NextResponse.json({ error: e?.message || 'failed' }, { status: 500 })
   }
