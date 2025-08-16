@@ -23,7 +23,8 @@ const COHERE_MODEL = 'embed-english-v3.0'
 // Files to index — add more as your site grows
 const TARGETS = [
   { file: 'app/page.tsx',       source: 'page:home',  url: '/' },
-  { file: 'app/about/page.tsx', source: 'page:/about', url: '/about' } // ok if missing
+  { file: 'app/about/page.tsx', source: 'page:/about', url: '/about' }, // ok if missing
+  { file: 'app/expeditions/page.tsx', source: 'page:/expeditions', url: '/expeditions' }
 ]
 
 // Simple character chunking (good enough for MVP)
