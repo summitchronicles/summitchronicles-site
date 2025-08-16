@@ -16,6 +16,7 @@ export default function ExpeditionsOverview() {
 
       <h2>Objectives & Notes</h2>
       <p><strong>Everest (2027):</strong> focus on altitude resilience, staged acclimatization, and mental stamina protocols.</p>
+      <p><strong>Next Expedition:</strong> Everest — target year 2027.</p>
       <p><strong>Vinson:</strong> logistics-heavy; cold weather systems and whiteout navigation practice.</p>
       <p><strong>Carstensz:</strong> rock sections and access logistics; emphasize upper-body strength and mobility.</p>
 
