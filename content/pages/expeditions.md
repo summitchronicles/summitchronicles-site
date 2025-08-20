@@ -1,9 +1,12 @@
 ---
-title: Expeditions Overview
-url: /expeditions
-access: public
-source: page:/expeditions
+title: "Expeditions"
+source: "page/expeditions"
+url: "/expeditions"
+access: "public"
+text: |
+  The next expedition in the Summit Chronicles is Everest (target 2027).
+  Training includes long carries, altitude work, and resilience systems.
 ---
 
-Summit Chronicles expeditions emphasize safety-first alpinism.
-The capstone objective is **Everest in 2027** with progressive training blocks.
+# Expeditions
+(Your page content can continue here…)

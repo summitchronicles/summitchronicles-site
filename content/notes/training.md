@@ -1,9 +1,11 @@
 ---
-title: Training Plan
-url: /notes/training
-access: public
-source: note:training
+title: "Training Notes"
+source: "notes/training"
+url: "/training"
+access: "public"
+text: |
+  Weekly training focuses on carries, altitude adaptation, and strength.
 ---
 
-Current block: heavy carries, stair repeats (15–20% bodyweight), and aerobic base with MAF.
-Focus: resilience systems and altitude adaptations.
+# Training Notes
+(Your notes content can continue here…)
