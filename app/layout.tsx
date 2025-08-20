@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { defaultSEO } from '@/lib/seo'
 import Link from 'next/link'
 import { Montserrat, Lora } from 'next/font/google'
+import './globals.css';
 
 const mont = Montserrat({ subsets:['latin'], weight:['500','800'], variable:'--font-mont' })
 const lora = Lora({ subsets:['latin'], weight:['400'], variable:'--font-lora' })

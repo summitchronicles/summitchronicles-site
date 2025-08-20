@@ -3,7 +3,7 @@ import { getSupabaseAnon } from '@/lib/supabaseServer'
 import { embedText } from '@/lib/embeddings'   // your existing embeddings helper
 import { z } from 'zod'
 import crypto from 'crypto'
-
+export const runtime = 'nodejs';
 /**
  * POST /api/ask
  * Body: { q: string }
