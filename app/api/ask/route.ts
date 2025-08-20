@@ -1,196 +1,156 @@
-import { NextResponse } from 'next/server'
-import index from '@/data/rag-index.json' assert { type: 'json' }
-import facts from '@/data/facts.json' assert { type: 'json' }
+import { NextResponse, NextRequest } from 'next/server'
+import { getSupabaseAnon } from '@/lib/supabaseServer'
+import { embedText } from '@/lib/embeddings'   // your existing embeddings helper
+import { z } from 'zod'
+import crypto from 'crypto'
 
-/* =======================
-   Config (scales well)
-   ======================= */
-const COHERE_API_KEY = process.env.COHERE_API_KEY
+/**
+ * POST /api/ask
+ * Body: { q: string }
+ * 
+ * Retrieval:
+ *  - embed query with the same model used for chunks
+ *  - call match_chunks(...) with filters (public by default)
+ *  - compose a short prompt and ask the LLM to answer strictly from context
+ * 
+ * Logging (optional):
+ *  - if LOG_WEBHOOK_URL is set, we POST a small JSON payload (no PII)
+ *  - includes: timestamp, duration, route, env, hashed client fingerprint,
+ *    question text, and top doc_ids with scores
+ */
 
-// Embeddings (first-pass recall)
-const COHERE_EMBED_MODEL =
-  (index as any)?.model?.startsWith('cohere:')
-    ? (index as any).model.split(':')[1]
-    : 'embed-english-v3.0'
+// ---- Tunables ----
+const TOP_K = 6
+const MIN_SCORE = 0      // rely on ranking; raise later if you want a cutoff
+const GEN_MAX_TOKENS = 300
 
-// Rerank (precision)
-const COHERE_RERANK_MODEL = 'rerank-english-v3.0'
+const Body = z.object({
+  q: z.string().min(2, 'Question is too short'),
+})
 
-// Retrieval knobs (kept reasonably strict)
-const MIN_SCORE_EMBED = 0.20
-const FIRST_PASS_K    = 20
-const RERANK_TOP_K    = 5
-const RERANK_MIN      = 0.35
+// ===== Helpers =====
 
-/* =======================
-   Helpers
-   ======================= */
-function requireEnv(name: string, val?: string) {
-  if (!val) throw new Error(`Missing ${name} env var`)
-}
+/** Minimal Cohere text generation – mirrors your existing pattern */
+async function generateWithCohere(prompt: string, maxTokens: number) {
+  const key = process.env.COHERE_API_KEY
+  if (!key) throw new Error('Missing COHERE_API_KEY')
 
-function cosine(a: number[], b: number[]) {
-  let dot = 0, na = 0, nb = 0
-  for (let i = 0; i < a.length; i++) { dot += a[i] * b[i]; na += a[i] * a[i]; nb += b[i] * b[i] }
-  return dot / (Math.sqrt(na) * Math.sqrt(nb))
-}
-
-// Very small intent detector for mission-critical answers
-function factMatch(q: string) {
-  const s = q.toLowerCase()
-  if (
-    /next\s+(expedition|climb|objective)/.test(s) ||
-    /(what|which)\s+is\s+the\s+next\s+(expedition|climb|objective)/.test(s)
-  ) {
-    return {
-      key: 'next_expedition',
-      answer: (facts as any)?.statement ||
-        `Next Expedition: ${(facts as any)?.next_expedition ?? '—'} — target year ${(facts as any)?.target_year ?? '—'}.`,
-      sources: [{ source: 'facts.json', url: '/expeditions' }]
-    }
-  }
-  return null
-}
-
-/* =======================
-   Cohere APIs
-   ======================= */
-async function cohereEmbed(text: string, inputType: 'search_document' | 'search_query') {
-  const res = await fetch('https://api.cohere.ai/v1/embed', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${COHERE_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: COHERE_EMBED_MODEL,
-      input_type: inputType,
-      texts: [text],
-    }),
-  })
-  if (!res.ok) throw new Error(`Cohere embed error ${res.status}: ${await res.text()}`)
-  const json = await res.json()
-  const first = Array.isArray(json.embeddings) ? json.embeddings[0] : null
-  const vec = Array.isArray(first) ? first : (first?.embedding || first?.values || first?.float)
-  if (!Array.isArray(vec)) throw new Error('Unexpected Cohere embed response shape')
-  return vec as number[]
-}
-
-async function cohereRerank(query: string, documents: string[]) {
-  const res = await fetch('https://api.cohere.ai/v1/rerank', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${COHERE_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: COHERE_RERANK_MODEL,
-      query,
-      documents,
-      top_n: Math.min(RERANK_TOP_K, documents.length),
-    }),
-  })
-  if (!res.ok) throw new Error(`Cohere rerank error ${res.status}: ${await res.text()}`)
-  const json = await res.json()
-  return (json?.results ?? []) as Array<{ index: number; relevance_score: number }>
-}
-
-async function cohereGenerate(prompt: string) {
   const res = await fetch('https://api.cohere.ai/v1/generate', {
     method: 'POST',
     headers: {
-      Authorization: `Bearer ${COHERE_API_KEY}`,
+      Authorization: `Bearer ${key}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       model: 'command',
       prompt,
-      max_tokens: 400,
+      max_tokens: maxTokens,
       temperature: 0.2,
     }),
   })
-  if (!res.ok) throw new Error(`Cohere generate error ${res.status}: ${await res.text()}`)
-  const json = await res.json()
-  const text = json?.generations?.[0]?.text
-  if (typeof text !== 'string') throw new Error('Unexpected Cohere generate response shape')
+  if (!res.ok) {
+    throw new Error(`Cohere generate error ${res.status}: ${await res.text()}`)
+  }
+  const data = await res.json()
+  const text = data?.generations?.[0]?.text
+  if (typeof text !== 'string') throw new Error('Unexpected Cohere response')
   return text.trim()
 }
 
-/* =======================
-   Route
-   ======================= */
-export async function POST(req: Request) {
+/** fire-and-forget JSON POST to a webhook (no throw on failure) */
+function logEvent(payload: any) {
+  const url = process.env.LOG_WEBHOOK_URL
+  if (!url) return // optional
+
+  // best-effort, do not await (don’t slow down user)
+  fetch(url, {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify(payload),
+    // next: { revalidate: 0 }  // not needed; just noting this is server-side
+  }).catch(() => {})
+}
+
+/** Build an anon fingerprint (hash of a few headers) to track volumes w/o PII */
+function anonFingerprint(req: NextRequest) {
   try {
-    requireEnv('COHERE_API_KEY', COHERE_API_KEY)
+    const ip =
+      req.headers.get('x-forwarded-for') ||
+      req.headers.get('x-real-ip') ||
+      '' // empty if none
 
-    const body = await req.json().catch(() => ({}))
-    const q = body?.q as string
-    const debug = !!body?.debug
+    const ua = req.headers.get('user-agent') || ''
+    const seed = `${ip}::${ua}`
+    return crypto.createHash('sha256').update(seed).digest('hex').slice(0, 24)
+  } catch {
+    return 'na'
+  }
+}
 
-    if (!q || typeof q !== 'string') {
-      return NextResponse.json({ error: 'No question provided' }, { status: 400 })
+// ===== Route =====
+
+export async function POST(req: NextRequest) {
+  const t0 = Date.now()
+  let log: any = {
+    t: t0,
+    route: '/api/ask',
+    env: process.env.VERCEL_ENV || process.env.NODE_ENV || 'unknown',
+  }
+
+  try {
+    const json = await req.json()
+    const { q } = Body.parse(json)
+    log.q = q
+    log.fp = anonFingerprint(req)
+
+    // 1) Embed the user query
+    const qVec = await embedText(q, 'search_query') // must match your chunk embedding model & dimension
+
+    // 2) Retrieve from Supabase via RPC (public docs only by default)
+    const supabase = getSupabaseAnon()
+    const { data: rows, error } = await supabase.rpc('match_chunks', {
+      query_embedding: qVec,
+      match_count: TOP_K,
+      p_access: 'public',
+      p_source: null,
+      p_url: null,
+    })
+    if (error) throw error
+
+    const ranked = (rows ?? [])
+      .map((r: any) => ({
+        doc_id: r.doc_id,
+        idx: r.idx,
+        content: r.content,
+        source: r.source,
+        url: r.url,
+        // pgvector returns cosine distance when using `<=>` (smaller is closer)
+        score: 1 - (typeof r.distance === 'number' ? r.distance : 0),
+      }))
+      .filter(r => r.score >= MIN_SCORE)
+
+    const top = ranked.slice(0, TOP_K).filter(r => (r.content || '').trim().length > 0)
+
+    // store summary for the log
+    log.retrieved = top.map(t => ({ doc_id: t.doc_id, idx: t.idx, score: Number(t.score?.toFixed?.(3) ?? t.score) }))
+
+    const context = top.map((r, i) =>
+      `# Chunk ${i + 1}\nSource: ${r.source ?? 'unknown'}\nURL: ${r.url ?? ''}\n${r.content}`
+    ).join('\n\n---\n\n')
+
+    if (!context) {
+      const body = { answer: "I don't have that information yet.", sources: [] as any[] }
+      log.status = 'no_context'
+      log.ms = Date.now() - t0
+      logEvent({ ...log, body })
+      return NextResponse.json(body)
     }
 
-    // 0) FACTS-FIRST: deterministic answers for key intents
-    const hit = factMatch(q)
-    if (hit) {
-      return NextResponse.json({
-        answer: hit.answer,
-        sources: hit.sources,
-        ...(debug ? { debug: { route: 'facts-first' } } : {})
-      })
-    }
-
-    // 1) First-pass: embeddings recall
-    const qVec = await cohereEmbed(q, 'search_query')
-    const chunks: any[] = (index as any)?.chunks || []
-
-    const firstPass = chunks
-      .map(ch => ({ ...ch, embedScore: cosine(qVec, ch.embedding as number[]) }))
-      .filter(ch => ch.embedScore >= MIN_SCORE_EMBED)
-      .sort((a, b) => b.embedScore - a.embedScore)
-      .slice(0, FIRST_PASS_K)
-
-    if (firstPass.length === 0) {
-      return NextResponse.json({
-        answer: "Sorry, I don't have that information yet.",
-        sources: [],
-        ...(debug ? { debug: { note: 'no chunks met MIN_SCORE_EMBED', MIN_SCORE_EMBED } } : {}),
-      })
-    }
-
-    // 2) Precision: rerank
-    const docs = firstPass.map(ch => `${ch.content}\n[Source: ${ch.source}]`)
-    const reranked = await cohereRerank(q, docs)
-
-    const selected = reranked
-      .map(r => ({ ...firstPass[r.index], rerankScore: r.relevance_score }))
-      .filter(ch => ch.rerankScore >= RERANK_MIN)
-      .sort((a, b) => b.rerankScore - a.rerankScore)
-      .slice(0, RERANK_TOP_K)
-
-    if (selected.length === 0) {
-      return NextResponse.json({
-        answer: "Sorry, I don't have that information yet.",
-        sources: [],
-        ...(debug ? { debug: { note: 'no chunks met RERANK_MIN', RERANK_MIN } } : {}),
-      })
-    }
-
-    // 3) Build final context
-    const context = selected.map(ch => `Source: ${ch.source}\n${ch.content}`).join('\n---\n')
-    const sources = selected.map(s => ({
-      source: s.source,
-      url: s.url,
-      embedScore: Number(s.embedScore.toFixed(3)),
-      rerankScore: Number(s.rerankScore.toFixed(3)),
-    }))
-
+    // 3) Generate answer constrained to context
     const prompt =
-`You are the assistant for the Summit Chronicles website.
-Answer the user's question ONLY using the context below. If the context contains an explicit fact
-(e.g., "Next Expedition: Everest — 2026"), extract and state it directly. If the context does not
-contain the answer, say you don't have that information yet. Be concise and precise.
+`You are the assistant for the Summit Chronicles site.
+Answer ONLY using the context blocks. If the context doesn't contain the answer, say you don't have it yet.
+Be concise and precise.
 
 Context:
 ${context}
@@ -199,25 +159,21 @@ Question: ${q}
 
 Answer:`
 
-    const answer = await cohereGenerate(prompt)
+    const answer = await generateWithCohere(prompt, GEN_MAX_TOKENS)
+    const sources = top.map(r => ({ source: r.source ?? 'unknown', url: r.url ?? '' }))
 
-    return NextResponse.json({
-      answer,
-      sources,
-      ...(debug ? {
-        debug: {
-          route: 'rag',
-          FIRST_PASS_K,
-          MIN_SCORE_EMBED,
-          RERANK_TOP_K,
-          RERANK_MIN,
-          firstPassCount: firstPass.length,
-          rerankedCount: reranked.length,
-          selectedCount: selected.length,
-        }
-      } : {})
-    })
+    const body = { answer, sources }
+    log.status = 'ok'
+    log.ms = Date.now() - t0
+    logEvent({ ...log, body })
+    return NextResponse.json(body)
   } catch (e: any) {
-    return NextResponse.json({ error: e?.message || 'failed' }, { status: 500 })
+    const msg = e?.message || 'failed'
+    const body = { error: msg }
+    log.status = 'error'
+    log.err = msg
+    log.ms = Date.now() - t0
+    logEvent({ ...log, body })
+    return NextResponse.json(body, { status: 400 })
   }
 }

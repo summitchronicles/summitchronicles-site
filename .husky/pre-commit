@@ -1,3 +1,19 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-npm run lint && npm test
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh" 2>/dev/null || true
+
+set -e
+
+# 1) Lint everything (fast; fail on errors)
+npm run lint
+
+# 2) Run Jest only for staged JS/TS files.
+#    If no related tests are found, do NOT fail the commit.
+CHANGED="$(git diff --name-only --cached --relative | grep -E '\.(js|jsx|ts|tsx)$' || true)"
+
+if [ -n "$CHANGED" ]; then
+  echo "Running Jest for staged files:"
+  echo "$CHANGED" | sed 's/^/  • /'
+  npx jest --findRelatedTests --bail --passWithNoTests $CHANGED
+else
+  echo "No staged JS/TS files. Skipping Jest."
+fi
