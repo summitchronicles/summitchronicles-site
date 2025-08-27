@@ -19,9 +19,11 @@
     "ingest:local": "node -r dotenv/config scripts/ingest.mjs dotenv_config_path=.env.local",
     "ingest:md:local": "INGEST_ENDPOINT=http://localhost:3000/api/db/ingest node -r dotenv/config scripts/ingest-md.mjs content dotenv_config_path=.env.local",
     "ingest:md:prod": "INGEST_ENDPOINT=https://summitchronicles.com/api/db/ingest node -r dotenv/config scripts/ingest-md.mjs content dotenv_config_path=.env.local",
-    "curl:ingest": "dotenv -e .env.local -- sh -c 'curl -s -X POST http://localhost:3000/api/db/ingest -H \"content-type: application/json\" -H \"x-ingest-secret: $INGEST_SECRET\" -d \"{ \\\"title\\\": \\\"expeditions\\\", \\\"source\\\": \\\"page/expeditions\\\", \\\"url\\\": \\\"/expeditions\\\", \\\"access\\\": \\\"public\\\", \\\"text\\\": \\\"The next expedition in the Summit Chronicles is Everest (target 2027). Training includes long carries, altitude work, and resilience systems.\\\" }\" | jq'"
+    "curl:ingest": "dotenv -e .env.local -- sh -c 'curl -s -X POST http://localhost:3000/api/db/ingest -H \"content-type: application/json\" -H \"x-ingest-secret: $INGEST_SECRET\" -d \"{ \\\"title\\\": \\\"expeditions\\\", \\\"source\\\": \\\"page/expeditions\\\", \\\"url\\\": \\\"/expeditions\\\", \\\"access\\\": \\\"public\\\", \\\"text\\\": \\\"The next expedition in the Summit Chronicles is Everest (target 2027). Training includes long carries, altitude work, and resilience systems.\\\" }\" | jq'",
+    "test:e2e": "playwright test --reporter=html && playwright show-report"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.6.0",
     "@supabase/supabase-js": "^2.55.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
