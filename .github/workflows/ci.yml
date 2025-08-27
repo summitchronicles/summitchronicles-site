@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
   push:
     branches: [ "main" ]
-  workflow_dispatch:   # allows manual trigger from CLI (gh workflow run)
+  workflow_dispatch:   # manual trigger from CLI (gh workflow run)
 
 jobs:
   build-and-test:
@@ -40,7 +40,6 @@ jobs:
       - name: Install Playwright
         run: npx playwright install --with-deps
 
-      # Build → Start → Wait → Test
       - name: Build Next.js app
         run: npm run build
 
@@ -53,7 +52,8 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test --reporter=html
 
-      - name: Upload Playwright test results
+      - name: Upload Playwright HTML report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
@@ -65,10 +65,8 @@ jobs:
     if: github.event_name == 'pull_request'
     environment:
       name: staging
-      url: https://staging.summit-chronicles.vercel.app
-
     steps:
-      - name: Deploy to Vercel (Staging)
+      - name: Deploy to Vercel (Preview)
         run: |
           npx vercel --token=${{ secrets.VERCEL_TOKEN }} \
             --project=${{ secrets.VERCEL_PROJECT_ID }} \
@@ -81,13 +79,34 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: production
-      url: https://summit-chronicles.vercel.app
-
+      url: https://summitchronicles.com
     steps:
       - name: Deploy to Vercel (Production)
         run: |
           npx vercel --token=${{ secrets.VERCEL_TOKEN }} \
             --prod \
             --project=${{ secrets.VERCEL_PROJECT_ID }} \
-            --org=${{ secrets.VERCEL_ORG_ID }} \
-            --confirm --scope=${{ secrets.VERCEL_ORG_ID }}
+            --scope=${{ secrets.VERCEL_ORG_ID }} \
+            --confirm
+
+      - name: Health check Production (Custom Domain)
+        run: curl -f https://summitchronicles.com || exit 1
+
+      - name: Health check Vercel Fallback
+        run: curl -f https://summit-chronicles.vercel.app || exit 1
+
+  notify:
+    needs: [build-and-test, deploy-staging, deploy-production]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Discord notification
+        uses: Ilshidur/action-discord@v2
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          args: |
+            CI/CD run for ${{ github.repository }} on ref ${{ github.ref }}:
+            Status: ${{ job.status }}
+            Actor: ${{ github.actor }}
+            Workflow: ${{ github.workflow }}
+            Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
