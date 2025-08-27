@@ -1,13 +1,3 @@
-name: CI/CD Pipeline
-
-on:
-  pull_request:
-    branches: [ "main" ]
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:   # 👈 this enables manual trigger from CLI (gh workflow run)
-
-jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
@@ -43,54 +33,11 @@ jobs:
         run: npx wait-on http://localhost:3000
 
       - name: Run Playwright tests
-        run: npx playwright test --reporter=html
+        run: npx playwright test --reporter=html --output=playwright-report
 
+      # ✅ Upload report so it’s visible in GitHub Actions
       - name: Upload Playwright test results
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report
           path: playwright-report/
-
-  deploy-staging:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    environment:
-      name: staging
-      url: https://staging.summit-chronicles.vercel.app
-
-    steps:
-      - name: Deploy to Vercel (Staging)
-        run: |
-          npx vercel --token=${{ secrets.VERCEL_TOKEN }} \
-            --project=${{ secrets.VERCEL_PROJECT_ID }} \
-            --scope=${{ secrets.VERCEL_ORG_ID }} \
-            --confirm
-
- deploy-production:
-  needs: build-and-test
-  runs-on: ubuntu-latest
-  if: github.ref == 'refs/heads/main'
-  environment:
-    name: production
-    url: https://summit-chronicles.vercel.app
-  steps:
-    - name: Wait for manual approval
-      uses: hmarr/auto-approve-action@v3
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-      continue-on-error: true
-
-    - name: Confirm approval
-      run: |
-        echo "Did you mean to deploy? If yes, rerun this job with 'Continue'."
-        exit 1
-
-    - name: Deploy to Vercel (Production)
-      if: success() || failure()
-      run: |
-        npx vercel --token=${{ secrets.VERCEL_TOKEN }} \
-          --prod \
-          --project=${{ secrets.VERCEL_PROJECT_ID }} \
-          --org=${{ secrets.VERCEL_ORG_ID }} \
-          --confirm --scope=${{ secrets.VERCEL_ORG_ID }}
