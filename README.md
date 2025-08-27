@@ -1,5 +1,6 @@
-# Summit Chronicles Site
+# SummitChronicles
 
+[![CI/CD Pipeline](https://github.com/summitchronicles/summitchronicles-site/actions/workflows/ci.yml/badge.svg)](https://github.com/summitchronicles/summitchronicles-site/actions/workflows/ci.yml)
 
-![CI/CD](https://github.com/summitchronicles/summitchronicles-site/actions/workflows/ci.yml/badge.svg)
-# Summit Chronicles Site
+🌐 **Production**: [summitchronicles.com](https://summitchronicles.com)  
+🌐 **Staging**: [staging.summit-chronicles.vercel.app](https://staging.summit-chronicles.vercel.app)
