@@ -55,6 +55,7 @@
     "tailwindcss": "^4.1.12",
     "ts-jest": "^29.4.1",
     "typescript": "5.5.4",
-    "vercel": "^39.0.0"
+    "vercel": "^39.0.0",
+    "wait-on": "^8.0.4"
   }
 }
