@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
   push:
     branches: [ "main" ]
-  workflow_dispatch: # allows manual trigger
+  workflow_dispatch:
 
 jobs:
   build-and-test:
@@ -60,12 +60,25 @@ jobs:
       url: https://staging.summit-chronicles.vercel.app
 
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Deploy to Vercel (Staging)
         run: |
           npx vercel --token=${{ secrets.VERCEL_TOKEN }} \
             --project=${{ secrets.VERCEL_PROJECT_ID }} \
             --scope=${{ secrets.VERCEL_ORG_ID }} \
             --confirm
+
+      - name: Create Sentry Release (Staging)
+        run: |
+          npx sentry-cli releases new $GITHUB_SHA
+          npx sentry-cli releases set-commits $GITHUB_SHA --auto
+          npx sentry-cli releases finalize $GITHUB_SHA
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: summit-chronicles
+          SENTRY_PROJECT: javascript-nextjs
 
   deploy-production:
     needs: build-and-test
@@ -74,7 +87,11 @@ jobs:
     environment:
       name: production
       url: https://summitchronicles.com
+
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - name: Deploy to Vercel (Production)
         run: |
           npx vercel --token=${{ secrets.VERCEL_TOKEN }} \
@@ -83,12 +100,12 @@ jobs:
             --org=${{ secrets.VERCEL_ORG_ID }} \
             --confirm --scope=${{ secrets.VERCEL_ORG_ID }}
 
-  notify-discord:
-    needs: [deploy-production, deploy-staging]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Send notification to Discord
-        uses: Ilshidur/action-discord@master
-        with:
-          webhook: ${{ secrets.DISCORD_WEBHOOK }}
-          message: "🚀 SummitChronicles CI/CD finished with status: ${{ job.status }}"
+      - name: Create Sentry Release (Production)
+        run: |
+          npx sentry-cli releases new $GITHUB_SHA
+          npx sentry-cli releases set-commits $GITHUB_SHA --auto
+          npx sentry-cli releases finalize $GITHUB_SHA
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: summit-chronicles
+          SENTRY_PROJECT: javascript-nextjs
