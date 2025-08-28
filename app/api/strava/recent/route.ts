@@ -1,32 +1,27 @@
+// app/api/strava/recent/route.ts
 import { NextResponse } from "next/server";
 import { getStravaAccessToken } from "@/lib/strava";
 
 const STRAVA_BASE = "https://www.strava.com/api/v3";
 
-async function fetchActivities(accessToken: string) {
-  const res = await fetch(`${STRAVA_BASE}/athlete/activities?per_page=10`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
+async function fetchRecentActivities(token: string) {
+  const r = await fetch(`${STRAVA_BASE}/athlete/activities?per_page=10`, {
+    headers: { Authorization: `Bearer ${token}` },
     cache: "no-store",
   });
-  return res;
+  if (!r.ok) {
+    const err = await r.text();
+    throw new Error(`Strava error ${r.status}: ${err}`);
+  }
+  return r.json();
 }
 
 export async function GET() {
   try {
-    // Always get a valid token (refresh handled in lib/strava.ts)
     const token = await getStravaAccessToken();
+    const activities = await fetchRecentActivities(token);
 
-    const res = await fetchActivities(token);
-
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`Strava recent error ${res.status}: ${err}`);
-    }
-
-    const data = await res.json();
-
-    // Return JSON response
-    return NextResponse.json({ ok: true, activities: data });
+    return NextResponse.json({ ok: true, activities });
   } catch (e: any) {
     return NextResponse.json(
       { error: e.message || "Unexpected error" },

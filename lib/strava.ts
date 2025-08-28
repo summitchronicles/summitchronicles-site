@@ -25,9 +25,9 @@ interface StravaTokenRow {
 export async function getStravaAccessToken(): Promise<string> {
   // 1. Try load token row from Supabase
   const { data, error } = await supabase
-    .from<StravaTokenRow>(STRAVA_TOKEN_TABLE)
+    .from(STRAVA_TOKEN_TABLE)
     .select("*")
-    .single();
+    .single<StravaTokenRow>();
 
   let access_token: string | null = null;
   let refresh_token: string | null = null;
@@ -76,12 +76,14 @@ export async function getStravaAccessToken(): Promise<string> {
   const json = await res.json();
 
   // 4. Save new tokens in Supabase
-  const { error: upsertError } = await supabase.from(STRAVA_TOKEN_TABLE).upsert({
-    id: 1,
-    access_token: json.access_token,
-    refresh_token: json.refresh_token,
-    expires_at: json.expires_at,
-  });
+  const { error: upsertError } = await supabase
+    .from(STRAVA_TOKEN_TABLE)
+    .upsert({
+      id: 1,
+      access_token: json.access_token,
+      refresh_token: json.refresh_token,
+      expires_at: json.expires_at,
+    });
 
   if (upsertError) {
     console.error("⚠️ Failed to persist refreshed token in Supabase:", upsertError.message);
