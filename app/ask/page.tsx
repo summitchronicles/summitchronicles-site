@@ -1,65 +1,39 @@
-'use client'
-import React, { useState } from 'react'
+"use client";
+import { useState } from "react";
 
 export default function AskPage() {
-  const [q, setQ] = useState('')
-  const [answer, setAnswer] = useState<string | null>(null)
-  const [sources, setSources] = useState<{source:string; url?:string}[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
 
-  async function onAsk(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true); setError(null); setAnswer(null); setSources([])
-    try {
-      const res = await fetch('/api/ask', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ q })
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json?.error || 'Failed')
-      setAnswer(json.answer)
-      setSources(json.sources || [])
-    } catch (err:any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const handleAsk = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAnswer("🤖 Placeholder: AI will answer based on expedition + training docs.");
+  };
 
   return (
-    <div style={{maxWidth: 800, margin: '80px auto', padding: 16}}>
-      <h1 style={{fontSize: 32, fontWeight: 800, marginBottom: 16}}>Ask Summit Chronicles</h1>
-      <form onSubmit={onAsk} style={{display:'flex', gap:8, marginBottom:16}}>
+    <main className="max-w-3xl mx-auto py-16 px-6">
+      <h1 className="text-3xl font-bold mb-6">Ask the Site</h1>
+      <p className="mb-4 text-gray-700">Ask anything about expeditions, training, or gear.</p>
+
+      <form onSubmit={handleAsk} className="flex flex-col gap-4">
         <input
-          value={q}
-          onChange={e => setQ(e.target.value)}
-          placeholder="Ask about mission, story, expeditions…"
-          style={{flex:1, padding:12, borderRadius:8, border:'1px solid #333', background:'#111', color:'#fff'}}
+          type="text"
+          value={question}
+          onChange={(e) => setQuestion(e.target.value)}
+          placeholder="Type your question..."
+          className="px-4 py-2 border rounded"
+          required
         />
-        <button disabled={loading || !q.trim()} style={{padding:'12px 16px', borderRadius:8, background:'#fff', color:'#000'}}>
-          {loading ? 'Thinking…' : 'Ask'}
+        <button type="submit" className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
+          Ask
         </button>
       </form>
-      {error && <div style={{color:'#f66', marginBottom:12}}>Error: {error}</div>}
+
       {answer && (
-        <div style={{background:'#111', border:'1px solid #333', padding:16, borderRadius:12, whiteSpace:'pre-wrap'}}>
-          {answer}
+        <div className="mt-6 p-4 border rounded bg-gray-50 shadow">
+          <p>{answer}</p>
         </div>
       )}
-      {!!sources.length && (
-        <div style={{marginTop:12, opacity:0.8}}>
-          <div style={{fontSize:12, marginBottom:6}}>Sources</div>
-          <ul>
-            {sources.map((s,i)=>(
-              <li key={i} style={{fontSize:12}}>
-                {s.url ? <a href={s.url} style={{textDecoration:'underline'}}>{s.source}</a> : s.source}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  )
+    </main>
+  );
 }
