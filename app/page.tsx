@@ -1,5 +1,5 @@
 import Link from "next/link";
-
+export const dynamic = "force-dynamic"; // This is to force the page to be dynamic, so that it is not cached
 export default function HomePage() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-between bg-gray-50">
