@@ -1,33 +1,95 @@
 // app/api/strava/recent/route.ts
 import { NextResponse } from "next/server";
-import { getStravaAccessToken } from "@/lib/strava";
+import { createClient } from "@supabase/supabase-js";
+import { getStravaAccessToken, rateLimitedFetch } from "@/lib/strava";
 
 const STRAVA_BASE = "https://www.strava.com/api/v3";
 
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+async function fetchRecentActivities(token: string, after?: number) {
+  const url = new URL(`${STRAVA_BASE}/athlete/activities`);
+  url.searchParams.set("per_page", "100");
+  if (after) url.searchParams.set("after", String(after));
+
+  const res = await rateLimitedFetch(url.toString(), {
+    headers: { Authorization: `Bearer ${token}` },
+    cache: "no-store",
+  });
+
+  const text = await res.text();
+  console.log("DEBUG: Raw Strava response:", text.slice(0, 500));
+
+  if (!res.ok) throw new Error(`Strava error ${res.status}`);
+  return JSON.parse(text) as any[];
+}
+
 export async function GET() {
   try {
-    // Get valid access token (refresh if expired)
     const token = await getStravaAccessToken();
 
-    // Fetch recent activities
-    const res = await fetch(`${STRAVA_BASE}/athlete/activities?per_page=5`, {
-      headers: { Authorization: `Bearer ${token}` },
-      cache: "no-store",
-    });
+    // last synced activity
+    const { data: lastRow } = await supabase
+      .from("strava_activities")
+      .select("start_date")
+      .order("start_date", { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(`Strava error ${res.status}: ${err}`);
+    let after: number | undefined;
+    if (lastRow?.start_date) {
+      after = Math.floor(new Date(lastRow.start_date).getTime() / 1000);
     }
 
-    const data = await res.json();
+    // new Strava activities
+    const newActs = await fetchRecentActivities(token, after);
 
-    return NextResponse.json(data, {
-      headers: { "Cache-Control": "s-maxage=600, stale-while-revalidate=1200" },
-    });
+    if (newActs.length > 0) {
+      const rows = newActs.map((a) => ({
+        id: Number(a.id), // bigint
+        name: String(a.name ?? ""),
+        type: String(a.sport_type ?? a.type ?? ""),
+        distance: a.distance ? Number(a.distance) : 0, // double precision
+        moving_time: a.moving_time ? Math.floor(Number(a.moving_time)) : 0, // int
+        total_elevation_gain: a.total_elevation_gain
+          ? Math.floor(Number(a.total_elevation_gain))
+          : 0, // int
+        start_date: a.start_date
+          ? new Date(a.start_date).toISOString()
+          : null, // timestamptz
+        average_speed: a.average_speed
+          ? Number(a.average_speed)
+          : null, // double precision
+      }));
+
+      const { error: upsertErr } = await supabase
+        .from("strava_activities")
+        .upsert(rows, { onConflict: "id" });
+
+      if (upsertErr) {
+        console.error("Supabase upsert error:", upsertErr);
+      }
+    }
+
+    // last 7 days for UI
+    const sevenDaysAgoIso = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
+
+    const { data: activities, error: fetchErr } = await supabase
+      .from("strava_activities")
+      .select("*")
+      .gte("start_date", sevenDaysAgoIso)
+      .order("start_date", { ascending: false });
+
+    if (fetchErr) console.error("Supabase fetch error:", fetchErr);
+
+    return NextResponse.json({ ok: true, activities: activities ?? [] });
   } catch (e: any) {
+    console.error("Error in /api/strava/recent:", e);
     return NextResponse.json(
-      { error: e.message || "Unexpected error" },
+      { ok: false, error: e.message ?? "Unknown error" },
       { status: 500 }
     );
   }

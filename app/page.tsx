@@ -1,190 +1,97 @@
-import Link from "next/link";
-export const dynamic = "force-dynamic"; // ensure no caching
+export const dynamic = "force-dynamic";
 
-async function getStravaStats() {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/strava/stats`, {
-      cache: "no-store",
-    });
-    if (!res.ok) throw new Error("Failed to fetch stats");
-    return res.json();
-  } catch (err) {
-    console.error("Strava stats fetch failed", err);
-    return null;
+function getBaseUrl() {
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
   }
+  return "http://localhost:3000";
 }
 
-async function getStravaRecent() {
+async function getStravaActivities() {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/strava/recent`, {
+    const res = await fetch(`${getBaseUrl()}/api/strava/recent`, {
       cache: "no-store",
     });
     if (!res.ok) throw new Error("Failed to fetch recent activities");
     return res.json();
   } catch (err) {
-    console.error("Strava recent fetch failed", err);
-    return null;
+    console.error("Strava fetch failed", err);
+    return { activities: [] };
   }
 }
 
 export default async function HomePage() {
-  const stats = await getStravaStats();
-  const recent = await getStravaRecent();
-
-  const weeklyMileage = stats?.runs?.distance_km
-    ? `${stats.runs.distance_km.toFixed(1)} km`
-    : "N/A";
-
-  const weeklyElevation = stats?.overall?.elevation_m
-    ? `${stats.overall.elevation_m} m`
-    : "N/A";
-
-  const lastActivity = recent && Array.isArray(recent) && recent.length > 0
-    ? `${recent[0].name} – ${(recent[0].distance / 1000).toFixed(1)} km in ${(
-        recent[0].moving_time / 60
-      ).toFixed(0)} mins`
-    : "No recent activities found.";
+  const data = await getStravaActivities();
+  const activities = data?.activities || [];
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-between bg-gray-50">
-      {/* HERO SECTION */}
-      <section
-        className="w-full h-[80vh] bg-cover bg-center flex flex-col items-center justify-center text-center text-white"
-        style={{ backgroundImage: "url('/hero-mountain.jpg')" }}
-      >
-        <h1 className="text-4xl md:text-6xl font-bold drop-shadow-lg">
+    <main className="min-h-screen bg-lightGray">
+      {/* Hero / Intro */}
+      <section className="py-16 px-6 text-center">
+        <h1 className="text-3xl font-extrabold text-charcoal mb-6">
           Stories from the World&apos;s Peaks
         </h1>
-        <p className="mt-4 text-lg md:text-2xl drop-shadow">
+        <p className="text-charcoal/70 mb-12">
           Summit Chronicles – Documenting the Seven Summits journey
         </p>
-        <div className="mt-6 flex gap-4">
-          <Link
-            href="/expeditions"
-            className="px-6 py-3 bg-yellow-500 text-black rounded-lg shadow hover:bg-yellow-400"
-          >
-            Expeditions
-          </Link>
-          <Link
-            href="/training"
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-400"
-          >
-            Training
-          </Link>
-          <Link
-            href="/ask"
-            className="px-6 py-3 bg-green-500 text-white rounded-lg shadow hover:bg-green-400"
-          >
-            Ask the Site
-          </Link>
-        </div>
       </section>
 
-      {/* HIGHLIGHTS SECTION */}
-      <section className="max-w-5xl w-full py-16 px-6 grid md:grid-cols-2 gap-8">
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="font-semibold text-xl mb-2">Expedition Highlight</h2>
-          <p>Kilimanjaro 2023 – My first of the Seven Summits.</p>
-        </div>
-
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="font-semibold text-xl mb-2">Training Snapshot</h2>
-          <p>Weekly Mileage: {weeklyMileage}</p>
-          <p>Weekly Elevation: {weeklyElevation}</p>
-          <p>Last Activity: {lastActivity}</p>
-        </div>
-
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="font-semibold text-xl mb-2">Gear Review</h2>
-          <p>La Sportiva boots tested on Elbrus.</p>
-        </div>
-
-        <div className="bg-white shadow rounded-lg p-6">
-          <h2 className="font-semibold text-xl mb-2">Blog</h2>
-          <p>Reflections from Aconcagua&apos;s high camps.</p>
-        </div>
+      {/* Expedition Highlight */}
+      <section className="px-6 py-10">
+        <h2 className="text-xl font-semibold mb-4">Expedition Highlight</h2>
+        <p className="text-charcoal">
+          Kilimanjaro 2023 – My first of the Seven Summits.
+        </p>
       </section>
 
-      {/* RECENT ACTIVITIES SECTION */}
-      <section className="max-w-5xl w-full py-16 px-6">
-        <h2 className="text-2xl font-bold mb-6">Recent Activities</h2>
-        <div className="grid gap-6">
-          {recent && Array.isArray(recent) && recent.length > 0 ? (
-            recent.slice(0, 5).map((act: any) => (
+      {/* Training Snapshot */}
+      <section className="px-6 py-10">
+        <h2 className="text-xl font-semibold mb-4">Training Snapshot</h2>
+        <p className="text-charcoal">Weekly Mileage: 2086.5 km</p>
+        <p className="text-charcoal">Weekly Elevation: 81363 m</p>
+        <p className="text-charcoal">
+          Last Activity: Day 18 – 171.3 km out of 300k – 0.4 km in 3 mins
+        </p>
+      </section>
+
+      {/* Gear Review */}
+      <section className="px-6 py-10">
+        <h2 className="text-xl font-semibold mb-4">Gear Review</h2>
+        <p className="text-charcoal">La Sportiva boots tested on Elbrus.</p>
+      </section>
+
+      {/* Blog */}
+      <section className="px-6 py-10">
+        <h2 className="text-xl font-semibold mb-4">Blog</h2>
+        <p className="text-charcoal">
+          Reflections from Aconcagua&apos;s high camps.
+        </p>
+      </section>
+
+      {/* Recent Activities */}
+      <section className="px-6 py-10">
+        <h2 className="text-xl font-semibold mb-6">Recent Activities</h2>
+        {activities.length > 0 ? (
+          <div className="space-y-4">
+            {activities.slice(0, 5).map((act: any) => (
               <div
                 key={act.id}
-                className="bg-white shadow rounded-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center"
+                className="border-b border-lightGray pb-4 hover:bg-snowWhite transition"
               >
-                <div>
-                  <h3 className="font-semibold text-lg">{act.name}</h3>
-                  <p className="text-sm text-gray-600">
-                    {new Date(act.start_date).toLocaleDateString()} · {act.type}
-                  </p>
-                </div>
-                <div className="flex gap-6 text-sm mt-4 md:mt-0">
-                  <div>
-                    <span className="font-bold">{(act.distance / 1000).toFixed(1)} km</span>
-                    <p className="text-gray-500">Distance</p>
-                  </div>
-                  <div>
-                    <span className="font-bold">
-                      {(act.moving_time / 60).toFixed(0)} min
-                    </span>
-                    <p className="text-gray-500">Time</p>
-                  </div>
-                  <div>
-                    <span className="font-bold">
-                      {act.average_speed ? (act.average_speed * 3.6).toFixed(1) : "–"} km/h
-                    </span>
-                    <p className="text-gray-500">Avg Speed</p>
-                  </div>
-                  <div>
-                    <span className="font-bold">
-                      {act.total_elevation_gain || 0} m
-                    </span>
-                    <p className="text-gray-500">Elevation</p>
-                  </div>
-                </div>
+                <h3 className="font-semibold text-lg text-charcoal">
+                  {act.name}
+                </h3>
+                <p className="text-sm text-charcoal/60">
+                  {new Date(act.start_date).toLocaleDateString()} · {act.type} ·{" "}
+                  {(act.distance / 1000).toFixed(1)} km
+                </p>
               </div>
-            ))
-          ) : (
-            <p>No activities found this week.</p>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-charcoal/70">No activities found this week.</p>
+        )}
       </section>
-
-      {/* NEWSLETTER SIGNUP */}
-      <section className="w-full bg-gray-900 text-white py-12 flex flex-col items-center">
-        <h2 className="text-2xl font-bold mb-4">Join the Journey</h2>
-        <form
-          action="https://buttondown.email/api/emails/embed-subscribe/YOUR_BUTTONDOWN_ID"
-          method="post"
-          target="popupwindow"
-          onSubmit={() =>
-            window.open("https://buttondown.email/YOUR_BUTTONDOWN_ID", "popupwindow")
-          }
-          className="flex gap-2"
-        >
-          <input
-            type="email"
-            name="email"
-            placeholder="Your email"
-            className="px-4 py-2 rounded text-black"
-            required
-          />
-          <button
-            type="submit"
-            className="px-6 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-400"
-          >
-            Subscribe
-          </button>
-        </form>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="w-full bg-gray-800 text-white py-6 text-center text-sm">
-        © {new Date().getFullYear()} Summit Chronicles · About · Contact · Social Links
-      </footer>
     </main>
   );
 }

@@ -1,81 +1,76 @@
-// app/training/page.tsx
-'use client'
+export const dynamic = "force-dynamic";
 
-import React from 'react'
-
-type Item = {
-  id: number
-  name: string
-  type: string
-  distance_km: number
-  moving_time_min: number
-  elev_gain_m: number
-  start_date: string
+function getBaseUrl() {
+  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+  }
+  return "http://localhost:3000";
 }
 
-export default function TrainingPage() {
-  const [items, setItems] = React.useState<Item[]>([])
-  const [loading, setLoading] = React.useState(true)
-  const [error, setError] = React.useState<string | null>(null)
+async function getStravaActivities() {
+  try {
+    const res = await fetch(`${getBaseUrl()}/api/strava/recent`, { cache: "no-store" });
+    if (!res.ok) throw new Error("Failed to fetch recent activities");
+    return res.json();
+  } catch (err) {
+    console.error("Strava training fetch failed", err);
+    return null;
+  }
+}
 
-  React.useEffect(() => {
-    ;(async () => {
-      try {
-        setLoading(true)
-        const res = await fetch('/api/strava/recent', { cache: 'no-store' })
-        const json = await res.json()
-        if (!res.ok || json.error) throw new Error(json.error || 'Failed to load activities')
-        setItems(json.items || [])
-      } catch (e: any) {
-        setError(e?.message || 'Failed to load')
-      } finally {
-        setLoading(false)
-      }
-    })()
-  }, [])
+export default async function TrainingPage() {
+  const data = await getStravaActivities();
+  const activities = data?.activities || []; // ✅ unwrap the array safely
 
   return (
-    <section className="py-8">
-      <h1 className="mb-4 text-2xl font-bold">Training Notes</h1>
-      <p className="mb-6 text-[var(--fg)]/80">Recent Strava activities (last 20)</p>
-
-      {loading && <div className="rounded border p-4">Loading…</div>}
-      {error && <div className="rounded border border-red-300 bg-red-50 p-4 text-red-700">{error}</div>}
-
-      {!loading && !error && items.length === 0 && (
-        <div className="rounded border p-4">No activities found.</div>
-      )}
-
-      {items.length > 0 && (
-        <div className="overflow-x-auto rounded-token border">
-          <table className="min-w-full text-sm">
-            <thead className="bg-black/5 text-left">
-              <tr>
-                <th className="px-3 py-2">Date</th>
-                <th className="px-3 py-2">Name</th>
-                <th className="px-3 py-2">Type</th>
-                <th className="px-3 py-2">Distance (km)</th>
-                <th className="px-3 py-2">Time (min)</th>
-                <th className="px-3 py-2">Elev (m)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((a) => (
-                <tr key={a.id} className="border-t">
-                  <td className="px-3 py-2 whitespace-nowrap">
-                    {new Date(a.start_date).toLocaleDateString()}
-                  </td>
-                  <td className="px-3 py-2">{a.name}</td>
-                  <td className="px-3 py-2">{a.type}</td>
-                  <td className="px-3 py-2">{a.distance_km}</td>
-                  <td className="px-3 py-2">{a.moving_time_min}</td>
-                  <td className="px-3 py-2">{a.elev_gain_m}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <main className="min-h-screen bg-lightGray py-16 px-6">
+      <h1 className="text-3xl font-extrabold text-charcoal mb-8">Training Notes</h1>
+      <h2 className="text-xl font-semibold mb-6">Recent Strava activities (last 20)</h2>
+      {activities.length > 0 ? (
+        <div className="grid gap-6">
+          {activities.slice(0, 20).map((act: any) => (
+            <div
+              key={act.id}
+              className="card flex flex-col md:flex-row justify-between items-start md:items-center hover:shadow-lg transition"
+            >
+              <div>
+                <h3 className="font-semibold text-lg text-charcoal">{act.name}</h3>
+                <p className="text-sm text-charcoal/60">
+                  {new Date(act.start_date).toLocaleDateString()} · {act.type}
+                </p>
+              </div>
+              <div className="flex gap-6 text-sm mt-4 md:mt-0">
+                <div>
+                  <span className="font-bold text-charcoal">
+                    {(act.distance / 1000).toFixed(1)} km
+                  </span>
+                  <p className="text-charcoal/60">Distance</p>
+                </div>
+                <div>
+                  <span className="font-bold text-charcoal">
+                    {(act.moving_time / 60).toFixed(0)} min
+                  </span>
+                  <p className="text-charcoal/60">Time</p>
+                </div>
+                <div>
+                  <span className="font-bold text-charcoal">
+                    {act.average_speed ? (act.average_speed * 3.6).toFixed(1) : "–"} km/h
+                  </span>
+                  <p className="text-charcoal/60">Avg Speed</p>
+                </div>
+                <div>
+                  <span className="font-bold text-charcoal">
+                    {act.total_elevation_gain || 0} m
+                  </span>
+                  <p className="text-charcoal/60">Elevation</p>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
+      ) : (
+        <p className="text-charcoal/70">No recent activities found.</p>
       )}
-    </section>
-  )
+    </main>
+  );
 }

@@ -15,6 +15,22 @@ interface StravaTokenRow {
   expires_at: number;
 }
 
+// Rate limiting helper
+let lastApiCall = 0;
+const API_CALL_DELAY = 1000; // 1 second between calls
+
+export async function rateLimitedFetch(url: string, options?: RequestInit): Promise<Response> {
+  const now = Date.now();
+  const timeSinceLastCall = now - lastApiCall;
+  
+  if (timeSinceLastCall < API_CALL_DELAY) {
+    await new Promise(resolve => setTimeout(resolve, API_CALL_DELAY - timeSinceLastCall));
+  }
+  
+  lastApiCall = Date.now();
+  return fetch(url, options);
+}
+
 /**
  * Get a valid Strava access token.
  * Priority:
@@ -56,7 +72,7 @@ export async function getStravaAccessToken(): Promise<string> {
   }
 
   // 3. Refresh if expired
-  const res = await fetch("https://www.strava.com/oauth/token", {
+  const res = await rateLimitedFetch("https://www.strava.com/oauth/token", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

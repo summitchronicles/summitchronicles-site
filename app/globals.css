@@ -1,114 +1,93 @@
-/* app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-/* Tailwind layers */
-@import "tailwindcss";
-
-/* --------
-   Design tokens (light by default; overridden when .dark is on <html>)
-   -------- */
+/* ===== PRD Brand Tokens ===== */
 :root {
-  --bg: #ffffff;
-  --fg: #111111;
-  --muted: #6b7280;       /* gray-500 */
-  --border: #e5e7eb;      /* gray-200 */
-  --accent: #0ea5e9;      /* sky-500 */
-  --accent-foreground: #ffffff;
-  --radius: 12px;
+  --color-alpine-blue: #1e3a8a;     /* Primary deep alpine blue */
+  --color-summit-gold: #fbbf24;     /* Highlight gold */
+  --color-charcoal: #1f2937;        /* Dark text / footer */
+  --color-light-gray: #f9fafb;      /* Background */
+  --color-snow-white: #ffffff;      /* Neutral white */
+
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.15);
 }
 
-/* Optional manual dark-mode (works even if Tailwind darkMode: 'media') */
-.dark {
-  --bg: #0b0f14;          /* near-black with a hint of blue */
-  --fg: #e5e7eb;          /* gray-200 */
-  --muted: #94a3b8;       /* slate-400 */
-  --border: #1f2937;      /* gray-800 */
-  --accent: #38bdf8;      /* sky-400 */
-  --accent-foreground: #0b0f14;
-}
-
-/* Respect user preference if you’re not using the .dark class */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0b0f14;
-    --fg: #e5e7eb;
-    --muted: #94a3b8;
-    --border: #1f2937;
-    --accent: #38bdf8;
-    --accent-foreground: #0b0f14;
-  }
-}
-
-/* --------
-   Base element normalization
-   -------- */
-html {
-  scroll-behavior: smooth;
-  hanging-punctuation: first last;
-}
-
-html, body {
-  height: 100%;
-}
-
+/* ===== Global Defaults ===== */
 body {
-  background: var(--bg);
-  color: var(--fg);
-  font-feature-settings: "rlig" 1, "calt" 1;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-light-gray);
+  color: var(--color-charcoal);
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
 }
 
-/* Make borders pick up our token by default (works with Tailwind border utilities) */
-*,
-*::before,
-*::after {
-  border-color: var(--border);
+/* ===== Hero Section ===== */
+.hero {
+  background-image: url('/hero-mountain.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
 }
 
-/* Links */
-a {
-  color: inherit;
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
+/* ===== Brand Buttons ===== */
+.btn-gold,
+.btn-blue,
+.btn-green {
+  @apply px-6 py-3 font-semibold rounded-lg transition transform;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Focus states */
-*:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+.btn-gold {
+  background-color: var(--color-summit-gold);
+  color: var(--color-charcoal);
+}
+.btn-gold:hover {
+  background-color: #fcd34d;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-/* Text selection */
-::selection {
-  background: color-mix(in oklab, var(--accent) 40%, transparent);
-  color: var(--accent-foreground);
+.btn-blue {
+  background-color: var(--color-alpine-blue);
+  color: var(--color-snow-white);
+}
+.btn-blue:hover {
+  background-color: #3749a5;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-/* Media elements */
-img, svg, video, canvas, audio, iframe, embed, object {
-  display: block;
-  max-width: 100%;
+.btn-green {
+  background-color: #22c55e;
+  color: var(--color-snow-white);
 }
-img, video, canvas {
-  height: auto;
-}
-
-/* Typography niceties for code */
-code, kbd, samp, pre {
-  font-feature-settings: normal;
-  font-variant-ligatures: none;
+.btn-green:hover {
+  background-color: #16a34a;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
 }
 
-/* A simple centered container utility (optional; complements Tailwind’s container) */
-.container {
-  width: min(100% - 2rem, 1100px);
-  margin-inline: auto;
+/* ===== Card Styles ===== */
+.card {
+  @apply bg-white p-6 rounded-lg transition;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
 }
 
-/* Optional helper for rounded UI using token */
-.rounded-token {
-  border-radius: var(--radius);
+/* ===== Footer ===== */
+.footer {
+  @apply w-full py-6 text-center text-sm;
+  background-color: var(--color-charcoal);
+  color: var(--color-snow-white);
+  border-top: 1px solid rgba(255,255,255,0.1);
 }

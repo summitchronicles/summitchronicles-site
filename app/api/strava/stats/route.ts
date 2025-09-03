@@ -1,6 +1,6 @@
 // app/api/strava/stats/route.ts
 import { NextResponse } from "next/server";
-import { getStravaAccessToken } from "@/lib/strava";
+import { getStravaAccessToken, rateLimitedFetch } from "@/lib/strava";
 
 const STRAVA_BASE = "https://www.strava.com/api/v3";
 
@@ -13,15 +13,12 @@ async function fetchAllActivities(token: string) {
   let overallElevation_m = 0;
 
   for (; page <= 10; page++) {
-    const r = await fetch(
+    const r = await rateLimitedFetch(
       `${STRAVA_BASE}/athlete/activities?per_page=${perPage}&page=${page}`,
       { headers: { Authorization: `Bearer ${token}` }, cache: "no-store" }
     );
 
-    if (!r.ok) {
-      const err = await r.text();
-      throw new Error(`Strava error ${r.status}: ${err}`);
-    }
+    if (!r.ok) break;
 
     const acts = await r.json();
     if (!Array.isArray(acts) || acts.length === 0) break;
@@ -43,12 +40,7 @@ async function fetchAllActivities(token: string) {
         hikes.distance_m += dist;
         hikes.moving_s += move;
         hikes.elev_m += elev;
-      } else if (
-        type === "Ride" ||
-        type === "VirtualRide" ||
-        type === "GravelRide" ||
-        type === "MountainBikeRide"
-      ) {
+      } else if (["Ride", "VirtualRide", "GravelRide", "MountainBikeRide"].includes(type)) {
         rides.count++;
         rides.distance_m += dist;
         rides.moving_s += move;
@@ -87,9 +79,15 @@ export async function GET() {
       headers: { "Cache-Control": "s-maxage=43200, stale-while-revalidate=86400" },
     });
   } catch (e: any) {
+    console.error("Error in /api/strava/stats:", e);
     return NextResponse.json(
-      { error: e.message || "Unexpected error" },
-      { status: 500 }
+      {
+        runs: { count: 0, distance_km: 0, moving_sec: 0 },
+        hikes: { count: 0, distance_km: 0, elevation_m: 0, moving_sec: 0 },
+        rides: { count: 0, distance_km: 0, moving_sec: 0 },
+        overall: { elevation_m: 0 },
+      },
+      { status: 200 } // fallback safe response
     );
   }
 }
