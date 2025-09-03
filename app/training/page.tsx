@@ -12,9 +12,24 @@ function getBaseUrl() {
 
 async function getStravaActivities() {
   try {
-    const res = await fetch(`${getBaseUrl()}/api/strava/recent`, { cache: "no-store" });
-    if (!res.ok) throw new Error("Failed to fetch recent activities");
-    return res.json();
+    const baseUrl = getBaseUrl();
+    const url = `${baseUrl}/api/strava/recent`;
+    console.log("Training page fetching from:", url);
+    
+    const res = await fetch(url, { cache: "no-store" });
+    
+    console.log("Training response status:", res.status);
+    console.log("Training response ok:", res.ok);
+    
+    if (!res.ok) {
+      const text = await res.text();
+      console.log("Training error response:", text.slice(0, 200));
+      throw new Error(`Failed to fetch recent activities: ${res.status}`);
+    }
+    
+    const data = await res.json();
+    console.log("Training activities received:", data?.activities?.length || 0);
+    return data;
   } catch (err) {
     console.error("Strava training fetch failed", err);
     return null;
