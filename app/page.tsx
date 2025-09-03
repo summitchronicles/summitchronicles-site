@@ -1,10 +1,8 @@
 export const dynamic = "force-dynamic";
 
 function getBaseUrl() {
-  if (process.env.NEXT_PUBLIC_VERCEL_URL) {
-    return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
-  }
-  if (process.env.NODE_ENV === 'production') {
+  // For production, always use the www domain to avoid redirects
+  if (process.env.VERCEL_URL || process.env.NODE_ENV === 'production') {
     return "https://www.summitchronicles.com";
   }
   return "http://localhost:3000";
