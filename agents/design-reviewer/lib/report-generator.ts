@@ -380,8 +380,8 @@ export class ReportGenerator {
       ${[...report.visualQuality.issues, ...report.console.errors].map(issue => `
         <div class="issue ${issue.severity}">
           <strong>${issue.type || 'Console'}:</strong> ${issue.message}
-          ${issue.element ? `<br><em>Element: ${issue.element}</em>` : ''}
-          ${issue.expected && issue.actual ? `<br><em>Expected: ${issue.expected} | Actual: ${issue.actual}</em>` : ''}
+          ${'element' in issue && issue.element ? `<br><em>Element: ${issue.element}</em>` : ''}
+          ${'expected' in issue && 'actual' in issue && issue.expected && issue.actual ? `<br><em>Expected: ${issue.expected} | Actual: ${issue.actual}</em>` : ''}
         </div>
       `).join('')}
       
