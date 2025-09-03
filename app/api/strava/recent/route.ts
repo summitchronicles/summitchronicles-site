@@ -74,14 +74,13 @@ export async function GET() {
       }
     }
 
-    // last 7 days for UI
-    const sevenDaysAgoIso = new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString();
-
+    // Get recent activities - expand to show more than just last 7 days
+    // Changed to get last 20 activities to show more data on training page
     const { data: activities, error: fetchErr } = await supabase
       .from("strava_activities")
       .select("*")
-      .gte("start_date", sevenDaysAgoIso)
-      .order("start_date", { ascending: false });
+      .order("start_date", { ascending: false })
+      .limit(20);
 
     if (fetchErr) console.error("Supabase fetch error:", fetchErr);
 
