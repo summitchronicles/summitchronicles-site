@@ -2,19 +2,91 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== PRD Brand Tokens ===== */
+/* ===== Enhanced Design System - "Ascent by Design" ===== */
 :root {
+  /* Brand Colors - Mountain Palette */
   --color-alpine-blue: #1e3a8a;     /* Primary deep alpine blue */
-  --color-summit-gold: #fbbf24;     /* Highlight gold */
-  --color-charcoal: #1f2937;        /* Dark text / footer */
-  --color-light-gray: #f9fafb;      /* Background */
-  --color-snow-white: #ffffff;      /* Neutral white */
-
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
+  --color-summit-gold: #fbbf24;     /* Achievement gold */
+  --color-charcoal: #1f2937;        /* Technical precision */
+  --color-light-gray: #f9fafb;      /* Clean base camp */
+  --color-snow-white: #ffffff;      /* Pure summit */
+  
+  /* Extended Color Palette */
+  --color-glacier-blue: #0ea5e9;    /* Active states, progress */
+  --color-stone-gray: #6b7280;      /* Supporting text */
+  --color-warning-orange: #f59e0b;  /* Safety alerts */
+  --color-success-green: #10b981;   /* Safe conditions */
+  --color-danger-red: #ef4444;      /* Emergency states */
+  
+  /* Typography Scale - Technical Precision */
+  --font-size-xs: 0.75rem;          /* 12px - Fine details */
+  --font-size-sm: 0.875rem;         /* 14px - Supporting info */
+  --font-size-base: 1rem;           /* 16px - Body text */
+  --font-size-lg: 1.125rem;         /* 18px - Emphasis */
+  --font-size-xl: 1.25rem;          /* 20px - Small headings */
+  --font-size-2xl: 1.5rem;          /* 24px - Section headers */
+  --font-size-3xl: 1.875rem;        /* 30px - Page titles */
+  --font-size-4xl: 2.25rem;         /* 36px - Hero headings */
+  --font-size-5xl: 3rem;            /* 48px - Major displays */
+  
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* Spacing Scale - Altitude Zones */
+  --space-1: 0.25rem;    /* 4px - Micro spacing */
+  --space-2: 0.5rem;     /* 8px - Tight spacing */
+  --space-3: 0.75rem;    /* 12px - Small gaps */
+  --space-4: 1rem;       /* 16px - Standard spacing */
+  --space-6: 1.5rem;     /* 24px - Section spacing */
+  --space-8: 2rem;       /* 32px - Component spacing */
+  --space-12: 3rem;      /* 48px - Large sections */
+  --space-16: 4rem;      /* 64px - Major sections */
+  --space-24: 6rem;      /* 96px - Page sections */
+  
+  /* Border Radius - Mountain Contours */
+  --radius-sm: 0.25rem;   /* 4px - Small elements */
+  --radius-md: 0.5rem;    /* 8px - Standard cards */
+  --radius-lg: 0.75rem;   /* 12px - Large cards */
+  --radius-xl: 1rem;      /* 16px - Hero elements */
+  --radius-2xl: 1.5rem;   /* 24px - Feature cards */
+  --radius-full: 9999px;  /* Circular elements */
+  
+  /* Shadows - Elevation Depth */
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
   --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.15);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
+  --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
+  
+  /* Animation Timings - Natural Movement */
+  --duration-fast: 150ms;     /* Micro interactions */
+  --duration-normal: 250ms;   /* Standard transitions */
+  --duration-slow: 350ms;     /* Content transitions */
+  --duration-slower: 500ms;   /* Page transitions */
+  
+  --easing-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* Interactive States - Expedition Feedback */
+  --hover-scale: 1.02;
+  --active-scale: 0.98;
+  --focus-ring: 0 0 0 2px var(--color-alpine-blue);
+  --focus-ring-offset: 2px;
+  
+  /* Gradients - Mountain Atmosphere */
+  --gradient-alpine: linear-gradient(135deg, var(--color-alpine-blue) 0%, #3b82f6 100%);
+  --gradient-summit: linear-gradient(135deg, var(--color-summit-gold) 0%, #fcd34d 100%);
+  --gradient-sky: linear-gradient(to bottom, #0ea5e9 0%, var(--color-alpine-blue) 100%);
+  --gradient-elevation: linear-gradient(to top, var(--color-light-gray) 0%, var(--color-snow-white) 100%);
 }
 
 /* ===== Global Defaults ===== */
@@ -82,6 +154,240 @@ body {
 .card:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
+}
+
+/* ===== Advanced Component Styles ===== */
+
+/* Elevation Cards - Altitude-inspired depth */
+.card-elevation-1 {
+  box-shadow: var(--shadow-sm);
+  transform: translateZ(0);
+}
+.card-elevation-2 {
+  box-shadow: var(--shadow-md);
+  transform: translateZ(0) translateY(-1px);
+}
+.card-elevation-3 {
+  box-shadow: var(--shadow-lg);
+  transform: translateZ(0) translateY(-2px);
+}
+.card-elevation-4 {
+  box-shadow: var(--shadow-xl);
+  transform: translateZ(0) translateY(-4px);
+}
+
+/* Interactive Elements - Mountain Expedition Feel */
+.interactive {
+  transition: all var(--duration-normal) var(--easing-ease-out);
+  cursor: pointer;
+}
+.interactive:hover {
+  transform: scale(var(--hover-scale)) translateZ(0);
+}
+.interactive:active {
+  transform: scale(var(--active-scale)) translateZ(0);
+  transition-duration: var(--duration-fast);
+}
+
+/* Focus States - High Visibility for Safety */
+.focusable:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Progress Indicators - Expedition Progress */
+.progress-bar {
+  background: var(--gradient-elevation);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+.progress-fill {
+  background: var(--gradient-alpine);
+  height: 100%;
+  border-radius: inherit;
+  transition: width var(--duration-slow) var(--easing-ease-out);
+}
+.progress-glow::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Status Indicators - Safety & Condition States */
+.status-safe {
+  background: var(--color-success-green);
+  color: var(--color-snow-white);
+}
+.status-warning {
+  background: var(--color-warning-orange);
+  color: var(--color-charcoal);
+}
+.status-danger {
+  background: var(--color-danger-red);
+  color: var(--color-snow-white);
+}
+
+/* Activity Type Icons - Strava Integration */
+.activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-snow-white);
+  position: relative;
+  overflow: hidden;
+}
+.activity-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform var(--duration-slow) var(--easing-ease-out);
+}
+.activity-icon:hover::before {
+  transform: translateX(100%);
+}
+
+/* Enhanced Cards - Modern Strava Style */
+.strava-card {
+  background: var(--color-snow-white);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) var(--easing-ease-out);
+  position: relative;
+  overflow: hidden;
+}
+.strava-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+.strava-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-alpine);
+  opacity: 0;
+  transition: opacity var(--duration-normal);
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+.strava-card:hover::after {
+  opacity: 0.03;
+}
+
+/* Typography Utilities */
+.text-gradient-alpine {
+  background: var(--gradient-alpine);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+.text-gradient-summit {
+  background: var(--gradient-summit);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Loading States - Expedition Prep */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animation Utilities */
+.animate-fade-in-up {
+  animation: fadeInUp var(--duration-slow) var(--easing-ease-out);
+}
+.animate-scale-in {
+  animation: scaleIn var(--duration-normal) var(--easing-ease-out);
+}
+.animate-slide-in-right {
+  animation: slideInRight var(--duration-slow) var(--easing-ease-out);
+}
+
+/* Responsive Design Helpers */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark Mode Support - Night Expedition Mode */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-light-gray: #111827;
+    --color-charcoal: #f9fafb;
+    --color-stone-gray: #9ca3af;
+  }
+  
+  .strava-card {
+    background: #1f2937;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .skeleton {
+    background: linear-gradient(90deg, #374151 0%, #4b5563 50%, #374151 100%);
+  }
 }
 
 /* ===== Footer ===== */
