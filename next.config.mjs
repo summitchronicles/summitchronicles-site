@@ -2,10 +2,42 @@ import {withSentryConfig} from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  swcMinify: true,
+  compress: true,
+  poweredByHeader: false,
+  generateEtags: false,
+  httpAgentOptions: {
+    keepAlive: true,
+  },
   images: {
     remotePatterns: [
-      { protocol: 'https', hostname: '**' }
-    ]
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: '*.strava.com' }
+    ],
+    minimumCacheTTL: 60,
+    formats: ['image/webp', 'image/avif'],
+  },
+  headers: async () => [
+    {
+      source: '/(.*)',
+      headers: [
+        {
+          key: 'X-DNS-Prefetch-Control',
+          value: 'on'
+        },
+        {
+          key: 'X-Content-Type-Options',
+          value: 'nosniff'
+        },
+        {
+          key: 'Permissions-Policy',
+          value: 'camera=(), microphone=(), geolocation=()'
+        }
+      ]
+    }
+  ],
+  experimental: {
+    optimizePackageImports: ['framer-motion', '@heroicons/react']
   }
 };
 export default withSentryConfig(nextConfig, {
