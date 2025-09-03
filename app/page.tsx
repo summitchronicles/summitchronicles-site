@@ -4,6 +4,9 @@ function getBaseUrl() {
   if (process.env.NEXT_PUBLIC_VERCEL_URL) {
     return `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
   }
+  if (process.env.NODE_ENV === 'production') {
+    return "https://www.summitchronicles.com";
+  }
   return "http://localhost:3000";
 }
 
