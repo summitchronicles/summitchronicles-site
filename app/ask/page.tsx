@@ -5,9 +5,36 @@ export default function AskPage() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
 
+  const [loading, setLoading] = useState(false);
+
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
-    setAnswer("🤖 Placeholder: AI will answer based on expedition + training docs.");
+    if (!question.trim()) return;
+    
+    setLoading(true);
+    setAnswer("");
+    
+    try {
+      const response = await fetch("/api/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ q: question }),
+      });
+      
+      const data = await response.json();
+      
+      if (data.error) {
+        setAnswer("❌ " + data.error);
+      } else {
+        setAnswer(data.answer || "No answer received.");
+      }
+    } catch (error) {
+      setAnswer("❌ Failed to get response. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -24,14 +51,19 @@ export default function AskPage() {
           className="px-4 py-2 border rounded"
           required
         />
-        <button type="submit" className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-400">
-          Ask
+        <button 
+          type="submit" 
+          disabled={loading}
+          className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {loading ? "🤖 Thinking..." : "Ask Question"}
         </button>
       </form>
 
       {answer && (
         <div className="mt-6 p-4 border rounded bg-gray-50 shadow">
-          <p>{answer}</p>
+          <h3 className="font-semibold mb-2">Answer:</h3>
+          <p className="whitespace-pre-line">{answer}</p>
         </div>
       )}
     </main>
