@@ -397,3 +397,141 @@ body {
   color: var(--color-snow-white);
   border-top: 1px solid rgba(255,255,255,0.1);
 }
+
+/* ===== Enhanced Mobile Experience ===== */
+@media (max-width: 768px) {
+  /* Better touch targets - iOS/Android standard 44px minimum */
+  button, a, input, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Prevent horizontal scrolling on mobile */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Improved text readability on small screens */
+  .text-4xl {
+    @apply text-2xl;
+  }
+  
+  .text-5xl {
+    @apply text-3xl;
+  }
+  
+  .text-6xl {
+    @apply text-3xl;
+  }
+  
+  /* Better spacing on mobile */
+  .py-24 {
+    @apply py-12;
+  }
+  
+  .py-16 {
+    @apply py-8;
+  }
+  
+  .py-12 {
+    @apply py-8;
+  }
+  
+  /* Mobile-friendly padding */
+  .px-6 {
+    @apply px-4;
+  }
+  
+  /* Better mobile form inputs - prevents iOS zoom */
+  input[type="text"], 
+  input[type="email"], 
+  input[type="search"],
+  textarea {
+    font-size: 16px !important;
+  }
+  
+  /* Mobile-optimized grid gaps */
+  .grid {
+    gap: 0.75rem;
+  }
+  
+  /* Better mobile card layout */
+  .md\:grid-cols-2 {
+    @apply grid-cols-1;
+  }
+  
+  .lg\:grid-cols-3 {
+    @apply grid-cols-1;
+  }
+  
+  .lg\:grid-cols-4 {
+    @apply grid-cols-2;
+  }
+  
+  /* Mobile filter improvements */
+  .flex-wrap {
+    gap: 0.5rem;
+  }
+  
+  /* Mobile conversation history improvements */
+  .space-y-6 > * + * {
+    margin-top: 1rem;
+  }
+}
+
+/* ===== Touch-friendly hover states ===== */
+@media (hover: hover) and (pointer: fine) {
+  /* Only apply hover effects on devices with precise pointers */
+  .hover\:scale-105:hover {
+    transform: scale(1.05);
+  }
+  
+  .hover\:bg-white\/10:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .hover\:bg-white\/20:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .hover\:text-summitGold:hover {
+    color: var(--color-summit-gold);
+  }
+}
+
+/* ===== Improved Focus States for Better Accessibility ===== */
+*:focus {
+  outline: 2px solid var(--color-summit-gold);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove focus outline for mouse users but keep for keyboard users */
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ===== Smooth scroll for better UX ===== */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ===== Mobile Safari specific optimizations ===== */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific styles */
+  input, textarea, button {
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+  
+  /* Prevent zoom on focus */
+  select, input, textarea {
+    font-size: 16px;
+  }
+}

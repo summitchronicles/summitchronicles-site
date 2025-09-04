@@ -28,6 +28,10 @@ const GEN_MAX_TOKENS = 300
 
 const Body = z.object({
   q: z.string().min(2, 'Question is too short'),
+  context: z.array(z.object({
+    question: z.string(),
+    answer: z.string()
+  })).optional()
 })
 
 // ===== Types for RPC + ranking =====
@@ -117,7 +121,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const json = await req.json()
-    const { q } = Body.parse(json)
+    const { q, context } = Body.parse(json)
     log.q = q
     log.fp = anonFingerprint(req)
 
@@ -160,7 +164,7 @@ export async function POST(req: NextRequest) {
       score: Number(t.score.toFixed(3)),
     }))
 
-    const context = top
+    const knowledgeContext = top
       .map(
         (r, i) =>
           `# Chunk ${i + 1}\nSource: ${r.source ?? 'unknown'}\nURL: ${
@@ -169,7 +173,7 @@ export async function POST(req: NextRequest) {
       )
       .join('\n\n---\n\n')
 
-    if (!context) {
+    if (!knowledgeContext) {
       const body = { answer: "I don't have that information yet.", sources: [] as any[] }
       log.status = 'no_context'
       log.ms = Date.now() - t0
@@ -178,12 +182,18 @@ export async function POST(req: NextRequest) {
     }
 
     // 3) Generate answer constrained to context
-    const prompt = `You are the assistant for the Summit Chronicles site.
-Answer ONLY using the context blocks. If the context doesn't contain the answer, say you don't have it yet.
-Be concise and precise.
+    let conversationContext = ''
+    if (context && context.length > 0) {
+      conversationContext = '\n\nRecent conversation:\n' + 
+        context.slice(-3).map(c => `Q: ${c.question}\nA: ${c.answer}`).join('\n\n')
+    }
 
-Context:
-${context}
+    const prompt = `You are the assistant for the Summit Chronicles site.
+Answer ONLY using the context blocks below. If the context doesn't contain the answer, say you don't have it yet.
+Be concise and precise. Use the conversation history for context but answer from the knowledge base.
+
+Knowledge Context:
+${knowledgeContext}${conversationContext}
 
 Question: ${q}
 
