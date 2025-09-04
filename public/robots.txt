@@ -1,3 +1,21 @@
 User-agent: *
-Disallow: /
-Sitemap: https://summitchronicles.example/sitemap.xml
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /private/
+Disallow: /*.json$
+
+# Block specific crawlers from resource-intensive endpoints
+User-agent: GPTBot
+User-agent: ChatGPT-User
+User-agent: CCBot
+User-agent: anthropic-ai
+User-agent: Claude-Web
+Disallow: /api/ask
+Disallow: /api/db/search
+Disallow: /api/analytics/
+Disallow: /admin/
+
+Sitemap: https://summitchronicles.com/sitemap.xml
+Host: https://summitchronicles.com
