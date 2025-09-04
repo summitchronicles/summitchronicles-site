@@ -17,11 +17,11 @@ import {
 } from '@heroicons/react/24/outline';
 import ImageUpload from '../../../components/blog/ImageUpload';
 
-// Dynamic import for TinyMCE to avoid SSR issues
-const Editor = dynamic(() => import('@tinymce/tinymce-react').then(mod => ({ default: mod.Editor })), {
+// Dynamic import for TinyMCE to avoid SSR issues  
+const Editor = dynamic(() => import('@tinymce/tinymce-react'), {
   ssr: false,
   loading: () => <div className="h-64 bg-white/5 rounded-xl flex items-center justify-center text-white/60">Loading editor...</div>
-});
+}) as any;
 
 interface Category {
   name: string;
