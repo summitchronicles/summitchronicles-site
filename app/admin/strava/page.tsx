@@ -38,7 +38,7 @@ export default function StravaAdminPage() {
 
   const handleStravaConnect = () => {
     const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID || '172794';
-    const redirectUri = `${window.location.origin}/api/strava/callback`;
+    const redirectUri = 'https://summitchronicles.com/api/strava/callback';
     const scope = 'read,activity:read_all';
     
     const authUrl = `https://www.strava.com/oauth/authorize?` +
