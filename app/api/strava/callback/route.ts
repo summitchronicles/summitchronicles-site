@@ -44,13 +44,25 @@ export async function GET(req: Request) {
 
   const json = await r.json();
 
+  console.log('✅ Successful Strava token exchange:', {
+    athlete_id: json.athlete?.id,
+    access_token: json.access_token?.slice(0, 10) + '...',
+    expires_at: json.expires_at
+  });
+
   // Store in Supabase
-  await supabase.from("strava_tokens").upsert({
+  const { error: storeError } = await supabase.from("strava_tokens").upsert({
     id: 1,
     access_token: json.access_token,
     refresh_token: json.refresh_token,
     expires_at: json.expires_at,
+    athlete_id: json.athlete?.id
   });
+
+  if (storeError) {
+    console.error('Supabase storage error:', storeError);
+    // Continue anyway - token exchange worked
+  }
 
   // Redirect to success page
   return NextResponse.redirect(new URL('/admin/strava?success=true', req.url));
