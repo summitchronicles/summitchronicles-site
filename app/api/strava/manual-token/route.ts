@@ -12,8 +12,7 @@ export async function POST() {
     const tokenData = {
       access_token: "1650f96e93841365cbbb46f7ee56137e1b4fe4c2",
       refresh_token: "6a7b9c080221422dc07960bd5d2f03ff935860cc", 
-      expires_at: 1757097696,
-      athlete_id: 29642479
+      expires_at: 1757097696
     };
 
     console.log('Manually storing Strava token data');
@@ -33,8 +32,7 @@ export async function POST() {
 
     return NextResponse.json({ 
       success: true, 
-      message: 'Strava token stored successfully',
-      athlete_id: tokenData.athlete_id
+      message: 'Strava token stored successfully'
     });
 
   } catch (error: any) {

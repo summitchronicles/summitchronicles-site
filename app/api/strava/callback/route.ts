@@ -45,7 +45,6 @@ export async function GET(req: Request) {
   const json = await r.json();
 
   console.log('✅ Successful Strava token exchange:', {
-    athlete_id: json.athlete?.id,
     access_token: json.access_token?.slice(0, 10) + '...',
     expires_at: json.expires_at
   });
