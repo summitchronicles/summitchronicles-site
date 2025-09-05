@@ -26,12 +26,13 @@ export async function GET(req: Request) {
   });
 
   // Exchange code for token - use form-encoded data as required by OAuth 2.0
+  // Temporarily hardcode values to test if env vars are the issue
   const params = new URLSearchParams({
-    client_id: process.env.STRAVA_CLIENT_ID!,
-    client_secret: process.env.STRAVA_CLIENT_SECRET!,
+    client_id: "172794",
+    client_secret: "f58933ff81ff645699212050ce2a0e379f7fc886",
     code,
     grant_type: "authorization_code",
-    redirect_uri: process.env.STRAVA_REDIRECT_URI!,
+    redirect_uri: "https://summitchronicles.com/api/strava/callback",
   });
 
   const r = await fetch(OAUTH_TOKEN, {
