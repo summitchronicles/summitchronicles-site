@@ -30,7 +30,7 @@ interface MonthlyData {
 
 async function fetchExistingStravaData() {
   // Use your existing Strava endpoint that's already working
-  const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3001'}/api/strava/recent`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/api/strava/recent`)
   
   if (!response.ok) {
     throw new Error(`Failed to fetch existing Strava data: ${response.status}`)
@@ -65,7 +65,9 @@ function aggregateMonthlyData(activities: StravaActivity[]): {
     
     const stats = monthlyStats.get(monthKey)!
     
-    if (activity.type === 'Run') {
+    const activityType = (activity as any).sport_type || activity.type;
+    
+    if (activityType === 'Run') {
       stats.running.distance += activity.distance / 1000 // convert to km
       stats.running.time += activity.moving_time / 3600 // convert to hours
       stats.running.sessions += 1
@@ -74,21 +76,25 @@ function aggregateMonthlyData(activities: StravaActivity[]): {
         const paceSecondsPerKm = 1000 / activity.average_speed
         stats.running.speeds.push(paceSecondsPerKm / 60) // min/km
       }
-    } else if (['Hike', 'Walk', 'TrailRun'].includes(activity.type)) {
+    } else if (['Hike', 'Walk', 'TrailRun'].includes(activityType)) {
       stats.hiking.distance += activity.distance / 1000 // convert to km
       stats.hiking.time += activity.moving_time / 3600 // convert to hours
       stats.hiking.sessions += 1
       stats.hiking.elevation += activity.total_elevation_gain || 0
-    } else if (['WeightTraining', 'Workout', 'CrossTraining'].includes(activity.type)) {
+    } else if (['WeightTraining', 'Workout', 'CrossTraining', 'HighIntensityIntervalTraining'].includes(activityType)) {
       stats.strength.sessions += 1
       stats.strength.duration += activity.moving_time / 60 // convert to minutes
     }
   })
 
   // Convert to arrays and calculate derived metrics
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  // Get all months that actually have data, sorted by date
+  const allMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  const monthsWithData = Array.from(monthlyStats.keys()).sort((a, b) => 
+    allMonths.indexOf(a) - allMonths.indexOf(b)
+  )
   
-  const running = months.map(month => {
+  const running = monthsWithData.map(month => {
     const data = monthlyStats.get(month)?.running || { distance: 0, time: 0, sessions: 0, speeds: [] }
     const avgPace = data.speeds.length > 0 
       ? data.speeds.reduce((a, b) => a + b, 0) / data.speeds.length 
@@ -103,7 +109,7 @@ function aggregateMonthlyData(activities: StravaActivity[]): {
     }
   })
 
-  const hiking = months.map(month => {
+  const hiking = monthsWithData.map(month => {
     const data = monthlyStats.get(month)?.hiking || { distance: 0, time: 0, sessions: 0, elevation: 0 }
     return {
       month,
@@ -114,11 +120,11 @@ function aggregateMonthlyData(activities: StravaActivity[]): {
     }
   })
 
-  const strength = months.map(month => {
+  const strength = monthsWithData.map(month => {
     const data = monthlyStats.get(month)?.strength || { sessions: 0, duration: 0 }
     // Mock total weight based on sessions (realistic progression)
     const baseWeight = 1000 // kg per session
-    const progression = months.indexOf(month) * 100 // progressive overload
+    const progression = allMonths.indexOf(month) * 100 // progressive overload
     const totalWeight = data.sessions > 0 ? (baseWeight + progression) * data.sessions : 0
     
     return {
