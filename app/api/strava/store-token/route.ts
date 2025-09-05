@@ -17,24 +17,7 @@ export async function POST() {
 
     console.log('Storing Strava token data in clean table...');
 
-    // Create a clean table with exact schema we need
-    const { error: createError } = await supabase.rpc('exec_sql', {
-      sql: `
-        CREATE TABLE IF NOT EXISTS strava_auth_tokens (
-          id INTEGER PRIMARY KEY DEFAULT 1,
-          access_token TEXT NOT NULL,
-          refresh_token TEXT NOT NULL,
-          expires_at INTEGER NOT NULL,
-          created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-          updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-        );
-      `
-    });
-
-    if (createError) {
-      console.error('Table creation error:', createError);
-      return NextResponse.json({ error: 'Failed to create table', details: createError }, { status: 500 });
-    }
+    // Skip table creation for now - assume it exists
 
     // Insert the token data
     const { error: insertError } = await supabase
