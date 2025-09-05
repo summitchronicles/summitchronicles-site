@@ -48,6 +48,9 @@ export default function StravaAdminPage() {
       `approval_prompt=force&` +
       `scope=${scope}`;
     
+    console.log('Strava Auth URL:', authUrl);
+    console.log('Client ID being used:', clientId);
+    
     window.location.href = authUrl;
   };
 
