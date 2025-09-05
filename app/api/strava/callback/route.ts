@@ -25,17 +25,19 @@ export async function GET(req: Request) {
     code_length: code?.length
   });
 
-  // Exchange code for token
+  // Exchange code for token - use form-encoded data as required by OAuth 2.0
+  const params = new URLSearchParams({
+    client_id: process.env.STRAVA_CLIENT_ID!,
+    client_secret: process.env.STRAVA_CLIENT_SECRET!,
+    code,
+    grant_type: "authorization_code",
+    redirect_uri: process.env.STRAVA_REDIRECT_URI!,
+  });
+
   const r = await fetch(OAUTH_TOKEN, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      client_id: process.env.STRAVA_CLIENT_ID,
-      client_secret: process.env.STRAVA_CLIENT_SECRET,
-      code,
-      grant_type: "authorization_code",
-      redirect_uri: process.env.STRAVA_REDIRECT_URI,
-    }),
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params,
   });
 
   if (!r.ok) {
