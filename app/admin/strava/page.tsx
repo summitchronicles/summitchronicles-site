@@ -45,7 +45,6 @@ export default function StravaAdminPage() {
       `client_id=${clientId}&` +
       `response_type=code&` +
       `redirect_uri=${encodeURIComponent(redirectUri)}&` +
-      `approval_prompt=force&` +
       `scope=${scope}`;
     
     console.log('Strava Auth URL:', authUrl);
