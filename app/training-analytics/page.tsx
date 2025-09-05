@@ -139,6 +139,29 @@ export default function TrainingAnalyticsPage() {
   const currentStrengthData = stravaData?.monthlyData.strength || strengthData;
   const totalStats = stravaData?.totalStats;
 
+  // Calculate overall average pace from monthly data
+  const calculateOverallAvgPace = () => {
+    if (!currentRunningData || currentRunningData.length === 0) return "5:05";
+    
+    const validPaces = currentRunningData
+      .map(month => month.avgPace)
+      .filter(pace => pace && pace !== "0:00");
+    
+    if (validPaces.length === 0) return "5:05";
+    
+    // Convert pace strings to total seconds, then average them
+    const totalSeconds = validPaces.reduce((sum, pace) => {
+      const [minutes, seconds] = pace.split(':').map(Number);
+      return sum + (minutes * 60 + seconds);
+    }, 0);
+    
+    const avgSeconds = Math.round(totalSeconds / validPaces.length);
+    const avgMinutes = Math.floor(avgSeconds / 60);
+    const remainingSeconds = avgSeconds % 60;
+    
+    return `${avgMinutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+  };
+
   const tabs = [
     { id: 'running', label: 'Running', icon: FireIcon },
     { id: 'hiking', label: 'Hiking', icon: MapIcon },
@@ -201,7 +224,7 @@ export default function TrainingAnalyticsPage() {
         />
         <MetricCard
           title="Avg Pace"
-          value="5:05"
+          value={calculateOverallAvgPace()}
           unit="/km"
           change="3"
           icon={FireIcon}
