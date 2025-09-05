@@ -25,15 +25,8 @@ export async function GET(req: Request) {
     code_length: code?.length
   });
 
-  // Exchange code for token - use form-encoded data as required by OAuth 2.0
-  // Temporarily hardcode values to test if env vars are the issue
-  const params = new URLSearchParams({
-    client_id: "172794",
-    client_secret: "f58933ff81ff645699212050ce2a0e379f7fc886",
-    code,
-    grant_type: "authorization_code",
-    redirect_uri: "https://summitchronicles.com/api/strava/callback",
-  });
+  // Exchange code for token - exactly mirror the working curl request
+  const formData = `client_id=172794&client_secret=f58933ff81ff645699212050ce2a0e379f7fc886&code=${code}&grant_type=authorization_code&redirect_uri=https://summitchronicles.com/api/strava/callback`;
 
   const r = await fetch(OAUTH_TOKEN, {
     method: "POST",
@@ -41,7 +34,7 @@ export async function GET(req: Request) {
       "Content-Type": "application/x-www-form-urlencoded",
       "Accept": "application/json"
     },
-    body: params.toString(),
+    body: formData,
   });
 
   if (!r.ok) {
