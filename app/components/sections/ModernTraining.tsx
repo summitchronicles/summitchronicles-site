@@ -23,6 +23,28 @@ interface Activity {
   average_speed: number;
 }
 
+interface StravaStats {
+  runs: {
+    count: number;
+    distance_km: number;
+    moving_sec: number;
+  };
+  hikes: {
+    count: number;
+    distance_km: number;
+    elevation_m: number;
+    moving_sec: number;
+  };
+  rides: {
+    count: number;
+    distance_km: number;
+    moving_sec: number;
+  };
+  overall: {
+    elevation_m: number;
+  };
+}
+
 const ACTIVITY_COLORS: Record<string, string> = {
   'Run': 'from-orange-500 to-red-500',
   'Ride': 'from-blue-500 to-cyan-500',
@@ -45,10 +67,13 @@ export default function ModernTraining() {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.3 });
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [stats, setStats] = useState<StravaStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
 
   useEffect(() => {
     fetchActivities();
+    fetchStats();
   }, []);
 
   const fetchActivities = async () => {
@@ -67,6 +92,19 @@ export default function ModernTraining() {
     }
   };
 
+  const fetchStats = async () => {
+    try {
+      setStatsLoading(true);
+      const response = await fetch("/api/strava/stats", { cache: "no-store" });
+      const data = await response.json();
+      setStats(data);
+    } catch (error) {
+      console.error("Failed to fetch stats:", error);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -76,6 +114,49 @@ export default function ModernTraining() {
   const formatDistance = (meters: number) => {
     const km = meters / 1000;
     return km >= 1 ? `${km.toFixed(1)}km` : `${meters}m`;
+  };
+
+  const getStatsDisplay = () => {
+    if (!stats) {
+      return [
+        { icon: CalendarDaysIcon, label: "Active Days", value: "---", change: "" },
+        { icon: MapIcon, label: "Total Distance", value: "---", change: "" },
+        { icon: ArrowTrendingUpIcon, label: "Elevation Gain", value: "---", change: "" },
+        { icon: ClockIcon, label: "Training Hours", value: "---", change: "" }
+      ];
+    }
+
+    const totalActivities = stats.runs.count + stats.hikes.count + stats.rides.count;
+    const totalDistance = stats.runs.distance_km + stats.hikes.distance_km + stats.rides.distance_km;
+    const totalHours = Math.round((stats.runs.moving_sec + stats.hikes.moving_sec + stats.rides.moving_sec) / 3600);
+    const totalElevation = stats.overall.elevation_m;
+
+    return [
+      { 
+        icon: CalendarDaysIcon, 
+        label: "Total Activities", 
+        value: totalActivities.toString(), 
+        change: totalActivities > 0 ? `${Math.round((totalActivities / 365) * 100)}% year complete` : "" 
+      },
+      { 
+        icon: MapIcon, 
+        label: "Total Distance", 
+        value: `${Math.round(totalDistance).toLocaleString()}km`, 
+        change: totalDistance > 1000 ? "+1000km milestone" : ""
+      },
+      { 
+        icon: ArrowTrendingUpIcon, 
+        label: "Elevation Gain", 
+        value: `${Math.round(totalElevation).toLocaleString()}m`, 
+        change: totalElevation > 50000 ? "50k+ meters climbed" : ""
+      },
+      { 
+        icon: ClockIcon, 
+        label: "Training Hours", 
+        value: `${totalHours}h`, 
+        change: totalHours > 200 ? "200+ hours logged" : ""
+      }
+    ];
   };
 
   const container = {
@@ -135,12 +216,7 @@ export default function ModernTraining() {
           animate={isInView ? "show" : "hidden"}
           className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16"
         >
-          {[
-            { icon: CalendarDaysIcon, label: "Active Days", value: "287", change: "+12%" },
-            { icon: MapIcon, label: "Total Distance", value: "2,847km", change: "+18%" },
-            { icon: ArrowTrendingUpIcon, label: "Elevation Gain", value: "84,230m", change: "+25%" },
-            { icon: ClockIcon, label: "Training Hours", value: "312h", change: "+8%" }
-          ].map((stat, index) => (
+          {getStatsDisplay().map((stat, index) => (
             <motion.div
               key={stat.label}
               variants={item}
@@ -152,10 +228,21 @@ export default function ModernTraining() {
                   <div className="p-3 rounded-2xl bg-gradient-to-br from-alpineBlue/20 to-glacierBlue/20">
                     <stat.icon className="w-6 h-6 text-glacierBlue" />
                   </div>
-                  <div className="text-xs font-medium text-successGreen">{stat.change}</div>
+                  {!statsLoading && stat.change && (
+                    <div className="text-xs font-medium text-successGreen">{stat.change}</div>
+                  )}
                 </div>
-                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-white/60">{stat.label}</div>
+                {statsLoading ? (
+                  <div className="space-y-2 animate-pulse">
+                    <div className="h-8 bg-white/10 rounded w-20"></div>
+                    <div className="h-4 bg-white/10 rounded w-16"></div>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                    <div className="text-sm text-white/60">{stat.label}</div>
+                  </>
+                )}
               </div>
               
               {/* Glow Effect */}
@@ -175,11 +262,14 @@ export default function ModernTraining() {
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={fetchActivities}
-              disabled={loading}
+              onClick={() => {
+                fetchActivities();
+                fetchStats();
+              }}
+              disabled={loading || statsLoading}
               className="px-4 py-2 bg-alpineBlue/20 border border-alpineBlue/30 text-alpineBlue rounded-xl hover:bg-alpineBlue/30 transition-all duration-300 disabled:opacity-50"
             >
-              {loading ? 'Syncing...' : 'Sync Latest'}
+              {(loading || statsLoading) ? 'Syncing...' : 'Sync Latest'}
             </motion.button>
           </div>
 
