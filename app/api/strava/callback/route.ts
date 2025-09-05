@@ -17,6 +17,14 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: "Missing ?code from Strava" }, { status: 400 });
   }
 
+  // Log what we're sending (without secret)
+  console.log('OAuth request:', {
+    client_id: process.env.STRAVA_CLIENT_ID,
+    redirect_uri: process.env.STRAVA_REDIRECT_URI,
+    grant_type: "authorization_code",
+    code_length: code?.length
+  });
+
   // Exchange code for token
   const r = await fetch(OAUTH_TOKEN, {
     method: "POST",
