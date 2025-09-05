@@ -17,13 +17,34 @@ export async function POST() {
 
     console.log('Manually storing Strava token data');
 
-    // Store in Supabase with minimal required fields
-    const { error: storeError } = await supabase.from("strava_tokens").upsert({
-      id: 1,
-      access_token: tokenData.access_token,
-      refresh_token: tokenData.refresh_token,
-      expires_at: tokenData.expires_at
-    });
+    // Store in Supabase with minimal required fields - use insert/update to avoid schema cache issues
+    const { data: existing } = await supabase.from("strava_tokens").select('id').eq('id', 1).single();
+    
+    let storeError;
+    if (existing) {
+      // Update existing record
+      const { error } = await supabase
+        .from("strava_tokens")
+        .update({
+          access_token: tokenData.access_token,
+          refresh_token: tokenData.refresh_token,
+          expires_at: tokenData.expires_at,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', 1);
+      storeError = error;
+    } else {
+      // Insert new record
+      const { error } = await supabase
+        .from("strava_tokens")
+        .insert({
+          id: 1,
+          access_token: tokenData.access_token,
+          refresh_token: tokenData.refresh_token,
+          expires_at: tokenData.expires_at
+        });
+      storeError = error;
+    }
 
     if (storeError) {
       console.error('Supabase storage error:', storeError);
