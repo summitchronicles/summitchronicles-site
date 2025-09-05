@@ -55,8 +55,7 @@ export async function GET(req: Request) {
     id: 1,
     access_token: json.access_token,
     refresh_token: json.refresh_token,
-    expires_at: json.expires_at,
-    athlete_id: json.athlete?.id
+    expires_at: json.expires_at
   });
 
   if (storeError) {

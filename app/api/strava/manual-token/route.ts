@@ -18,7 +18,7 @@ export async function POST() {
 
     console.log('Manually storing Strava token data');
 
-    // Store in Supabase (without athlete_id column)
+    // Store in Supabase with minimal required fields
     const { error: storeError } = await supabase.from("strava_tokens").upsert({
       id: 1,
       access_token: tokenData.access_token,
