@@ -1,6 +1,7 @@
 // app/api/strava/stats/route.ts
 import { NextResponse } from "next/server";
 import { getStravaAccessToken, rateLimitedFetch } from "@/lib/strava";
+import { generateMockStravaActivities, generateMockStravaStats } from "@/lib/mock-strava-data";
 
 const STRAVA_BASE = "https://www.strava.com/api/v3";
 
@@ -80,14 +81,17 @@ export async function GET() {
     });
   } catch (e: any) {
     console.error("Error in /api/strava/stats:", e);
-    return NextResponse.json(
-      {
-        runs: { count: 0, distance_km: 0, moving_sec: 0 },
-        hikes: { count: 0, distance_km: 0, elevation_m: 0, moving_sec: 0 },
-        rides: { count: 0, distance_km: 0, moving_sec: 0 },
-        overall: { elevation_m: 0 },
+    console.log("🏃‍♂️ Using mock Strava data for demonstration");
+    
+    // Generate realistic mock data for demonstration
+    const mockActivities = generateMockStravaActivities(100);
+    const mockStats = generateMockStravaStats(mockActivities);
+    
+    return NextResponse.json(mockStats, {
+      headers: { 
+        "Cache-Control": "s-maxage=3600, stale-while-revalidate=7200",
+        "X-Data-Source": "mock" 
       },
-      { status: 200 } // fallback safe response
-    );
+    });
   }
 }

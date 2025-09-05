@@ -41,10 +41,10 @@ async function checkDatabase(): Promise<HealthStatus['checks']['database']> {
   try {
     const supabase = getSupabaseAdmin()
     
-    // Simple ping query
+    // Simple ping query - use blog_posts table which exists
     const { data, error } = await supabase
-      .from('analytics_sessions')
-      .select('count')
+      .from('blog_posts')
+      .select('id')
       .limit(1)
     
     if (error) throw error
@@ -73,7 +73,10 @@ async function checkAnalytics(): Promise<HealthStatus['checks']['analytics']> {
   const start = Date.now()
   try {
     // Test analytics endpoint
-    const response = await fetch(`${process.env.VERCEL_URL || 'http://localhost:3000'}/api/analytics/track`, {
+    const baseUrl = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}` 
+      : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    const response = await fetch(`${baseUrl}/api/analytics/track`, {
       method: 'GET'
     })
     

@@ -111,7 +111,7 @@ export async function GET(req: NextRequest) {
         
         const ratings = { good: 0, 'needs-improvement': 0, poor: 0 }
         values.forEach(v => {
-          if (v.rating in ratings) ratings[v.rating]++
+          if (v.rating in ratings) ratings[v.rating as keyof typeof ratings]++
         })
         
         return [metricName, {

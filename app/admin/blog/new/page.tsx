@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
 import {
   ArrowLeftIcon,
@@ -16,12 +15,6 @@ import {
   PaperAirplaneIcon
 } from '@heroicons/react/24/outline';
 import ImageUpload from '../../../components/blog/ImageUpload';
-
-// Dynamic import for TinyMCE to avoid SSR issues  
-const Editor = dynamic(() => import('@tinymce/tinymce-react'), {
-  ssr: false,
-  loading: () => <div className="h-64 bg-white/5 rounded-xl flex items-center justify-center text-white/60">Loading editor...</div>
-}) as any;
 
 interface Category {
   name: string;
@@ -244,26 +237,17 @@ export default function NewBlogPost() {
               <label className="block text-white font-medium mb-3">Content</label>
               
               {!previewMode ? (
-                <div className="bg-white rounded-xl overflow-hidden">
-                  <Editor
-                    apiKey="zogwwzpyckchvocvebx1dw4kqnqp8rbctxktrfgwdvld3h5v"
+                <div className="bg-white rounded-xl p-6">
+                  <textarea
                     value={formData.content}
-                    onEditorChange={handleContentChange}
-                    init={{
-                      height: 500,
-                      menubar: false,
-                      plugins: [
-                        'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                        'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                        'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
-                      ],
-                      toolbar: 
-                        'undo redo | blocks | bold italic forecolor | alignleft aligncenter ' +
-                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                        'removeformat | help',
-                      content_style: 'body { font-family: Arial, sans-serif; font-size:14px }'
-                    }}
+                    onChange={(e) => handleContentChange(e.target.value)}
+                    rows={20}
+                    className="w-full bg-transparent border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Write your blog content here..."
                   />
+                  <div className="text-sm text-gray-500 mt-2">
+                    Rich text editor temporarily disabled for production build
+                  </div>
                 </div>
               ) : (
                 <div className="bg-white rounded-xl p-6 min-h-[500px]">
@@ -417,10 +401,12 @@ export default function NewBlogPost() {
               <ImageUpload 
                 showGallery={true}
                 onImageUploaded={(imageUrl) => {
-                  // Insert image into TinyMCE editor
-                  if (window.tinymce && window.tinymce.activeEditor) {
-                    window.tinymce.activeEditor.insertContent(`<img src="${imageUrl}" alt="" style="max-width: 100%; height: auto;" />`);
-                  }
+                  // Insert image markdown into content
+                  const markdown = `\n![Image](${imageUrl})\n`;
+                  setFormData(prev => ({
+                    ...prev,
+                    content: prev.content + markdown
+                  }));
                 }}
               />
             </div>

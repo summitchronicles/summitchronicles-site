@@ -91,11 +91,20 @@ export const addToOfflineQueue = async (data: any) => {
         timestamp: Date.now()
       });
       
-      await tx.complete;
+      await new Promise((resolve, reject) => {
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => reject(tx.error);
+      });
       
-      // Register for background sync
-      const registration = await navigator.serviceWorker.ready;
-      await registration.sync.register('analytics-sync');
+      // Register for background sync (if supported)
+      try {
+        const registration = await navigator.serviceWorker.ready;
+        if ('sync' in registration) {
+          await (registration as any).sync.register('analytics-sync');
+        }
+      } catch (syncError) {
+        console.warn('[SW] Background sync not supported:', syncError);
+      }
       
       console.log('[SW] Data queued for background sync');
     } catch (error) {

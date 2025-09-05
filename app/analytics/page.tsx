@@ -172,7 +172,7 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
           title="Unique Visitors"
-          value={data.sessions?.length || '0'}
+          value={data.visitors?.length || '0'}
           icon={UsersIcon}
         />
         <MetricCard
@@ -199,8 +199,8 @@ export default function AnalyticsPage() {
             Geographic Distribution
           </h3>
           <div className="space-y-3">
-            {data.geography && data.geography.length > 0 ? (
-              data.geography.slice(0, 5).map((country: any, index: number) => (
+            {data.visitors && data.visitors.length > 0 ? (
+              data.visitors.slice(0, 5).map((country: any, index: number) => (
                 <div key={`${country.country}-${index}`} className="flex justify-between items-center">
                   <span className="text-white/80">{country.country || 'Unknown'}</span>
                   <span className="text-summitGold font-medium">{country.count || 0}</span>
@@ -225,8 +225,8 @@ export default function AnalyticsPage() {
             Device Types
           </h3>
           <div className="space-y-3">
-            {data.devices && data.devices.length > 0 ? (
-              data.devices.slice(0, 5).map((device: any, index: number) => (
+            {data.visitors && data.visitors.length > 0 ? (
+              data.visitors.slice(0, 5).map((device: any, index: number) => (
                 <div key={`${device.device_type}-${device.browser}-${index}`} className="flex justify-between items-center">
                   <span className="text-white/80">
                     {device.device_type || 'Unknown'} - {device.browser || 'Unknown'}
@@ -250,7 +250,7 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <MetricCard
           title="Total Questions"
-          value={data.interactions?.length || '0'}
+          value={data.ai?.length || '0'}
           icon={ChatBubbleBottomCenterTextIcon}
         />
         <MetricCard
@@ -278,7 +278,7 @@ export default function AnalyticsPage() {
       >
         <h3 className="text-lg font-semibold text-white mb-4">Popular Topics</h3>
         <div className="space-y-4">
-          {data.topics?.slice(0, 8).map((topic: any, index: number) => (
+          {data.ai?.slice(0, 8).map((topic: any, index: number) => (
             <div key={topic.topic_name} className="flex items-center justify-between">
               <div>
                 <span className="text-white font-medium">{topic.topic_name}</span>
@@ -305,7 +305,7 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <MetricCard
           title="Total Page Views"
-          value={data.popularPages?.reduce((acc: number, page: any) => acc + page.total_views, 0) || '0'}
+          value={data.content?.reduce((acc: number, page: any) => acc + page.total_views, 0) || '0'}
           icon={EyeIcon}
         />
         <MetricCard
@@ -315,7 +315,7 @@ export default function AnalyticsPage() {
         />
         <MetricCard
           title="Popular Pages"
-          value={data.popularPages?.length || '0'}
+          value={data.content?.length || '0'}
           icon={DocumentTextIcon}
         />
       </div>
@@ -328,7 +328,7 @@ export default function AnalyticsPage() {
       >
         <h3 className="text-lg font-semibold text-white mb-4">Top Performing Pages</h3>
         <div className="space-y-4">
-          {data.popularPages?.slice(0, 10).map((page: any, index: number) => (
+          {data.content?.slice(0, 10).map((page: any, index: number) => (
             <div key={page.page_url} className="flex items-center justify-between">
               <div>
                 <span className="text-white font-medium">{page.page_title || page.page_url}</span>
@@ -350,7 +350,7 @@ export default function AnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <MetricCard
           title="Active Users"
-          value={data.liveStats?.active_users || '0'}
+          value={data.realtime?.active_users || '0'}
           icon={UsersIcon}
         />
         <MetricCard
@@ -365,7 +365,7 @@ export default function AnalyticsPage() {
         />
         <MetricCard
           title="Response Time"
-          value={data.liveStats?.avg_ai_response_time ? `${Math.round(data.liveStats.avg_ai_response_time)}ms` : '0ms'}
+          value={data.realtime?.avg_ai_response_time ? `${Math.round(data.realtime.avg_ai_response_time)}ms` : '0ms'}
           icon={ClockIcon}
         />
       </div>
@@ -379,7 +379,7 @@ export default function AnalyticsPage() {
         >
           <h3 className="text-lg font-semibold text-white mb-4">Active Sessions</h3>
           <div className="space-y-3 max-h-64 overflow-y-auto">
-            {data.activeSessions?.map((session: any, index: number) => (
+            {data.realtime?.activeSessions?.map((session: any, index: number) => (
               <div key={index} className="flex justify-between items-center py-2">
                 <div>
                   <span className="text-white/80 text-sm">{session.current_page}</span>
@@ -401,7 +401,7 @@ export default function AnalyticsPage() {
         >
           <h3 className="text-lg font-semibold text-white mb-4">Recent Activity</h3>
           <div className="space-y-3 max-h-64 overflow-y-auto">
-            {data.recentActivity?.map((activity: any, index: number) => (
+            {data.realtime?.recentActivity?.map((activity: any, index: number) => (
               <div key={index} className="flex justify-between items-center py-2">
                 <span className="text-white/80 text-sm">{activity.page_url}</span>
                 <span className="text-white/60 text-xs">

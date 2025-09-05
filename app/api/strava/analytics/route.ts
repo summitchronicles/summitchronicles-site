@@ -123,6 +123,8 @@ function aggregateMonthlyData(activities: StravaActivity[]): {
     
     return {
       month,
+      distance: 0, // Not applicable for strength training
+      hours: data.sessions > 0 ? Math.round(data.duration / data.sessions / 60) : 0,
       totalWeight,
       sessions: data.sessions,
       avgDuration: data.sessions > 0 ? Math.round(data.duration / data.sessions) : 0

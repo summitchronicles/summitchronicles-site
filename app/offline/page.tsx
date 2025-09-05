@@ -11,7 +11,7 @@ export default function OfflinePage() {
   const handleRetry = () => {
     if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
       navigator.serviceWorker.ready.then((registration) => {
-        return registration.sync.register('retry-connection');
+        return (registration as any).sync.register('retry-connection');
       });
     }
     window.location.reload();

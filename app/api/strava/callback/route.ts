@@ -45,9 +45,6 @@ export async function GET(req: Request) {
     expires_at: json.expires_at,
   });
 
-  return NextResponse.json({
-    ok: true,
-    message: "Strava connected successfully",
-    tokens: json,
-  });
+  // Redirect to success page
+  return NextResponse.redirect(new URL('/admin/strava?success=true', req.url));
 }

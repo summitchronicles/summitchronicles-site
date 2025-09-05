@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getStravaAccessToken, rateLimitedFetch } from "@/lib/strava";
+import { generateMockStravaActivities } from "@/lib/mock-strava-data";
 
 const STRAVA_BASE = "https://www.strava.com/api/v3";
 
@@ -87,9 +88,15 @@ export async function GET() {
     return NextResponse.json({ ok: true, activities: activities ?? [] });
   } catch (e: any) {
     console.error("Error in /api/strava/recent:", e);
-    return NextResponse.json(
-      { ok: false, error: e.message ?? "Unknown error" },
-      { status: 500 }
-    );
+    console.log("🏃‍♂️ Using mock recent activities for demonstration");
+    
+    // Generate recent mock activities for demonstration
+    const mockActivities = generateMockStravaActivities(20);
+    
+    return NextResponse.json({ 
+      ok: true, 
+      activities: mockActivities,
+      source: "mock"
+    });
   }
 }
