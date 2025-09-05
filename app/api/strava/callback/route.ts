@@ -37,8 +37,11 @@ export async function GET(req: Request) {
 
   const r = await fetch(OAUTH_TOKEN, {
     method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: params,
+    headers: { 
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Accept": "application/json"
+    },
+    body: params.toString(),
   });
 
   if (!r.ok) {
