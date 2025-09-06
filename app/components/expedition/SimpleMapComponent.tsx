@@ -1,6 +1,5 @@
 "use client";
 
-import { MapContainer, TileLayer, Marker, Polyline } from 'react-leaflet';
 import { GPSPoint, ParticipantData } from '@/lib/expedition-tracker';
 
 interface SimpleMapComponentProps {
@@ -15,40 +14,14 @@ export default function SimpleMapComponent({
   participants 
 }: SimpleMapComponentProps) {
   return (
-    <div className="h-80 rounded-lg overflow-hidden">
-      <MapContainer
-        center={[currentPosition.lat, currentPosition.lng]}
-        zoom={13}
-        style={{ height: '100%', width: '100%' }}
-      >
-        <TileLayer
-          url="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://opentopomap.org">OpenTopoMap</a>'
-        />
-        
-        {/* Current position */}
-        <Marker position={[currentPosition.lat, currentPosition.lng]} />
-        
-        {/* Route */}
-        {route.length > 0 && (
-          <Polyline
-            positions={route.map(point => [point.lat, point.lng])}
-            color="#3b82f6"
-            weight={3}
-            opacity={0.8}
-          />
-        )}
-        
-        {/* Participant positions */}
-        {participants.map(participant => (
-          participant.position && (
-            <Marker
-              key={participant.id}
-              position={[participant.position.lat, participant.position.lng]}
-            />
-          )
-        ))}
-      </MapContainer>
+    <div className="h-80 rounded-lg overflow-hidden bg-gray-800 flex items-center justify-center">
+      <div className="text-center text-gray-400">
+        <div className="text-sm">Map Component</div>
+        <div className="text-xs mt-1">
+          Position: {currentPosition.lat.toFixed(4)}, {currentPosition.lng.toFixed(4)}
+        </div>
+        <div className="text-xs">Participants: {participants.length}</div>
+      </div>
     </div>
   );
 }
