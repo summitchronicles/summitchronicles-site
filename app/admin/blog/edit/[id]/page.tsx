@@ -43,7 +43,7 @@ interface BlogPost {
 export default function EditBlogPost() {
   const router = useRouter();
   const params = useParams();
-  const postId = params.id as string;
+  const postId = params?.id as string;
   
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -55,7 +55,7 @@ export default function EditBlogPost() {
     excerpt: '',
     content: '',
     category: '',
-    status: 'draft' as 'draft' | 'published' | 'scheduled',
+    status: 'draft' as 'draft' | 'published' | 'scheduled' | 'archived',
     featured: false,
     meta_title: '',
     meta_description: '',
