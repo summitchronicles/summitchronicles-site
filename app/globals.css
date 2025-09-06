@@ -87,6 +87,65 @@
   --gradient-summit: linear-gradient(135deg, var(--color-summit-gold) 0%, #fcd34d 100%);
   --gradient-sky: linear-gradient(to bottom, #0ea5e9 0%, var(--color-alpine-blue) 100%);
   --gradient-elevation: linear-gradient(to top, var(--color-light-gray) 0%, var(--color-snow-white) 100%);
+  
+  /* Phase 1 Extensions - Advanced Visual System */
+  
+  /* 3D Transform & Perspective */
+  --perspective: 1000px;
+  --transform-3d-scale: 1.05;
+  --transform-3d-rotate-x: -5deg;
+  --transform-3d-rotate-y: 15deg;
+  --transform-preserve-3d: preserve-3d;
+  
+  /* Advanced Animation Variables */
+  --animation-bounce-in: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --animation-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --animation-mountain-lift: cubic-bezier(0.23, 1, 0.32, 1);
+  --duration-ultra-slow: 800ms;
+  --duration-page-transition: 1200ms;
+  
+  /* Glassmorphism Effects */
+  --glass-background: rgba(255, 255, 255, 0.1);
+  --glass-background-dark: rgba(0, 0, 0, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-blur: 16px;
+  --glass-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  
+  /* Particle & Effect Colors */
+  --particle-snow: rgba(255, 255, 255, 0.8);
+  --particle-mist: rgba(135, 206, 250, 0.3);
+  --aurora-green: #00ff88;
+  --aurora-blue: #0088ff;
+  --aurora-purple: #8800ff;
+  
+  /* Advanced Gradients */
+  --gradient-aurora: linear-gradient(45deg, var(--aurora-green) 0%, var(--aurora-blue) 50%, var(--aurora-purple) 100%);
+  --gradient-mountain-mist: radial-gradient(ellipse at center, var(--particle-mist) 0%, transparent 70%);
+  --gradient-glass: linear-gradient(135deg, var(--glass-background) 0%, rgba(255,255,255,0.05) 100%);
+  --gradient-depth: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 100%);
+  
+  /* Altitude Zone Colors */
+  --altitude-base: #22c55e;      /* Base Camp - Green */
+  --altitude-low: #3b82f6;       /* Low Altitude - Blue */
+  --altitude-mid: #f59e0b;       /* Mid Altitude - Orange */
+  --altitude-high: #ef4444;      /* High Altitude - Red */
+  --altitude-summit: #8b5cf6;    /* Summit - Purple */
+  
+  /* Interactive Feedback */
+  --haptic-light: scale(1.02);
+  --haptic-medium: scale(1.05);
+  --haptic-strong: scale(1.08);
+  --ripple-duration: 600ms;
+  
+  /* Content Layers - Z-index system */
+  --z-base: 0;
+  --z-content: 10;
+  --z-elevated: 20;
+  --z-sticky: 30;
+  --z-overlay: 40;
+  --z-modal: 50;
+  --z-toast: 60;
+  --z-tooltip: 70;
 }
 
 /* ===== Global Defaults ===== */
@@ -350,6 +409,68 @@ body {
   }
 }
 
+@keyframes mountainLift {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  60% {
+    opacity: 0.8;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes parallaxDrift {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(-2px) translateY(-1px);
+  }
+  50% {
+    transform: translateX(-1px) translateY(-3px);
+  }
+  75% {
+    transform: translateX(-3px) translateY(-2px);
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes aurora {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
 /* Animation Utilities */
 .animate-fade-in-up {
   animation: fadeInUp var(--duration-slow) var(--easing-ease-out);
@@ -359,6 +480,242 @@ body {
 }
 .animate-slide-in-right {
   animation: slideInRight var(--duration-slow) var(--easing-ease-out);
+}
+.animate-mountain-lift {
+  animation: mountainLift var(--duration-ultra-slow) var(--animation-mountain-lift);
+}
+.animate-float-up {
+  animation: floatUp 3s ease-in-out infinite;
+}
+.animate-parallax-drift {
+  animation: parallaxDrift 8s ease-in-out infinite;
+}
+.animate-aurora {
+  background: var(--gradient-aurora);
+  background-size: 200% 200%;
+  animation: aurora 4s ease infinite;
+}
+
+/* ===== Phase 1 Advanced Component Classes ===== */
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: var(--glass-background);
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+}
+
+.glass-card-dark {
+  background: var(--glass-background-dark);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 3D Transform Utilities */
+.transform-3d {
+  transform-style: var(--transform-preserve-3d);
+  perspective: var(--perspective);
+}
+
+.card-3d {
+  transition: transform var(--duration-normal) var(--easing-ease-out);
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover {
+  transform: rotateX(var(--transform-3d-rotate-x)) rotateY(var(--transform-3d-rotate-y)) scale(var(--transform-3d-scale));
+}
+
+/* Altitude Zone Navigation */
+.altitude-zone {
+  position: relative;
+  transition: all var(--duration-slow) var(--animation-mountain-lift);
+}
+
+.altitude-zone[data-zone="base"] {
+  background: linear-gradient(135deg, var(--altitude-base), rgba(34, 197, 94, 0.8));
+}
+
+.altitude-zone[data-zone="low"] {
+  background: linear-gradient(135deg, var(--altitude-low), rgba(59, 130, 246, 0.8));
+}
+
+.altitude-zone[data-zone="mid"] {
+  background: linear-gradient(135deg, var(--altitude-mid), rgba(245, 158, 11, 0.8));
+}
+
+.altitude-zone[data-zone="high"] {
+  background: linear-gradient(135deg, var(--altitude-high), rgba(239, 68, 68, 0.8));
+}
+
+.altitude-zone[data-zone="summit"] {
+  background: linear-gradient(135deg, var(--altitude-summit), rgba(139, 92, 246, 0.8));
+}
+
+/* Interactive Ripple Effect */
+.ripple-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: scale(0);
+  animation: ripple var(--ripple-duration) linear;
+  pointer-events: none;
+}
+
+/* Enhanced Button System */
+.btn-mountain {
+  @apply px-6 py-3 font-semibold rounded-xl transition-all duration-normal;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-mountain::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left var(--duration-slow) var(--easing-ease-out);
+}
+
+.btn-mountain:hover::before {
+  left: 100%;
+}
+
+.btn-mountain:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-mountain:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: var(--duration-fast);
+}
+
+/* Expedition Status Indicators */
+.status-indicator {
+  @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium;
+  position: relative;
+  overflow: hidden;
+}
+
+.status-indicator::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.8;
+  animation: pulse 2s infinite;
+}
+
+.status-active {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--color-success-green);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.status-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--color-warning-orange);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.status-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--color-danger-red);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Parallax Layers */
+.parallax-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.parallax-background {
+  transform: translateZ(-10px) scale(1.1);
+}
+
+.parallax-midground {
+  transform: translateZ(-5px) scale(1.05);
+}
+
+.parallax-foreground {
+  transform: translateZ(0);
+}
+
+/* Enhanced Search Interface */
+.search-enhanced {
+  @apply relative;
+}
+
+.search-enhanced input {
+  @apply w-full px-4 py-3 pr-12 rounded-xl border-0 bg-white/10 backdrop-blur-md;
+  border: 1px solid var(--glass-border);
+  transition: all var(--duration-normal) var(--easing-ease-out);
+}
+
+.search-enhanced input:focus {
+  background: var(--glass-background);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), var(--shadow-lg);
+  border-color: var(--color-alpine-blue);
+}
+
+.search-suggestions {
+  @apply absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border border-gray-200 max-h-96 overflow-y-auto;
+  backdrop-filter: var(--glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--glass-backdrop-filter);
+  z-index: var(--z-elevated);
+}
+
+/* Content Loading States */
+.content-shimmer {
+  background: linear-gradient(90deg, 
+    var(--color-light-gray) 0%, 
+    rgba(255,255,255,0.8) 50%, 
+    var(--color-light-gray) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+/* Mountain Scene Container */
+.mountain-scene {
+  position: relative;
+  overflow: hidden;
+  perspective: var(--perspective);
+  transform-style: preserve-3d;
 }
 
 /* Responsive Design Helpers */

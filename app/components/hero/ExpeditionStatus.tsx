@@ -9,9 +9,32 @@ import {
   SignalIcon
 } from "@heroicons/react/24/outline";
 import { clsx } from "clsx";
+import { useEffect, useState } from "react";
 
 interface ExpeditionStatusProps {
   className?: string;
+}
+
+interface StravaStats {
+  runs: {
+    count: number;
+    distance_km: number;
+    moving_sec: number;
+  };
+  hikes: {
+    count: number;
+    distance_km: number;
+    elevation_m: number;
+    moving_sec: number;
+  };
+  rides: {
+    count: number;
+    distance_km: number;
+    moving_sec: number;
+  };
+  overall: {
+    elevation_m: number;
+  };
 }
 
 interface ExpeditionData {
@@ -90,7 +113,112 @@ const getStatusIcon = (status: string) => {
 };
 
 export default function ExpeditionStatus({ className = "" }: ExpeditionStatusProps) {
-  const { current, next, training, conditions } = mockExpeditionData;
+  const [stravaStats, setStravaStats] = useState<StravaStats | null>(null);
+  const [statsLoading, setStatsLoading] = useState(true);
+  
+  useEffect(() => {
+    const fetchStravaStats = async () => {
+      try {
+        const response = await fetch('/api/strava/stats');
+        const data = await response.json();
+        setStravaStats(data);
+      } catch (error) {
+        console.error('Failed to fetch Strava stats:', error);
+      } finally {
+        setStatsLoading(false);
+      }
+    };
+    
+    fetchStravaStats();
+  }, []);
+
+  // Calculate real training data from Strava
+  const getRealTrainingData = () => {
+    if (!stravaStats) {
+      return mockExpeditionData.training;
+    }
+    
+    const totalActivities = stravaStats.runs.count + stravaStats.hikes.count + stravaStats.rides.count;
+    const totalDistance = Math.round(stravaStats.runs.distance_km + stravaStats.hikes.distance_km + stravaStats.rides.distance_km);
+    
+    // Calculate days active (estimate: assume 1 activity every 1.5 days on average for active days)
+    const daysActive = Math.min(Math.round(totalActivities * 1.5), 365); // More realistic estimate
+    
+    // Determine status based on activity level
+    let status: 'on-track' | 'ahead' | 'behind' = 'on-track';
+    if (totalActivities > 200) status = 'ahead';
+    else if (totalActivities < 100) status = 'behind';
+    
+    return {
+      daysActive,
+      distanceCompleted: `${totalDistance.toLocaleString()}km`,
+      status
+    };
+  };
+
+  // Generate dynamic expedition data based on training progress
+  const getDynamicExpeditionData = () => {
+    if (!stravaStats) {
+      return mockExpeditionData;
+    }
+
+    const totalActivities = stravaStats.runs.count + stravaStats.hikes.count + stravaStats.rides.count;
+    const totalElevation = stravaStats.overall.elevation_m;
+    
+    // Determine current phase based on training progress
+    let currentPhase = "Base Training";
+    let currentLocation = "Home Base - Training Phase";
+    let currentAltitude = "1,200m";
+    let nextTarget = "First Training Camp";
+    let nextAltitude = "2,500m";
+    let eta = "2 months";
+
+    if (totalActivities > 500 && totalElevation > 50000) {
+      currentPhase = "Advanced Training";
+      currentLocation = "High Altitude Training - Banff";
+      currentAltitude = "1,400m";
+      nextTarget = "Everest Base Camp";
+      nextAltitude = "5,364m";
+      eta = "6 months";
+    } else if (totalActivities > 300 && totalElevation > 30000) {
+      currentPhase = "Altitude Acclimatization";
+      currentLocation = "Mountain Training - Local Peaks";
+      currentAltitude = "1,300m";
+      nextTarget = "High Altitude Camp";
+      nextAltitude = "3,500m";
+      eta = "4 months";
+    } else if (totalActivities > 100) {
+      currentPhase = "Endurance Building";
+      currentLocation = "Training Progression - Local Trails";
+      currentAltitude = "1,200m";
+      nextTarget = "Mountain Training";
+      nextAltitude = "2,000m";
+      eta = "3 months";
+    }
+
+    return {
+      current: {
+        location: currentLocation,
+        altitude: currentAltitude,
+        phase: currentPhase
+      },
+      next: {
+        target: nextTarget,
+        altitude: nextAltitude,
+        eta: eta
+      },
+      conditions: {
+        temperature: "-5°C",
+        wind: "15km/h SW",
+        visibility: "Partly cloudy",
+        status: 'good' as const
+      }
+    };
+  };
+
+  const dynamicExpeditionData = getDynamicExpeditionData();
+  const { current, next, conditions } = dynamicExpeditionData;
+  const training = getRealTrainingData();
 
   return (
     <motion.div
@@ -178,20 +306,30 @@ export default function ExpeditionStatus({ className = "" }: ExpeditionStatusPro
             <h3 className="font-semibold text-charcoal">Training</h3>
           </div>
           <div>
-            <div className="text-2xl font-bold text-charcoal mb-1">
-              📊 {training.daysActive}
-            </div>
-            <div className="text-sm text-stoneGray mb-1">
-              days active • {training.distanceCompleted}
-            </div>
-            <div className={clsx(
-              "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium",
-              training.status === 'on-track' && "bg-successGreen/10 text-successGreen",
-              training.status === 'ahead' && "bg-glacierBlue/10 text-glacierBlue",
-              training.status === 'behind' && "bg-warningOrange/10 text-warningOrange"
-            )}>
-              {getStatusIcon(training.status)} {training.status.replace('-', ' ')}
-            </div>
+            {statsLoading ? (
+              <div className="animate-pulse">
+                <div className="h-8 bg-gray-200 rounded mb-2 w-16"></div>
+                <div className="h-4 bg-gray-200 rounded mb-2 w-32"></div>
+                <div className="h-6 bg-gray-200 rounded w-20"></div>
+              </div>
+            ) : (
+              <>
+                <div className="text-2xl font-bold text-charcoal mb-1">
+                  📊 {training.daysActive}
+                </div>
+                <div className="text-sm text-stoneGray mb-1">
+                  days active • {training.distanceCompleted}
+                </div>
+                <div className={clsx(
+                  "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium",
+                  training.status === 'on-track' && "bg-successGreen/10 text-successGreen",
+                  training.status === 'ahead' && "bg-glacierBlue/10 text-glacierBlue",
+                  training.status === 'behind' && "bg-warningOrange/10 text-warningOrange"
+                )}>
+                  {getStatusIcon(training.status)} {training.status.replace('-', ' ')}
+                </div>
+              </>
+            )}
           </div>
         </motion.div>
 

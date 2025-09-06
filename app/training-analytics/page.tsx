@@ -12,6 +12,12 @@ import {
   TrophyIcon,
   CalendarIcon
 } from "@heroicons/react/24/outline";
+import TrainingInsights from "@/app/components/ai-insights/TrainingInsights";
+import PredictiveAnalysis from "@/app/components/ai-insights/PredictiveAnalysis";
+import SmartScheduler from "@/app/components/ai-insights/SmartScheduler";
+import BiometricTracker from "@/app/components/ai-insights/BiometricTracker";
+import GoalSetting from "@/app/components/ai-insights/GoalSetting";
+import GoalSettingSimple from "@/app/components/ai-insights/GoalSettingSimple";
 import {
   LineChart,
   Line,
@@ -166,7 +172,12 @@ export default function TrainingAnalyticsPage() {
     { id: 'running', label: 'Running', icon: FireIcon },
     { id: 'hiking', label: 'Hiking', icon: MapIcon },
     { id: 'strength', label: 'Strength', icon: BoltIcon },
-    { id: 'overview', label: 'Overview', icon: ChartBarIcon }
+    { id: 'overview', label: 'Overview', icon: ChartBarIcon },
+    { id: 'ai-insights', label: 'AI Insights', icon: BoltIcon },
+    { id: 'predictions', label: 'Predictions', icon: TrophyIcon },
+    { id: 'scheduler', label: 'Scheduler', icon: CalendarIcon },
+    { id: 'biometrics', label: 'Recovery', icon: HeartIcon },
+    { id: 'goals', label: 'Goals', icon: TrophyIcon }
   ];
 
   const MetricCard = ({ title, value, unit, change, icon: Icon, color = "alpineBlue" }: any) => (
@@ -672,6 +683,42 @@ export default function TrainingAnalyticsPage() {
         {activeTab === 'hiking' && <HikingTab />}
         {activeTab === 'strength' && <StrengthTab />}
         {activeTab === 'overview' && <OverviewTab />}
+        {activeTab === 'ai-insights' && (
+          <div className="space-y-8">
+            <TrainingInsights 
+              activities={[]} 
+              biometrics={[]}
+              goals={[]}
+            />
+          </div>
+        )}
+        {activeTab === 'predictions' && (
+          <div className="space-y-8">
+            <PredictiveAnalysis 
+              activities={[]}
+              goals={[]}
+            />
+          </div>
+        )}
+        {activeTab === 'scheduler' && (
+          <div className="space-y-8">
+            <SmartScheduler 
+              activities={[]}
+            />
+          </div>
+        )}
+        {activeTab === 'biometrics' && (
+          <div className="space-y-8">
+            <BiometricTracker 
+              data={[]}
+            />
+          </div>
+        )}
+        {activeTab === 'goals' && (
+          <div className="space-y-8">
+            <GoalSettingSimple />
+          </div>
+        )}
       </div>
     </main>
   );
