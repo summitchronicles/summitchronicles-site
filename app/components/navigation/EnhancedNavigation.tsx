@@ -41,6 +41,12 @@ const navigation = [
     description: "Live training data and analytics"
   },
   {
+    name: "Sponsorship",
+    href: "/sponsorship",
+    icon: SparklesIcon,
+    description: "Partner with me for expeditions"
+  },
+  {
     name: "Connect",
     href: "/connect",
     icon: PhoneIcon,

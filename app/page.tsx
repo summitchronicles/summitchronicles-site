@@ -1,4 +1,5 @@
 import EnhancedModernHero from "./components/hero/EnhancedModernHero";
+import SocialProof from "./components/sections/SocialProof";
 import EnhancedSevenSummitsTracker from "./components/sections/EnhancedSevenSummitsTracker";
 import ModernTraining from "./components/sections/ModernTraining";
 import ModernContent from "./components/sections/ModernContent";
@@ -8,6 +9,9 @@ export default function HomePage() {
     <main className="min-h-screen overflow-x-hidden">
       {/* Modern Hero Section */}
       <EnhancedModernHero />
+
+      {/* Social Proof Section */}
+      <SocialProof />
 
       {/* Seven Summits Progress Tracker */}
       <EnhancedSevenSummitsTracker />

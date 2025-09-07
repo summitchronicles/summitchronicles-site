@@ -80,6 +80,25 @@ export default function ModernHero() {
           />
         </motion.div>
 
+        {/* Achievement Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="inline-flex items-center gap-3 bg-gradient-to-r from-summitGold/20 via-yellow-400/20 to-summitGold/20 backdrop-blur-sm border border-summitGold/30 rounded-full px-6 py-3 mb-6"
+        >
+          <span className="text-2xl">🏔️</span>
+          <span className="text-lg md:text-xl font-bold text-summitGold">
+            4/7 SUMMITS CONQUERED
+          </span>
+          <span className="text-white/60 text-sm md:text-base">|</span>
+          <span className="text-white/80 text-sm md:text-base">2013-2024</span>
+          <span className="text-white/60 text-sm md:text-base">|</span>
+          <span className="text-glacierBlue font-semibold text-sm md:text-base">
+            NEXT: VINSON MASSIF 2025
+          </span>
+        </motion.div>
+
         {/* Main Heading */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -123,7 +142,7 @@ export default function ModernHero() {
           {[
             { icon: MapPinIcon, label: "Next Target", value: "Everest 2027", color: "text-alpineBlue" },
             { icon: CalendarIcon, label: "Training Days", value: "365+ Active", color: "text-successGreen" },
-            { icon: TrophyIcon, label: "Progress", value: "3 of 7", color: "text-summitGold" }
+            { icon: TrophyIcon, label: "Progress", value: "4 of 7", color: "text-summitGold" }
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -149,34 +168,58 @@ export default function ModernHero() {
           ))}
         </motion.div>
 
-        {/* CTA Buttons */}
+        {/* Persona-Specific CTA Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1.2 }}
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
         >
-          <motion.button
+          {/* For Marketing Manager Mike - Sponsorship */}
+          <motion.a
+            href="/sponsorship"
             whileHover={{ 
               scale: 1.05,
               boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.1), 0 10px 10px -5px rgba(245, 158, 11, 0.04)"
             }}
             whileTap={{ scale: 0.95 }}
-            onHoverStart={() => setIsHovered(true)}
-            onHoverEnd={() => setIsHovered(false)}
-            className="group relative px-8 py-4 bg-white text-black font-semibold rounded-2xl overflow-hidden shadow-lg"
+            className="group relative px-8 py-4 bg-summitGold text-black font-semibold rounded-2xl overflow-hidden shadow-lg"
           >
             <span className="relative z-10 flex items-center gap-2">
-              Follow My Journey
-              <motion.div
-                animate={{ 
-                  x: isHovered ? 5 : 0,
-                  rotate: isHovered ? 15 : 0
-                }}
-                transition={{ duration: 0.2, type: "spring", stiffness: 300 }}
-              >
-                <ArrowRightIcon className="w-5 h-5" />
-              </motion.div>
+              🎯 Partner With Me
+              <ArrowRightIcon className="w-5 h-5" />
+            </span>
+          </motion.a>
+
+          {/* For Aspiring Adventurer Alex - Inspiration */}
+          <motion.a
+            href="/start-your-journey"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04)"
+            }}
+            whileTap={{ scale: 0.95 }}
+            className="group relative px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-2xl overflow-hidden shadow-lg hover:bg-white/20"
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              🚀 Start Your Adventure
+              <ArrowRightIcon className="w-5 h-5" />
+            </span>
+          </motion.a>
+
+          {/* For CEO Sarah - Professional */}
+          <motion.a
+            href="/speaking"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 20px 25px -5px rgba(16, 185, 129, 0.1), 0 10px 10px -5px rgba(16, 185, 129, 0.04)"
+            }}
+            whileTap={{ scale: 0.95 }}
+            className="group relative px-8 py-4 bg-transparent border-2 border-glacierBlue text-glacierBlue font-semibold rounded-2xl overflow-hidden shadow-lg hover:bg-glacierBlue hover:text-black"
+          >
+            <span className="relative z-10 flex items-center gap-2">
+              🎤 Book Speaking
+              <ArrowRightIcon className="w-5 h-5" />
             </span>
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-summitGold to-yellow-400"
@@ -194,7 +237,7 @@ export default function ModernHero() {
               transition={{ duration: 2, repeat: Infinity }}
               style={{ transform: "translate(-50%, -50%)" }}
             />
-          </motion.button>
+          </motion.a>
 
           <motion.button
             whileHover={{ 
