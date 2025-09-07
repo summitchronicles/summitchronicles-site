@@ -154,7 +154,7 @@ export default function NovelEditor({
               <div className="border-t border-white/10 p-3 bg-white/5">
                 <div className="flex items-center justify-between text-xs text-white/50">
                   <div className="flex gap-4">
-                    <span>💡 Press "/" for commands</span>
+                    <span>💡 Press &quot;/&quot; for commands</span>
                     <span>🖼️ Drag & drop images</span>
                     <span>⌘K for links</span>
                   </div>
@@ -305,7 +305,7 @@ export default function NovelEditor({
                 className="flex w-full items-center space-x-2 rounded-lg px-2 py-1 text-left text-sm text-white hover:bg-white/10"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-500 text-white">
-                  ""
+                  &quot;&quot;
                 </div>
                 <div>
                   <p className="font-medium">Quote</p>

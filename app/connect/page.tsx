@@ -85,7 +85,7 @@ export default function ConnectPage() {
           </h1>
 
           <p className="text-xl md:text-2xl text-white/70 leading-relaxed mb-12">
-            Interested in working together? I'm always open to meaningful partnerships, 
+            Interested in working together? I&apos;m always open to meaningful partnerships, 
             speaking opportunities, and collaborations that align with my mountaineering journey.
           </p>
 
