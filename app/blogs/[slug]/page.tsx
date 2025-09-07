@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import OptimizedImage from "../../components/blog/OptimizedImage";
 import { 
   ArrowLeftIcon,
   ClockIcon,
@@ -129,7 +130,20 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           prose-img:rounded-xl prose-img:shadow-2xl
           prose-code:text-summitGold prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
           prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+          <ReactMarkdown 
+            remarkPlugins={[remarkGfm]}
+            components={{
+              img: ({ src, alt, ...props }) => (
+                <OptimizedImage
+                  src={src || ''}
+                  alt={alt || ''}
+                  width={800}
+                  height={400}
+                  className="rounded-xl shadow-2xl my-6"
+                />
+              )
+            }}
+          >
             {content}
           </ReactMarkdown>
         </div>

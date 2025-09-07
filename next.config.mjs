@@ -20,7 +20,8 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: '*.strava.com' },
       { protocol: 'https', hostname: 'summitchronicles.com' },
-      { protocol: 'https', hostname: '*.supabase.co' }
+      { protocol: 'https', hostname: '*.supabase.co' },
+      { protocol: 'https', hostname: 'nvoljnojiondyjhxwkqq.supabase.co' }
     ],
     minimumCacheTTL: 60,
     formats: ['image/webp', 'image/avif'],
