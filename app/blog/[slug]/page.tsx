@@ -231,9 +231,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             transition={{ delay: 0.6 }}
             className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 md:p-12"
           >
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              className="prose prose-invert prose-lg max-w-none
+            <div className="prose prose-invert prose-lg max-w-none
                 prose-headings:text-white prose-headings:font-bold
                 prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4
                 prose-a:text-summitGold prose-a:no-underline hover:prose-a:underline
@@ -246,8 +244,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                 prose-code:text-summitGold prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
                 prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20"
             >
-              {post.content}
-            </ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {post.content}
+              </ReactMarkdown>
+            </div>
           </motion.div>
         </div>
       </section>
