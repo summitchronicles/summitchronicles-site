@@ -1,0 +1,6 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#374151" stroke="#6B7280" stroke-width="2" rx="8"/>
+  <circle cx="200" cy="150" r="30" fill="#9CA3AF"/>
+  <path d="M170 120l60 60-60 60z" fill="#F59E0B"/>
+  <text x="200" y="200" text-anchor="middle" fill="#F59E0B" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Uploading...</text>
+</svg>

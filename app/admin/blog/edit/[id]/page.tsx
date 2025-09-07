@@ -15,6 +15,7 @@ import {
   PaperAirplaneIcon
 } from '@heroicons/react/24/outline';
 import ImageUpload from '../../../../components/blog/ImageUpload';
+import AdvancedEditor from '../../../../components/editor/AdvancedEditor';
 
 interface Category {
   name: string;
@@ -64,7 +65,6 @@ export default function EditBlogPost() {
     read_time: 5
   });
   const [tagInput, setTagInput] = useState('');
-  const [previewMode, setPreviewMode] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -274,13 +274,6 @@ export default function EditBlogPost() {
             </div>
             
             <div className="flex items-center gap-3">
-              <button
-                onClick={() => setPreviewMode(!previewMode)}
-                className="flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-xl hover:bg-white/20 transition-colors"
-              >
-                <EyeIcon className="w-4 h-4" />
-                {previewMode ? 'Edit' : 'Preview'}
-              </button>
               
               <button
                 onClick={() => handleSave('draft')}
@@ -337,23 +330,11 @@ export default function EditBlogPost() {
             {/* Content */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
               <label className="block text-white font-medium mb-4">Content *</label>
-              {previewMode ? (
-                <div className="prose prose-invert max-w-none">
-                  <div 
-                    className="text-white"
-                    dangerouslySetInnerHTML={{ 
-                      __html: formData.content.replace(/\n/g, '<br />') 
-                    }}
-                  />
-                </div>
-              ) : (
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => handleContentChange(e.target.value)}
-                  placeholder="Share your mountaineering adventure..."
-                  className="w-full h-96 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-summitGold/50 resize-none"
-                />
-              )}
+              <AdvancedEditor
+                content={formData.content}
+                onChange={handleContentChange}
+                placeholder="Edit your mountaineering adventure... Use the toolbar for rich formatting, images, tables, and more!"
+              />
             </div>
 
             {/* Excerpt */}

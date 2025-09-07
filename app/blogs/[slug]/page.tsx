@@ -91,6 +91,52 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     return colors[category] || 'text-gray-400 border-gray-400/20 bg-gray-400/10';
   };
 
+  // Smart content renderer that detects HTML vs Markdown
+  const renderContent = (content: string) => {
+    // Check if content contains HTML tags (from NovelEditor)
+    const containsHTML = /<[^>]+>/.test(content);
+    
+    if (containsHTML) {
+      // Content is HTML from NovelEditor - render directly
+      return (
+        <div 
+          className="prose prose-invert prose-lg max-w-none blog-content
+            prose-headings:text-white prose-headings:font-bold
+            prose-a:text-summitGold prose-a:no-underline hover:prose-a:underline
+            prose-strong:text-white prose-strong:font-semibold
+            prose-em:text-white/90
+            prose-blockquote:border-l-summitGold prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:text-white/70
+            prose-ul:text-white/80 prose-ol:text-white/80 prose-ul:mb-4 prose-ol:mb-4
+            prose-li:text-white/80 prose-li:mb-1
+            prose-img:rounded-xl prose-img:shadow-2xl
+            prose-code:text-summitGold prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
+            prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
+      );
+    } else {
+      // Content is Markdown - use ReactMarkdown
+      return (
+        <div className="prose prose-invert prose-lg max-w-none
+          prose-headings:text-white prose-headings:font-bold
+          prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4
+          prose-a:text-summitGold prose-a:no-underline hover:prose-a:underline
+          prose-strong:text-white prose-strong:font-semibold
+          prose-em:text-white/90
+          prose-blockquote:border-l-summitGold prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:text-white/70
+          prose-ul:text-white/80 prose-ol:text-white/80 prose-ul:mb-4 prose-ol:mb-4
+          prose-li:text-white/80 prose-li:mb-1
+          prose-img:rounded-xl prose-img:shadow-2xl
+          prose-code:text-summitGold prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
+          prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20">
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+            {content}
+          </ReactMarkdown>
+        </div>
+      );
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
@@ -104,8 +150,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-400 text-xl mb-4">Error: {error}</div>
-          <Link href="/blog" className="text-summitGold hover:underline">
-            ← Back to Blog
+          <Link href="/blogs" className="text-summitGold hover:underline">
+            ← Back to Blogs
           </Link>
         </div>
       </div>
@@ -135,11 +181,11 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             className="mb-8"
           >
             <Link 
-              href="/blog" 
+              href="/blogs" 
               className="inline-flex items-center gap-2 text-white/70 hover:text-summitGold transition-colors duration-300"
             >
               <ArrowLeftIcon className="w-4 h-4" />
-              Back to Blog
+              Back to Blogs
             </Link>
           </motion.div>
 
@@ -231,23 +277,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             transition={{ delay: 0.6 }}
             className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 md:p-12"
           >
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              className="prose prose-invert prose-lg max-w-none
-                prose-headings:text-white prose-headings:font-bold
-                prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4
-                prose-a:text-summitGold prose-a:no-underline hover:prose-a:underline
-                prose-strong:text-white prose-strong:font-semibold
-                prose-em:text-white/90
-                prose-blockquote:border-l-summitGold prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:text-white/70
-                prose-ul:text-white/80 prose-ol:text-white/80 prose-ul:mb-4 prose-ol:mb-4
-                prose-li:text-white/80 prose-li:mb-1
-                prose-img:rounded-xl prose-img:shadow-2xl
-                prose-code:text-summitGold prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
-                prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20"
-            >
-              {post.content}
-            </ReactMarkdown>
+            {renderContent(post.content)}
           </motion.div>
         </div>
       </section>
@@ -273,7 +303,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             </div>
             
             <Link 
-              href="/blog"
+              href="/blogs"
               className="text-summitGold hover:text-summitGold/80 transition-colors duration-300 font-medium"
             >
               ← Back to all posts
@@ -281,6 +311,41 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           </motion.div>
         </div>
       </footer>
+      
+      {/* Custom CSS for proper paragraph spacing */}
+      <style jsx global>{`
+        /* Blog content paragraph spacing - preserve user's intended spacing */
+        .blog-content p {
+          color: rgba(255, 255, 255, 0.8) !important;
+          line-height: 1.7 !important;
+          margin: 1em 0 !important;
+          min-height: 1.2em !important;
+        }
+        
+        /* Preserve empty paragraphs in rendered blog content */
+        .blog-content p:empty::before {
+          content: '\\200B' !important; /* Zero-width space */
+          display: inline-block !important;
+        }
+        
+        /* Ensure proper spacing between consecutive paragraphs */
+        .blog-content p + p {
+          margin-top: 1em !important;
+        }
+        
+        /* Handle paragraphs with only whitespace */
+        .blog-content .paragraph-block {
+          margin: 1em 0 !important;
+          min-height: 1.2em !important;
+        }
+        
+        /* Hard break styling for Shift+Enter line breaks in rendered content */
+        .blog-content br {
+          display: block !important;
+          content: '' !important;
+          margin-top: 0.5em !important;
+        }
+      `}</style>
     </article>
   );
 }

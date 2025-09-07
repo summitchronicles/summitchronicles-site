@@ -72,7 +72,7 @@ export default function ModernHero() {
           className="inline-flex items-center gap-2 bg-white/5 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 text-sm text-white/80 mb-8"
         >
           <TrophyIcon className="w-4 h-4 text-summitGold" />
-          Seven Summits Journey
+          Active Climber & Seven Summits Pursuer
           <motion.div
             className="w-2 h-2 bg-successGreen rounded-full"
             animate={{ scale: [1, 1.2, 1] }}
@@ -87,7 +87,7 @@ export default function ModernHero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight mb-6"
         >
-          <span className="block">Stories from</span>
+          <span className="block">I&apos;m Sunith Kumar,</span>
           <motion.span
             className="block bg-gradient-to-r from-summitGold via-yellow-400 to-summitGold bg-clip-text text-transparent"
             initial={{ backgroundPosition: "0% 50%" }}
@@ -95,8 +95,9 @@ export default function ModernHero() {
             transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
             style={{ backgroundSize: "200% 200%" }}
           >
-            the Heights
+            and I&apos;m climbing
           </motion.span>
+          <span className="block text-white">the Seven Summits</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -106,10 +107,10 @@ export default function ModernHero() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed mb-12"
         >
-          Documenting the pursuit of the Seven Summits with{" "}
-          <span className="text-white font-medium">precision</span>,{" "}
-          <span className="text-summitGold font-medium">passion</span>, and{" "}
-          <span className="text-glacierBlue font-medium">purpose</span>.
+          Follow my journey to the world&apos;s highest peaks. Real insights from{" "}
+          <span className="text-white font-medium">actual expeditions</span>,{" "}
+          <span className="text-summitGold font-medium">training wisdom</span>, and{" "}
+          <span className="text-glacierBlue font-medium">gear that works</span> at altitude.
         </motion.p>
 
         {/* Stats Cards */}
@@ -120,9 +121,9 @@ export default function ModernHero() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12"
         >
           {[
-            { icon: MapPinIcon, label: "Current Expedition", value: "Everest Base Camp", color: "text-alpineBlue" },
-            { icon: CalendarIcon, label: "Days Training", value: "287 Active", color: "text-successGreen" },
-            { icon: TrophyIcon, label: "Peaks Conquered", value: "2 of 7", color: "text-summitGold" }
+            { icon: MapPinIcon, label: "Next Target", value: "Everest 2027", color: "text-alpineBlue" },
+            { icon: CalendarIcon, label: "Training Days", value: "365+ Active", color: "text-successGreen" },
+            { icon: TrophyIcon, label: "Progress", value: "3 of 7", color: "text-summitGold" }
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -156,17 +157,23 @@ export default function ModernHero() {
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
         >
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.1), 0 10px 10px -5px rgba(245, 158, 11, 0.04)"
+            }}
             whileTap={{ scale: 0.95 }}
             onHoverStart={() => setIsHovered(true)}
             onHoverEnd={() => setIsHovered(false)}
-            className="group relative px-8 py-4 bg-white text-black font-semibold rounded-2xl overflow-hidden"
+            className="group relative px-8 py-4 bg-white text-black font-semibold rounded-2xl overflow-hidden shadow-lg"
           >
             <span className="relative z-10 flex items-center gap-2">
-              Explore Journey
+              Follow My Journey
               <motion.div
-                animate={{ x: isHovered ? 5 : 0 }}
-                transition={{ duration: 0.2 }}
+                animate={{ 
+                  x: isHovered ? 5 : 0,
+                  rotate: isHovered ? 15 : 0
+                }}
+                transition={{ duration: 0.2, type: "spring", stiffness: 300 }}
               >
                 <ArrowRightIcon className="w-5 h-5" />
               </motion.div>
@@ -175,19 +182,66 @@ export default function ModernHero() {
               className="absolute inset-0 bg-gradient-to-r from-summitGold to-yellow-400"
               initial={{ x: "-100%" }}
               whileHover={{ x: "0%" }}
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            />
+            {/* Animated particles */}
+            <motion.div
+              className="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-r from-summitGold/20 to-yellow-400/20 rounded-full blur-xl"
+              animate={isHovered ? {
+                scale: [1, 1.2, 1],
+                opacity: [0.3, 0.6, 0.3]
+              } : {}}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{ transform: "translate(-50%, -50%)" }}
             />
           </motion.button>
 
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ 
+              scale: 1.05,
+              backgroundColor: "rgba(255, 255, 255, 0.1)",
+              borderColor: "rgba(255, 255, 255, 0.4)",
+              boxShadow: "0 10px 25px -5px rgba(255, 255, 255, 0.1)"
+            }}
             whileTap={{ scale: 0.95 }}
-            className="group px-8 py-4 border border-white/20 text-white font-semibold rounded-2xl backdrop-blur-sm hover:bg-white/5 transition-all duration-300"
+            className="group relative px-8 py-4 border border-white/20 text-white font-semibold rounded-2xl backdrop-blur-sm overflow-hidden"
           >
-            <span className="flex items-center gap-2">
-              <PlayIcon className="w-5 h-5" />
-              Watch Story
+            <span className="relative z-10 flex items-center gap-2">
+              <motion.div
+                whileHover={{ 
+                  scale: 1.2,
+                  rotate: [0, -10, 10, 0] 
+                }}
+                transition={{ duration: 0.4 }}
+              >
+                <PlayIcon className="w-5 h-5" />
+              </motion.div>
+              My Story
             </span>
+            {/* Ripple effect */}
+            <motion.div
+              className="absolute inset-0 bg-white/5 rounded-2xl"
+              initial={{ scale: 0, opacity: 0 }}
+              whileHover={{ 
+                scale: 1,
+                opacity: [0, 0.5, 0],
+              }}
+              transition={{ duration: 0.6 }}
+            />
+            {/* Border glow */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl"
+              initial={{ 
+                background: "linear-gradient(45deg, transparent, transparent)" 
+              }}
+              whileHover={{ 
+                background: "linear-gradient(45deg, rgba(245, 158, 11, 0.3), rgba(59, 130, 246, 0.3), rgba(245, 158, 11, 0.3))",
+                backgroundSize: "200% 200%",
+                backgroundPosition: ["0% 50%", "100% 50%"]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{ padding: "1px" }}
+            />
           </motion.button>
         </motion.div>
       </motion.div>

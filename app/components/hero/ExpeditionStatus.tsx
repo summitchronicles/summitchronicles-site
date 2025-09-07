@@ -248,85 +248,155 @@ export default function ExpeditionStatus({ className = "" }: ExpeditionStatusPro
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {/* Current Location */}
         <motion.div 
-          className="space-y-3"
+          className="space-y-3 group cursor-pointer p-3 -m-3 rounded-xl hover:bg-alpineBlue/5 transition-all duration-300"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
+          whileHover={{ scale: 1.02, y: -2 }}
         >
           <div className="flex items-center space-x-2">
-            <MapPinIcon className="w-5 h-5 text-alpineBlue" />
-            <h3 className="font-semibold text-charcoal">Current</h3>
+            <motion.div
+              className="p-1.5 rounded-lg bg-alpineBlue/10 group-hover:bg-alpineBlue/20 transition-colors duration-300"
+              whileHover={{ scale: 1.1, rotate: 5 }}
+            >
+              <MapPinIcon className="w-4 h-4 text-alpineBlue" />
+            </motion.div>
+            <h3 className="font-semibold text-charcoal group-hover:text-alpineBlue transition-colors duration-300">Current Position</h3>
           </div>
-          <div>
-            <div className="text-2xl font-bold text-charcoal mb-1">
+          <div className="relative overflow-hidden">
+            <motion.div className="text-2xl font-bold text-charcoal mb-1 group-hover:text-alpineBlue transition-colors duration-300">
               📍 {current.altitude}
-            </div>
-            <div className="text-sm text-stoneGray mb-1">
+            </motion.div>
+            <div className="text-sm text-stoneGray mb-2 leading-relaxed">
               {current.location}
             </div>
-            <div className="inline-flex items-center px-2 py-1 rounded-full bg-glacierBlue/10 text-glacierBlue text-xs font-medium">
+            <motion.div 
+              className="inline-flex items-center px-3 py-1.5 rounded-full bg-glacierBlue/10 text-glacierBlue text-xs font-medium group-hover:bg-glacierBlue/20 transition-colors duration-300"
+              whileHover={{ scale: 1.05 }}
+            >
+              <motion.div
+                className="w-2 h-2 bg-glacierBlue rounded-full mr-2"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
               {current.phase}
-            </div>
+            </motion.div>
           </div>
         </motion.div>
 
         {/* Next Target */}
         <motion.div 
-          className="space-y-3"
+          className="space-y-3 group cursor-pointer p-3 -m-3 rounded-xl hover:bg-summitGold/5 transition-all duration-300"
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
+          whileHover={{ scale: 1.02, y: -2 }}
         >
           <div className="flex items-center space-x-2">
-            <FireIcon className="w-5 h-5 text-summitGold" />
-            <h3 className="font-semibold text-charcoal">Next Target</h3>
+            <motion.div
+              className="p-1.5 rounded-lg bg-summitGold/10 group-hover:bg-summitGold/20 transition-colors duration-300"
+              whileHover={{ scale: 1.1, rotate: -5 }}
+            >
+              <FireIcon className="w-4 h-4 text-summitGold" />
+            </motion.div>
+            <h3 className="font-semibold text-charcoal group-hover:text-summitGold transition-colors duration-300">Next Summit</h3>
           </div>
-          <div>
-            <div className="text-2xl font-bold text-charcoal mb-1">
+          <div className="relative overflow-hidden">
+            <motion.div className="text-2xl font-bold text-charcoal mb-1 group-hover:text-summitGold transition-colors duration-300">
               🎯 {next.altitude}
-            </div>
-            <div className="text-sm text-stoneGray mb-1">
+            </motion.div>
+            <div className="text-sm text-stoneGray mb-2 leading-relaxed">
               {next.target}
             </div>
-            <div className="inline-flex items-center px-2 py-1 rounded-full bg-summitGold/10 text-summitGold text-xs font-medium">
+            <motion.div 
+              className="inline-flex items-center px-3 py-1.5 rounded-full bg-summitGold/10 text-summitGold text-xs font-medium group-hover:bg-summitGold/20 transition-colors duration-300"
+              whileHover={{ scale: 1.05 }}
+            >
+              <motion.div
+                className="w-2 h-2 bg-summitGold rounded-full mr-2"
+                animate={{ opacity: [1, 0.5, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              />
               ETA {next.eta}
-            </div>
+            </motion.div>
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-summitGold/20 rounded-full animate-ping opacity-75"></div>
           </div>
         </motion.div>
 
         {/* Training Status */}
         <motion.div 
-          className="space-y-3"
+          className="space-y-3 group cursor-pointer p-3 -m-3 rounded-xl hover:bg-successGreen/5 transition-all duration-300"
           initial={{ opacity: 0, x: 10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
+          whileHover={{ scale: 1.02, y: -2 }}
         >
           <div className="flex items-center space-x-2">
-            <ClockIcon className="w-5 h-5 text-successGreen" />
-            <h3 className="font-semibold text-charcoal">Training</h3>
+            <motion.div
+              className="p-1.5 rounded-lg bg-successGreen/10 group-hover:bg-successGreen/20 transition-colors duration-300"
+              whileHover={{ scale: 1.1, rotate: 10 }}
+            >
+              <ClockIcon className="w-4 h-4 text-successGreen" />
+            </motion.div>
+            <h3 className="font-semibold text-charcoal group-hover:text-successGreen transition-colors duration-300">Training Progress</h3>
           </div>
-          <div>
+          <div className="relative">
             {statsLoading ? (
-              <div className="animate-pulse">
+              <motion.div 
+                className="animate-pulse"
+                animate={{ opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
                 <div className="h-8 bg-gray-200 rounded mb-2 w-16"></div>
                 <div className="h-4 bg-gray-200 rounded mb-2 w-32"></div>
                 <div className="h-6 bg-gray-200 rounded w-20"></div>
-              </div>
+              </motion.div>
             ) : (
               <>
-                <div className="text-2xl font-bold text-charcoal mb-1">
+                <motion.div 
+                  className="text-2xl font-bold text-charcoal mb-1 group-hover:text-successGreen transition-colors duration-300"
+                  whileHover={{ scale: 1.05 }}
+                >
                   📊 {training.daysActive}
-                </div>
-                <div className="text-sm text-stoneGray mb-1">
+                </motion.div>
+                <div className="text-sm text-stoneGray mb-2 leading-relaxed">
                   days active • {training.distanceCompleted}
                 </div>
-                <div className={clsx(
-                  "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium",
-                  training.status === 'on-track' && "bg-successGreen/10 text-successGreen",
-                  training.status === 'ahead' && "bg-glacierBlue/10 text-glacierBlue",
-                  training.status === 'behind' && "bg-warningOrange/10 text-warningOrange"
-                )}>
-                  {getStatusIcon(training.status)} {training.status.replace('-', ' ')}
+                <motion.div 
+                  className={clsx(
+                    "inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-colors duration-300",
+                    training.status === 'on-track' && "bg-successGreen/10 text-successGreen group-hover:bg-successGreen/20",
+                    training.status === 'ahead' && "bg-glacierBlue/10 text-glacierBlue group-hover:bg-glacierBlue/20",
+                    training.status === 'behind' && "bg-warningOrange/10 text-warningOrange group-hover:bg-warningOrange/20"
+                  )}
+                  whileHover={{ scale: 1.05 }}
+                >
+                  <motion.div
+                    className="mr-2"
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                  >
+                    {getStatusIcon(training.status)}
+                  </motion.div>
+                  {training.status.replace('-', ' ')}
+                </motion.div>
+                
+                {/* Progress Bar */}
+                <div className="mt-3 w-full bg-gray-200 rounded-full h-1.5">
+                  <motion.div 
+                    className={clsx(
+                      "h-1.5 rounded-full",
+                      training.status === 'on-track' && "bg-successGreen",
+                      training.status === 'ahead' && "bg-glacierBlue", 
+                      training.status === 'behind' && "bg-warningOrange"
+                    )}
+                    initial={{ width: "0%" }}
+                    animate={{ 
+                      width: training.status === 'ahead' ? "90%" : 
+                             training.status === 'on-track' ? "70%" : "45%" 
+                    }}
+                    transition={{ duration: 1, delay: 1 }}
+                  />
                 </div>
               </>
             )}
@@ -335,31 +405,71 @@ export default function ExpeditionStatus({ className = "" }: ExpeditionStatusPro
 
         {/* Weather Conditions */}
         <motion.div 
-          className="space-y-3"
+          className="space-y-3 group cursor-pointer p-3 -m-3 rounded-xl hover:bg-glacierBlue/5 transition-all duration-300"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.6 }}
+          whileHover={{ scale: 1.02, y: -2 }}
         >
           <div className="flex items-center space-x-2">
-            <CloudIcon className="w-5 h-5 text-glacierBlue" />
-            <h3 className="font-semibold text-charcoal">Conditions</h3>
+            <motion.div
+              className="p-1.5 rounded-lg bg-glacierBlue/10 group-hover:bg-glacierBlue/20 transition-colors duration-300"
+              whileHover={{ scale: 1.1, rotate: -10 }}
+            >
+              <CloudIcon className="w-4 h-4 text-glacierBlue" />
+            </motion.div>
+            <h3 className="font-semibold text-charcoal group-hover:text-glacierBlue transition-colors duration-300">Weather Conditions</h3>
           </div>
-          <div>
-            <div className="text-2xl font-bold text-charcoal mb-1">
+          <div className="relative overflow-hidden">
+            <motion.div 
+              className="text-2xl font-bold text-charcoal mb-1 group-hover:text-glacierBlue transition-colors duration-300"
+              whileHover={{ scale: 1.05 }}
+            >
               🌡️ {conditions.temperature}
-            </div>
-            <div className="text-sm text-stoneGray mb-1">
+            </motion.div>
+            <div className="text-sm text-stoneGray mb-2 leading-relaxed">
               💨 {conditions.wind} • {conditions.visibility}
             </div>
-            <div className={clsx(
-              "inline-flex items-center px-2 py-1 rounded-full text-xs font-medium",
-              conditions.status === 'excellent' && "bg-successGreen/10 text-successGreen",
-              conditions.status === 'good' && "bg-glacierBlue/10 text-glacierBlue", 
-              conditions.status === 'poor' && "bg-warningOrange/10 text-warningOrange",
-              conditions.status === 'dangerous' && "bg-dangerRed/10 text-dangerRed"
-            )}>
-              {getStatusIcon(conditions.status)} {conditions.status}
-            </div>
+            <motion.div 
+              className={clsx(
+                "inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium transition-colors duration-300",
+                conditions.status === 'excellent' && "bg-successGreen/10 text-successGreen group-hover:bg-successGreen/20",
+                conditions.status === 'good' && "bg-glacierBlue/10 text-glacierBlue group-hover:bg-glacierBlue/20", 
+                conditions.status === 'poor' && "bg-warningOrange/10 text-warningOrange group-hover:bg-warningOrange/20",
+                conditions.status === 'dangerous' && "bg-dangerRed/10 text-dangerRed group-hover:bg-dangerRed/20"
+              )}
+              whileHover={{ scale: 1.05 }}
+            >
+              <motion.div
+                className="mr-2"
+                animate={{ 
+                  scale: conditions.status === 'dangerous' ? [1, 1.2, 1] : [1, 1.1, 1] 
+                }}
+                transition={{ 
+                  duration: conditions.status === 'dangerous' ? 1 : 2, 
+                  repeat: Infinity,
+                  repeatDelay: conditions.status === 'dangerous' ? 0.5 : 1
+                }}
+              >
+                {getStatusIcon(conditions.status)}
+              </motion.div>
+              {conditions.status}
+            </motion.div>
+            
+            {/* Weather Animation Effect */}
+            <motion.div
+              className="absolute -top-2 -right-2 text-xs opacity-30"
+              animate={{ 
+                y: [0, -5, 0],
+                opacity: [0.3, 0.6, 0.3]
+              }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              {conditions.status === 'excellent' && '☀️'}
+              {conditions.status === 'good' && '⛅'}
+              {conditions.status === 'poor' && '🌧️'}
+              {conditions.status === 'dangerous' && '⛈️'}
+            </motion.div>
           </div>
         </motion.div>
       </div>
@@ -371,18 +481,87 @@ export default function ExpeditionStatus({ className = "" }: ExpeditionStatusPro
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.7 }}
       >
-        <button className="flex items-center space-x-2 px-4 py-2 bg-alpineBlue text-white rounded-lg hover:bg-blue-700 transition-all duration-normal hover:scale-105 focus:ring-2 focus:ring-alpineBlue/20">
-          <MapPinIcon className="w-4 h-4" />
-          <span>View Route Map</span>
-        </button>
-        <button className="flex items-center space-x-2 px-4 py-2 bg-summitGold text-charcoal rounded-lg hover:bg-yellow-400 transition-all duration-normal hover:scale-105 focus:ring-2 focus:ring-summitGold/20">
-          <SignalIcon className="w-4 h-4" />
-          <span>Live Updates</span>
-        </button>
-        <button className="flex items-center space-x-2 px-4 py-2 bg-gray-100 text-charcoal rounded-lg hover:bg-gray-200 transition-all duration-normal hover:scale-105 focus:ring-2 focus:ring-gray-300">
-          <CloudIcon className="w-4 h-4" />
-          <span>Weather Forecast</span>
-        </button>
+        <motion.button 
+          className="group relative overflow-hidden flex items-center space-x-2 px-5 py-3 bg-alpineBlue text-white rounded-xl font-medium transition-all duration-300 focus:ring-2 focus:ring-alpineBlue/20 focus:outline-none"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-alpineBlue via-blue-600 to-glacierBlue opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          />
+          <motion.div
+            whileHover={{ rotate: 10, scale: 1.1 }}
+            className="relative z-10"
+          >
+            <MapPinIcon className="w-4 h-4" />
+          </motion.div>
+          <span className="relative z-10">View Route Map</span>
+          <motion.div
+            className="absolute -top-1 -right-1 w-2 h-2 bg-white/30 rounded-full"
+            animate={{ scale: [1, 1.5, 1], opacity: [1, 0.5, 1] }}
+            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+          />
+        </motion.button>
+
+        <motion.button 
+          className="group relative overflow-hidden flex items-center space-x-2 px-5 py-3 bg-summitGold text-charcoal rounded-xl font-medium transition-all duration-300 focus:ring-2 focus:ring-summitGold/20 focus:outline-none"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-summitGold via-yellow-400 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          />
+          <motion.div
+            animate={{ 
+              rotate: [0, 10, -10, 0],
+              scale: [1, 1.1, 1]
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+            className="relative z-10"
+          >
+            <SignalIcon className="w-4 h-4" />
+          </motion.div>
+          <span className="relative z-10">Live Updates</span>
+          <motion.div
+            className="absolute top-0 right-1 w-2 h-2 bg-green-400 rounded-full"
+            animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
+            transition={{ duration: 1, repeat: Infinity }}
+          />
+        </motion.button>
+
+        <motion.button 
+          className="group relative overflow-hidden flex items-center space-x-2 px-5 py-3 bg-white/90 backdrop-blur-sm text-charcoal rounded-xl font-medium border border-gray-200 hover:border-glacierBlue/30 transition-all duration-300 focus:ring-2 focus:ring-glacierBlue/20 focus:outline-none"
+          whileHover={{ scale: 1.05, y: -2 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-white to-glacierBlue/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          />
+          <motion.div
+            animate={{ 
+              y: [0, -2, 0],
+              scale: [1, 1.05, 1] 
+            }}
+            transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+            className="relative z-10"
+          >
+            <CloudIcon className="w-4 h-4 text-glacierBlue" />
+          </motion.div>
+          <span className="relative z-10 group-hover:text-glacierBlue transition-colors duration-300">Weather Forecast</span>
+        </motion.button>
+
+        {/* Real-time Status Indicator */}
+        <div className="flex items-center space-x-2 px-4 py-3 bg-successGreen/5 border border-successGreen/20 rounded-xl">
+          <motion.div 
+            className="w-2 h-2 bg-successGreen rounded-full"
+            animate={{ 
+              scale: [1, 1.4, 1],
+              opacity: [1, 0.7, 1]
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <span className="text-xs font-medium text-successGreen">Live Data</span>
+        </div>
       </motion.div>
     </motion.div>
   );

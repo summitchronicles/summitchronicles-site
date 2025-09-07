@@ -12,7 +12,7 @@ import {
   MapIcon,
   ClockIcon,
   FireIcon,
-  BeakerIcon as MountainIcon,
+  BeakerIcon,
   FlagIcon,
   SparklesIcon,
   ExclamationTriangleIcon,
@@ -253,7 +253,7 @@ export default function GoalSetting({
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'expedition': return MountainIcon;
+      case 'expedition': return BeakerIcon;
       case 'fitness': return BoltIcon;
       case 'technical': return TargetIcon;
       case 'endurance': return ClockIcon;

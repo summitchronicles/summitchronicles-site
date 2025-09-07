@@ -298,7 +298,7 @@ export default function BlogAdminPage() {
                         </Link>
 
                         <Link
-                          href={`/blog/${post.slug}`}
+                          href={`/blogs/${post.slug}`}
                           target="_blank"
                           className="p-2 bg-green-500/20 text-green-400 rounded-xl hover:bg-green-500/30 transition-colors"
                         >

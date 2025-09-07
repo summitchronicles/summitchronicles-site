@@ -15,6 +15,7 @@ import {
   PaperAirplaneIcon
 } from '@heroicons/react/24/outline';
 import ImageUpload from '../../../components/blog/ImageUpload';
+import AdvancedEditor from '../../../components/editor/AdvancedEditor';
 
 interface Category {
   name: string;
@@ -236,27 +237,11 @@ export default function NewBlogPost() {
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
               <label className="block text-white font-medium mb-3">Content</label>
               
-              {!previewMode ? (
-                <div className="bg-white rounded-xl p-6">
-                  <textarea
-                    value={formData.content}
-                    onChange={(e) => handleContentChange(e.target.value)}
-                    rows={20}
-                    className="w-full bg-transparent border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Write your blog content here..."
-                  />
-                  <div className="text-sm text-gray-500 mt-2">
-                    Rich text editor temporarily disabled for production build
-                  </div>
-                </div>
-              ) : (
-                <div className="bg-white rounded-xl p-6 min-h-[500px]">
-                  <div 
-                    className="prose prose-gray max-w-none"
-                    dangerouslySetInnerHTML={{ __html: formData.content }}
-                  />
-                </div>
-              )}
+              <AdvancedEditor
+                content={formData.content}
+                onChange={handleContentChange}
+                placeholder="Start writing your expedition story... Use the toolbar for rich formatting, images, tables, and more!"
+              />
             </div>
           </div>
 

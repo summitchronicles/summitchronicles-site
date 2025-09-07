@@ -130,16 +130,16 @@ export default function TrainingPage() {
               whileHover={{ scale: 1.05 }}
             >
               <TrophyIcon className="w-4 h-4" />
-              Training Dashboard
+              My Training Data
             </motion.div>
             
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Peak <span className="text-summitGold">Performance</span> Tracking
+              My <span className="text-summitGold">Seven Summits</span> Training
             </h1>
             
             <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
-              Real-time Strava integration powering your mountaineering preparation. 
-              Monitor progress, analyze patterns, and optimize training for summit success.
+              Real training data from my Strava account as I prepare for Everest 2027. 
+              Follow my actual workouts, elevation gains, and progress toward the ultimate mountaineering goal.
             </p>
           </motion.div>
 
@@ -191,7 +191,7 @@ export default function TrainingPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex items-center justify-between mb-12"
           >
-            <h2 className="text-3xl font-bold text-white">Training Activities</h2>
+            <h2 className="text-3xl font-bold text-white">My Recent Workouts</h2>
             
             <div className="flex items-center gap-4">
               <div className="flex bg-white/5 border border-white/10 rounded-2xl p-1">

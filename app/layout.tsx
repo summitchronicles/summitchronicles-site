@@ -4,6 +4,7 @@ import Link from "next/link";
 import AnalyticsProvider from "@/app/components/AnalyticsProvider";
 import ServiceWorkerProvider from "@/app/components/ServiceWorkerProvider";
 import WebVitalsProvider from "@/app/components/WebVitalsProvider";
+import EnhancedNavigation from "@/app/components/navigation/EnhancedNavigation";
 import { getOrganizationSchema } from "@/lib/seo";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -104,75 +105,8 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body className={`${inter.className} bg-black text-white`}>
-        {/* RESPONSIVE NAVBAR */}
-        <header className="fixed top-0 w-full bg-black/80 backdrop-blur-xl border-b border-white/10 z-50">
-          <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-            <Link href="/" className="text-lg sm:text-xl font-bold tracking-wide text-white hover:text-summitGold transition-colors duration-300">
-              Summit Chronicles
-            </Link>
-            
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex gap-8 text-sm font-medium">
-              <Link
-                href="/expeditions"
-                className="text-white/80 hover:text-summitGold transition-colors duration-300 relative group"
-              >
-                Expeditions
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-summitGold group-hover:w-full transition-all duration-300" />
-              </Link>
-              <Link
-                href="/training"
-                className="text-white/80 hover:text-summitGold transition-colors duration-300 relative group"
-              >
-                Training
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-summitGold group-hover:w-full transition-all duration-300" />
-              </Link>
-              <Link
-                href="/training-analytics"
-                className="text-white/80 hover:text-summitGold transition-colors duration-300 relative group"
-              >
-                Training Data
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-summitGold group-hover:w-full transition-all duration-300" />
-              </Link>
-              <Link
-                href="/gear"
-                className="text-white/80 hover:text-summitGold transition-colors duration-300 relative group"
-              >
-                Gear
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-summitGold group-hover:w-full transition-all duration-300" />
-              </Link>
-              <Link
-                href="/blog"
-                className="text-white/80 hover:text-summitGold transition-colors duration-300 relative group"
-              >
-                Blog
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-summitGold group-hover:w-full transition-all duration-300" />
-              </Link>
-              <Link
-                href="/analytics"
-                className="text-white/80 hover:text-summitGold transition-colors duration-300 relative group"
-              >
-                Analytics
-                <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-summitGold group-hover:w-full transition-all duration-300" />
-              </Link>
-              <Link
-                href="/ask"
-                className="px-4 py-2 bg-summitGold text-black rounded-full font-semibold hover:bg-yellow-400 transition-colors duration-300"
-              >
-                Ask AI
-              </Link>
-            </div>
-
-            {/* Mobile Navigation - Simple toggle */}
-            <div className="md:hidden">
-              <button className="p-2 text-white hover:text-summitGold transition-colors duration-300" aria-label="Menu">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-            </div>
-          </nav>
-        </header>
+        {/* ENHANCED NAVIGATION */}
+        <EnhancedNavigation />
 
         {/* PROVIDERS */}
         <AnalyticsProvider />
@@ -183,17 +117,62 @@ export default function RootLayout({
         <main className="pt-20">{children}</main>
 
         {/* MODERN FOOTER */}
-        <footer className="bg-black border-t border-white/10 py-12">
-          <div className="max-w-7xl mx-auto px-6 text-center">
-            <div className="text-2xl font-bold text-white mb-4">Summit Chronicles</div>
-            <div className="text-white/60 mb-6">
-              © {new Date().getFullYear()} · Documenting the Seven Summits Journey
+        <footer className="bg-black border-t border-white/10 py-16">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+              {/* Personal Brand Column */}
+              <div className="md:col-span-2">
+                <div className="text-2xl font-bold text-white mb-4">Summit Chronicles</div>
+                <p className="text-white/60 mb-6 max-w-md">
+                  Follow my journey to climb the Seven Summits. Real insights from actual expeditions, 
+                  training data, and lessons learned on the world's highest peaks.
+                </p>
+                <div className="flex items-center gap-4">
+                  <div className="text-sm">
+                    <span className="text-white/40">Progress:</span>
+                    <span className="text-summitGold font-semibold ml-2">3 of 7 Summits</span>
+                  </div>
+                  <div className="h-2 w-24 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-summitGold to-yellow-400 rounded-full transition-all duration-1000" style={{ width: `${Math.round((3/7) * 100)}%` }}></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Links */}
+              <div>
+                <h3 className="text-white font-semibold mb-4">The Journey</h3>
+                <div className="space-y-2 text-sm">
+                  <Link href="/my-story" className="block text-white/60 hover:text-summitGold transition-colors">My Story</Link>
+                  <Link href="/the-journey" className="block text-white/60 hover:text-summitGold transition-colors">Seven Summits</Link>
+                  <Link href="/blogs" className="block text-white/60 hover:text-summitGold transition-colors">Latest Blogs</Link>
+                  <Link href="/training" className="block text-white/60 hover:text-summitGold transition-colors">Training Data</Link>
+                </div>
+              </div>
+
+              {/* Connect */}
+              <div>
+                <h3 className="text-white font-semibold mb-4">Connect</h3>
+                <div className="space-y-2 text-sm">
+                  <Link href="/connect" className="block text-white/60 hover:text-summitGold transition-colors">Work Together</Link>
+                  <Link href="/ask-sunith" className="block text-white/60 hover:text-summitGold transition-colors">Ask Questions</Link>
+                  <a href="mailto:hello@summitchronicles.com" className="block text-white/60 hover:text-summitGold transition-colors">Email Me</a>
+                  <Link href="/connect#media" className="block text-white/60 hover:text-summitGold transition-colors">Media Kit</Link>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-8 text-sm text-white/40">
-              <span>About</span>
-              <span>Contact</span>
-              <span>Privacy</span>
-              <span>Follow the Journey</span>
+
+            {/* Bottom Bar */}
+            <div className="border-t border-white/10 pt-8">
+              <div className="flex flex-col md:flex-row items-center justify-between">
+                <div className="text-white/40 text-sm mb-4 md:mb-0">
+                  © {new Date().getFullYear()} Sunith Kumar · Summit Chronicles · Climbing the Seven Summits
+                </div>
+                <div className="flex items-center gap-6 text-sm text-white/40">
+                  <Link href="/privacy" className="hover:text-summitGold transition-colors">Privacy</Link>
+                  <Link href="/terms" className="hover:text-summitGold transition-colors">Terms</Link>
+                  <span>Follow the Journey 🏔️</span>
+                </div>
+              </div>
             </div>
           </div>
         </footer>

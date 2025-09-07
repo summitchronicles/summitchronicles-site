@@ -107,6 +107,7 @@ const nextConfig = {
   
   // Optimize redirects and rewrites
   redirects: async () => [
+    // Legacy redirects
     {
       source: '/home',
       destination: '/',
@@ -115,6 +116,48 @@ const nextConfig = {
     {
       source: '/blog/index',
       destination: '/blog',
+      permanent: true,
+    },
+    // Personal branding navigation redirects
+    {
+      source: '/about',
+      destination: '/my-story',
+      permanent: true,
+    },
+    {
+      source: '/expeditions',
+      destination: '/the-journey',
+      permanent: true,
+    },
+    {
+      source: '/blog',
+      destination: '/blogs',
+      permanent: true,
+    },
+    {
+      source: '/insights',
+      destination: '/blogs',
+      permanent: true,
+    },
+    {
+      source: '/contact',
+      destination: '/connect',
+      permanent: true,
+    },
+    {
+      source: '/ask',
+      destination: '/ask-sunith',
+      permanent: true,
+    },
+    // Analytics and gear pages keep same URL but update content
+    {
+      source: '/analytics',
+      destination: '/training',
+      permanent: false, // Temporary redirect while reorganizing
+    },
+    {
+      source: '/training-analytics',
+      destination: '/training',
       permanent: true,
     }
   ],
