@@ -27,7 +27,7 @@ export default function StartYourJourneyPage() {
         >
           <span className="block">From 40kg Patient</span>
           <span className="block bg-gradient-to-r from-successGreen to-green-400 bg-clip-text text-transparent">
-            to Mountain Climber
+            to Global Adventurer
           </span>
         </motion.h1>
 
@@ -39,7 +39,7 @@ export default function StartYourJourneyPage() {
           className="mb-12"
         >
           <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-2xl mx-auto">
-            My 2013 tuberculosis recovery led to Seven Summits.<br />
+            My 2013 recovery led to mountains, marathons, and exploration.<br />
             <span className="text-successGreen font-semibold">If I can do it, so can you.</span>
           </p>
         </motion.div>

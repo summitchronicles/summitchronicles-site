@@ -61,8 +61,8 @@ export default function MediaKitPage() {
           className="max-w-2xl mx-auto mb-12"
         >
           <p className="text-xl text-white/80 leading-relaxed">
-            <span className="text-summitGold font-semibold">From Recovery to Summit:</span> Sunith's journey began in 2013 
-            during recovery from tuberculosis, transforming from a 40kg patient to a Seven Summits mountaineer.
+            <span className="text-summitGold font-semibold">Multi-Discipline Adventurer:</span> From tuberculosis recovery in 2013 
+            to conquering mountains, ultra marathons, and unexplored places across 15+ countries.
           </p>
         </motion.div>
 

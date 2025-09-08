@@ -28,7 +28,7 @@ export default function SpeakingPage() {
         >
           <span className="block">From Hospital Bed</span>
           <span className="block bg-gradient-to-r from-glacierBlue to-blue-400 bg-clip-text text-transparent">
-            to Everest Base Camp
+            to Adventure Beyond Limits
           </span>
         </motion.h1>
 
@@ -40,8 +40,8 @@ export default function SpeakingPage() {
           className="mb-12"
         >
           <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-2xl mx-auto">
-            Lessons in resilience, goal-setting, and team dynamics that transform 
-            how organizations approach challenges.
+            Mountains, ultra marathons, exploration. Lessons in resilience and pushing boundaries 
+            that transform how teams approach impossible challenges.
           </p>
         </motion.div>
 

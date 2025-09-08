@@ -21,7 +21,7 @@ export default function MinimalHero() {
           className="inline-flex items-center gap-3 bg-summitGold/10 backdrop-blur-sm border border-summitGold/30 rounded-2xl px-6 py-4 mb-8"
         >
           <TrophyIcon className="w-5 h-5 text-summitGold" />
-          <span className="text-summitGold font-bold text-lg">4/7 SUMMITS</span>
+          <span className="text-summitGold font-bold text-lg">MULTI-DISCIPLINE ADVENTURER</span>
           <div className="w-px h-6 bg-summitGold/30" />
           <span className="text-glacierBlue font-medium">EVEREST 2027</span>
         </motion.div>
@@ -35,7 +35,7 @@ export default function MinimalHero() {
         >
           <span className="block">Sunith Kumar</span>
           <span className="block text-3xl md:text-4xl text-summitGold font-normal">
-            Seven Summits Mountaineer
+            Adventurer & Explorer
           </span>
         </motion.h1>
 
@@ -46,7 +46,8 @@ export default function MinimalHero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed"
         >
-          11-year journey from tuberculosis recovery to world's highest peaks.
+          Mountains, ultra marathons, unexplored places.<br />
+          <span className="text-summitGold">11 years of pushing boundaries.</span>
         </motion.p>
 
         {/* Key Stats */}
@@ -57,16 +58,16 @@ export default function MinimalHero() {
           className="flex justify-center gap-12 text-white/70 mb-12"
         >
           <div className="text-center">
-            <div className="text-2xl font-bold text-summitGold">40kg</div>
-            <div className="text-sm">Starting Weight</div>
-          </div>
-          <div className="text-center">
             <div className="text-2xl font-bold text-summitGold">4/7</div>
-            <div className="text-sm">Summits Done</div>
+            <div className="text-sm">Summits</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-summitGold">2027</div>
-            <div className="text-sm">Everest Year</div>
+            <div className="text-2xl font-bold text-summitGold">Ultra</div>
+            <div className="text-sm">Marathons</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-summitGold">15+</div>
+            <div className="text-sm">Countries</div>
           </div>
         </motion.div>
 
