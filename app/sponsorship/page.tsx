@@ -60,30 +60,32 @@ export default function SponsorshipPage() {
           </div>
         </motion.div>
 
-        {/* Simple Partnership Options */}
+        {/* Collaboration Opportunities */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-2xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-3xl mx-auto"
         >
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Title Sponsor</h3>
-            <div className="text-4xl font-bold text-summitGold mb-4">$25K</div>
+            <h3 className="text-2xl font-bold text-white mb-4">Brand Partnerships</h3>
+            <div className="text-lg text-summitGold mb-4 font-medium">Let's discuss your goals</div>
             <ul className="text-white/80 text-left space-y-2">
-              <li>• Logo on all expedition content</li>
-              <li>• Live updates from base camp</li>
-              <li>• Documentary film feature</li>
+              <li>• Expedition sponsorship opportunities</li>
+              <li>• Content collaboration</li>
+              <li>• Product partnerships</li>
+              <li>• Custom packages for your brand</li>
             </ul>
           </div>
           
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Gear Partner</h3>
-            <div className="text-4xl font-bold text-glacierBlue mb-4">$10K</div>
+            <h3 className="text-2xl font-bold text-white mb-4">Speaking & Events</h3>
+            <div className="text-lg text-glacierBlue mb-4 font-medium">Tailored to your audience</div>
             <ul className="text-white/80 text-left space-y-2">
-              <li>• Product placement content</li>
-              <li>• Gear reviews & testimonials</li>
-              <li>• Social media features</li>
+              <li>• Corporate keynotes</li>
+              <li>• Team building workshops</li>
+              <li>• Virtual presentations</li>
+              <li>• Event partnerships</li>
             </ul>
           </div>
         </motion.div>
@@ -95,7 +97,7 @@ export default function SponsorshipPage() {
           transition={{ delay: 0.8 }}
         >
           <motion.a
-            href="mailto:hello@summitchronicles.com?subject=Everest 2027 Partnership Inquiry"
+            href="mailto:hello@summitchronicles.com?subject=Let's collaborate - Partnership Discussion"
             whileHover={{ 
               scale: 1.05,
               boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.1)"
@@ -103,12 +105,12 @@ export default function SponsorshipPage() {
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center gap-3 bg-summitGold text-black font-bold text-xl px-12 py-6 rounded-2xl hover:bg-yellow-400 transition-colors"
           >
-            Partner With Me
+            Let's Collaborate
             <ArrowRightIcon className="w-6 h-6" />
           </motion.a>
           
           <p className="text-white/50 text-sm mt-6">
-            Response within 24 hours
+            Every partnership is unique. Let's discuss what works for your brand.
           </p>
         </motion.div>
       </div>

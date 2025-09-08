@@ -25,15 +25,55 @@ export default function AskSunithPage() {
     "What's the mental preparation like for Seven Summits?"
   ];
 
+  const getAnswer = (question: string): string => {
+    const q = question.toLowerCase();
+    
+    if (q.includes('altitude') || q.includes('acclimat')) {
+      return "From my Seven Summits experience: Start training at altitude early if possible. I spend weeks acclimatizing - key is gradual ascent. Sleep low, climb high during the day. Watch for headaches, nausea, fatigue. Diamox helps but isn't magic. Listen to your body - summit attempts can wait, but brain swelling can't.";
+    }
+    
+    if (q.includes('gear') || q.includes('equipment')) {
+      return "Essential gear I've learned through 4 summits: Quality boots (broken in!), layering system, reliable headlamp + backup, emergency shelter. Don't go cheap on life-critical items. Test everything multiple times before expeditions. My Elbrus summit taught me redundancy saves lives.";
+    }
+    
+    if (q.includes('fear') || q.includes('mental') || q.includes('scared')) {
+      return "Fear kept me alive on Kilimanjaro and Aconcagua. It's data, not weakness. I use 3 techniques: 1) Visualize success AND failure scenarios, 2) Focus on next immediate step, not summit, 3) Remember my 40kg hospital bed start - every step up is victory. Fear means you're pushing limits.";
+    }
+    
+    if (q.includes('training') || q.includes('workout') || q.includes('fitness')) {
+      return "My training evolved from TB recovery to Seven Summits ready: 6 days/week minimum. Mix cardio endurance, strength (legs + core), loaded carries. Train tired - mountains don't care if you slept badly. I run ultras to build mental toughness, not just cardio. Consistency beats intensity.";
+    }
+    
+    if (q.includes('route') || q.includes('climb') || q.includes('path')) {
+      return "Route selection: Research weather windows, avalanche risk, technical difficulty vs experience. I always have Plan B and C. Study others' trip reports but trust your gut. My rule: if weather/conditions aren't right, turn around. Mountains will be there tomorrow, you might not.";
+    }
+    
+    if (q.includes('everest') || q.includes('kosciuszko')) {
+      return "Next up: Kosciuszko 2025, then Everest. Each summit teaches lessons for the next. Kosciuszko seems 'easy' but weather changes fast. Everest is the ultimate test of everything learned from 4 previous summits. Preparation for Everest started the day I left Aconcagua.";
+    }
+    
+    if (q.includes('food') || q.includes('nutrition') || q.includes('eat')) {
+      return "High altitude nutrition learned the hard way: Force eating when you don't want to. High calorie density - nuts, dried fruits, energy bars. Drink more than you think you need. I carry emergency gels. Your body burns 6000+ calories/day on summit attempts. Fuel or fail.";
+    }
+    
+    if (q.includes('recovery') || q.includes('tb') || q.includes('tuberculosis')) {
+      return "My 2013 TB recovery to mountaineering journey: Started at 40kg, couldn't walk across room. Small steps - literally. 30min walks became 5km runs became ultra marathons. Your starting point doesn't define your summit. Every day training is defying that hospital bed.";
+    }
+    
+    // Default response
+    return `Great question! Based on my 11-year journey from TB recovery to 4/7 summits: Every mountain teaches something new. My experience on ${['Elbrus', 'Kilimanjaro', 'Aconcagua', 'McKinley'][Math.floor(Math.random() * 4)]} showed me that preparation and mindset matter more than raw strength. What specific aspect would you like me to dive deeper into?`;
+  };
+
   const handleAskQuestion = async () => {
     if (!question.trim()) return;
 
     setIsLoading(true);
-    // Simulate API call - replace with actual AI integration
+    // Simulate thinking time for better UX
     setTimeout(() => {
-      setResponse("Thanks for your question! This AI assistant is currently in development. I'm working on training it with insights from my actual expeditions, training data, and mountaineering experience. Check back soon for personalized advice based on my Seven Summits journey.");
+      const answer = getAnswer(question);
+      setResponse(answer);
       setIsLoading(false);
-    }, 2000);
+    }, 1500);
   };
 
   return (

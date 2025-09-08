@@ -46,6 +46,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
   useEffect(() => {
     fetchPost();
@@ -59,6 +61,10 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       
       if (response.ok) {
         setPost(data.post);
+        setLikeCount(data.post.likes || 0);
+        // Check if user has liked this post (using localStorage)
+        const hasLiked = localStorage.getItem(`liked-${params.slug}`) === 'true';
+        setLiked(hasLiked);
       } else if (response.status === 404) {
         notFound();
       } else {
@@ -90,6 +96,34 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       'Recovery': 'text-cyan-400 border-cyan-400/20 bg-cyan-400/10'
     };
     return colors[category] || 'text-gray-400 border-gray-400/20 bg-gray-400/10';
+  };
+
+  const handleLike = () => {
+    const newLiked = !liked;
+    setLiked(newLiked);
+    setLikeCount(prev => newLiked ? prev + 1 : prev - 1);
+    localStorage.setItem(`liked-${params.slug}`, newLiked.toString());
+  };
+
+  const handleShare = () => {
+    const url = window.location.href;
+    const title = post?.title || 'Check out this blog post';
+    
+    if (navigator.share) {
+      // Use native sharing if available
+      navigator.share({
+        title: title,
+        url: url,
+      }).catch(console.error);
+    } else {
+      // Fallback to copying URL to clipboard
+      navigator.clipboard.writeText(url).then(() => {
+        alert('Link copied to clipboard!');
+      }).catch(() => {
+        // Final fallback - show the URL
+        prompt('Copy this link:', url);
+      });
+    }
   };
 
   // Smart content renderer that detects HTML vs Markdown
@@ -306,13 +340,23 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             className="flex items-center justify-between border-t border-white/10 pt-8"
           >
             <div className="flex items-center gap-4">
-              <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors duration-300">
-                <HeartIcon className="w-4 h-4 text-red-400" />
-                <span className="text-white/80">Like ({post.likes})</span>
+              <button 
+                onClick={handleLike}
+                className={`flex items-center gap-2 px-4 py-2 border rounded-xl transition-colors duration-300 ${
+                  liked 
+                    ? 'bg-red-400/20 hover:bg-red-400/30 border-red-400/40 text-red-400' 
+                    : 'bg-white/5 hover:bg-white/10 border-white/10 text-white/80'
+                }`}
+              >
+                <HeartIcon className={`w-4 h-4 ${liked ? 'text-red-400 fill-red-400' : 'text-red-400'}`} />
+                <span>Like ({likeCount})</span>
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors duration-300">
+              <button 
+                onClick={handleShare}
+                className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors duration-300 text-white/80"
+              >
                 <ShareIcon className="w-4 h-4 text-blue-400" />
-                <span className="text-white/80">Share</span>
+                <span>Share</span>
               </button>
             </div>
             
