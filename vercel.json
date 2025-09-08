@@ -44,12 +44,8 @@
   "trailingSlash": false,
   "crons": [
     {
-      "path": "/api/strava/stats",
-      "schedule": "0 4 * * *"
-    },
-    {
       "path": "/api/strava/refresh-tokens",
-      "schedule": "0 */4 * * *"
+      "schedule": "0 4 * * *"
     }
   ]
 }
