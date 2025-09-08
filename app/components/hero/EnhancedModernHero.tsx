@@ -201,6 +201,23 @@ export default function EnhancedModernHero() {
           <span className="text-green-400 font-medium">ACTIVE</span>
         </motion.div>
 
+        {/* Achievement Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="inline-flex items-center gap-4 bg-summitGold/10 backdrop-blur-sm border border-summitGold/30 rounded-2xl px-6 py-4 mb-8"
+        >
+          <div className="flex items-center gap-2">
+            <TrophyIcon className="w-5 h-5 text-summitGold" />
+            <span className="text-summitGold font-bold text-lg">4/7 SUMMITS CONQUERED</span>
+          </div>
+          <div className="w-px h-6 bg-summitGold/30" />
+          <span className="text-white/80 font-medium">2013-2024</span>
+          <div className="w-px h-6 bg-summitGold/30" />
+          <span className="text-glacierBlue font-medium">NEXT: VINSON MASSIF 2025</span>
+        </motion.div>
+
         {/* Dynamic Heading with Typewriter Effect */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
@@ -245,7 +262,7 @@ export default function EnhancedModernHero() {
             { 
               icon: TrophyIcon, 
               label: "Summits Conquered", 
-              value: "3/7", 
+              value: "4/7", 
               color: "text-summitGold",
               description: "Major Peaks"
             },
