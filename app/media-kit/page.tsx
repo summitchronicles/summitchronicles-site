@@ -48,8 +48,8 @@ export default function MediaKitPage() {
             <div className="text-white/60 text-sm">Followers</div>
           </div>
           <div className="text-center">
-            <div className="text-3xl font-bold text-summitGold">15+</div>
-            <div className="text-white/60 text-sm">Countries</div>
+            <div className="text-3xl font-bold text-summitGold">4</div>
+            <div className="text-white/60 text-sm">Continents</div>
           </div>
         </motion.div>
 
@@ -62,7 +62,7 @@ export default function MediaKitPage() {
         >
           <p className="text-xl text-white/80 leading-relaxed">
             <span className="text-summitGold font-semibold">Multi-Discipline Adventurer:</span> From tuberculosis recovery in 2013 
-            to conquering mountains, ultra marathons, and unexplored places across 15+ countries.
+            to conquering mountains, ultra marathons, and exploration across 4 continents.
           </p>
         </motion.div>
 

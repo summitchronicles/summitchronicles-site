@@ -6,9 +6,14 @@ import { ArrowRightIcon, TrophyIcon } from "@heroicons/react/24/outline";
 export default function MinimalHero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
-      {/* Subtle Mountain Backdrop */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-gray-800 to-transparent" />
+      {/* Hero Background Image */}
+      <div className="absolute inset-0">
+        <img 
+          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&h=1500&fit=crop&crop=center&auto=format&q=80" 
+          alt="Sunith Kumar mountaineering expedition"
+          className="w-full h-full object-cover opacity-30"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
       </div>
       
       {/* Main Content */}
@@ -23,7 +28,7 @@ export default function MinimalHero() {
           <TrophyIcon className="w-5 h-5 text-summitGold" />
           <span className="text-summitGold font-bold text-lg">MULTI-DISCIPLINE ADVENTURER</span>
           <div className="w-px h-6 bg-summitGold/30" />
-          <span className="text-glacierBlue font-medium">EVEREST 2027</span>
+          <span className="text-glacierBlue font-medium">KOSCIUSZKO 2025</span>
         </motion.div>
 
         {/* Main Headline */}
@@ -66,8 +71,8 @@ export default function MinimalHero() {
             <div className="text-sm">Marathons</div>
           </div>
           <div className="text-center">
-            <div className="text-2xl font-bold text-summitGold">15+</div>
-            <div className="text-sm">Countries</div>
+            <div className="text-2xl font-bold text-summitGold">4</div>
+            <div className="text-sm">Continents</div>
           </div>
         </motion.div>
 
