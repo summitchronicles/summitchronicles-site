@@ -1,173 +1,107 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { 
-  ArrowDownTrayIcon,
-  TrophyIcon,
-  CalendarIcon,
-  GlobeAltIcon,
-  UserIcon,
-  EnvelopeIcon,
-  ChartBarIcon
-} from "@heroicons/react/24/outline";
+import { TrophyIcon, ArrowDownTrayIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 
 export default function MediaKitPage() {
-  const stats = [
-    { label: "Summits Conquered", value: "4/7", icon: TrophyIcon },
-    { label: "Years Experience", value: "11+", icon: CalendarIcon },
-    { label: "Countries Reached", value: "15+", icon: GlobeAltIcon },
-    { label: "Followers", value: "1,000+", icon: UserIcon },
-    { label: "Newsletter Readers", value: "200+", icon: EnvelopeIcon },
-    { label: "Training Days/Year", value: "365+", icon: ChartBarIcon }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-blue-900/20 to-transparent" />
-        
-        <div className="relative max-w-6xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Media Kit
-              <span className="block text-2xl md:text-3xl text-summitGold font-normal mt-2">
-                Sunith Kumar • Summit Chronicles
-              </span>
-            </h1>
-            <p className="text-xl text-white/70 max-w-3xl mx-auto mb-8">
-              Professional assets, statistics, and partnership information for media and sponsor use.
-            </p>
-            
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-flex items-center gap-2 bg-summitGold text-black px-8 py-4 rounded-2xl font-semibold hover:bg-yellow-400 transition-colors"
-            >
-              <ArrowDownTrayIcon className="w-5 h-5" />
-              Download Complete Media Kit
-            </motion.button>
-          </motion.div>
-        </div>
-      </section>
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
+      <div className="max-w-4xl mx-auto px-6 text-center">
+        {/* Achievement Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center gap-3 bg-summitGold/10 backdrop-blur-sm border border-summitGold/30 rounded-2xl px-6 py-4 mb-8"
+        >
+          <TrophyIcon className="w-5 h-5 text-summitGold" />
+          <span className="text-summitGold font-bold text-lg">4/7 SUMMITS</span>
+          <div className="w-px h-6 bg-summitGold/30" />
+          <span className="text-glacierBlue font-medium">EVEREST 2027</span>
+        </motion.div>
 
-      {/* Key Statistics */}
-      <section className="py-20">
-        <div className="max-w-6xl mx-auto px-6">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl font-bold text-white text-center mb-12"
+        {/* Main Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="text-5xl md:text-7xl font-bold text-white leading-tight mb-8"
+        >
+          <span className="block">Media Kit</span>
+          <span className="block text-3xl md:text-4xl text-summitGold font-normal">
+            Sunith Kumar • Summit Chronicles
+          </span>
+        </motion.h1>
+
+        {/* Key Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="grid grid-cols-3 gap-8 mb-12 max-w-2xl mx-auto"
+        >
+          <div className="text-center">
+            <div className="text-3xl font-bold text-summitGold">11+</div>
+            <div className="text-white/60 text-sm">Years Journey</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-summitGold">1K+</div>
+            <div className="text-white/60 text-sm">Followers</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-summitGold">15+</div>
+            <div className="text-white/60 text-sm">Countries</div>
+          </div>
+        </motion.div>
+
+        {/* Bio */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="max-w-2xl mx-auto mb-12"
+        >
+          <p className="text-xl text-white/80 leading-relaxed">
+            <span className="text-summitGold font-semibold">From Recovery to Summit:</span> Sunith's journey began in 2013 
+            during recovery from tuberculosis, transforming from a 40kg patient to a Seven Summits mountaineer.
+          </p>
+        </motion.div>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+          className="flex flex-col sm:flex-row gap-6 justify-center"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-3 bg-summitGold text-black font-bold text-lg px-10 py-5 rounded-2xl hover:bg-yellow-400 transition-colors"
           >
-            Key Statistics
-          </motion.h2>
+            <ArrowDownTrayIcon className="w-6 h-6" />
+            Download Media Kit
+          </motion.button>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 text-center"
-              >
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-summitGold/20 rounded-2xl mb-4">
-                  <stat.icon className="w-6 h-6 text-summitGold" />
-                </div>
-                <div className="text-3xl font-bold text-white mb-2">{stat.value}</div>
-                <div className="text-white/60 text-sm">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Bio Section */}
-      <section className="py-20 bg-white/5 backdrop-blur-sm">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-3xl font-bold text-white mb-6">About Sunith Kumar</h2>
-              <div className="space-y-4 text-white/80 leading-relaxed">
-                <p>
-                  <strong className="text-summitGold">From Recovery to Summit:</strong> Sunith&apos;s mountaineering journey began in 2013 
-                  during recovery from tuberculosis, transforming from a 40kg patient to a Seven Summits mountaineer.
-                </p>
-                <p>
-                  <strong className="text-summitGold">Proven Track Record:</strong> 4 out of 7 continental summits completed 
-                  with meticulous preparation, safety-first approach, and authentic documentation of each expedition.
-                </p>
-                <p>
-                  <strong className="text-summitGold">Content Creator:</strong> Produces high-quality expedition content including 
-                  photography, video, blog posts, and social media that resonates with adventure audiences worldwide.
-                </p>
-                <p>
-                  <strong className="text-summitGold">Community Builder:</strong> Growing engaged audience of aspiring mountaineers, 
-                  adventure travelers, and outdoor enthusiasts who trust gear recommendations and expedition insights.
-                </p>
-              </div>
-            </motion.div>
-            
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="bg-gradient-to-br from-summitGold/20 to-yellow-400/20 rounded-3xl p-12 text-center"
-            >
-              <div className="text-6xl mb-4">📸</div>
-              <h3 className="text-2xl font-bold text-white mb-4">Professional Photos Available</h3>
-              <p className="text-white/70">High-resolution expedition photos, headshots, and branded materials ready for media use.</p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section className="py-20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+          <motion.a
+            href="mailto:hello@summitchronicles.com?subject=Media Kit Request"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-3 bg-white/10 text-white font-bold text-lg px-10 py-5 rounded-2xl hover:bg-white/20 transition-colors"
           >
-            <h2 className="text-3xl font-bold text-white mb-8">
-              Ready to Partner?
-            </h2>
-            
-            <div className="bg-gradient-to-r from-summitGold/20 to-yellow-400/20 backdrop-blur-sm border border-summitGold/30 rounded-3xl p-8">
-              <h3 className="text-2xl font-bold text-white mb-4">Contact for Partnerships</h3>
-              <p className="text-white/80 mb-6">
-                Ready to discuss how your brand can be part of the Seven Summits journey?
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <a
-                  href="mailto:hello@summitchronicles.com"
-                  className="bg-summitGold text-black px-8 py-4 rounded-2xl font-semibold hover:bg-yellow-400 transition-colors"
-                >
-                  📧 hello@summitchronicles.com
-                </a>
-                
-                <a
-                  href="/sponsorship"
-                  className="bg-white/10 text-white px-8 py-4 rounded-2xl font-semibold hover:bg-white/20 transition-colors"
-                >
-                  View Sponsorship Packages
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+            <EnvelopeIcon className="w-6 h-6" />
+            Contact for Media
+          </motion.a>
+        </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.0 }}
+          className="text-white/50 text-sm mt-6"
+        >
+          Professional photos, bio, and partnership information
+        </motion.p>
+      </div>
     </div>
   );
 }
