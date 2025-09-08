@@ -68,12 +68,30 @@ export default function AskSunithPage() {
     if (!question.trim()) return;
 
     setIsLoading(true);
-    // Simulate thinking time for better UX
-    setTimeout(() => {
-      const answer = getAnswer(question);
-      setResponse(answer);
+    
+    try {
+      const response = await fetch('/api/ask-sunith', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question: question.trim() }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get response');
+      }
+
+      const data = await response.json();
+      setResponse(data.response);
+    } catch (error) {
+      console.error('Error asking question:', error);
+      // Fallback to rule-based response on error
+      const fallbackAnswer = getAnswer(question);
+      setResponse(fallbackAnswer);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (

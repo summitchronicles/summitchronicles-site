@@ -30,7 +30,9 @@ async function fetchRecentActivities(token: string, after?: number) {
 
 export async function GET() {
   try {
+    console.log('🏃‍♂️ Fetching recent Strava activities...');
     const token = await getStravaAccessToken();
+    console.log('✅ Got Strava access token successfully');
 
     // last synced activity
     const { data: lastRow } = await supabase
@@ -87,16 +89,35 @@ export async function GET() {
 
     return NextResponse.json({ ok: true, activities: activities ?? [] });
   } catch (e: any) {
-    console.error("Error in /api/strava/recent:", e);
-    console.log("🏃‍♂️ Using mock recent activities for demonstration");
+    console.error("❌ Error in /api/strava/recent:", e);
     
-    // Generate recent mock activities for demonstration
+    // Try to get activities from database first (cached data)
+    const { data: cachedActivities } = await supabase
+      .from("strava_activities")
+      .select("*")
+      .order("start_date", { ascending: false })
+      .limit(20);
+
+    if (cachedActivities && cachedActivities.length > 0) {
+      console.log("📦 Using cached Strava activities from database");
+      return NextResponse.json({ 
+        ok: true, 
+        activities: cachedActivities,
+        source: "cached",
+        message: "Using cached data due to API error. Tokens may need refresh."
+      });
+    }
+
+    // Only fall back to mock if no cached data exists
+    console.log("🏃‍♂️ No cached data available, using mock activities for demonstration");
     const mockActivities = generateMockStravaActivities(20);
     
     return NextResponse.json({ 
       ok: true, 
       activities: mockActivities,
-      source: "mock"
+      source: "mock",
+      error: e.message,
+      message: "API temporarily unavailable. Please check Strava authentication."
     });
   }
 }

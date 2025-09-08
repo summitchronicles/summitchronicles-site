@@ -2,8 +2,12 @@
 
 import { motion } from "framer-motion";
 import { ArrowRightIcon, TrophyIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 export default function MinimalHero() {
+  const [status, setStatus] = useState<'idle' | 'ok'>('idle');
+  const username = process.env.NEXT_PUBLIC_BUTTONDOWN_USERNAME;
+
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
       {/* Hero Background Image */}
@@ -23,12 +27,29 @@ export default function MinimalHero() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-3 bg-summitGold/10 backdrop-blur-sm border border-summitGold/30 rounded-2xl px-6 py-4 mb-8"
+          className="inline-flex items-center gap-3 bg-summitGold/10 backdrop-blur-sm border border-summitGold/30 rounded-2xl px-6 py-4 mb-4"
         >
           <TrophyIcon className="w-5 h-5 text-summitGold" />
           <span className="text-summitGold font-bold text-lg">MULTI-DISCIPLINE ADVENTURER</span>
           <div className="w-px h-6 bg-summitGold/30" />
           <span className="text-glacierBlue font-medium">KOSCIUSZKO 2025</span>
+        </motion.div>
+
+        {/* Summit Progress Banner */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.3 }}
+          className="inline-flex items-center justify-center bg-gradient-to-r from-summitGold/20 to-yellow-400/20 backdrop-blur-sm border-2 border-summitGold/50 rounded-3xl px-8 py-6 mb-8"
+        >
+          <div className="text-center">
+            <div className="text-3xl md:text-4xl font-bold text-summitGold mb-1">
+              🏔️ 4 OF 7 SUMMITS CONQUERED
+            </div>
+            <div className="text-lg md:text-xl text-white font-medium">
+              2013-2024 | <span className="text-summitGold">NEXT: KOSCIUSZKO 2025</span>
+            </div>
+          </div>
         </motion.div>
 
         {/* Main Headline */}
@@ -81,7 +102,7 @@ export default function MinimalHero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
+          className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
         >
           <motion.a
             href="/the-journey"
@@ -104,8 +125,72 @@ export default function MinimalHero() {
             whileTap={{ scale: 0.95 }}
             className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold text-lg rounded-2xl hover:bg-white/20 transition-colors"
           >
-            Partnership Opportunities
+            🎯 Partner With Me
           </motion.a>
+        </motion.div>
+
+        {/* Newsletter Signup */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.0 }}
+          className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-3xl p-8 max-w-2xl mx-auto"
+        >
+          <div className="text-center mb-6">
+            <h3 className="text-2xl font-bold text-white mb-2">📧 Join the Adventure</h3>
+            <p className="text-white/70">
+              Get expedition updates, training insights, and behind-the-scenes content from the Seven Summits journey.
+            </p>
+          </div>
+          
+{!username ? (
+            <p className="text-amber-300 text-sm">
+              Newsletter configuration needed. Add NEXT_PUBLIC_BUTTONDOWN_USERNAME to environment.
+            </p>
+          ) : (
+            <form
+              action="https://buttondown.email/api/emails/subscribe"
+              method="post"
+              target="popupwindow"
+              onSubmit={() => {
+                const url = `https://buttondown.email/${username}`;
+                window.open(url, 'popupwindow');
+                setTimeout(() => setStatus('ok'), 300);
+              }}
+              className="flex flex-col sm:flex-row gap-4"
+            >
+              <input type="hidden" name="username" value={username} />
+              <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+                className="flex-1 px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-summitGold/50"
+              />
+              <motion.button
+                type="submit"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-8 py-3 bg-summitGold text-black font-bold rounded-xl hover:bg-yellow-400 transition-colors whitespace-nowrap"
+              >
+                Start My Journey
+              </motion.button>
+            </form>
+          )}
+
+          {status === 'ok' && (
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-green-400 text-sm text-center mt-2"
+            >
+              ✅ Thanks! Check your inbox to confirm your subscription.
+            </motion.p>
+          )}
+          
+          <p className="text-white/50 text-sm text-center mt-4">
+            Join 1000+ future mountaineers. No spam, unsubscribe anytime.
+          </p>
         </motion.div>
       </div>
     </section>
