@@ -23,7 +23,7 @@ export default function MinimalHero() {
           <TrophyIcon className="w-5 h-5 text-summitGold" />
           <span className="text-summitGold font-bold text-lg">4/7 SUMMITS</span>
           <div className="w-px h-6 bg-summitGold/30" />
-          <span className="text-glacierBlue font-medium">NEXT: EVEREST 2027</span>
+          <span className="text-glacierBlue font-medium">EVEREST 2027</span>
         </motion.div>
 
         {/* Main Headline */}
@@ -33,59 +33,73 @@ export default function MinimalHero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight mb-6"
         >
-          <span className="block">Partner with</span>
-          <span className="block bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
-            Summit Chronicles
+          <span className="block">Sunith Kumar</span>
+          <span className="block text-3xl md:text-4xl text-summitGold font-normal">
+            Seven Summits Mountaineer
           </span>
         </motion.h1>
 
-        {/* Simple Value Prop */}
+        {/* Credibility Statement */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed"
         >
-          From hospital bed to world's highest peaks.<br />
-          <span className="text-summitGold font-semibold">Join the journey to Everest.</span>
+          11-year journey from tuberculosis recovery to world's highest peaks.
         </motion.p>
 
-        {/* Single Primary CTA */}
+        {/* Key Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="flex justify-center"
+          className="flex justify-center gap-12 text-white/70 mb-12"
         >
-          <motion.a
-            href="/sponsorship"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.1), 0 10px 10px -5px rgba(245, 158, 11, 0.04)"
-            }}
-            whileTap={{ scale: 0.95 }}
-            className="group relative px-10 py-5 bg-summitGold text-black font-bold text-lg rounded-2xl overflow-hidden shadow-xl hover:bg-yellow-400 transition-colors"
-          >
-            <span className="relative z-10 flex items-center gap-3">
-              Partner With Me
-              <ArrowRightIcon className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
-            </span>
-          </motion.a>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-summitGold">40kg</div>
+            <div className="text-sm">Starting Weight</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-summitGold">4/7</div>
+            <div className="text-sm">Summits Done</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-summitGold">2027</div>
+            <div className="text-sm">Everest Year</div>
+          </div>
         </motion.div>
 
-        {/* Subtle Secondary Action */}
+        {/* Action Buttons */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 1.0 }}
-          className="mt-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="flex flex-col sm:flex-row gap-4 justify-center"
         >
-          <a
+          <motion.a
             href="/the-journey"
-            className="text-white/60 hover:text-white/80 text-sm font-medium transition-colors underline underline-offset-4"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.1)"
+            }}
+            whileTap={{ scale: 0.95 }}
+            className="group relative px-8 py-4 bg-summitGold text-black font-bold text-lg rounded-2xl hover:bg-yellow-400 transition-colors"
           >
-            Read My Story
-          </a>
+            <span className="relative z-10 flex items-center gap-3">
+              View Journey
+              <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </motion.a>
+
+          <motion.a
+            href="/sponsorship"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold text-lg rounded-2xl hover:bg-white/20 transition-colors"
+          >
+            Partnership Opportunities
+          </motion.a>
         </motion.div>
       </div>
     </section>

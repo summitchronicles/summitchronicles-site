@@ -47,12 +47,6 @@ const navigation = [
     description: "Partner with me for expeditions"
   },
   {
-    name: "Connect",
-    href: "/connect",
-    icon: PhoneIcon,
-    description: "Work together and partnerships"
-  },
-  {
     name: "Ask Sunith",
     href: "/ask-sunith",
     icon: SparklesIcon,
