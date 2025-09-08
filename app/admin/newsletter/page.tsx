@@ -178,7 +178,7 @@ export default function NewsletterAdminPage() {
                 <h4 className="text-lg font-bold text-white">Next Steps:</h4>
                 <ol className="text-white/80 space-y-2 text-sm">
                   <li>1. <strong>Review & Edit:</strong> Customize the draft above with your personal updates</li>
-                  <li>2. <strong>Copy Content:</strong> Use the "Copy to Clipboard" button</li>
+                  <li>2. <strong>Copy Content:</strong> Use the &quot;Copy to Clipboard&quot; button</li>
                   <li>3. <strong>Go to Buttondown:</strong> Visit your <a href="https://buttondown.email/summitchronicles" target="_blank" rel="noopener noreferrer" className="text-summitGold hover:underline">Buttondown dashboard</a></li>
                   <li>4. <strong>Create New Email:</strong> Paste the content and review</li>
                   <li>5. <strong>Send to Subscribers:</strong> Schedule or send immediately</li>
