@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { trackNewsletterSignup } from '@/app/components/GoogleAnalytics'
 
 export default function SignupCard() {
   const [status, setStatus] = useState<'idle' | 'ok'>('idle')
@@ -24,6 +25,8 @@ export default function SignupCard() {
               const url = `https://buttondown.email/${username}`
               window.open(url, 'popupwindow')
               setTimeout(() => setStatus('ok'), 300)
+              // Track newsletter signup
+              trackNewsletterSignup('buttondown_form')
             }}
             className="mt-6 flex flex-col sm:flex-row gap-3"
           >

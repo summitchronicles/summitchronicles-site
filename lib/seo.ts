@@ -126,3 +126,37 @@ export const getBreadcrumbSchema = (breadcrumbs: Array<{ name: string, url: stri
     item: `https://summitchronicles.com${item.url}`,
   })),
 })
+
+export const getFAQSchema = (faqs: Array<{ question: string, answer: string }>) => ({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map(faq => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.answer,
+    },
+  })),
+})
+
+export const getPersonSchema = (person: {
+  name: string;
+  description: string;
+  image?: string;
+  jobTitle?: string;
+  worksFor?: string;
+  sameAs?: string[];
+}) => ({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: person.name,
+  description: person.description,
+  image: person.image ? `https://summitchronicles.com${person.image}` : undefined,
+  jobTitle: person.jobTitle,
+  worksFor: person.worksFor ? {
+    '@type': 'Organization',
+    name: person.worksFor,
+  } : undefined,
+  sameAs: person.sameAs,
+})

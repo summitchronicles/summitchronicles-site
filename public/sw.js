@@ -1,17 +1,18 @@
 // Summit Chronicles Service Worker
 // Provides offline content caching for better UX
 
-const CACHE_NAME = 'summit-chronicles-v1';
+const CACHE_NAME = 'summit-chronicles-v4';
 const OFFLINE_URL = '/offline';
 
 // Essential assets to cache for offline use
 const ESSENTIAL_ASSETS = [
   '/',
-  '/expeditions',
+  '/training-hub',
+  '/ask-sunith',
   '/training',
-  '/gear',
-  '/blog',
-  '/ask',
+  '/the-journey',
+  '/my-story',
+  '/connect',
   '/offline',
   '/_next/static/css/',
   '/_next/static/js/',
@@ -20,9 +21,12 @@ const ESSENTIAL_ASSETS = [
 // Dynamic content patterns to cache
 const CACHE_PATTERNS = [
   /\/_next\/static\/.*/,
+  /\/api\/training\/(analytics|progress)/,
   /\/api\/strava\/recent/,
-  /\/api\/ask/,
-  /\.(?:js|css|woff2|png|jpg|jpeg|svg)$/
+  /\/api\/ask-sunith/,
+  /\/api\/training\/periodization/,
+  /\/api\/training\/programs/,
+  /\.(?:js|css|woff2|png|jpg|jpeg|svg|webp)$/
 ];
 
 // Install event - cache essential assets
@@ -163,11 +167,16 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
-// Handle background sync for analytics
+// Handle background sync for analytics and training data
 self.addEventListener('sync', (event) => {
+  console.log('[SW] Background sync triggered:', event.tag);
+  
   if (event.tag === 'analytics-sync') {
-    console.log('[SW] Background sync: analytics-sync');
     event.waitUntil(syncAnalytics());
+  } else if (event.tag === 'training-data-sync') {
+    event.waitUntil(syncTrainingData());
+  } else if (event.tag === 'workout-upload') {
+    event.waitUntil(syncWorkoutData());
   }
 });
 
@@ -202,6 +211,67 @@ async function syncAnalytics() {
   }
 }
 
+// Background sync function for training data
+async function syncTrainingData() {
+  try {
+    const db = await openDB('training-queue', 1);
+    const tx = db.transaction('workouts', 'readwrite');
+    const store = tx.objectStore('workouts');
+    const pendingWorkouts = await store.getAll();
+    
+    console.log('[SW] Syncing', pendingWorkouts.length, 'training records');
+    
+    for (const workout of pendingWorkouts) {
+      try {
+        await fetch('/api/training/sync', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(workout.data)
+        });
+        
+        await store.delete(workout.id);
+      } catch (error) {
+        console.error('[SW] Failed to sync workout:', error);
+      }
+    }
+    
+    await tx.complete;
+  } catch (error) {
+    console.error('[SW] Training data sync failed:', error);
+  }
+}
+
+// Background sync function for workout uploads
+async function syncWorkoutData() {
+  try {
+    const db = await openDB('workout-uploads', 1);
+    const tx = db.transaction('uploads', 'readwrite');
+    const store = tx.objectStore('uploads');
+    const pendingUploads = await store.getAll();
+    
+    for (const upload of pendingUploads) {
+      try {
+        const formData = new FormData();
+        formData.append('workout', upload.file);
+        formData.append('metadata', JSON.stringify(upload.metadata));
+        
+        await fetch('/api/training/upload', {
+          method: 'POST',
+          body: formData
+        });
+        
+        await store.delete(upload.id);
+      } catch (error) {
+        console.error('[SW] Failed to upload workout:', error);
+      }
+    }
+    
+    await tx.complete;
+  } catch (error) {
+    console.error('[SW] Workout upload sync failed:', error);
+  }
+}
+
 // Helper function to open IndexedDB
 function openDB(name, version) {
   return new Promise((resolve, reject) => {
@@ -212,8 +282,23 @@ function openDB(name, version) {
     
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
-      if (!db.objectStoreNames.contains('queue')) {
+      
+      // Analytics queue store
+      if (name === 'analytics-queue' && !db.objectStoreNames.contains('queue')) {
         const store = db.createObjectStore('queue', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('timestamp', 'timestamp');
+      }
+      
+      // Training data queue store
+      if (name === 'training-queue' && !db.objectStoreNames.contains('workouts')) {
+        const store = db.createObjectStore('workouts', { keyPath: 'id', autoIncrement: true });
+        store.createIndex('timestamp', 'timestamp');
+        store.createIndex('type', 'type');
+      }
+      
+      // Workout upload queue store
+      if (name === 'workout-uploads' && !db.objectStoreNames.contains('uploads')) {
+        const store = db.createObjectStore('uploads', { keyPath: 'id', autoIncrement: true });
         store.createIndex('timestamp', 'timestamp');
       }
     };

@@ -2,6 +2,9 @@
 
 import { motion } from "framer-motion";
 import { useState } from "react";
+import StructuredData from "../components/seo/StructuredData";
+import { getFAQSchema, getPersonSchema } from "@/lib/seo";
+import { trackAIQuery } from "../components/GoogleAnalytics";
 import {
   ChatBubbleLeftRightIcon,
   SparklesIcon,
@@ -68,6 +71,7 @@ export default function AskSunithPage() {
     if (!question.trim()) return;
 
     setIsLoading(true);
+    const startTime = Date.now();
     
     try {
       const response = await fetch('/api/ask-sunith', {
@@ -83,19 +87,61 @@ export default function AskSunithPage() {
       }
 
       const data = await response.json();
+      const responseTime = Date.now() - startTime;
+      
       setResponse(data.response);
+      
+      // Track successful AI interaction
+      trackAIQuery(question.trim(), responseTime);
     } catch (error) {
       console.error('Error asking question:', error);
+      const responseTime = Date.now() - startTime;
+      
       // Fallback to rule-based response on error
       const fallbackAnswer = getAnswer(question);
       setResponse(fallbackAnswer);
+      
+      // Track fallback response (less helpful)
+      trackAIQuery(question.trim(), responseTime, false);
     } finally {
       setIsLoading(false);
     }
   };
 
+  // Sample FAQs for structured data (based on common mountaineering questions)
+  const commonFAQs = [
+    {
+      question: "How do you train for high altitude mountaineering?",
+      answer: "Start training at altitude early if possible. I spend weeks acclimatizing - key is gradual ascent. Sleep low, climb high during the day. Watch for headaches, nausea, fatigue. Listen to your body - summit attempts can wait, but brain swelling can't."
+    },
+    {
+      question: "What essential gear do you need for mountaineering?",
+      answer: "Quality boots (broken in!), layering system, reliable headlamp + backup, emergency shelter. Don't go cheap on life-critical items. Test everything multiple times before expeditions. Redundancy saves lives."
+    },
+    {
+      question: "How do you overcome fear on mountains?",
+      answer: "Fear kept me alive on mountains. It's data, not weakness. I use 3 techniques: 1) Visualize success AND failure scenarios, 2) Focus on next immediate step, not summit, 3) Remember every step up is victory. Fear means you're pushing limits."
+    },
+    {
+      question: "What's your training routine for Seven Summits?",
+      answer: "6 days/week minimum. Mix cardio endurance, strength (legs + core), loaded carries. Train tired - mountains don't care if you slept badly. I run ultras to build mental toughness. Consistency beats intensity."
+    }
+  ];
+
+  const personSchema = getPersonSchema({
+    name: "Sunith Kumar",
+    description: "Mountaineer pursuing the Seven Summits challenge, recovered from tuberculosis, ultra-marathon runner and adventure athlete with expeditions across 4 continents.",
+    jobTitle: "Mountaineer & Adventure Athlete",
+    sameAs: [
+      "https://summitchronicles.com",
+      "https://instagram.com/summitchronicles"
+    ]
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
+      {/* Add structured data */}
+      <StructuredData data={[getFAQSchema(commonFAQs), personSchema]} />
       {/* Hero Section */}
       <section className="relative pt-20 pb-20 overflow-hidden">
         <motion.div

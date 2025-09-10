@@ -38,6 +38,15 @@
   "functions": {
     "app/api/**/*.js": {
       "maxDuration": 10
+    },
+    "app/api/**/*.ts": {
+      "maxDuration": 15
+    },
+    "app/api/training/**/*.ts": {
+      "maxDuration": 30
+    },
+    "app/api/ask-sunith/**/*.ts": {
+      "maxDuration": 60
     }
   },
   "regions": ["iad1"],
@@ -46,6 +55,28 @@
     {
       "path": "/api/strava/refresh-tokens",
       "schedule": "0 4 * * *"
+    },
+    {
+      "path": "/api/backup/database?type=incremental", 
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/training/cron/daily-analysis",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/training/cron/weekly-reports",
+      "schedule": "0 8 * * 1"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/training-hub",
+      "destination": "/training-hub"
+    },
+    {
+      "source": "/api/training/(.*)",
+      "destination": "/api/training/$1"
     }
   ]
 }

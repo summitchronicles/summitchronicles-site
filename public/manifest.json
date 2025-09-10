@@ -40,23 +40,10 @@
   ],
   "shortcuts": [
     {
-      "name": "Ask AI",
-      "short_name": "Ask AI",
-      "description": "Get instant mountaineering advice from our AI assistant",
-      "url": "/ask",
-      "icons": [
-        {
-          "src": "/ask-icon-96x96.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Training",
+      "name": "Training Hub",
       "short_name": "Training",
-      "description": "View training plans and progress",
-      "url": "/training",
+      "description": "Access your professional training dashboard",
+      "url": "/training-hub",
       "icons": [
         {
           "src": "/training-icon-96x96.png",
@@ -66,10 +53,36 @@
       ]
     },
     {
-      "name": "Expeditions",
-      "short_name": "Expeditions",
-      "description": "Explore Seven Summits expeditions",
-      "url": "/expeditions",
+      "name": "Ask Sunith AI",
+      "short_name": "Ask AI",
+      "description": "Get personalized training and climbing advice",
+      "url": "/ask-sunith",
+      "icons": [
+        {
+          "src": "/ask-icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Training Analytics",
+      "short_name": "Analytics", 
+      "description": "View your progress and performance metrics",
+      "url": "/training",
+      "icons": [
+        {
+          "src": "/analytics-icon-96x96.png",
+          "sizes": "96x96",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Seven Summits Journey",
+      "short_name": "Journey",
+      "description": "Follow the Seven Summits expedition progress",
+      "url": "/the-journey",
       "icons": [
         {
           "src": "/expeditions-icon-96x96.png",

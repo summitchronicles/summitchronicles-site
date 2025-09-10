@@ -34,7 +34,7 @@ import {
   PieChart,
   Pie,
   Cell
-} from 'recharts';
+} from '@/app/components/charts/DynamicCharts';
 
 // Mock training data - replace with real Strava API data
 const runningData = [

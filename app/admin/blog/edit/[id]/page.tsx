@@ -15,7 +15,7 @@ import {
   PaperAirplaneIcon
 } from '@heroicons/react/24/outline';
 import ImageUpload from '../../../../components/blog/ImageUpload';
-import AdvancedEditor from '../../../../components/editor/AdvancedEditor';
+import AdvancedEditorLazy from '../../../../components/editor/AdvancedEditorLazy';
 
 interface Category {
   name: string;
@@ -330,7 +330,7 @@ export default function EditBlogPost() {
             {/* Content */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
               <label className="block text-white font-medium mb-4">Content *</label>
-              <AdvancedEditor
+              <AdvancedEditorLazy
                 content={formData.content}
                 onChange={handleContentChange}
                 placeholder="Edit your mountaineering adventure... Use the toolbar for rich formatting, images, tables, and more!"

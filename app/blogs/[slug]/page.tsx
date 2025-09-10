@@ -7,6 +7,9 @@ import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import OptimizedImage from "../../components/blog/OptimizedImage";
+import StructuredData from "../../components/seo/StructuredData";
+import { getArticleSchema, getBreadcrumbSchema } from "@/lib/seo";
+import { trackBlogPost } from "../../components/GoogleAnalytics";
 import { 
   ArrowLeftIcon,
   ClockIcon,
@@ -52,6 +55,13 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   useEffect(() => {
     fetchPost();
   }, [params.slug]);
+
+  // Track blog post view when post data is loaded
+  useEffect(() => {
+    if (post) {
+      trackBlogPost(post.slug, post.read_time);
+    }
+  }, [post]);
 
   const fetchPost = async () => {
     try {
@@ -210,8 +220,28 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     return notFound();
   }
 
+  // Generate structured data for the post
+  const structuredData = post ? [
+    getArticleSchema({
+      title: post.title,
+      description: post.excerpt || 'Expert mountaineering insights from Summit Chronicles',
+      datePublished: new Date(post.published_at).toISOString(),
+      dateModified: new Date(post.updated_at || post.published_at).toISOString(),
+      author: post.author || 'Sunith Kumar',
+      image: post.featured_image,
+      url: `/blogs/${post.slug}`,
+    }),
+    getBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'Blog', url: '/blogs' },
+      { name: post.title, url: `/blogs/${post.slug}` },
+    ])
+  ] : [];
+
   return (
     <article className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
+      {/* Add structured data */}
+      {post && <StructuredData data={structuredData} />}
       {/* Header */}
       <header className="relative py-16 bg-black">
         <div className="absolute inset-0 opacity-10">

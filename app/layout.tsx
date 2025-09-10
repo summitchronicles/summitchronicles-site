@@ -2,6 +2,8 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
 import AnalyticsProvider from "@/app/components/AnalyticsProvider";
+import GoogleAnalytics from "@/app/components/GoogleAnalytics";
+import SessionProvider from "@/app/components/auth/SessionProvider";
 import ServiceWorkerProvider from "@/app/components/ServiceWorkerProvider";
 import WebVitalsProvider from "@/app/components/WebVitalsProvider";
 import EnhancedNavigation from "@/app/components/navigation/EnhancedNavigation";
@@ -105,16 +107,19 @@ export default function RootLayout({
         <meta name="format-detection" content="telephone=no" />
       </head>
       <body className={`${inter.className} bg-black text-white`}>
-        {/* ENHANCED NAVIGATION */}
-        <EnhancedNavigation />
+        <SessionProvider>
+          {/* ENHANCED NAVIGATION */}
+          <EnhancedNavigation />
 
-        {/* PROVIDERS */}
-        <AnalyticsProvider />
-        <ServiceWorkerProvider />
-        <WebVitalsProvider />
-        
-        {/* MAIN CONTENT */}
-        <main className="pt-20">{children}</main>
+          {/* PROVIDERS */}
+          <AnalyticsProvider />
+          <GoogleAnalytics />
+          <ServiceWorkerProvider />
+          <WebVitalsProvider />
+          
+          {/* MAIN CONTENT */}
+          <main className="pt-20">{children}</main>
+        </SessionProvider>
 
         {/* MODERN FOOTER */}
         <footer className="bg-black border-t border-white/10 py-16">

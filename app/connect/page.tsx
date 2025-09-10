@@ -129,7 +129,7 @@ export default function ConnectPage() {
               </span>
             </h2>
             <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              I'm selective about partnerships and collaborations, focusing on authentic 
+              I&apos;m selective about partnerships and collaborations, focusing on authentic 
               connections that provide real value to my audience and align with my values.
             </p>
           </motion.div>

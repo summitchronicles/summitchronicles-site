@@ -13,7 +13,7 @@ import {
 import { GlassCard } from "@/app/components/ui";
 import { ExpeditionTracker, ExpeditionData, GPSPoint, ParticipantData, HealthMetrics, WeatherData } from "@/lib/expedition-tracker";
 import ExpeditionCharts from "./ExpeditionCharts";
-import Route3DVisualization from "./Route3DVisualization";
+import Route3DVisualizationLazy from "./Route3DVisualizationLazy";
 import HealthMonitoringPanel from "./HealthMonitoringPanel";
 
 // Dynamic import for Leaflet to avoid SSR issues
@@ -249,7 +249,7 @@ export default function RealTimeExpeditionDashboard({
 
       {/* 3D Route Visualization */}
       <div className="mt-8">
-        <Route3DVisualization 
+        <Route3DVisualizationLazy 
           routeData={expeditionData.route}
           participants={participants}
         />

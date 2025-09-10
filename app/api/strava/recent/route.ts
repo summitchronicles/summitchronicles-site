@@ -1,8 +1,10 @@
 // app/api/strava/recent/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { getStravaAccessToken, rateLimitedFetch } from "@/lib/strava";
 import { generateMockStravaActivities } from "@/lib/mock-strava-data";
+import { withErrorMonitoring, logInfo, logError } from "@/lib/error-monitor";
+import { protectionPresets, ProtectedRequest } from "@/lib/api-protection";
 
 const STRAVA_BASE = "https://www.strava.com/api/v3";
 
@@ -28,11 +30,10 @@ async function fetchRecentActivities(token: string, after?: number) {
   return JSON.parse(text) as any[];
 }
 
-export async function GET() {
-  try {
-    console.log('🏃‍♂️ Fetching recent Strava activities...');
-    const token = await getStravaAccessToken();
-    console.log('✅ Got Strava access token successfully');
+const getRecentActivitiesHandler = async () => {
+  console.log('🏃‍♂️ Fetching recent Strava activities...');
+  const token = await getStravaAccessToken();
+  console.log('✅ Got Strava access token successfully');
 
     // last synced activity
     const { data: lastRow } = await supabase
@@ -87,9 +88,23 @@ export async function GET() {
 
     if (fetchErr) console.error("Supabase fetch error:", fetchErr);
 
-    return NextResponse.json({ ok: true, activities: activities ?? [] });
+  await logInfo('Strava activities fetched successfully', { count: activities?.length || 0 });
+  return NextResponse.json({ ok: true, activities: activities ?? [] });
+};
+
+export const GET = protectionPresets.apiEndpoint(async (request: ProtectedRequest) => {
+  try {
+    return await getRecentActivitiesHandler();
   } catch (e: any) {
+    return await fallbackHandler(e);
+  }
+});
+
+async function fallbackHandler(e: any) {
     console.error("❌ Error in /api/strava/recent:", e);
+    
+    // Log the error to our monitoring system
+    await logError(e, { endpoint: '/api/strava/recent', action: 'fetch_recent_activities' });
     
     // Try to get activities from database first (cached data)
     const { data: cachedActivities } = await supabase
@@ -119,5 +134,4 @@ export async function GET() {
       error: e.message,
       message: "API temporarily unavailable. Please check Strava authentication."
     });
-  }
 }

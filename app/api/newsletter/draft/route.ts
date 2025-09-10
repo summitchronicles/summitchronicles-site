@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { logError, logInfo, logPerformance } from '@/lib/error-monitor';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -7,10 +8,14 @@ const supabase = createClient(
 );
 
 export async function GET(request: NextRequest) {
+  const startTime = Date.now();
+  
   try {
     const { searchParams } = new URL(request.url);
     const days = parseInt(searchParams.get('days') || '14'); // Default: last 14 days
     const format = searchParams.get('format') || 'markdown'; // 'markdown' or 'html'
+    
+    await logInfo('Newsletter draft generation started', { days, format });
 
     // Calculate date threshold
     const dateThreshold = new Date();
@@ -29,6 +34,12 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Newsletter draft error:', error);
+      await logError(error, { 
+        endpoint: '/api/newsletter/draft',
+        action: 'fetch_posts',
+        days,
+        format 
+      }, request);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
@@ -49,6 +60,15 @@ export async function GET(request: NextRequest) {
       ? generateMarkdownNewsletter(posts, siteUrl, days)
       : generateHtmlNewsletter(posts, siteUrl, days);
 
+    const duration = Date.now() - startTime;
+    await logPerformance('/api/newsletter/draft', duration, true);
+    await logInfo('Newsletter draft generated successfully', { 
+      posts_count: posts.length,
+      period_days: days,
+      format,
+      duration
+    });
+
     return NextResponse.json({
       draft,
       posts_count: posts.length,
@@ -62,6 +82,15 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Newsletter draft generation error:', error);
+    const duration = Date.now() - startTime;
+    
+    await logError(error instanceof Error ? error : String(error), {
+      endpoint: '/api/newsletter/draft',
+      action: 'generate_draft',
+      duration
+    }, request);
+    await logPerformance('/api/newsletter/draft', duration, false);
+    
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

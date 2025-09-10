@@ -5,14 +5,46 @@
 import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
-  dsn: "https://9e53abfd0a8ad97c8066dc9f87f0d8e9@o4509917043687424.ingest.de.sentry.io/4509917048406096",
-
-  // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
-  tracesSampleRate: 1,
+  dsn: process.env.SENTRY_DSN,
+  
+  // Server-side sampling - reduce in production
+  tracesSampleRate: process.env.NODE_ENV === 'production' ? 0.1 : 1.0,
+  
+  // Environment and release tracking
+  environment: process.env.VERCEL_ENV || process.env.NODE_ENV,
+  release: process.env.npm_package_version || '1.0.0',
 
   // Enable logs to be sent to Sentry
-  enableLogs: true,
+  enableLogs: process.env.NODE_ENV === 'production',
 
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: false,
+  // Debug mode for development only
+  debug: process.env.NODE_ENV === 'development',
+
+  // Error filtering for production
+  beforeSend(event, hint) {
+    // Don't send development errors
+    if (process.env.NODE_ENV === 'development') {
+      return null;
+    }
+    
+    const error = hint.originalException;
+    if (error instanceof Error) {
+      // Filter out expected API errors
+      if (error.message.includes('Rate limit') || 
+          error.message.includes('validation') ||
+          error.message.includes('Unauthorized')) {
+        return null;
+      }
+    }
+    
+    return event;
+  },
+
+  // Server context
+  initialScope: {
+    tags: {
+      runtime: 'nodejs',
+      component: 'summit-chronicles-server'
+    }
+  },
 });

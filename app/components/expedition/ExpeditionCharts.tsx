@@ -1,6 +1,6 @@
 "use client";
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from '@/app/components/charts/DynamicCharts';
 import { GlassCard } from "@/app/components/ui";
 import { GPSPoint, HealthMetrics, WeatherData } from "@/lib/expedition-tracker";
 

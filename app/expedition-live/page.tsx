@@ -1,5 +1,15 @@
 import { Metadata } from "next";
-import RealTimeExpeditionDashboard from "@/app/components/expedition/RealTimeExpeditionDashboard";
+import dynamic from "next/dynamic";
+
+const RealTimeExpeditionDashboard = dynamic(
+  () => import("@/app/components/expedition/RealTimeExpeditionDashboard"),
+  { 
+    ssr: false,
+    loading: () => <div className="min-h-screen bg-gradient-to-b from-charcoal to-black flex items-center justify-center">
+      <div className="text-white text-xl">Loading expedition dashboard...</div>
+    </div>
+  }
+);
 
 export const metadata: Metadata = {
   title: "Live Expedition Tracking - Summit Chronicles",

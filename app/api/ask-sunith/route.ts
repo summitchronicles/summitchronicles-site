@@ -1,20 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { searchSimilarContent } from '@/lib/supabase'
 import { generateEmbedding, ollama } from '@/lib/ollama'
+import { logError, logInfo, logPerformance } from '@/lib/error-monitor'
+import { protectionPresets, ProtectedRequest, InputValidator } from '@/lib/api-protection'
 
-export async function POST(request: NextRequest) {
+export const POST = protectionPresets.aiEndpoint(async (request: ProtectedRequest) => {
+  const startTime = Date.now();
+  
   try {
     const { question } = await request.json()
-
-    if (!question || typeof question !== 'string') {
+    
+    // Validate input using security validator
+    const validationResult = InputValidator.validateQuestionInput(question)
+    if (!validationResult.valid) {
       return NextResponse.json(
-        { error: 'Question is required and must be a string' },
+        { error: validationResult.error },
         { status: 400 }
       )
     }
 
-    // Generate embedding for the question
-    const questionEmbedding = await generateEmbedding(question)
+    // Sanitize the question
+    const sanitizedQuestion = InputValidator.sanitizeString(question, 500)
+    
+    // Log the incoming question
+    await logInfo('Ask Sunith request received', { 
+      questionLength: sanitizedQuestion.length,
+      rateLimitRemaining: request.rateLimit?.remaining || 0
+    })
+
+    // Generate embedding for the sanitized question
+    const questionEmbedding = await generateEmbedding(sanitizedQuestion)
 
     // Search for similar content in knowledge base
     const similarContent = await searchSimilarContent(
@@ -31,7 +46,7 @@ export async function POST(request: NextRequest) {
     // Check if we have any relevant context
     if (context.length === 0) {
       // Fallback to rule-based responses if no vector matches
-      const fallbackResponse = getFallbackResponse(question)
+      const fallbackResponse = getFallbackResponse(sanitizedQuestion)
       return NextResponse.json({ 
         response: fallbackResponse,
         source: 'fallback',
@@ -46,13 +61,13 @@ Answer the question based on the provided context from your actual experiences. 
 
 Keep responses conversational but informative, around 2-3 sentences. Always speak in first person as Sunith.`
 
-    const prompt = `${systemPrompt}\n\nContext from my experiences:\n${context.join('\n\n')}\n\nQuestion: ${question}\n\nMy answer:`
+    const prompt = `${systemPrompt}\n\nContext from my experiences:\n${context.join('\n\n')}\n\nQuestion: ${sanitizedQuestion}\n\nMy answer:`
 
     let response: string
 
     // Try Ollama first, fallback to simple context if unavailable
     if (await ollama.isRunning()) {
-      response = await ollama.generateResponse(question, context)
+      response = await ollama.generateResponse(sanitizedQuestion, context)
       
       // Clean up the response
       response = response
@@ -61,8 +76,18 @@ Keep responses conversational but informative, around 2-3 sentences. Always spea
         .trim()
     } else {
       // Simple context-based response if Ollama unavailable
-      response = generateContextResponse(question, context)
+      response = generateContextResponse(sanitizedQuestion, context)
     }
+
+    // Log successful completion with performance metrics
+    const duration = Date.now() - startTime;
+    await logPerformance('/api/ask-sunith', duration, true);
+    await logInfo('Ask Sunith response generated successfully', { 
+      source: 'rag', 
+      confidence: similarContent.length > 2 ? 'high' : 'medium',
+      matchCount: similarContent.length,
+      duration 
+    });
 
     return NextResponse.json({ 
       response,
@@ -74,8 +99,17 @@ Keep responses conversational but informative, around 2-3 sentences. Always spea
   } catch (error) {
     console.error('Error in ask-sunith API:', error)
     
+    // Log error with performance data
+    const duration = Date.now() - startTime;
+    await logError(error instanceof Error ? error : String(error), { 
+      endpoint: '/api/ask-sunith',
+      duration,
+      action: 'generate_response'
+    }, request);
+    await logPerformance('/api/ask-sunith', duration, false);
+    
     // Return fallback response on error
-    const fallbackResponse = getFallbackResponse(await request.json().then(data => data.question).catch(() => ''))
+    const fallbackResponse = getFallbackResponse('')
     
     return NextResponse.json({ 
       response: fallbackResponse,
@@ -83,7 +117,7 @@ Keep responses conversational but informative, around 2-3 sentences. Always spea
       confidence: 'low'
     })
   }
-}
+});
 
 // Fallback responses for when RAG system is unavailable
 function getFallbackResponse(question: string): string {

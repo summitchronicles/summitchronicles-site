@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { protectionPresets, ProtectedRequest } from '@/lib/api-protection'
 
 export const runtime = 'nodejs'
 
@@ -8,7 +9,7 @@ const DashboardQuerySchema = z.object({
   metric: z.enum(['overview', 'visitors', 'ai', 'content', 'realtime']).optional().default('overview')
 })
 
-export async function GET(req: NextRequest) {
+export const GET = protectionPresets.adminEndpoint(async (req: ProtectedRequest) => {
   try {
     const { searchParams } = new URL(req.url)
     const { timeRange, metric } = DashboardQuerySchema.parse({
@@ -127,4 +128,4 @@ export async function GET(req: NextRequest) {
       { status: 500 }
     )
   }
-}
+});

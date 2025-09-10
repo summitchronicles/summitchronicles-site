@@ -3,6 +3,7 @@ import { getSupabaseAnon } from '@/lib/supabaseServer'
 import { embedText } from '@/lib/embeddings'   // your existing embeddings helper
 import { z } from 'zod'
 import crypto from 'crypto'
+import { protectionPresets, ProtectedRequest } from '@/lib/api-protection'
 
 export const runtime = 'nodejs'
 
@@ -111,7 +112,7 @@ function anonFingerprint(req: NextRequest) {
 
 // ===== Route =====
 
-export async function POST(req: NextRequest) {
+export const POST = protectionPresets.aiEndpoint(async (req: ProtectedRequest) => {
   const t0 = Date.now()
   let log: any = {
     t: t0,
@@ -216,4 +217,4 @@ Answer:`
     logEvent({ ...log, body })
     return NextResponse.json(body, { status: 400 })
   }
-}
+});

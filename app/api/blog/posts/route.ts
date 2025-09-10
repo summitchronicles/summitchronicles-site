@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { protectionPresets, ProtectedRequest } from '@/lib/api-protection';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export async function GET(request: NextRequest) {
+export const GET = protectionPresets.publicEndpoint(async (request: ProtectedRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status') || 'published';
@@ -62,14 +63,19 @@ export async function GET(request: NextRequest) {
       category_color: categoryColors[post.category] || '#D97706'
     })) || [];
 
-    return NextResponse.json({ posts: formattedPosts });
+    const response = NextResponse.json({ posts: formattedPosts });
+    
+    // Cache blog posts for 5 minutes (300 seconds)
+    response.headers.set('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600');
+    
+    return response;
   } catch (error) {
     console.error('Blog API error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+});
 
-export async function POST(request: NextRequest) {
+export const POST = protectionPresets.adminEndpoint(async (request: ProtectedRequest) => {
   try {
     const body = await request.json();
     const {
@@ -184,4 +190,4 @@ export async function POST(request: NextRequest) {
     console.error('Blog post creation error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+});

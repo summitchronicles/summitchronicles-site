@@ -85,10 +85,11 @@ export default function OfflinePage() {
             >
               <h3 className="text-white font-medium mb-2">Available Offline</h3>
               <div className="text-sm text-white/60 space-y-1">
-                <div>• Recent training data</div>
-                <div>• Previously viewed expeditions</div>
-                <div>• Cached gear reviews</div>
-                <div>• Your conversation history</div>
+                <div>• Training Hub dashboard</div>
+                <div>• Cached periodization plans</div>
+                <div>• Previously viewed programs</div>
+                <div>• AI conversation history</div>
+                <div>• Performance analytics</div>
               </div>
             </motion.div>
           </div>

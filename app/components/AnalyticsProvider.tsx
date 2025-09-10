@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { initializeAnalytics } from '@/lib/analytics';
 
 export default function AnalyticsProvider() {
@@ -16,5 +17,10 @@ export default function AnalyticsProvider() {
     }
   }, []);
 
-  return null; // This component doesn't render anything
+  return (
+    <>
+      {/* Vercel Analytics */}
+      <Analytics />
+    </>
+  );
 }
