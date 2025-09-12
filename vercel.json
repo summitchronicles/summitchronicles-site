@@ -4,6 +4,9 @@
   "outputDirectory": ".next",
   "installCommand": "npm ci",
   "public": true,
+  "engines": {
+    "node": "20.x"
+  },
   "headers": [
     {
       "source": "/(.*)",
