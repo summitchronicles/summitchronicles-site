@@ -213,9 +213,11 @@ async function getOverviewMetrics(): Promise<MonitoringMetrics['overview']> {
   }
 }
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url)
+    const { searchParams } = req.nextUrl
     const { metric, timeRange } = MonitoringQuerySchema.parse({
       metric: searchParams.get('metric') || 'overview',
       timeRange: searchParams.get('timeRange') || '24h'
