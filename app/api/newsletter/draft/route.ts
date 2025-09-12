@@ -7,11 +7,13 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
   
   try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams } = request.nextUrl;
     const days = parseInt(searchParams.get('days') || '14'); // Default: last 14 days
     const format = searchParams.get('format') || 'markdown'; // 'markdown' or 'html'
     
