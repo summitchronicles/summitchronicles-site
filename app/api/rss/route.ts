@@ -61,7 +61,7 @@ ${posts?.map(post => {
       <content:encoded><![CDATA[${post.content}]]></content:encoded>
       <pubDate>${publishedDate}</pubDate>
       <category><![CDATA[${post.category}]]></category>
-      ${tags.map(tag => `<category><![CDATA[${tag}]]></category>`).join('\n      ')}
+      ${tags.map((tag: string) => `<category><![CDATA[${tag}]]></category>`).join('\n      ')}
       <author>hello@summitchronicles.com (Sunith Kumar)</author>
     </item>`;
 }).join('\n')}
