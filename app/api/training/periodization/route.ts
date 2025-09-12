@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { protectionPresets, ProtectedRequest } from '@/lib/api-protection';
 import { MultiUserDatabase } from '@/lib/multi-user/database';
-import { AdvancedPeriodizationAnalytics } from '@/lib/periodization/advanced-analytics';
+import { AdvancedPeriodization } from '@/lib/periodization/advanced-analytics';
 
-export const GET = protectionPresets.userEndpoint(async (request: ProtectedRequest) => {
+export const GET = protectionPresets.apiEndpoint(async (request: ProtectedRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const userId = request.user.id;
@@ -23,7 +23,7 @@ export const GET = protectionPresets.userEndpoint(async (request: ProtectedReque
         const currentPlan = activePlans[0] || null;
         
         if (currentPlan) {
-          const analytics = new AdvancedPeriodizationAnalytics();
+          const analytics = new AdvancedPeriodization();
           const currentPhase = await analytics.getCurrentPhase(currentPlan);
           const loadMetrics = await analytics.calculateCurrentLoadMetrics(userId, currentPlan.id);
           
@@ -41,7 +41,7 @@ export const GET = protectionPresets.userEndpoint(async (request: ProtectedReque
           return NextResponse.json({ error: 'planId is required' }, { status: 400 });
         }
         
-        const analytics = new AdvancedPeriodizationAnalytics();
+        const analytics = new AdvancedPeriodization();
         const [peakPrediction, loadProgression, riskAssessment] = await Promise.all([
           analytics.predictPeakPerformance(userId, planId),
           analytics.analyzeLoadProgression(userId, planId),
@@ -55,7 +55,7 @@ export const GET = protectionPresets.userEndpoint(async (request: ProtectedReque
         });
 
       case 'recommendations':
-        const recommendationAnalytics = new AdvancedPeriodizationAnalytics();
+        const recommendationAnalytics = new AdvancedPeriodization();
         const recommendations = await recommendationAnalytics.generateTrainingRecommendations(userId);
         
         return NextResponse.json({ recommendations });
@@ -74,13 +74,13 @@ export const GET = protectionPresets.userEndpoint(async (request: ProtectedReque
   }
 });
 
-export const POST = protectionPresets.userEndpoint(async (request: ProtectedRequest) => {
+export const POST = protectionPresets.apiEndpoint(async (request: ProtectedRequest) => {
   try {
     const body = await request.json();
     const userId = request.user.id;
     const { action } = body;
 
-    const analytics = new AdvancedPeriodizationAnalytics();
+    const analytics = new AdvancedPeriodization();
 
     switch (action) {
       case 'create_plan':

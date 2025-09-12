@@ -3,7 +3,7 @@ import { protectionPresets, ProtectedRequest } from '@/lib/api-protection';
 import { MultiUserDatabase } from '@/lib/multi-user/database';
 import { TrainingProgram } from '@/lib/multi-user/types';
 
-export const GET = protectionPresets.userEndpoint(async (request: ProtectedRequest) => {
+export const GET = protectionPresets.apiEndpoint(async (request: ProtectedRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const userId = request.user.id;
@@ -109,7 +109,7 @@ export const GET = protectionPresets.userEndpoint(async (request: ProtectedReque
   }
 });
 
-export const POST = protectionPresets.userEndpoint(async (request: ProtectedRequest) => {
+export const POST = protectionPresets.apiEndpoint(async (request: ProtectedRequest) => {
   try {
     const body = await request.json();
     const userId = request.user.id;
