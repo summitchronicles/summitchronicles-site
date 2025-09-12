@@ -1,4 +1,6 @@
 // app/api/strava/stats/route.ts
+export const dynamic = 'force-dynamic'
+
 import { NextResponse } from "next/server";
 import { getStravaAccessToken, rateLimitedFetch } from "@/lib/strava";
 import { generateMockStravaActivities, generateMockStravaStats } from "@/lib/mock-strava-data";
