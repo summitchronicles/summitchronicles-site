@@ -7,9 +7,9 @@ import {
   LightBulbIcon,
   ExclamationTriangleIcon,
   TrophyIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   ClockIcon,
-  RefreshIcon,
+  ArrowPathIcon,
   ChartBarIcon,
   FireIcon,
   EyeIcon,
@@ -102,7 +102,7 @@ export default function AITrainingInsights({ timeRange }: AITrainingInsightsProp
       case 'achievement': return TrophyIcon;
       case 'warning': return ExclamationTriangleIcon;
       case 'recommendation': return LightBulbIcon;
-      case 'pattern': return TrendingUpIcon;
+      case 'pattern': return ArrowTrendingUpIcon;
       default: return SparklesIcon;
     }
   };
@@ -179,7 +179,7 @@ export default function AITrainingInsights({ timeRange }: AITrainingInsightsProp
               disabled={generating}
               className="flex items-center gap-2 px-4 py-2 bg-purple-500/20 border border-purple-500/30 text-purple-400 rounded-xl hover:bg-purple-500/30 transition-colors disabled:opacity-50"
             >
-              <RefreshIcon className={`w-4 h-4 ${generating ? 'animate-spin' : ''}`} />
+              <ArrowPathIcon className={`w-4 h-4 ${generating ? 'animate-spin' : ''}`} />
               {generating ? 'Learning...' : 'Update AI'}
             </button>
           </div>

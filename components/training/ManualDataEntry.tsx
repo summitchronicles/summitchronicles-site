@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  BackpackIcon,
+  BriefcaseIcon,
   ClockIcon,
   FireIcon,
   ScaleIcon,
@@ -125,7 +125,7 @@ export default function ManualDataEntry({ selectedDate }: ManualDataEntryProps) 
       >
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
-            <BackpackIcon className="w-5 h-5 text-blue-400" />
+            <BriefcaseIcon className="w-5 h-5 text-blue-400" />
           </div>
           <div>
             <h3 className="text-lg font-semibold text-white">Manual Training Data</h3>
@@ -157,7 +157,7 @@ export default function ManualDataEntry({ selectedDate }: ManualDataEntryProps) 
             {/* Existing Entries */}
             {existingData.length > 0 && (
               <div className="p-6 border-b border-white/10">
-                <h4 className="text-white font-semibold mb-4">Today's Entries</h4>
+                <h4 className="text-white font-semibold mb-4">Today&apos;s Entries</h4>
                 <div className="space-y-3">
                   {existingData.map((entry, index) => {
                     const activityType = ACTIVITY_TYPES.find(type => type.value === entry.activity_type);
@@ -184,7 +184,7 @@ export default function ManualDataEntry({ selectedDate }: ManualDataEntryProps) 
                           )}
                           {entry.backpack_weight_kg && (
                             <div className="flex items-center gap-1">
-                              <BackpackIcon className="w-4 h-4" />
+                              <BriefcaseIcon className="w-4 h-4" />
                               {entry.backpack_weight_kg}kg
                             </div>
                           )}

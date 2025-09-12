@@ -10,7 +10,7 @@ import {
   ClockIcon,
   MapPinIcon,
   HeartIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   ArrowPathIcon,
   EyeIcon,
   XMarkIcon
@@ -164,7 +164,7 @@ export default function CombinedDataOverview({ timeRange }: CombinedDataOverview
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center">
-              <TrendingUpIcon className="w-5 h-5 text-purple-400" />
+              <ArrowTrendingUpIcon className="w-5 h-5 text-purple-400" />
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">Combined Training Analysis</h2>

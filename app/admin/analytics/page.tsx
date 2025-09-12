@@ -9,8 +9,8 @@ import {
   SparklesIcon,
   NewspaperIcon,
   ClockIcon,
-  TrendingUpIcon,
-  TrendingDownIcon
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon
 } from "@heroicons/react/24/outline";
 
 interface AnalyticsData {
@@ -72,7 +72,7 @@ export default function AnalyticsDashboard() {
     const isPositive = change >= 0;
     return (
       <div className={`flex items-center gap-1 text-sm ${isPositive ? 'text-green-400' : 'text-red-400'}`}>
-        {isPositive ? <TrendingUpIcon className="w-4 h-4" /> : <TrendingDownIcon className="w-4 h-4" />}
+        {isPositive ? <ArrowTrendingUpIcon className="w-4 h-4" /> : <ArrowTrendingDownIcon className="w-4 h-4" />}
         {Math.abs(change).toFixed(1)}%
       </div>
     );

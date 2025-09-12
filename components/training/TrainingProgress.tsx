@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   ChartBarIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon,
   CalendarDaysIcon,
   ScaleIcon,
   FireIcon,
@@ -206,7 +206,7 @@ export default function TrainingProgress({ timeRange = 'month' }: TrainingProgre
           <div className="flex gap-2">
             {[
               { key: 'volume', label: 'Volume', icon: ScaleIcon },
-              { key: 'rpe', label: 'RPE', icon: TrendingUpIcon },
+              { key: 'rpe', label: 'RPE', icon: ArrowTrendingUpIcon },
               { key: 'frequency', label: 'Sessions', icon: CalendarDaysIcon }
             ].map(metric => (
               <button
@@ -218,7 +218,7 @@ export default function TrainingProgress({ timeRange = 'month' }: TrainingProgre
                     : 'bg-white/10 text-white/70 hover:bg-white/15'
                 }`}
               >
-                <metric.icon className=\"w-4 h-4 inline mr-1\" />
+                <metric.icon className="w-4 h-4 inline mr-1" />
                 {metric.label}
               </button>
             ))}
@@ -226,16 +226,16 @@ export default function TrainingProgress({ timeRange = 'month' }: TrainingProgre
         </div>
 
         {/* Progress Chart */}
-        <div className=\"bg-white/5 rounded-xl p-4\">
+        <div className="bg-white/5 rounded-xl p-4">
           {selectedMetric === 'volume' && weeklyVolume.length > 0 ? (
             <VolumeChart data={weeklyVolume} />
           ) : selectedMetric === 'rpe' && weeklyRPE.length > 0 ? (
             <RPEChart data={weeklyRPE} />
           ) : (
-            <div className=\"text-center py-12 text-white/50\">
-              <ChartBarIcon className=\"w-12 h-12 mx-auto mb-4 opacity-50\" />
+            <div className="text-center py-12 text-white/50">
+              <ChartBarIcon className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p>No data available for selected metric</p>
-              <p className=\"text-sm mt-1\">Complete more workouts to see progress</p>
+              <p className="text-sm mt-1">Complete more workouts to see progress</p>
             </div>
           )}
         </div>
@@ -247,29 +247,29 @@ export default function TrainingProgress({ timeRange = 'month' }: TrainingProgre
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className=\"bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6\"
+          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6"
         >
-          <h3 className=\"text-lg font-bold text-white mb-4 flex items-center gap-2\">
-            <FireIcon className=\"w-5 h-5 text-orange-400\" />
+          <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+            <FireIcon className="w-5 h-5 text-orange-400" />
             Activity Summary
           </h3>
           
-          <div className=\"grid grid-cols-2 md:grid-cols-4 gap-4\">
-            <div className=\"bg-white/5 rounded-xl p-4 text-center\">
-              <div className=\"text-2xl font-bold text-summitGold\">{activityStats.totalActivities}</div>
-              <div className=\"text-white/60 text-sm\">Activities</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="bg-white/5 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-summitGold">{activityStats.totalActivities}</div>
+              <div className="text-white/60 text-sm">Activities</div>
             </div>
-            <div className=\"bg-white/5 rounded-xl p-4 text-center\">
-              <div className=\"text-2xl font-bold text-blue-400\">{activityStats.totalDistance}km</div>
-              <div className=\"text-white/60 text-sm\">Distance</div>
+            <div className="bg-white/5 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-blue-400">{activityStats.totalDistance}km</div>
+              <div className="text-white/60 text-sm">Distance</div>
             </div>
-            <div className=\"bg-white/5 rounded-xl p-4 text-center\">
-              <div className=\"text-2xl font-bold text-green-400\">{activityStats.totalElevation}m</div>
-              <div className=\"text-white/60 text-sm\">Elevation</div>
+            <div className="bg-white/5 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-green-400">{activityStats.totalElevation}m</div>
+              <div className="text-white/60 text-sm">Elevation</div>
             </div>
-            <div className=\"bg-white/5 rounded-xl p-4 text-center\">
-              <div className=\"text-2xl font-bold text-purple-400\">{activityStats.averageBackpackWeight}kg</div>
-              <div className=\"text-white/60 text-sm\">Avg Pack Weight</div>
+            <div className="bg-white/5 rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-purple-400">{activityStats.averageBackpackWeight}kg</div>
+              <div className="text-white/60 text-sm">Avg Pack Weight</div>
             </div>
           </div>
         </motion.div>
@@ -283,26 +283,26 @@ function VolumeChart({ data }: { data: Array<{ date: string; volume: number }> }
   const maxVolume = Math.max(...data.map(d => d.volume));
   
   return (
-    <div className=\"space-y-4\">
-      <div className=\"flex items-center justify-between\">
-        <h4 className=\"text-white font-semibold\">Weekly Training Volume</h4>
-        <span className=\"text-summitGold text-sm\">Total kg lifted</span>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h4 className="text-white font-semibold">Weekly Training Volume</h4>
+        <span className="text-summitGold text-sm">Total kg lifted</span>
       </div>
       
-      <div className=\"space-y-3\">
+      <div className="space-y-3">
         {data.map((week, index) => (
-          <div key={week.date} className=\"flex items-center gap-4\">
-            <div className=\"w-16 text-white/60 text-xs\">
+          <div key={week.date} className="flex items-center gap-4">
+            <div className="w-16 text-white/60 text-xs">
               {new Date(week.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             </div>
-            <div className=\"flex-1 bg-white/10 rounded-full h-6 relative overflow-hidden\">
+            <div className="flex-1 bg-white/10 rounded-full h-6 relative overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(week.volume / maxVolume) * 100}%` }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
-                className=\"bg-gradient-to-r from-summitGold to-yellow-400 h-full rounded-full flex items-center justify-end pr-2\"
+                className="bg-gradient-to-r from-summitGold to-yellow-400 h-full rounded-full flex items-center justify-end pr-2"
               >
-                <span className=\"text-black text-xs font-medium\">{Math.round(week.volume)}kg</span>
+                <span className="text-black text-xs font-medium">{Math.round(week.volume)}kg</span>
               </motion.div>
             </div>
           </div>
@@ -315,26 +315,26 @@ function VolumeChart({ data }: { data: Array<{ date: string; volume: number }> }
 // Simple RPE Chart Component  
 function RPEChart({ data }: { data: Array<{ date: string; averageRpe: number }> }) {
   return (
-    <div className=\"space-y-4\">
-      <div className=\"flex items-center justify-between\">
-        <h4 className=\"text-white font-semibold\">Weekly Average RPE</h4>
-        <span className=\"text-summitGold text-sm\">Perceived effort (1-10)</span>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h4 className="text-white font-semibold">Weekly Average RPE</h4>
+        <span className="text-summitGold text-sm">Perceived effort (1-10)</span>
       </div>
       
-      <div className=\"space-y-3\">
+      <div className="space-y-3">
         {data.map((week, index) => (
-          <div key={week.date} className=\"flex items-center gap-4\">
-            <div className=\"w-16 text-white/60 text-xs\">
+          <div key={week.date} className="flex items-center gap-4">
+            <div className="w-16 text-white/60 text-xs">
               {new Date(week.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
             </div>
-            <div className=\"flex-1 bg-white/10 rounded-full h-6 relative overflow-hidden\">
+            <div className="flex-1 bg-white/10 rounded-full h-6 relative overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${(week.averageRpe / 10) * 100}%` }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
-                className=\"bg-gradient-to-r from-red-500 to-orange-400 h-full rounded-full flex items-center justify-end pr-2\"
+                className="bg-gradient-to-r from-red-500 to-orange-400 h-full rounded-full flex items-center justify-end pr-2"
               >
-                <span className=\"text-white text-xs font-medium\">{week.averageRpe.toFixed(1)}</span>
+                <span className="text-white text-xs font-medium">{week.averageRpe.toFixed(1)}</span>
               </motion.div>
             </div>
           </div>
