@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { protectionPresets, ProtectedRequest } from '@/lib/api-protection';
 import { TrainingRAG } from '@/lib/training-rag';
 
-export const GET = protectionPresets.adminEndpoint(async (request: ProtectedRequest) => {
+export const GET = protectionPresets.apiEndpoint(async (request: ProtectedRequest) => {
   try {
     const { searchParams } = new URL(request.url);
     const startDate = searchParams.get('start');
@@ -53,7 +53,7 @@ export const GET = protectionPresets.adminEndpoint(async (request: ProtectedRequ
   }
 });
 
-export const POST = protectionPresets.adminEndpoint(async (request: ProtectedRequest) => {
+export const POST = protectionPresets.apiEndpoint(async (request: ProtectedRequest) => {
   try {
     const body = await request.json();
     const { action, dateRange } = body;
