@@ -1,6 +1,9 @@
 // app/api/strava/recent/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+
+// Force dynamic rendering to prevent build-time execution
+export const dynamic = 'force-dynamic'
 import { getStravaAccessToken, rateLimitedFetch } from "@/lib/strava";
 import { generateMockStravaActivities } from "@/lib/mock-strava-data";
 import { withErrorMonitoring, logInfo, logError } from "@/lib/error-monitor";
