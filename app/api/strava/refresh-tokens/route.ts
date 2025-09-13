@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getStravaAccessToken } from '@/lib/strava';
 import { logError, logInfo, logPerformance, logCritical } from '@/lib/error-monitor';
 
+// Force dynamic rendering to prevent build-time execution
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
   
