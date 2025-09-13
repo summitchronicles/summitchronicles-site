@@ -1,3 +1,7 @@
+// Force dynamic rendering to avoid build timeouts
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Link from "next/link";
