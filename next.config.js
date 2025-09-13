@@ -5,12 +5,15 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 const nextConfig = {
+  output: 'export',
+  trailingSlash: true,
   experimental: {
     instrumentationHook: true,
     optimizePackageImports: ['@heroicons/react', 'framer-motion', 'recharts'],
     turbotrace: {
       logLevel: 'error',
     },
+    // isrMemoryCacheSize: 0, // Disable ISR cache (invalid in this version)
   },
   
   // Bundle optimization
@@ -19,9 +22,6 @@ const nextConfig = {
       exclude: ['error']
     } : false,
   },
-
-  // Output optimization  
-  output: 'standalone',
   
   // Disable source maps in production
   productionBrowserSourceMaps: false,
@@ -29,6 +29,7 @@ const nextConfig = {
   // Enable SWC minification
   swcMinify: true,
   images: {
+    unoptimized: true,
     formats: ['image/webp', 'image/avif'],
     remotePatterns: [
       {
