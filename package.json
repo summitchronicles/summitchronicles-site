@@ -16,6 +16,8 @@
     "release:preflight": "node scripts/release-check.cjs",
     "print:env": "dotenv -e .env.local -- node scripts/print-env.mjs",
     "deploy": "netlify deploy --prod",
+    "ai-devops": "node ai-devops-netlify.js",
+    "ai-deploy": "npm run ai-devops",
     "ingest:local": "node -r dotenv/config scripts/ingest.mjs dotenv_config_path=.env.local",
     "ingest:md:local": "INGEST_ENDPOINT=http://localhost:3000/api/db/ingest node -r dotenv/config scripts/ingest-md.mjs content dotenv_config_path=.env.local",
     "ingest:md:prod": "INGEST_ENDPOINT=https://heroic-figolla-ba583d.netlify.app/api/db/ingest node -r dotenv/config scripts/ingest-md.mjs content dotenv_config_path=.env.local",
