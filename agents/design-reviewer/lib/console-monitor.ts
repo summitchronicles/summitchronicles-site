@@ -95,7 +95,10 @@ export class ConsoleMonitor {
       const errors: any[] = [];
       
       // Check if Strava data loaded properly
-      const stravaSection = document.querySelector('section:has(h2:contains("Recent Activities"))');
+      const stravaHeaders = Array.from(document.querySelectorAll('h2')).find(h2 => 
+        h2.textContent?.includes('Recent Activities')
+      );
+      const stravaSection = stravaHeaders?.closest('section');
       if (stravaSection) {
         const noActivitiesMsg = stravaSection.textContent?.includes('No activities found');
         if (noActivitiesMsg) {

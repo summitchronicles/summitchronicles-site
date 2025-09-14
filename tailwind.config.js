@@ -1,145 +1,55 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 module.exports = {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./pages/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
+      // Swiss Spa Design System Color Palette
       colors: {
-        // Core Brand Colors
-        alpineBlue: "var(--color-alpine-blue)",
-        summitGold: "var(--color-summit-gold)",
-        charcoal: "var(--color-charcoal)",
-        lightGray: "var(--color-light-gray)",
-        snowWhite: "var(--color-snow-white)",
-        
-        // Extended Palette
-        glacierBlue: "var(--color-glacier-blue)",
-        stoneGray: "var(--color-stone-gray)",
-        warningOrange: "var(--color-warning-orange)",
-        successGreen: "var(--color-success-green)",
-        dangerRed: "var(--color-danger-red)",
+        // Primary brand colors
+        'alpine-blue': '#1e3a8a',
+        'summit-gold': '#fbbf24',
+        // Swiss spa neutrals
+        'spa-stone': '#f8fafc',
+        'spa-mist': '#e2e8f0',
+        'spa-cloud': '#cbd5e1',
+        'spa-slate': '#64748b',
+        'spa-charcoal': '#334155',
       },
-      fontFamily: {
-        sans: ["Inter", "sans-serif"],
+      // Swiss spa typography system
+      fontSize: {
+        'display': ['4rem', { lineHeight: '1.1', fontWeight: '300' }], // 64px
+        'display-lg': ['4.5rem', { lineHeight: '1.1', fontWeight: '300' }], // 72px
+        'h1': ['2.25rem', { lineHeight: '1.2', fontWeight: '400' }], // 36px
+        'h1-lg': ['3rem', { lineHeight: '1.2', fontWeight: '400' }], // 48px
       },
+      // 8px grid spacing system
       spacing: {
-        // Custom spacing scale matching our CSS variables
-        '1': 'var(--space-1)',
-        '2': 'var(--space-2)', 
-        '3': 'var(--space-3)',
-        '4': 'var(--space-4)',
-        '6': 'var(--space-6)',
-        '8': 'var(--space-8)',
-        '12': 'var(--space-12)',
-        '16': 'var(--space-16)',
-        '24': 'var(--space-24)',
+        '18': '4.5rem', // 72px
+        '22': '5.5rem', // 88px
+        '26': '6.5rem', // 104px
+        '30': '7.5rem', // 120px
       },
-      borderRadius: {
-        'sm': 'var(--radius-sm)',
-        'DEFAULT': 'var(--radius-md)',
-        'md': 'var(--radius-md)',
-        'lg': 'var(--radius-lg)',
-        'xl': 'var(--radius-xl)',
-        '2xl': 'var(--radius-2xl)',
-        'full': 'var(--radius-full)',
-      },
+      // Swiss spa shadows (subtle elevation)
       boxShadow: {
-        'xs': 'var(--shadow-xs)',
-        'sm': 'var(--shadow-sm)',
-        'DEFAULT': 'var(--shadow-md)',
-        'md': 'var(--shadow-md)',
-        'lg': 'var(--shadow-lg)',
-        'xl': 'var(--shadow-xl)',
-        '2xl': 'var(--shadow-2xl)',
+        'spa-soft': '0 2px 8px rgba(0, 0, 0, 0.04)',
+        'spa-medium': '0 4px 16px rgba(0, 0, 0, 0.08)',
+        'spa-elevated': '0 8px 32px rgba(0, 0, 0, 0.12)',
       },
-      animation: {
-        'fade-in-up': 'fadeInUp var(--duration-slow) var(--easing-ease-out)',
-        'scale-in': 'scaleIn var(--duration-normal) var(--easing-ease-out)',
-        'slide-in-right': 'slideInRight var(--duration-slow) var(--easing-ease-out)',
-        'shimmer': 'shimmer 1.5s infinite',
-      },
+      // Premium animations
       transitionDuration: {
-        'fast': 'var(--duration-fast)',
-        'normal': 'var(--duration-normal)', 
-        'slow': 'var(--duration-slow)',
-        'slower': 'var(--duration-slower)',
+        '400': '400ms',
+        '500': '500ms',
       },
-      transitionTimingFunction: {
-        'ease-out': 'var(--easing-ease-out)',
-        'ease-in-out': 'var(--easing-ease-in-out)',
-        'bounce': 'var(--easing-bounce)',
-        'mountain-lift': 'var(--animation-mountain-lift)',
-        'elastic': 'var(--animation-elastic)',
-      },
-      perspective: {
-        '1000': 'var(--perspective)',
-      },
-      backdropBlur: {
-        'glass': 'var(--glass-blur)',
-      },
-      zIndex: {
-        'base': 'var(--z-base)',
-        'content': 'var(--z-content)',
-        'elevated': 'var(--z-elevated)',
-        'sticky': 'var(--z-sticky)',
-        'overlay': 'var(--z-overlay)',
-        'modal': 'var(--z-modal)',
-        'toast': 'var(--z-toast)',
-        'tooltip': 'var(--z-tooltip)',
-      },
-      animation: {
-        'mountain-lift': 'mountainLift var(--duration-ultra-slow) var(--animation-mountain-lift)',
-        'float-up': 'floatUp 3s ease-in-out infinite',
-        'parallax-drift': 'parallaxDrift 8s ease-in-out infinite',
-        'aurora': 'aurora 4s ease infinite',
-        'ripple': 'ripple var(--ripple-duration) linear',
-      },
-      colors: {
-        // Existing colors
-        alpineBlue: "var(--color-alpine-blue)",
-        summitGold: "var(--color-summit-gold)",
-        charcoal: "var(--color-charcoal)",
-        lightGray: "var(--color-light-gray)",
-        snowWhite: "var(--color-snow-white)",
-        glacierBlue: "var(--color-glacier-blue)",
-        stoneGray: "var(--color-stone-gray)",
-        warningOrange: "var(--color-warning-orange)",
-        successGreen: "var(--color-success-green)",
-        dangerRed: "var(--color-danger-red)",
-        
-        // Phase 1 extensions - Altitude zones
-        altitude: {
-          base: "var(--altitude-base)",
-          low: "var(--altitude-low)",
-          mid: "var(--altitude-mid)",
-          high: "var(--altitude-high)",
-          summit: "var(--altitude-summit)",
-        },
-        
-        // Aurora colors
-        aurora: {
-          green: "var(--aurora-green)",
-          blue: "var(--aurora-blue)",
-          purple: "var(--aurora-purple)",
-        },
-        
-        // Glass effects
-        glass: {
-          bg: "var(--glass-background)",
-          'bg-dark': "var(--glass-background-dark)",
-          border: "var(--glass-border)",
-        },
-        
-        // Particle effects
-        particle: {
-          snow: "var(--particle-snow)",
-          mist: "var(--particle-mist)",
-        },
+      // Swiss spa typography
+      fontFamily: {
+        'sans': ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
+        'serif': ['Georgia', 'Times New Roman', 'serif'],
       },
     },
   },
   plugins: [],
-};
+}

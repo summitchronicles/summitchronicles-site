@@ -1,0 +1,4843 @@
+{
+  "metadata": {
+    "url": "http://localhost:3000",
+    "timestamp": "2025-09-14T07:17:01.476Z",
+    "userAgent": "Summit Chronicles Design Reviewer",
+    "testDuration": 8069
+  },
+  "summary": {
+    "overallScore": 33,
+    "totalIssues": 565,
+    "criticalIssues": 0,
+    "warningIssues": 322,
+    "infoIssues": 243
+  },
+  "visualQuality": {
+    "score": 0,
+    "issues": [
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".flex.items-center.space-x-3.group",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".w-8.h-8.gradient-summit.rounded-xl.flex.items-center.justify-center.group-hover:animate-glow.transition-all.duration-300.relative.overflow-hidden",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "svg",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "path",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".text-xl.font-semibold.text-slate-900.tracking-tight",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "svg",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "path",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "path",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".text-sm.font-medium",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "svg",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "path",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "path",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".text-sm.font-medium",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "svg",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "circle",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "circle",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "circle",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".text-sm.font-medium",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "svg",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "path",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": "circle",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(0, 0, 238)",
+        "element": ".text-sm.font-medium",
+        "actual": "rgb(0, 0, 238)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": ".btn-summit",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": "SPAN",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": "svg",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": "path",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": "path",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": ".btn-summit",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": "svg",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": "path",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "color-violation",
+        "severity": "warning",
+        "message": "Non-brand color detected: rgb(255, 255, 255)",
+        "element": "SPAN",
+        "actual": "rgb(255, 255, 255)"
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".max-w-6xl.mx-auto.px-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-between.h-20",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-3.group",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-8.h-8.gradient-summit.rounded-xl.flex.items-center.justify-center.group-hover:animate-glow.transition-all.duration-300.relative.overflow-hidden",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xl.font-semibold.text-slate-900.tracking-tight",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".hidden.md:flex.items-center.space-x-8",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.font-medium",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.font-medium",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.font-medium",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.font-medium",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: Arial",
+        "element": ".md:hidden.p-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-colors",
+        "expected": "Inter, sans-serif",
+        "actual": "Arial"
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".min-h-screen.gradient-peak",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".max-w-4xl.mx-auto.px-6.text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.justify-center.mb-8",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-20.h-20.gradient-summit.rounded-2xl.flex.items-center.justify-center.animate-float.peak-shadow.relative.overflow-hidden",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".absolute.inset-0.bg-gradient-to-t.from-slate-900/20.to-transparent",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".absolute.-bottom-1.left-1/2.transform.-translate-x-1/2.w-12.h-3.gradient-elevation.opacity-30.rounded-full.blur-sm",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-5xl.font-bold.text-slate-900.mb-6.tracking-tight",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".block.text-gradient.mt-2",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xl.text-slate-600.mb-12.max-w-2xl.mx-auto.leading-relaxed",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.flex-col.sm:flex-row.items-center.justify-center.space-y-4.sm:space-y-0.sm:space-x-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".btn-summit",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: Arial",
+        "element": ".inline-flex.items-center.space-x-2.px-8.py-4.rounded-xl.font-medium.text-slate-700.bg-white.border.border-slate-200.hover:border-slate-300.hover:bg-slate-50.transition-all.duration-300.hover:shadow-md",
+        "expected": "Inter, sans-serif",
+        "actual": "Arial"
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: Arial",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "Arial"
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".max-w-4xl.mx-auto.px-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-2.md:grid-cols-4.gap-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-center.mb-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-center.mb-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-center.mb-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-center.mb-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".max-w-4xl.mx-auto.px-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-8.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-start.space-x-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "DIV",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-semibold.text-slate-900.mb-2",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-slate-600.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".space-y-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-3.text-sm",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-slate-700",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-3.text-sm",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-slate-700",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-3.text-sm",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-slate-700",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-3.text-sm.text-slate-500",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-4.h-4.rounded-full.border-2.border-slate-300",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-3.text-sm.text-slate-500",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-4.h-4.rounded-full.border-2.border-slate-300",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".max-w-4xl.mx-auto.px-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-8.elevation-shadow.text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.justify-center.mb-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-16.h-16.bg-orange-100.rounded-2xl.flex.items-center.justify-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-slate-600.mb-8.max-w-2xl.mx-auto.leading-relaxed",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.flex-col.sm:flex-row.items-center.justify-center.space-y-4.sm:space-y-0.sm:space-x-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".btn-summit",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: Arial",
+        "element": ".inline-flex.items-center.space-x-2.px-8.py-4.rounded-xl.font-medium.text-slate-700.hover:text-slate-900.transition-all.duration-300",
+        "expected": "Inter, sans-serif",
+        "actual": "Arial"
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: Arial",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "Arial"
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".max-w-7xl.mx-auto.px-6.lg:px-8",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".space-y-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-between",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-2.text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-2.h-2.bg-green-500.rounded-full",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-1.lg:grid-cols-2.gap-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-start.justify-between.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "DIV",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".font-semibold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-2.text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-2.h-2.bg-green-500.rounded-full",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-between.text-sm.text-slate-500",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-start.justify-between.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "DIV",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".font-semibold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-2.text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-2.h-2.bg-green-500.rounded-full",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-between.text-sm.text-slate-500",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-start.justify-between.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "DIV",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".font-semibold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-2.text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-2.h-2.bg-green-500.rounded-full",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-between.text-sm.text-slate-500",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-start.justify-between.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "DIV",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".font-semibold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-2.text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-2.h-2.bg-green-500.rounded-full",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-between.text-sm.text-slate-500",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-start.justify-between.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "DIV",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".font-semibold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-2.text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-2.h-2.bg-green-500.rounded-full",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-between.text-sm.text-slate-500",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-6.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-start.justify-between.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "DIV",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".font-semibold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-2.text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-2.h-2.bg-green-500.rounded-full",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-bold.text-slate-900",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-xs.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.justify-between.text-sm.text-slate-500",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-center.space-x-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "SPAN",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mountain-card.p-8.elevation-shadow",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-lg.font-semibold.text-slate-900.mb-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".grid.grid-cols-1.md:grid-cols-3.gap-6",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-12.h-12.bg-blue-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-12.h-12.bg-green-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-center",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-12.h-12.bg-purple-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-2xl.font-bold.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".mt-8.p-4.bg-slate-50.rounded-xl",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".flex.items-start.space-x-3",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".w-8.h-8.bg-orange-100.rounded-lg.flex.items-center.justify-center.flex-shrink-0",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": "DIV",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".font-medium.text-slate-900.mb-1",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      },
+      {
+        "type": "typography-issue",
+        "severity": "warning",
+        "message": "Non-brand font detected: \"Times New Roman\"",
+        "element": ".text-sm.text-slate-600",
+        "expected": "Inter, sans-serif",
+        "actual": "\"Times New Roman\""
+      }
+    ],
+    "brokenImagesCount": 0,
+    "colorComplianceIssues": 35,
+    "typographyIssues": 269,
+    "layoutProblems": 0
+  },
+  "console": {
+    "score": 100,
+    "errors": [],
+    "javascriptErrors": 0,
+    "networkErrors": 0,
+    "performanceWarnings": 0
+  },
+  "responsive": {
+    "score": 0,
+    "viewportResults": [
+      {
+        "name": "Mobile",
+        "width": 375,
+        "height": 667,
+        "issues": [
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Touch target too small: 124x18px (minimum: 44x44px)",
+            "element": "a.flex.items-center.space-x-3.group",
+            "expected": "44x44px",
+            "actual": "124x18px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Touch target too small: 0x0px (minimum: 44x44px)",
+            "element": "a.group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+            "expected": "44x44px",
+            "actual": "0x0px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Touch target too small: 0x0px (minimum: 44x44px)",
+            "element": "a.group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+            "expected": "44x44px",
+            "actual": "0x0px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Touch target too small: 0x0px (minimum: 44x44px)",
+            "element": "a.group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+            "expected": "44x44px",
+            "actual": "0x0px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Touch target too small: 0x0px (minimum: 44x44px)",
+            "element": "a.group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+            "expected": "44x44px",
+            "actual": "0x0px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Touch target too small: 40x33px (minimum: 44x44px)",
+            "element": "button.md:hidden.p-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-colors",
+            "expected": "44x44px",
+            "actual": "40x33px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Touch target too small: 129x28px (minimum: 44x44px)",
+            "element": "button.inline-flex.items-center.space-x-2.px-8.py-4.rounded-xl.font-medium.text-slate-700.bg-white.border.border-slate-200.hover:border-slate-300.hover:bg-slate-50.transition-all.duration-300.hover:shadow-md",
+            "expected": "44x44px",
+            "actual": "129x28px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Touch target too small: 151x30px (minimum: 44x44px)",
+            "element": "button.inline-flex.items-center.space-x-2.px-8.py-4.rounded-xl.font-medium.text-slate-700.hover:text-slate-900.transition-all.duration-300",
+            "expected": "44x44px",
+            "actual": "151x30px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Text too small for mobile: 13.3333px",
+            "element": "span",
+            "expected": "≥14px",
+            "actual": "13.3333px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "warning",
+            "viewport": "Mobile",
+            "message": "Text too small for mobile: 13.3333px",
+            "element": "span",
+            "expected": "≥14px",
+            "actual": "13.3333px"
+          }
+        ],
+        "screenshot": "agents/design-reviewer/reports/screenshots/mobile-375x667.png",
+        "passed": true
+      },
+      {
+        "name": "Tablet",
+        "width": 768,
+        "height": 1024,
+        "issues": [
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Tablet",
+            "message": "Touch target too small: 124x18px (minimum: 44x44px)",
+            "element": "a.flex.items-center.space-x-3.group",
+            "expected": "44x44px",
+            "actual": "124x18px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Tablet",
+            "message": "Touch target too small: 0x0px (minimum: 44x44px)",
+            "element": "a.group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+            "expected": "44x44px",
+            "actual": "0x0px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Tablet",
+            "message": "Touch target too small: 0x0px (minimum: 44x44px)",
+            "element": "a.group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+            "expected": "44x44px",
+            "actual": "0x0px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Tablet",
+            "message": "Touch target too small: 0x0px (minimum: 44x44px)",
+            "element": "a.group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+            "expected": "44x44px",
+            "actual": "0x0px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Tablet",
+            "message": "Touch target too small: 0x0px (minimum: 44x44px)",
+            "element": "a.group.flex.items-center.space-x-2.px-4.py-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-all.duration-200",
+            "expected": "44x44px",
+            "actual": "0x0px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Tablet",
+            "message": "Touch target too small: 40x33px (minimum: 44x44px)",
+            "element": "button.md:hidden.p-2.rounded-lg.text-slate-600.hover:text-slate-900.hover:bg-white/60.transition-colors",
+            "expected": "44x44px",
+            "actual": "40x33px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Tablet",
+            "message": "Touch target too small: 129x28px (minimum: 44x44px)",
+            "element": "button.inline-flex.items-center.space-x-2.px-8.py-4.rounded-xl.font-medium.text-slate-700.bg-white.border.border-slate-200.hover:border-slate-300.hover:bg-slate-50.transition-all.duration-300.hover:shadow-md",
+            "expected": "44x44px",
+            "actual": "129x28px"
+          },
+          {
+            "type": "touch-target",
+            "severity": "warning",
+            "viewport": "Tablet",
+            "message": "Touch target too small: 151x30px (minimum: 44x44px)",
+            "element": "button.inline-flex.items-center.space-x-2.px-8.py-4.rounded-xl.font-medium.text-slate-700.hover:text-slate-900.transition-all.duration-300",
+            "expected": "44x44px",
+            "actual": "151x30px"
+          }
+        ],
+        "screenshot": "agents/design-reviewer/reports/screenshots/tablet-768x1024.png",
+        "passed": true
+      },
+      {
+        "name": "Desktop",
+        "width": 1280,
+        "height": 720,
+        "issues": [
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.max-w-6xl.mx-auto.px-6",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.flex.items-center.justify-between.h-20",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.min-h-screen.gradient-peak",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.max-w-4xl.mx-auto.px-6.text-center",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.flex.justify-center.mb-8",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "h1.text-5xl.font-bold.text-slate-900.mb-6.tracking-tight",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "span.block.text-gradient.mt-2",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "p.text-xl.text-slate-600.mb-12.max-w-2xl.mx-auto.leading-relaxed",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.flex.flex-col.sm:flex-row.items-center.justify-center.space-y-4.sm:space-y-0.sm:space-x-4",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.max-w-4xl.mx-auto.px-6",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.max-w-4xl.mx-auto.px-6",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-8.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-start.space-x-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "h2.text-lg.font-semibold.text-slate-900.mb-2",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "p.text-slate-600.mb-4",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.space-y-3",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.max-w-4xl.mx-auto.px-6",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-8.elevation-shadow.text-center",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.justify-center.mb-6",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "h2.text-2xl.font-bold.text-slate-900.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "p.text-slate-600.mb-8.max-w-2xl.mx-auto.leading-relaxed",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.flex-col.sm:flex-row.items-center.justify-center.space-y-4.sm:space-y-0.sm:space-x-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.max-w-7xl.mx-auto.px-6.lg:px-8",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.space-y-6",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.flex.items-center.justify-between",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.grid.grid-cols-1.lg:grid-cols-2.gap-6",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1264px",
+            "element": "div.mountain-card.p-8.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1264px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "h3.text-lg.font-semibold.text-slate-900.mb-6",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.grid.grid-cols-1.md:grid-cols-3.gap-6",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.w-12.h-12.bg-blue-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.w-12.h-12.bg-green-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.w-12.h-12.bg-purple-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.mt-8.p-4.bg-slate-50.rounded-xl",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 1262px",
+            "element": "div.flex.items-start.space-x-3",
+            "expected": "≤800px",
+            "actual": "1262px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 947px",
+            "element": "div",
+            "expected": "≤800px",
+            "actual": "947px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 947px",
+            "element": "h4.font-medium.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "947px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Desktop",
+            "message": "Text line might be too long for comfortable reading: 947px",
+            "element": "p.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "947px"
+          }
+        ],
+        "screenshot": "agents/design-reviewer/reports/screenshots/desktop-1280x720.png",
+        "passed": true
+      },
+      {
+        "name": "Large Desktop",
+        "width": 1920,
+        "height": 1080,
+        "issues": [
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.max-w-6xl.mx-auto.px-6",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.flex.items-center.justify-between.h-20",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.min-h-screen.gradient-peak",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.max-w-4xl.mx-auto.px-6.text-center",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.flex.justify-center.mb-8",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "h1.text-5xl.font-bold.text-slate-900.mb-6.tracking-tight",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "span.block.text-gradient.mt-2",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "p.text-xl.text-slate-600.mb-12.max-w-2xl.mx-auto.leading-relaxed",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.flex.flex-col.sm:flex-row.items-center.justify-center.space-y-4.sm:space-y-0.sm:space-x-4",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.max-w-4xl.mx-auto.px-6",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 952px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "952px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.flex.items-center.justify-center.mb-3",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 952px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "952px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.flex.items-center.justify-center.mb-3",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 952px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "952px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.flex.items-center.justify-center.mb-3",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 952px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "952px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.flex.items-center.justify-center.mb-3",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 950px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "950px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.max-w-4xl.mx-auto.px-6",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-8.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-start.space-x-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "h2.text-lg.font-semibold.text-slate-900.mb-2",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "p.text-slate-600.mb-4",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.space-y-3",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1180px",
+            "element": "div.flex.items-center.space-x-3.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1180px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.max-w-4xl.mx-auto.px-6",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-8.elevation-shadow.text-center",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.justify-center.mb-6",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "h2.text-2xl.font-bold.text-slate-900.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "p.text-slate-600.mb-8.max-w-2xl.mx-auto.leading-relaxed",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.flex-col.sm:flex-row.items-center.justify-center.space-y-4.sm:space-y-0.sm:space-x-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.max-w-7xl.mx-auto.px-6.lg:px-8",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.space-y-6",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.flex.items-center.justify-between",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.grid.grid-cols-1.lg:grid-cols-2.gap-6",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-6.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-start.justify-between.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.grid.grid-cols-2.md:grid-cols-4.gap-4.mb-4",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-lg.font-bold.text-slate-900",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 951px",
+            "element": "div.text-xs.text-slate-600",
+            "expected": "≤800px",
+            "actual": "951px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-center.justify-between.text-sm.text-slate-500",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1904px",
+            "element": "div.mountain-card.p-8.elevation-shadow",
+            "expected": "≤800px",
+            "actual": "1904px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "h3.text-lg.font-semibold.text-slate-900.mb-6",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.grid.grid-cols-1.md:grid-cols-3.gap-6",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.w-12.h-12.bg-blue-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.w-12.h-12.bg-green-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-center",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.w-12.h-12.bg-purple-100.rounded-xl.flex.items-center.justify-center.mx-auto.mb-3",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-2xl.font-bold.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.mt-8.p-4.bg-slate-50.rounded-xl",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 1902px",
+            "element": "div.flex.items-start.space-x-3",
+            "expected": "≤800px",
+            "actual": "1902px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 947px",
+            "element": "div",
+            "expected": "≤800px",
+            "actual": "947px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 947px",
+            "element": "h4.font-medium.text-slate-900.mb-1",
+            "expected": "≤800px",
+            "actual": "947px"
+          },
+          {
+            "type": "text-readability",
+            "severity": "info",
+            "viewport": "Large Desktop",
+            "message": "Text line might be too long for comfortable reading: 947px",
+            "element": "p.text-sm.text-slate-600",
+            "expected": "≤800px",
+            "actual": "947px"
+          }
+        ],
+        "screenshot": "agents/design-reviewer/reports/screenshots/large-desktop-1920x1080.png",
+        "passed": true
+      }
+    ],
+    "failedViewports": [],
+    "totalResponsiveIssues": 261
+  },
+  "screenshots": {
+    "fullPage": "agents/design-reviewer/reports/screenshots/full-page.png",
+    "viewports": {
+      "Mobile": "agents/design-reviewer/reports/screenshots/mobile-375x667.png",
+      "Tablet": "agents/design-reviewer/reports/screenshots/tablet-768x1024.png",
+      "Desktop": "agents/design-reviewer/reports/screenshots/desktop-1280x720.png",
+      "Large Desktop": "agents/design-reviewer/reports/screenshots/large-desktop-1920x1080.png"
+    }
+  },
+  "recommendations": [
+    {
+      "priority": "medium",
+      "category": "visual",
+      "title": "Ensure brand color consistency",
+      "description": "Non-brand colors detected that may not align with Summit Chronicles design system.",
+      "actionItems": [
+        "Review CSS custom properties in globals.css",
+        "Replace hardcoded colors with Tailwind brand classes",
+        "Use alpineBlue, summitGold, and other defined brand colors"
+      ],
+      "estimatedEffort": "medium"
+    }
+  ]
+}

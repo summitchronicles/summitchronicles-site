@@ -1,145 +1,109 @@
-const { chromium } = require('playwright');
+#!/usr/bin/env node
+
+const https = require('https');
+const { URL } = require('url');
+
+const sites = [
+  'https://summitchronicles.com',
+  'https://heroic-figolla-ba583d.netlify.app'
+];
+
+let checkCount = 0;
+const maxChecks = 20; // 10 minutes with 30-second intervals
+
+function checkSiteStatus(url) {
+  return new Promise((resolve) => {
+    const { hostname, pathname, protocol } = new URL(url);
+    const port = protocol === 'https:' ? 443 : 80;
+    
+    const options = {
+      hostname,
+      port,
+      path: pathname,
+      method: 'HEAD',
+      timeout: 10000
+    };
+
+    const req = https.request(options, (res) => {
+      resolve({
+        url,
+        status: res.statusCode,
+        success: res.statusCode === 200
+      });
+    });
+
+    req.on('timeout', () => {
+      req.destroy();
+      resolve({
+        url,
+        status: 'TIMEOUT',
+        success: false
+      });
+    });
+
+    req.on('error', (err) => {
+      resolve({
+        url,
+        status: err.code || 'ERROR',
+        success: false
+      });
+    });
+
+    req.end();
+  });
+}
 
 async function monitorDeployment() {
-  const browser = await chromium.launch({ headless: false });
-  const context = await browser.newContext();
-  const page = await context.newPage();
-
-  try {
-    console.log('🔍 Monitoring deployment until completion...');
+  console.log('🔍 Monitoring Netlify deployment...');
+  console.log(`📅 ${new Date().toISOString()}`);
+  
+  while (checkCount < maxChecks) {
+    checkCount++;
+    console.log(`\n--- Check ${checkCount}/${maxChecks} ---`);
     
-    const deploymentUrl = 'https://summit-chronicles-starter-pkjgd0w59-summit-chronicles-projects.vercel.app';
-    let attempt = 1;
-    const maxAttempts = 20; // 10 minutes max wait
+    const results = await Promise.all(sites.map(checkSiteStatus));
     
-    while (attempt <= maxAttempts) {
-      console.log(`\n📊 Check #${attempt} (${new Date().toLocaleTimeString()})`);
+    let anySuccess = false;
+    results.forEach(result => {
+      const emoji = result.success ? '✅' : '❌';
+      console.log(`${emoji} ${result.url}: ${result.status}`);
+      if (result.success) anySuccess = true;
+    });
+    
+    if (anySuccess) {
+      console.log('\n🎉 Deployment successful! Site is live!');
       
-      try {
-        await page.goto(deploymentUrl, { waitUntil: 'networkidle', timeout: 30000 });
-        
-        // Check if still building
-        const buildingIndicators = await page.locator('text=building, text=Building, text=BUILDING').count();
-        
-        if (buildingIndicators > 0) {
-          console.log('🔄 Still building... waiting 30 seconds');
-          await page.waitForTimeout(30000);
-          attempt++;
-          continue;
+      // Test some key pages
+      const testPages = [
+        '/',
+        '/blog',
+        '/training',
+        '/the-journey'
+      ];
+      
+      console.log('\n🧪 Testing key pages...');
+      for (const page of testPages) {
+        const successfulSite = results.find(r => r.success)?.url;
+        if (successfulSite) {
+          const pageResult = await checkSiteStatus(successfulSite + page);
+          const emoji = pageResult.success ? '✅' : '❌';
+          console.log(`${emoji} ${successfulSite}${page}: ${pageResult.status}`);
         }
-        
-        // Check for failure
-        const failureIndicators = await page.locator('text=failed, text=Failed, text=ERROR, text=Error, text=deployment has failed').count();
-        if (failureIndicators > 0) {
-          console.log('❌ Deployment failed!');
-          await page.screenshot({ path: 'deployment-failed.png', fullPage: true });
-          return { success: false, status: 'failed', screenshot: 'deployment-failed.png' };
-        }
-        
-        // Check for success - look for actual site content
-        const siteTitleCount = await page.locator('title').count();
-        const bodyText = await page.textContent('body');
-        
-        // Look for Summit Chronicles specific content
-        const summitContent = [
-          'Summit Chronicles',
-          'mountaineering',
-          'seven summits',
-          'training',
-          'expedition'
-        ].some(term => bodyText?.toLowerCase().includes(term.toLowerCase()));
-        
-        // Look for navigation elements
-        const navElements = await page.locator('nav, [role="navigation"], header').count();
-        
-        // Check if we have real content (not just build page)
-        if (summitContent || navElements > 0) {
-          console.log('🎉 SUCCESS! Deployment completed successfully!');
-          
-          await page.screenshot({ path: 'deployment-success.png', fullPage: true });
-          
-          // Test key functionality
-          console.log('🧪 Testing key pages...');
-          const testResults = {};
-          
-          const pagesToTest = [
-            { path: '/', name: 'Home' },
-            { path: '/training', name: 'Training' },
-            { path: '/blogs', name: 'Blogs' }
-          ];
-          
-          for (const testPage of pagesToTest) {
-            try {
-              const response = await page.goto(`${deploymentUrl}${testPage.path}`, { timeout: 15000 });
-              testResults[testPage.name] = {
-                status: response?.status() || 'unknown',
-                working: response?.status() === 200
-              };
-              console.log(`✅ ${testPage.name}: ${response?.status()}`);
-            } catch (error) {
-              testResults[testPage.name] = { 
-                status: 'error', 
-                working: false, 
-                error: error.message 
-              };
-              console.log(`❌ ${testPage.name}: Failed`);
-            }
-          }
-          
-          return {
-            success: true,
-            status: 'completed',
-            deploymentUrl,
-            screenshot: 'deployment-success.png',
-            testResults,
-            completionTime: new Date().toLocaleTimeString()
-          };
-        } else {
-          console.log('⚠️ Page loaded but no Summit Chronicles content detected yet...');
-          await page.screenshot({ path: `deployment-check-${attempt}.png` });
-          console.log(`📸 Screenshot saved: deployment-check-${attempt}.png`);
-        }
-        
-      } catch (error) {
-        console.log(`⚠️ Network error on attempt ${attempt}: ${error.message}`);
       }
       
-      // Wait before next check
-      console.log('⏳ Waiting 30 seconds before next check...');
-      await page.waitForTimeout(30000);
-      attempt++;
+      break;
     }
     
-    // Timeout reached
-    console.log('⏰ Timeout reached - deployment taking longer than expected');
-    await page.screenshot({ path: 'deployment-timeout.png', fullPage: true });
-    
-    return {
-      success: false,
-      status: 'timeout',
-      screenshot: 'deployment-timeout.png',
-      message: 'Deployment exceeded maximum wait time'
-    };
-    
-  } catch (error) {
-    console.error('❌ Error monitoring deployment:', error);
-    return { success: false, status: 'error', error: error.message };
-  } finally {
-    await browser.close();
+    if (checkCount < maxChecks) {
+      console.log('⏳ Waiting 30 seconds before next check...');
+      await new Promise(resolve => setTimeout(resolve, 30000));
+    }
+  }
+  
+  if (checkCount >= maxChecks) {
+    console.log('\n⚠️  Deployment taking longer than expected. Check Netlify dashboard for details.');
+    console.log('🔗 Admin URL: https://app.netlify.com/projects/summit-chronicles');
   }
 }
 
-// Start monitoring
-console.log('🚀 Starting deployment monitor...');
-monitorDeployment().then(result => {
-  console.log('\n🎯 FINAL DEPLOYMENT RESULT:');
-  console.log('='.repeat(50));
-  console.log(JSON.stringify(result, null, 2));
-  console.log('='.repeat(50));
-  
-  if (result.success) {
-    console.log('🎉 DEPLOYMENT SUCCESSFUL! Training system should now be live!');
-  } else {
-    console.log('❌ Deployment did not complete successfully');
-  }
-}).catch(console.error);
+monitorDeployment().catch(console.error);

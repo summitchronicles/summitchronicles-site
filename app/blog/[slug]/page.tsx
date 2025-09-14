@@ -1,300 +1,240 @@
-"use client";
+import Link from 'next/link'
+import { ArrowLeft, Calendar, Clock, User } from 'lucide-react'
 
-import { useState, useEffect } from "react";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import OptimizedImage from "../../components/blog/OptimizedImage";
-import { 
-  ArrowLeftIcon,
-  ClockIcon,
-  CalendarIcon,
-  UserIcon,
-  TagIcon,
-  HeartIcon,
-  ShareIcon,
-  EyeIcon
-} from "@heroicons/react/24/outline";
+const blogPosts = {
+  'training-for-everest': {
+    title: 'Training for Everest: A Comprehensive Approach',
+    content: `
+      Preparing for Mount Everest requires a systematic approach that builds both physical and mental resilience. After months of research and consultation with experienced climbers, I've developed a training program that addresses every aspect of high-altitude mountaineering.
 
-interface BlogPost {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  category: string;
-  author: string;
-  published_at: string;
-  read_time: number;
-  views: number;
-  likes: number;
-  featured: boolean;
-  tags: string[];
-  meta_title?: string;
-  meta_description?: string;
-}
+      ## Physical Preparation
 
-interface BlogPostPageProps {
-  params: {
-    slug: string;
-  };
-}
+      The foundation of Everest training lies in building exceptional cardiovascular endurance. I've structured my weekly training around:
 
-export default function BlogPostPage({ params }: BlogPostPageProps) {
-  const [post, setPost] = useState<BlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+      - **Long-distance hiking**: 4-6 hour sessions with increasing elevation gain
+      - **Interval training**: High-intensity workouts to simulate oxygen debt
+      - **Strength training**: Focus on functional movements and core stability
+      - **Altitude simulation**: Using hypoxic tents and chambers when possible
 
-  useEffect(() => {
-    fetchPost();
-  }, [params.slug]);
+      ## Mental Training
 
-  const fetchPost = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/blog/posts/${params.slug}`);
-      const data = await response.json();
-      
-      if (response.ok) {
-        setPost(data.post);
-      } else if (response.status === 404) {
-        notFound();
-      } else {
-        setError(data.error || 'Failed to fetch post');
-      }
-    } catch (err) {
-      setError('Failed to fetch post');
-      console.error('Error fetching post:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
+      Physical preparation is only half the battle. Mental resilience becomes critical when facing extreme conditions at altitude. My approach includes:
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+      - Visualization techniques for challenging scenarios
+      - Meditation and breathing exercises
+      - Cold exposure training for psychological adaptation
+      - Risk assessment and decision-making practice
 
-  const getCategoryColor = (category: string) => {
-    const colors: Record<string, string> = {
-      'Training': 'text-blue-400 border-blue-400/20 bg-blue-400/10',
-      'Expeditions': 'text-orange-400 border-orange-400/20 bg-orange-400/10',
-      'Gear': 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10',
-      'Mental': 'text-purple-400 border-purple-400/20 bg-purple-400/10',
-      'Nutrition': 'text-green-400 border-green-400/20 bg-green-400/10',
-      'Recovery': 'text-cyan-400 border-cyan-400/20 bg-cyan-400/10'
-    };
-    return colors[category] || 'text-gray-400 border-gray-400/20 bg-gray-400/10';
-  };
+      ## Technical Skills Development
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
-        <div className="text-white">Loading blog post...</div>
-      </div>
-    );
+      Everest demands technical proficiency in multiple areas:
+
+      - Ice climbing on steep terrain
+      - Crevasse rescue techniques
+      - High-altitude camping and equipment management
+      - Weather pattern recognition and route planning
+
+      The journey continues with each training session building toward the ultimate goal.
+    `,
+    date: 'March 15, 2024',
+    readTime: '8 min read',
+    author: 'Sunith Kumar'
+  },
+  'alpine-climbing-basics': {
+    title: 'Alpine Climbing Basics: Essential Skills for Success',
+    content: `
+      Alpine climbing represents one of mountaineering's purest forms, combining technical skill with endurance and judgment. Whether you're planning your first alpine route or looking to refine your techniques, understanding the fundamentals is crucial.
+
+      ## Route Planning and Assessment
+
+      Successful alpine climbing begins long before you touch rock or ice:
+
+      - Study topographic maps and route descriptions thoroughly
+      - Check weather patterns and seasonal conditions
+      - Assess your skill level honestly against route demands
+      - Plan escape routes and bail-out options
+
+      ## Essential Equipment
+
+      Alpine climbing demands a careful balance between having necessary gear and keeping weight manageable:
+
+      - Lightweight mountaineering boots with crampon compatibility
+      - Ice axe and possibly ice tools for technical sections
+      - Helmet for rockfall and ice protection
+      - Harness and climbing hardware appropriate for the route
+
+      ## Movement Techniques
+
+      Efficient movement in alpine terrain requires:
+
+      - Self-arrest techniques with ice axe
+      - Front-pointing and flat-footing on snow and ice
+      - Mixed climbing on rock and ice combinations
+      - Proper rope management on exposed terrain
+
+      ## Risk Management
+
+      Alpine environments present objective hazards that require constant awareness:
+
+      - Rockfall assessment and timing
+      - Avalanche risk evaluation
+      - Weather pattern recognition
+      - Partner communication and decision-making
+
+      Every alpine route teaches valuable lessons that contribute to mountaineering growth.
+    `,
+    date: 'March 10, 2024',
+    readTime: '6 min read',
+    author: 'Sunith Kumar'
+  },
+  'gear-review-winter-equipment': {
+    title: 'Gear Review: Essential Winter Equipment',
+    content: `
+      Winter mountaineering demands reliable equipment that performs in extreme conditions. After extensive testing in various environments, here's my comprehensive review of essential winter gear.
+
+      ## Insulation Systems
+
+      Layering becomes critical in winter conditions:
+
+      **Base Layer**: Merino wool provides excellent moisture management and odor resistance. I've found 150-200gsm weight ideal for active mountaineering.
+
+      **Insulation Layer**: Down vs. synthetic remains a key decision. Down offers superior warmth-to-weight but fails when wet. Synthetic insulation performs better in damp conditions.
+
+      **Shell Layer**: Hardshell jackets with full zips allow ventilation during active climbing. Look for reinforced high-wear areas.
+
+      ## Footwear Systems
+
+      Winter boots must balance warmth, dryness, and crampon compatibility:
+
+      - Double boots excel in extreme cold
+      - Single boots work for moderate conditions and technical climbing
+      - Boot selection significantly impacts foot health and climbing performance
+
+      ## Protection and Safety
+
+      Winter conditions amplify standard mountaineering risks:
+
+      - Avalanche safety equipment becomes essential
+      - Navigation tools must function in cold temperatures
+      - Emergency bivouac gear provides critical safety margins
+
+      ## Testing and Selection
+
+      I test all gear extensively before committing to expeditions:
+
+      - Home freezer tests for basic cold weather performance
+      - Local winter climbing for real-world evaluation
+      - Gradual system integration to identify compatibility issues
+
+      Reliable gear builds confidence, but skills and judgment remain paramount.
+    `,
+    date: 'March 5, 2024',
+    readTime: '5 min read',
+    author: 'Sunith Kumar'
   }
+}
 
-  if (error) {
+export default function BlogPost({ params }: { params: { slug: string } }) {
+  const post = blogPosts[params.slug as keyof typeof blogPosts]
+
+  if (!post) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-400 text-xl mb-4">Error: {error}</div>
-          <Link href="/blog" className="text-summitGold hover:underline">
+      <div className="min-h-screen bg-slate-50 py-16">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h1 className="text-2xl font-bold text-slate-900 mb-4">Post Not Found</h1>
+          <Link href="/blog" className="text-slate-600 hover:text-slate-900">
             ← Back to Blog
           </Link>
         </div>
       </div>
-    );
-  }
-
-  if (!post) {
-    return notFound();
+    )
   }
 
   return (
-    <article className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
-      {/* Header */}
-      <header className="relative py-16 bg-black">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-            backgroundSize: '60px 60px'
-          }}></div>
-        </div>
-        
-        <div className="relative z-10 max-w-4xl mx-auto px-6">
-          {/* Back Link */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="mb-8"
-          >
-            <Link 
-              href="/blog" 
-              className="inline-flex items-center gap-2 text-white/70 hover:text-summitGold transition-colors duration-300"
-            >
-              <ArrowLeftIcon className="w-4 h-4" />
-              Back to Blog
-            </Link>
-          </motion.div>
+    <div className="min-h-screen gradient-peak py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        {/* Back Navigation */}
+        <Link 
+          href="/blog"
+          className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 mb-8 transition-colors"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to Journal</span>
+        </Link>
 
-          {/* Category */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="mb-4"
-          >
-            <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(post.category)}`}>
-              <TagIcon className="w-3 h-3" />
-              {post.category}
-            </span>
-          </motion.div>
-
-          {/* Title */}
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6"
-          >
-            {post.title}
-          </motion.h1>
-
-          {/* Excerpt */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="text-xl text-white/70 leading-relaxed mb-8 max-w-3xl"
-          >
-            {post.excerpt}
-          </motion.p>
-
-          {/* Meta Information */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="flex flex-wrap items-center gap-6 text-white/60 mb-8"
-          >
-            <div className="flex items-center gap-2">
-              <UserIcon className="w-4 h-4" />
-              <span>{post.author}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CalendarIcon className="w-4 h-4" />
-              <span>{formatDate(post.published_at)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <ClockIcon className="w-4 h-4" />
-              <span>{post.read_time} min read</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <EyeIcon className="w-4 h-4" />
-              <span>{post.views.toLocaleString()} views</span>
-            </div>
-          </motion.div>
-
-          {/* Tags */}
-          {post.tags && post.tags.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="flex flex-wrap gap-2 mb-8"
-            >
-              {post.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-white/10 text-white/80 rounded-full text-sm"
-                >
-                  #{tag}
-                </span>
-              ))}
-            </motion.div>
-          )}
-        </div>
-      </header>
-
-      {/* Content */}
-      <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
-        <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 md:p-12"
-          >
-            <div className="prose prose-invert prose-lg max-w-none
-                prose-headings:text-white prose-headings:font-bold
-                prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4
-                prose-a:text-summitGold prose-a:no-underline hover:prose-a:underline
-                prose-strong:text-white prose-strong:font-semibold
-                prose-em:text-white/90
-                prose-blockquote:border-l-summitGold prose-blockquote:border-l-4 prose-blockquote:pl-6 prose-blockquote:text-white/70
-                prose-ul:text-white/80 prose-ol:text-white/80 prose-ul:mb-4 prose-ol:mb-4
-                prose-li:text-white/80 prose-li:mb-1
-                prose-img:rounded-xl prose-img:shadow-2xl
-                prose-code:text-summitGold prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
-                prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20"
-            >
-              <ReactMarkdown 
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  img: ({ src, alt, ...props }) => (
-                    <OptimizedImage
-                      src={src || ''}
-                      alt={alt || ''}
-                      width={800}
-                      height={400}
-                      className="rounded-xl shadow-2xl my-6"
-                    />
-                  )
-                }}
-              >
-                {post.content}
-              </ReactMarkdown>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Footer Actions */}
-      <footer className="py-16 bg-black">
-        <div className="max-w-4xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8 }}
-            className="flex items-center justify-between border-t border-white/10 pt-8"
-          >
-            <div className="flex items-center gap-4">
-              <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors duration-300">
-                <HeartIcon className="w-4 h-4 text-red-400" />
-                <span className="text-white/80">Like ({post.likes})</span>
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors duration-300">
-                <ShareIcon className="w-4 h-4 text-blue-400" />
-                <span className="text-white/80">Share</span>
-              </button>
-            </div>
+        {/* Article Header */}
+        <article className="mountain-card overflow-hidden elevation-shadow">
+          <div className="p-8 md:p-12">
+            <h1 className="text-4xl font-bold text-slate-900 mb-6 leading-tight">
+              {post.title}
+            </h1>
             
-            <Link 
-              href="/blog"
-              className="text-summitGold hover:text-summitGold/80 transition-colors duration-300 font-medium"
-            >
-              ← Back to all posts
-            </Link>
-          </motion.div>
+            {/* Meta Information */}
+            <div className="flex items-center space-x-6 text-slate-600 mb-8 pb-8 border-b border-slate-200">
+              <div className="flex items-center space-x-2">
+                <User className="w-4 h-4" />
+                <span className="text-sm">{post.author}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Calendar className="w-4 h-4" />
+                <span className="text-sm">{post.date}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Clock className="w-4 h-4" />
+                <span className="text-sm">{post.readTime}</span>
+              </div>
+            </div>
+
+            {/* Article Content */}
+            <div className="prose prose-slate max-w-none">
+              {post.content.split('\n\n').map((paragraph, index) => {
+                if (paragraph.startsWith('## ')) {
+                  return (
+                    <h2 key={index} className="text-2xl font-semibold text-slate-900 mt-8 mb-4">
+                      {paragraph.replace('## ', '')}
+                    </h2>
+                  )
+                }
+                if (paragraph.startsWith('- ') || paragraph.includes('\n- ')) {
+                  const items = paragraph.split('\n- ').filter(item => item.trim())
+                  return (
+                    <ul key={index} className="space-y-2 mb-6">
+                      {items.map((item, itemIndex) => (
+                        <li key={itemIndex} className="text-slate-700 leading-relaxed">
+                          {item.replace(/^- /, '')}
+                        </li>
+                      ))}
+                    </ul>
+                  )
+                }
+                if (paragraph.startsWith('**') && paragraph.endsWith('**')) {
+                  return (
+                    <p key={index} className="font-semibold text-slate-900 mb-4">
+                      {paragraph.replace(/\*\*/g, '')}
+                    </p>
+                  )
+                }
+                return (
+                  <p key={index} className="text-slate-700 leading-relaxed mb-6">
+                    {paragraph}
+                  </p>
+                )
+              })}
+            </div>
+          </div>
+        </article>
+
+        {/* Navigation */}
+        <div className="mt-8 text-center">
+          <Link 
+            href="/blog"
+            className="btn-summit px-6 py-3"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>More Posts</span>
+          </Link>
         </div>
-      </footer>
-    </article>
-  );
+      </div>
+    </div>
+  )
 }

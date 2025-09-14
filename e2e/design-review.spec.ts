@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 import { DesignReviewer } from '../agents/design-reviewer';
 
 test.describe('Summit Chronicles Design Review', () => {
-  test('Complete design review - localhost:3000', async ({ page }) => {
+  test('Complete design review - localhost:3001', async ({ page }) => {
     const reviewer = new DesignReviewer(page);
     const report = await reviewer.reviewSite('http://localhost:3000');
     

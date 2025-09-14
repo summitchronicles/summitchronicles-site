@@ -1,0 +1,7 @@
+#!/bin/bash
+vercel env add NEXT_PUBLIC_SUPABASE_URL production <<< "https://nvoljnojiondyjhxwkqq.supabase.co"
+vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production <<< "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52b2xqbm9qaW9uZHlqaHh3a3FxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzNTAzMTEsImV4cCI6MjA3MDkyNjMxMX0.238bhZDihRSFAK5xobFbH-MKuAx47lGDjo-qPyX1jsA"
+vercel env add SUPABASE_URL production <<< "https://nvoljnojiondyjhxwkqq.supabase.co"
+vercel env add SUPABASE_ANON_KEY production <<< "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52b2xqbm9qaW9uZHlqaHh3a3FxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzNTAzMTEsImV4cCI6MjA3MDkyNjMxMX0.238bhZDihRSFAK5xobFbH-MKuAx47lGDjo-qPyX1jsA"
+vercel env add SUPABASE_SERVICE_ROLE_KEY production <<< "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im52b2xqbm9qaW9uZHlqaHh3a3FxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NTM1MDMxMSwiZXhwIjoyMDcwOTI2MzExfQ.JZF44a8K2tOVitBfT1AgCkhTUeZOb0H_ZHUPuWIoNkc"
+vercel env add NEXT_PUBLIC_SITE_URL production <<< "https://summitchronicles.com"

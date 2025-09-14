@@ -52,7 +52,7 @@ export class VisualInspector {
               element: el.tagName.toLowerCase(),
               property: 'color',
               value: color,
-              selector: el.className ? '.' + el.className.replace(/\s+/g, '.') : el.tagName
+              selector: el.className && typeof el.className === 'string' ? '.' + el.className.replace(/\s+/g, '.') : el.tagName
             });
           }
         }
