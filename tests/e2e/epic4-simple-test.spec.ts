@@ -4,7 +4,7 @@ test('Epic 4: Community Engagement & Newsletter System Direct Test', async ({ pa
   console.log('🎯 TESTING EPIC 4: Community Engagement & Newsletter System');
   
   // Test the newsletter page directly
-  const newsletterUrl = 'https://summit-chronicles-starter-81io23ve5-summit-chronicles-projects.vercel.app/newsletter';
+  const newsletterUrl = 'http://localhost:3000/newsletter';
   
   try {
     await page.goto(newsletterUrl, { waitUntil: 'networkidle', timeout: 45000 });
@@ -55,7 +55,7 @@ test('Epic 4: Community Engagement & Newsletter System Direct Test', async ({ pa
     console.log('🤝 Story 4.2 - Community Communication:', hasCommunityContent);
     
     // Now test community page
-    const communityUrl = 'https://summit-chronicles-starter-81io23ve5-summit-chronicles-projects.vercel.app/community';
+    const communityUrl = 'http://localhost:3000/community';
     await page.goto(communityUrl, { waitUntil: 'networkidle', timeout: 45000 });
     
     // Take community page screenshot

@@ -1,6 +1,26 @@
 import type { Metadata } from "next";
-import { ErrorBoundary } from "./components/organisms/ErrorBoundary";
 import "./globals.css";
+import { Montserrat, Amatic_SC, Oswald } from 'next/font/google';
+import { OrganizationStructuredData, BreadcrumbStructuredData } from './components/seo/StructuredData';
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  variable: '--font-montserrat',
+  display: 'swap',
+});
+
+const amaticSC = Amatic_SC({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-amatic',
+  display: 'swap',
+});
+
+const oswald = Oswald({
+  subsets: ['latin'],
+  variable: '--font-oswald',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: "Summit Chronicles - Journey to the Summit",
@@ -43,10 +63,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className="font-sans antialiased text-spa-charcoal bg-spa-stone">
-        <ErrorBoundary>
-          {children}
-        </ErrorBoundary>
+      <head>
+        <OrganizationStructuredData />
+        <BreadcrumbStructuredData />
+      </head>
+      <body className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-spa-charcoal bg-spa-stone`}>
+        {children}
       </body>
     </html>
   );

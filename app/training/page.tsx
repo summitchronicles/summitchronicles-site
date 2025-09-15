@@ -1,10 +1,22 @@
+import { Suspense, lazy } from 'react'
 import { CheckCircle, Clock, TrendingUp, Calendar, Target, Zap, Mountain, Award, BarChart3 } from 'lucide-react'
 import { TrainingAnalytics } from '../components/TrainingCharts'
 import { StravaActivityFeed } from '../components/StravaIntegration'
-import { TrainingMethodologyHub } from '../components/organisms/TrainingMethodologyHub'
-import { TrainingProgressionAnalytics } from '../components/organisms/TrainingProgressionAnalytics'
 import { DefaultLayout } from '../components/templates/DefaultLayout'
 import { cn } from '@/lib/utils'
+
+// Lazy load heavy components
+const TrainingMethodologyHub = lazy(() => 
+  import('../components/organisms/TrainingMethodologyHub').then(module => ({
+    default: module.TrainingMethodologyHub
+  }))
+)
+
+const TrainingProgressionAnalytics = lazy(() => 
+  import('../components/organisms/TrainingProgressionAnalytics').then(module => ({
+    default: module.TrainingProgressionAnalytics
+  }))
+)
 
 export default function TrainingPage() {
   const trainingPhases = [
@@ -208,7 +220,22 @@ export default function TrainingPage() {
       </section>
       
       {/* Training Methodology Hub */}
-      <TrainingMethodologyHub />
+      <Suspense fallback={
+        <div className="py-16 bg-spa-cloud/20">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="animate-pulse space-y-8">
+              <div className="h-8 bg-spa-stone/20 rounded w-64 mx-auto"></div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1,2,3].map(i => (
+                  <div key={i} className="h-64 bg-spa-stone/20 rounded-xl"></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <TrainingMethodologyHub />
+      </Suspense>
       
       {/* Training Analytics Section */}
       <section className="py-16 bg-white">
@@ -218,7 +245,21 @@ export default function TrainingPage() {
       </section>
 
       {/* Training Progression Analytics */}
-      <TrainingProgressionAnalytics />
+      <Suspense fallback={
+        <div className="py-16 bg-white">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="animate-pulse space-y-8">
+              <div className="h-8 bg-spa-stone/20 rounded w-64 mx-auto"></div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="h-96 bg-spa-stone/20 rounded-xl"></div>
+                <div className="h-96 bg-spa-stone/20 rounded-xl"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <TrainingProgressionAnalytics />
+      </Suspense>
 
       {/* Strava Activity Feed */}
       <section className="py-16 bg-gradient-to-br from-spa-mist/20 to-white">

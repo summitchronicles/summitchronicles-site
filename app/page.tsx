@@ -14,6 +14,7 @@ import {
 } from './components/atoms/Typography';
 import { Card, CardContent, CardHeader } from './components/molecules/Card';
 import { StatusBadge } from './components/molecules/StatusBadge';
+import { ClimbingRope, IceAxe, Compass, Tent, SummitFlag } from './components/icons/MountaineeringIcons';
 
 export default function Home() {
   return (
@@ -23,6 +24,78 @@ export default function Home() {
 
       {/* Visual Showcase Section */}
       <VisualShowcase />
+
+      {/* Essential Gear Section */}
+      <section className="py-16 space-y-12">
+        <div className="text-center space-y-4">
+          <H2 className="font-oswald">Essential Expedition Gear</H2>
+          <Body className="max-w-2xl mx-auto font-montserrat">
+            Professional mountaineering equipment essential for high-altitude expedition success
+          </Body>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 max-w-4xl mx-auto">
+          <div className="text-center space-y-4 group">
+            <div className="flex justify-center p-4 bg-glacier-50 rounded-xl group-hover:bg-glacier-100 transition-colors duration-300">
+              <ClimbingRope 
+                size={48} 
+                color="#0284c7" 
+                animateOnScroll={true}
+                className="group-hover:scale-110 transition-transform duration-300"
+              />
+            </div>
+            <H3 className="text-sm font-montserrat text-glacier-700">Dynamic Rope</H3>
+          </div>
+
+          <div className="text-center space-y-4 group">
+            <div className="flex justify-center p-4 bg-peak-50 rounded-xl group-hover:bg-peak-100 transition-colors duration-300">
+              <IceAxe 
+                size={48} 
+                color="#3f3f46" 
+                animateOnScroll={true}
+                className="group-hover:scale-110 transition-transform duration-300"
+              />
+            </div>
+            <H3 className="text-sm font-montserrat text-peak-700">Ice Axe</H3>
+          </div>
+
+          <div className="text-center space-y-4 group">
+            <div className="flex justify-center p-4 bg-summit-gold-50 rounded-xl group-hover:bg-summit-gold-100 transition-colors duration-300">
+              <Compass 
+                size={48} 
+                color="#d97706" 
+                animateOnScroll={true}
+                className="group-hover:scale-110 transition-transform duration-300"
+              />
+            </div>
+            <H3 className="text-sm font-montserrat text-summit-gold-700">Navigation</H3>
+          </div>
+
+          <div className="text-center space-y-4 group">
+            <div className="flex justify-center p-4 bg-forest-50 rounded-xl group-hover:bg-forest-100 transition-colors duration-300">
+              <Tent 
+                size={48} 
+                color="#15803d" 
+                animateOnScroll={true}
+                className="group-hover:scale-110 transition-transform duration-300"
+              />
+            </div>
+            <H3 className="text-sm font-montserrat text-forest-700">Base Camp</H3>
+          </div>
+
+          <div className="text-center space-y-4 group">
+            <div className="flex justify-center p-4 bg-expedition-50 rounded-xl group-hover:bg-expedition-100 transition-colors duration-300">
+              <SummitFlag 
+                size={48} 
+                color="#b91c1c" 
+                animateOnScroll={true}
+                className="group-hover:scale-110 transition-transform duration-300"
+              />
+            </div>
+            <H3 className="text-sm font-montserrat text-expedition-700">Summit Goal</H3>
+          </div>
+        </div>
+      </section>
 
       {/* Training Progress Section */}
       <section className="py-16 space-y-12">

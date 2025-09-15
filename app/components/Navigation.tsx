@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { Home, BookOpen, Target, User, Menu, X } from 'lucide-react'
+import { AnimatedLogo } from './icons/AnimatedLogo'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -25,11 +26,18 @@ export default function Navigation() {
             onClick={() => setIsOpen(false)}
           >
             <div className="w-8 h-8 gradient-summit rounded-xl flex items-center justify-center group-hover:animate-glow transition-all duration-300 relative overflow-hidden">
-              <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L3 21h18L12 2zm0 4.5L18.5 19H5.5L12 6.5z"/>
-              </svg>
+              <AnimatedLogo 
+                size={20} 
+                variant="minimal"
+                animateOnScroll={false}
+                colors={{
+                  primary: '#ffffff',
+                  secondary: '#fbbf24',
+                  accent: '#ffffff'
+                }}
+              />
             </div>
-            <span className="text-xl font-semibold text-slate-900 tracking-tight">
+            <span className="text-xl font-semibold text-slate-900 tracking-tight font-montserrat">
               Summit Chronicles
             </span>
           </Link>

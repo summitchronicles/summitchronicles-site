@@ -1,7 +1,19 @@
+import { Suspense, lazy } from 'react'
 import { Mountain, Compass, BookOpen } from 'lucide-react'
 import { DefaultLayout } from '../components/templates/DefaultLayout'
-import { ExpeditionTimeline } from '../components/organisms/ExpeditionTimeline'
-import { PersonalStoryGallery } from '../components/organisms/PersonalStoryGallery'
+
+// Lazy load heavy components
+const ExpeditionTimeline = lazy(() => 
+  import('../components/organisms/ExpeditionTimeline').then(module => ({
+    default: module.ExpeditionTimeline
+  }))
+)
+
+const PersonalStoryGallery = lazy(() => 
+  import('../components/organisms/PersonalStoryGallery').then(module => ({
+    default: module.PersonalStoryGallery
+  }))
+)
 
 export default function JourneyPage() {
   return (
@@ -57,10 +69,50 @@ export default function JourneyPage() {
       </section>
 
       {/* Expedition Timeline */}
-      <ExpeditionTimeline />
+      <Suspense fallback={
+        <div className="py-16 bg-white">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="animate-pulse space-y-8">
+              <div className="h-8 bg-spa-stone/20 rounded w-48 mx-auto"></div>
+              <div className="space-y-6">
+                {[1,2,3,4].map(i => (
+                  <div key={i} className="flex gap-6">
+                    <div className="w-4 h-4 bg-spa-stone/20 rounded-full flex-shrink-0 mt-2"></div>
+                    <div className="flex-1 space-y-3">
+                      <div className="h-4 bg-spa-stone/20 rounded w-3/4"></div>
+                      <div className="h-3 bg-spa-stone/20 rounded w-1/2"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <ExpeditionTimeline />
+      </Suspense>
 
       {/* Personal Story & Achievement Gallery */}
-      <PersonalStoryGallery />
+      <Suspense fallback={
+        <div className="py-16 bg-spa-cloud/20">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="animate-pulse space-y-8">
+              <div className="h-8 bg-spa-stone/20 rounded w-64 mx-auto"></div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[1,2,3,4,5,6].map(i => (
+                  <div key={i} className="space-y-4">
+                    <div className="h-48 bg-spa-stone/20 rounded-xl"></div>
+                    <div className="h-4 bg-spa-stone/20 rounded"></div>
+                    <div className="h-3 bg-spa-stone/20 rounded w-3/4"></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      }>
+        <PersonalStoryGallery />
+      </Suspense>
 
       {/* Call to Action */}
       <section className="py-16 bg-gradient-to-br from-alpine-blue/5 to-summit-gold/5">

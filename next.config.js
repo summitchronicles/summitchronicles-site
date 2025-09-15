@@ -5,13 +5,19 @@ const nextConfig = {
     domains: ['images.unsplash.com', 'via.placeholder.com']
   },
   // experimental: {
-  //   optimizeCss: true,
+  //   optimizeCss: true
   // },
   poweredByHeader: false,
   compress: true,
   // Performance optimizations
   swcMinify: true,
   reactStrictMode: true,
+  // Bundle optimization
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{member}}'
+    }
+  },
   // Static optimization
   trailingSlash: false,
   // Environment config for Netlify deployment
