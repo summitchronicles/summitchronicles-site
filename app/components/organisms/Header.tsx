@@ -17,6 +17,7 @@ interface NavigationItem {
 const primaryNavigation: NavigationItem[] = [
   { href: '/', label: 'Home', description: 'Journey overview' },
   { href: '/about', label: 'About', description: 'My story' },
+  { href: '/journey', label: 'Journey', description: 'Timeline & achievements' },
   { href: '/training', label: 'Training', description: 'Progress & data' },
   { href: '/blog', label: 'Blog', description: 'Insights & updates' },
 ];
