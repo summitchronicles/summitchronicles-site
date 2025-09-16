@@ -64,7 +64,7 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo / Brand */}
-          <Link href="/" className="flex items-center space-x-3 group">
+          <Link href="/" className="flex items-center space-x-3 group brand">
             <div className="flex items-center justify-center w-10 h-10 bg-alpine-blue rounded-md group-hover:bg-blue-800 transition-colors duration-300">
               <Icon name="Mountain" className="text-white" size="md" />
             </div>
@@ -74,7 +74,7 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-8">
             {primaryNavigation.map((item) => (
               <Link
                 key={item.href}

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
-import { Home, BookOpen, Target, User, Menu, X } from 'lucide-react'
+import { Home, BookOpen, Target, User, Menu, X, Brain, Mountain, Users, Bot, Calendar, Zap } from 'lucide-react'
 import { AnimatedLogo } from './icons/AnimatedLogo'
 
 export default function Navigation() {
@@ -10,9 +10,12 @@ export default function Navigation() {
 
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
-    { href: '/blog', label: 'Journal', icon: BookOpen },
-    { href: '/training', label: 'Training', icon: Target },
     { href: '/about', label: 'About', icon: User },
+    { href: '/journey', label: 'Journey', icon: Mountain },
+    { href: '/blog', label: 'Blog', icon: BookOpen },
+    { href: '/training', label: 'Training', icon: Target },
+    { href: '/ai-search', label: 'AI Coach', icon: Brain },
+    { href: '/automation', label: 'Automation', icon: Bot },
   ]
 
   return (
@@ -22,7 +25,7 @@ export default function Navigation() {
           {/* Logo */}
           <Link 
             href="/" 
-            className="flex items-center space-x-3 group"
+            className="flex items-center space-x-3 group brand"
             onClick={() => setIsOpen(false)}
           >
             <div className="w-8 h-8 gradient-summit rounded-xl flex items-center justify-center group-hover:animate-glow transition-all duration-300 relative overflow-hidden">

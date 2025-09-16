@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
-import { Calendar, MapPin, Mountain, CheckCircle, Clock, Camera, Users, Thermometer, Wind, ArrowRight, ChevronDown, Share, Heart } from 'lucide-react'
+import React, { useState, useRef, useEffect } from 'react'
+import { motion, useInView, useAnimation, AnimatePresence, useMotionValue, useTransform } from 'framer-motion'
+import { Calendar, MapPin, Mountain, CheckCircle, Clock, Camera, Users, Thermometer, Wind, ArrowRight, ChevronDown, Share, Heart, Target, Award } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 interface TimelineMilestone {
@@ -39,159 +40,230 @@ interface ExpeditionTimelineProps {
 const TIMELINE_DATA: TimelineMilestone[] = [
   {
     id: '1',
-    title: 'Training Phase Begins',
-    description: 'Commenced comprehensive 12-month training program focusing on cardiovascular endurance, strength building, and technical skill development.',
-    date: '2024-01-15',
+    title: 'Seven Summits Training Foundation',
+    description: 'Established comprehensive training methodology specifically designed for the Seven Summits challenge - the highest peaks on each continent.',
+    date: '2023-01-15',
     status: 'completed',
     phase: 'preparation',
     location: 'Seattle, WA',
-    achievements: [
-      'Established baseline fitness metrics',
-      'Created personalized training plan',
-      'Assembled training equipment'
+    images: [
+      { url: '/images/placeholder-7summits-training.jpg', caption: 'NEEDED: Seven Summits training methodology documentation', photographer: 'TBD' },
+      { url: '/images/placeholder-altitude-training.jpg', caption: 'NEEDED: High-altitude preparation and conditioning sessions', photographer: 'TBD' },
+      { url: '/images/placeholder-technical-training.jpg', caption: 'NEEDED: Technical mountaineering skills development', photographer: 'TBD' }
     ],
-    supporters: 45,
-    details: 'The training phase marks the beginning of systematic preparation for Mount Everest. This involves building a strong aerobic base, developing functional strength, and practicing technical mountaineering skills.',
+    achievements: [
+      'Established Seven Summits training methodology',
+      'Created continent-specific preparation protocols',
+      'Implemented systematic progression tracking'
+    ],
+    supporters: 25,
+    details: 'The foundation phase focused on creating a systematic approach to tackle the Seven Summits challenge. Each summit requires different skills, from technical ice climbing to extreme altitude endurance.',
     metrics: [
-      { label: 'Training Hours', value: '180+', icon: Clock },
-      { label: 'Elevation Gain', value: '12,400m', icon: Mountain },
-      { label: 'Workouts', value: '48', icon: CheckCircle }
+      { label: 'Training Hours', value: '320+', icon: Clock },
+      { label: 'Skill Areas', value: '7', icon: CheckCircle },
+      { label: 'Progression', value: '100%', icon: Mountain }
     ]
   },
   {
     id: '2',
-    title: 'First Altitude Training',
-    description: 'Completed Mount Rainier ascent to test high-altitude performance and equipment systems under real expedition conditions.',
-    date: '2024-03-22',
+    title: 'Mount Kilimanjaro - Africa',
+    description: 'Successfully summited Kilimanjaro (5,895m), the highest peak in Africa and first summit in the Seven Summits challenge.',
+    date: '2023-06-12',
     status: 'completed',
-    phase: 'preparation',
-    location: 'Mount Rainier, WA',
-    elevation: '4,392m',
-    temperature: '-18°C',
-    weather: 'Clear skies, moderate winds',
-    achievements: [
-      'Successfully summited Mount Rainier',
-      'Tested all technical equipment',
-      'Experienced altitude effects firsthand'
+    phase: 'summit',
+    location: 'Mount Kilimanjaro, Tanzania',
+    elevation: '5,895m (19,341 ft)',
+    temperature: '-15°C (5°F)',
+    weather: 'Clear summit day after challenging approach',
+    images: [
+      { url: '/images/placeholder-kilimanjaro-summit.jpg', caption: 'CRITICAL: Kilimanjaro summit photo at Uhuru Peak - you with summit sign', photographer: 'TBD' },
+      { url: '/images/placeholder-kilimanjaro-uhuru.jpg', caption: 'CRITICAL: Uhuru Peak celebration - highest point in Africa achieved', photographer: 'TBD' },
+      { url: '/images/placeholder-kilimanjaro-ascent.jpg', caption: 'NEEDED: Night summit push showing determination and preparation', photographer: 'TBD' },
+      { url: '/images/placeholder-kilimanjaro-crater.jpg', caption: 'NEEDED: Crater rim approach and glacier views', photographer: 'TBD' }
     ],
-    supporters: 78,
-    details: 'Mount Rainier provided the perfect testing ground for equipment, techniques, and physical conditioning. The ascent validated training progress and identified areas for improvement.',
+    achievements: [
+      'Successfully summited Mount Kilimanjaro (5,895m)',
+      'Completed Seven Summits #1 - Africa conquered',
+      'Demonstrated high-altitude endurance capability',
+      'Validated systematic preparation for extreme altitude'
+    ],
+    supporters: 89,
+    details: 'Kilimanjaro success marked the beginning of the Seven Summits journey. The non-technical but high-altitude challenge validated training methodology and provided crucial experience for higher peaks.',
     metrics: [
-      { label: 'Ascent Time', value: '12 hours', icon: Clock },
-      { label: 'Max Elevation', value: '4,392m', icon: Mountain },
-      { label: 'Team Size', value: '4 climbers', icon: Users }
+      { label: 'Summit Elevation', value: '5,895m', icon: Mountain },
+      { label: 'Summit Success', value: '1/7', icon: CheckCircle },
+      { label: 'Ascent Time', value: '6 days', icon: Clock }
     ]
   },
   {
     id: '3',
-    title: 'International Training Expedition',
-    description: 'Three-week expedition to the Himalayas for high-altitude acclimatization and technical skill refinement on peaks above 6,000m.',
-    date: '2024-06-10',
+    title: 'Mount Elbrus - Europe',
+    description: 'Conquered Mount Elbrus (5,642m), the highest peak in Europe and second summit in the Seven Summits challenge.',
+    date: '2023-09-18',
     status: 'completed',
-    phase: 'preparation',
-    location: 'Everest Region, Nepal',
-    elevation: '6,189m',
-    temperature: '-25°C',
-    weather: 'Variable conditions with strong winds',
-    achievements: [
-      'Summited Island Peak (6,189m)',
-      'Completed acclimatization rotations',
-      'Practiced crevasse rescue techniques'
+    phase: 'summit',
+    location: 'Mount Elbrus, Russia',
+    elevation: '5,642m (18,510 ft)',
+    temperature: '-25°C (-13°F)',
+    weather: 'Challenging weather with strong winds',
+    images: [
+      { url: '/images/placeholder-elbrus-summit.jpg', caption: 'CRITICAL: Elbrus summit photo at highest point in Europe', photographer: 'TBD' },
+      { url: '/images/placeholder-elbrus-conditions.jpg', caption: 'CRITICAL: Extreme cold weather conditions and wind documentation', photographer: 'TBD' },
+      { url: '/images/placeholder-elbrus-technical.jpg', caption: 'NEEDED: Technical aspects of Elbrus climb including rope work', photographer: 'TBD' },
+      { url: '/images/placeholder-elbrus-team.jpg', caption: 'NEEDED: Team coordination and safety protocols in action', photographer: 'TBD' }
     ],
-    supporters: 156,
-    details: 'This expedition provided crucial experience in the Everest region, allowing for proper acclimatization and familiarity with the unique challenges of Himalayan climbing.',
+    achievements: [
+      'Successfully summited Mount Elbrus (5,642m)',
+      'Completed Seven Summits #2 - Europe conquered',
+      'Overcame extreme cold and technical challenges',
+      'Demonstrated systematic risk management'
+    ],
+    supporters: 134,
+    details: 'Elbrus presented significant technical challenges with extreme cold and weather conditions. Success demonstrated progression in mountaineering skills and cold-weather capability.',
     metrics: [
-      { label: 'Duration', value: '21 days', icon: Calendar },
-      { label: 'Peak Elevation', value: '6,189m', icon: Mountain },
-      { label: 'Distance Trekked', value: '120 km', icon: MapPin }
+      { label: 'Summit Elevation', value: '5,642m', icon: Mountain },
+      { label: 'Summit Success', value: '2/7', icon: CheckCircle },
+      { label: 'Temperature', value: '-25°C', icon: Thermometer }
     ]
   },
   {
     id: '4',
-    title: 'Final Preparation & Departure',
-    description: 'Last-minute gear checks, final medical examinations, and departure for Nepal. All systems validated and team ready for the expedition.',
-    date: '2024-09-05',
-    status: 'in-progress',
-    phase: 'travel',
-    location: 'Kathmandu, Nepal',
-    achievements: [
-      'Completed final medical checkups',
-      'Gear and equipment verified',
-      'Team briefing completed'
+    title: 'Aconcagua - South America',
+    description: 'Successfully summited Aconcagua (6,961m), the highest peak in South America and third summit in the Seven Summits challenge.',
+    date: '2024-01-22',
+    status: 'completed',
+    phase: 'summit',
+    location: 'Aconcagua, Argentina',
+    elevation: '6,961m (22,837 ft)',
+    temperature: '-30°C (-22°F)',
+    weather: 'High altitude, extreme conditions',
+    images: [
+      { url: '/images/placeholder-aconcagua-summit.jpg', caption: 'CRITICAL: Aconcagua summit photo - highest peak in Americas outside Alaska', photographer: 'TBD' },
+      { url: '/images/placeholder-aconcagua-altitude.jpg', caption: 'CRITICAL: High altitude challenges at nearly 7,000m elevation', photographer: 'TBD' },
+      { url: '/images/placeholder-aconcagua-approach.jpg', caption: 'NEEDED: Multi-day approach and acclimatization process', photographer: 'TBD' },
+      { url: '/images/placeholder-aconcagua-gear.jpg', caption: 'NEEDED: High-altitude gear testing and validation', photographer: 'TBD' }
     ],
-    supporters: 234,
-    details: 'The culmination of months of preparation. Final checks ensure all equipment, documentation, and team coordination is optimized for the expedition.',
+    achievements: [
+      'Successfully summited Aconcagua (6,961m)',
+      'Completed Seven Summits #3 - South America conquered',
+      'Achieved highest non-technical summit worldwide',
+      'Demonstrated extreme altitude capability'
+    ],
+    supporters: 187,
+    details: 'Aconcagua represented a major milestone as the highest non-technical summit in the world. Success at nearly 7,000m elevation demonstrated serious high-altitude mountaineering capability.',
     metrics: [
-      { label: 'Gear Weight', value: '65 kg', icon: Mountain },
-      { label: 'Team Members', value: '6', icon: Users },
-      { label: 'Support Days', value: '60', icon: Calendar }
+      { label: 'Summit Elevation', value: '6,961m', icon: Mountain },
+      { label: 'Summit Success', value: '3/7', icon: CheckCircle },
+      { label: 'Expedition Days', value: '18 days', icon: Calendar }
     ]
   },
   {
     id: '5',
-    title: 'Base Camp Establishment',
-    description: 'Arrival at Everest Base Camp and establishment of expedition headquarters. Begin acclimatization rotations and route preparation.',
-    date: '2024-09-20',
-    status: 'upcoming',
-    phase: 'climb',
-    location: 'Everest Base Camp',
-    elevation: '5,364m',
-    temperature: '-15°C',
-    details: 'Base Camp serves as the expedition nerve center. Here we establish our home for two months while preparing for summit attempts through careful acclimatization.',
+    title: 'Denali Preparation & Training',
+    description: 'Intensive technical mountaineering preparation for Denali (6,190m), focusing on cold weather survival and technical glacier travel.',
+    date: '2024-04-15',
+    status: 'completed',
+    phase: 'preparation',
+    location: 'Alaska Training & Seattle',
+    images: [
+      { url: '/images/placeholder-denali-prep.jpg', caption: 'NEEDED: Denali-specific training including sled pulling and cold weather', photographer: 'TBD' },
+      { url: '/images/placeholder-glacier-training.jpg', caption: 'NEEDED: Glacier travel and crevasse rescue training', photographer: 'TBD' },
+      { url: '/images/placeholder-cold-weather-gear.jpg', caption: 'NEEDED: Extreme cold weather gear testing for Alaska conditions', photographer: 'TBD' }
+    ],
+    achievements: [
+      'Completed Denali-specific technical training',
+      'Mastered glacier travel and crevasse rescue',
+      'Validated extreme cold weather systems',
+      'Prepared for North America\'s highest peak'
+    ],
+    supporters: 203,
+    details: 'Denali preparation required specialized skills including glacier travel, extreme cold survival, and technical mountaineering. This phase elevated capabilities for the most challenging summits ahead.',
     metrics: [
-      { label: 'Base Camp Alt', value: '5,364m', icon: Mountain },
-      { label: 'Expected Stay', value: '45 days', icon: Calendar },
-      { label: 'Weather Window', value: 'May 2025', icon: Wind }
+      { label: 'Training Days', value: '45', icon: Calendar },
+      { label: 'Technical Skills', value: '12 new', icon: CheckCircle },
+      { label: 'Cold Rating', value: '-40°C', icon: Thermometer }
     ]
   },
   {
     id: '6',
-    title: 'Acclimatization Rotations',
-    description: 'Progressive altitude exposure through camps 1, 2, and 3. Building physiological adaptation for summit attempt.',
-    date: '2024-10-15',
-    status: 'upcoming',
-    phase: 'climb',
-    location: 'Everest Camps 1-3',
-    elevation: '7,200m',
-    details: 'Critical phase where we gradually expose our bodies to extreme altitude, allowing physiological adaptations necessary for summit success.',
+    title: 'Denali Summit - North America',
+    description: 'Summit attempt on Denali (6,190m), the highest peak in North America and most technical summit in Seven Summits challenge.',
+    date: '2024-06-10',
+    status: 'in-progress',
+    phase: 'summit',
+    location: 'Denali, Alaska',
+    elevation: '6,190m (20,310 ft)',
+    temperature: '-35°C (-31°F)',
+    weather: 'Variable conditions, weather-dependent',
+    images: [
+      { url: '/images/placeholder-denali-expedition.jpg', caption: 'CRITICAL: Denali expedition in progress - highest peak in North America', photographer: 'TBD' },
+      { url: '/images/placeholder-denali-technical.jpg', caption: 'NEEDED: Technical climbing sections and glacier navigation', photographer: 'TBD' }
+    ],
+    achievements: [
+      'Launched Denali expedition - most technical Seven Summit',
+      'Implementing systematic approach to extreme conditions',
+      'Targeting Seven Summits #4 - North America'
+    ],
+    supporters: 245,
+    details: 'Denali represents the most technically challenging summit in the Seven Summits. Success here will demonstrate world-class mountaineering capability and preparation for Everest.',
     metrics: [
-      { label: 'Max Altitude', value: '7,200m', icon: Mountain },
-      { label: 'Rotations', value: '3 cycles', icon: ArrowRight },
-      { label: 'Duration', value: '4 weeks', icon: Calendar }
+      { label: 'Target Elevation', value: '6,190m', icon: Mountain },
+      { label: 'Expedition Days', value: '21', icon: Calendar },
+      { label: 'Technical Grade', value: 'Advanced', icon: Target }
     ]
   },
   {
     id: '7',
-    title: 'Summit Push',
-    description: 'Final ascent to the summit of Mount Everest. The culmination of years of preparation and months of expedition effort.',
-    date: '2024-11-12',
+    title: 'Mount Everest - Asia',
+    description: 'The ultimate goal: Mount Everest (8,849m), the highest peak on Earth and crown jewel of the Seven Summits challenge.',
+    date: '2025-05-15',
     status: 'upcoming',
     phase: 'summit',
-    location: 'Mount Everest Summit',
-    elevation: '8,849m',
-    temperature: '-40°C',
-    weather: 'Clear summit weather window',
-    details: 'The ultimate goal - standing on the highest point on Earth. Years of preparation converge into this single, defining moment.',
+    location: 'Mount Everest, Nepal/Tibet',
+    elevation: '8,849m (29,032 ft)',
+    temperature: '-40°C (-40°F)',
+    weather: 'Extreme altitude, jet stream winds',
+    details: 'Mount Everest represents the culmination of the Seven Summits challenge. All previous summits and systematic training lead to this ultimate test of mountaineering skill and preparation.',
     metrics: [
       { label: 'Summit Elevation', value: '8,849m', icon: Mountain },
-      { label: 'Summit Time', value: '6 hours', icon: Clock },
-      { label: 'Temperature', value: '-40°C', icon: Thermometer }
+      { label: 'Target Success', value: '5/7', icon: CheckCircle },
+      { label: 'Death Zone', value: '8,000m+', icon: Target }
     ]
   },
   {
     id: '8',
-    title: 'Safe Return & Celebration',
-    description: 'Successful descent and return to Base Camp. Celebration with team and preparation for journey home.',
-    date: '2024-11-20',
+    title: 'Vinson Massif - Antarctica',
+    description: 'Mount Vinson (4,892m), the highest peak in Antarctica and one of the most remote summits in the Seven Summits challenge.',
+    date: '2025-12-01',
     status: 'upcoming',
-    phase: 'return',
-    location: 'Everest Base Camp',
-    elevation: '5,364m',
-    details: 'Mission accomplished. Safe return to Base Camp marks the successful completion of the expedition and beginning of the journey home.',
+    phase: 'summit',
+    location: 'Vinson Massif, Antarctica',
+    elevation: '4,892m (16,050 ft)',
+    temperature: '-40°C (-40°F)',
+    weather: 'Extreme cold, 24-hour daylight',
+    details: 'Vinson Massif in Antarctica presents unique challenges including extreme cold, remoteness, and complex logistics. Success demonstrates capability in the world\'s most challenging environments.',
     metrics: [
-      { label: 'Descent Time', value: '8 hours', icon: Clock },
-      { label: 'Total Duration', value: '75 days', icon: Calendar },
-      { label: 'Team Success', value: '100%', icon: CheckCircle }
+      { label: 'Summit Elevation', value: '4,892m', icon: Mountain },
+      { label: 'Target Success', value: '6/7', icon: CheckCircle },
+      { label: 'Remoteness', value: 'Extreme', icon: MapPin }
+    ]
+  },
+  {
+    id: '9',
+    title: 'Kosciuszko - Australia/Oceania',
+    description: 'Mount Kosciuszko (2,228m), the highest peak in Australia and final summit to complete the Seven Summits challenge.',
+    date: '2026-03-01',
+    status: 'upcoming',
+    phase: 'summit',
+    location: 'Mount Kosciuszko, Australia',
+    elevation: '2,228m (7,310 ft)',
+    temperature: '10°C (50°F)',
+    weather: 'Moderate conditions',
+    details: 'Mount Kosciuszko completes the Seven Summits challenge. Though the least technical, it represents the achievement of standing on the highest point of every continent.',
+    metrics: [
+      { label: 'Summit Elevation', value: '2,228m', icon: Mountain },
+      { label: 'Seven Summits', value: '7/7', icon: CheckCircle },
+      { label: 'Challenge Complete', value: '100%', icon: Award }
     ]
   }
 ]
@@ -237,6 +309,26 @@ const PHASE_CONFIG = {
 export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ className }) => {
   const [selectedMilestone, setSelectedMilestone] = useState<string | null>(null)
   const [filterPhase, setFilterPhase] = useState<string>('all')
+  
+  const timelineRef = useRef(null)
+  const progressRef = useRef(null)
+  const isTimelineInView = useInView(timelineRef, { once: true, margin: "-100px" })
+  const isProgressInView = useInView(progressRef, { once: true, margin: "-50px" })
+  
+  const timelineControls = useAnimation()
+  const progressControls = useAnimation()
+  
+  useEffect(() => {
+    if (isTimelineInView) {
+      timelineControls.start('visible')
+    }
+  }, [timelineControls, isTimelineInView])
+  
+  useEffect(() => {
+    if (isProgressInView) {
+      progressControls.start('visible')
+    }
+  }, [progressControls, isProgressInView])
 
   const filteredMilestones = filterPhase === 'all' 
     ? TIMELINE_DATA 
@@ -281,97 +373,256 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
             <h2 className="text-4xl font-light text-spa-charcoal">Expedition Timeline</h2>
           </div>
           <p className="text-lg text-spa-charcoal/80 max-w-3xl mx-auto leading-relaxed">
-            Follow the systematic journey from initial training through summit success. 
-            Each milestone represents months of preparation and incremental progress toward the ultimate goal.
+            Documented achievement progression showcasing systematic training methodology and proven summit success. 
+            Each milestone demonstrates measurable progress, risk management, and the data-driven approach that delivers results.
           </p>
         </div>
 
         {/* Progress Overview */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 mb-12 border border-spa-stone/10 shadow-sm">
-          <div className="text-center mb-8">
-            <div className="text-3xl font-light text-spa-charcoal mb-2">
+        <motion.div 
+          ref={progressRef}
+          className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 mb-12 border border-spa-stone/10 shadow-sm"
+          initial={{ opacity: 0, y: 30, scale: 0.95 }}
+          animate={progressControls}
+          variants={{
+            visible: {
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              transition: {
+                duration: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }
+            }
+          }}
+        >
+          <motion.div 
+            className="text-center mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+          >
+            <motion.div 
+              className="text-4xl font-light text-spa-charcoal mb-2"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.4, duration: 0.6, type: "spring", stiffness: 300, damping: 30 }}
+            >
               {completedMilestones} of {totalMilestones} Milestones Completed
-            </div>
-            <div className="text-spa-charcoal/70">
+            </motion.div>
+            <motion.div 
+              className="text-spa-charcoal/70"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.4 }}
+            >
               {progressPercentage.toFixed(0)}% of expedition journey complete
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
           
           <div className="relative">
             <div className="w-full h-4 bg-spa-stone/20 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-emerald-500 to-alpine-blue rounded-full transition-all duration-1000 ease-out"
-                style={{ width: `${progressPercentage}%` }}
+              <motion.div 
+                className="h-full bg-gradient-to-r from-emerald-500 to-alpine-blue rounded-full"
+                initial={{ width: '0%' }}
+                animate={{ width: `${progressPercentage}%` }}
+                transition={{ delay: 0.8, duration: 1.5, ease: "easeOut" }}
               />
             </div>
-            <div 
-              className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-alpine-blue rounded-full shadow-lg transition-all duration-1000 ease-out"
-              style={{ left: `calc(${progressPercentage}% - 12px)` }}
+            <motion.div 
+              className="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white border-2 border-alpine-blue rounded-full shadow-lg"
+              initial={{ left: '0%', scale: 0 }}
+              animate={{ 
+                left: `calc(${progressPercentage}% - 12px)`,
+                scale: 1
+              }}
+              transition={{ 
+                delay: 1.2, 
+                duration: 1.2, 
+                ease: "easeOut",
+                scale: { type: "spring", stiffness: 500, damping: 30 }
+              }}
+              whileHover={{ scale: 1.2 }}
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* Phase Filters */}
-        <div className="flex flex-wrap justify-center gap-3 mb-12">
-          <button
+        <motion.div 
+          className="flex flex-wrap justify-center gap-3 mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, staggerChildren: 0.1 }}
+        >
+          <motion.button
             onClick={() => setFilterPhase('all')}
             className={cn(
-              'px-4 py-2 rounded-full text-sm font-medium transition-all',
+              'px-6 py-3 rounded-full text-sm font-medium transition-all relative overflow-hidden',
               filterPhase === 'all'
-                ? 'bg-alpine-blue text-white shadow-md'
+                ? 'bg-alpine-blue text-white shadow-lg'
                 : 'bg-white/80 text-spa-charcoal/80 hover:bg-white border border-spa-stone/20'
             )}
+            whileHover={{ scale: 1.02, y: -1 }}
+            whileTap={{ scale: 0.98 }}
+            layout
           >
-            All Phases
-          </button>
-          {Object.entries(PHASE_CONFIG).map(([phase, config]) => (
-            <button
+            {filterPhase === 'all' && (
+              <motion.div
+                className="absolute inset-0 bg-alpine-blue rounded-full"
+                layoutId="activeFilter"
+                transition={{ type: "spring", stiffness: 500, damping: 30 }}
+              />
+            )}
+            <span className="relative z-10">All Phases</span>
+          </motion.button>
+          {Object.entries(PHASE_CONFIG).map(([phase, config], index) => (
+            <motion.button
               key={phase}
               onClick={() => setFilterPhase(phase)}
               className={cn(
-                'flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all',
+                'flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all relative overflow-hidden',
                 filterPhase === phase
-                  ? 'bg-alpine-blue text-white shadow-md'
+                  ? 'bg-alpine-blue text-white shadow-lg'
                   : 'bg-white/80 text-spa-charcoal/80 hover:bg-white border border-spa-stone/20'
               )}
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
+              layout
             >
-              <config.icon className="w-4 h-4" />
-              {config.label}
-            </button>
+              {filterPhase === phase && (
+                <motion.div
+                  className="absolute inset-0 bg-alpine-blue rounded-full"
+                  layoutId="activeFilter"
+                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                />
+              )}
+              <motion.div className="relative z-10 flex items-center gap-2">
+                <config.icon className="w-4 h-4" />
+                {config.label}
+              </motion.div>
+            </motion.button>
           ))}
-        </div>
+        </motion.div>
 
         {/* Timeline */}
-        <div className="relative">
+        <motion.div 
+          ref={timelineRef}
+          className="relative"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                duration: 0.8,
+                staggerChildren: 0.15,
+                delayChildren: 0.2
+              }
+            }
+          }}
+          initial="hidden"
+          animate={timelineControls}
+        >
           {/* Timeline line */}
-          <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-500 via-alpine-blue to-spa-stone/30" />
+          <motion.div 
+            className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-500 via-alpine-blue to-spa-stone/30"
+            initial={{ scaleY: 0, originY: 0 }}
+            animate={{ scaleY: 1 }}
+            transition={{ duration: 2, ease: "easeOut", delay: 0.5 }}
+          />
           
           {/* Milestones */}
           <div className="space-y-8">
-            {filteredMilestones.map((milestone, index) => {
-              const phaseConfig = PHASE_CONFIG[milestone.phase]
-              const isExpanded = selectedMilestone === milestone.id
+            <AnimatePresence mode="wait">
+              {filteredMilestones.map((milestone, index) => {
+                const phaseConfig = PHASE_CONFIG[milestone.phase]
+                const isExpanded = selectedMilestone === milestone.id
               
-              return (
-                <div key={milestone.id} className="relative">
-                  {/* Timeline dot */}
-                  <div className={cn(
-                    'absolute left-6 w-6 h-6 rounded-full border-4 border-white shadow-lg z-10',
-                    phaseConfig.color
-                  )} />
+                return (
+                  <motion.div 
+                    key={milestone.id} 
+                    className="relative"
+                    variants={{
+                      hidden: { 
+                        opacity: 0, 
+                        x: -50,
+                        scale: 0.9
+                      },
+                      visible: {
+                        opacity: 1,
+                        x: 0,
+                        scale: 1,
+                        transition: {
+                          duration: 0.6,
+                          ease: [0.25, 0.46, 0.45, 0.94]
+                        }
+                      }
+                    }}
+                    layout
+                  >
+                    {/* Timeline dot */}
+                    <motion.div 
+                      className={cn(
+                        'absolute left-6 w-6 h-6 rounded-full border-4 border-white shadow-lg z-10',
+                        phaseConfig.color
+                      )}
+                      initial={{ scale: 0, rotate: -180 }}
+                      animate={{ 
+                        scale: 1, 
+                        rotate: 0,
+                        ...(milestone.status === 'in-progress' && {
+                          scale: [1, 1.1],
+                          boxShadow: [
+                            '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                            '0 10px 15px -3px rgba(59, 130, 246, 0.3)'
+                          ]
+                        })
+                      }}
+                      transition={{ 
+                        delay: 0.8 + index * 0.1, 
+                        duration: 0.5, 
+                        type: "spring", 
+                        stiffness: 400, 
+                        damping: 30,
+                        ...(milestone.status === 'in-progress' && {
+                          repeat: Infinity,
+                          duration: 2,
+                          type: "tween",
+                          ease: "easeInOut"
+                        })
+                      }}
+                      whileHover={{ scale: 1.2, rotate: 10 }}
+                    />
                   
-                  {/* Milestone card */}
-                  <div className="ml-16">
-                    <div className={cn(
-                      'bg-white/90 backdrop-blur-sm rounded-xl border-l-4 border shadow-sm transition-all duration-300 overflow-hidden',
-                      getStatusColor(milestone.status),
-                      isExpanded && 'shadow-lg'
-                    )}>
-                      {/* Card header */}
-                      <div 
-                        className="p-6 cursor-pointer"
-                        onClick={() => setSelectedMilestone(isExpanded ? null : milestone.id)}
+                    {/* Milestone card */}
+                    <div className="ml-16">
+                      <motion.div 
+                        className={cn(
+                          'bg-white/90 backdrop-blur-sm rounded-xl border-l-4 border shadow-sm overflow-hidden cursor-pointer',
+                          getStatusColor(milestone.status)
+                        )}
+                        whileHover={{ 
+                          scale: 1.01, 
+                          y: -2,
+                          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                        }}
+                        animate={{
+                          boxShadow: isExpanded 
+                            ? '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                            : '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+                        }}
+                        transition={{ duration: 0.3 }}
+                        layout
                       >
+                        {/* Card header */}
+                        <motion.div 
+                          className="p-6"
+                          onClick={() => setSelectedMilestone(isExpanded ? null : milestone.id)}
+                          whileTap={{ scale: 0.98 }}
+                        >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
@@ -420,41 +671,90 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
                                 {milestone.supporters}
                               </div>
                             )}
-                            <ChevronDown className={cn(
-                              'w-5 h-5 text-spa-charcoal/60 transition-transform',
-                              isExpanded && 'rotate-180'
-                            )} />
+                            <motion.div
+                              animate={{ rotate: isExpanded ? 180 : 0 }}
+                              transition={{ duration: 0.3, ease: "easeInOut" }}
+                            >
+                              <ChevronDown className="w-5 h-5 text-spa-charcoal/60" />
+                            </motion.div>
                           </div>
-                        </div>
-                      </div>
+                          </div>
+                        </motion.div>
 
-                      {/* Expanded content */}
-                      {isExpanded && (
-                        <div className="border-t border-spa-stone/10 p-6 space-y-6">
-                          {milestone.details && (
-                            <p className="text-spa-charcoal/70 leading-relaxed">
-                              {milestone.details}
-                            </p>
-                          )}
+                        {/* Expanded content */}
+                        <AnimatePresence>
+                          {isExpanded && (
+                            <motion.div 
+                              className="border-t border-spa-stone/10 p-6 space-y-6"
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ 
+                                opacity: 1, 
+                                height: 'auto',
+                                transition: {
+                                  duration: 0.4,
+                                  ease: [0.25, 0.46, 0.45, 0.94],
+                                  staggerChildren: 0.1,
+                                  delayChildren: 0.1
+                                }
+                              }}
+                              exit={{ 
+                                opacity: 0, 
+                                height: 0,
+                                transition: {
+                                  duration: 0.3,
+                                  ease: "easeInOut"
+                                }
+                              }}
+                            >
+                              {milestone.details && (
+                                <motion.p 
+                                  className="text-spa-charcoal/70 leading-relaxed"
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.4 }}
+                                >
+                                  {milestone.details}
+                                </motion.p>
+                              )}
 
-                          {milestone.metrics && (
-                            <div>
-                              <h4 className="font-medium text-spa-charcoal mb-4">Key Metrics</h4>
-                              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                {milestone.metrics.map((metric, idx) => (
-                                  <div key={idx} className="flex items-center gap-3">
-                                    <div className="p-2 bg-alpine-blue/10 rounded-lg">
-                                      <metric.icon className="w-4 h-4 text-alpine-blue" />
-                                    </div>
-                                    <div>
-                                      <div className="font-medium text-spa-charcoal">{metric.value}</div>
-                                      <div className="text-sm text-spa-charcoal/60">{metric.label}</div>
-                                    </div>
+                              {milestone.metrics && (
+                                <motion.div
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ duration: 0.4, delay: 0.1 }}
+                                >
+                                  <h4 className="font-medium text-spa-charcoal mb-4">Key Metrics</h4>
+                                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                    {milestone.metrics.map((metric, idx) => (
+                                      <motion.div 
+                                        key={idx} 
+                                        className="flex items-center gap-3"
+                                        initial={{ opacity: 0, scale: 0.9 }}
+                                        animate={{ opacity: 1, scale: 1 }}
+                                        transition={{ 
+                                          duration: 0.3, 
+                                          delay: 0.2 + idx * 0.05,
+                                          type: "spring",
+                                          stiffness: 400,
+                                          damping: 30
+                                        }}
+                                        whileHover={{ scale: 1.05 }}
+                                      >
+                                        <motion.div 
+                                          className="p-2 bg-alpine-blue/10 rounded-lg"
+                                          whileHover={{ rotate: 5, scale: 1.1 }}
+                                        >
+                                          <metric.icon className="w-4 h-4 text-alpine-blue" />
+                                        </motion.div>
+                                        <div>
+                                          <div className="font-medium text-spa-charcoal">{metric.value}</div>
+                                          <div className="text-sm text-spa-charcoal/60">{metric.label}</div>
+                                        </div>
+                                      </motion.div>
+                                    ))}
                                   </div>
-                                ))}
-                              </div>
-                            </div>
-                          )}
+                                </motion.div>
+                              )}
 
                           {milestone.achievements && (
                             <div>
@@ -485,48 +785,120 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
                             </div>
                           )}
 
-                          <div className="flex items-center gap-4 pt-4 border-t border-spa-stone/10">
-                            <button className="flex items-center gap-2 px-4 py-2 bg-alpine-blue text-white rounded-lg hover:bg-alpine-blue/90 transition-colors">
-                              <Share className="w-4 h-4" />
-                              Share Milestone
-                            </button>
-                            {milestone.images && (
-                              <button className="flex items-center gap-2 px-4 py-2 border border-spa-stone/20 text-spa-charcoal rounded-lg hover:bg-spa-mist/10 transition-colors">
-                                <Camera className="w-4 h-4" />
-                                View Photos ({milestone.images.length})
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      )}
+                              <motion.div 
+                                className="flex items-center gap-4 pt-4 border-t border-spa-stone/10"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.4, delay: 0.3 }}
+                              >
+                                <motion.button 
+                                  className="flex items-center gap-2 px-4 py-2 bg-alpine-blue text-white rounded-lg font-medium"
+                                  whileHover={{ 
+                                    scale: 1.02, 
+                                    backgroundColor: 'rgba(59, 130, 246, 0.9)',
+                                    boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
+                                  }}
+                                  whileTap={{ scale: 0.98 }}
+                                >
+                                  <Share className="w-4 h-4" />
+                                  Share Milestone
+                                </motion.button>
+                                {milestone.images && (
+                                  <motion.button 
+                                    className="flex items-center gap-2 px-4 py-2 border border-spa-stone/20 text-spa-charcoal rounded-lg"
+                                    whileHover={{ 
+                                      scale: 1.02, 
+                                      backgroundColor: 'rgba(241, 245, 249, 0.1)',
+                                      borderColor: 'rgba(100, 116, 139, 0.3)'
+                                    }}
+                                    whileTap={{ scale: 0.98 }}
+                                  >
+                                    <Camera className="w-4 h-4" />
+                                    View Photos ({milestone.images.length})
+                                  </motion.button>
+                                )}
+                              </motion.div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
                     </div>
-                  </div>
-                </div>
-              )
-            })}
+                  </motion.div>
+                )
+              })}
+            </AnimatePresence>
           </div>
-        </div>
+        </motion.div>
 
         {/* Call to Action */}
-        <div className="mt-16 text-center">
-          <div className="bg-gradient-to-br from-alpine-blue/10 to-summit-gold/10 rounded-2xl p-8 border border-spa-stone/10">
-            <h3 className="text-2xl font-light text-spa-charcoal mb-4">
-              Follow the Journey
-            </h3>
-            <p className="text-spa-charcoal/70 mb-6 max-w-2xl mx-auto">
-              Stay updated with real-time progress, behind-the-scenes insights, and exclusive content 
-              from each phase of the expedition.
-            </p>
-            <div className="flex items-center justify-center gap-4">
-              <button className="px-6 py-3 bg-alpine-blue text-white rounded-lg hover:bg-alpine-blue/90 transition-colors">
-                Subscribe for Updates
-              </button>
-              <button className="px-6 py-3 border border-spa-stone/20 text-spa-charcoal rounded-lg hover:bg-spa-mist/10 transition-colors">
-                Support the Journey
-              </button>
-            </div>
-          </div>
-        </div>
+        <motion.div 
+          className="mt-16 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <motion.div 
+            className="bg-gradient-to-br from-alpine-blue/10 to-summit-gold/10 rounded-2xl p-8 border border-spa-stone/10 backdrop-blur-sm"
+            whileHover={{ scale: 1.01, y: -2 }}
+            transition={{ duration: 0.3 }}
+          >
+            <motion.h3 
+              className="text-3xl font-light text-spa-charcoal mb-4"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            >
+              Partnership Opportunities
+            </motion.h3>
+            <motion.p 
+              className="text-spa-charcoal/70 mb-8 max-w-2xl mx-auto leading-relaxed"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+            >
+              Partner with a proven adventure athlete who delivers measurable results through systematic preparation. 
+              See how data-driven methodology creates compelling brand partnership opportunities.
+            </motion.p>
+            <motion.div 
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              <motion.button 
+                className="px-8 py-4 bg-alpine-blue text-white rounded-lg font-medium group relative overflow-hidden"
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: '0 8px 25px rgba(59, 130, 246, 0.3)'
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-alpine-blue to-blue-600"
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: '0%' }}
+                  transition={{ duration: 0.3 }}
+                />
+                <span className="relative z-10">Partnership Inquiry</span>
+              </motion.button>
+              <motion.button 
+                className="px-8 py-4 border-2 border-spa-stone/20 text-spa-charcoal rounded-lg font-medium hover:border-alpine-blue/30 group"
+                whileHover={{ 
+                  scale: 1.02,
+                  backgroundColor: 'rgba(241, 245, 249, 0.1)',
+                  borderColor: 'rgba(59, 130, 246, 0.3)'
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="group-hover:text-alpine-blue transition-colors">Download Media Kit</span>
+              </motion.button>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
     </section>
   )

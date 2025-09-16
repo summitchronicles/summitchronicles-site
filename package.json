@@ -15,12 +15,21 @@
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.52",
+    "@portabletext/react": "^4.0.3",
+    "@portabletext/types": "^2.0.15",
+    "@sanity/client": "^7.11.1",
+    "@sanity/image-url": "^1.2.0",
+    "axios": "^1.12.2",
     "clsx": "^2.1.1",
+    "critters": "^0.0.23",
+    "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.544.0",
     "next": "14.2.13",
+    "next-sanity": "^9.12.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "swr": "^2.3.6",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
@@ -36,6 +45,7 @@
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
     "tailwindcss": "^3.4.14",
+    "ts-jest": "^29.4.2",
     "typescript": "5.9.2"
   }
 }

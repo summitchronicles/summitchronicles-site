@@ -1,5 +1,6 @@
 import { Users, MessageCircle, Heart, Award, Calendar, Send, Mountain, TrendingUp } from 'lucide-react'
-import { DefaultLayout } from '../components/templates/DefaultLayout'
+import { Header } from '../components/organisms/Header'
+import { Footer } from '../components/organisms/Footer'
 import { CommunityFeed } from '../components/organisms/CommunityFeed'
 import { QuestionSubmission } from '../components/organisms/QuestionSubmission'
 import { CommunityChallenge } from '../components/organisms/CommunityChallenge'
@@ -33,7 +34,18 @@ export default function CommunityPage() {
   ]
 
   return (
-    <DefaultLayout>
+    <div className="min-h-screen bg-spa-stone flex flex-col">
+      {/* Skip link for accessibility */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-alpine-blue text-white px-4 py-2 rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-alpine-blue"
+      >
+        Skip to main content
+      </a>
+      <Header />
+      
+      {/* Main content with proper spacing for fixed header */}
+      <main id="main-content" className="flex-1 pt-16">
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-spa-mist via-white to-spa-cloud py-16">
         <div className="max-w-6xl mx-auto px-6">
@@ -131,6 +143,9 @@ export default function CommunityPage() {
           </div>
         </div>
       </section>
-    </DefaultLayout>
+      </main>
+
+      <Footer />
+    </div>
   )
 }
