@@ -107,6 +107,22 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     }
   }, [preload, src])
 
+  // Memoized values (must be before conditional returns)
+  const imageClassName = React.useMemo(() => {
+    const baseClasses = [
+      'transition-opacity duration-300',
+      progressive && !isLoaded ? 'opacity-70' : 'opacity-100',
+      className
+    ].filter(Boolean)
+
+    return baseClasses.join(' ')
+  }, [progressive, isLoaded, className])
+
+  const imageStyle = React.useMemo(() => ({
+    aspectRatio: aspectRatio ? `${aspectRatio}` : undefined,
+    ...style
+  }), [aspectRatio, style])
+
   // Don't render if lazy loading and not in view
   const shouldRender = !lazyLoad || isInView || preload
 
@@ -124,21 +140,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       />
     )
   }
-
-  const imageClassName = React.useMemo(() => {
-    const baseClasses = [
-      'transition-opacity duration-300',
-      progressive && !isLoaded ? 'opacity-70' : 'opacity-100',
-      className
-    ].filter(Boolean)
-
-    return baseClasses.join(' ')
-  }, [progressive, isLoaded, className])
-
-  const imageStyle = React.useMemo(() => ({
-    aspectRatio: aspectRatio ? `${aspectRatio}` : undefined,
-    ...style
-  }), [aspectRatio, style])
 
   return (
     <div ref={imageRef} className="relative overflow-hidden">

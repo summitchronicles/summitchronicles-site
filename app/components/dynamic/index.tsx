@@ -1,15 +1,15 @@
 import dynamic from 'next/dynamic'
-import { dynamicImport } from '../../lib/utils/performance'
+import React from 'react'
 
 // Loading component for dynamic imports
-const LoadingSpinner = () => (
+const LoadingSpinner: React.FC = () => (
   <div className="flex items-center justify-center p-8">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-alpine-blue"></div>
   </div>
 )
 
 // Error component for failed dynamic imports
-const ErrorComponent = ({ error, retry }: { error: Error; retry: () => void }) => (
+const ErrorComponent: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
   <div className="flex flex-col items-center justify-center p-8 text-center">
     <div className="text-red-600 mb-4">Failed to load component</div>
     <button 
@@ -192,7 +192,7 @@ export const DynamicComponents = {
 }
 
 // Helper to create optimized dynamic imports
-export const createOptimizedDynamic = <T>(
+export const createOptimizedDynamic = <T extends any>(
   importFn: () => Promise<{ default: React.ComponentType<T> }>,
   options: {
     ssr?: boolean
