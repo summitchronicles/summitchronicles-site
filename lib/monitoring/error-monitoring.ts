@@ -434,7 +434,7 @@ export const withErrorMonitoring = <P extends object>(
 
         render() {
           if (this.state.hasError) {
-            return <div>Something went wrong.</div>
+            return React.createElement('div', null, 'Something went wrong.')
           }
 
           return React.createElement(Component, { ...this.props, ref })

@@ -169,8 +169,8 @@ export const dynamicImport = <T>(
 ) => {
   return React.lazy(async () => {
     try {
-      const module = await importFn()
-      return module
+      const importedModule = await importFn()
+      return importedModule
     } catch (error) {
       if (options?.error) {
         return {
@@ -239,7 +239,7 @@ export const withPerformanceTracking = <P extends object>(
   Component: React.ComponentType<P>,
   componentName: string
 ) => {
-  return React.forwardRef<any, P>((props, ref) => {
+  const WrappedComponent = React.forwardRef<any, P>((props, ref) => {
     const monitor = PerformanceMonitor.getInstance()
     const renderCount = useRenderCount(componentName)
     
@@ -251,6 +251,10 @@ export const withPerformanceTracking = <P extends object>(
 
     return React.createElement(Component, { ...props, ref })
   })
+  
+  WrappedComponent.displayName = `withPerformanceTracking(${componentName})`
+  
+  return WrappedComponent
 }
 
 // React import
