@@ -1,3 +1,7 @@
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -10,7 +14,7 @@ const nextConfig = {
   },
   experimental: {
     optimizeCss: true,
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
+    optimizePackageImports: ['lucide-react'],
   },
   poweredByHeader: false,
   compress: true,
@@ -21,9 +25,6 @@ const nextConfig = {
   modularizeImports: {
     'lucide-react': {
       transform: 'lucide-react/dist/esm/icons/{{member}}'
-    },
-    'framer-motion': {
-      transform: 'framer-motion/dist/es/{{member}}'
     }
   },
   // Static optimization
@@ -56,7 +57,10 @@ const nextConfig = {
     ]
   },
   // Environment config for Netlify deployment
-  output: 'standalone'
+  output: 'standalone',
+  
+  // Transpile packages that use ESM
+  transpilePackages: ['framer-motion']
 };
 
-module.exports = nextConfig;
+module.exports = withBundleAnalyzer(nextConfig);

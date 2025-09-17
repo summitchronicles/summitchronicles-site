@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:analyze": "ANALYZE=true npm run build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -11,7 +12,10 @@
     "format:check": "prettier --check .",
     "test": "playwright test",
     "test:ui": "playwright test --ui",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "perf": "npm run build && npm run start",
+    "audit:security": "npm audit",
+    "audit:deps": "npm outdated"
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.52",
@@ -19,6 +23,7 @@
     "@portabletext/types": "^2.0.15",
     "@sanity/client": "^7.11.1",
     "@sanity/image-url": "^1.2.0",
+    "@sanity/vision": "^4.9.0",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
     "critters": "^0.0.23",
@@ -29,10 +34,13 @@
     "next-sanity": "^9.12.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "sanity": "^3.99.0",
+    "styled-components": "^6.1.19",
     "swr": "^2.3.6",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^15.5.3",
     "@playwright/test": "^1.55.0",
     "@types/node": "24.3.3",
     "@types/react": "19.1.13",
@@ -46,6 +54,7 @@
     "prettier": "^3.6.2",
     "tailwindcss": "^3.4.14",
     "ts-jest": "^29.4.2",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }

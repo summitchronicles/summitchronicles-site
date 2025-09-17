@@ -4,15 +4,29 @@ import imageUrlBuilder from '@sanity/image-url'
 
 // Sanity configuration
 export const sanityConfig = {
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'your-project-id',
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'summit-chronicles',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   useCdn: process.env.NODE_ENV === 'production',
   apiVersion: '2024-01-01',
   token: process.env.SANITY_API_TOKEN,
 }
 
-// Create Sanity client
+// Create Sanity client (public)
 export const sanityClient: SanityClient = createClient(sanityConfig)
+
+// Write client for CMS operations (requires token)
+export const sanityWriteClient: SanityClient = createClient({
+  ...sanityConfig,
+  useCdn: false,
+  perspective: 'raw' // See all content including drafts
+})
+
+// Preview client for draft content
+export const sanityPreviewClient: SanityClient = createClient({
+  ...sanityConfig,
+  useCdn: false,
+  perspective: 'previewDrafts' // See drafts and published content
+})
 
 // Image URL builder
 const builder = imageUrlBuilder(sanityClient)
@@ -23,8 +37,8 @@ export function urlFor(source: any) {
 
 // GROQ queries for different content types
 export const queries = {
-  // Blog posts
-  allPosts: `*[_type == "post"] | order(publishedAt desc) {
+  // Blog posts (updated for new schema)
+  allPosts: `*[_type == "blogPost" && isPublished == true] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -32,17 +46,20 @@ export const queries = {
     publishedAt,
     author->{
       name,
-      image
+      avatar
     },
     categories[]->{
       title,
-      slug
+      slug,
+      color
     },
-    mainImage,
-    body
+    featuredImage,
+    content,
+    tags,
+    isFeatured
   }`,
   
-  postBySlug: (slug: string) => `*[_type == "post" && slug.current == "${slug}"][0] {
+  postBySlug: (slug: string) => `*[_type == "blogPost" && slug.current == "${slug}" && isPublished == true][0] {
     _id,
     title,
     slug,
@@ -51,15 +68,53 @@ export const queries = {
     author->{
       name,
       bio,
-      image
+      avatar,
+      social
     },
     categories[]->{
       title,
-      slug
+      slug,
+      color,
+      description
     },
-    mainImage,
-    body,
-    seo
+    featuredImage,
+    content,
+    tags,
+    seo,
+    isFeatured
+  }`,
+
+  // Training entries
+  allTrainingEntries: `*[_type == "trainingEntry" && isPublic == true] | order(date desc) {
+    _id,
+    title,
+    date,
+    type,
+    duration,
+    intensity,
+    description,
+    metrics,
+    location,
+    photos[],
+    tags,
+    stravaId
+  }`,
+
+  trainingByDate: (date: string) => `*[_type == "trainingEntry" && date == "${date}" && isPublic == true][0] {
+    _id,
+    title,
+    date,
+    type,
+    duration,
+    intensity,
+    description,
+    metrics,
+    location,
+    goals,
+    reflections,
+    photos[],
+    tags,
+    stravaId
   }`,
 
   // Training content
