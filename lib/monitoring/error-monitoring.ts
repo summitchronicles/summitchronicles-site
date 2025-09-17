@@ -411,11 +411,11 @@ export const useErrorMonitoring = () => {
 export const withErrorMonitoring = <P extends object>(
   Component: React.ComponentType<P>
 ) => {
-  return React.forwardRef<any, P>((props, ref) => {
+  const WrappedComponent = React.forwardRef<any, P>((props, ref) => {
     const { captureError } = useErrorMonitoring()
 
     const ErrorBoundary = React.useMemo(() => {
-      return class extends React.Component<P, { hasError: boolean }> {
+      class MonitoredErrorBoundary extends React.Component<P, { hasError: boolean }> {
         constructor(props: P) {
           super(props)
           this.state = { hasError: false }
@@ -440,10 +440,16 @@ export const withErrorMonitoring = <P extends object>(
           return React.createElement(Component, { ...this.props, ref })
         }
       }
+      MonitoredErrorBoundary.displayName = `ErrorBoundary(${Component.displayName || Component.name})`
+      return MonitoredErrorBoundary
     }, [captureError])
 
     return React.createElement(ErrorBoundary, props)
   })
+  
+  WrappedComponent.displayName = `withErrorMonitoring(${Component.displayName || Component.name})`
+  
+  return WrappedComponent
 }
 
 // Initialize error monitoring
