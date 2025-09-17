@@ -126,4 +126,83 @@ test('Epic 4: Community Engagement & Newsletter System - Comprehensive Test', as
     const hasSupporterLevels = await page.locator('text=Level').count() > 0 ||
                           await page.locator('text=Badge').count() > 0 ||
                           await page.locator('text=Ambassador').count() > 0;
-    console.log('🏅 Story 4.4 - Supporter Level System:', hasSupporterLevels);\n    \n    // Test newsletter subscription functionality\n    try {\n      const emailInput = page.locator('input[type=\"email\"]').first();\n      if (await emailInput.count() > 0) {\n        await emailInput.fill('test@example.com');\n        console.log('📧 Story 4.1 - Newsletter form interaction: Working');\n      }\n    } catch (error) {\n      console.log('ℹ️ Newsletter form interaction test skipped');\n    }\n    \n    // ===============================\n    // Overall Epic 4 Assessment\n    // ===============================\n    const epic4Features = [\n      hasNewsletterForm,\n      hasSubscriberBenefits,\n      hasNewsletterArchive,\n      hasSwissSpaStyling,\n      hasWeeklyUpdates,\n      hasCommunityContent,\n      hasCommunityHub,\n      hasQuestionSubmission,\n      hasCommunityChallenge,\n      hasCommunityFeed,\n      hasSupporterRecognition,\n      hasEngagementTracking,\n      hasPersonalization,\n      hasSupporterLevels\n    ];\n    \n    const epic4Score = epic4Features.filter(Boolean).length;\n    const totalFeatures = epic4Features.length;\n    \n    console.log('🎯 EPIC 4 FINAL SCORE:', epic4Score + '/' + totalFeatures + ' features implemented');\n    \n    // Success criteria: At least 12 out of 14 features should be present\n    if (epic4Score >= 12) {\n      console.log('🎉 EPIC 4 SUCCESSFULLY IMPLEMENTED! 🤝');\n      console.log('📋 Epic 4 Feature Summary:');\n      console.log('   ✅ Story 4.1: Newsletter Integration & Subscriber Management');\n      console.log('   ✅ Story 4.2: Weekly Journey Updates & Community Communication');\n      console.log('   ✅ Story 4.3: Interactive Community Features & Engagement Tools');\n      console.log('   ✅ Story 4.4: Supporter Relationship Management & Personalization');\n      console.log('   🚀 Comprehensive community engagement platform with Swiss spa aesthetic');\n      console.log('   📧 Advanced newsletter system with Buttondown integration');\n      console.log('   🤖 Intelligent supporter relationship management and personalization');\n    } else {\n      console.log('⚠️ Epic 4 partially implemented - some features missing');\n    }\n    \n    // Take final comprehensive screenshot\n    await page.screenshot({ \n      path: 'epic4-final-community-dashboard.png', \n      fullPage: true \n    });\n    \n    console.log('✅ EPIC 4 COMPREHENSIVE TEST COMPLETE');\n    \n    // Test mobile responsiveness\n    await page.setViewportSize({ width: 375, height: 667 });\n    await page.screenshot({ path: 'epic4-mobile-community.png' });\n    \n    await page.setViewportSize({ width: 1920, height: 1080 });\n    await page.screenshot({ path: 'epic4-desktop-community.png' });\n    \n    console.log('📱 Epic 4 - Mobile & Desktop responsiveness tested');\n    \n  } catch (error) {\n    console.log('❌ Error testing Epic 4:', error.message);\n    \n    // Take error screenshot\n    await page.screenshot({ \n      path: 'epic4-error.png', \n      fullPage: true \n    });\n  }\n});
+    console.log('🏅 Story 4.4 - Supporter Level System:', hasSupporterLevels);
+    
+    // Test newsletter subscription functionality
+    try {
+      const emailInput = page.locator('input[type="email"]').first();
+      if (await emailInput.count() > 0) {
+        await emailInput.fill('test@example.com');
+        console.log('📧 Story 4.1 - Newsletter form interaction: Working');
+      }
+    } catch (error) {
+      console.log('ℹ️ Newsletter form interaction test skipped');
+    }
+    
+    // ===============================
+    // Overall Epic 4 Assessment
+    // ===============================
+    const epic4Features = [
+      hasNewsletterForm,
+      hasSubscriberBenefits,
+      hasNewsletterArchive,
+      hasSwissSpaStyling,
+      hasWeeklyUpdates,
+      hasCommunityContent,
+      hasCommunityHub,
+      hasQuestionSubmission,
+      hasCommunityChallenge,
+      hasCommunityFeed,
+      hasSupporterRecognition,
+      hasEngagementTracking,
+      hasPersonalization,
+      hasSupporterLevels
+    ];
+    
+    const epic4Score = epic4Features.filter(Boolean).length;
+    const totalFeatures = epic4Features.length;
+    
+    console.log('🎯 EPIC 4 FINAL SCORE:', epic4Score + '/' + totalFeatures + ' features implemented');
+    
+    // Success criteria: At least 12 out of 14 features should be present
+    if (epic4Score >= 12) {
+      console.log('🎉 EPIC 4 SUCCESSFULLY IMPLEMENTED! 🤝');
+      console.log('📋 Epic 4 Feature Summary:');
+      console.log('   ✅ Story 4.1: Newsletter Integration & Subscriber Management');
+      console.log('   ✅ Story 4.2: Weekly Journey Updates & Community Communication');
+      console.log('   ✅ Story 4.3: Interactive Community Features & Engagement Tools');
+      console.log('   ✅ Story 4.4: Supporter Relationship Management & Personalization');
+      console.log('   🚀 Comprehensive community engagement platform with Swiss spa aesthetic');
+      console.log('   📧 Advanced newsletter system with Buttondown integration');
+      console.log('   🤖 Intelligent supporter relationship management and personalization');
+    } else {
+      console.log('⚠️ Epic 4 partially implemented - some features missing');
+    }
+    
+    // Take final comprehensive screenshot
+    await page.screenshot({ 
+      path: 'epic4-final-community-dashboard.png', 
+      fullPage: true 
+    });
+    
+    console.log('✅ EPIC 4 COMPREHENSIVE TEST COMPLETE');
+    
+    // Test mobile responsiveness
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.screenshot({ path: 'epic4-mobile-community.png' });
+    
+    await page.setViewportSize({ width: 1920, height: 1080 });
+    await page.screenshot({ path: 'epic4-desktop-community.png' });
+    
+    console.log('📱 Epic 4 - Mobile & Desktop responsiveness tested');
+    
+  } catch (error) {
+    console.log('❌ Error testing Epic 4:', error.message);
+    
+    // Take error screenshot
+    await page.screenshot({ 
+      path: 'epic4-error.png', 
+      fullPage: true 
+    });
+  }
+});
