@@ -1,8 +1,18 @@
-"use client";
+'use client';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from '@/app/components/charts/DynamicCharts';
-import { GlassCard } from "@/app/components/ui";
-import { GPSPoint, HealthMetrics, WeatherData } from "@/lib/expedition-tracker";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+} from '@/app/components/charts/DynamicCharts';
+import { GlassCard } from '@/app/components/ui';
+import { GPSPoint, HealthMetrics, WeatherData } from '@/lib/expedition-tracker';
 
 interface ExpeditionChartsProps {
   routeData?: GPSPoint[];
@@ -11,13 +21,12 @@ interface ExpeditionChartsProps {
   className?: string;
 }
 
-export default function ExpeditionCharts({ 
-  routeData = [], 
-  healthData = [], 
-  weatherData = [], 
-  className = "" 
+export default function ExpeditionCharts({
+  routeData = [],
+  healthData = [],
+  weatherData = [],
+  className = '',
 }: ExpeditionChartsProps) {
-  
   // Transform route data for altitude chart
   const altitudeData = routeData.map((point, index) => ({
     distance: index * 0.5, // Approximate distance in km
@@ -26,27 +35,31 @@ export default function ExpeditionCharts({
   }));
 
   // Transform health data for heart rate chart
-  const heartRateData = healthData.map((health, index) => ({
-    time: new Date().getTime() - (healthData.length - index) * 30000, // 30 second intervals
-    heartRate: health.heartRate || 0,
-    oxygenSat: health.oxygenSaturation || 0,
-    temperature: health.temperature || 0,
-  })).map(item => ({
-    ...item,
-    time: new Date(item.time).toLocaleTimeString(),
-  }));
+  const heartRateData = healthData
+    .map((health, index) => ({
+      time: new Date().getTime() - (healthData.length - index) * 30000, // 30 second intervals
+      heartRate: health.heartRate || 0,
+      oxygenSat: health.oxygenSaturation || 0,
+      temperature: health.temperature || 0,
+    }))
+    .map((item) => ({
+      ...item,
+      time: new Date(item.time).toLocaleTimeString(),
+    }));
 
   // Transform weather data for conditions chart
-  const weatherChartData = weatherData.map((weather, index) => ({
-    time: new Date().getTime() - (weatherData.length - index) * 300000, // 5 minute intervals
-    temperature: weather.temperature,
-    windSpeed: weather.windSpeed,
-    humidity: weather.humidity,
-    pressure: weather.pressure,
-  })).map(item => ({
-    ...item,
-    time: new Date(item.time).toLocaleTimeString(),
-  }));
+  const weatherChartData = weatherData
+    .map((weather, index) => ({
+      time: new Date().getTime() - (weatherData.length - index) * 300000, // 5 minute intervals
+      temperature: weather.temperature,
+      windSpeed: weather.windSpeed,
+      humidity: weather.humidity,
+      pressure: weather.pressure,
+    }))
+    .map((item) => ({
+      ...item,
+      time: new Date(item.time).toLocaleTimeString(),
+    }));
 
   // Custom tooltip component
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -70,26 +83,33 @@ export default function ExpeditionCharts({
       {/* Altitude Profile */}
       {altitudeData.length > 0 && (
         <GlassCard className="p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Elevation Profile</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Elevation Profile
+          </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={altitudeData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis 
-                  dataKey="distance" 
+                <XAxis
+                  dataKey="distance"
                   stroke="#9CA3AF"
                   tick={{ fontSize: 12 }}
                 />
-                <YAxis 
+                <YAxis
                   stroke="#9CA3AF"
                   tick={{ fontSize: 12 }}
-                  label={{ value: 'Altitude (m)', angle: -90, position: 'insideLeft', style: { textAnchor: 'middle', fill: '#9CA3AF' } }}
+                  label={{
+                    value: 'Altitude (m)',
+                    angle: -90,
+                    position: 'insideLeft',
+                    style: { textAnchor: 'middle', fill: '#9CA3AF' },
+                  }}
                 />
                 <Tooltip content={<CustomTooltip />} />
-                <Area 
-                  type="monotone" 
-                  dataKey="altitude" 
-                  stroke="#3B82F6" 
+                <Area
+                  type="monotone"
+                  dataKey="altitude"
+                  stroke="#3B82F6"
                   fill="#3B82F6"
                   fillOpacity={0.3}
                 />
@@ -102,33 +122,32 @@ export default function ExpeditionCharts({
       {/* Health Metrics */}
       {heartRateData.length > 0 && (
         <GlassCard className="p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Health Monitoring</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Health Monitoring
+          </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={heartRateData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis 
-                  dataKey="time" 
+                <XAxis
+                  dataKey="time"
                   stroke="#9CA3AF"
                   tick={{ fontSize: 12 }}
                 />
-                <YAxis 
-                  stroke="#9CA3AF"
-                  tick={{ fontSize: 12 }}
-                />
+                <YAxis stroke="#9CA3AF" tick={{ fontSize: 12 }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line 
-                  type="monotone" 
-                  dataKey="heartRate" 
-                  stroke="#EF4444" 
+                <Line
+                  type="monotone"
+                  dataKey="heartRate"
+                  stroke="#EF4444"
                   strokeWidth={2}
                   name="Heart Rate"
                   unit=" bpm"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="oxygenSat" 
-                  stroke="#10B981" 
+                <Line
+                  type="monotone"
+                  dataKey="oxygenSat"
+                  stroke="#10B981"
                   strokeWidth={2}
                   name="O2 Saturation"
                   unit="%"
@@ -142,41 +161,40 @@ export default function ExpeditionCharts({
       {/* Weather Conditions */}
       {weatherChartData.length > 0 && (
         <GlassCard className="p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">Weather Conditions</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">
+            Weather Conditions
+          </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={weatherChartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis 
-                  dataKey="time" 
+                <XAxis
+                  dataKey="time"
                   stroke="#9CA3AF"
                   tick={{ fontSize: 12 }}
                 />
-                <YAxis 
-                  stroke="#9CA3AF"
-                  tick={{ fontSize: 12 }}
-                />
+                <YAxis stroke="#9CA3AF" tick={{ fontSize: 12 }} />
                 <Tooltip content={<CustomTooltip />} />
-                <Line 
-                  type="monotone" 
-                  dataKey="temperature" 
-                  stroke="#F59E0B" 
+                <Line
+                  type="monotone"
+                  dataKey="temperature"
+                  stroke="#F59E0B"
                   strokeWidth={2}
                   name="Temperature"
                   unit="°C"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="windSpeed" 
-                  stroke="#06B6D4" 
+                <Line
+                  type="monotone"
+                  dataKey="windSpeed"
+                  stroke="#06B6D4"
                   strokeWidth={2}
                   name="Wind Speed"
                   unit=" km/h"
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="pressure" 
-                  stroke="#8B5CF6" 
+                <Line
+                  type="monotone"
+                  dataKey="pressure"
+                  stroke="#8B5CF6"
                   strokeWidth={2}
                   name="Pressure"
                   unit=" hPa"
@@ -191,11 +209,14 @@ export default function ExpeditionCharts({
       <GlassCard className="p-4 border-l-4 border-summitGold">
         <div className="flex items-center space-x-2">
           <div className="w-2 h-2 bg-summitGold rounded-full animate-pulse" />
-          <h4 className="text-sm font-medium text-summitGold">Live Demo Mode</h4>
+          <h4 className="text-sm font-medium text-summitGold">
+            Live Demo Mode
+          </h4>
         </div>
         <p className="text-xs text-gray-300 mt-1">
-          This dashboard is displaying simulated expedition data for demonstration purposes. 
-          Real expeditions would connect to actual GPS devices, health monitors, and weather stations.
+          This dashboard is displaying simulated expedition data for
+          demonstration purposes. Real expeditions would connect to actual GPS
+          devices, health monitors, and weather stations.
         </p>
       </GlassCard>
     </div>

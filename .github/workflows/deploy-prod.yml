@@ -1,7 +1,7 @@
-name: Deploy to Production   # 👈 REQUIRED workflow name
+name: Deploy to Production # 👈 REQUIRED workflow name
 
 on:
-  workflow_dispatch:   # 👈 enables manual trigger from GH CLI or Wez
+  workflow_dispatch: # 👈 enables manual trigger from GH CLI or Wez
 
 jobs:
   deploy:

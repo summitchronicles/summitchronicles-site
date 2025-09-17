@@ -1,27 +1,36 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  MapPinIcon, 
+import { useState, useEffect, useRef } from 'react';
+import dynamic from 'next/dynamic';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  MapPinIcon,
   SignalIcon,
   ClockIcon,
   UserGroupIcon,
-  CloudIcon
-} from "@heroicons/react/24/outline";
-import { GlassCard } from "@/app/components/ui";
-import { ExpeditionTracker, ExpeditionData, GPSPoint, ParticipantData, HealthMetrics, WeatherData } from "@/lib/expedition-tracker";
-import ExpeditionCharts from "./ExpeditionCharts";
-import Route3DVisualizationLazy from "./Route3DVisualizationLazy";
-import HealthMonitoringPanel from "./HealthMonitoringPanel";
+  CloudIcon,
+} from '@heroicons/react/24/outline';
+import { GlassCard } from '@/app/components/ui';
+import {
+  ExpeditionTracker,
+  ExpeditionData,
+  GPSPoint,
+  ParticipantData,
+  HealthMetrics,
+  WeatherData,
+} from '@/lib/expedition-tracker';
+import ExpeditionCharts from './ExpeditionCharts';
+import Route3DVisualizationLazy from './Route3DVisualizationLazy';
+import HealthMonitoringPanel from './HealthMonitoringPanel';
 
 // Dynamic import for Leaflet to avoid SSR issues
-const SimpleMapComponent = dynamic(() => import('./SimpleMapComponent'), { 
+const SimpleMapComponent = dynamic(() => import('./SimpleMapComponent'), {
   ssr: false,
-  loading: () => <div className="h-80 bg-gray-800/20 rounded-lg animate-pulse flex items-center justify-center">
-    <span className="text-gray-400">Loading map...</span>
-  </div>
+  loading: () => (
+    <div className="h-80 bg-gray-800/20 rounded-lg animate-pulse flex items-center justify-center">
+      <span className="text-gray-400">Loading map...</span>
+    </div>
+  ),
 });
 
 interface RealTimeExpeditionDashboardProps {
@@ -29,17 +38,21 @@ interface RealTimeExpeditionDashboardProps {
   className?: string;
 }
 
-export default function RealTimeExpeditionDashboard({ 
-  expeditionId, 
-  className = "" 
+export default function RealTimeExpeditionDashboard({
+  expeditionId,
+  className = '',
 }: RealTimeExpeditionDashboardProps) {
-  const [expeditionData, setExpeditionData] = useState<ExpeditionData | null>(null);
+  const [expeditionData, setExpeditionData] = useState<ExpeditionData | null>(
+    null
+  );
   const [currentPosition, setCurrentPosition] = useState<GPSPoint | null>(null);
   const [participants, setParticipants] = useState<ParticipantData[]>([]);
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
-  
+  const [connectionStatus, setConnectionStatus] = useState<
+    'connecting' | 'connected' | 'disconnected'
+  >('connecting');
+
   const trackerRef = useRef<ExpeditionTracker | null>(null);
 
   useEffect(() => {
@@ -101,29 +114,30 @@ export default function RealTimeExpeditionDashboard({
     return `${hours}h ${minutes}m`;
   };
 
-
   if (!expeditionData) {
     return (
-      <div className={`min-h-screen bg-gradient-to-b from-charcoal to-black p-6 ${className}`}>
+      <div
+        className={`min-h-screen bg-gradient-to-b from-charcoal to-black p-6 ${className}`}
+      >
         <GlassCard className="p-8 text-center">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+            transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
             className="w-12 h-12 border-4 border-alpineBlue border-t-transparent rounded-full mx-auto mb-4"
           />
           <h3 className="text-xl font-semibold text-white mb-2">
             Connecting to Expedition
           </h3>
-          <p className="text-gray-400">
-            Establishing real-time connection...
-          </p>
+          <p className="text-gray-400">Establishing real-time connection...</p>
         </GlassCard>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-b from-charcoal to-black p-6 ${className}`}>
+    <div
+      className={`min-h-screen bg-gradient-to-b from-charcoal to-black p-6 ${className}`}
+    >
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
@@ -134,26 +148,36 @@ export default function RealTimeExpeditionDashboard({
             <div className="flex items-center space-x-4 text-sm text-gray-400">
               <div className="flex items-center space-x-1">
                 <ClockIcon className="w-4 h-4" />
-                <span>Duration: {formatDuration(expeditionData.startTime)}</span>
+                <span>
+                  Duration: {formatDuration(expeditionData.startTime)}
+                </span>
               </div>
               <div className="flex items-center space-x-1">
                 <UserGroupIcon className="w-4 h-4" />
                 <span>{participants.length} participants</span>
               </div>
               <div className="flex items-center space-x-1">
-                <SignalIcon className={`w-4 h-4 ${isConnected ? 'text-green-400' : 'text-red-400'}`} />
-                <span className={isConnected ? 'text-green-400' : 'text-red-400'}>
+                <SignalIcon
+                  className={`w-4 h-4 ${isConnected ? 'text-green-400' : 'text-red-400'}`}
+                />
+                <span
+                  className={isConnected ? 'text-green-400' : 'text-red-400'}
+                >
                   {connectionStatus}
                 </span>
               </div>
             </div>
           </div>
-          
-          <div className={`px-4 py-2 rounded-full text-sm font-medium ${
-            expeditionData.status === 'active' ? 'bg-green-500/20 text-green-400' :
-            expeditionData.status === 'emergency' ? 'bg-red-500/20 text-red-400' :
-            'bg-gray-500/20 text-gray-400'
-          }`}>
+
+          <div
+            className={`px-4 py-2 rounded-full text-sm font-medium ${
+              expeditionData.status === 'active'
+                ? 'bg-green-500/20 text-green-400'
+                : expeditionData.status === 'emergency'
+                  ? 'bg-red-500/20 text-red-400'
+                  : 'bg-gray-500/20 text-gray-400'
+            }`}
+          >
             {expeditionData.status.toUpperCase()}
           </div>
         </div>
@@ -164,9 +188,11 @@ export default function RealTimeExpeditionDashboard({
         {/* Map Section */}
         <div className="lg:col-span-2">
           <GlassCard className="p-6 h-96">
-            <h3 className="text-lg font-semibold text-white mb-4">Live Position</h3>
+            <h3 className="text-lg font-semibold text-white mb-4">
+              Live Position
+            </h3>
             {currentPosition && (
-              <SimpleMapComponent 
+              <SimpleMapComponent
                 currentPosition={currentPosition}
                 route={expeditionData.route}
                 participants={participants}
@@ -180,23 +206,33 @@ export default function RealTimeExpeditionDashboard({
           {/* Current Position */}
           {currentPosition && (
             <GlassCard className="p-4">
-              <h4 className="text-sm font-medium text-gray-400 mb-3">CURRENT POSITION</h4>
+              <h4 className="text-sm font-medium text-gray-400 mb-3">
+                CURRENT POSITION
+              </h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-300">Latitude:</span>
-                  <span className="text-white font-mono">{currentPosition.lat.toFixed(6)}</span>
+                  <span className="text-white font-mono">
+                    {currentPosition.lat.toFixed(6)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-300">Longitude:</span>
-                  <span className="text-white font-mono">{currentPosition.lng.toFixed(6)}</span>
+                  <span className="text-white font-mono">
+                    {currentPosition.lng.toFixed(6)}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-300">Altitude:</span>
-                  <span className="text-white font-mono">{currentPosition.altitude}m</span>
+                  <span className="text-white font-mono">
+                    {currentPosition.altitude}m
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-300">Accuracy:</span>
-                  <span className="text-white">±{currentPosition.accuracy}m</span>
+                  <span className="text-white">
+                    ±{currentPosition.accuracy}m
+                  </span>
                 </div>
               </div>
             </GlassCard>
@@ -228,7 +264,9 @@ export default function RealTimeExpeditionDashboard({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-300">Visibility:</span>
-                  <span className="text-white">{(weather.visibility / 1000).toFixed(1)} km</span>
+                  <span className="text-white">
+                    {(weather.visibility / 1000).toFixed(1)} km
+                  </span>
                 </div>
               </div>
             </GlassCard>
@@ -238,7 +276,7 @@ export default function RealTimeExpeditionDashboard({
 
       {/* Enhanced Health Monitoring */}
       <div className="mt-8">
-        <HealthMonitoringPanel 
+        <HealthMonitoringPanel
           participants={participants}
           onEmergencyAlert={(alert) => {
             console.log('Emergency alert:', alert);
@@ -249,7 +287,7 @@ export default function RealTimeExpeditionDashboard({
 
       {/* 3D Route Visualization */}
       <div className="mt-8">
-        <Route3DVisualizationLazy 
+        <Route3DVisualizationLazy
           routeData={expeditionData.route}
           participants={participants}
         />
@@ -257,10 +295,12 @@ export default function RealTimeExpeditionDashboard({
 
       {/* Charts Section */}
       <div className="mt-8">
-        <h3 className="text-lg font-semibold text-white mb-4">Analytics & Trends</h3>
-        <ExpeditionCharts 
+        <h3 className="text-lg font-semibold text-white mb-4">
+          Analytics & Trends
+        </h3>
+        <ExpeditionCharts
           routeData={expeditionData.route}
-          healthData={participants.map(p => p.health)}
+          healthData={participants.map((p) => p.health)}
           weatherData={weather ? [weather] : []}
         />
       </div>

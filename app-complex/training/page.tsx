@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
-import Link from "next/link";
-import { trackTrainingPageView } from "../components/GoogleAnalytics";
-import TrainingCalendar from "../components/training/TrainingCalendar";
-import { 
+import { motion, useInView } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import Link from 'next/link';
+import { trackTrainingPageView } from '../components/GoogleAnalytics';
+import TrainingCalendar from '../components/training/TrainingCalendar';
+import {
   FireIcon,
   ChartBarIcon,
   TrophyIcon,
@@ -17,8 +17,8 @@ import {
   PlayIcon,
   ArrowRightIcon,
   DocumentTextIcon,
-  ArrowDownTrayIcon
-} from "@heroicons/react/24/outline";
+  ArrowDownTrayIcon,
+} from '@heroicons/react/24/outline';
 
 interface Activity {
   id: number;
@@ -32,21 +32,21 @@ interface Activity {
 }
 
 const ACTIVITY_COLORS: Record<string, string> = {
-  'Run': 'from-orange-500 to-red-500',
-  'Ride': 'from-blue-500 to-cyan-500',
-  'Hike': 'from-green-500 to-emerald-600',
-  'Walk': 'from-green-400 to-green-500',
-  'WeightTraining': 'from-red-600 to-pink-600',
-  'Workout': 'from-purple-500 to-violet-500',
+  Run: 'from-orange-500 to-red-500',
+  Ride: 'from-blue-500 to-cyan-500',
+  Hike: 'from-green-500 to-emerald-600',
+  Walk: 'from-green-400 to-green-500',
+  WeightTraining: 'from-red-600 to-pink-600',
+  Workout: 'from-purple-500 to-violet-500',
 };
 
 const ACTIVITY_ICONS: Record<string, string> = {
-  'Run': '🏃‍♂️',
-  'Ride': '🚴‍♂️',
-  'Hike': '🥾',
-  'Walk': '🚶‍♂️',
-  'WeightTraining': '💪',
-  'Workout': '🏋️‍♂️',
+  Run: '🏃‍♂️',
+  Ride: '🚴‍♂️',
+  Hike: '🥾',
+  Walk: '🚶‍♂️',
+  WeightTraining: '💪',
+  Workout: '🏋️‍♂️',
 };
 
 export default function TrainingPage() {
@@ -65,14 +65,14 @@ export default function TrainingPage() {
   const fetchActivities = async () => {
     try {
       setLoading(true);
-      const response = await fetch("/api/strava/recent", { cache: "no-store" });
+      const response = await fetch('/api/strava/recent', { cache: 'no-store' });
       const data = await response.json();
-      
+
       if (data.ok && data.activities) {
         setActivities(data.activities);
       }
     } catch (error) {
-      console.error("Failed to fetch activities:", error);
+      console.error('Failed to fetch activities:', error);
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,10 @@ export default function TrainingPage() {
     return km >= 1 ? `${km.toFixed(1)}km` : `${meters}m`;
   };
 
-  const recentActivities = activities.slice(0, activeTab === 'recent' ? 10 : 30);
+  const recentActivities = activities.slice(
+    0,
+    activeTab === 'recent' ? 10 : 30
+  );
 
   const container = {
     hidden: { opacity: 0 },
@@ -97,32 +100,38 @@ export default function TrainingPage() {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.25, 0.25, 0.25, 0.75]
-      }
-    }
+        ease: [0.25, 0.25, 0.25, 0.75],
+      },
+    },
   };
 
   return (
-    <main ref={ref} className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black overflow-x-hidden">
+    <main
+      ref={ref}
+      className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black overflow-x-hidden"
+    >
       {/* Hero Section */}
       <section className="relative py-24 bg-black overflow-hidden">
         <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)`,
-            backgroundSize: '50px 50px'
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)`,
+              backgroundSize: '50px 50px',
+            }}
+          />
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6">
@@ -139,14 +148,15 @@ export default function TrainingPage() {
               <TrophyIcon className="w-4 h-4" />
               My Training Data
             </motion.div>
-            
+
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
               My <span className="text-summitGold">Seven Summits</span> Training
             </h1>
-            
+
             <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
-              Real training data from my Strava account as I prepare for Everest 2027. 
-              Follow my actual workouts, elevation gains, and progress toward the ultimate mountaineering goal.
+              Real training data from my Strava account as I prepare for Everest
+              2027. Follow my actual workouts, elevation gains, and progress
+              toward the ultimate mountaineering goal.
             </p>
           </motion.div>
 
@@ -154,14 +164,38 @@ export default function TrainingPage() {
           <motion.div
             variants={container}
             initial="hidden"
-            animate={isInView ? "show" : "hidden"}
+            animate={isInView ? 'show' : 'hidden'}
             className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16"
           >
             {[
-              { icon: CalendarDaysIcon, label: "Active Days", value: "287", change: "+12%", color: "from-alpineBlue/20 to-glacierBlue/20" },
-              { icon: MapIcon, label: "Total Distance", value: "2,847km", change: "+18%", color: "from-green-500/20 to-emerald-500/20" },
-              { icon: ArrowTrendingUpIcon, label: "Elevation Gain", value: "84,230m", change: "+25%", color: "from-orange-500/20 to-red-500/20" },
-              { icon: ClockIcon, label: "Training Hours", value: "312h", change: "+8%", color: "from-purple-500/20 to-violet-500/20" }
+              {
+                icon: CalendarDaysIcon,
+                label: 'Active Days',
+                value: '287',
+                change: '+12%',
+                color: 'from-alpineBlue/20 to-glacierBlue/20',
+              },
+              {
+                icon: MapIcon,
+                label: 'Total Distance',
+                value: '2,847km',
+                change: '+18%',
+                color: 'from-green-500/20 to-emerald-500/20',
+              },
+              {
+                icon: ArrowTrendingUpIcon,
+                label: 'Elevation Gain',
+                value: '84,230m',
+                change: '+25%',
+                color: 'from-orange-500/20 to-red-500/20',
+              },
+              {
+                icon: ClockIcon,
+                label: 'Training Hours',
+                value: '312h',
+                change: '+8%',
+                color: 'from-purple-500/20 to-violet-500/20',
+              },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -171,15 +205,21 @@ export default function TrainingPage() {
               >
                 <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 hover:bg-white/10 transition-all duration-500">
                   <div className="flex items-center justify-between mb-4">
-                    <div className={`p-3 rounded-2xl bg-gradient-to-br ${stat.color}`}>
+                    <div
+                      className={`p-3 rounded-2xl bg-gradient-to-br ${stat.color}`}
+                    >
                       <stat.icon className="w-6 h-6 text-white" />
                     </div>
-                    <div className="text-xs font-medium text-successGreen">{stat.change}</div>
+                    <div className="text-xs font-medium text-successGreen">
+                      {stat.change}
+                    </div>
                   </div>
-                  <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                  <div className="text-3xl font-bold text-white mb-1">
+                    {stat.value}
+                  </div>
                   <div className="text-sm text-white/60">{stat.label}</div>
                 </div>
-                
+
                 {/* Glow Effect */}
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-alpineBlue/10 to-summitGold/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl" />
               </motion.div>
@@ -198,8 +238,10 @@ export default function TrainingPage() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="flex items-center justify-between mb-12"
           >
-            <h2 className="text-3xl font-bold text-white">My Recent Workouts</h2>
-            
+            <h2 className="text-3xl font-bold text-white">
+              My Recent Workouts
+            </h2>
+
             <div className="flex items-center gap-4">
               <div className="flex bg-white/5 border border-white/10 rounded-2xl p-1">
                 <button
@@ -208,8 +250,8 @@ export default function TrainingPage() {
                     trackTrainingPageView('recent_activities');
                   }}
                   className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                    activeTab === 'recent' 
-                      ? 'bg-summitGold text-black' 
+                    activeTab === 'recent'
+                      ? 'bg-summitGold text-black'
                       : 'text-white/60 hover:text-white'
                   }`}
                 >
@@ -221,15 +263,15 @@ export default function TrainingPage() {
                     trackTrainingPageView('extended_activities');
                   }}
                   className={`px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 ${
-                    activeTab === 'extended' 
-                      ? 'bg-summitGold text-black' 
+                    activeTab === 'extended'
+                      ? 'bg-summitGold text-black'
                       : 'text-white/60 hover:text-white'
                   }`}
                 >
                   Extended (30)
                 </button>
               </div>
-              
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -247,7 +289,10 @@ export default function TrainingPage() {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(9)].map((_, i) => (
-                <div key={i} className="bg-white/5 rounded-3xl p-6 animate-pulse">
+                <div
+                  key={i}
+                  className="bg-white/5 rounded-3xl p-6 animate-pulse"
+                >
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 bg-white/10 rounded-2xl"></div>
                     <div className="flex-1 space-y-2">
@@ -270,11 +315,12 @@ export default function TrainingPage() {
             <motion.div
               variants={container}
               initial="hidden"
-              animate={isInView ? "show" : "hidden"}
+              animate={isInView ? 'show' : 'hidden'}
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
               {recentActivities.map((activity, index) => {
-                const colorClass = ACTIVITY_COLORS[activity.type] || 'from-gray-500 to-gray-600';
+                const colorClass =
+                  ACTIVITY_COLORS[activity.type] || 'from-gray-500 to-gray-600';
                 const icon = ACTIVITY_ICONS[activity.type] || '🏃‍♂️';
 
                 return (
@@ -287,16 +333,24 @@ export default function TrainingPage() {
                     <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6 hover:bg-white/8 transition-all duration-500 overflow-hidden">
                       {/* Activity Header */}
                       <div className="flex items-center gap-3 mb-4">
-                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${colorClass} flex items-center justify-center text-lg`}>
+                        <div
+                          className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${colorClass} flex items-center justify-center text-lg`}
+                        >
                           {icon}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-semibold truncate">{activity.name}</h4>
+                          <h4 className="text-white font-semibold truncate">
+                            {activity.name}
+                          </h4>
                           <p className="text-white/60 text-sm capitalize">
-                            {new Date(activity.start_date).toLocaleDateString('en-US', { 
-                              month: 'short', 
-                              day: 'numeric' 
-                            })} • {activity.type}
+                            {new Date(activity.start_date).toLocaleDateString(
+                              'en-US',
+                              {
+                                month: 'short',
+                                day: 'numeric',
+                              }
+                            )}{' '}
+                            • {activity.type}
                           </p>
                         </div>
                       </div>
@@ -304,25 +358,35 @@ export default function TrainingPage() {
                       {/* Activity Stats */}
                       <div className="grid grid-cols-3 gap-4">
                         <div className="text-center">
-                          <div className="text-lg font-bold text-white">{formatDistance(activity.distance)}</div>
+                          <div className="text-lg font-bold text-white">
+                            {formatDistance(activity.distance)}
+                          </div>
                           <div className="text-xs text-white/60">Distance</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-lg font-bold text-white">{formatTime(activity.moving_time)}</div>
+                          <div className="text-lg font-bold text-white">
+                            {formatTime(activity.moving_time)}
+                          </div>
                           <div className="text-xs text-white/60">Time</div>
                         </div>
                         <div className="text-center">
-                          <div className="text-lg font-bold text-white">{activity.total_elevation_gain}m</div>
+                          <div className="text-lg font-bold text-white">
+                            {activity.total_elevation_gain}m
+                          </div>
                           <div className="text-xs text-white/60">Elevation</div>
                         </div>
                       </div>
 
                       {/* Hover Effect Background */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${colorClass} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-3xl`} />
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${colorClass} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-3xl`}
+                      />
                     </div>
 
                     {/* Glow Effect */}
-                    <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${colorClass} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl`} />
+                    <div
+                      className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${colorClass} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl`}
+                    />
                   </motion.div>
                 );
               })}
@@ -338,11 +402,13 @@ export default function TrainingPage() {
           >
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-white mb-6">
-                Interactive Training <span className="text-summitGold">Calendar</span>
+                Interactive Training{' '}
+                <span className="text-summitGold">Calendar</span>
               </h2>
               <p className="text-white/60 max-w-2xl mx-auto">
-                Track your progress with my proven training structure. Click to mark completed sessions 
-                and stay consistent with the system that's taken me to 4 summits.
+                Track your progress with my proven training structure. Click to
+                mark completed sessions and stay consistent with the system
+                that's taken me to 4 summits.
               </p>
             </div>
 
@@ -365,42 +431,57 @@ export default function TrainingPage() {
           >
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-white mb-4">
-                Structured <span className="text-summitGold">Training Plans</span>
+                Structured{' '}
+                <span className="text-summitGold">Training Plans</span>
               </h2>
               <p className="text-white/60 max-w-2xl mx-auto">
-                Beyond the raw data, here are the complete training systems I've developed. 
-                From beginner to Everest-ready.
+                Beyond the raw data, here are the complete training systems I've
+                developed. From beginner to Everest-ready.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
               {[
                 {
-                  title: "Beginner Foundation",
-                  description: "Zero to first summit in 16 weeks",
-                  duration: "16 weeks",
-                  level: "Beginner",
-                  features: ["No equipment start", "Progressive difficulty", "Safety focus"]
+                  title: 'Beginner Foundation',
+                  description: 'Zero to first summit in 16 weeks',
+                  duration: '16 weeks',
+                  level: 'Beginner',
+                  features: [
+                    'No equipment start',
+                    'Progressive difficulty',
+                    'Safety focus',
+                  ],
                 },
                 {
-                  title: "Seven Summits Ready", 
-                  description: "My complete expedition prep system",
-                  duration: "12 weeks",
-                  level: "Intermediate",
-                  features: ["Altitude simulation", "Load carrying", "Mental prep"]
+                  title: 'Seven Summits Ready',
+                  description: 'My complete expedition prep system',
+                  duration: '12 weeks',
+                  level: 'Intermediate',
+                  features: [
+                    'Altitude simulation',
+                    'Load carrying',
+                    'Mental prep',
+                  ],
                 },
                 {
-                  title: "Everest Protocol",
+                  title: 'Everest Protocol',
                   description: "The exact plan I'm using for 2027",
-                  duration: "18 months", 
-                  level: "Advanced",
-                  features: ["Hypoxic training", "Technical mastery", "Peak timing"]
-                }
+                  duration: '18 months',
+                  level: 'Advanced',
+                  features: [
+                    'Hypoxic training',
+                    'Technical mastery',
+                    'Peak timing',
+                  ],
+                },
               ].map((plan, index) => (
                 <motion.div
                   key={plan.title}
                   initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+                  animate={
+                    isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                  }
                   transition={{ delay: 0.8 + index * 0.1 }}
                   whileHover={{ y: -5 }}
                   className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300"
@@ -410,15 +491,22 @@ export default function TrainingPage() {
                       {plan.level}
                     </span>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{plan.title}</h3>
-                  <p className="text-white/70 text-sm mb-4">{plan.description}</p>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    {plan.title}
+                  </h3>
+                  <p className="text-white/70 text-sm mb-4">
+                    {plan.description}
+                  </p>
                   <div className="flex items-center gap-2 text-xs text-white/60 mb-4">
                     <CalendarDaysIcon className="w-4 h-4" />
                     {plan.duration}
                   </div>
                   <ul className="space-y-1 mb-4">
                     {plan.features.map((feature, idx) => (
-                      <li key={idx} className="text-white/60 text-xs flex items-center gap-2">
+                      <li
+                        key={idx}
+                        className="text-white/60 text-xs flex items-center gap-2"
+                      >
                         <div className="w-1 h-1 bg-summitGold rounded-full"></div>
                         {feature}
                       </li>
@@ -455,8 +543,9 @@ export default function TrainingPage() {
                 Manual Training <span className="text-summitGold">System</span>
               </h2>
               <p className="text-white/60 max-w-2xl mx-auto">
-                Log your actual workouts, track strength progression, and record non-Strava activities 
-                like hiking with pack weight. Complete data for comprehensive analysis.
+                Log your actual workouts, track strength progression, and record
+                non-Strava activities like hiking with pack weight. Complete
+                data for comprehensive analysis.
               </p>
             </div>
 
@@ -469,9 +558,12 @@ export default function TrainingPage() {
                   <div className="w-12 h-12 bg-summitGold/20 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-summitGold/30 transition-colors">
                     <ChartBarIcon className="w-6 h-6 text-summitGold" />
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">Training Dashboard</h3>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    Training Dashboard
+                  </h3>
                   <p className="text-white/70 text-sm mb-4">
-                    View progress charts, analyze training volume, and track month-over-month improvements
+                    View progress charts, analyze training volume, and track
+                    month-over-month improvements
                   </p>
                   <div className="flex items-center text-summitGold text-sm font-medium">
                     View Dashboard
@@ -488,9 +580,12 @@ export default function TrainingPage() {
                   <div className="w-12 h-12 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-blue-500/30 transition-colors">
                     <PlayIcon className="w-6 h-6 text-blue-400" />
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">Daily Workout</h3>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    Daily Workout
+                  </h3>
                   <p className="text-white/70 text-sm mb-4">
-                    Log strength training sets, track RPE, and record manual activities like hiking
+                    Log strength training sets, track RPE, and record manual
+                    activities like hiking
                   </p>
                   <div className="flex items-center text-blue-400 text-sm font-medium">
                     Start Workout
@@ -507,9 +602,12 @@ export default function TrainingPage() {
                   <div className="w-12 h-12 bg-green-500/20 rounded-2xl flex items-center justify-center mb-4 group-hover:bg-green-500/30 transition-colors">
                     <ArrowDownTrayIcon className="w-6 h-6 text-green-400" />
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2">Upload Plan</h3>
+                  <h3 className="text-lg font-bold text-white mb-2">
+                    Upload Plan
+                  </h3>
                   <p className="text-white/70 text-sm mb-4">
-                    Import weekly training Excel files to automatically create workout schedules
+                    Import weekly training Excel files to automatically create
+                    workout schedules
                   </p>
                   <div className="flex items-center text-green-400 text-sm font-medium">
                     Upload Excel
@@ -536,16 +634,14 @@ export default function TrainingPage() {
                 <span className="relative z-10 flex items-center gap-2">
                   <ChartBarIcon className="w-5 h-5" />
                   View Training Dashboard
-                  <motion.div
-                    className="group-hover:translate-x-1 transition-transform duration-300"
-                  >
+                  <motion.div className="group-hover:translate-x-1 transition-transform duration-300">
                     <ArrowRightIcon className="w-4 h-4" />
                   </motion.div>
                 </span>
                 <motion.div
                   className="absolute inset-0 bg-gradient-to-r from-summitGold to-yellow-400"
-                  initial={{ x: "-100%" }}
-                  whileHover={{ x: "0%" }}
+                  initial={{ x: '-100%' }}
+                  whileHover={{ x: '0%' }}
                   transition={{ duration: 0.3 }}
                 />
               </motion.button>
@@ -560,9 +656,7 @@ export default function TrainingPage() {
                 <span className="flex items-center gap-2">
                   <DocumentTextIcon className="w-5 h-5" />
                   Training Plans
-                  <motion.div
-                    className="group-hover:translate-x-1 transition-transform duration-300"
-                  >
+                  <motion.div className="group-hover:translate-x-1 transition-transform duration-300">
                     <ArrowRightIcon className="w-4 h-4" />
                   </motion.div>
                 </span>

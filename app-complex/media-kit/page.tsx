@@ -1,7 +1,11 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { TrophyIcon, ArrowDownTrayIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
+import { motion } from 'framer-motion';
+import {
+  TrophyIcon,
+  ArrowDownTrayIcon,
+  EnvelopeIcon,
+} from '@heroicons/react/24/outline';
 
 export default function MediaKitPage() {
   return (
@@ -61,8 +65,11 @@ export default function MediaKitPage() {
           className="max-w-2xl mx-auto mb-12"
         >
           <p className="text-xl text-white/80 leading-relaxed">
-            <span className="text-summitGold font-semibold">Multi-Discipline Adventurer:</span> From tuberculosis recovery in 2013 
-            to conquering mountains, ultra marathons, and exploration across 4 continents.
+            <span className="text-summitGold font-semibold">
+              Multi-Discipline Adventurer:
+            </span>{' '}
+            From tuberculosis recovery in 2013 to conquering mountains, ultra
+            marathons, and exploration across 4 continents.
           </p>
         </motion.div>
 
@@ -81,7 +88,7 @@ export default function MediaKitPage() {
             <ArrowDownTrayIcon className="w-6 h-6" />
             Download Media Kit
           </motion.button>
-          
+
           <motion.a
             href="mailto:hello@summitchronicles.com?subject=Media Kit Request"
             whileHover={{ scale: 1.05 }}

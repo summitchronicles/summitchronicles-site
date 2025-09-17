@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import {
   ChartBarIcon,
   ClockIcon,
@@ -10,14 +10,14 @@ import {
   MapIcon,
   HeartIcon,
   TrophyIcon,
-  CalendarIcon
-} from "@heroicons/react/24/outline";
-import TrainingInsights from "@/app/components/ai-insights/TrainingInsights";
-import PredictiveAnalysis from "@/app/components/ai-insights/PredictiveAnalysis";
-import SmartScheduler from "@/app/components/ai-insights/SmartScheduler";
-import BiometricTracker from "@/app/components/ai-insights/BiometricTracker";
-import GoalSetting from "@/app/components/ai-insights/GoalSetting";
-import GoalSettingSimple from "@/app/components/ai-insights/GoalSettingSimple";
+  CalendarIcon,
+} from '@heroicons/react/24/outline';
+import TrainingInsights from '@/app/components/ai-insights/TrainingInsights';
+import PredictiveAnalysis from '@/app/components/ai-insights/PredictiveAnalysis';
+import SmartScheduler from '@/app/components/ai-insights/SmartScheduler';
+import BiometricTracker from '@/app/components/ai-insights/BiometricTracker';
+import GoalSetting from '@/app/components/ai-insights/GoalSetting';
+import GoalSettingSimple from '@/app/components/ai-insights/GoalSettingSimple';
 import {
   LineChart,
   Line,
@@ -33,7 +33,7 @@ import {
   ResponsiveContainer,
   PieChart,
   Pie,
-  Cell
+  Cell,
 } from '@/app/components/charts/DynamicCharts';
 
 // Mock training data - replace with real Strava API data
@@ -45,7 +45,7 @@ const runningData = [
   { month: 'May', distance: 195, hours: 30, sessions: 20, avgPace: '5:08' },
   { month: 'Jun', distance: 225, hours: 35, sessions: 23, avgPace: '5:00' },
   { month: 'Jul', distance: 250, hours: 38, sessions: 25, avgPace: '4:58' },
-  { month: 'Aug', distance: 280, hours: 42, sessions: 28, avgPace: '4:55' }
+  { month: 'Aug', distance: 280, hours: 42, sessions: 28, avgPace: '4:55' },
 ];
 
 const hikingData = [
@@ -56,7 +56,7 @@ const hikingData = [
   { month: 'May', distance: 140, elevation: 11500, hours: 38, sessions: 12 },
   { month: 'Jun', distance: 165, elevation: 14200, hours: 45, sessions: 15 },
   { month: 'Jul', distance: 190, elevation: 16800, hours: 52, sessions: 18 },
-  { month: 'Aug', distance: 210, elevation: 19500, hours: 58, sessions: 20 }
+  { month: 'Aug', distance: 210, elevation: 19500, hours: 58, sessions: 20 },
 ];
 
 const strengthData = [
@@ -67,7 +67,7 @@ const strengthData = [
   { month: 'May', totalWeight: 25800, sessions: 32, avgDuration: 88 },
   { month: 'Jun', totalWeight: 29200, sessions: 36, avgDuration: 90 },
   { month: 'Jul', totalWeight: 32900, sessions: 40, avgDuration: 92 },
-  { month: 'Aug', totalWeight: 36500, sessions: 44, avgDuration: 95 }
+  { month: 'Aug', totalWeight: 36500, sessions: 44, avgDuration: 95 },
 ];
 
 // Future projections
@@ -77,14 +77,14 @@ const futureProjections = [
   { month: 'Nov', running: 380, hiking: 270, strength: 48000 },
   { month: 'Dec', running: 400, hiking: 290, strength: 52000 },
   { month: 'Jan 2024', running: 420, hiking: 310, strength: 56000 },
-  { month: 'Feb 2024', running: 450, hiking: 330, strength: 60000 }
+  { month: 'Feb 2024', running: 450, hiking: 330, strength: 60000 },
 ];
 
 const trainingDistribution = [
   { name: 'Running', value: 45, color: '#FF6B35' },
   { name: 'Hiking', value: 30, color: '#4ECDC4' },
   { name: 'Strength', value: 20, color: '#45B7D1' },
-  { name: 'Recovery', value: 5, color: '#96CEB4' }
+  { name: 'Recovery', value: 5, color: '#96CEB4' },
 ];
 
 interface StravaData {
@@ -94,9 +94,22 @@ interface StravaData {
     strength: typeof strengthData;
   };
   totalStats: {
-    running: { totalDistance: number; totalHours: number; totalSessions: number };
-    hiking: { totalDistance: number; totalHours: number; totalSessions: number; totalElevation: number };
-    strength: { totalSessions: number; totalWeight: number; totalHours: number };
+    running: {
+      totalDistance: number;
+      totalHours: number;
+      totalSessions: number;
+    };
+    hiking: {
+      totalDistance: number;
+      totalHours: number;
+      totalSessions: number;
+      totalElevation: number;
+    };
+    strength: {
+      totalSessions: number;
+      totalWeight: number;
+      totalHours: number;
+    };
   };
   fallbackData?: boolean;
   lastUpdated?: string;
@@ -123,13 +136,30 @@ export default function TrainingAnalyticsPage() {
         setError(err.message);
         // Use fallback data
         setStravaData({
-          monthlyData: { running: runningData, hiking: hikingData, strength: strengthData },
-          totalStats: {
-            running: { totalDistance: 1605, totalHours: 245, totalSessions: 162 },
-            hiking: { totalDistance: 1015, totalHours: 277, totalSessions: 91, totalElevation: 85200 },
-            strength: { totalSessions: 240, totalWeight: 263100, totalHours: 348 }
+          monthlyData: {
+            running: runningData,
+            hiking: hikingData,
+            strength: strengthData,
           },
-          fallbackData: true
+          totalStats: {
+            running: {
+              totalDistance: 1605,
+              totalHours: 245,
+              totalSessions: 162,
+            },
+            hiking: {
+              totalDistance: 1015,
+              totalHours: 277,
+              totalSessions: 91,
+              totalElevation: 85200,
+            },
+            strength: {
+              totalSessions: 240,
+              totalWeight: 263100,
+              totalHours: 348,
+            },
+          },
+          fallbackData: true,
         });
       } finally {
         setLoading(false);
@@ -147,24 +177,24 @@ export default function TrainingAnalyticsPage() {
 
   // Calculate overall average pace from monthly data
   const calculateOverallAvgPace = () => {
-    if (!currentRunningData || currentRunningData.length === 0) return "5:05";
-    
+    if (!currentRunningData || currentRunningData.length === 0) return '5:05';
+
     const validPaces = currentRunningData
-      .map(month => month.avgPace)
-      .filter(pace => pace && pace !== "0:00");
-    
-    if (validPaces.length === 0) return "5:05";
-    
+      .map((month) => month.avgPace)
+      .filter((pace) => pace && pace !== '0:00');
+
+    if (validPaces.length === 0) return '5:05';
+
     // Convert pace strings to total seconds, then average them
     const totalSeconds = validPaces.reduce((sum, pace) => {
       const [minutes, seconds] = pace.split(':').map(Number);
       return sum + (minutes * 60 + seconds);
     }, 0);
-    
+
     const avgSeconds = Math.round(totalSeconds / validPaces.length);
     const avgMinutes = Math.floor(avgSeconds / 60);
     const remainingSeconds = avgSeconds % 60;
-    
+
     return `${avgMinutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
@@ -177,10 +207,17 @@ export default function TrainingAnalyticsPage() {
     { id: 'predictions', label: 'Predictions', icon: TrophyIcon },
     { id: 'scheduler', label: 'Scheduler', icon: CalendarIcon },
     { id: 'biometrics', label: 'Recovery', icon: HeartIcon },
-    { id: 'goals', label: 'Goals', icon: TrophyIcon }
+    { id: 'goals', label: 'Goals', icon: TrophyIcon },
   ];
 
-  const MetricCard = ({ title, value, unit, change, icon: Icon, color = "alpineBlue" }: any) => (
+  const MetricCard = ({
+    title,
+    value,
+    unit,
+    change,
+    icon: Icon,
+    color = 'alpineBlue',
+  }: any) => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -190,7 +227,8 @@ export default function TrainingAnalyticsPage() {
         <div>
           <p className="text-white/60 text-sm font-medium">{title}</p>
           <p className="text-3xl font-bold text-white mt-1">
-            {value}<span className="text-lg text-white/70">{unit}</span>
+            {value}
+            <span className="text-lg text-white/70">{unit}</span>
           </p>
           {change && (
             <p className="text-successGreen text-sm font-medium mt-2">
@@ -198,7 +236,9 @@ export default function TrainingAnalyticsPage() {
             </p>
           )}
         </div>
-        <div className={`p-3 bg-gradient-to-br from-${color}/20 to-glacierBlue/20 rounded-xl`}>
+        <div
+          className={`p-3 bg-gradient-to-br from-${color}/20 to-glacierBlue/20 rounded-xl`}
+        >
           <Icon className={`w-6 h-6 text-${color}`} />
         </div>
       </div>
@@ -211,7 +251,11 @@ export default function TrainingAnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <MetricCard
           title="Total Distance"
-          value={totalStats?.running.totalDistance ? Math.round(totalStats.running.totalDistance).toLocaleString() : "1,605"}
+          value={
+            totalStats?.running.totalDistance
+              ? Math.round(totalStats.running.totalDistance).toLocaleString()
+              : '1,605'
+          }
           unit="km"
           change="12"
           icon={MapIcon}
@@ -227,7 +271,7 @@ export default function TrainingAnalyticsPage() {
         />
         <MetricCard
           title="Sessions"
-          value={totalStats?.running.totalSessions.toString() || "162"}
+          value={totalStats?.running.totalSessions.toString() || '162'}
           unit=""
           change="15"
           icon={CalendarIcon}
@@ -249,11 +293,16 @@ export default function TrainingAnalyticsPage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
       >
-        <h3 className="text-xl font-semibold text-white mb-6">Monthly Running Volume</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Monthly Running Volume
+        </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={currentRunningData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255,255,255,0.1)"
+              />
               <XAxis dataKey="month" stroke="rgba(255,255,255,0.7)" />
               <YAxis stroke="rgba(255,255,255,0.7)" />
               <Tooltip
@@ -261,7 +310,7 @@ export default function TrainingAnalyticsPage() {
                   backgroundColor: 'rgba(0,0,0,0.8)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '12px',
-                  color: 'white'
+                  color: 'white',
                 }}
               />
               <Legend />
@@ -284,20 +333,33 @@ export default function TrainingAnalyticsPage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
       >
-        <h3 className="text-xl font-semibold text-white mb-6">Distance vs Time Correlation</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Distance vs Time Correlation
+        </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={currentRunningData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255,255,255,0.1)"
+              />
               <XAxis dataKey="month" stroke="rgba(255,255,255,0.7)" />
-              <YAxis yAxisId="distance" orientation="left" stroke="rgba(255,255,255,0.7)" />
-              <YAxis yAxisId="hours" orientation="right" stroke="rgba(255,255,255,0.7)" />
+              <YAxis
+                yAxisId="distance"
+                orientation="left"
+                stroke="rgba(255,255,255,0.7)"
+              />
+              <YAxis
+                yAxisId="hours"
+                orientation="right"
+                stroke="rgba(255,255,255,0.7)"
+              />
               <Tooltip
                 contentStyle={{
                   backgroundColor: 'rgba(0,0,0,0.8)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '12px',
-                  color: 'white'
+                  color: 'white',
                 }}
               />
               <Legend />
@@ -332,7 +394,11 @@ export default function TrainingAnalyticsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <MetricCard
           title="Total Distance"
-          value={totalStats?.hiking.totalDistance ? Math.round(totalStats.hiking.totalDistance).toLocaleString() : "1,015"}
+          value={
+            totalStats?.hiking.totalDistance
+              ? Math.round(totalStats.hiking.totalDistance).toLocaleString()
+              : '1,015'
+          }
           unit="km"
           change="18"
           icon={MapIcon}
@@ -340,7 +406,11 @@ export default function TrainingAnalyticsPage() {
         />
         <MetricCard
           title="Elevation Gain"
-          value={totalStats?.hiking.totalElevation ? Math.round(totalStats.hiking.totalElevation).toLocaleString() : "85,200"}
+          value={
+            totalStats?.hiking.totalElevation
+              ? Math.round(totalStats.hiking.totalElevation).toLocaleString()
+              : '85,200'
+          }
           unit="m"
           change="22"
           icon={TrophyIcon}
@@ -370,20 +440,33 @@ export default function TrainingAnalyticsPage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
       >
-        <h3 className="text-xl font-semibold text-white mb-6">Monthly Hiking Progress</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Monthly Hiking Progress
+        </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={currentHikingData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255,255,255,0.1)"
+              />
               <XAxis dataKey="month" stroke="rgba(255,255,255,0.7)" />
-              <YAxis yAxisId="distance" orientation="left" stroke="rgba(255,255,255,0.7)" />
-              <YAxis yAxisId="elevation" orientation="right" stroke="rgba(255,255,255,0.7)" />
+              <YAxis
+                yAxisId="distance"
+                orientation="left"
+                stroke="rgba(255,255,255,0.7)"
+              />
+              <YAxis
+                yAxisId="elevation"
+                orientation="right"
+                stroke="rgba(255,255,255,0.7)"
+              />
               <Tooltip
                 contentStyle={{
                   backgroundColor: 'rgba(0,0,0,0.8)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '12px',
-                  color: 'white'
+                  color: 'white',
                 }}
               />
               <Legend />
@@ -452,11 +535,16 @@ export default function TrainingAnalyticsPage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
       >
-        <h3 className="text-xl font-semibold text-white mb-6">Strength Training Progression</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Strength Training Progression
+        </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={currentStrengthData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255,255,255,0.1)"
+              />
               <XAxis dataKey="month" stroke="rgba(255,255,255,0.7)" />
               <YAxis stroke="rgba(255,255,255,0.7)" />
               <Tooltip
@@ -464,7 +552,7 @@ export default function TrainingAnalyticsPage() {
                   backgroundColor: 'rgba(0,0,0,0.8)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '12px',
-                  color: 'white'
+                  color: 'white',
                 }}
               />
               <Legend />
@@ -487,20 +575,33 @@ export default function TrainingAnalyticsPage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
       >
-        <h3 className="text-xl font-semibold text-white mb-6">Sessions vs Total Weight</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Sessions vs Total Weight
+        </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={currentStrengthData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255,255,255,0.1)"
+              />
               <XAxis dataKey="month" stroke="rgba(255,255,255,0.7)" />
-              <YAxis yAxisId="weight" orientation="left" stroke="rgba(255,255,255,0.7)" />
-              <YAxis yAxisId="sessions" orientation="right" stroke="rgba(255,255,255,0.7)" />
+              <YAxis
+                yAxisId="weight"
+                orientation="left"
+                stroke="rgba(255,255,255,0.7)"
+              />
+              <YAxis
+                yAxisId="sessions"
+                orientation="right"
+                stroke="rgba(255,255,255,0.7)"
+              />
               <Tooltip
                 contentStyle={{
                   backgroundColor: 'rgba(0,0,0,0.8)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '12px',
-                  color: 'white'
+                  color: 'white',
                 }}
               />
               <Legend />
@@ -537,7 +638,9 @@ export default function TrainingAnalyticsPage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
       >
-        <h3 className="text-xl font-semibold text-white mb-6">Training Time Distribution</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Training Time Distribution
+        </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -548,7 +651,9 @@ export default function TrainingAnalyticsPage() {
                 outerRadius={120}
                 fill="#8884d8"
                 dataKey="value"
-                label={({ name, percent }) => `${name} ${(percent ? (percent * 100).toFixed(0) : '0')}%`}
+                label={({ name, percent }) =>
+                  `${name} ${percent ? (percent * 100).toFixed(0) : '0'}%`
+                }
               >
                 {trainingDistribution.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
@@ -559,7 +664,7 @@ export default function TrainingAnalyticsPage() {
                   backgroundColor: 'rgba(0,0,0,0.8)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '12px',
-                  color: 'white'
+                  color: 'white',
                 }}
               />
             </PieChart>
@@ -573,11 +678,16 @@ export default function TrainingAnalyticsPage() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
       >
-        <h3 className="text-xl font-semibold text-white mb-6">Future Training Projections</h3>
+        <h3 className="text-xl font-semibold text-white mb-6">
+          Future Training Projections
+        </h3>
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={futureProjections}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(255,255,255,0.1)"
+              />
               <XAxis dataKey="month" stroke="rgba(255,255,255,0.7)" />
               <YAxis stroke="rgba(255,255,255,0.7)" />
               <Tooltip
@@ -585,7 +695,7 @@ export default function TrainingAnalyticsPage() {
                   backgroundColor: 'rgba(0,0,0,0.8)',
                   border: '1px solid rgba(255,255,255,0.1)',
                   borderRadius: '12px',
-                  color: 'white'
+                  color: 'white',
                 }}
               />
               <Legend />
@@ -625,8 +735,12 @@ export default function TrainingAnalyticsPage() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl font-bold text-white mb-4">Training Analytics</h1>
-              <p className="text-white/60 text-lg">Comprehensive analysis of your mountain training progress</p>
+              <h1 className="text-4xl font-bold text-white mb-4">
+                Training Analytics
+              </h1>
+              <p className="text-white/60 text-lg">
+                Comprehensive analysis of your mountain training progress
+              </p>
             </div>
             <div className="text-right">
               {loading ? (
@@ -636,14 +750,21 @@ export default function TrainingAnalyticsPage() {
                 </div>
               ) : stravaData?.fallbackData ? (
                 <div className="text-white/60 text-sm">
-                  📊 Demo data shown<br/>
-                  <span className="text-xs">Connect Strava for real metrics</span>
+                  📊 Demo data shown
+                  <br />
+                  <span className="text-xs">
+                    Connect Strava for real metrics
+                  </span>
                 </div>
               ) : (
                 <div className="text-successGreen text-sm">
-                  ✅ Live Strava data<br/>
+                  ✅ Live Strava data
+                  <br />
                   <span className="text-xs text-white/60">
-                    Updated: {stravaData?.lastUpdated ? new Date(stravaData.lastUpdated).toLocaleTimeString() : 'Now'}
+                    Updated:{' '}
+                    {stravaData?.lastUpdated
+                      ? new Date(stravaData.lastUpdated).toLocaleTimeString()
+                      : 'Now'}
                   </span>
                 </div>
               )}
@@ -685,33 +806,22 @@ export default function TrainingAnalyticsPage() {
         {activeTab === 'overview' && <OverviewTab />}
         {activeTab === 'ai-insights' && (
           <div className="space-y-8">
-            <TrainingInsights 
-              activities={[]} 
-              biometrics={[]}
-              goals={[]}
-            />
+            <TrainingInsights activities={[]} biometrics={[]} goals={[]} />
           </div>
         )}
         {activeTab === 'predictions' && (
           <div className="space-y-8">
-            <PredictiveAnalysis 
-              activities={[]}
-              goals={[]}
-            />
+            <PredictiveAnalysis activities={[]} goals={[]} />
           </div>
         )}
         {activeTab === 'scheduler' && (
           <div className="space-y-8">
-            <SmartScheduler 
-              activities={[]}
-            />
+            <SmartScheduler activities={[]} />
           </div>
         )}
         {activeTab === 'biometrics' && (
           <div className="space-y-8">
-            <BiometricTracker 
-              data={[]}
-            />
+            <BiometricTracker data={[]} />
           </div>
         )}
         {activeTab === 'goals' && (

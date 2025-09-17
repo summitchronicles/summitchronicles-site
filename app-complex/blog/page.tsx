@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { motion, useInView } from "framer-motion";
-import { useRef, useState, useEffect } from "react";
+import { motion, useInView } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { 
+import {
   BookOpenIcon,
   ClockIcon,
   TagIcon,
@@ -15,8 +15,8 @@ import {
   UserIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
-  ChatBubbleBottomCenterTextIcon
-} from "@heroicons/react/24/outline";
+  ChatBubbleBottomCenterTextIcon,
+} from '@heroicons/react/24/outline';
 
 interface BlogPost {
   id: string;
@@ -43,31 +43,30 @@ interface Category {
 
 export default function BlogPage() {
   const heroRef = useRef(null);
-  const isHeroInView = useInView(heroRef, { once: true, margin: "-100px" });
+  const isHeroInView = useInView(heroRef, { once: true, margin: '-100px' });
 
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    Promise.all([
-      fetchPosts(),
-      fetchCategories()
-    ]).finally(() => setLoading(false));
+    Promise.all([fetchPosts(), fetchCategories()]).finally(() =>
+      setLoading(false)
+    );
   }, []);
 
   const fetchPosts = async () => {
     try {
       const params = new URLSearchParams({
         status: 'published',
-        limit: '20'
+        limit: '20',
       });
 
-      if (selectedCategory !== "All") {
+      if (selectedCategory !== 'All') {
         params.append('category', selectedCategory);
       }
 
@@ -77,7 +76,7 @@ export default function BlogPage() {
 
       const response = await fetch(`/api/blog/posts?${params.toString()}`);
       const data = await response.json();
-      
+
       if (response.ok) {
         setPosts(data.posts || []);
       } else {
@@ -93,7 +92,7 @@ export default function BlogPage() {
     try {
       const response = await fetch('/api/blog/categories');
       const data = await response.json();
-      
+
       if (response.ok) {
         setCategories(data.categories || []);
       }
@@ -114,24 +113,24 @@ export default function BlogPage() {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
   const getCategoryGradient = (category: string) => {
     const gradients: Record<string, string> = {
-      'Training': 'from-blue-500 to-cyan-600',
-      'Expeditions': 'from-orange-500 to-red-600',
-      'Gear': 'from-yellow-500 to-orange-600',
-      'Mental': 'from-purple-500 to-indigo-600',
-      'Nutrition': 'from-green-500 to-emerald-600',
-      'Recovery': 'from-cyan-500 to-blue-600'
+      Training: 'from-blue-500 to-cyan-600',
+      Expeditions: 'from-orange-500 to-red-600',
+      Gear: 'from-yellow-500 to-orange-600',
+      Mental: 'from-purple-500 to-indigo-600',
+      Nutrition: 'from-green-500 to-emerald-600',
+      Recovery: 'from-cyan-500 to-blue-600',
     };
     return gradients[category] || 'from-gray-500 to-slate-600';
   };
 
-  const featuredPosts = posts.filter(post => post.featured);
-  const regularPosts = posts.filter(post => !post.featured);
+  const featuredPosts = posts.filter((post) => post.featured);
+  const regularPosts = posts.filter((post) => !post.featured);
 
   if (loading) {
     return (
@@ -154,17 +153,23 @@ export default function BlogPage() {
       {/* Hero Section */}
       <section className="relative py-24 bg-black overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-            backgroundSize: '60px 60px'
-          }}></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+              backgroundSize: '60px 60px',
+            }}
+          ></div>
         </div>
-        
+
         <div className="relative z-10 max-w-7xl mx-auto px-6">
-          <motion.div 
+          <motion.div
             ref={heroRef}
             initial={{ opacity: 0, y: 30 }}
-            animate={isHeroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            animate={
+              isHeroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+            }
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
@@ -173,18 +178,22 @@ export default function BlogPage() {
               Mountain Wisdom
             </div>
             <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
-              Chronicles from the <span className="text-summitGold">Heights</span>
+              Chronicles from the{' '}
+              <span className="text-summitGold">Heights</span>
             </h1>
             <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
-              Deep insights, hard-won lessons, and practical wisdom from the world&apos;s highest peaks. 
-              Real experiences, honest reflections, and actionable knowledge.
+              Deep insights, hard-won lessons, and practical wisdom from the
+              world&apos;s highest peaks. Real experiences, honest reflections,
+              and actionable knowledge.
             </p>
           </motion.div>
 
           {/* Search and Filters */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={isHeroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+            animate={
+              isHeroInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+            }
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-4xl mx-auto mb-16"
           >
@@ -202,7 +211,7 @@ export default function BlogPage() {
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-4">
-              {["All", ...categories.map(cat => cat.name)].map((category) => (
+              {['All', ...categories.map((cat) => cat.name)].map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
@@ -224,7 +233,7 @@ export default function BlogPage() {
       {featuredPosts.length > 0 && (
         <section className="py-16 bg-gradient-to-b from-gray-900 to-black">
           <div className="max-w-7xl mx-auto px-6">
-            <motion.h2 
+            <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
@@ -233,7 +242,7 @@ export default function BlogPage() {
             >
               Featured Articles
             </motion.h2>
-            
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
               {featuredPosts.map((post, index) => (
                 <motion.article
@@ -248,7 +257,9 @@ export default function BlogPage() {
                     <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden hover:bg-white/8 transition-all duration-500">
                       <div className="relative h-64 overflow-hidden">
                         <div className="w-full h-full bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center">
-                          <span className="text-white/50">Image placeholder</span>
+                          <span className="text-white/50">
+                            Image placeholder
+                          </span>
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
                         <div className="absolute top-4 right-4 px-3 py-1 bg-summitGold/20 border border-summitGold/30 rounded-full text-xs font-medium text-summitGold">
@@ -265,7 +276,7 @@ export default function BlogPage() {
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="p-6">
                         <div className="flex items-center gap-4 mb-4 text-sm text-white/60">
                           <span className="flex items-center gap-1">
@@ -292,7 +303,7 @@ export default function BlogPage() {
 
                         <div className="flex flex-wrap gap-2 mb-6">
                           {post.tags.map((tag, idx) => (
-                            <span 
+                            <span
                               key={idx}
                               className="px-3 py-1 bg-white/10 rounded-full text-xs text-white/80"
                             >
@@ -302,17 +313,23 @@ export default function BlogPage() {
                         </div>
 
                         <div className="flex items-center gap-2 text-white/80 hover:text-summitGold transition-colors duration-300 group/button">
-                          <span className="text-sm font-medium">Read Full Article</span>
+                          <span className="text-sm font-medium">
+                            Read Full Article
+                          </span>
                           <div className="group-hover/button:translate-x-1 transition-transform duration-300">
                             <ArrowRightIcon className="w-4 h-4" />
                           </div>
                         </div>
                       </div>
-                      
-                      <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryGradient(post.category)}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}></div>
+
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${getCategoryGradient(post.category)}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}
+                      ></div>
                     </div>
-                    
-                    <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(post.category)} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl`}></div>
+
+                    <div
+                      className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(post.category)} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl`}
+                    ></div>
                   </Link>
                 </motion.article>
               ))}
@@ -324,16 +341,18 @@ export default function BlogPage() {
       {/* Latest Articles */}
       <section className="py-16 bg-black">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
             className="text-2xl font-bold text-white mb-8"
           >
-            {selectedCategory !== "All" ? `${selectedCategory} Articles` : "Latest Articles"}
+            {selectedCategory !== 'All'
+              ? `${selectedCategory} Articles`
+              : 'Latest Articles'}
           </motion.h2>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {regularPosts.map((post, index) => (
               <motion.article
@@ -348,14 +367,16 @@ export default function BlogPage() {
                   <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl overflow-hidden hover:bg-white/8 transition-all duration-500">
                     <div className="relative h-48 overflow-hidden">
                       <div className="w-full h-full bg-gradient-to-br from-gray-600 to-gray-800 flex items-center justify-center">
-                        <span className="text-white/50 text-sm">Image placeholder</span>
+                        <span className="text-white/50 text-sm">
+                          Image placeholder
+                        </span>
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                       <div className="absolute top-4 right-4 px-2 py-1 bg-alpineBlue/20 border border-alpineBlue/30 rounded-full text-xs font-medium text-alpineBlue">
                         {post.category}
                       </div>
                     </div>
-                    
+
                     <div className="p-6">
                       <div className="flex items-center gap-3 mb-3 text-xs text-white/60">
                         <span>{formatDate(post.published_at)}</span>
@@ -375,7 +396,7 @@ export default function BlogPage() {
 
                       <div className="flex flex-wrap gap-1 mb-4">
                         {post.tags.map((tag, idx) => (
-                          <span 
+                          <span
                             key={idx}
                             className="px-2 py-1 bg-white/10 rounded-lg text-xs text-white/70"
                           >
@@ -395,12 +416,16 @@ export default function BlogPage() {
                           <ShareIcon className="w-4 h-4 text-white/60 hover:text-alpineBlue" />
                         </button>
                       </div>
-                      
-                      <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryGradient(post.category)}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}></div>
+
+                      <div
+                        className={`absolute inset-0 bg-gradient-to-br ${getCategoryGradient(post.category)}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}
+                      ></div>
                     </div>
                   </div>
-                  
-                  <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(post.category)} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl`}></div>
+
+                  <div
+                    className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(post.category)} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl`}
+                  ></div>
                 </Link>
               </motion.article>
             ))}
@@ -410,10 +435,9 @@ export default function BlogPage() {
             <div className="text-center py-12">
               <div className="text-white/60 mb-4">No posts found</div>
               <p className="text-white/40">
-                {selectedCategory !== "All" 
+                {selectedCategory !== 'All'
                   ? `No posts found in the ${selectedCategory} category.`
-                  : "No blog posts are available yet."
-                }
+                  : 'No blog posts are available yet.'}
               </p>
             </div>
           )}

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import OptimizedImage from "../../components/blog/OptimizedImage";
-import { 
+import { useState, useEffect } from 'react';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import OptimizedImage from '../../components/blog/OptimizedImage';
+import {
   ArrowLeftIcon,
   ClockIcon,
   CalendarIcon,
@@ -15,8 +15,8 @@ import {
   TagIcon,
   HeartIcon,
   ShareIcon,
-  EyeIcon
-} from "@heroicons/react/24/outline";
+  EyeIcon,
+} from '@heroicons/react/24/outline';
 
 interface BlogPost {
   id: string;
@@ -56,7 +56,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       setLoading(true);
       const response = await fetch(`/api/blog/posts/${params.slug}`);
       const data = await response.json();
-      
+
       if (response.ok) {
         setPost(data.post);
       } else if (response.status === 404) {
@@ -76,20 +76,22 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      'Training': 'text-blue-400 border-blue-400/20 bg-blue-400/10',
-      'Expeditions': 'text-orange-400 border-orange-400/20 bg-orange-400/10',
-      'Gear': 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10',
-      'Mental': 'text-purple-400 border-purple-400/20 bg-purple-400/10',
-      'Nutrition': 'text-green-400 border-green-400/20 bg-green-400/10',
-      'Recovery': 'text-cyan-400 border-cyan-400/20 bg-cyan-400/10'
+      Training: 'text-blue-400 border-blue-400/20 bg-blue-400/10',
+      Expeditions: 'text-orange-400 border-orange-400/20 bg-orange-400/10',
+      Gear: 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10',
+      Mental: 'text-purple-400 border-purple-400/20 bg-purple-400/10',
+      Nutrition: 'text-green-400 border-green-400/20 bg-green-400/10',
+      Recovery: 'text-cyan-400 border-cyan-400/20 bg-cyan-400/10',
     };
-    return colors[category] || 'text-gray-400 border-gray-400/20 bg-gray-400/10';
+    return (
+      colors[category] || 'text-gray-400 border-gray-400/20 bg-gray-400/10'
+    );
   };
 
   if (loading) {
@@ -122,12 +124,16 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       {/* Header */}
       <header className="relative py-16 bg-black">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-            backgroundSize: '60px 60px'
-          }}></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+              backgroundSize: '60px 60px',
+            }}
+          ></div>
         </div>
-        
+
         <div className="relative z-10 max-w-4xl mx-auto px-6">
           {/* Back Link */}
           <motion.div
@@ -135,8 +141,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             animate={{ opacity: 1, x: 0 }}
             className="mb-8"
           >
-            <Link 
-              href="/blog" 
+            <Link
+              href="/blog"
               className="inline-flex items-center gap-2 text-white/70 hover:text-summitGold transition-colors duration-300"
             >
               <ArrowLeftIcon className="w-4 h-4" />
@@ -151,14 +157,16 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             transition={{ delay: 0.1 }}
             className="mb-4"
           >
-            <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(post.category)}`}>
+            <span
+              className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(post.category)}`}
+            >
               <TagIcon className="w-3 h-3" />
               {post.category}
             </span>
           </motion.div>
 
           {/* Title */}
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -232,7 +240,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             transition={{ delay: 0.6 }}
             className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8 md:p-12"
           >
-            <div className="prose prose-invert prose-lg max-w-none
+            <div
+              className="prose prose-invert prose-lg max-w-none
                 prose-headings:text-white prose-headings:font-bold
                 prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4
                 prose-a:text-summitGold prose-a:no-underline hover:prose-a:underline
@@ -245,7 +254,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                 prose-code:text-summitGold prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
                 prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20"
             >
-              <ReactMarkdown 
+              <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
                   img: ({ src, alt, ...props }) => (
@@ -256,7 +265,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                       height={400}
                       className="rounded-xl shadow-2xl my-6"
                     />
-                  )
+                  ),
                 }}
               >
                 {post.content}
@@ -285,8 +294,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                 <span className="text-white/80">Share</span>
               </button>
             </div>
-            
-            <Link 
+
+            <Link
               href="/blog"
               className="text-summitGold hover:text-summitGold/80 transition-colors duration-300 font-medium"
             >

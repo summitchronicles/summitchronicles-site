@@ -1,7 +1,10 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next';
+import './globals.css';
 import { Montserrat, Amatic_SC, Oswald } from 'next/font/google';
-import { OrganizationStructuredData, BreadcrumbStructuredData } from './components/seo/StructuredData';
+import {
+  OrganizationStructuredData,
+  BreadcrumbStructuredData,
+} from './components/seo/StructuredData';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -23,25 +26,29 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: "Summit Chronicles - Journey to the Summit",
-  description: "Follow the systematic training, preparation, and expedition journey toward mountaineering excellence. Premium adventure preparation with Swiss spa aesthetics.",
-  keywords: "mountaineering, training, expedition, summit, adventure, preparation, community support",
-  authors: [{ name: "Summit Chronicles" }],
-  creator: "Summit Chronicles",
-  publisher: "Summit Chronicles",
+  title: 'Summit Chronicles - Journey to the Summit',
+  description:
+    'Follow the systematic training, preparation, and expedition journey toward mountaineering excellence. Premium adventure preparation with Swiss spa aesthetics.',
+  keywords:
+    'mountaineering, training, expedition, summit, adventure, preparation, community support',
+  authors: [{ name: 'Summit Chronicles' }],
+  creator: 'Summit Chronicles',
+  publisher: 'Summit Chronicles',
   openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: "https://summitchronicles.com",
-    siteName: "Summit Chronicles",
-    title: "Summit Chronicles - Journey to the Summit",
-    description: "Follow the systematic training, preparation, and expedition journey toward mountaineering excellence.",
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://summitchronicles.com',
+    siteName: 'Summit Chronicles',
+    title: 'Summit Chronicles - Journey to the Summit',
+    description:
+      'Follow the systematic training, preparation, and expedition journey toward mountaineering excellence.',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Summit Chronicles - Journey to the Summit",
-    description: "Follow the systematic training, preparation, and expedition journey toward mountaineering excellence.",
-    creator: "@summitchronicles",
+    card: 'summary_large_image',
+    title: 'Summit Chronicles - Journey to the Summit',
+    description:
+      'Follow the systematic training, preparation, and expedition journey toward mountaineering excellence.',
+    creator: '@summitchronicles',
   },
   robots: {
     index: true,
@@ -67,7 +74,9 @@ export default function RootLayout({
         <OrganizationStructuredData />
         <BreadcrumbStructuredData />
       </head>
-      <body className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-spa-charcoal bg-spa-stone`}>
+      <body
+        className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-spa-charcoal bg-spa-stone`}
+      >
         {children}
       </body>
     </html>

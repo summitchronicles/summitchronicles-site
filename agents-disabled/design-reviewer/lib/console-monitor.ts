@@ -27,16 +27,20 @@ export class ConsoleMonitor {
           type: 'javascript',
           severity: 'critical',
           message: msg.text(),
-          location: msg.location() ? `${msg.location().url}:${msg.location().lineNumber}` : undefined,
-          timestamp: new Date().toISOString()
+          location: msg.location()
+            ? `${msg.location().url}:${msg.location().lineNumber}`
+            : undefined,
+          timestamp: new Date().toISOString(),
         });
       } else if (msg.type() === 'warning') {
         this.consoleErrors.push({
           type: 'javascript',
-          severity: 'warning', 
+          severity: 'warning',
           message: msg.text(),
-          location: msg.location() ? `${msg.location().url}:${msg.location().lineNumber}` : undefined,
-          timestamp: new Date().toISOString()
+          location: msg.location()
+            ? `${msg.location().url}:${msg.location().lineNumber}`
+            : undefined,
+          timestamp: new Date().toISOString(),
         });
       }
     });
@@ -48,7 +52,7 @@ export class ConsoleMonitor {
         severity: 'critical',
         message: `Network request failed: ${request.failure()?.errorText || 'Unknown error'}`,
         url: request.url(),
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     });
 
@@ -60,7 +64,7 @@ export class ConsoleMonitor {
           severity: response.status() >= 500 ? 'critical' : 'warning',
           message: `HTTP ${response.status()}: ${response.statusText()}`,
           url: response.url(),
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
     });
@@ -70,7 +74,7 @@ export class ConsoleMonitor {
     // Check for runtime JS errors by injecting error handler
     const runtimeErrors = await this.page.evaluate(() => {
       const errors: any[] = [];
-      
+
       // Override console.error to capture additional errors
       const originalError = console.error;
       console.error = (...args) => {
@@ -78,11 +82,11 @@ export class ConsoleMonitor {
           type: 'javascript',
           severity: 'critical',
           message: args.join(' '),
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
         originalError.apply(console, args);
       };
-      
+
       return errors;
     });
 
@@ -93,21 +97,26 @@ export class ConsoleMonitor {
     // Check for Strava API specific issues
     const stravaApiErrors = await this.page.evaluate(() => {
       const errors: any[] = [];
-      
+
       // Check if Strava data loaded properly
-      const stravaSection = document.querySelector('section:has(h2:contains("Recent Activities"))');
+      const stravaSection = document.querySelector(
+        'section:has(h2:contains("Recent Activities"))'
+      );
       if (stravaSection) {
-        const noActivitiesMsg = stravaSection.textContent?.includes('No activities found');
+        const noActivitiesMsg = stravaSection.textContent?.includes(
+          'No activities found'
+        );
         if (noActivitiesMsg) {
           errors.push({
             type: 'network',
             severity: 'warning',
-            message: 'Strava API may not be returning data - showing fallback message',
-            timestamp: new Date().toISOString()
+            message:
+              'Strava API may not be returning data - showing fallback message',
+            timestamp: new Date().toISOString(),
           });
         }
       }
-      
+
       return errors;
     });
 
@@ -117,32 +126,32 @@ export class ConsoleMonitor {
   async checkPerformanceWarnings(): Promise<ConsoleError[]> {
     const performanceMetrics = await this.page.evaluate(() => {
       const warnings: any[] = [];
-      
+
       // Check for large images without optimization
       const images = Array.from(document.images);
-      images.forEach(img => {
+      images.forEach((img) => {
         if (img.naturalWidth > 1920 || img.naturalHeight > 1080) {
           warnings.push({
             type: 'performance',
             severity: 'warning',
             message: `Large unoptimized image detected: ${img.src} (${img.naturalWidth}x${img.naturalHeight})`,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
         }
       });
-      
+
       // Check for missing alt attributes
-      images.forEach(img => {
+      images.forEach((img) => {
         if (!img.alt || img.alt.trim() === '') {
           warnings.push({
             type: 'performance',
             severity: 'info',
             message: `Image missing alt text: ${img.src}`,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
         }
       });
-      
+
       return warnings;
     });
 
@@ -159,14 +168,14 @@ export class ConsoleMonitor {
     const [jsErrors, networkErrors, perfWarnings] = await Promise.all([
       this.checkForJavaScriptErrors(),
       this.checkNetworkHealth(),
-      this.checkPerformanceWarnings()
+      this.checkPerformanceWarnings(),
     ]);
 
     return {
       javascript: jsErrors,
       network: networkErrors,
       performance: perfWarnings,
-      total: jsErrors.length + networkErrors.length + perfWarnings.length
+      total: jsErrors.length + networkErrors.length + perfWarnings.length,
     };
   }
 

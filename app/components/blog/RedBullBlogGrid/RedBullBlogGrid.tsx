@@ -1,144 +1,145 @@
-'use client'
+'use client';
 
-import { motion } from 'framer-motion'
-import Image from 'next/image'
-import Link from 'next/link'
-import { 
-  Calendar, 
-  Clock, 
-  Eye, 
-  TrendingUp, 
-  Mountain, 
-  Award, 
-  User, 
+import { motion } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import {
+  Calendar,
+  Clock,
+  Eye,
+  TrendingUp,
+  Mountain,
+  Award,
+  User,
   ChevronRight,
-  Plus 
-} from 'lucide-react'
+  Plus,
+} from 'lucide-react';
 
 interface BlogPost {
-  slug: string
-  title: string
-  subtitle: string
-  category: string
-  author: string
-  date: string
-  readTime: string
-  views: string
-  image: string
-  featured: boolean
+  slug: string;
+  title: string;
+  subtitle: string;
+  category: string;
+  author: string;
+  date: string;
+  readTime: string;
+  views: string;
+  image: string;
+  featured: boolean;
 }
 
 interface RedBullBlogGridProps {
-  className?: string
+  className?: string;
 }
 
-export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
+export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
   // Red Bull-style sample posts
   const samplePosts: BlogPost[] = [
     {
-      slug: "mental-preparation-everest-2027",
-      title: "The Mental Game",
-      subtitle: "Preparing Mind and Body for Everest 2027: A Systematic Approach to Peak Performance",
-      category: "MENTAL PREPARATION",
-      author: "Sunith Kumar",
-      date: "December 15, 2024",
-      readTime: "12 min read",
-      views: "2.1K",
-      image: "/stories/everest-prep.jpg",
-      featured: true
+      slug: 'mental-preparation-everest-2027',
+      title: 'The Mental Game',
+      subtitle:
+        'Preparing Mind and Body for Everest 2027: A Systematic Approach to Peak Performance',
+      category: 'MENTAL PREPARATION',
+      author: 'Sunith Kumar',
+      date: 'December 15, 2024',
+      readTime: '12 min read',
+      views: '2.1K',
+      image: '/stories/everest-prep.jpg',
+      featured: true,
     },
     {
-      slug: "kilimanjaro-data-analysis",
-      title: "Data-Driven Ascent",
-      subtitle: "How Analytics Transformed My Kilimanjaro Training Strategy",
-      category: "TRAINING",
-      author: "Sunith Kumar",
-      date: "November 28, 2024",
-      readTime: "8 min read",
-      views: "1.8K",
-      image: "/stories/kilimanjaro.jpg",
-      featured: false
+      slug: 'kilimanjaro-data-analysis',
+      title: 'Data-Driven Ascent',
+      subtitle: 'How Analytics Transformed My Kilimanjaro Training Strategy',
+      category: 'TRAINING',
+      author: 'Sunith Kumar',
+      date: 'November 28, 2024',
+      readTime: '8 min read',
+      views: '1.8K',
+      image: '/stories/kilimanjaro.jpg',
+      featured: false,
     },
     {
-      slug: "altitude-acclimatization-science",
-      title: "Breathing at the Edge",
-      subtitle: "The Science Behind High-Altitude Acclimatization",
-      category: "EXPEDITION",
-      author: "Sunith Kumar",
-      date: "November 12, 2024",
-      readTime: "10 min read",
-      views: "1.5K",
-      image: "/stories/data-training.jpg",
-      featured: false
+      slug: 'altitude-acclimatization-science',
+      title: 'Breathing at the Edge',
+      subtitle: 'The Science Behind High-Altitude Acclimatization',
+      category: 'EXPEDITION',
+      author: 'Sunith Kumar',
+      date: 'November 12, 2024',
+      readTime: '10 min read',
+      views: '1.5K',
+      image: '/stories/data-training.jpg',
+      featured: false,
     },
     {
-      slug: "gear-optimization-strategy",
-      title: "Every Gram Matters",
-      subtitle: "Optimizing Gear Selection for Multi-Day Expeditions",
-      category: "GEAR",
-      author: "Sunith Kumar",
-      date: "October 30, 2024",
-      readTime: "6 min read",
-      views: "1.2K",
-      image: "/stories/everest-prep.jpg",
-      featured: false
+      slug: 'gear-optimization-strategy',
+      title: 'Every Gram Matters',
+      subtitle: 'Optimizing Gear Selection for Multi-Day Expeditions',
+      category: 'GEAR',
+      author: 'Sunith Kumar',
+      date: 'October 30, 2024',
+      readTime: '6 min read',
+      views: '1.2K',
+      image: '/stories/everest-prep.jpg',
+      featured: false,
     },
     {
-      slug: "team-dynamics-mountain",
-      title: "Trust at Altitude",
-      subtitle: "Building Team Dynamics for Life-or-Death Situations",
-      category: "EXPEDITION",
-      author: "Sunith Kumar",
-      date: "October 18, 2024",
-      readTime: "9 min read",
-      views: "943",
-      image: "/stories/data-training.jpg",
-      featured: false
+      slug: 'team-dynamics-mountain',
+      title: 'Trust at Altitude',
+      subtitle: 'Building Team Dynamics for Life-or-Death Situations',
+      category: 'EXPEDITION',
+      author: 'Sunith Kumar',
+      date: 'October 18, 2024',
+      readTime: '9 min read',
+      views: '943',
+      image: '/stories/data-training.jpg',
+      featured: false,
     },
     {
-      slug: "nutrition-extreme-environments",
-      title: "Fueling the Summit",
-      subtitle: "Nutrition Strategies for Extreme High-Altitude Performance",
-      category: "TRAINING",
-      author: "Sunith Kumar",
-      date: "October 5, 2024",
-      readTime: "7 min read",
-      views: "1.7K",
-      image: "/stories/kilimanjaro.jpg",
-      featured: false
-    }
-  ]
+      slug: 'nutrition-extreme-environments',
+      title: 'Fueling the Summit',
+      subtitle: 'Nutrition Strategies for Extreme High-Altitude Performance',
+      category: 'TRAINING',
+      author: 'Sunith Kumar',
+      date: 'October 5, 2024',
+      readTime: '7 min read',
+      views: '1.7K',
+      image: '/stories/kilimanjaro.jpg',
+      featured: false,
+    },
+  ];
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
       case 'MENTAL PREPARATION':
-        return TrendingUp
+        return TrendingUp;
       case 'EXPEDITION':
-        return Mountain
+        return Mountain;
       case 'TRAINING':
-        return Award
+        return Award;
       default:
-        return Mountain
+        return Mountain;
     }
-  }
+  };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'MENTAL PREPARATION':
-        return 'bg-purple-600'
+        return 'bg-purple-600';
       case 'EXPEDITION':
-        return 'bg-blue-600'
+        return 'bg-blue-600';
       case 'TRAINING':
-        return 'bg-green-600'
+        return 'bg-green-600';
       case 'GEAR':
-        return 'bg-orange-600'
+        return 'bg-orange-600';
       default:
-        return 'bg-red-600'
+        return 'bg-red-600';
     }
-  }
+  };
 
-  const featuredPost = samplePosts.find(post => post.featured)
-  const regularPosts = samplePosts.filter(post => !post.featured)
+  const featuredPost = samplePosts.find((post) => post.featured);
+  const regularPosts = samplePosts.filter((post) => !post.featured);
 
   return (
     <div className={`bg-white min-h-screen ${className}`}>
@@ -155,8 +156,9 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
               MOUNTAIN CHRONICLES
             </h1>
             <p className="text-xl md:text-2xl font-light max-w-3xl mx-auto leading-relaxed">
-              Stories from the summit. Data-driven insights from extreme environments. 
-              The systematic journey toward mountaineering excellence.
+              Stories from the summit. Data-driven insights from extreme
+              environments. The systematic journey toward mountaineering
+              excellence.
             </p>
           </motion.div>
         </div>
@@ -182,7 +184,9 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
               <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12">
                 <div className="max-w-4xl">
                   <div className="flex items-center space-x-2 mb-4">
-                    <div className={`${getCategoryColor(featuredPost.category)} text-white px-3 py-1 text-xs font-bold tracking-wider uppercase`}>
+                    <div
+                      className={`${getCategoryColor(featuredPost.category)} text-white px-3 py-1 text-xs font-bold tracking-wider uppercase`}
+                    >
                       FEATURED
                     </div>
                     <div className="bg-white text-gray-900 px-3 py-1 text-xs font-bold tracking-wider uppercase">
@@ -193,7 +197,7 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
                   <h2 className="text-4xl md:text-6xl font-black text-white leading-tight mb-4 group-hover:text-red-400 transition-colors">
                     {featuredPost.title}
                   </h2>
-                  
+
                   <p className="text-xl text-gray-200 leading-relaxed mb-6 max-w-3xl">
                     {featuredPost.subtitle}
                   </p>
@@ -234,8 +238,8 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {regularPosts.map((post, index) => {
-            const CategoryIcon = getCategoryIcon(post.category)
-            
+            const CategoryIcon = getCategoryIcon(post.category);
+
             return (
               <motion.div
                 key={post.slug}
@@ -257,7 +261,9 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                       <div className="absolute top-4 left-4">
-                        <div className={`${getCategoryColor(post.category)} text-white px-3 py-1 text-xs font-bold tracking-wider uppercase flex items-center space-x-1`}>
+                        <div
+                          className={`${getCategoryColor(post.category)} text-white px-3 py-1 text-xs font-bold tracking-wider uppercase flex items-center space-x-1`}
+                        >
                           <CategoryIcon className="w-3 h-3" />
                           <span>{post.category}</span>
                         </div>
@@ -269,7 +275,7 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
                       <h3 className="text-xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-red-600 transition-colors">
                         {post.title}
                       </h3>
-                      
+
                       <p className="text-gray-600 leading-relaxed mb-4 text-sm">
                         {post.subtitle}
                       </p>
@@ -288,13 +294,13 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
                   </div>
                 </Link>
               </motion.div>
-            )
+            );
           })}
         </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
-          <Link 
+          <Link
             href="/blog/create"
             className="inline-flex items-center space-x-2 bg-green-600 text-white px-8 py-3 font-bold uppercase tracking-wide hover:bg-green-700 transition-colors"
           >
@@ -315,10 +321,10 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
             GET THE INSIDE STORY
           </h3>
           <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-            Exclusive expedition updates, training data, and behind-the-scenes insights 
-            delivered directly to your inbox every week.
+            Exclusive expedition updates, training data, and behind-the-scenes
+            insights delivered directly to your inbox every week.
           </p>
-          <Link 
+          <Link
             href="/newsletter"
             className="inline-flex items-center space-x-3 bg-red-600 text-white px-8 py-4 font-bold uppercase tracking-wide hover:bg-red-700 transition-colors"
           >
@@ -328,5 +334,5 @@ export function RedBullBlogGrid({ className = "" }: RedBullBlogGridProps) {
         </div>
       </section>
     </div>
-  )
+  );
 }

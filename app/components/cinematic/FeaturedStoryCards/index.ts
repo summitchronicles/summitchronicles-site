@@ -1,1 +1,1 @@
-export { FeaturedStoryCards } from './FeaturedStoryCards'
+export { FeaturedStoryCards } from './FeaturedStoryCards';

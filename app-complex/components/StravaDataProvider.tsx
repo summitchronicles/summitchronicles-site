@@ -1,6 +1,12 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from 'react';
 
 interface StravaActivity {
   id: number;
@@ -60,7 +66,6 @@ export function StravaDataProvider({ children }: { children: ReactNode }) {
 
       setActivities(data.activities || []);
       setAthleteName(data.athlete_name || 'Sunith Kumar');
-
     } catch (err: any) {
       console.error('Strava data fetch error:', err);
       setError(err.message || 'Failed to load training data');
@@ -78,13 +83,15 @@ export function StravaDataProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <StravaContext.Provider value={{
-      activities,
-      loading,
-      error,
-      athleteName,
-      refreshData
-    }}>
+    <StravaContext.Provider
+      value={{
+        activities,
+        loading,
+        error,
+        athleteName,
+        refreshData,
+      }}
+    >
       {children}
     </StravaContext.Provider>
   );
@@ -100,17 +107,33 @@ export function useStravaData() {
 
 // Helper functions to transform Strava data for charts
 export function getMonthlyRunningData(activities: StravaActivity[]) {
-  const monthlyData: { [key: string]: { distance: number; hours: number; sessions: number; totalTime: number } } = {};
-  
+  const monthlyData: {
+    [key: string]: {
+      distance: number;
+      hours: number;
+      sessions: number;
+      totalTime: number;
+    };
+  } = {};
+
   activities
-    .filter(activity => ['Run', 'Trail Run', 'Virtual Run'].includes(activity.type))
-    .forEach(activity => {
-      const month = new Date(activity.date).toLocaleDateString('en-US', { month: 'short' });
-      
+    .filter((activity) =>
+      ['Run', 'Trail Run', 'Virtual Run'].includes(activity.type)
+    )
+    .forEach((activity) => {
+      const month = new Date(activity.date).toLocaleDateString('en-US', {
+        month: 'short',
+      });
+
       if (!monthlyData[month]) {
-        monthlyData[month] = { distance: 0, hours: 0, sessions: 0, totalTime: 0 };
+        monthlyData[month] = {
+          distance: 0,
+          hours: 0,
+          sessions: 0,
+          totalTime: 0,
+        };
       }
-      
+
       monthlyData[month].distance += activity.distance || 0;
       monthlyData[month].totalTime += activity.duration || 0;
       monthlyData[month].sessions += 1;
@@ -121,22 +144,38 @@ export function getMonthlyRunningData(activities: StravaActivity[]) {
     distance: Math.round(data.distance),
     hours: Math.round(data.totalTime / 3600), // Convert seconds to hours
     sessions: data.sessions,
-    avgPace: formatPace(data.totalTime / data.distance) // Calculate average pace
+    avgPace: formatPace(data.totalTime / data.distance), // Calculate average pace
   }));
 }
 
 export function getMonthlyHikingData(activities: StravaActivity[]) {
-  const monthlyData: { [key: string]: { distance: number; elevation: number; hours: number; sessions: number } } = {};
-  
+  const monthlyData: {
+    [key: string]: {
+      distance: number;
+      elevation: number;
+      hours: number;
+      sessions: number;
+    };
+  } = {};
+
   activities
-    .filter(activity => ['Hike', 'Walk', 'Alpine Ski', 'Backcountry Ski'].includes(activity.type))
-    .forEach(activity => {
-      const month = new Date(activity.date).toLocaleDateString('en-US', { month: 'short' });
-      
+    .filter((activity) =>
+      ['Hike', 'Walk', 'Alpine Ski', 'Backcountry Ski'].includes(activity.type)
+    )
+    .forEach((activity) => {
+      const month = new Date(activity.date).toLocaleDateString('en-US', {
+        month: 'short',
+      });
+
       if (!monthlyData[month]) {
-        monthlyData[month] = { distance: 0, elevation: 0, hours: 0, sessions: 0 };
+        monthlyData[month] = {
+          distance: 0,
+          elevation: 0,
+          hours: 0,
+          sessions: 0,
+        };
       }
-      
+
       monthlyData[month].distance += activity.distance || 0;
       monthlyData[month].elevation += activity.elevation_gain || 0;
       monthlyData[month].hours += (activity.duration || 0) / 3600; // Convert to hours
@@ -148,13 +187,13 @@ export function getMonthlyHikingData(activities: StravaActivity[]) {
     distance: Math.round(data.distance),
     elevation: Math.round(data.elevation),
     hours: Math.round(data.hours),
-    sessions: data.sessions
+    sessions: data.sessions,
   }));
 }
 
 function formatPace(secondsPerKm: number): string {
   if (!secondsPerKm || secondsPerKm === Infinity) return 'N/A';
-  
+
   const minutes = Math.floor(secondsPerKm / 60);
   const seconds = Math.round(secondsPerKm % 60);
   return `${minutes}:${seconds.toString().padStart(2, '0')}`;

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -14,10 +14,12 @@ export async function GET(request: NextRequest) {
     // Fetch published blog posts
     const { data: posts, error } = await supabase
       .from('blog_posts')
-      .select(`
+      .select(
+        `
         *,
         blog_post_tags(blog_tags(name))
-      `)
+      `
+      )
       .eq('status', 'published')
       .order('published_at', { ascending: false })
       .limit(20); // Latest 20 posts for RSS
@@ -27,7 +29,8 @@ export async function GET(request: NextRequest) {
       return new Response('Internal Server Error', { status: 500 });
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://summitchronicles.com';
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || 'https://summitchronicles.com';
     const now = new Date().toUTCString();
 
     // Generate RSS XML
@@ -52,11 +55,15 @@ export async function GET(request: NextRequest) {
       <height>144</height>
     </image>
     
-${posts?.map(post => {
-  const tags = post.blog_post_tags?.map((pt: any) => pt.blog_tags?.name).filter(Boolean) || [];
-  const publishedDate = new Date(post.published_at).toUTCString();
-  
-  return `    <item>
+${posts
+  ?.map((post) => {
+    const tags =
+      post.blog_post_tags
+        ?.map((pt: any) => pt.blog_tags?.name)
+        .filter(Boolean) || [];
+    const publishedDate = new Date(post.published_at).toUTCString();
+
+    return `    <item>
       <title><![CDATA[${post.title}]]></title>
       <link>${siteUrl}/blogs/${post.slug}</link>
       <guid isPermaLink="true">${siteUrl}/blogs/${post.slug}</guid>
@@ -67,7 +74,8 @@ ${posts?.map(post => {
       ${tags.map((tag: string) => `<category><![CDATA[${tag}]]></category>`).join('\n      ')}
       <author>hello@summitchronicles.com (Sunith Kumar)</author>
     </item>`;
-}).join('\n')}
+  })
+  .join('\n')}
   </channel>
 </rss>`;
 

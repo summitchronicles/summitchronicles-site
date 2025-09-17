@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { clsx } from "clsx";
-import { usePathname, useRouter } from "next/navigation";
-import { ChevronRightIcon, HomeIcon } from "@heroicons/react/24/outline";
+import { motion } from 'framer-motion';
+import { clsx } from 'clsx';
+import { usePathname, useRouter } from 'next/navigation';
+import { ChevronRightIcon, HomeIcon } from '@heroicons/react/24/outline';
 
 interface BreadcrumbItem {
   label: string;
@@ -22,21 +22,57 @@ interface AltitudeBreadcrumbsProps {
 // Zone mapping for altitude display
 const zoneMap = {
   '/': { zone: 'Base Camp', altitude: '1,200m', color: 'var(--altitude-base)' },
-  '/training': { zone: 'Training Zone', altitude: '2,500m', color: 'var(--altitude-low)' },
-  '/blog': { zone: 'Expedition Logs', altitude: '4,200m', color: 'var(--altitude-mid)' },
-  '/routes': { zone: 'Route Planning', altitude: '6,800m', color: 'var(--altitude-high)' },
-  '/ask': { zone: 'Summit Command', altitude: '8,848m', color: 'var(--altitude-summit)' },
-  '/admin': { zone: 'Summit Command', altitude: '8,848m', color: 'var(--altitude-summit)' },
-  '/about': { zone: 'Base Camp', altitude: '1,200m', color: 'var(--altitude-base)' },
-  '/gear': { zone: 'Expedition Logs', altitude: '4,200m', color: 'var(--altitude-mid)' },
-  '/expeditions': { zone: 'Expedition Logs', altitude: '4,200m', color: 'var(--altitude-mid)' },
-  '/training-analytics': { zone: 'Training Zone', altitude: '2,500m', color: 'var(--altitude-low)' },
+  '/training': {
+    zone: 'Training Zone',
+    altitude: '2,500m',
+    color: 'var(--altitude-low)',
+  },
+  '/blog': {
+    zone: 'Expedition Logs',
+    altitude: '4,200m',
+    color: 'var(--altitude-mid)',
+  },
+  '/routes': {
+    zone: 'Route Planning',
+    altitude: '6,800m',
+    color: 'var(--altitude-high)',
+  },
+  '/ask': {
+    zone: 'Summit Command',
+    altitude: '8,848m',
+    color: 'var(--altitude-summit)',
+  },
+  '/admin': {
+    zone: 'Summit Command',
+    altitude: '8,848m',
+    color: 'var(--altitude-summit)',
+  },
+  '/about': {
+    zone: 'Base Camp',
+    altitude: '1,200m',
+    color: 'var(--altitude-base)',
+  },
+  '/gear': {
+    zone: 'Expedition Logs',
+    altitude: '4,200m',
+    color: 'var(--altitude-mid)',
+  },
+  '/expeditions': {
+    zone: 'Expedition Logs',
+    altitude: '4,200m',
+    color: 'var(--altitude-mid)',
+  },
+  '/training-analytics': {
+    zone: 'Training Zone',
+    altitude: '2,500m',
+    color: 'var(--altitude-low)',
+  },
 };
 
-export default function AltitudeBreadcrumbs({ 
-  className = "",
+export default function AltitudeBreadcrumbs({
+  className = '',
   maxItems = 4,
-  showAltitude = true 
+  showAltitude = true,
 }: AltitudeBreadcrumbsProps) {
   const pathname = usePathname();
   const router = useRouter();
@@ -51,21 +87,21 @@ export default function AltitudeBreadcrumbs({
     breadcrumbs.push({
       label: 'Base Camp',
       path: '/',
-      ...zoneMap['/']
+      ...zoneMap['/'],
     });
 
     // Build breadcrumbs from path segments
     let currentPath = '';
     segments.forEach((segment, index) => {
       currentPath += `/${segment}`;
-      
+
       // Get zone info for this path
       const zoneInfo = zoneMap[currentPath as keyof typeof zoneMap];
-      
+
       // Convert segment to readable label
       const label = segment
         .split('-')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 
       breadcrumbs.push({
@@ -73,7 +109,7 @@ export default function AltitudeBreadcrumbs({
         path: currentPath,
         zone: zoneInfo?.zone,
         altitude: zoneInfo?.altitude,
-        zoneColor: zoneInfo?.color
+        zoneColor: zoneInfo?.color,
       });
     });
 
@@ -89,20 +125,20 @@ export default function AltitudeBreadcrumbs({
   };
 
   return (
-    <nav className={clsx("altitude-breadcrumbs", className)}>
+    <nav className={clsx('altitude-breadcrumbs', className)}>
       {/* Zone indicator banner */}
       {showAltitude && currentBreadcrumb?.zone && (
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="mb-4 p-3 rounded-lg glass-card flex items-center justify-between"
-          style={{ 
+          style={{
             borderLeft: `4px solid ${currentBreadcrumb.zoneColor}`,
-            backgroundColor: `${currentBreadcrumb.zoneColor}10`
+            backgroundColor: `${currentBreadcrumb.zoneColor}10`,
           }}
         >
           <div className="flex items-center space-x-3">
-            <div 
+            <div
               className="w-3 h-3 rounded-full animate-pulse"
               style={{ backgroundColor: currentBreadcrumb.zoneColor }}
             />
@@ -115,7 +151,7 @@ export default function AltitudeBreadcrumbs({
               </div>
             </div>
           </div>
-          
+
           {/* Elevation progress indicator */}
           <div className="flex flex-col items-end">
             <div className="text-xs text-gray-400 mb-1">Elevation</div>
@@ -124,14 +160,14 @@ export default function AltitudeBreadcrumbs({
                 <div
                   key={index}
                   className={clsx(
-                    "w-2 h-6 rounded-sm transition-opacity",
-                    zone.color === currentBreadcrumb.zoneColor 
-                      ? "opacity-100" 
-                      : "opacity-30"
+                    'w-2 h-6 rounded-sm transition-opacity',
+                    zone.color === currentBreadcrumb.zoneColor
+                      ? 'opacity-100'
+                      : 'opacity-30'
                   )}
-                  style={{ 
+                  style={{
                     backgroundColor: zone.color,
-                    height: `${12 + index * 4}px`
+                    height: `${12 + index * 4}px`,
                   }}
                 />
               ))}
@@ -163,33 +199,35 @@ export default function AltitudeBreadcrumbs({
                 onClick={() => handleBreadcrumbClick(breadcrumb.path)}
                 disabled={isLast}
                 className={clsx(
-                  "flex items-center space-x-1 px-2 py-1 rounded-lg transition-all duration-200",
-                  "focus:outline-none focus:ring-2 focus:ring-white/20",
-                  isLast 
-                    ? "text-white font-medium cursor-default" 
-                    : "text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer"
+                  'flex items-center space-x-1 px-2 py-1 rounded-lg transition-all duration-200',
+                  'focus:outline-none focus:ring-2 focus:ring-white/20',
+                  isLast
+                    ? 'text-white font-medium cursor-default'
+                    : 'text-gray-400 hover:text-white hover:bg-white/5 cursor-pointer'
                 )}
                 whileHover={!isLast ? { scale: 1.05, x: 2 } : undefined}
                 whileTap={!isLast ? { scale: 0.95 } : undefined}
               >
                 {isFirst && <HomeIcon className="w-4 h-4" />}
-                <span className={clsx(
-                  "transition-colors",
-                  isLast && breadcrumb.zoneColor && "text-gradient-alpine"
-                )}>
+                <span
+                  className={clsx(
+                    'transition-colors',
+                    isLast && breadcrumb.zoneColor && 'text-gradient-alpine'
+                  )}
+                >
                   {breadcrumb.label}
                 </span>
-                
+
                 {/* Zone indicator dot */}
                 {breadcrumb.zoneColor && (
                   <div
                     className={clsx(
-                      "w-2 h-2 rounded-full",
-                      isLast ? "animate-pulse" : ""
+                      'w-2 h-2 rounded-full',
+                      isLast ? 'animate-pulse' : ''
                     )}
-                    style={{ 
+                    style={{
                       backgroundColor: breadcrumb.zoneColor,
-                      opacity: isLast ? 1 : 0.6
+                      opacity: isLast ? 1 : 0.6,
                     }}
                   />
                 )}
@@ -214,18 +252,21 @@ export default function AltitudeBreadcrumbs({
       {/* Route progress indicator */}
       <motion.div
         initial={{ width: 0 }}
-        animate={{ width: "100%" }}
+        animate={{ width: '100%' }}
         transition={{ duration: 1, delay: 0.5 }}
         className="mt-3 h-1 bg-gray-800 rounded-full overflow-hidden"
       >
         <motion.div
           className="h-full rounded-full"
-          style={{ 
-            backgroundColor: currentBreadcrumb?.zoneColor || 'var(--color-alpine-blue)',
-            width: `${((breadcrumbs.length - 1) / Object.keys(zoneMap).length) * 100}%`
+          style={{
+            backgroundColor:
+              currentBreadcrumb?.zoneColor || 'var(--color-alpine-blue)',
+            width: `${((breadcrumbs.length - 1) / Object.keys(zoneMap).length) * 100}%`,
           }}
           initial={{ width: 0 }}
-          animate={{ width: `${((breadcrumbs.length - 1) / Object.keys(zoneMap).length) * 100}%` }}
+          animate={{
+            width: `${((breadcrumbs.length - 1) / Object.keys(zoneMap).length) * 100}%`,
+          }}
           transition={{ duration: 1, delay: 0.8 }}
         />
       </motion.div>

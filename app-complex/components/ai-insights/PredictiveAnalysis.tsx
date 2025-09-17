@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
-import { clsx } from "clsx";
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { clsx } from 'clsx';
 import {
   SparklesIcon,
   TrophyIcon,
@@ -14,10 +14,15 @@ import {
   ShieldExclamationIcon,
   CheckCircleIcon,
   XMarkIcon,
-  ArrowPathIcon
-} from "@heroicons/react/24/outline";
-import { GlassCard, ProgressBar, StatusIndicator, MountainButton } from "@/app/components/ui";
-import { ExpeditionGoal, AITrainingAnalyzer } from "@/lib/ai-training";
+  ArrowPathIcon,
+} from '@heroicons/react/24/outline';
+import {
+  GlassCard,
+  ProgressBar,
+  StatusIndicator,
+  MountainButton,
+} from '@/app/components/ui';
+import { ExpeditionGoal, AITrainingAnalyzer } from '@/lib/ai-training';
 
 interface PredictiveAnalysisProps {
   activities: any[];
@@ -49,8 +54,8 @@ const mockGoals: ExpeditionGoal[] = [
     conditions: {
       season: 'Summer',
       weather: 'Variable',
-      temperature: { min: -10, max: 15 }
-    }
+      temperature: { min: -10, max: 15 },
+    },
   },
   {
     id: '2',
@@ -65,8 +70,8 @@ const mockGoals: ExpeditionGoal[] = [
     conditions: {
       season: 'Summer',
       weather: 'Alpine',
-      temperature: { min: -15, max: 10 }
-    }
+      temperature: { min: -15, max: 10 },
+    },
   },
   {
     id: '3',
@@ -81,15 +86,15 @@ const mockGoals: ExpeditionGoal[] = [
     conditions: {
       season: 'Pre-monsoon',
       weather: 'Clear',
-      temperature: { min: -10, max: 20 }
-    }
-  }
+      temperature: { min: -10, max: 20 },
+    },
+  },
 ];
 
-export default function PredictiveAnalysis({ 
-  activities, 
+export default function PredictiveAnalysis({
+  activities,
   goals = mockGoals,
-  className = "" 
+  className = '',
 }: PredictiveAnalysisProps) {
   const [predictions, setPredictions] = useState<ExpeditionPrediction[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<string | null>(null);
@@ -99,20 +104,23 @@ export default function PredictiveAnalysis({
   // Calculate current fitness level from activities
   const calculatedFitness = useMemo(() => {
     if (activities.length === 0) return 5; // Default fitness level
-    
+
     const recentActivities = activities.slice(0, 20);
-    const totalHours = recentActivities.reduce((sum, a) => 
-      sum + ((a.moving_time || a.duration || 3600) / 3600), 0
+    const totalHours = recentActivities.reduce(
+      (sum, a) => sum + (a.moving_time || a.duration || 3600) / 3600,
+      0
     );
-    const avgElevation = recentActivities.reduce((sum, a) => 
-      sum + (a.total_elevation_gain || a.elevation_gain || 0), 0
-    ) / recentActivities.length;
-    
+    const avgElevation =
+      recentActivities.reduce(
+        (sum, a) => sum + (a.total_elevation_gain || a.elevation_gain || 0),
+        0
+      ) / recentActivities.length;
+
     // Simple fitness scoring (1-10 scale)
     const volumeScore = Math.min(10, totalHours / 10); // 100 hours = max score
     const elevationScore = Math.min(10, avgElevation / 100); // 1000m avg = max score
     const consistencyScore = Math.min(10, recentActivities.length / 2); // 20 activities = max score
-    
+
     return Math.round((volumeScore + elevationScore + consistencyScore) / 3);
   }, [activities]);
 
@@ -123,28 +131,31 @@ export default function PredictiveAnalysis({
   // Generate predictions when data changes
   useEffect(() => {
     if (goals.length === 0) return;
-    
+
     setIsAnalyzing(true);
-    
+
     const timer = setTimeout(() => {
-      const newPredictions = goals.map(goal => {
-        const formattedActivities = activities.map(activity => ({
+      const newPredictions = goals.map((goal) => {
+        const formattedActivities = activities.map((activity) => ({
           id: activity.id?.toString() || Math.random().toString(),
           name: activity.name || activity.title || 'Untitled Activity',
           type: activity.type || 'Run',
           distance: activity.distance || 0,
           moving_time: activity.moving_time || activity.duration || 3600,
-          total_elevation_gain: activity.total_elevation_gain || activity.elevation_gain || 0,
-          start_date: activity.start_date || activity.date || new Date().toISOString(),
+          total_elevation_gain:
+            activity.total_elevation_gain || activity.elevation_gain || 0,
+          start_date:
+            activity.start_date || activity.date || new Date().toISOString(),
           average_speed: activity.average_speed,
           max_speed: activity.max_speed,
           average_heartrate: activity.average_heartrate,
           max_heartrate: activity.max_heartrate,
           suffer_score: activity.suffer_score,
-          calories: activity.calories
+          calories: activity.calories,
         }));
 
-        const patterns = AITrainingAnalyzer.analyzeTrainingPatterns(formattedActivities);
+        const patterns =
+          AITrainingAnalyzer.analyzeTrainingPatterns(formattedActivities);
         const prediction = AITrainingAnalyzer.predictExpeditionSuccess(
           goal,
           { overall: currentFitness / 10 }, // Convert to 0-1 scale
@@ -152,14 +163,18 @@ export default function PredictiveAnalysis({
           patterns
         );
 
-        const timeRemaining = (goal.targetDate.getTime() - Date.now()) / (24 * 60 * 60 * 1000);
-        const improvementNeeded = Math.max(0, goal.requiredFitnessLevel - currentFitness);
+        const timeRemaining =
+          (goal.targetDate.getTime() - Date.now()) / (24 * 60 * 60 * 1000);
+        const improvementNeeded = Math.max(
+          0,
+          goal.requiredFitnessLevel - currentFitness
+        );
 
         return {
           goal,
           ...prediction,
           timeRemaining,
-          improvementNeeded
+          improvementNeeded,
         };
       });
 
@@ -186,20 +201,21 @@ export default function PredictiveAnalysis({
 
   if (activities.length === 0) {
     return (
-      <GlassCard className={clsx("p-8 text-center", className)}>
+      <GlassCard className={clsx('p-8 text-center', className)}>
         <div className="text-6xl mb-4">🔮</div>
         <h3 className="text-xl font-semibold text-white mb-2">
           Expedition Success Prediction
         </h3>
         <p className="text-gray-400">
-          Upload training data to get AI-powered success predictions for your expeditions.
+          Upload training data to get AI-powered success predictions for your
+          expeditions.
         </p>
       </GlassCard>
     );
   }
 
   return (
-    <div className={clsx("space-y-6", className)}>
+    <div className={clsx('space-y-6', className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -207,16 +223,20 @@ export default function PredictiveAnalysis({
             <SparklesIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">Expedition Success Prediction</h2>
-            <p className="text-gray-400">AI-powered analysis of your expedition readiness</p>
+            <h2 className="text-2xl font-bold text-white">
+              Expedition Success Prediction
+            </h2>
+            <p className="text-gray-400">
+              AI-powered analysis of your expedition readiness
+            </p>
           </div>
         </div>
-        
+
         {isAnalyzing && (
           <div className="flex items-center space-x-2 text-aurora-purple">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             >
               <ArrowPathIcon className="w-5 h-5" />
             </motion.div>
@@ -228,13 +248,17 @@ export default function PredictiveAnalysis({
       {/* Current Fitness Overview */}
       <GlassCard className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">Current Fitness Assessment</h3>
+          <h3 className="text-lg font-semibold text-white">
+            Current Fitness Assessment
+          </h3>
           <div className="flex items-center space-x-2">
             <FireIcon className="w-5 h-5 text-summitGold" />
-            <span className="text-2xl font-bold text-white">{currentFitness}/10</span>
+            <span className="text-2xl font-bold text-white">
+              {currentFitness}/10
+            </span>
           </div>
         </div>
-        
+
         <ProgressBar
           value={currentFitness * 10}
           variant="altitude"
@@ -243,21 +267,35 @@ export default function PredictiveAnalysis({
           showValue={false}
           className="mb-3"
         />
-        
+
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
-            <div className="text-2xl font-bold text-glacierBlue">{activities.length}</div>
+            <div className="text-2xl font-bold text-glacierBlue">
+              {activities.length}
+            </div>
             <div className="text-xs text-gray-400">Activities Logged</div>
           </div>
           <div>
             <div className="text-2xl font-bold text-summitGold">
-              {Math.round(activities.reduce((sum, a) => sum + ((a.moving_time || 3600) / 3600), 0))}h
+              {Math.round(
+                activities.reduce(
+                  (sum, a) => sum + (a.moving_time || 3600) / 3600,
+                  0
+                )
+              )}
+              h
             </div>
             <div className="text-xs text-gray-400">Total Training</div>
           </div>
           <div>
             <div className="text-2xl font-bold text-successGreen">
-              {Math.round(activities.reduce((sum, a) => sum + (a.total_elevation_gain || 0), 0) / 1000)}km
+              {Math.round(
+                activities.reduce(
+                  (sum, a) => sum + (a.total_elevation_gain || 0),
+                  0
+                ) / 1000
+              )}
+              km
             </div>
             <div className="text-xs text-gray-400">Elevation Gained</div>
           </div>
@@ -298,17 +336,18 @@ export default function PredictiveAnalysis({
             >
               <GlassCard className="p-6 hover:bg-white/5 transition-colors duration-300 relative overflow-hidden">
                 {/* Background gradient based on success probability */}
-                <div 
+                <div
                   className="absolute inset-0 opacity-5 pointer-events-none"
                   style={{
-                    background: prediction.successProbability >= 0.7 ? 
-                      'linear-gradient(135deg, #10b981, #059669)' :
-                      prediction.successProbability >= 0.5 ?
-                      'linear-gradient(135deg, #f59e0b, #d97706)' :
-                      'linear-gradient(135deg, #ef4444, #dc2626)'
+                    background:
+                      prediction.successProbability >= 0.7
+                        ? 'linear-gradient(135deg, #10b981, #059669)'
+                        : prediction.successProbability >= 0.5
+                          ? 'linear-gradient(135deg, #f59e0b, #d97706)'
+                          : 'linear-gradient(135deg, #ef4444, #dc2626)',
                   }}
                 />
-                
+
                 {/* Header */}
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
@@ -321,12 +360,16 @@ export default function PredictiveAnalysis({
                       <span>{Math.round(prediction.timeRemaining)} days</span>
                     </div>
                   </div>
-                  
+
                   <div className="text-right">
-                    <div className={clsx(
-                      "text-2xl font-bold",
-                      getSuccessProbabilityColor(prediction.successProbability)
-                    )}>
+                    <div
+                      className={clsx(
+                        'text-2xl font-bold',
+                        getSuccessProbabilityColor(
+                          prediction.successProbability
+                        )
+                      )}
+                    >
                       {Math.round(prediction.successProbability * 100)}%
                     </div>
                     <div className="text-xs text-gray-400">Success Rate</div>
@@ -338,8 +381,11 @@ export default function PredictiveAnalysis({
                   <ProgressBar
                     value={prediction.successProbability * 100}
                     variant={
-                      prediction.successProbability >= 0.7 ? 'success' :
-                      prediction.successProbability >= 0.5 ? 'warning' : 'danger'
+                      prediction.successProbability >= 0.7
+                        ? 'success'
+                        : prediction.successProbability >= 0.5
+                          ? 'warning'
+                          : 'danger'
                     }
                     size="md"
                     animated
@@ -351,23 +397,32 @@ export default function PredictiveAnalysis({
                 {/* Readiness Metrics */}
                 <div className="space-y-3 mb-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-300">Fitness Readiness</span>
+                    <span className="text-sm text-gray-300">
+                      Fitness Readiness
+                    </span>
                     <StatusIndicator
-                      status={getReadinessStatus(prediction.fitnessReadiness).status as any}
-                      text={getReadinessStatus(prediction.fitnessReadiness).text}
+                      status={
+                        getReadinessStatus(prediction.fitnessReadiness)
+                          .status as any
+                      }
+                      text={
+                        getReadinessStatus(prediction.fitnessReadiness).text
+                      }
                       size="sm"
                     />
                   </div>
-                  
+
                   {prediction.improvementNeeded > 0 && (
                     <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-300">Improvement Needed</span>
+                      <span className="text-sm text-gray-300">
+                        Improvement Needed
+                      </span>
                       <span className="text-sm font-medium text-warningOrange">
                         +{prediction.improvementNeeded} levels
                       </span>
                     </div>
                   )}
-                  
+
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-300">Target Date</span>
                     <span className="text-sm text-white">
@@ -384,17 +439,30 @@ export default function PredictiveAnalysis({
                       <span>Recommendations</span>
                     </div>
                     <div className="space-y-1">
-                      {prediction.recommendations.slice(0, 2).map((rec, index) => (
-                        <div key={index} className="text-xs text-gray-400 pl-5">
-                          • {rec}
-                        </div>
-                      ))}
+                      {prediction.recommendations
+                        .slice(0, 2)
+                        .map((rec, index) => (
+                          <div
+                            key={index}
+                            className="text-xs text-gray-400 pl-5"
+                          >
+                            • {rec}
+                          </div>
+                        ))}
                       {prediction.recommendations.length > 2 && (
-                        <button 
-                          onClick={() => setSelectedGoal(selectedGoal === prediction.goal.id ? null : prediction.goal.id)}
+                        <button
+                          onClick={() =>
+                            setSelectedGoal(
+                              selectedGoal === prediction.goal.id
+                                ? null
+                                : prediction.goal.id
+                            )
+                          }
                           className="text-xs text-summitGold hover:text-yellow-400 transition-colors pl-5"
                         >
-                          {selectedGoal === prediction.goal.id ? 'Show less' : `+${prediction.recommendations.length - 2} more`}
+                          {selectedGoal === prediction.goal.id
+                            ? 'Show less'
+                            : `+${prediction.recommendations.length - 2} more`}
                         </button>
                       )}
                     </div>
@@ -432,7 +500,7 @@ export default function PredictiveAnalysis({
                           • {rec}
                         </div>
                       ))}
-                      
+
                       {prediction.risks.slice(1).map((risk, index) => (
                         <div key={index} className="text-xs text-gray-400">
                           ⚠️ {risk}
@@ -467,13 +535,10 @@ export default function PredictiveAnalysis({
             Set Your Expedition Goals
           </h3>
           <p className="text-gray-400 mb-4">
-            Add expedition goals to get personalized success predictions and training recommendations.
+            Add expedition goals to get personalized success predictions and
+            training recommendations.
           </p>
-          <MountainButton
-            variant="gradient"
-            size="lg"
-            className="mx-auto"
-          >
+          <MountainButton variant="gradient" size="lg" className="mx-auto">
             Add Expedition Goal
           </MountainButton>
         </GlassCard>

@@ -9,14 +9,28 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'primary', size = 'md', asChild = false, children, ...props }, ref) => {
-    const baseClasses = 'inline-flex items-center justify-center rounded-md font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-alpine-blue focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
-    
+  (
+    {
+      className,
+      variant = 'primary',
+      size = 'md',
+      asChild = false,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const baseClasses =
+      'inline-flex items-center justify-center rounded-md font-medium transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-alpine-blue focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50';
+
     const variants = {
-      primary: 'bg-alpine-blue text-white hover:bg-blue-800 shadow-spa-soft hover:shadow-spa-medium',
-      secondary: 'bg-spa-mist text-spa-charcoal hover:bg-spa-cloud shadow-spa-soft hover:shadow-spa-medium',
+      primary:
+        'bg-alpine-blue text-white hover:bg-blue-800 shadow-spa-soft hover:shadow-spa-medium',
+      secondary:
+        'bg-spa-mist text-spa-charcoal hover:bg-spa-cloud shadow-spa-soft hover:shadow-spa-medium',
       ghost: 'text-spa-slate hover:text-alpine-blue hover:bg-spa-stone',
-      summit: 'bg-summit-gold text-spa-charcoal hover:bg-yellow-500 shadow-spa-soft hover:shadow-spa-medium font-medium',
+      summit:
+        'bg-summit-gold text-spa-charcoal hover:bg-yellow-500 shadow-spa-soft hover:shadow-spa-medium font-medium',
     };
 
     const sizes = {
@@ -40,12 +54,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <button
-        className={cn(
-          baseClasses,
-          variants[variant],
-          sizes[size],
-          className
-        )}
+        className={cn(baseClasses, variants[variant], sizes[size], className)}
         ref={ref}
         {...props}
       >

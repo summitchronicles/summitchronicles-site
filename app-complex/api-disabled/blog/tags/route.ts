@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -13,10 +13,12 @@ export async function GET() {
   try {
     const { data: tags, error } = await supabase
       .from('blog_tags')
-      .select(`
+      .select(
+        `
         *,
         blog_post_tags(count)
-      `)
+      `
+      )
       .order('name', { ascending: true });
 
     if (error) {
@@ -25,15 +27,19 @@ export async function GET() {
     }
 
     // Format tags with usage count
-    const formattedTags = tags?.map(tag => ({
-      ...tag,
-      usage_count: tag.blog_post_tags?.length || 0
-    })) || [];
+    const formattedTags =
+      tags?.map((tag) => ({
+        ...tag,
+        usage_count: tag.blog_post_tags?.length || 0,
+      })) || [];
 
     return NextResponse.json({ tags: formattedTags });
   } catch (error) {
     console.error('Tags API error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -56,13 +62,14 @@ export async function POST(request: NextRequest) {
       .insert({
         name,
         slug,
-        color: color || '#6B7280'
+        color: color || '#6B7280',
       })
       .select()
       .single();
 
     if (error) {
-      if (error.code === '23505') { // Unique constraint violation
+      if (error.code === '23505') {
+        // Unique constraint violation
         return NextResponse.json(
           { error: 'Tag name already exists' },
           { status: 409 }
@@ -75,6 +82,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, tag }, { status: 201 });
   } catch (error) {
     console.error('Tag creation error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

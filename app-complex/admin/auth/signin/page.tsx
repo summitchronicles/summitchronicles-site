@@ -1,49 +1,49 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { signIn, getSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import { signIn, getSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import {
   KeyIcon,
   UserIcon,
   EyeIcon,
   EyeSlashIcon,
-  ShieldCheckIcon
-} from "@heroicons/react/24/outline";
-import Link from "next/link";
+  ShieldCheckIcon,
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 export default function AdminSignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleCredentialsSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
+    setError('');
 
     try {
-      const result = await signIn("credentials", {
+      const result = await signIn('credentials', {
         email,
         password,
         redirect: false,
       });
 
       if (result?.error) {
-        setError("Invalid credentials. Please check your email and password.");
+        setError('Invalid credentials. Please check your email and password.');
       } else {
         // Check if user is authenticated and has proper role
         const session = await getSession();
         if (session?.user) {
-          router.push("/admin");
+          router.push('/admin');
         }
       }
     } catch (error) {
-      setError("An error occurred during sign in. Please try again.");
+      setError('An error occurred during sign in. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -52,11 +52,11 @@ export default function AdminSignIn() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
-      await signIn("google", {
-        callbackUrl: "/admin",
+      await signIn('google', {
+        callbackUrl: '/admin',
       });
     } catch (error) {
-      setError("An error occurred with Google sign in. Please try again.");
+      setError('An error occurred with Google sign in. Please try again.');
       setIsLoading(false);
     }
   };
@@ -79,13 +79,9 @@ export default function AdminSignIn() {
           >
             <ShieldCheckIcon className="w-8 h-8 text-summitGold" />
           </motion.div>
-          
-          <h1 className="text-2xl font-bold text-white mb-2">
-            Admin Access
-          </h1>
-          <p className="text-white/60">
-            Summit Chronicles Dashboard
-          </p>
+
+          <h1 className="text-2xl font-bold text-white mb-2">Admin Access</h1>
+          <p className="text-white/60">Summit Chronicles Dashboard</p>
         </div>
 
         {/* Error Message */}
@@ -133,7 +129,7 @@ export default function AdminSignIn() {
               <div className="relative">
                 <KeyIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-white/40" />
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
@@ -160,7 +156,7 @@ export default function AdminSignIn() {
               disabled={isLoading}
               className="w-full bg-summitGold text-black font-semibold py-3 rounded-lg hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Signing In..." : "Sign In"}
+              {isLoading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
         </motion.div>
@@ -171,7 +167,9 @@ export default function AdminSignIn() {
             <div className="w-full border-t border-white/10"></div>
           </div>
           <div className="relative flex justify-center text-xs">
-            <span className="bg-gray-900 px-2 text-white/40">Or continue with</span>
+            <span className="bg-gray-900 px-2 text-white/40">
+              Or continue with
+            </span>
           </div>
         </div>
 

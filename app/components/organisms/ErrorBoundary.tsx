@@ -17,7 +17,10 @@ interface ErrorBoundaryProps {
   fallback?: React.ComponentType<{ error: Error; retry: () => void }>;
 }
 
-class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = {
@@ -55,14 +58,19 @@ class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundarySta
       if (this.props.fallback) {
         const FallbackComponent = this.props.fallback;
         return (
-          <FallbackComponent 
-            error={this.state.error!} 
+          <FallbackComponent
+            error={this.state.error!}
             retry={this.handleRetry}
           />
         );
       }
 
-      return <DefaultErrorFallback error={this.state.error!} retry={this.handleRetry} />;
+      return (
+        <DefaultErrorFallback
+          error={this.state.error!}
+          retry={this.handleRetry}
+        />
+      );
     }
 
     return this.props.children;
@@ -74,19 +82,27 @@ interface ErrorFallbackProps {
   retry: () => void;
 }
 
-const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, retry }) => (
+const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({
+  error,
+  retry,
+}) => (
   <div className="min-h-screen bg-spa-stone flex items-center justify-center px-4">
-    <Card variant="elevated" padding="lg" className="max-w-lg w-full text-center space-y-6">
+    <Card
+      variant="elevated"
+      padding="lg"
+      className="max-w-lg w-full text-center space-y-6"
+    >
       <div className="flex justify-center">
         <div className="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full">
           <Icon name="AlertTriangle" size="xl" className="text-red-600" />
         </div>
       </div>
-      
+
       <div className="space-y-3">
         <H2 className="text-spa-charcoal">Something went wrong</H2>
         <Body className="text-spa-slate">
-          We encountered an unexpected error. This has been logged and we're working to fix it.
+          We encountered an unexpected error. This has been logged and we're
+          working to fix it.
         </Body>
       </div>
 
@@ -95,10 +111,10 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, retry }) =>
           <Icon name="RefreshCw" size="sm" />
           Try Again
         </Button>
-        
-        <Button 
-          onClick={() => window.location.href = '/'} 
-          variant="ghost" 
+
+        <Button
+          onClick={() => (window.location.href = '/')}
+          variant="ghost"
           className="w-full"
         >
           <Icon name="Home" size="sm" />
@@ -124,17 +140,22 @@ const DefaultErrorFallback: React.FC<ErrorFallbackProps> = ({ error, retry }) =>
 // Specialized error components
 const NetworkErrorFallback: React.FC<ErrorFallbackProps> = ({ retry }) => (
   <div className="min-h-screen bg-spa-stone flex items-center justify-center px-4">
-    <Card variant="elevated" padding="lg" className="max-w-lg w-full text-center space-y-6">
+    <Card
+      variant="elevated"
+      padding="lg"
+      className="max-w-lg w-full text-center space-y-6"
+    >
       <div className="flex justify-center">
         <div className="flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full">
           <Icon name="Wifi" size="xl" className="text-alpine-blue" />
         </div>
       </div>
-      
+
       <div className="space-y-3">
         <H2 className="text-spa-charcoal">Connection Issue</H2>
         <Body className="text-spa-slate">
-          Unable to connect to our servers. Please check your internet connection and try again.
+          Unable to connect to our servers. Please check your internet
+          connection and try again.
         </Body>
       </div>
 

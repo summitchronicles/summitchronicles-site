@@ -1,25 +1,33 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { Calendar, Eye, Clock, TrendingUp, Mountain, Users, ExternalLink } from 'lucide-react'
-import { Button } from '../atoms/Button'
-import { Badge } from '../atoms/Badge'
-import { cn } from '@/lib/utils'
+import { useState } from 'react';
+import {
+  Calendar,
+  Eye,
+  Clock,
+  TrendingUp,
+  Mountain,
+  Users,
+  ExternalLink,
+} from 'lucide-react';
+import { Button } from '../atoms/Button';
+import { Badge } from '../atoms/Badge';
+import { cn } from '@/lib/utils';
 
 interface NewsletterEdition {
-  id: string
-  title: string
-  date: string
-  summary: string
-  topics: string[]
-  readTime: string
-  openRate?: string
-  featured?: boolean
-  buttondownUrl?: string
+  id: string;
+  title: string;
+  date: string;
+  summary: string;
+  topics: string[];
+  readTime: string;
+  openRate?: string;
+  featured?: boolean;
+  buttondownUrl?: string;
 }
 
 export function NewsletterArchive() {
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
   // Mock newsletter data - in real implementation, this would come from Buttondown API
   const newsletters: NewsletterEdition[] = [
@@ -27,71 +35,88 @@ export function NewsletterArchive() {
       id: '2024-01',
       title: 'Week 1: Training Foundation & Base Building Begins',
       date: '2024-01-08',
-      summary: 'Starting the systematic 12-month Everest preparation with base building phase, establishing training routines, and setting measurable goals.',
+      summary:
+        'Starting the systematic 12-month Everest preparation with base building phase, establishing training routines, and setting measurable goals.',
       topics: ['Base Building', 'Training Methodology', 'Goal Setting'],
       readTime: '5 min',
       openRate: '89%',
       featured: true,
-      buttondownUrl: 'https://buttondown.email/summitchronicles/archive/week-1-training-foundation'
+      buttondownUrl:
+        'https://buttondown.email/summitchronicles/archive/week-1-training-foundation',
     },
     {
       id: '2024-02',
       title: 'Week 2: Cardiovascular Progress & Mindset Development',
       date: '2024-01-15',
-      summary: 'Deep dive into aerobic capacity building, mental preparation techniques, and community support systems for long-term expedition success.',
+      summary:
+        'Deep dive into aerobic capacity building, mental preparation techniques, and community support systems for long-term expedition success.',
       topics: ['Cardiovascular Training', 'Mental Preparation', 'Community'],
       readTime: '6 min',
       openRate: '92%',
-      buttondownUrl: 'https://buttondown.email/summitchronicles/archive/week-2-cardiovascular-progress'
+      buttondownUrl:
+        'https://buttondown.email/summitchronicles/archive/week-2-cardiovascular-progress',
     },
     {
       id: '2024-03',
       title: 'Week 3: Strength Training Integration & Gear Selection',
       date: '2024-01-22',
-      summary: 'Introducing strength training protocols, gear selection methodology, and balancing different training modalities for optimal preparation.',
+      summary:
+        'Introducing strength training protocols, gear selection methodology, and balancing different training modalities for optimal preparation.',
       topics: ['Strength Training', 'Gear Selection', 'Training Balance'],
       readTime: '7 min',
       openRate: '85%',
-      buttondownUrl: 'https://buttondown.email/summitchronicles/archive/week-3-strength-training'
+      buttondownUrl:
+        'https://buttondown.email/summitchronicles/archive/week-3-strength-training',
     },
     {
       id: '2024-04',
       title: 'Week 4: First Month Reflection & Adjustment',
       date: '2024-01-29',
-      summary: 'Analyzing first month progress, adjusting training protocols based on data, and celebrating early milestones with community support.',
-      topics: ['Progress Analysis', 'Protocol Adjustment', 'Milestone Celebration'],
+      summary:
+        'Analyzing first month progress, adjusting training protocols based on data, and celebrating early milestones with community support.',
+      topics: [
+        'Progress Analysis',
+        'Protocol Adjustment',
+        'Milestone Celebration',
+      ],
       readTime: '5 min',
       openRate: '88%',
-      buttondownUrl: 'https://buttondown.email/summitchronicles/archive/week-4-first-month-reflection'
-    }
-  ]
+      buttondownUrl:
+        'https://buttondown.email/summitchronicles/archive/week-4-first-month-reflection',
+    },
+  ];
 
   const categories = [
     { id: 'all', label: 'All Updates', count: newsletters.length },
     { id: 'training', label: 'Training', count: 3 },
     { id: 'gear', label: 'Gear & Equipment', count: 1 },
     { id: 'mental', label: 'Mental Preparation', count: 2 },
-    { id: 'community', label: 'Community', count: 4 }
-  ]
+    { id: 'community', label: 'Community', count: 4 },
+  ];
 
-  const filteredNewsletters = selectedCategory === 'all' 
-    ? newsletters 
-    : newsletters.filter(newsletter => 
-        newsletter.topics.some(topic => 
-          topic.toLowerCase().includes(selectedCategory.toLowerCase()) ||
-          (selectedCategory === 'mental' && topic.toLowerCase().includes('mental')) ||
-          (selectedCategory === 'gear' && topic.toLowerCase().includes('gear')) ||
-          (selectedCategory === 'community' && topic.toLowerCase().includes('community'))
-        )
-      )
+  const filteredNewsletters =
+    selectedCategory === 'all'
+      ? newsletters
+      : newsletters.filter((newsletter) =>
+          newsletter.topics.some(
+            (topic) =>
+              topic.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+              (selectedCategory === 'mental' &&
+                topic.toLowerCase().includes('mental')) ||
+              (selectedCategory === 'gear' &&
+                topic.toLowerCase().includes('gear')) ||
+              (selectedCategory === 'community' &&
+                topic.toLowerCase().includes('community'))
+          )
+        );
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
-    })
-  }
+      day: 'numeric',
+    });
+  };
 
   return (
     <section className="py-16 bg-gradient-to-br from-spa-mist/20 to-white">
@@ -100,10 +125,13 @@ export function NewsletterArchive() {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Calendar className="w-6 h-6 text-alpine-blue" />
-            <h2 className="text-3xl font-light text-spa-charcoal">Newsletter Archive</h2>
+            <h2 className="text-3xl font-light text-spa-charcoal">
+              Newsletter Archive
+            </h2>
           </div>
           <p className="text-spa-charcoal/70 mb-8">
-            Browse past expedition updates, training insights, and community stories
+            Browse past expedition updates, training insights, and community
+            stories
           </p>
 
           {/* Category Filter */}
@@ -143,7 +171,7 @@ export function NewsletterArchive() {
                       <h3 className="text-xl font-medium text-spa-charcoal mb-2">
                         {newsletter.title}
                       </h3>
-                      
+
                       <div className="flex items-center gap-4 text-sm text-spa-charcoal/60 mb-3">
                         <div className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
@@ -163,7 +191,10 @@ export function NewsletterArchive() {
                     </div>
 
                     {newsletter.featured && (
-                      <Badge variant="summit" className="flex items-center gap-1">
+                      <Badge
+                        variant="summit"
+                        className="flex items-center gap-1"
+                      >
                         <TrendingUp className="w-3 h-3" />
                         Featured
                       </Badge>
@@ -177,7 +208,11 @@ export function NewsletterArchive() {
                   {/* Topics */}
                   <div className="flex flex-wrap gap-2 mb-6">
                     {newsletter.topics.map((topic) => (
-                      <Badge key={topic} variant="secondary" className="text-xs">
+                      <Badge
+                        key={topic}
+                        variant="secondary"
+                        className="text-xs"
+                      >
                         {topic}
                       </Badge>
                     ))}
@@ -212,7 +247,7 @@ export function NewsletterArchive() {
                       Coming Soon
                     </Button>
                   )}
-                  
+
                   <div className="text-center">
                     <div className="text-sm text-spa-charcoal/60">
                       Subscribe to get future updates
@@ -232,7 +267,8 @@ export function NewsletterArchive() {
               No newsletters found
             </h3>
             <p className="text-spa-charcoal/60">
-              Try selecting a different category or check back soon for new content.
+              Try selecting a different category or check back soon for new
+              content.
             </p>
           </div>
         )}
@@ -247,7 +283,8 @@ export function NewsletterArchive() {
               </h3>
             </div>
             <p className="text-spa-charcoal/70 mb-6">
-              Join 2,847+ adventurers following the Mount Everest expedition journey
+              Join 2,847+ adventurers following the Mount Everest expedition
+              journey
             </p>
             <Button variant="summit" size="lg" asChild>
               <a href="#newsletter-signup">Subscribe to Newsletter</a>
@@ -256,5 +293,5 @@ export function NewsletterArchive() {
         </div>
       </div>
     </section>
-  )
+  );
 }

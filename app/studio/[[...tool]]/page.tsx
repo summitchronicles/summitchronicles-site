@@ -7,14 +7,15 @@
  * https://github.com/sanity-io/next-sanity
  */
 
-'use client'
+'use client';
 
-import dynamic from 'next/dynamic'
-import { Suspense } from 'react'
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
 // Dynamically import Sanity Studio to avoid build issues
 const NextStudio = dynamic(
-  () => import('next-sanity/studio').then(mod => ({ default: mod.NextStudio })),
+  () =>
+    import('next-sanity/studio').then((mod) => ({ default: mod.NextStudio })),
   {
     ssr: false,
     loading: () => (
@@ -24,26 +25,28 @@ const NextStudio = dynamic(
           <p className="text-gray-600">Loading Sanity Studio...</p>
         </div>
       </div>
-    )
+    ),
   }
-)
+);
 
 export default function StudioPage() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Sanity Studio...</p>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading Sanity Studio...</p>
+          </div>
         </div>
-      </div>
-    }>
-      <NextStudio 
+      }
+    >
+      <NextStudio
         config={(() => {
-          const config = require('../../../sanity.config')
-          return config.default || config
-        })()} 
+          const config = require('../../../sanity.config');
+          return config.default || config;
+        })()}
       />
     </Suspense>
-  )
+  );
 }

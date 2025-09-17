@@ -1,9 +1,9 @@
-"use client"; // 👈 enables interactivity
+'use client'; // 👈 enables interactivity
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function NewsletterForm() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
 
   return (
     <section className="w-full bg-gray-900 text-white py-12 flex flex-col items-center">
@@ -14,8 +14,8 @@ export default function NewsletterForm() {
         target="popupwindow"
         onSubmit={() =>
           window.open(
-            "https://buttondown.email/YOUR_BUTTONDOWN_ID",
-            "popupwindow"
+            'https://buttondown.email/YOUR_BUTTONDOWN_ID',
+            'popupwindow'
           )
         }
         className="flex gap-2"

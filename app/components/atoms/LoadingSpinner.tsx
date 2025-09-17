@@ -6,9 +6,9 @@ interface LoadingSpinnerProps {
   className?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  size = 'md', 
-  className 
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  size = 'md',
+  className,
 }) => {
   const sizes = {
     sm: 'w-4 h-4',
@@ -19,10 +19,12 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
 
   return (
     <div className={cn('flex items-center justify-center', className)}>
-      <div className={cn(
-        'animate-spin rounded-full border-2 border-spa-cloud border-t-alpine-blue',
-        sizes[size]
-      )}></div>
+      <div
+        className={cn(
+          'animate-spin rounded-full border-2 border-spa-cloud border-t-alpine-blue',
+          sizes[size]
+        )}
+      ></div>
     </div>
   );
 };
@@ -36,13 +38,15 @@ interface LoadingStateProps {
 const LoadingState: React.FC<LoadingStateProps> = ({
   message = 'Loading...',
   size = 'md',
-  className
+  className,
 }) => {
   return (
-    <div className={cn(
-      'flex flex-col items-center justify-center space-y-4 py-12',
-      className
-    )}>
+    <div
+      className={cn(
+        'flex flex-col items-center justify-center space-y-4 py-12',
+        className
+      )}
+    >
       <LoadingSpinner size={size} />
       <p className="text-spa-slate text-sm font-medium">{message}</p>
     </div>

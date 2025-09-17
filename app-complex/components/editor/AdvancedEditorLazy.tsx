@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { lazy, Suspense } from 'react';
 
@@ -19,7 +19,9 @@ function EditorFallback() {
       <div className="text-center">
         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-summitGold mx-auto mb-3"></div>
         <p className="text-gray-600 font-medium">Loading Editor...</p>
-        <p className="text-gray-500 text-sm mt-1">Preparing rich text editing tools</p>
+        <p className="text-gray-500 text-sm mt-1">
+          Preparing rich text editing tools
+        </p>
       </div>
     </div>
   );

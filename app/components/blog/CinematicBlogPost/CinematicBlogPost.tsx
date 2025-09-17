@@ -1,61 +1,66 @@
-'use client'
+'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef, useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { 
-  Calendar, 
-  Clock, 
-  ArrowLeft, 
-  Eye, 
-  Share2, 
-  BookOpen, 
-  User, 
-  MapPin, 
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import {
+  Calendar,
+  Clock,
+  ArrowLeft,
+  Eye,
+  Share2,
+  BookOpen,
+  User,
+  MapPin,
   Mountain,
   TrendingUp,
   Award,
-  ChevronUp
-} from 'lucide-react'
+  ChevronUp,
+} from 'lucide-react';
 // import type { Post } from '../../../lib/sanity/types'
 
 interface BlogPostData {
-  title: string
-  excerpt: string
-  author: string
-  date: string
-  readTime: string
-  category: string
-  image: string
-  content: string
-  views?: string
-  location?: string
+  title: string;
+  excerpt: string;
+  author: string;
+  date: string;
+  readTime: string;
+  category: string;
+  image: string;
+  content: string;
+  views?: string;
+  location?: string;
 }
 
 interface CinematicBlogPostProps {
-  post?: any
-  slug: string
-  className?: string
+  post?: any;
+  slug: string;
+  className?: string;
 }
 
-export function CinematicBlogPost({ post, slug, className = "" }: CinematicBlogPostProps) {
-  const containerRef = useRef(null)
+export function CinematicBlogPost({
+  post,
+  slug,
+  className = '',
+}: CinematicBlogPostProps) {
+  const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start start", "end start"]
-  })
-  
-  const [readingProgress, setReadingProgress] = useState(0)
-  const [showScrollTop, setShowScrollTop] = useState(false)
-  
-  const headerY = useTransform(scrollYProgress, [0, 1], [0, -200])
-  const headerOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+    offset: ['start start', 'end start'],
+  });
+
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const headerY = useTransform(scrollYProgress, [0, 1], [0, -200]);
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   // Sample blog post data
   const samplePost: BlogPostData = {
     title: 'The Mental Game: Preparing Mind and Body for Everest 2027',
-    excerpt: 'Every summit begins in the mind. Discover the psychological preparation behind the world\'s ultimate mountaineering challenge, where mental fortitude matters as much as physical strength.',
+    excerpt:
+      "Every summit begins in the mind. Discover the psychological preparation behind the world's ultimate mountaineering challenge, where mental fortitude matters as much as physical strength.",
     author: 'Sunith Kumar',
     date: 'December 15, 2024',
     readTime: '12 min read',
@@ -106,88 +111,93 @@ export function CinematicBlogPost({ post, slug, className = "" }: CinematicBlogP
       <p>Whether you're climbing the world's highest peak or pursuing any challenging goal, the principles remain the same: systematic preparation, process focus, and the mental resilience to continue when everything tells you to stop.</p>
 
       <p>The mountain will test everything I've learned. In 487 days, I'll find out if my preparation was enough.</p>
-    `
-  }
+    `,
+  };
 
-  const displayPost = post ? {
-    title: post.title,
-    excerpt: post.excerpt || '',
-    author: post.author?.name || 'Sunith Kumar',
-    date: new Date(post.publishedAt).toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    }),
-    readTime: `${post.readTime || 12} min read`,
-    category: post.categories?.[0]?.title || 'Story',
-    image: post.mainImage ? '/stories/everest-prep.jpg' : '/stories/everest-prep.jpg',
-    views: '2.1K',
-    location: 'Training Grounds, California',
-    content: samplePost.content // TODO: Convert portable text to HTML
-  } : samplePost
+  const displayPost = post
+    ? {
+        title: post.title,
+        excerpt: post.excerpt || '',
+        author: post.author?.name || 'Sunith Kumar',
+        date: new Date(post.publishedAt).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        readTime: `${post.readTime || 12} min read`,
+        category: post.categories?.[0]?.title || 'Story',
+        image: post.mainImage
+          ? '/stories/everest-prep.jpg'
+          : '/stories/everest-prep.jpg',
+        views: '2.1K',
+        location: 'Training Grounds, California',
+        content: samplePost.content, // TODO: Convert portable text to HTML
+      }
+    : samplePost;
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
       case 'mental preparation':
       case 'mental':
-        return TrendingUp
+        return TrendingUp;
       case 'expedition':
       case 'adventure':
-        return Mountain
+        return Mountain;
       case 'training':
-        return Award
+        return Award;
       default:
-        return BookOpen
+        return BookOpen;
     }
-  }
+  };
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
       case 'mental preparation':
       case 'mental':
-        return 'bg-purple-100 text-purple-800'
+        return 'bg-purple-100 text-purple-800';
       case 'expedition':
       case 'adventure':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-blue-800';
       case 'training':
-        return 'bg-green-100 text-green-800'
+        return 'bg-green-100 text-green-800';
       default:
-        return 'bg-slate-100 text-slate-800'
+        return 'bg-slate-100 text-slate-800';
     }
-  }
+  };
 
   // Reading progress calculation
   useEffect(() => {
     const handleScroll = () => {
-      const scrolled = window.scrollY
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight
-      const progress = Math.min(scrolled / maxScroll, 1)
-      setReadingProgress(progress)
-      setShowScrollTop(scrolled > 1000)
-    }
+      const scrolled = window.scrollY;
+      const maxScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const progress = Math.min(scrolled / maxScroll, 1);
+      setReadingProgress(progress);
+      setShowScrollTop(scrolled > 1000);
+    };
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-  const CategoryIcon = getCategoryIcon(displayPost.category)
+  const CategoryIcon = getCategoryIcon(displayPost.category);
 
   return (
     <article ref={containerRef} className={`min-h-screen ${className}`}>
       {/* Reading Progress Bar */}
       <div className="fixed top-0 left-0 w-full h-1 z-50 bg-slate-100">
-        <div 
+        <div
           className="h-full bg-summit-gold transition-all duration-300"
           style={{ width: `${readingProgress * 100}%` }}
         />
       </div>
 
       {/* Hero Section */}
-      <motion.section 
+      <motion.section
         className="relative min-h-screen flex items-end overflow-hidden"
         style={{ y: headerY, opacity: headerOpacity }}
       >
@@ -208,7 +218,7 @@ export function CinematicBlogPost({ post, slug, className = "" }: CinematicBlogP
 
         {/* Navigation */}
         <div className="absolute top-8 left-8 z-20">
-          <Link 
+          <Link
             href="/blog"
             className="flex items-center space-x-2 bg-black/40 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-black/60 transition-colors duration-300"
           >
@@ -237,7 +247,9 @@ export function CinematicBlogPost({ post, slug, className = "" }: CinematicBlogP
             transition={{ duration: 1, delay: 0.5 }}
             className="space-y-6"
           >
-            <div className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${getCategoryColor(displayPost.category)}`}>
+            <div
+              className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-medium ${getCategoryColor(displayPost.category)}`}
+            >
               <CategoryIcon className="w-4 h-4 mr-2" />
               {displayPost.category}
             </div>
@@ -299,11 +311,14 @@ export function CinematicBlogPost({ post, slug, className = "" }: CinematicBlogP
                 <User className="w-8 h-8 text-slate-600" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-slate-900 mb-2">{displayPost.author}</h3>
+                <h3 className="text-xl font-bold text-slate-900 mb-2">
+                  {displayPost.author}
+                </h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Mountaineer and systematic athlete pursuing the Seven Summits challenge. 
-                  Currently preparing for Mount Everest in Spring 2027 through data-driven 
-                  training and methodical preparation approaches.
+                  Mountaineer and systematic athlete pursuing the Seven Summits
+                  challenge. Currently preparing for Mount Everest in Spring
+                  2027 through data-driven training and methodical preparation
+                  approaches.
                 </p>
               </div>
             </div>
@@ -319,10 +334,10 @@ export function CinematicBlogPost({ post, slug, className = "" }: CinematicBlogP
           >
             <h3 className="text-2xl font-bold mb-4">Enjoyed this story?</h3>
             <p className="text-slate-300 mb-6 max-w-2xl mx-auto">
-              Get exclusive expedition updates and training insights delivered 
+              Get exclusive expedition updates and training insights delivered
               directly to your inbox every week.
             </p>
-            <Link 
+            <Link
               href="/newsletter"
               className="inline-flex items-center gap-3 bg-summit-gold text-spa-charcoal px-6 py-3 rounded-xl font-medium hover:bg-yellow-500 transition-colors duration-300"
             >
@@ -339,7 +354,7 @@ export function CinematicBlogPost({ post, slug, className = "" }: CinematicBlogP
             viewport={{ once: true }}
             className="mt-12 text-center"
           >
-            <Link 
+            <Link
               href="/blog"
               className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors duration-300"
             >
@@ -363,5 +378,5 @@ export function CinematicBlogPost({ post, slug, className = "" }: CinematicBlogP
         </motion.button>
       )}
     </article>
-  )
+  );
 }

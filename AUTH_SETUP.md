@@ -5,12 +5,14 @@ Summit Chronicles now has comprehensive authentication using NextAuth.js with mu
 ## 🎯 **Current Setup**
 
 ### **Authentication Providers** ✅
+
 1. **Google OAuth** - Primary authentication method
 2. **Credentials** - Fallback admin login
 3. **Role-Based Access** - Admin and Owner roles
 4. **Protected Routes** - Secure admin areas
 
 ### **Security Features** ✅
+
 - JWT-based sessions (24-hour expiration)
 - Role-based authorization
 - Protected API routes
@@ -41,12 +43,14 @@ SUNITH_PASSWORD=your-secure-owner-password
 ## 🚀 **Setup Steps**
 
 ### 1. **Generate NextAuth Secret**
+
 ```bash
 # Generate a secure random secret
 openssl rand -base64 32
 ```
 
 ### 2. **Set up Google OAuth**
+
 1. Go to [Google Cloud Console](https://console.cloud.google.com)
 2. Create a new project or select existing
 3. Enable Google+ API
@@ -55,24 +59,28 @@ openssl rand -base64 32
 6. Copy Client ID and Client Secret
 
 ### 3. **Configure Admin Access**
+
 - Set `ADMIN_EMAIL` to the Google account that should have admin access
 - Set strong passwords for `ADMIN_PASSWORD` and `SUNITH_PASSWORD`
 
 ## 🛡️ **Access Levels**
 
 ### **Owner Role** (Highest Privilege)
+
 - Email: `sunith@summitchronicles.com`
 - Full system access
 - Can manage all content and settings
 - Access via Google OAuth or credentials
 
 ### **Admin Role** (Management Access)
+
 - Email: `ADMIN_EMAIL` environment variable
 - Can manage blog, newsletter, analytics
 - Protected admin dashboard access
 - Access via Google OAuth or credentials
 
 ### **Public Access**
+
 - Regular site visitors
 - Can use Ask Sunith AI
 - Can sign up for newsletter
@@ -81,6 +89,7 @@ openssl rand -base64 32
 ## 🔐 **Authentication Flow**
 
 ### **Admin Sign-In Process**:
+
 1. User visits `/admin`
 2. Redirected to `/admin/auth/signin` if not authenticated
 3. Options:
@@ -90,6 +99,7 @@ openssl rand -base64 32
 5. Redirect to admin dashboard or access denied
 
 ### **API Protection**:
+
 - Admin API routes check session and role
 - Protected routes use `ProtectedRoute` component
 - Automatic redirect for unauthorized access
@@ -98,6 +108,7 @@ openssl rand -base64 32
 
 **URL**: `/admin/auth/signin`
 **Features**:
+
 - Branded Summit Chronicles design
 - Google OAuth integration
 - Fallback credential authentication
@@ -108,6 +119,7 @@ openssl rand -base64 32
 
 **Error Page**: `/admin/auth/error`
 **Error Types**:
+
 - `Configuration`: Server setup issues
 - `AccessDenied`: Unauthorized email/role
 - `Verification`: Token issues
@@ -116,8 +128,9 @@ openssl rand -base64 32
 ## 📱 **Usage Examples**
 
 ### **Protecting a Page**:
+
 ```tsx
-import ProtectedRoute from "@/app/components/auth/ProtectedRoute";
+import ProtectedRoute from '@/app/components/auth/ProtectedRoute';
 
 export default function AdminPage() {
   return (
@@ -129,42 +142,43 @@ export default function AdminPage() {
 ```
 
 ### **Getting User Session**:
+
 ```tsx
-import { useSession } from "next-auth/react";
+import { useSession } from 'next-auth/react';
 
 export default function Component() {
   const { data: session, status } = useSession();
-  
-  if (status === "loading") return <p>Loading...</p>
-  if (!session) return <p>Not authenticated</p>
-  
-  return <p>Hello {session.user?.name}!</p>
+
+  if (status === 'loading') return <p>Loading...</p>;
+  if (!session) return <p>Not authenticated</p>;
+
+  return <p>Hello {session.user?.name}!</p>;
 }
 ```
 
 ### **Sign Out**:
-```tsx
-import { signOut } from "next-auth/react";
 
-<button onClick={() => signOut({ callbackUrl: "/" })}>
-  Sign Out
-</button>
+```tsx
+import { signOut } from 'next-auth/react';
+
+<button onClick={() => signOut({ callbackUrl: '/' })}>Sign Out</button>;
 ```
 
 ## 🔧 **API Route Protection**
 
 Example protected API route:
+
 ```typescript
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { getServerSession } from 'next-auth/next';
+import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function GET(request: Request) {
   const session = await getServerSession(authOptions);
-  
-  if (!session || !["admin", "owner"].includes(session.user.role)) {
-    return new Response("Unauthorized", { status: 401 });
+
+  if (!session || !['admin', 'owner'].includes(session.user.role)) {
+    return new Response('Unauthorized', { status: 401 });
   }
-  
+
   // Protected API logic here
 }
 ```
@@ -182,6 +196,7 @@ export async function GET(request: Request) {
 ## 🛠️ **Troubleshooting**
 
 **Common Issues**:
+
 1. **"Configuration Error"**: Check `NEXTAUTH_SECRET` and `NEXTAUTH_URL`
 2. **"Access Denied"**: Verify email is in authorized list
 3. **Google OAuth fails**: Check client ID, secret, and redirect URLs

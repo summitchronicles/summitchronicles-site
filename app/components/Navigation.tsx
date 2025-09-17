@@ -1,12 +1,25 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { Home, BookOpen, Target, User, Menu, X, Brain, Mountain, Users, Bot, Calendar, Zap } from 'lucide-react'
-import { AnimatedLogo } from './icons/AnimatedLogo'
+import Link from 'next/link';
+import { useState } from 'react';
+import {
+  Home,
+  BookOpen,
+  Target,
+  User,
+  Menu,
+  X,
+  Brain,
+  Mountain,
+  Users,
+  Bot,
+  Calendar,
+  Zap,
+} from 'lucide-react';
+import { AnimatedLogo } from './icons/AnimatedLogo';
 
 export default function Navigation() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { href: '/', label: 'Home', icon: Home },
@@ -16,27 +29,27 @@ export default function Navigation() {
     { href: '/training', label: 'Training', icon: Target },
     { href: '/ai-search', label: 'AI Coach', icon: Brain },
     { href: '/automation', label: 'Automation', icon: Bot },
-  ]
+  ];
 
   return (
     <nav className="backdrop-mountain border-b border-slate-200/60 sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="flex items-center space-x-3 group brand"
             onClick={() => setIsOpen(false)}
           >
             <div className="w-8 h-8 gradient-summit rounded-xl flex items-center justify-center group-hover:animate-glow transition-all duration-300 relative overflow-hidden">
-              <AnimatedLogo 
-                size={20} 
+              <AnimatedLogo
+                size={20}
                 variant="minimal"
                 animateOnScroll={false}
                 colors={{
                   primary: '#ffffff',
                   secondary: '#fbbf24',
-                  accent: '#ffffff'
+                  accent: '#ffffff',
                 }}
               />
             </div>
@@ -60,15 +73,11 @@ export default function Navigation() {
           </div>
 
           {/* Mobile Menu Button */}
-          <button 
+          <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-colors"
           >
-            {isOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
+            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
         </div>
 
@@ -92,5 +101,5 @@ export default function Navigation() {
         )}
       </div>
     </nav>
-  )
+  );
 }

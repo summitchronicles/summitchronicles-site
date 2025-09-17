@@ -7,9 +7,13 @@ interface Props {
   children: React.ReactNode;
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
   const supabase = getSupabaseAdmin();
-  
+
   try {
     const { data: post } = await supabase
       .from('blog_posts')
@@ -26,10 +30,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     }
 
     const title = `${post.title} | Summit Chronicles`;
-    const description = post.excerpt || post.description || 'Expert mountaineering insights from Summit Chronicles';
+    const description =
+      post.excerpt ||
+      post.description ||
+      'Expert mountaineering insights from Summit Chronicles';
     const url = `/blogs/${post.slug}`;
     const publishDate = new Date(post.published_at).toISOString();
-    const modifiedDate = new Date(post.updated_at || post.published_at).toISOString();
+    const modifiedDate = new Date(
+      post.updated_at || post.published_at
+    ).toISOString();
 
     // Generate structured data
     const articleSchema = getArticleSchema({
@@ -51,28 +60,32 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     return {
       title,
       description,
-      keywords: post.tags?.join(', ') || 'mountaineering, seven summits, climbing, expedition planning',
+      keywords:
+        post.tags?.join(', ') ||
+        'mountaineering, seven summits, climbing, expedition planning',
       authors: [{ name: post.author || 'Sunith Kumar' }],
       openGraph: {
         title: post.title,
         description: description,
         type: 'article',
         url: `https://summitchronicles.com${url}`,
-        images: post.featured_image ? [
-          {
-            url: `https://summitchronicles.com${post.featured_image}`,
-            width: 1200,
-            height: 630,
-            alt: post.title,
-          }
-        ] : [
-          {
-            url: 'https://summitchronicles.com/og-image.jpg',
-            width: 1200,
-            height: 630,
-            alt: 'Summit Chronicles',
-          }
-        ],
+        images: post.featured_image
+          ? [
+              {
+                url: `https://summitchronicles.com${post.featured_image}`,
+                width: 1200,
+                height: 630,
+                alt: post.title,
+              },
+            ]
+          : [
+              {
+                url: 'https://summitchronicles.com/og-image.jpg',
+                width: 1200,
+                height: 630,
+                alt: 'Summit Chronicles',
+              },
+            ],
         publishedTime: publishDate,
         modifiedTime: modifiedDate,
         authors: [post.author || 'Sunith Kumar'],
@@ -83,7 +96,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
         card: 'summary_large_image',
         title: post.title,
         description: description,
-        images: post.featured_image ? [`https://summitchronicles.com${post.featured_image}`] : ['https://summitchronicles.com/og-image.jpg'],
+        images: post.featured_image
+          ? [`https://summitchronicles.com${post.featured_image}`]
+          : ['https://summitchronicles.com/og-image.jpg'],
         creator: '@summitchronicles',
       },
       other: {
@@ -95,7 +110,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     console.error('Error generating blog metadata:', error);
     return {
       title: 'Blog Post | Summit Chronicles',
-      description: 'Expert mountaineering insights and Seven Summits expedition guidance.',
+      description:
+        'Expert mountaineering insights and Seven Summits expedition guidance.',
     };
   }
 }

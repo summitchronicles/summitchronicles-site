@@ -25,21 +25,23 @@ interface ContentData {
   featuredImage?: string;
 }
 
-const ContentEditor: React.FC<ContentEditorProps> = ({ 
-  className, 
+const ContentEditor: React.FC<ContentEditorProps> = ({
+  className,
   onSave,
-  initialContent 
+  initialContent,
 }) => {
-  const [content, setContent] = useState<ContentData>(initialContent || {
-    title: '',
-    slug: '',
-    content: '',
-    excerpt: '',
-    status: 'draft',
-    category: 'training',
-    tags: [],
-    featuredImage: undefined
-  });
+  const [content, setContent] = useState<ContentData>(
+    initialContent || {
+      title: '',
+      slug: '',
+      content: '',
+      excerpt: '',
+      status: 'draft',
+      category: 'training',
+      tags: [],
+      featuredImage: undefined,
+    }
+  );
 
   const [isPreview, setIsPreview] = useState(false);
 
@@ -59,10 +61,10 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
   };
 
   const handleTitleChange = (title: string) => {
-    setContent(prev => ({
+    setContent((prev) => ({
       ...prev,
       title,
-      slug: generateSlug(title)
+      slug: generateSlug(title),
     }));
   };
 
@@ -73,7 +75,15 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
         <div className="space-y-2">
           <H3 className="text-spa-charcoal">Content Editor</H3>
           <div className="flex items-center space-x-3">
-            <StatusBadge variant={content.status === 'published' ? 'success' : content.status === 'draft' ? 'warning' : 'default'}>
+            <StatusBadge
+              variant={
+                content.status === 'published'
+                  ? 'success'
+                  : content.status === 'draft'
+                    ? 'warning'
+                    : 'default'
+              }
+            >
               {content.status.charAt(0).toUpperCase() + content.status.slice(1)}
             </StatusBadge>
             <Body className="text-spa-slate text-sm">
@@ -88,15 +98,15 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
             size="sm"
             onClick={() => setIsPreview(!isPreview)}
           >
-            <Icon name={isPreview ? "Edit" : "Eye"} size="sm" />
+            <Icon name={isPreview ? 'Edit' : 'Eye'} size="sm" />
             {isPreview ? 'Edit' : 'Preview'}
           </Button>
-          
+
           <Button variant="secondary" size="sm">
             <Icon name="Save" size="sm" />
             Save Draft
           </Button>
-          
+
           <Button variant="summit" size="sm" onClick={handleSave}>
             <Icon name="Upload" size="sm" />
             Publish
@@ -122,9 +132,12 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                     className="w-full px-4 py-3 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-alpine-blue"
                     placeholder="Enter content title..."
                   />
-                  
+
                   <div className="text-sm text-spa-slate">
-                    Slug: <code className="bg-spa-stone px-2 py-1 rounded">{content.slug}</code>
+                    Slug:{' '}
+                    <code className="bg-spa-stone px-2 py-1 rounded">
+                      {content.slug}
+                    </code>
                   </div>
                 </div>
               </Card>
@@ -137,7 +150,12 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                   </label>
                   <textarea
                     value={content.excerpt}
-                    onChange={(e) => setContent(prev => ({ ...prev, excerpt: e.target.value }))}
+                    onChange={(e) =>
+                      setContent((prev) => ({
+                        ...prev,
+                        excerpt: e.target.value,
+                      }))
+                    }
                     rows={3}
                     className="w-full px-4 py-3 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-alpine-blue resize-none"
                     placeholder="Brief description of this content..."
@@ -153,13 +171,19 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                   </label>
                   <textarea
                     value={content.content}
-                    onChange={(e) => setContent(prev => ({ ...prev, content: e.target.value }))}
+                    onChange={(e) =>
+                      setContent((prev) => ({
+                        ...prev,
+                        content: e.target.value,
+                      }))
+                    }
                     rows={20}
                     className="w-full px-4 py-3 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-alpine-blue resize-none font-mono text-sm"
                     placeholder="Write your content in Markdown format..."
                   />
                   <Body className="text-spa-slate text-sm">
-                    Supports Markdown formatting. Use **bold**, *italic*, ## headings, and more.
+                    Supports Markdown formatting. Use **bold**, *italic*, ##
+                    headings, and more.
                   </Body>
                 </div>
               </Card>
@@ -171,13 +195,13 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                 <h1 className="text-3xl font-bold text-spa-charcoal mb-4">
                   {content.title || 'Untitled'}
                 </h1>
-                
+
                 {content.excerpt && (
                   <div className="text-lg text-spa-slate mb-6 p-4 bg-spa-mist rounded-lg">
                     {content.excerpt}
                   </div>
                 )}
-                
+
                 <div className="text-spa-charcoal leading-relaxed whitespace-pre-wrap">
                   {content.content || 'No content yet...'}
                 </div>
@@ -200,7 +224,12 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                 </label>
                 <select
                   value={content.status}
-                  onChange={(e) => setContent(prev => ({ ...prev, status: e.target.value as ContentData['status'] }))}
+                  onChange={(e) =>
+                    setContent((prev) => ({
+                      ...prev,
+                      status: e.target.value as ContentData['status'],
+                    }))
+                  }
                   className="w-full px-3 py-2 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue"
                 >
                   <option value="draft">Draft</option>
@@ -215,7 +244,12 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                 </label>
                 <select
                   value={content.category}
-                  onChange={(e) => setContent(prev => ({ ...prev, category: e.target.value }))}
+                  onChange={(e) =>
+                    setContent((prev) => ({
+                      ...prev,
+                      category: e.target.value,
+                    }))
+                  }
                   className="w-full px-3 py-2 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue"
                 >
                   <option value="training">Training</option>
@@ -236,7 +270,11 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
             <CardContent className="space-y-4">
               <div className="aspect-video bg-spa-mist rounded-lg border-2 border-dashed border-spa-cloud flex items-center justify-center">
                 <div className="text-center space-y-2">
-                  <Icon name="Upload" size="lg" className="text-spa-slate mx-auto" />
+                  <Icon
+                    name="Upload"
+                    size="lg"
+                    className="text-spa-slate mx-auto"
+                  />
                   <Body className="text-spa-slate text-sm">Upload Image</Body>
                 </div>
               </div>
@@ -256,12 +294,18 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
               <div className="flex justify-between">
                 <Body className="text-spa-slate">Words:</Body>
                 <Body className="text-spa-charcoal font-medium">
-                  {content.content.split(/\s+/).filter(word => word.length > 0).length}
+                  {
+                    content.content
+                      .split(/\s+/)
+                      .filter((word) => word.length > 0).length
+                  }
                 </Body>
               </div>
               <div className="flex justify-between">
                 <Body className="text-spa-slate">Characters:</Body>
-                <Body className="text-spa-charcoal font-medium">{content.content.length}</Body>
+                <Body className="text-spa-charcoal font-medium">
+                  {content.content.length}
+                </Body>
               </div>
               <div className="flex justify-between">
                 <Body className="text-spa-slate">Read time:</Body>

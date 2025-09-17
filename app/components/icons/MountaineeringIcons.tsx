@@ -1,60 +1,65 @@
-'use client'
+'use client';
 
-import React, { useEffect, useRef } from 'react'
-import { motion, useAnimation, useInView } from 'framer-motion'
+import React, { useEffect, useRef } from 'react';
+import { motion, useAnimation, useInView } from 'framer-motion';
 
 interface IconProps {
-  size?: number
-  className?: string
-  color?: string
-  animateOnScroll?: boolean
-  variant?: 'stroke' | 'fill' | 'mixed'
+  size?: number;
+  className?: string;
+  color?: string;
+  animateOnScroll?: boolean;
+  variant?: 'stroke' | 'fill' | 'mixed';
 }
 
 // Base animation variants
 const createPathVariants = (delay = 0) => ({
-  hidden: { 
+  hidden: {
     pathLength: 0,
-    opacity: 0
+    opacity: 0,
   },
   visible: {
     pathLength: 1,
-    opacity: 1
-  }
-})
+    opacity: 1,
+  },
+});
 
 const createFillVariants = (delay = 0) => ({
-  hidden: { 
+  hidden: {
     opacity: 0,
-    scale: 0.8
+    scale: 0.8,
   },
   visible: {
     opacity: 1,
-    scale: 1
-  }
-})
+    scale: 1,
+  },
+});
 
 // Hook for scroll animation
 function useScrollAnimation(animateOnScroll: boolean) {
-  const controls = useAnimation()
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
     if (animateOnScroll && isInView) {
-      controls.start('visible')
+      controls.start('visible');
     } else if (!animateOnScroll) {
-      controls.start('visible')
+      controls.start('visible');
     }
-  }, [controls, isInView, animateOnScroll])
+  }, [controls, isInView, animateOnScroll]);
 
-  return { controls, ref }
+  return { controls, ref };
 }
 
 // Climbing Rope Icon
-export function ClimbingRope({ size = 24, className = '', color = '#1e3a8a', animateOnScroll = true }: IconProps) {
-  const { controls, ref } = useScrollAnimation(animateOnScroll)
-  
+export function ClimbingRope({
+  size = 24,
+  className = '',
+  color = '#1e3a8a',
+  animateOnScroll = true,
+}: IconProps) {
+  const { controls, ref } = useScrollAnimation(animateOnScroll);
+
   return (
     <svg
       ref={ref}
@@ -75,7 +80,7 @@ export function ClimbingRope({ size = 24, className = '', color = '#1e3a8a', ani
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Carabiners */}
       <motion.ellipse
         cx="8"
@@ -89,7 +94,7 @@ export function ClimbingRope({ size = 24, className = '', color = '#1e3a8a', ani
         initial="hidden"
         animate={controls}
       />
-      
+
       <motion.ellipse
         cx="8"
         cy="14"
@@ -102,7 +107,7 @@ export function ClimbingRope({ size = 24, className = '', color = '#1e3a8a', ani
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Knots */}
       <motion.circle
         cx="8"
@@ -114,13 +119,18 @@ export function ClimbingRope({ size = 24, className = '', color = '#1e3a8a', ani
         animate={controls}
       />
     </svg>
-  )
+  );
 }
 
 // Ice Axe Icon
-export function IceAxe({ size = 24, className = '', color = '#334155', animateOnScroll = true }: IconProps) {
-  const { controls, ref } = useScrollAnimation(animateOnScroll)
-  
+export function IceAxe({
+  size = 24,
+  className = '',
+  color = '#334155',
+  animateOnScroll = true,
+}: IconProps) {
+  const { controls, ref } = useScrollAnimation(animateOnScroll);
+
   return (
     <svg
       ref={ref}
@@ -144,7 +154,7 @@ export function IceAxe({ size = 24, className = '', color = '#334155', animateOn
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Adze */}
       <motion.path
         d="M8 6 L16 6 L15 4 L9 4 Z"
@@ -155,7 +165,7 @@ export function IceAxe({ size = 24, className = '', color = '#334155', animateOn
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Pick */}
       <motion.path
         d="M12 6 L18 8 L17 10 L12 8"
@@ -166,7 +176,7 @@ export function IceAxe({ size = 24, className = '', color = '#334155', animateOn
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Spike */}
       <motion.path
         d="M10 20 L12 22 L14 20"
@@ -179,13 +189,18 @@ export function IceAxe({ size = 24, className = '', color = '#334155', animateOn
         animate={controls}
       />
     </svg>
-  )
+  );
 }
 
 // Compass Icon
-export function Compass({ size = 24, className = '', color = '#fbbf24', animateOnScroll = true }: IconProps) {
-  const { controls, ref } = useScrollAnimation(animateOnScroll)
-  
+export function Compass({
+  size = 24,
+  className = '',
+  color = '#fbbf24',
+  animateOnScroll = true,
+}: IconProps) {
+  const { controls, ref } = useScrollAnimation(animateOnScroll);
+
   return (
     <svg
       ref={ref}
@@ -207,7 +222,7 @@ export function Compass({ size = 24, className = '', color = '#fbbf24', animateO
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Cardinal directions */}
       <motion.line
         x1="12"
@@ -220,7 +235,7 @@ export function Compass({ size = 24, className = '', color = '#fbbf24', animateO
         initial="hidden"
         animate={controls}
       />
-      
+
       <motion.line
         x1="19"
         y1="12"
@@ -232,7 +247,7 @@ export function Compass({ size = 24, className = '', color = '#fbbf24', animateO
         initial="hidden"
         animate={controls}
       />
-      
+
       <motion.line
         x1="12"
         y1="19"
@@ -244,7 +259,7 @@ export function Compass({ size = 24, className = '', color = '#fbbf24', animateO
         initial="hidden"
         animate={controls}
       />
-      
+
       <motion.line
         x1="5"
         y1="12"
@@ -256,7 +271,7 @@ export function Compass({ size = 24, className = '', color = '#fbbf24', animateO
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Compass needle */}
       <motion.path
         d="M12 8 L10 12 L12 16 L14 12 Z"
@@ -265,7 +280,7 @@ export function Compass({ size = 24, className = '', color = '#fbbf24', animateO
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Center point */}
       <motion.circle
         cx="12"
@@ -277,13 +292,18 @@ export function Compass({ size = 24, className = '', color = '#fbbf24', animateO
         animate={controls}
       />
     </svg>
-  )
+  );
 }
 
 // Tent Icon
-export function Tent({ size = 24, className = '', color = '#16a34a', animateOnScroll = true }: IconProps) {
-  const { controls, ref } = useScrollAnimation(animateOnScroll)
-  
+export function Tent({
+  size = 24,
+  className = '',
+  color = '#16a34a',
+  animateOnScroll = true,
+}: IconProps) {
+  const { controls, ref } = useScrollAnimation(animateOnScroll);
+
   return (
     <svg
       ref={ref}
@@ -304,7 +324,7 @@ export function Tent({ size = 24, className = '', color = '#16a34a', animateOnSc
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Tent entrance */}
       <motion.path
         d="M8 20 L12 14 L16 20"
@@ -314,7 +334,7 @@ export function Tent({ size = 24, className = '', color = '#16a34a', animateOnSc
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Ground stakes */}
       <motion.line
         x1="4"
@@ -327,7 +347,7 @@ export function Tent({ size = 24, className = '', color = '#16a34a', animateOnSc
         initial="hidden"
         animate={controls}
       />
-      
+
       <motion.line
         x1="20"
         y1="20"
@@ -339,7 +359,7 @@ export function Tent({ size = 24, className = '', color = '#16a34a', animateOnSc
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Guy lines */}
       <motion.line
         x1="8"
@@ -353,7 +373,7 @@ export function Tent({ size = 24, className = '', color = '#16a34a', animateOnSc
         initial="hidden"
         animate={controls}
       />
-      
+
       <motion.line
         x1="16"
         y1="16"
@@ -367,13 +387,18 @@ export function Tent({ size = 24, className = '', color = '#16a34a', animateOnSc
         animate={controls}
       />
     </svg>
-  )
+  );
 }
 
 // Summit Flag Icon
-export function SummitFlag({ size = 24, className = '', color = '#dc2626', animateOnScroll = true }: IconProps) {
-  const { controls, ref } = useScrollAnimation(animateOnScroll)
-  
+export function SummitFlag({
+  size = 24,
+  className = '',
+  color = '#dc2626',
+  animateOnScroll = true,
+}: IconProps) {
+  const { controls, ref } = useScrollAnimation(animateOnScroll);
+
   return (
     <svg
       ref={ref}
@@ -396,7 +421,7 @@ export function SummitFlag({ size = 24, className = '', color = '#dc2626', anima
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Flag */}
       <motion.path
         d="M6 4 L18 4 L16 8 L18 12 L6 12 Z"
@@ -408,7 +433,7 @@ export function SummitFlag({ size = 24, className = '', color = '#dc2626', anima
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Wind lines */}
       <motion.path
         d="M18 6 Q22 6 20 8"
@@ -418,7 +443,7 @@ export function SummitFlag({ size = 24, className = '', color = '#dc2626', anima
         initial="hidden"
         animate={controls}
       />
-      
+
       <motion.path
         d="M18 10 Q22 10 20 12"
         stroke={color}
@@ -428,5 +453,5 @@ export function SummitFlag({ size = 24, className = '', color = '#dc2626', anima
         animate={controls}
       />
     </svg>
-  )
+  );
 }

@@ -2,7 +2,10 @@ export function StatsSkeleton() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div key={i} className="mountain-card p-6 elevation-shadow animate-pulse">
+        <div
+          key={i}
+          className="mountain-card p-6 elevation-shadow animate-pulse"
+        >
           <div className="flex items-center justify-center mb-3">
             <div className="w-6 h-6 bg-slate-200 rounded-full"></div>
           </div>
@@ -13,14 +16,17 @@ export function StatsSkeleton() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function BlogCardSkeleton() {
   return (
     <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-12">
       {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="mountain-card p-8 h-full elevation-shadow animate-pulse">
+        <div
+          key={i}
+          className="mountain-card p-8 h-full elevation-shadow animate-pulse"
+        >
           <div className="h-6 w-3/4 bg-slate-200 rounded-md mb-3"></div>
           <div className="space-y-2 mb-6">
             <div className="h-4 w-full bg-slate-200 rounded-md"></div>
@@ -37,7 +43,7 @@ export function BlogCardSkeleton() {
         </div>
       ))}
     </div>
-  )
+  );
 }
 
 export function TrainingPhasesSkeleton() {
@@ -59,7 +65,7 @@ export function TrainingPhasesSkeleton() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export function ContentSkeleton() {
@@ -81,7 +87,7 @@ export function ContentSkeleton() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export function HeroSkeleton() {
@@ -97,5 +103,5 @@ export function HeroSkeleton() {
         <div className="h-12 w-40 bg-slate-200 rounded-xl mx-auto"></div>
       </div>
     </section>
-  )
+  );
 }

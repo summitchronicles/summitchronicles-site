@@ -9,15 +9,15 @@ interface SkeletonProps {
   lines?: number;
 }
 
-const Skeleton: React.FC<SkeletonProps> = ({ 
+const Skeleton: React.FC<SkeletonProps> = ({
   className,
   variant = 'rectangle',
   width,
   height,
-  lines = 1
+  lines = 1,
 }) => {
   const baseClasses = 'animate-pulse bg-spa-mist rounded';
-  
+
   const variants = {
     text: 'h-4',
     rectangle: 'h-20',
@@ -31,9 +31,9 @@ const Skeleton: React.FC<SkeletonProps> = ({
           <div
             key={index}
             className={cn(baseClasses, variants.text)}
-            style={{ 
+            style={{
               width: width || (index === lines - 1 ? '75%' : '100%'),
-              height: height 
+              height: height,
             }}
           />
         ))}
@@ -44,9 +44,9 @@ const Skeleton: React.FC<SkeletonProps> = ({
   return (
     <div
       className={cn(baseClasses, variants[variant], className)}
-      style={{ 
+      style={{
         width: variant === 'circle' ? undefined : width,
-        height: variant === 'circle' ? undefined : height
+        height: variant === 'circle' ? undefined : height,
       }}
     />
   );
@@ -54,7 +54,12 @@ const Skeleton: React.FC<SkeletonProps> = ({
 
 // Common skeleton patterns
 const SkeletonCard: React.FC<{ className?: string }> = ({ className }) => (
-  <div className={cn('space-y-4 p-6 bg-white rounded-lg border border-spa-cloud', className)}>
+  <div
+    className={cn(
+      'space-y-4 p-6 bg-white rounded-lg border border-spa-cloud',
+      className
+    )}
+  >
     <div className="flex items-center space-x-4">
       <Skeleton variant="circle" />
       <div className="flex-1 space-y-2">
@@ -70,9 +75,9 @@ const SkeletonCard: React.FC<{ className?: string }> = ({ className }) => (
   </div>
 );
 
-const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({ 
-  lines = 3, 
-  className 
+const SkeletonText: React.FC<{ lines?: number; className?: string }> = ({
+  lines = 3,
+  className,
 }) => (
   <div className={cn('space-y-2', className)}>
     <Skeleton variant="text" lines={lines} />

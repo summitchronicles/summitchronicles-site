@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -14,21 +14,24 @@ export async function POST(request: NextRequest) {
     console.log('Setting up blog database schema...');
 
     // Check if tables already exist by trying to query blog_categories
-    const { error: checkError } = await supabase.from('blog_categories').select('id').limit(1);
-    
+    const { error: checkError } = await supabase
+      .from('blog_categories')
+      .select('id')
+      .limit(1);
+
     if (!checkError) {
-      return NextResponse.json({ 
-        message: 'Blog tables already exist', 
-        status: 'already_setup' 
+      return NextResponse.json({
+        message: 'Blog tables already exist',
+        status: 'already_setup',
       });
     }
 
     // Execute raw SQL using rpc with a custom function or direct execution
     // Since we can't use .sql, we'll create tables using the REST API method
-    
+
     const sqlCommands = [
       `CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`,
-      
+
       `CREATE TABLE blog_categories (
         id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
         name VARCHAR(50) UNIQUE NOT NULL,
@@ -111,7 +114,7 @@ export async function POST(request: NextRequest) {
 
       `CREATE TRIGGER update_blog_posts_updated_at 
       BEFORE UPDATE ON blog_posts 
-      FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()`
+      FOR EACH ROW EXECUTE FUNCTION update_updated_at_column()`,
     ];
 
     // Try to setup using direct approach - assume tables exist or will fail gracefully
@@ -119,12 +122,48 @@ export async function POST(request: NextRequest) {
 
     // Insert default categories
     const categories = [
-      { name: 'Training', slug: 'training', description: 'Physical preparation and fitness for mountaineering', color: '#10B981', sort_order: 1 },
-      { name: 'Expeditions', slug: 'expeditions', description: 'Stories and lessons from Seven Summits adventures', color: '#3B82F6', sort_order: 2 },
-      { name: 'Gear', slug: 'gear', description: 'Equipment reviews and recommendations', color: '#F59E0B', sort_order: 3 },
-      { name: 'Mental', slug: 'mental', description: 'Psychology and mental preparation for climbing', color: '#8B5CF6', sort_order: 4 },
-      { name: 'Nutrition', slug: 'nutrition', description: 'Fueling strategies for high altitude performance', color: '#EF4444', sort_order: 5 },
-      { name: 'Recovery', slug: 'recovery', description: 'Rest and recovery techniques for climbers', color: '#06B6D4', sort_order: 6 }
+      {
+        name: 'Training',
+        slug: 'training',
+        description: 'Physical preparation and fitness for mountaineering',
+        color: '#10B981',
+        sort_order: 1,
+      },
+      {
+        name: 'Expeditions',
+        slug: 'expeditions',
+        description: 'Stories and lessons from Seven Summits adventures',
+        color: '#3B82F6',
+        sort_order: 2,
+      },
+      {
+        name: 'Gear',
+        slug: 'gear',
+        description: 'Equipment reviews and recommendations',
+        color: '#F59E0B',
+        sort_order: 3,
+      },
+      {
+        name: 'Mental',
+        slug: 'mental',
+        description: 'Psychology and mental preparation for climbing',
+        color: '#8B5CF6',
+        sort_order: 4,
+      },
+      {
+        name: 'Nutrition',
+        slug: 'nutrition',
+        description: 'Fueling strategies for high altitude performance',
+        color: '#EF4444',
+        sort_order: 5,
+      },
+      {
+        name: 'Recovery',
+        slug: 'recovery',
+        description: 'Rest and recovery techniques for climbers',
+        color: '#06B6D4',
+        sort_order: 6,
+      },
     ];
 
     for (const category of categories) {
@@ -142,7 +181,7 @@ export async function POST(request: NextRequest) {
       { name: 'Gear Review', slug: 'gear-review', color: '#06B6D4' },
       { name: 'Kilimanjaro', slug: 'kilimanjaro', color: '#84CC16' },
       { name: 'Ultralight', slug: 'ultralight', color: '#F97316' },
-      { name: 'Safety', slug: 'safety', color: '#DC2626' }
+      { name: 'Safety', slug: 'safety', color: '#DC2626' },
     ];
 
     for (const tag of tags) {
@@ -153,7 +192,8 @@ export async function POST(request: NextRequest) {
     const samplePost = {
       title: 'Welcome to Summit Chronicles Blog',
       slug: 'welcome-to-summit-chronicles',
-      excerpt: 'Your journey documenting the Seven Summits begins here. This is your first blog post created automatically by the CMS setup.',
+      excerpt:
+        'Your journey documenting the Seven Summits begins here. This is your first blog post created automatically by the CMS setup.',
       content: `<h2>Welcome to Your Blog CMS!</h2>
       
       <p>Congratulations! Your blog content management system is now fully set up and ready to use. This sample post demonstrates the capabilities of your new blogging platform.</p>
@@ -174,41 +214,54 @@ export async function POST(request: NextRequest) {
       status: 'published',
       featured: true,
       meta_title: 'Welcome to Summit Chronicles Blog - Seven Summits Journey',
-      meta_description: 'Start your Seven Summits documentation journey with this professional blog CMS. Create, manage, and share your mountaineering experiences.',
+      meta_description:
+        'Start your Seven Summits documentation journey with this professional blog CMS. Create, manage, and share your mountaineering experiences.',
       read_time: 3,
       published_at: new Date().toISOString(),
       views: 1,
-      likes: 0
+      likes: 0,
     };
 
-    const { data: post } = await supabase.from('blog_posts').insert(samplePost).select().single();
+    const { data: post } = await supabase
+      .from('blog_posts')
+      .insert(samplePost)
+      .select()
+      .single();
 
     // Add tags to sample post
     if (post) {
       const postTags = ['Seven Summits', 'Preparation', 'Lessons'];
       for (const tagName of postTags) {
-        const { data: tag } = await supabase.from('blog_tags').select('id').eq('name', tagName).single();
+        const { data: tag } = await supabase
+          .from('blog_tags')
+          .select('id')
+          .eq('name', tagName)
+          .single();
         if (tag) {
-          await supabase.from('blog_post_tags').insert({ post_id: post.id, tag_id: tag.id });
+          await supabase
+            .from('blog_post_tags')
+            .insert({ post_id: post.id, tag_id: tag.id });
         }
       }
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'Blog database setup completed successfully!',
       status: 'success',
       details: {
         categories_created: categories.length,
         tags_created: tags.length,
-        sample_post_created: true
-      }
+        sample_post_created: true,
+      },
     });
-
   } catch (error) {
     console.error('Database setup error:', error);
-    return NextResponse.json({ 
-      error: 'Failed to set up database',
-      details: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: 'Failed to set up database',
+        details: error instanceof Error ? error.message : 'Unknown error',
+      },
+      { status: 500 }
+    );
   }
 }

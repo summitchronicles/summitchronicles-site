@@ -1,27 +1,29 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   DocumentTextIcon,
   ClipboardDocumentIcon,
   NewspaperIcon,
-  CalendarIcon
-} from "@heroicons/react/24/outline";
+  CalendarIcon,
+} from '@heroicons/react/24/outline';
 
 export default function NewsletterAdminPage() {
-  const [draft, setDraft] = useState("");
+  const [draft, setDraft] = useState('');
   const [loading, setLoading] = useState(false);
   const [days, setDays] = useState(14);
-  const [format, setFormat] = useState("markdown");
+  const [format, setFormat] = useState('markdown');
   const [metadata, setMetadata] = useState<any>(null);
 
   const generateDraft = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/newsletter/draft?days=${days}&format=${format}`);
+      const response = await fetch(
+        `/api/newsletter/draft?days=${days}&format=${format}`
+      );
       const data = await response.json();
-      
+
       if (response.ok) {
         setDraft(data.draft);
         setMetadata(data);
@@ -56,14 +58,17 @@ export default function NewsletterAdminPage() {
         >
           <div className="inline-flex items-center gap-3 bg-summitGold/10 backdrop-blur-sm border border-summitGold/30 rounded-2xl px-6 py-3 mb-6">
             <NewspaperIcon className="w-6 h-6 text-summitGold" />
-            <span className="text-summitGold font-bold text-lg">Newsletter Admin</span>
+            <span className="text-summitGold font-bold text-lg">
+              Newsletter Admin
+            </span>
           </div>
-          
+
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             Newsletter Draft Generator
           </h1>
           <p className="text-xl text-white/70">
-            Generate newsletter drafts from recent blog posts, then copy to Buttondown
+            Generate newsletter drafts from recent blog posts, then copy to
+            Buttondown
           </p>
         </motion.div>
 
@@ -131,7 +136,9 @@ export default function NewsletterAdminPage() {
               </div>
               <div>
                 <span className="text-blue-400 font-medium">Period: </span>
-                <span className="text-white">Last {metadata.period_days} days</span>
+                <span className="text-white">
+                  Last {metadata.period_days} days
+                </span>
               </div>
               {metadata.message && (
                 <div>
@@ -162,7 +169,7 @@ export default function NewsletterAdminPage() {
                 Copy to Clipboard
               </motion.button>
             </div>
-            
+
             <div className="p-6">
               <textarea
                 value={draft}
@@ -172,16 +179,38 @@ export default function NewsletterAdminPage() {
                 placeholder="Your newsletter draft will appear here..."
               />
             </div>
-            
+
             <div className="p-6 border-t border-white/10 bg-black/20">
               <div className="flex flex-col gap-4">
                 <h4 className="text-lg font-bold text-white">Next Steps:</h4>
                 <ol className="text-white/80 space-y-2 text-sm">
-                  <li>1. <strong>Review & Edit:</strong> Customize the draft above with your personal updates</li>
-                  <li>2. <strong>Copy Content:</strong> Use the &quot;Copy to Clipboard&quot; button</li>
-                  <li>3. <strong>Go to Buttondown:</strong> Visit your <a href="https://buttondown.email/summitchronicles" target="_blank" rel="noopener noreferrer" className="text-summitGold hover:underline">Buttondown dashboard</a></li>
-                  <li>4. <strong>Create New Email:</strong> Paste the content and review</li>
-                  <li>5. <strong>Send to Subscribers:</strong> Schedule or send immediately</li>
+                  <li>
+                    1. <strong>Review & Edit:</strong> Customize the draft above
+                    with your personal updates
+                  </li>
+                  <li>
+                    2. <strong>Copy Content:</strong> Use the &quot;Copy to
+                    Clipboard&quot; button
+                  </li>
+                  <li>
+                    3. <strong>Go to Buttondown:</strong> Visit your{' '}
+                    <a
+                      href="https://buttondown.email/summitchronicles"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-summitGold hover:underline"
+                    >
+                      Buttondown dashboard
+                    </a>
+                  </li>
+                  <li>
+                    4. <strong>Create New Email:</strong> Paste the content and
+                    review
+                  </li>
+                  <li>
+                    5. <strong>Send to Subscribers:</strong> Schedule or send
+                    immediately
+                  </li>
                 </ol>
               </div>
             </div>
@@ -199,27 +228,39 @@ export default function NewsletterAdminPage() {
             <h3 className="text-2xl font-bold text-white mb-6">How It Works</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <h4 className="text-lg font-semibold text-summitGold mb-3">🔄 Auto-Collection</h4>
+                <h4 className="text-lg font-semibold text-summitGold mb-3">
+                  🔄 Auto-Collection
+                </h4>
                 <p className="text-white/80 text-sm">
-                  Automatically pulls your recent blog posts and formats them into a newsletter template.
+                  Automatically pulls your recent blog posts and formats them
+                  into a newsletter template.
                 </p>
               </div>
               <div>
-                <h4 className="text-lg font-semibold text-summitGold mb-3">✏️ Review & Edit</h4>
+                <h4 className="text-lg font-semibold text-summitGold mb-3">
+                  ✏️ Review & Edit
+                </h4>
                 <p className="text-white/80 text-sm">
-                  Add your personal expedition updates, training progress, and gear insights before sending.
+                  Add your personal expedition updates, training progress, and
+                  gear insights before sending.
                 </p>
               </div>
               <div>
-                <h4 className="text-lg font-semibold text-summitGold mb-3">📧 Easy Export</h4>
+                <h4 className="text-lg font-semibold text-summitGold mb-3">
+                  📧 Easy Export
+                </h4>
                 <p className="text-white/80 text-sm">
-                  Copy the formatted content directly to your Buttondown account for sending.
+                  Copy the formatted content directly to your Buttondown account
+                  for sending.
                 </p>
               </div>
               <div>
-                <h4 className="text-lg font-semibold text-summitGold mb-3">🎯 Personalized</h4>
+                <h4 className="text-lg font-semibold text-summitGold mb-3">
+                  🎯 Personalized
+                </h4>
                 <p className="text-white/80 text-sm">
-                  Each draft includes your voice and encourages subscriber engagement through questions.
+                  Each draft includes your voice and encourages subscriber
+                  engagement through questions.
                 </p>
               </div>
             </div>

@@ -1,102 +1,102 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { 
-  Play, 
-  Pause, 
-  RefreshCw, 
-  Database, 
-  Clock, 
-  CheckCircle, 
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import {
+  Play,
+  Pause,
+  RefreshCw,
+  Database,
+  Clock,
+  CheckCircle,
   AlertCircle,
   Activity,
   Settings,
-  BarChart3
-} from 'lucide-react'
+  BarChart3,
+} from 'lucide-react';
 
 interface SyncStatus {
-  isRunning: boolean
+  isRunning: boolean;
   config: {
-    intervalMinutes: number
-    enableStrava: boolean
-    enableWeather: boolean
-    enableCache: boolean
-  }
-  cacheSize: number
-  lastSync: string | null
+    intervalMinutes: number;
+    enableStrava: boolean;
+    enableWeather: boolean;
+    enableCache: boolean;
+  };
+  cacheSize: number;
+  lastSync: string | null;
 }
 
 interface SyncResult {
-  success: boolean
-  synced: string[]
-  errors: string[]
+  success: boolean;
+  synced: string[];
+  errors: string[];
 }
 
 export function SyncManager() {
-  const [status, setStatus] = useState<SyncStatus | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [syncing, setSyncing] = useState(false)
-  const [lastSyncResult, setLastSyncResult] = useState<SyncResult | null>(null)
+  const [status, setStatus] = useState<SyncStatus | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
+  const [lastSyncResult, setLastSyncResult] = useState<SyncResult | null>(null);
 
   const fetchStatus = async () => {
     try {
-      const response = await fetch('/api/sync?action=status')
-      const data = await response.json()
+      const response = await fetch('/api/sync?action=status');
+      const data = await response.json();
       if (data.success) {
-        setStatus(data.data)
+        setStatus(data.data);
       }
     } catch (error) {
-      console.error('Failed to fetch sync status:', error)
+      console.error('Failed to fetch sync status:', error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchStatus()
+    fetchStatus();
     // Refresh status every 30 seconds
-    const interval = setInterval(fetchStatus, 30000)
-    return () => clearInterval(interval)
-  }, [])
+    const interval = setInterval(fetchStatus, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleStart = async () => {
     try {
-      const response = await fetch('/api/sync?action=start')
-      const data = await response.json()
+      const response = await fetch('/api/sync?action=start');
+      const data = await response.json();
       if (data.success) {
-        setStatus(data.data)
+        setStatus(data.data);
       }
     } catch (error) {
-      console.error('Failed to start sync:', error)
+      console.error('Failed to start sync:', error);
     }
-  }
+  };
 
   const handleStop = async () => {
     try {
-      const response = await fetch('/api/sync?action=stop')
-      const data = await response.json()
+      const response = await fetch('/api/sync?action=stop');
+      const data = await response.json();
       if (data.success) {
-        setStatus(data.data)
+        setStatus(data.data);
       }
     } catch (error) {
-      console.error('Failed to stop sync:', error)
+      console.error('Failed to stop sync:', error);
     }
-  }
+  };
 
   const handleManualSync = async () => {
-    setSyncing(true)
+    setSyncing(true);
     try {
-      const response = await fetch('/api/sync?action=sync')
-      const data = await response.json()
-      setLastSyncResult(data.data)
-      await fetchStatus() // Refresh status after sync
+      const response = await fetch('/api/sync?action=sync');
+      const data = await response.json();
+      setLastSyncResult(data.data);
+      await fetchStatus(); // Refresh status after sync
     } catch (error) {
-      console.error('Failed to perform manual sync:', error)
+      console.error('Failed to perform manual sync:', error);
     } finally {
-      setSyncing(false)
+      setSyncing(false);
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -106,7 +106,7 @@ export function SyncManager() {
           <div className="h-16 bg-spa-stone/20 rounded"></div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -123,11 +123,13 @@ export function SyncManager() {
             <Database className="w-8 h-8" />
             <h2 className="text-2xl font-light">Data Sync Manager</h2>
           </div>
-          <div className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
-            status?.isRunning 
-              ? 'bg-green-500/20 text-green-100' 
-              : 'bg-red-500/20 text-red-100'
-          }`}>
+          <div
+            className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium ${
+              status?.isRunning
+                ? 'bg-green-500/20 text-green-100'
+                : 'bg-red-500/20 text-red-100'
+            }`}
+          >
             {status?.isRunning ? (
               <>
                 <Play className="w-4 h-4" />
@@ -166,7 +168,7 @@ export function SyncManager() {
               </>
             )}
           </button>
-          
+
           <button
             onClick={handleManualSync}
             disabled={syncing}
@@ -186,7 +188,7 @@ export function SyncManager() {
             </div>
             <div className="text-xs text-spa-charcoal/60">Sync Interval</div>
           </div>
-          
+
           <div className="text-center p-3 bg-spa-cloud/10 rounded-lg">
             <Database className="w-6 h-6 mx-auto mb-2 text-alpine-blue" />
             <div className="text-lg font-light text-spa-charcoal">
@@ -194,22 +196,28 @@ export function SyncManager() {
             </div>
             <div className="text-xs text-spa-charcoal/60">Cache Entries</div>
           </div>
-          
+
           <div className="text-center p-3 bg-spa-cloud/10 rounded-lg">
             <Activity className="w-6 h-6 mx-auto mb-2 text-alpine-blue" />
-            <div className={`text-lg font-light ${
-              status?.config.enableStrava ? 'text-green-600' : 'text-gray-400'
-            }`}>
+            <div
+              className={`text-lg font-light ${
+                status?.config.enableStrava ? 'text-green-600' : 'text-gray-400'
+              }`}
+            >
               {status?.config.enableStrava ? 'ON' : 'OFF'}
             </div>
             <div className="text-xs text-spa-charcoal/60">Strava Sync</div>
           </div>
-          
+
           <div className="text-center p-3 bg-spa-cloud/10 rounded-lg">
             <BarChart3 className="w-6 h-6 mx-auto mb-2 text-alpine-blue" />
-            <div className={`text-lg font-light ${
-              status?.config.enableWeather ? 'text-green-600' : 'text-gray-400'
-            }`}>
+            <div
+              className={`text-lg font-light ${
+                status?.config.enableWeather
+                  ? 'text-green-600'
+                  : 'text-gray-400'
+              }`}
+            >
               {status?.config.enableWeather ? 'ON' : 'OFF'}
             </div>
             <div className="text-xs text-spa-charcoal/60">Weather Sync</div>
@@ -218,34 +226,40 @@ export function SyncManager() {
 
         {/* Last Sync Result */}
         {lastSyncResult && (
-          <div className={`p-4 rounded-lg border ${
-            lastSyncResult.success 
-              ? 'bg-green-50 border-green-200' 
-              : 'bg-red-50 border-red-200'
-          }`}>
+          <div
+            className={`p-4 rounded-lg border ${
+              lastSyncResult.success
+                ? 'bg-green-50 border-green-200'
+                : 'bg-red-50 border-red-200'
+            }`}
+          >
             <div className="flex items-center gap-2 mb-2">
               {lastSyncResult.success ? (
                 <CheckCircle className="w-5 h-5 text-green-600" />
               ) : (
                 <AlertCircle className="w-5 h-5 text-red-600" />
               )}
-              <h4 className={`font-medium ${
-                lastSyncResult.success ? 'text-green-900' : 'text-red-900'
-              }`}>
+              <h4
+                className={`font-medium ${
+                  lastSyncResult.success ? 'text-green-900' : 'text-red-900'
+                }`}
+              >
                 Last Sync {lastSyncResult.success ? 'Successful' : 'Failed'}
               </h4>
             </div>
-            
+
             {lastSyncResult.synced.length > 0 && (
               <div className="mb-2">
-                <span className={`text-sm ${
-                  lastSyncResult.success ? 'text-green-800' : 'text-red-800'
-                }`}>
+                <span
+                  className={`text-sm ${
+                    lastSyncResult.success ? 'text-green-800' : 'text-red-800'
+                  }`}
+                >
                   Synced: {lastSyncResult.synced.join(', ')}
                 </span>
               </div>
             )}
-            
+
             {lastSyncResult.errors.length > 0 && (
               <div>
                 <span className="text-sm text-red-800">
@@ -264,20 +278,24 @@ export function SyncManager() {
           </h4>
           <div className="grid md:grid-cols-2 gap-4 text-sm text-spa-charcoal/70">
             <div>
-              <strong>Auto-sync:</strong> Every {status?.config.intervalMinutes} minutes
+              <strong>Auto-sync:</strong> Every {status?.config.intervalMinutes}{' '}
+              minutes
             </div>
             <div>
-              <strong>Cache:</strong> {status?.config.enableCache ? 'Enabled' : 'Disabled'}
+              <strong>Cache:</strong>{' '}
+              {status?.config.enableCache ? 'Enabled' : 'Disabled'}
             </div>
             <div>
-              <strong>Strava Integration:</strong> {status?.config.enableStrava ? 'Active' : 'Inactive'}
+              <strong>Strava Integration:</strong>{' '}
+              {status?.config.enableStrava ? 'Active' : 'Inactive'}
             </div>
             <div>
-              <strong>Weather Integration:</strong> {status?.config.enableWeather ? 'Active' : 'Inactive'}
+              <strong>Weather Integration:</strong>{' '}
+              {status?.config.enableWeather ? 'Active' : 'Inactive'}
             </div>
           </div>
         </div>
       </div>
     </motion.div>
-  )
+  );
 }

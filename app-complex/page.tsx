@@ -1,4 +1,4 @@
-import MinimalHero from "./components/hero/MinimalHero";
+import MinimalHero from './components/hero/MinimalHero';
 
 export default function HomePage() {
   return (

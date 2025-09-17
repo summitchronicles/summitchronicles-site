@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
 
 // Mock Strava activity data that looks realistic
 const mockStravaActivities = [
@@ -18,7 +18,8 @@ const mockStravaActivities = [
     average_speed: 0.87, // m/s
     max_speed: 2.1,
     calories: 1420,
-    description: 'Focused on maintaining steady pace at altitude. Good progress on cardiovascular adaptation.',
+    description:
+      'Focused on maintaining steady pace at altitude. Good progress on cardiovascular adaptation.',
     gear_id: 'hiking_boots_1',
     trainer: false,
     commute: false,
@@ -44,13 +45,13 @@ const mockStravaActivities = [
     map: {
       id: 'a10342857463',
       summary_polyline: 'u{~vFvyys@fS]',
-      resource_state: 2
+      resource_state: 2,
     },
     trainer_gear: false,
     visibility: 'everyone',
     from_accepted_tag: false,
     average_temp: 8, // Celsius
-    device_name: 'Garmin Fenix 7X'
+    device_name: 'Garmin Fenix 7X',
   },
   {
     id: '10289341752',
@@ -68,7 +69,8 @@ const mockStravaActivities = [
     average_speed: 2.28,
     max_speed: 3.1,
     calories: 720,
-    description: 'Steady zone 2 run focusing on aerobic base development. Felt strong throughout.',
+    description:
+      'Steady zone 2 run focusing on aerobic base development. Felt strong throughout.',
     suffer_score: 45,
     weighted_average_watts: 280,
     device_watts: true,
@@ -83,7 +85,7 @@ const mockStravaActivities = [
     athlete_count: 1,
     photo_count: 1,
     average_temp: 12,
-    device_name: 'Garmin Fenix 7X'
+    device_name: 'Garmin Fenix 7X',
   },
   {
     id: '10198765432',
@@ -96,12 +98,13 @@ const mockStravaActivities = [
     average_heartrate: null, // No HR data for technical climbing
     max_heartrate: null,
     location_city: 'Ouray',
-    location_state: 'Colorado', 
+    location_state: 'Colorado',
     location_country: 'United States',
     average_speed: 0.29,
     max_speed: 1.2,
     calories: 890,
-    description: 'Multi-pitch ice climbing practice. Worked on efficient movement and anchor building. Great conditions.',
+    description:
+      'Multi-pitch ice climbing practice. Worked on efficient movement and anchor building. Great conditions.',
     suffer_score: 92,
     weighted_average_watts: null,
     device_watts: false,
@@ -116,7 +119,7 @@ const mockStravaActivities = [
     athlete_count: 2, // Climbing partner
     photo_count: 8,
     average_temp: -5,
-    device_name: 'Garmin Fenix 7X'
+    device_name: 'Garmin Fenix 7X',
   },
   {
     id: '10156789012',
@@ -134,7 +137,8 @@ const mockStravaActivities = [
     average_speed: 0.88,
     max_speed: 1.9,
     calories: 1650,
-    description: 'Expedition pack weight training with 20kg load. Simulating Everest base camp approaches.',
+    description:
+      'Expedition pack weight training with 20kg load. Simulating Everest base camp approaches.',
     suffer_score: 85,
     weighted_average_watts: 195,
     device_watts: true,
@@ -149,7 +153,7 @@ const mockStravaActivities = [
     athlete_count: 1,
     photo_count: 2,
     average_temp: 6,
-    device_name: 'Garmin Fenix 7X'
+    device_name: 'Garmin Fenix 7X',
   },
   {
     id: '10098765431',
@@ -167,7 +171,8 @@ const mockStravaActivities = [
     average_speed: 2.41,
     max_speed: 2.8,
     calories: 485,
-    description: 'Easy recovery run on familiar trails. Focused on maintaining aerobic base without stress.',
+    description:
+      'Easy recovery run on familiar trails. Focused on maintaining aerobic base without stress.',
     suffer_score: 22,
     weighted_average_watts: 210,
     device_watts: true,
@@ -182,31 +187,32 @@ const mockStravaActivities = [
     athlete_count: 1,
     photo_count: 0,
     average_temp: 18,
-    device_name: 'Garmin Fenix 7X'
-  }
-]
+    device_name: 'Garmin Fenix 7X',
+  },
+];
 
 export async function GET() {
   try {
     // Optimize performance - no artificial delay needed
-    
+
     // Transform data to match our frontend expectations
-    const transformedActivities = mockStravaActivities.map(activity => ({
+    const transformedActivities = mockStravaActivities.map((activity) => ({
       id: activity.id,
       name: activity.name,
       type: activity.type,
       date: new Date(activity.start_date).toLocaleDateString('en-US', {
         month: 'short',
         day: 'numeric',
-        year: 'numeric'
+        year: 'numeric',
       }),
       distance: (activity.distance / 1000).toFixed(1), // Convert to km
       duration: activity.moving_time,
       elevation: activity.total_elevation_gain,
       heartRate: activity.average_heartrate,
-      location: activity.location_city && activity.location_state 
-        ? `${activity.location_city}, ${activity.location_state}`
-        : 'Training Location',
+      location:
+        activity.location_city && activity.location_state
+          ? `${activity.location_city}, ${activity.location_state}`
+          : 'Training Location',
       calories: activity.calories,
       averageSpeed: activity.average_speed,
       maxSpeed: activity.max_speed,
@@ -215,30 +221,29 @@ export async function GET() {
       kudosCount: activity.kudos_count,
       photoCount: activity.photo_count,
       deviceName: activity.device_name,
-      averageTemp: activity.average_temp
-    }))
+      averageTemp: activity.average_temp,
+    }));
 
     return NextResponse.json({
       activities: transformedActivities,
       source: 'Strava API Mock',
       lastSync: new Date().toISOString(),
       totalActivities: transformedActivities.length,
-      status: 'success'
-    })
-
+      status: 'success',
+    });
   } catch (error) {
-    console.error('Error fetching Strava activities:', error)
+    console.error('Error fetching Strava activities:', error);
     return NextResponse.json(
-      { 
+      {
         error: 'Failed to fetch training activities',
         activities: [],
         source: 'error',
-        status: 'error'
+        status: 'error',
       },
       { status: 500 }
-    )
+    );
   }
 }
 
 // Export dynamic to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';

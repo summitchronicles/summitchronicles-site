@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 import {
   EnvelopeIcon,
   PresentationChartLineIcon,
@@ -8,53 +8,80 @@ import {
   DocumentTextIcon,
   GlobeAltIcon,
   UserGroupIcon,
-  MegaphoneIcon
-} from "@heroicons/react/24/outline";
+  MegaphoneIcon,
+} from '@heroicons/react/24/outline';
 
 export default function ConnectPage() {
   const collaborationTypes = [
     {
       icon: PresentationChartLineIcon,
-      title: "Speaking Engagements",
-      description: "Keynotes and presentations on mountaineering, goal-setting, perseverance, and overcoming challenges.",
-      topics: ["Seven Summits Journey", "Goal Achievement", "Risk Management", "Team Leadership"]
+      title: 'Speaking Engagements',
+      description:
+        'Keynotes and presentations on mountaineering, goal-setting, perseverance, and overcoming challenges.',
+      topics: [
+        'Seven Summits Journey',
+        'Goal Achievement',
+        'Risk Management',
+        'Team Leadership',
+      ],
     },
     {
       icon: UserGroupIcon,
-      title: "Brand Partnerships",
-      description: "Authentic partnerships with outdoor gear, fitness, and lifestyle brands that align with my values.",
-      topics: ["Gear Testing", "Product Reviews", "Brand Ambassadorship", "Content Creation"]
+      title: 'Brand Partnerships',
+      description:
+        'Authentic partnerships with outdoor gear, fitness, and lifestyle brands that align with my values.',
+      topics: [
+        'Gear Testing',
+        'Product Reviews',
+        'Brand Ambassadorship',
+        'Content Creation',
+      ],
     },
     {
       icon: CameraIcon,
-      title: "Media & Press",
-      description: "Interviews, documentaries, and media opportunities to share authentic mountaineering stories.",
-      topics: ["Expedition Documentaries", "Podcast Interviews", "Press Inquiries", "Photo Essays"]
+      title: 'Media & Press',
+      description:
+        'Interviews, documentaries, and media opportunities to share authentic mountaineering stories.',
+      topics: [
+        'Expedition Documentaries',
+        'Podcast Interviews',
+        'Press Inquiries',
+        'Photo Essays',
+      ],
     },
     {
       icon: UserGroupIcon,
-      title: "Mentoring & Coaching",
-      description: "Working with aspiring mountaineers and adventurers to plan and execute their own big goals.",
-      topics: ["Expedition Planning", "Training Guidance", "Mental Preparation", "Route Selection"]
-    }
+      title: 'Mentoring & Coaching',
+      description:
+        'Working with aspiring mountaineers and adventurers to plan and execute their own big goals.',
+      topics: [
+        'Expedition Planning',
+        'Training Guidance',
+        'Mental Preparation',
+        'Route Selection',
+      ],
+    },
   ];
 
   const mediaKit = [
     {
       icon: DocumentTextIcon,
-      title: "Media Kit",
-      description: "Professional photos, bio, expedition statistics, and speaking topics."
+      title: 'Media Kit',
+      description:
+        'Professional photos, bio, expedition statistics, and speaking topics.',
     },
     {
       icon: CameraIcon,
-      title: "High-Res Photos",
-      description: "Professional expedition photography for media and editorial use."
+      title: 'High-Res Photos',
+      description:
+        'Professional expedition photography for media and editorial use.',
     },
     {
       icon: GlobeAltIcon,
-      title: "Press Resources",
-      description: "Fact sheets, expedition timelines, and interview talking points."
-    }
+      title: 'Press Resources',
+      description:
+        'Fact sheets, expedition timelines, and interview talking points.',
+    },
   ];
 
   return (
@@ -78,15 +105,16 @@ export default function ConnectPage() {
           </motion.div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-8">
-            Connect &{" "}
+            Connect &{' '}
             <span className="bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
               Collaborate
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-white/70 leading-relaxed mb-12">
-            Interested in working together? I&apos;m always open to meaningful partnerships, 
-            speaking opportunities, and collaborations that align with my mountaineering journey.
+            Interested in working together? I&apos;m always open to meaningful
+            partnerships, speaking opportunities, and collaborations that align
+            with my mountaineering journey.
           </p>
 
           {/* Quick Contact */}
@@ -100,7 +128,7 @@ export default function ConnectPage() {
               <EnvelopeIcon className="w-6 h-6 text-summitGold" />
               <div className="text-left">
                 <p className="text-sm text-white/60 mb-1">Get in touch</p>
-                <a 
+                <a
                   href="mailto:hello@summitchronicles.com"
                   className="text-white font-medium hover:text-summitGold transition-colors"
                 >
@@ -123,14 +151,15 @@ export default function ConnectPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-white mb-6">
-              How We Can{" "}
+              How We Can{' '}
               <span className="bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
                 Work Together
               </span>
             </h2>
             <p className="text-xl text-white/70 max-w-3xl mx-auto">
-              I&apos;m selective about partnerships and collaborations, focusing on authentic 
-              connections that provide real value to my audience and align with my values.
+              I&apos;m selective about partnerships and collaborations, focusing
+              on authentic connections that provide real value to my audience
+              and align with my values.
             </p>
           </motion.div>
 
@@ -187,18 +216,37 @@ export default function ConnectPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-white mb-6">Why Partner With Me?</h2>
+            <h2 className="text-3xl font-bold text-white mb-6">
+              Why Partner With Me?
+            </h2>
             <p className="text-white/70">
-              Authentic reach and engagement in the mountaineering and outdoor adventure community
+              Authentic reach and engagement in the mountaineering and outdoor
+              adventure community
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
-              { value: "10K+", label: "Monthly Readers", description: "Engaged mountaineering enthusiasts" },
-              { value: "3/7", label: "Summits Completed", description: "Proven expedition experience" },
-              { value: "5+", label: "Years Climbing", description: "Deep mountaineering knowledge" },
-              { value: "100%", label: "Authenticity", description: "Only promote what I actually use" }
+              {
+                value: '10K+',
+                label: 'Monthly Readers',
+                description: 'Engaged mountaineering enthusiasts',
+              },
+              {
+                value: '3/7',
+                label: 'Summits Completed',
+                description: 'Proven expedition experience',
+              },
+              {
+                value: '5+',
+                label: 'Years Climbing',
+                description: 'Deep mountaineering knowledge',
+              },
+              {
+                value: '100%',
+                label: 'Authenticity',
+                description: 'Only promote what I actually use',
+              },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -208,7 +256,9 @@ export default function ConnectPage() {
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center"
               >
-                <div className="text-3xl font-bold text-summitGold mb-2">{stat.value}</div>
+                <div className="text-3xl font-bold text-summitGold mb-2">
+                  {stat.value}
+                </div>
                 <div className="text-white font-medium mb-1">{stat.label}</div>
                 <div className="text-sm text-white/60">{stat.description}</div>
               </motion.div>
@@ -227,9 +277,12 @@ export default function ConnectPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-white mb-6">Media Resources</h2>
+            <h2 className="text-3xl font-bold text-white mb-6">
+              Media Resources
+            </h2>
             <p className="text-white/70">
-              Everything you need for press coverage, interviews, and content creation
+              Everything you need for press coverage, interviews, and content
+              creation
             </p>
           </motion.div>
 
@@ -246,7 +299,9 @@ export default function ConnectPage() {
                 <div className="p-4 rounded-xl bg-gradient-to-br from-summitGold/20 to-yellow-400/20 inline-block mb-6">
                   <resource.icon className="w-8 h-8 text-summitGold" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">{resource.title}</h3>
+                <h3 className="text-xl font-bold text-white mb-3">
+                  {resource.title}
+                </h3>
                 <p className="text-white/70 mb-6">{resource.description}</p>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -271,7 +326,9 @@ export default function ConnectPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl font-bold text-white mb-6">Start a Conversation</h2>
+            <h2 className="text-3xl font-bold text-white mb-6">
+              Start a Conversation
+            </h2>
             <p className="text-white/70">
               Tell me about your project, event, or collaboration idea
             </p>
@@ -287,7 +344,10 @@ export default function ConnectPage() {
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
+                  <label
+                    htmlFor="name"
+                    className="block text-sm font-medium text-white mb-2"
+                  >
                     Name
                   </label>
                   <input
@@ -298,7 +358,10 @@ export default function ConnectPage() {
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-white mb-2">
+                  <label
+                    htmlFor="email"
+                    className="block text-sm font-medium text-white mb-2"
+                  >
                     Email
                   </label>
                   <input
@@ -311,7 +374,10 @@ export default function ConnectPage() {
               </div>
 
               <div>
-                <label htmlFor="company" className="block text-sm font-medium text-white mb-2">
+                <label
+                  htmlFor="company"
+                  className="block text-sm font-medium text-white mb-2"
+                >
                   Company/Organization
                 </label>
                 <input
@@ -323,7 +389,10 @@ export default function ConnectPage() {
               </div>
 
               <div>
-                <label htmlFor="type" className="block text-sm font-medium text-white mb-2">
+                <label
+                  htmlFor="type"
+                  className="block text-sm font-medium text-white mb-2"
+                >
                   Collaboration Type
                 </label>
                 <select
@@ -340,7 +409,10 @@ export default function ConnectPage() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-white mb-2">
+                <label
+                  htmlFor="message"
+                  className="block text-sm font-medium text-white mb-2"
+                >
                   Message
                 </label>
                 <textarea
@@ -372,9 +444,12 @@ export default function ConnectPage() {
             className="text-center mt-8"
           >
             <p className="text-sm text-white/60">
-              I typically respond within 2-3 business days. For urgent inquiries, 
-              please email directly at{" "}
-              <a href="mailto:hello@summitchronicles.com" className="text-summitGold hover:underline">
+              I typically respond within 2-3 business days. For urgent
+              inquiries, please email directly at{' '}
+              <a
+                href="mailto:hello@summitchronicles.com"
+                className="text-summitGold hover:underline"
+              >
                 hello@summitchronicles.com
               </a>
             </p>

@@ -1,1 +1,1 @@
-export { InteractiveStatsGrid } from './InteractiveStatsGrid'
+export { InteractiveStatsGrid } from './InteractiveStatsGrid';

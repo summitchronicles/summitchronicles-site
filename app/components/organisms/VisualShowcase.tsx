@@ -13,42 +13,56 @@ interface VisualShowcaseProps {
 
 const VisualShowcase: React.FC<VisualShowcaseProps> = ({ className }) => {
   return (
-    <section className={cn(
-      'py-24 bg-gradient-to-br from-spa-mist to-white relative overflow-hidden',
-      className
-    )}>
+    <section
+      className={cn(
+        'py-24 bg-gradient-to-br from-spa-mist to-white relative overflow-hidden',
+        className
+      )}
+    >
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-spa-cloud to-transparent" />
-      
+
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center space-y-6 mb-16">
           <H2 className="text-spa-charcoal">Expedition Visual Journey</H2>
           <BodyLarge className="max-w-3xl mx-auto text-spa-slate">
-            Experience the breathtaking moments, challenging conditions, and triumphant achievements 
-            through our premium visual documentation system.
+            Experience the breathtaking moments, challenging conditions, and
+            triumphant achievements through our premium visual documentation
+            system.
           </BodyLarge>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          <Card variant="elevated" padding="lg" className="overflow-hidden hover:shadow-spa-strong transition-all duration-500">
+          <Card
+            variant="elevated"
+            padding="lg"
+            className="overflow-hidden hover:shadow-spa-strong transition-all duration-500"
+          >
             <div className="relative aspect-[16/10] overflow-hidden mb-6">
               <div className="absolute inset-0 bg-gradient-to-br from-alpine-blue/20 via-transparent to-summit-gold/10" />
               <div className="absolute inset-0 bg-spa-charcoal/60 flex items-center justify-center">
                 <div className="text-center text-white space-y-4">
-                  <Icon name="Mountain" size="xl" className="mx-auto opacity-80" />
+                  <Icon
+                    name="Mountain"
+                    size="xl"
+                    className="mx-auto opacity-80"
+                  />
                   <H3 className="text-white">Everest Base Camp Approach</H3>
                   <Body className="text-spa-mist max-w-md">
-                    High-resolution expedition photography capturing every step of the journey 
-                    toward the world's highest peak.
+                    High-resolution expedition photography capturing every step
+                    of the journey toward the world's highest peak.
                   </Body>
                 </div>
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between">
               <div>
-                <H3 className="text-spa-charcoal mb-2">Premium Visual Documentation</H3>
+                <H3 className="text-spa-charcoal mb-2">
+                  Premium Visual Documentation
+                </H3>
                 <Body className="text-spa-slate">
-                  Professional-grade photography and videography throughout the expedition
+                  Professional-grade photography and videography throughout the
+                  expedition
                 </Body>
               </div>
               <Button variant="ghost" size="sm">
@@ -58,33 +72,51 @@ const VisualShowcase: React.FC<VisualShowcaseProps> = ({ className }) => {
           </Card>
 
           <div className="space-y-6">
-            <Card variant="elevated" padding="md" className="overflow-hidden group hover:shadow-spa-medium transition-all duration-300">
+            <Card
+              variant="elevated"
+              padding="md"
+              className="overflow-hidden group hover:shadow-spa-medium transition-all duration-300"
+            >
               <div className="relative aspect-square overflow-hidden mb-4">
                 <div className="absolute inset-0 bg-gradient-to-br from-summit-gold/20 to-alpine-blue/10" />
                 <div className="absolute inset-0 bg-spa-charcoal/50 flex items-center justify-center">
                   <div className="text-center text-white space-y-2">
-                    <Icon name="Activity" size="xl" className="mx-auto opacity-80" />
+                    <Icon
+                      name="Activity"
+                      size="xl"
+                      className="mx-auto opacity-80"
+                    />
                     <H3 className="text-white text-lg">Training Sessions</H3>
                   </div>
                 </div>
               </div>
               <Body className="text-spa-slate text-sm">
-                Weekly training documentation with performance metrics and insights
+                Weekly training documentation with performance metrics and
+                insights
               </Body>
             </Card>
 
-            <Card variant="elevated" padding="md" className="overflow-hidden group hover:shadow-spa-medium transition-all duration-300">
+            <Card
+              variant="elevated"
+              padding="md"
+              className="overflow-hidden group hover:shadow-spa-medium transition-all duration-300"
+            >
               <div className="relative aspect-square overflow-hidden mb-4">
                 <div className="absolute inset-0 bg-gradient-to-br from-alpine-blue/15 to-spa-cloud" />
                 <div className="absolute inset-0 bg-spa-charcoal/50 flex items-center justify-center">
                   <div className="text-center text-white space-y-2">
-                    <Icon name="Shield" size="xl" className="mx-auto opacity-80" />
+                    <Icon
+                      name="Shield"
+                      size="xl"
+                      className="mx-auto opacity-80"
+                    />
                     <H3 className="text-white text-lg">Gear Testing</H3>
                   </div>
                 </div>
               </div>
               <Body className="text-spa-slate text-sm">
-                Comprehensive equipment evaluation and field testing documentation
+                Comprehensive equipment evaluation and field testing
+                documentation
               </Body>
             </Card>
           </div>
@@ -109,14 +141,19 @@ const VisualShowcase: React.FC<VisualShowcaseProps> = ({ className }) => {
           </div>
         </div>
 
-        <Card variant="premium" padding="lg" className="bg-gradient-to-r from-white to-spa-mist border-2 border-spa-cloud/30">
+        <Card
+          variant="premium"
+          padding="lg"
+          className="bg-gradient-to-r from-white to-spa-mist border-2 border-spa-cloud/30"
+        >
           <div className="flex flex-col lg:flex-row items-center gap-8">
             <div className="flex-1 space-y-4">
               <H3 className="text-spa-charcoal">Interactive Journey Gallery</H3>
               <Body className="text-spa-slate">
-                Explore high-resolution imagery, time-lapse sequences, and behind-the-scenes 
-                content from every stage of the expedition preparation. Each image tells a 
-                story of dedication, progress, and the relentless pursuit of excellence.
+                Explore high-resolution imagery, time-lapse sequences, and
+                behind-the-scenes content from every stage of the expedition
+                preparation. Each image tells a story of dedication, progress,
+                and the relentless pursuit of excellence.
               </Body>
               <div className="flex flex-wrap gap-3 pt-4">
                 <Button variant="primary" size="md">
@@ -129,7 +166,7 @@ const VisualShowcase: React.FC<VisualShowcaseProps> = ({ className }) => {
                 </Button>
               </div>
             </div>
-            
+
             <div className="flex-shrink-0">
               <div className="relative">
                 <div className="w-32 h-32 bg-gradient-to-br from-alpine-blue via-summit-gold to-alpine-blue rounded-2xl flex items-center justify-center shadow-spa-medium">

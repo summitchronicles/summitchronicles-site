@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -38,15 +38,19 @@ export async function GET(request: NextRequest) {
     }
 
     // Add full URL to each media item
-    const mediaWithUrls = media?.map(item => ({
-      ...item,
-      url: item.file_path
-    })) || [];
+    const mediaWithUrls =
+      media?.map((item) => ({
+        ...item,
+        url: item.file_path,
+      })) || [];
 
     return NextResponse.json({ media: mediaWithUrls });
   } catch (error) {
     console.error('Media API error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -56,7 +60,10 @@ export async function DELETE(request: NextRequest) {
     const mediaId = searchParams.get('id');
 
     if (!mediaId) {
-      return NextResponse.json({ error: 'Media ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Media ID is required' },
+        { status: 400 }
+      );
     }
 
     // Get media record first
@@ -90,12 +97,18 @@ export async function DELETE(request: NextRequest) {
 
     if (dbError) {
       console.error('Database deletion error:', dbError);
-      return NextResponse.json({ error: 'Failed to delete media record' }, { status: 500 });
+      return NextResponse.json(
+        { error: 'Failed to delete media record' },
+        { status: 500 }
+      );
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Media deletion error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

@@ -18,11 +18,11 @@ interface UploadedImage {
   caption?: string;
 }
 
-export default function ImageUpload({ 
-  onImageUploaded, 
-  postId, 
+export default function ImageUpload({
+  onImageUploaded,
+  postId,
   className = '',
-  showGallery = false 
+  showGallery = false,
 }: ImageUploadProps) {
   const [uploading, setUploading] = useState(false);
   const [uploadedImages, setUploadedImages] = useState<UploadedImage[]>([]);
@@ -50,7 +50,7 @@ export default function ImageUpload({
 
   const uploadFile = async (file: File) => {
     setUploading(true);
-    
+
     try {
       const formData = new FormData();
       formData.append('file', file);
@@ -58,7 +58,7 @@ export default function ImageUpload({
 
       const response = await fetch('/api/blog/media/upload', {
         method: 'POST',
-        body: formData
+        body: formData,
       });
 
       const result = await response.json();
@@ -72,18 +72,19 @@ export default function ImageUpload({
         url: result.media.url,
         filename: result.media.filename,
         alt_text: result.media.alt_text,
-        caption: result.media.caption
+        caption: result.media.caption,
       };
 
-      setUploadedImages(prev => [...prev, newImage]);
-      
+      setUploadedImages((prev) => [...prev, newImage]);
+
       if (onImageUploaded) {
         onImageUploaded(newImage.url);
       }
-
     } catch (error) {
       console.error('Upload error:', error);
-      alert(`Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      alert(
+        `Upload failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+      );
     } finally {
       setUploading(false);
     }
@@ -93,7 +94,7 @@ export default function ImageUpload({
     try {
       const response = await fetch('/api/blog/media?limit=50');
       const result = await response.json();
-      
+
       if (response.ok) {
         setGallery(result.media || []);
       }
@@ -129,12 +130,12 @@ export default function ImageUpload({
   const deleteImage = async (imageId: string) => {
     try {
       const response = await fetch(`/api/blog/media?id=${imageId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       });
 
       if (response.ok) {
-        setUploadedImages(prev => prev.filter(img => img.id !== imageId));
-        setGallery(prev => prev.filter(img => img.id !== imageId));
+        setUploadedImages((prev) => prev.filter((img) => img.id !== imageId));
+        setGallery((prev) => prev.filter((img) => img.id !== imageId));
       }
     } catch (error) {
       console.error('Delete error:', error);
@@ -148,9 +149,10 @@ export default function ImageUpload({
       <div
         className={`
           border-2 border-dashed rounded-lg p-6 text-center transition-colors cursor-pointer
-          ${dragOver 
-            ? 'border-orange-400 bg-orange-50' 
-            : 'border-gray-300 hover:border-gray-400'
+          ${
+            dragOver
+              ? 'border-orange-400 bg-orange-50'
+              : 'border-gray-300 hover:border-gray-400'
           }
           ${uploading ? 'opacity-50 cursor-not-allowed' : ''}
         `}
@@ -163,10 +165,8 @@ export default function ImageUpload({
         <p className="text-sm text-gray-600 mb-2">
           {uploading ? 'Uploading...' : 'Click to upload or drag and drop'}
         </p>
-        <p className="text-xs text-gray-400">
-          PNG, JPG, GIF up to 5MB
-        </p>
-        
+        <p className="text-xs text-gray-400">PNG, JPG, GIF up to 5MB</p>
+
         <input
           ref={fileInputRef}
           type="file"
@@ -193,7 +193,9 @@ export default function ImageUpload({
       {/* Recently Uploaded Images */}
       {uploadedImages.length > 0 && (
         <div className="mt-4">
-          <h4 className="text-sm font-medium text-gray-900 mb-2">Recently Uploaded</h4>
+          <h4 className="text-sm font-medium text-gray-900 mb-2">
+            Recently Uploaded
+          </h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {uploadedImages.map((image) => (
               <div key={image.id} className="relative group">
@@ -244,7 +246,9 @@ export default function ImageUpload({
                 ))}
               </div>
               {gallery.length === 0 && (
-                <p className="text-center text-gray-500 py-8">No images found</p>
+                <p className="text-center text-gray-500 py-8">
+                  No images found
+                </p>
               )}
             </div>
           </div>

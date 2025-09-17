@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { TrophyIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
+import { motion } from 'framer-motion';
+import { TrophyIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 
 export default function MinimalSponsorshipPage() {
   return (
@@ -40,10 +40,13 @@ export default function MinimalSponsorshipPage() {
           className="mb-12"
         >
           <p className="text-xl md:text-2xl text-white/80 mb-6">
-            From hospital bed to world's highest peak.<br />
-            <span className="text-summitGold font-semibold">Your brand on the journey to Everest.</span>
+            From hospital bed to world's highest peak.
+            <br />
+            <span className="text-summitGold font-semibold">
+              Your brand on the journey to Everest.
+            </span>
           </p>
-          
+
           <div className="flex justify-center gap-12 text-white/60">
             <div className="text-center">
               <div className="text-2xl font-bold text-summitGold">1M+</div>
@@ -68,7 +71,9 @@ export default function MinimalSponsorshipPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-2xl mx-auto"
         >
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8">
-            <h3 className="text-2xl font-bold text-white mb-4">Title Sponsor</h3>
+            <h3 className="text-2xl font-bold text-white mb-4">
+              Title Sponsor
+            </h3>
             <div className="text-4xl font-bold text-summitGold mb-4">$25K</div>
             <ul className="text-white/80 text-left space-y-2">
               <li>• Logo on all expedition content</li>
@@ -76,7 +81,7 @@ export default function MinimalSponsorshipPage() {
               <li>• Documentary film feature</li>
             </ul>
           </div>
-          
+
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-8">
             <h3 className="text-2xl font-bold text-white mb-4">Gear Partner</h3>
             <div className="text-4xl font-bold text-glacierBlue mb-4">$10K</div>
@@ -96,9 +101,9 @@ export default function MinimalSponsorshipPage() {
         >
           <motion.a
             href="mailto:hello@summitchronicles.com?subject=Everest 2027 Partnership Inquiry"
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.1)"
+              boxShadow: '0 20px 25px -5px rgba(245, 158, 11, 0.1)',
             }}
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center gap-3 bg-summitGold text-black font-bold text-xl px-12 py-6 rounded-2xl hover:bg-yellow-400 transition-colors"
@@ -106,10 +111,8 @@ export default function MinimalSponsorshipPage() {
             Partner With Me
             <ArrowRightIcon className="w-6 h-6" />
           </motion.a>
-          
-          <p className="text-white/50 text-sm mt-6">
-            Response within 24 hours
-          </p>
+
+          <p className="text-white/50 text-sm mt-6">Response within 24 hours</p>
         </motion.div>
       </div>
     </div>

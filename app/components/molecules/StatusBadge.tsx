@@ -8,11 +8,11 @@ interface StatusBadgeProps {
   className?: string;
 }
 
-const StatusBadge: React.FC<StatusBadgeProps> = ({ 
-  children, 
-  variant = 'default', 
+const StatusBadge: React.FC<StatusBadgeProps> = ({
+  children,
+  variant = 'default',
   size = 'md',
-  className 
+  className,
 }) => {
   const variants = {
     default: 'bg-spa-mist text-spa-charcoal',
@@ -29,12 +29,14 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({
   };
 
   return (
-    <span className={cn(
-      'inline-flex items-center rounded-full font-medium border transition-colors duration-200',
-      variants[variant],
-      sizes[size],
-      className
-    )}>
+    <span
+      className={cn(
+        'inline-flex items-center rounded-full font-medium border transition-colors duration-200',
+        variants[variant],
+        sizes[size],
+        className
+      )}
+    >
       {children}
     </span>
   );

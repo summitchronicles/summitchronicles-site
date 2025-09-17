@@ -45,15 +45,33 @@ const footerSections = {
 };
 
 const socialLinks = [
-  { href: 'https://instagram.com/summitchronicles', label: 'Instagram', icon: 'Instagram' as const },
-  { href: 'https://twitter.com/summitchronicles', label: 'Twitter', icon: 'Twitter' as const },
-  { href: 'https://youtube.com/summitchronicles', label: 'YouTube', icon: 'Youtube' as const },
-  { href: 'https://strava.com/athletes/29642479', label: 'Strava', icon: 'Activity' as const },
+  {
+    href: 'https://instagram.com/summitchronicles',
+    label: 'Instagram',
+    icon: 'Instagram' as const,
+  },
+  {
+    href: 'https://twitter.com/summitchronicles',
+    label: 'Twitter',
+    icon: 'Twitter' as const,
+  },
+  {
+    href: 'https://youtube.com/summitchronicles',
+    label: 'YouTube',
+    icon: 'Youtube' as const,
+  },
+  {
+    href: 'https://strava.com/athletes/29642479',
+    label: 'Strava',
+    icon: 'Activity' as const,
+  },
 ];
 
 const Footer: React.FC = () => {
   const [email, setEmail] = useState('');
-  const [subscriptionStatus, setSubscriptionStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [subscriptionStatus, setSubscriptionStatus] = useState<
+    'idle' | 'loading' | 'success' | 'error'
+  >('idle');
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,8 +116,9 @@ const Footer: React.FC = () => {
                   <H3 className="text-white">Summit Chronicles</H3>
                 </div>
                 <Body className="text-spa-mist max-w-md">
-                  Follow my journey to the summit through systematic training, 
-                  expedition preparation, and the pursuit of mountaineering excellence.
+                  Follow my journey to the summit through systematic training,
+                  expedition preparation, and the pursuit of mountaineering
+                  excellence.
                 </Body>
               </div>
 
@@ -107,9 +126,10 @@ const Footer: React.FC = () => {
               <div className="space-y-4">
                 <H4 className="text-white">Stay Connected</H4>
                 <Body className="text-spa-mist">
-                  Get weekly training updates, expedition insights, and behind-the-scenes content.
+                  Get weekly training updates, expedition insights, and
+                  behind-the-scenes content.
                 </Body>
-                
+
                 <form onSubmit={handleNewsletterSubmit} className="space-y-3">
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Input
@@ -120,15 +140,19 @@ const Footer: React.FC = () => {
                       className="flex-1 bg-spa-slate/20 border-spa-slate/30 text-white placeholder:text-spa-mist"
                       required
                     />
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       variant="summit"
                       disabled={subscriptionStatus === 'loading'}
                       className="sm:w-auto"
                     >
                       {subscriptionStatus === 'loading' ? (
                         <>
-                          <Icon name="Loader2" size="sm" className="animate-spin" />
+                          <Icon
+                            name="Loader2"
+                            size="sm"
+                            className="animate-spin"
+                          />
                           Subscribing...
                         </>
                       ) : (
@@ -139,13 +163,13 @@ const Footer: React.FC = () => {
                       )}
                     </Button>
                   </div>
-                  
+
                   {subscriptionStatus === 'success' && (
                     <StatusBadge variant="success" size="sm">
                       ✓ Successfully subscribed! Check your email.
                     </StatusBadge>
                   )}
-                  
+
                   {subscriptionStatus === 'error' && (
                     <StatusBadge variant="error" size="sm">
                       ✗ Something went wrong. Please try again.
@@ -167,7 +191,11 @@ const Footer: React.FC = () => {
                       className="flex items-center justify-center w-10 h-10 bg-spa-slate/20 hover:bg-alpine-blue rounded-md transition-colors duration-300 group"
                       aria-label={social.label}
                     >
-                      <Icon name={social.icon} size="sm" className="text-spa-mist group-hover:text-white transition-colors duration-300" />
+                      <Icon
+                        name={social.icon}
+                        size="sm"
+                        className="text-spa-mist group-hover:text-white transition-colors duration-300"
+                      />
                     </Link>
                   ))}
                 </div>
@@ -200,7 +228,9 @@ const Footer: React.FC = () => {
         {/* Social Proof Section */}
         <div className="py-8 border-b border-spa-slate/20">
           <div className="text-center space-y-4">
-            <Caption className="text-spa-mist uppercase tracking-wider">Expedition Status</Caption>
+            <Caption className="text-spa-mist uppercase tracking-wider">
+              Expedition Status
+            </Caption>
             <div className="flex flex-wrap justify-center gap-4">
               <StatusBadge variant="summit" size="sm">
                 <Icon name="Target" size="sm" />
@@ -216,7 +246,8 @@ const Footer: React.FC = () => {
               </StatusBadge>
             </div>
             <Small className="text-spa-mist">
-              Supporting the journey to summit Mt. Everest through systematic preparation and community backing
+              Supporting the journey to summit Mt. Everest through systematic
+              preparation and community backing
             </Small>
           </div>
         </div>
@@ -225,22 +256,37 @@ const Footer: React.FC = () => {
         <div className="py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-spa-mist">
-              <Link href="/privacy" className="hover:text-summit-gold transition-colors duration-300">
+              <Link
+                href="/privacy"
+                className="hover:text-summit-gold transition-colors duration-300"
+              >
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="hover:text-summit-gold transition-colors duration-300">
+              <Link
+                href="/terms"
+                className="hover:text-summit-gold transition-colors duration-300"
+              >
                 Terms of Service
               </Link>
-              <Link href="/media-kit" className="hover:text-summit-gold transition-colors duration-300">
+              <Link
+                href="/media-kit"
+                className="hover:text-summit-gold transition-colors duration-300"
+              >
                 Press Inquiries
               </Link>
-              <Link href="/contact" className="hover:text-summit-gold transition-colors duration-300">
+              <Link
+                href="/contact"
+                className="hover:text-summit-gold transition-colors duration-300"
+              >
                 Contact
               </Link>
             </div>
-            
+
             <div className="text-sm text-spa-mist text-center md:text-right">
-              <p>© {new Date().getFullYear()} Summit Chronicles. All rights reserved.</p>
+              <p>
+                © {new Date().getFullYear()} Summit Chronicles. All rights
+                reserved.
+              </p>
               <p className="text-xs mt-1">
                 Built with passion for the mountains ⛰️
               </p>

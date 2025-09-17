@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   ArrowDownTrayIcon,
   DocumentTextIcon,
@@ -11,8 +11,8 @@ import {
   MapIcon,
   AcademicCapIcon,
   CheckCircleIcon,
-  LockClosedIcon
-} from "@heroicons/react/24/outline";
+  LockClosedIcon,
+} from '@heroicons/react/24/outline';
 
 interface Resource {
   id: string;
@@ -36,69 +36,75 @@ export default function DownloadableResources() {
     {
       id: '12-week-foundation',
       title: '12-Week Foundation Training Plan',
-      description: 'Complete beginner to summit-ready progression with weekly schedules, exercise descriptions, and progress tracking.',
+      description:
+        'Complete beginner to summit-ready progression with weekly schedules, exercise descriptions, and progress tracking.',
       type: 'pdf',
       category: 'training',
       pages: 24,
       downloadCount: 1847,
       isPremium: false,
-      downloadUrl: '/downloads/12-week-foundation.pdf'
+      downloadUrl: '/downloads/12-week-foundation.pdf',
     },
     {
       id: 'gear-checklist',
       title: 'Summit-Specific Gear Checklists',
-      description: 'Detailed equipment lists for each of the Seven Summits, with weight optimization and budget alternatives.',
+      description:
+        'Detailed equipment lists for each of the Seven Summits, with weight optimization and budget alternatives.',
       type: 'checklist',
       category: 'gear',
       pages: 16,
       downloadCount: 2134,
       isPremium: false,
-      downloadUrl: '/downloads/gear-checklists.pdf'
+      downloadUrl: '/downloads/gear-checklists.pdf',
     },
     {
       id: 'safety-protocols',
       title: 'Mountain Safety & Risk Assessment Guide',
-      description: 'My decision-making framework for mountain safety, emergency protocols, and risk management strategies.',
+      description:
+        'My decision-making framework for mountain safety, emergency protocols, and risk management strategies.',
       type: 'guide',
       category: 'safety',
       pages: 32,
       downloadCount: 1456,
       isPremium: true,
-      downloadUrl: '/downloads/safety-protocols.pdf'
+      downloadUrl: '/downloads/safety-protocols.pdf',
     },
     {
       id: 'mental-prep-workbook',
       title: 'Mental Preparation Workbook',
-      description: 'Exercises for fear management, goal setting, and building mental resilience for challenging climbs.',
+      description:
+        'Exercises for fear management, goal setting, and building mental resilience for challenging climbs.',
       type: 'workbook',
       category: 'mental',
       pages: 28,
       downloadCount: 987,
       isPremium: true,
-      downloadUrl: '/downloads/mental-prep-workbook.pdf'
+      downloadUrl: '/downloads/mental-prep-workbook.pdf',
     },
     {
       id: 'altitude-nutrition',
       title: 'High-Altitude Nutrition Guide',
-      description: 'Meal planning, caloric requirements, and nutrition strategies for extended high-altitude expeditions.',
+      description:
+        'Meal planning, caloric requirements, and nutrition strategies for extended high-altitude expeditions.',
       type: 'guide',
       category: 'nutrition',
       pages: 20,
       downloadCount: 1234,
       isPremium: false,
-      downloadUrl: '/downloads/altitude-nutrition.pdf'
+      downloadUrl: '/downloads/altitude-nutrition.pdf',
     },
     {
       id: 'everest-protocol',
       title: 'Everest 2027 Training Protocol',
-      description: 'The exact 18-month training plan I\'m using to prepare for Everest, including hypoxic training schedules.',
+      description:
+        "The exact 18-month training plan I'm using to prepare for Everest, including hypoxic training schedules.",
       type: 'pdf',
       category: 'training',
       pages: 48,
       downloadCount: 756,
       isPremium: true,
-      downloadUrl: '/downloads/everest-protocol.pdf'
-    }
+      downloadUrl: '/downloads/everest-protocol.pdf',
+    },
   ];
 
   const categories = [
@@ -107,33 +113,45 @@ export default function DownloadableResources() {
     { id: 'gear', label: 'Gear Guides', icon: MapIcon },
     { id: 'safety', label: 'Safety Protocols', icon: ShieldCheckIcon },
     { id: 'mental', label: 'Mental Prep', icon: AcademicCapIcon },
-    { id: 'nutrition', label: 'Nutrition', icon: ClipboardDocumentListIcon }
+    { id: 'nutrition', label: 'Nutrition', icon: ClipboardDocumentListIcon },
   ];
 
   const getTypeIcon = (type: Resource['type']) => {
     switch (type) {
-      case 'pdf': return DocumentTextIcon;
-      case 'checklist': return ClipboardDocumentListIcon;
-      case 'guide': return MapIcon;
-      case 'workbook': return AcademicCapIcon;
-      default: return DocumentTextIcon;
+      case 'pdf':
+        return DocumentTextIcon;
+      case 'checklist':
+        return ClipboardDocumentListIcon;
+      case 'guide':
+        return MapIcon;
+      case 'workbook':
+        return AcademicCapIcon;
+      default:
+        return DocumentTextIcon;
     }
   };
 
   const getCategoryColor = (category: Resource['category']) => {
     switch (category) {
-      case 'training': return 'text-red-400 bg-red-400/10 border-red-400/20';
-      case 'gear': return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
-      case 'safety': return 'text-green-400 bg-green-400/10 border-green-400/20';
-      case 'mental': return 'text-purple-400 bg-purple-400/10 border-purple-400/20';
-      case 'nutrition': return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
-      default: return 'text-gray-400 bg-gray-400/10 border-gray-400/20';
+      case 'training':
+        return 'text-red-400 bg-red-400/10 border-red-400/20';
+      case 'gear':
+        return 'text-blue-400 bg-blue-400/10 border-blue-400/20';
+      case 'safety':
+        return 'text-green-400 bg-green-400/10 border-green-400/20';
+      case 'mental':
+        return 'text-purple-400 bg-purple-400/10 border-purple-400/20';
+      case 'nutrition':
+        return 'text-yellow-400 bg-yellow-400/10 border-yellow-400/20';
+      default:
+        return 'text-gray-400 bg-gray-400/10 border-gray-400/20';
     }
   };
 
-  const filteredResources = selectedCategory === 'all' 
-    ? resources 
-    : resources.filter(resource => resource.category === selectedCategory);
+  const filteredResources =
+    selectedCategory === 'all'
+      ? resources
+      : resources.filter((resource) => resource.category === selectedCategory);
 
   const handleDownload = (resource: Resource) => {
     if (resource.isPremium) {
@@ -183,7 +201,7 @@ export default function DownloadableResources() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredResources.map((resource, index) => {
           const TypeIcon = getTypeIcon(resource.type);
-          
+
           return (
             <motion.div
               key={resource.id}
@@ -206,10 +224,14 @@ export default function DownloadableResources() {
                   <TypeIcon className="w-6 h-6 text-summitGold" />
                 </div>
                 <div className="flex-1">
-                  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(resource.category)} mb-2`}>
+                  <span
+                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(resource.category)} mb-2`}
+                  >
                     {resource.category}
                   </span>
-                  <h3 className="text-lg font-semibold text-white mb-2">{resource.title}</h3>
+                  <h3 className="text-lg font-semibold text-white mb-2">
+                    {resource.title}
+                  </h3>
                 </div>
               </div>
 
@@ -252,7 +274,8 @@ export default function DownloadableResources() {
                     </button>
                   </div>
                   <p className="text-white/50 text-xs">
-                    No spam. Unsubscribe anytime. Download link valid for 48 hours.
+                    No spam. Unsubscribe anytime. Download link valid for 48
+                    hours.
                   </p>
                 </motion.div>
               ) : (
@@ -285,7 +308,9 @@ export default function DownloadableResources() {
           </div>
           <div>
             <div className="text-2xl font-bold text-summitGold mb-1">
-              {resources.reduce((total, r) => total + r.downloadCount, 0).toLocaleString()}
+              {resources
+                .reduce((total, r) => total + r.downloadCount, 0)
+                .toLocaleString()}
             </div>
             <div className="text-white/60 text-sm">Total Downloads</div>
           </div>

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
-import { 
-  CheckCircleIcon, 
-  ClockIcon, 
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import {
+  CheckCircleIcon,
+  ClockIcon,
   MapPinIcon,
   CalendarIcon,
   TrophyIcon,
@@ -13,14 +13,14 @@ import {
   ChevronRightIcon,
   GlobeAltIcon,
   FireIcon,
-  BoltIcon
-} from "@heroicons/react/24/outline";
+  BoltIcon,
+} from '@heroicons/react/24/outline';
 
 interface Summit {
   name: string;
   elevation: string;
   continent: string;
-  status: "completed" | "in_progress" | "planned";
+  status: 'completed' | 'in_progress' | 'planned';
   completedDate?: string;
   targetDate?: string;
   description: string;
@@ -36,155 +36,170 @@ interface Summit {
 
 const sevenSummits: Summit[] = [
   {
-    name: "Mount Elbrus",
-    elevation: "5,642m",
-    continent: "Europe",
-    status: "completed",
-    completedDate: "July 2022",
-    description: "The highest peak in Europe, conquered during summer climbing season.",
+    name: 'Mount Elbrus',
+    elevation: '5,642m',
+    continent: 'Europe',
+    status: 'completed',
+    completedDate: 'July 2022',
+    description:
+      'The highest peak in Europe, conquered during summer climbing season.',
     difficulty: 3,
-    flag: "🇷🇺",
+    flag: '🇷🇺',
     coordinates: { lat: 43.3499, lng: 42.4453 },
-    temperature: "-30°C to 15°C",
-    climbingTime: "5-7 days",
-    highlights: ["Dual summit", "Volcanic origin", "European record"],
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+    temperature: '-30°C to 15°C',
+    climbingTime: '5-7 days',
+    highlights: ['Dual summit', 'Volcanic origin', 'European record'],
+    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
     gallery: [
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300",
-      "https://images.unsplash.com/photo-1464822759844-d150baec93d5?w=300",
-      "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=300"
-    ]
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300',
+      'https://images.unsplash.com/photo-1464822759844-d150baec93d5?w=300',
+      'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=300',
+    ],
   },
   {
-    name: "Mount Kilimanjaro",
-    elevation: "5,895m",
-    continent: "Africa", 
-    status: "completed",
-    completedDate: "March 2023",
-    description: "Africa's rooftop. An incredible journey through five climate zones.",
+    name: 'Mount Kilimanjaro',
+    elevation: '5,895m',
+    continent: 'Africa',
+    status: 'completed',
+    completedDate: 'March 2023',
+    description:
+      "Africa's rooftop. An incredible journey through five climate zones.",
     difficulty: 2,
-    flag: "🇹🇿",
+    flag: '🇹🇿',
     coordinates: { lat: -3.0674, lng: 37.3556 },
-    temperature: "-10°C to 30°C",
-    climbingTime: "6-8 days",
-    highlights: ["Five climate zones", "Uhuru Peak", "No technical climbing"],
-    image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400",
+    temperature: '-10°C to 30°C',
+    climbingTime: '6-8 days',
+    highlights: ['Five climate zones', 'Uhuru Peak', 'No technical climbing'],
+    image: 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=400',
     gallery: [
-      "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=300",
-      "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300",
-      "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=300"
-    ]
+      'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=300',
+      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300',
+      'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=300',
+    ],
   },
   {
-    name: "Aconcagua",
-    elevation: "6,961m",
-    continent: "South America",
-    status: "completed", 
-    completedDate: "December 2023",
-    description: "The Stone Sentinel. My first real test at high altitude.",
+    name: 'Aconcagua',
+    elevation: '6,961m',
+    continent: 'South America',
+    status: 'completed',
+    completedDate: 'December 2023',
+    description: 'The Stone Sentinel. My first real test at high altitude.',
     difficulty: 4,
-    flag: "🇦🇷",
+    flag: '🇦🇷',
     coordinates: { lat: -32.6532, lng: -70.0109 },
-    temperature: "-40°C to 20°C",
-    climbingTime: "12-18 days",
-    highlights: ["Highest outside Asia", "Altitude sickness test", "Polish Glacier route"],
-    image: "https://images.unsplash.com/photo-1582721478779-0ae163c05a60?w=400",
+    temperature: '-40°C to 20°C',
+    climbingTime: '12-18 days',
+    highlights: [
+      'Highest outside Asia',
+      'Altitude sickness test',
+      'Polish Glacier route',
+    ],
+    image: 'https://images.unsplash.com/photo-1582721478779-0ae163c05a60?w=400',
     gallery: [
-      "https://images.unsplash.com/photo-1582721478779-0ae163c05a60?w=300",
-      "https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?w=300",
-      "https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=300"
-    ]
+      'https://images.unsplash.com/photo-1582721478779-0ae163c05a60?w=300',
+      'https://images.unsplash.com/photo-1506012787146-f92b2d7d6d96?w=300',
+      'https://images.unsplash.com/photo-1540979388789-6cee28a1cdc9?w=300',
+    ],
   },
   {
-    name: "Mount McKinley",
-    elevation: "6,190m",
-    continent: "North America",
-    status: "planned",
-    targetDate: "June 2025",
-    description: "Denali - the ultimate cold weather and technical challenge.",
+    name: 'Mount McKinley',
+    elevation: '6,190m',
+    continent: 'North America',
+    status: 'planned',
+    targetDate: 'June 2025',
+    description: 'Denali - the ultimate cold weather and technical challenge.',
     difficulty: 5,
-    flag: "🇺🇸",
-    coordinates: { lat: 63.0692, lng: -151.0070 },
-    temperature: "-50°C to -10°C",
-    climbingTime: "14-21 days",
-    highlights: ["Coldest mountain", "Technical climbing", "Weather window crucial"],
-    image: "https://images.unsplash.com/photo-1551524164-d526b2c22017?w=400",
+    flag: '🇺🇸',
+    coordinates: { lat: 63.0692, lng: -151.007 },
+    temperature: '-50°C to -10°C',
+    climbingTime: '14-21 days',
+    highlights: [
+      'Coldest mountain',
+      'Technical climbing',
+      'Weather window crucial',
+    ],
+    image: 'https://images.unsplash.com/photo-1551524164-d526b2c22017?w=400',
     gallery: [
-      "https://images.unsplash.com/photo-1551524164-d526b2c22017?w=300",
-      "https://images.unsplash.com/photo-1517824388924-41bafc36aea4?w=300"
-    ]
+      'https://images.unsplash.com/photo-1551524164-d526b2c22017?w=300',
+      'https://images.unsplash.com/photo-1517824388924-41bafc36aea4?w=300',
+    ],
   },
   {
-    name: "Carstensz Pyramid", 
-    elevation: "4,884m",
-    continent: "Oceania",
-    status: "planned",
-    targetDate: "September 2026",
-    description: "The technical climb. More rock climbing than mountaineering.",
+    name: 'Carstensz Pyramid',
+    elevation: '4,884m',
+    continent: 'Oceania',
+    status: 'planned',
+    targetDate: 'September 2026',
+    description: 'The technical climb. More rock climbing than mountaineering.',
     difficulty: 5,
-    flag: "🇮🇩",
+    flag: '🇮🇩',
     coordinates: { lat: -4.0833, lng: 137.1833 },
-    temperature: "0°C to 20°C",
-    climbingTime: "3-5 days",
-    highlights: ["Technical rock climb", "Equatorial glaciers", "Logistically complex"],
-    image: "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400",
+    temperature: '0°C to 20°C',
+    climbingTime: '3-5 days',
+    highlights: [
+      'Technical rock climb',
+      'Equatorial glaciers',
+      'Logistically complex',
+    ],
+    image: 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=400',
     gallery: [
-      "https://images.unsplash.com/photo-1464207687429-7505649dae38?w=300",
-      "https://images.unsplash.com/photo-1606868306217-dbf5046868d2?w=300"
-    ]
+      'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=300',
+      'https://images.unsplash.com/photo-1606868306217-dbf5046868d2?w=300',
+    ],
   },
   {
-    name: "Mount Vinson",
-    elevation: "4,892m", 
-    continent: "Antarctica",
-    status: "planned",
-    targetDate: "December 2026",
-    description: "The bottom of the world. Logistics and isolation are the main challenges.",
+    name: 'Mount Vinson',
+    elevation: '4,892m',
+    continent: 'Antarctica',
+    status: 'planned',
+    targetDate: 'December 2026',
+    description:
+      'The bottom of the world. Logistics and isolation are the main challenges.',
     difficulty: 4,
-    flag: "🇦🇶",
+    flag: '🇦🇶',
     coordinates: { lat: -78.5254, lng: -85.6171 },
-    temperature: "-40°C to -20°C",
-    climbingTime: "7-10 days",
-    highlights: ["24h daylight", "Extreme isolation", "Flying to base camp"],
-    image: "https://images.unsplash.com/photo-1551524164-0c2b0c801dfc?w=400",
+    temperature: '-40°C to -20°C',
+    climbingTime: '7-10 days',
+    highlights: ['24h daylight', 'Extreme isolation', 'Flying to base camp'],
+    image: 'https://images.unsplash.com/photo-1551524164-0c2b0c801dfc?w=400',
     gallery: [
-      "https://images.unsplash.com/photo-1551524164-0c2b0c801dfc?w=300",
-      "https://images.unsplash.com/photo-1578445531803-50a26a02fad6?w=300"
-    ]
+      'https://images.unsplash.com/photo-1551524164-0c2b0c801dfc?w=300',
+      'https://images.unsplash.com/photo-1578445531803-50a26a02fad6?w=300',
+    ],
   },
   {
-    name: "Mount Everest",
-    elevation: "8,849m",
-    continent: "Asia",
-    status: "in_progress",
-    targetDate: "May 2027",
-    description: "The ultimate goal. Everything leads to this moment.",
+    name: 'Mount Everest',
+    elevation: '8,849m',
+    continent: 'Asia',
+    status: 'in_progress',
+    targetDate: 'May 2027',
+    description: 'The ultimate goal. Everything leads to this moment.',
     difficulty: 5,
-    flag: "🇳🇵",
-    coordinates: { lat: 27.9881, lng: 86.9250 },
-    temperature: "-60°C to 0°C",
-    climbingTime: "45-60 days",
-    highlights: ["Death zone", "Ultimate challenge", "World's highest"],
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400",
+    flag: '🇳🇵',
+    coordinates: { lat: 27.9881, lng: 86.925 },
+    temperature: '-60°C to 0°C',
+    climbingTime: '45-60 days',
+    highlights: ['Death zone', 'Ultimate challenge', "World's highest"],
+    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
     gallery: [
-      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300",
-      "https://images.unsplash.com/photo-1464822759844-d150baec93d5?w=300",
-      "https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=300",
-      "https://images.unsplash.com/photo-1517824388924-41bafc36aea4?w=300"
-    ]
-  }
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300',
+      'https://images.unsplash.com/photo-1464822759844-d150baec93d5?w=300',
+      'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?w=300',
+      'https://images.unsplash.com/photo-1517824388924-41bafc36aea4?w=300',
+    ],
+  },
 ];
 
 const statusColors = {
-  completed: "text-green-400",
-  in_progress: "text-summitGold",
-  planned: "text-blue-400"
+  completed: 'text-green-400',
+  in_progress: 'text-summitGold',
+  planned: 'text-blue-400',
 };
 
 const statusBackgrounds = {
-  completed: "from-green-400/20 to-green-600/20 border-green-400/30",
-  in_progress: "from-summitGold/20 to-yellow-400/20 border-summitGold/30", 
-  planned: "from-blue-400/20 to-purple-400/20 border-blue-400/30"
+  completed: 'from-green-400/20 to-green-600/20 border-green-400/30',
+  in_progress: 'from-summitGold/20 to-yellow-400/20 border-summitGold/30',
+  planned: 'from-blue-400/20 to-purple-400/20 border-blue-400/30',
 };
 
 export default function EnhancedSevenSummitsTracker() {
@@ -193,19 +208,27 @@ export default function EnhancedSevenSummitsTracker() {
   const [activeStats, setActiveStats] = useState({
     completed: 0,
     totalElevation: 0,
-    countries: 0
+    countries: 0,
   });
 
-  const completedCount = sevenSummits.filter(s => s.status === "completed").length;
+  const completedCount = sevenSummits.filter(
+    (s) => s.status === 'completed'
+  ).length;
   const progressPercentage = (completedCount / 7) * 100;
 
   // Animate stats on load
   useEffect(() => {
-    const completed = sevenSummits.filter(s => s.status === "completed").length;
+    const completed = sevenSummits.filter(
+      (s) => s.status === 'completed'
+    ).length;
     const totalElevation = sevenSummits
-      .filter(s => s.status === "completed")
-      .reduce((sum, s) => sum + parseInt(s.elevation.replace(/[^\d]/g, "")), 0);
-    const countries = new Set(sevenSummits.filter(s => s.status === "completed").map(s => s.continent)).size;
+      .filter((s) => s.status === 'completed')
+      .reduce((sum, s) => sum + parseInt(s.elevation.replace(/[^\d]/g, '')), 0);
+    const countries = new Set(
+      sevenSummits
+        .filter((s) => s.status === 'completed')
+        .map((s) => s.continent)
+    ).size;
 
     const animateStats = () => {
       const duration = 2000;
@@ -216,11 +239,11 @@ export default function EnhancedSevenSummitsTracker() {
       const timer = setInterval(() => {
         step++;
         const progress = step / steps;
-        
+
         setActiveStats({
           completed: Math.floor(progress * completed),
           totalElevation: Math.floor(progress * totalElevation),
-          countries: Math.floor(progress * countries)
+          countries: Math.floor(progress * countries),
         });
 
         if (step >= steps) {
@@ -275,7 +298,7 @@ export default function EnhancedSevenSummitsTracker() {
           >
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
             >
               <TrophyIcon className="w-5 h-5 text-summitGold" />
             </motion.div>
@@ -285,13 +308,13 @@ export default function EnhancedSevenSummitsTracker() {
           </motion.div>
 
           <h2 className="text-5xl md:text-7xl font-bold text-white mb-8">
-            Conquering the{" "}
+            Conquering the{' '}
             <motion.span
               className="bg-gradient-to-r from-summitGold via-yellow-400 via-blue-400 to-purple-400 bg-clip-text text-transparent"
-              initial={{ backgroundPosition: "0% 50%" }}
-              animate={{ backgroundPosition: "200% 50%" }}
-              transition={{ duration: 8, repeat: Infinity, repeatType: "loop" }}
-              style={{ backgroundSize: "300% 300%" }}
+              initial={{ backgroundPosition: '0% 50%' }}
+              animate={{ backgroundPosition: '200% 50%' }}
+              transition={{ duration: 8, repeat: Infinity, repeatType: 'loop' }}
+              style={{ backgroundSize: '300% 300%' }}
             >
               Seven Summits
             </motion.span>
@@ -303,41 +326,42 @@ export default function EnhancedSevenSummitsTracker() {
             transition={{ duration: 1, delay: 0.5 }}
             className="text-2xl text-white/70 max-w-4xl mx-auto mb-12 leading-relaxed"
           >
-            The ultimate mountaineering challenge: reaching the highest peak on each continent. 
-            From tropical glaciers to arctic storms, each summit tells a different story.
+            The ultimate mountaineering challenge: reaching the highest peak on
+            each continent. From tropical glaciers to arctic storms, each summit
+            tells a different story.
           </motion.p>
 
           {/* Enhanced Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto mb-16">
             {[
-              { 
-                label: "Summits Complete", 
-                value: `${activeStats.completed}/7`, 
-                color: "text-green-400",
+              {
+                label: 'Summits Complete',
+                value: `${activeStats.completed}/7`,
+                color: 'text-green-400',
                 icon: TrophyIcon,
-                suffix: ""
+                suffix: '',
               },
-              { 
-                label: "Total Elevation", 
-                value: `${Math.floor(activeStats.totalElevation / 1000)}`, 
-                color: "text-blue-400",
+              {
+                label: 'Total Elevation',
+                value: `${Math.floor(activeStats.totalElevation / 1000)}`,
+                color: 'text-blue-400',
                 icon: MapPinIcon,
-                suffix: "K meters"
+                suffix: 'K meters',
               },
-              { 
-                label: "Continents", 
-                value: `${activeStats.countries}`, 
-                color: "text-purple-400",
+              {
+                label: 'Continents',
+                value: `${activeStats.countries}`,
+                color: 'text-purple-400',
                 icon: GlobeAltIcon,
-                suffix: "/7"
+                suffix: '/7',
               },
-              { 
-                label: "Progress", 
-                value: `${Math.round(progressPercentage)}`, 
-                color: "text-summitGold",
+              {
+                label: 'Progress',
+                value: `${Math.round(progressPercentage)}`,
+                color: 'text-summitGold',
                 icon: BoltIcon,
-                suffix: "%"
-              }
+                suffix: '%',
+              },
             ].map((stat, index) => (
               <motion.div
                 key={stat.label}
@@ -349,7 +373,7 @@ export default function EnhancedSevenSummitsTracker() {
                 className="group relative"
               >
                 <div className="bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 rounded-2xl p-6 text-center">
-                  <motion.div 
+                  <motion.div
                     className={`inline-flex p-3 rounded-xl bg-gradient-to-br from-white/10 to-white/5 ${stat.color} mb-4`}
                     whileHover={{ rotate: 360, scale: 1.2 }}
                     transition={{ duration: 0.8 }}
@@ -357,7 +381,8 @@ export default function EnhancedSevenSummitsTracker() {
                     <stat.icon className="w-6 h-6" />
                   </motion.div>
                   <div className={`text-4xl font-bold ${stat.color} mb-2`}>
-                    {stat.value}<span className="text-sm">{stat.suffix}</span>
+                    {stat.value}
+                    <span className="text-sm">{stat.suffix}</span>
                   </div>
                   <div className="text-sm text-white/70">{stat.label}</div>
                 </div>
@@ -368,7 +393,10 @@ export default function EnhancedSevenSummitsTracker() {
 
           {/* Animated Progress Ring */}
           <div className="relative w-48 h-48 mx-auto mb-12">
-            <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 200 200">
+            <svg
+              className="absolute inset-0 w-full h-full transform -rotate-90"
+              viewBox="0 0 200 200"
+            >
               <circle
                 cx="100"
                 cy="100"
@@ -387,14 +415,21 @@ export default function EnhancedSevenSummitsTracker() {
                 strokeLinecap="round"
                 strokeDasharray={`${2 * Math.PI * 80}`}
                 initial={{ strokeDashoffset: 2 * Math.PI * 80 }}
-                whileInView={{ 
-                  strokeDashoffset: 2 * Math.PI * 80 * (1 - progressPercentage / 100)
+                whileInView={{
+                  strokeDashoffset:
+                    2 * Math.PI * 80 * (1 - progressPercentage / 100),
                 }}
                 viewport={{ once: true }}
                 transition={{ duration: 2, delay: 0.5 }}
               />
               <defs>
-                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <linearGradient
+                  id="progressGradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                >
                   <stop offset="0%" stopColor="#f59e0b" />
                   <stop offset="50%" stopColor="#3b82f6" />
                   <stop offset="100%" stopColor="#8b5cf6" />
@@ -426,14 +461,15 @@ export default function EnhancedSevenSummitsTracker() {
               onHoverEnd={() => setHoveredSummit(null)}
               onClick={() => setSelectedSummit(summit)}
               className="group relative cursor-pointer"
-              style={{ perspective: "1000px" }}
+              style={{ perspective: '1000px' }}
             >
-              <div className={`relative p-8 rounded-3xl bg-gradient-to-br ${statusBackgrounds[summit.status]} backdrop-blur-sm border transition-all duration-500 group-hover:border-white/40`}>
-                
+              <div
+                className={`relative p-8 rounded-3xl bg-gradient-to-br ${statusBackgrounds[summit.status]} backdrop-blur-sm border transition-all duration-500 group-hover:border-white/40`}
+              >
                 {/* Mountain Image Background */}
                 <div className="absolute inset-0 rounded-3xl overflow-hidden">
-                  <motion.img 
-                    src={summit.image} 
+                  <motion.img
+                    src={summit.image}
                     alt={summit.name}
                     className="w-full h-full object-cover opacity-20 group-hover:opacity-30 transition-opacity duration-500"
                     whileHover={{ scale: 1.1 }}
@@ -447,48 +483,68 @@ export default function EnhancedSevenSummitsTracker() {
                   {/* Status Header */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                      {summit.status === "completed" && (
+                      {summit.status === 'completed' && (
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          transition={{ type: "spring", stiffness: 500, delay: index * 0.1 }}
+                          transition={{
+                            type: 'spring',
+                            stiffness: 500,
+                            delay: index * 0.1,
+                          }}
                         >
                           <CheckCircleIcon className="w-6 h-6 text-green-400" />
                         </motion.div>
                       )}
-                      {summit.status === "in_progress" && (
+                      {summit.status === 'in_progress' && (
                         <motion.div
                           animate={{ rotate: 360 }}
-                          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: 'linear',
+                          }}
                         >
                           <ClockIcon className="w-6 h-6 text-summitGold" />
                         </motion.div>
                       )}
-                      {summit.status === "planned" && (
+                      {summit.status === 'planned' && (
                         <CalendarIcon className="w-6 h-6 text-blue-400" />
                       )}
-                      <span className={`text-sm font-bold uppercase tracking-wider ${statusColors[summit.status]}`}>
-                        {summit.status === "in_progress" ? "Training" : summit.status}
+                      <span
+                        className={`text-sm font-bold uppercase tracking-wider ${statusColors[summit.status]}`}
+                      >
+                        {summit.status === 'in_progress'
+                          ? 'Training'
+                          : summit.status}
                       </span>
                     </div>
-                    <motion.span 
+                    <motion.span
                       className="text-3xl"
-                      animate={{ scale: hoveredSummit === summit.name ? 1.3 : 1 }}
-                      transition={{ type: "spring", stiffness: 400 }}
+                      animate={{
+                        scale: hoveredSummit === summit.name ? 1.3 : 1,
+                      }}
+                      transition={{ type: 'spring', stiffness: 400 }}
                     >
                       {summit.flag}
                     </motion.span>
                   </div>
 
                   {/* Summit Info */}
-                  <h3 className="text-2xl font-bold text-white mb-2">{summit.name}</h3>
-                  <p className="text-white/60 text-sm mb-4">{summit.continent}</p>
-                  
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    {summit.name}
+                  </h3>
+                  <p className="text-white/60 text-sm mb-4">
+                    {summit.continent}
+                  </p>
+
                   {/* Key Stats */}
                   <div className="grid grid-cols-2 gap-4 mb-6">
                     <div className="flex items-center gap-2 text-white/80">
                       <MapPinIcon className="w-4 h-4 text-summitGold" />
-                      <span className="text-sm font-medium">{summit.elevation}</span>
+                      <span className="text-sm font-medium">
+                        {summit.elevation}
+                      </span>
                     </div>
                     <div className="flex items-center gap-2 text-white/80">
                       <FireIcon className="w-4 h-4 text-blue-400" />
@@ -500,7 +556,9 @@ export default function EnhancedSevenSummitsTracker() {
                     </div>
                     <div className="flex items-center gap-2 text-white/80">
                       <PhotoIcon className="w-4 h-4 text-green-400" />
-                      <span className="text-sm">{summit.gallery.length} photos</span>
+                      <span className="text-sm">
+                        {summit.gallery.length} photos
+                      </span>
                     </div>
                   </div>
 
@@ -515,7 +573,7 @@ export default function EnhancedSevenSummitsTracker() {
                           animate={{ scale: 1 }}
                           transition={{ delay: i * 0.1 + index * 0.05 }}
                           className={`w-3 h-3 rounded-full ${
-                            i < summit.difficulty ? "bg-red-400" : "bg-white/20"
+                            i < summit.difficulty ? 'bg-red-400' : 'bg-white/20'
                           }`}
                         />
                       ))}
@@ -530,7 +588,10 @@ export default function EnhancedSevenSummitsTracker() {
                   <div className="mb-6">
                     <div className="flex flex-wrap gap-2">
                       {summit.highlights.slice(0, 2).map((highlight, i) => (
-                        <span key={i} className="px-2 py-1 bg-white/10 rounded-full text-xs text-white/80">
+                        <span
+                          key={i}
+                          className="px-2 py-1 bg-white/10 rounded-full text-xs text-white/80"
+                        >
                           {highlight}
                         </span>
                       ))}
@@ -545,7 +606,7 @@ export default function EnhancedSevenSummitsTracker() {
                   {/* Date */}
                   <div className="text-sm mb-6">
                     {summit.completedDate && (
-                      <motion.span 
+                      <motion.span
                         className="flex items-center gap-2 text-green-400 font-medium"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -555,8 +616,10 @@ export default function EnhancedSevenSummitsTracker() {
                         Conquered {summit.completedDate}
                       </motion.span>
                     )}
-                    {summit.targetDate && summit.status !== "completed" && (
-                      <span className={`flex items-center gap-2 font-medium ${statusColors[summit.status]}`}>
+                    {summit.targetDate && summit.status !== 'completed' && (
+                      <span
+                        className={`flex items-center gap-2 font-medium ${statusColors[summit.status]}`}
+                      >
                         <CalendarIcon className="w-4 h-4" />
                         Target: {summit.targetDate}
                       </span>
@@ -577,7 +640,7 @@ export default function EnhancedSevenSummitsTracker() {
 
                 {/* Hover Effects */}
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-summitGold/5 via-blue-400/5 to-purple-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl" />
-                
+
                 {/* Animated Border */}
                 <motion.div
                   className="absolute inset-0 rounded-3xl"
@@ -585,17 +648,19 @@ export default function EnhancedSevenSummitsTracker() {
                   whileHover={{
                     opacity: 1,
                     background: `conic-gradient(from 0deg, transparent, ${
-                      summit.status === 'completed' ? 'rgba(34,197,94,0.3)' :
-                      summit.status === 'in_progress' ? 'rgba(245,158,11,0.3)' :
-                      'rgba(59,130,246,0.3)'
-                    }, transparent)`
+                      summit.status === 'completed'
+                        ? 'rgba(34,197,94,0.3)'
+                        : summit.status === 'in_progress'
+                          ? 'rgba(245,158,11,0.3)'
+                          : 'rgba(59,130,246,0.3)'
+                    }, transparent)`,
                   }}
                   animate={{ rotate: 360 }}
-                  transition={{ 
-                    rotate: { duration: 8, repeat: Infinity, ease: "linear" },
-                    opacity: { duration: 0.3 }
+                  transition={{
+                    rotate: { duration: 8, repeat: Infinity, ease: 'linear' },
+                    opacity: { duration: 0.3 },
                   }}
-                  style={{ padding: "1px" }}
+                  style={{ padding: '1px' }}
                 />
               </div>
             </motion.div>
@@ -613,10 +678,13 @@ export default function EnhancedSevenSummitsTracker() {
           <div className="relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-sm border border-white/20 rounded-3xl p-12 max-w-4xl mx-auto overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0" style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                backgroundSize: '30px 30px'
-              }} />
+              <div
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                  backgroundSize: '30px 30px',
+                }}
+              />
             </div>
 
             <div className="relative z-10">
@@ -624,8 +692,9 @@ export default function EnhancedSevenSummitsTracker() {
                 Follow the Complete Journey
               </h3>
               <p className="text-xl text-white/70 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Get exclusive expedition updates, training insights, gear reviews, and behind-the-scenes 
-                content from each summit attempt. Join thousands following the Seven Summits challenge.
+                Get exclusive expedition updates, training insights, gear
+                reviews, and behind-the-scenes content from each summit attempt.
+                Join thousands following the Seven Summits challenge.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button
@@ -672,17 +741,24 @@ export default function EnhancedSevenSummitsTracker() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-start gap-6 mb-6">
-                <img 
-                  src={selectedSummit.image} 
+                <img
+                  src={selectedSummit.image}
                   alt={selectedSummit.name}
                   className="w-32 h-32 object-cover rounded-2xl"
                 />
                 <div className="flex-1">
-                  <h3 className="text-3xl font-bold text-white mb-2">{selectedSummit.name}</h3>
-                  <p className="text-white/60 mb-4">{selectedSummit.continent} • {selectedSummit.elevation}</p>
+                  <h3 className="text-3xl font-bold text-white mb-2">
+                    {selectedSummit.name}
+                  </h3>
+                  <p className="text-white/60 mb-4">
+                    {selectedSummit.continent} • {selectedSummit.elevation}
+                  </p>
                   <div className="flex gap-2 mb-4">
                     {selectedSummit.highlights.map((highlight, i) => (
-                      <span key={i} className="px-3 py-1 bg-summitGold/20 rounded-full text-sm text-summitGold">
+                      <span
+                        key={i}
+                        className="px-3 py-1 bg-summitGold/20 rounded-full text-sm text-summitGold"
+                      >
                         {highlight}
                       </span>
                     ))}
@@ -690,9 +766,11 @@ export default function EnhancedSevenSummitsTracker() {
                 </div>
                 <span className="text-4xl">{selectedSummit.flag}</span>
               </div>
-              
-              <p className="text-white/80 leading-relaxed mb-6">{selectedSummit.description}</p>
-              
+
+              <p className="text-white/80 leading-relaxed mb-6">
+                {selectedSummit.description}
+              </p>
+
               {/* Gallery */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {selectedSummit.gallery.map((img, i) => (

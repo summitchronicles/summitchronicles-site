@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -10,21 +10,23 @@ import {
   FireIcon,
   TrophyIcon,
   DocumentArrowUpIcon,
-  PlayIcon
+  PlayIcon,
 } from '@heroicons/react/24/outline';
 import TrainingProgress from '@/components/training/TrainingProgressSimple';
 import CombinedDataOverview from '@/components/training/CombinedDataOverview';
 import AITrainingInsights from '@/components/training/AITrainingInsights';
 
 export default function TrainingDashboard() {
-  const [timeRange, setTimeRange] = useState<'week' | 'month' | 'quarter'>('month');
+  const [timeRange, setTimeRange] = useState<'week' | 'month' | 'quarter'>(
+    'month'
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black py-8">
       <div className="max-w-6xl mx-auto px-6">
         {/* Back Navigation */}
-        <Link 
-          href="/training" 
+        <Link
+          href="/training"
           className="inline-flex items-center gap-2 text-white/70 hover:text-summitGold transition-colors duration-300 mb-8"
         >
           <ArrowLeftIcon className="w-4 h-4" />
@@ -41,7 +43,8 @@ export default function TrainingDashboard() {
             Training Dashboard
           </h1>
           <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Track your strength progression, monitor training volume, and analyze performance data
+            Track your strength progression, monitor training volume, and
+            analyze performance data
           </p>
         </motion.div>
 
@@ -61,8 +64,12 @@ export default function TrainingDashboard() {
                 <PlayIcon className="w-6 h-6 text-summitGold" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Today's Workout</h3>
-                <p className="text-white/60 text-sm">Start your strength session</p>
+                <h3 className="text-lg font-semibold text-white">
+                  Today's Workout
+                </h3>
+                <p className="text-white/60 text-sm">
+                  Start your strength session
+                </p>
               </div>
             </div>
           </Link>
@@ -76,8 +83,12 @@ export default function TrainingDashboard() {
                 <DocumentArrowUpIcon className="w-6 h-6 text-blue-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Upload Plan</h3>
-                <p className="text-white/60 text-sm">Import weekly Excel file</p>
+                <h3 className="text-lg font-semibold text-white">
+                  Upload Plan
+                </h3>
+                <p className="text-white/60 text-sm">
+                  Import weekly Excel file
+                </p>
               </div>
             </div>
           </Link>
@@ -91,7 +102,9 @@ export default function TrainingDashboard() {
                 <CalendarDaysIcon className="w-6 h-6 text-green-400" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-white">Training Plans</h3>
+                <h3 className="text-lg font-semibold text-white">
+                  Training Plans
+                </h3>
                 <p className="text-white/60 text-sm">View all uploaded plans</p>
               </div>
             </div>
@@ -109,8 +122,8 @@ export default function TrainingDashboard() {
             {[
               { key: 'week', label: '7 Days' },
               { key: 'month', label: '30 Days' },
-              { key: 'quarter', label: '90 Days' }
-            ].map(option => (
+              { key: 'quarter', label: '90 Days' },
+            ].map((option) => (
               <button
                 key={option.key}
                 onClick={() => setTimeRange(option.key as any)}

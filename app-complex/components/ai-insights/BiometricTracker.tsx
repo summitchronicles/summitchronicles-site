@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
-import { clsx } from "clsx";
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { clsx } from 'clsx';
 import {
   HeartIcon,
   BoltIcon,
@@ -17,9 +17,14 @@ import {
   BeakerIcon,
   ChartBarIcon,
   WifiIcon,
-  DevicePhoneMobileIcon
-} from "@heroicons/react/24/outline";
-import { GlassCard, StatusIndicator, ProgressBar, MountainButton } from "@/app/components/ui";
+  DevicePhoneMobileIcon,
+} from '@heroicons/react/24/outline';
+import {
+  GlassCard,
+  StatusIndicator,
+  ProgressBar,
+  MountainButton,
+} from '@/app/components/ui';
 
 interface BiometricData {
   timestamp: string;
@@ -68,10 +73,10 @@ interface BiometricTrackerProps {
   onDeviceConnect?: (deviceType: string) => void;
 }
 
-export default function BiometricTracker({ 
-  data = [], 
-  className = "",
-  onDeviceConnect 
+export default function BiometricTracker({
+  data = [],
+  className = '',
+  onDeviceConnect,
 }: BiometricTrackerProps) {
   const [selectedMetric, setSelectedMetric] = useState<string>('recovery');
   const [isConnecting, setIsConnecting] = useState(false);
@@ -87,30 +92,43 @@ export default function BiometricTracker({
     const weekData = data.slice(-7);
 
     // Calculate trends
-    const hrTrend = previous && latest.heartRate && previous.heartRate 
-      ? latest.heartRate.resting - previous.heartRate.resting
-      : 0;
-    
-    const sleepTrend = previous && latest.sleep && previous.sleep
-      ? latest.sleep.quality - previous.sleep.quality
-      : 0;
+    const hrTrend =
+      previous && latest.heartRate && previous.heartRate
+        ? latest.heartRate.resting - previous.heartRate.resting
+        : 0;
 
-    const avgRecovery = weekData
-      .filter(d => d.recovery?.score)
-      .reduce((sum, d) => sum + d.recovery!.score, 0) / Math.max(weekData.length, 1);
+    const sleepTrend =
+      previous && latest.sleep && previous.sleep
+        ? latest.sleep.quality - previous.sleep.quality
+        : 0;
+
+    const avgRecovery =
+      weekData
+        .filter((d) => d.recovery?.score)
+        .reduce((sum, d) => sum + d.recovery!.score, 0) /
+      Math.max(weekData.length, 1);
 
     return {
       current: latest,
       trends: {
-        heartRate: hrTrend > 5 ? 'declining' : hrTrend < -5 ? 'improving' : 'stable',
-        sleep: sleepTrend > 0.1 ? 'improving' : sleepTrend < -0.1 ? 'declining' : 'stable',
-        weeklyRecovery: avgRecovery
+        heartRate:
+          hrTrend > 5 ? 'declining' : hrTrend < -5 ? 'improving' : 'stable',
+        sleep:
+          sleepTrend > 0.1
+            ? 'improving'
+            : sleepTrend < -0.1
+              ? 'declining'
+              : 'stable',
+        weeklyRecovery: avgRecovery,
       },
-      recommendations: generateRecoveryRecommendations(latest, weekData)
+      recommendations: generateRecoveryRecommendations(latest, weekData),
     };
   }, [data]);
 
-  const generateRecoveryRecommendations = (latest: BiometricData, weekData: BiometricData[]): RecoveryInsight[] => {
+  const generateRecoveryRecommendations = (
+    latest: BiometricData,
+    weekData: BiometricData[]
+  ): RecoveryInsight[] => {
     const recommendations: RecoveryInsight[] = [];
 
     // Sleep analysis
@@ -121,10 +139,11 @@ export default function BiometricTracker({
           type: 'warning',
           title: 'Insufficient Sleep Duration',
           message: `You got ${latest.sleep.duration.toFixed(1)} hours of sleep. Aim for 7-9 hours for optimal recovery.`,
-          recommendation: 'Consider adjusting your bedtime routine and limiting screen time before bed.',
+          recommendation:
+            'Consider adjusting your bedtime routine and limiting screen time before bed.',
           confidence: 0.9,
           trend: 'declining',
-          category: 'sleep'
+          category: 'sleep',
         });
       }
 
@@ -133,10 +152,12 @@ export default function BiometricTracker({
           id: 'sleep-quality',
           type: 'critical',
           title: 'Poor Sleep Quality',
-          message: 'Your sleep quality score is below optimal levels for athletic recovery.',
-          recommendation: 'Focus on sleep hygiene: cool, dark room, consistent schedule, and relaxation techniques.',
+          message:
+            'Your sleep quality score is below optimal levels for athletic recovery.',
+          recommendation:
+            'Focus on sleep hygiene: cool, dark room, consistent schedule, and relaxation techniques.',
           confidence: 0.85,
-          category: 'sleep'
+          category: 'sleep',
         });
       }
     }
@@ -148,9 +169,10 @@ export default function BiometricTracker({
         type: 'warning',
         title: 'Low Heart Rate Variability',
         message: 'Your HRV suggests your nervous system may be under stress.',
-        recommendation: 'Consider easier training, meditation, or breathing exercises to improve recovery.',
+        recommendation:
+          'Consider easier training, meditation, or breathing exercises to improve recovery.',
         confidence: 0.8,
-        category: 'heart'
+        category: 'heart',
       });
     }
 
@@ -161,9 +183,11 @@ export default function BiometricTracker({
         type: 'critical',
         title: 'Low Recovery Score',
         message: `Recovery score of ${latest.recovery.score}% indicates you need more rest.`,
-        recommendation: latest.recovery.recommendation || 'Take an easy day or complete rest to allow your body to recover.',
+        recommendation:
+          latest.recovery.recommendation ||
+          'Take an easy day or complete rest to allow your body to recover.',
         confidence: 0.95,
-        category: 'recovery'
+        category: 'recovery',
       });
     }
 
@@ -174,10 +198,11 @@ export default function BiometricTracker({
         type: 'success',
         title: 'Excellent Recovery',
         message: `Outstanding recovery score of ${latest.recovery.score}%! Your body is well-adapted to training.`,
-        recommendation: 'You&apos;re ready for high-intensity training or a challenging workout.',
+        recommendation:
+          'You&apos;re ready for high-intensity training or a challenging workout.',
         confidence: 0.9,
         trend: 'improving',
-        category: 'recovery'
+        category: 'recovery',
       });
     }
 
@@ -192,11 +217,11 @@ export default function BiometricTracker({
 
   const handleDeviceConnect = async (deviceType: string) => {
     setIsConnecting(true);
-    
+
     // Simulate device connection
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      setConnectedDevices(prev => [...prev, deviceType]);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      setConnectedDevices((prev) => [...prev, deviceType]);
       onDeviceConnect?.(deviceType);
     } catch (error) {
       console.error('Device connection failed:', error);
@@ -207,67 +232,89 @@ export default function BiometricTracker({
 
   const getMetricIcon = (metric: string) => {
     switch (metric) {
-      case 'recovery': return BoltIcon;
-      case 'heart': return HeartIcon;
-      case 'sleep': return MoonIcon;
-      case 'stress': return ExclamationTriangleIcon;
-      case 'body': return ScaleIcon;
-      default: return ChartBarIcon;
+      case 'recovery':
+        return BoltIcon;
+      case 'heart':
+        return HeartIcon;
+      case 'sleep':
+        return MoonIcon;
+      case 'stress':
+        return ExclamationTriangleIcon;
+      case 'body':
+        return ScaleIcon;
+      default:
+        return ChartBarIcon;
     }
   };
 
   const getInsightIcon = (type: string) => {
     switch (type) {
-      case 'critical': return ExclamationTriangleIcon;
-      case 'warning': return ExclamationTriangleIcon;
-      case 'success': return CheckCircleIcon;
-      default: return BeakerIcon;
+      case 'critical':
+        return ExclamationTriangleIcon;
+      case 'warning':
+        return ExclamationTriangleIcon;
+      case 'success':
+        return CheckCircleIcon;
+      default:
+        return BeakerIcon;
     }
   };
 
   const getInsightColor = (type: string) => {
     switch (type) {
-      case 'critical': return 'text-dangerRed bg-dangerRed/10 border-dangerRed/20';
-      case 'warning': return 'text-warningOrange bg-warningOrange/10 border-warningOrange/20';
-      case 'success': return 'text-successGreen bg-successGreen/10 border-successGreen/20';
-      default: return 'text-glacierBlue bg-glacierBlue/10 border-glacierBlue/20';
+      case 'critical':
+        return 'text-dangerRed bg-dangerRed/10 border-dangerRed/20';
+      case 'warning':
+        return 'text-warningOrange bg-warningOrange/10 border-warningOrange/20';
+      case 'success':
+        return 'text-successGreen bg-successGreen/10 border-successGreen/20';
+      default:
+        return 'text-glacierBlue bg-glacierBlue/10 border-glacierBlue/20';
     }
   };
 
   const getTrendIcon = (trend?: string) => {
     switch (trend) {
-      case 'improving': return ArrowTrendingUpIcon;
-      case 'declining': return ArrowTrendingDownIcon;
-      default: return null;
+      case 'improving':
+        return ArrowTrendingUpIcon;
+      case 'declining':
+        return ArrowTrendingDownIcon;
+      default:
+        return null;
     }
   };
 
   if (data.length === 0) {
     return (
-      <div className={clsx("space-y-6", className)}>
+      <div className={clsx('space-y-6', className)}>
         <GlassCard className="p-8 text-center">
           <div className="text-6xl mb-4">📊</div>
           <h3 className="text-xl font-semibold text-white mb-4">
             Connect Your Health Devices
           </h3>
           <p className="text-gray-400 mb-6">
-            Sync biometric data from your wearables to get personalized recovery insights and training recommendations.
+            Sync biometric data from your wearables to get personalized recovery
+            insights and training recommendations.
           </p>
-          
+
           <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
             {[
               { name: 'Heart Rate Monitor', type: 'hrm', icon: HeartIcon },
               { name: 'Sleep Tracker', type: 'sleep', icon: MoonIcon },
-              { name: 'Fitness Watch', type: 'watch', icon: DevicePhoneMobileIcon },
-              { name: 'Smart Scale', type: 'scale', icon: ScaleIcon }
+              {
+                name: 'Fitness Watch',
+                type: 'watch',
+                icon: DevicePhoneMobileIcon,
+              },
+              { name: 'Smart Scale', type: 'scale', icon: ScaleIcon },
             ].map((device) => {
               const IconComponent = device.icon;
               const isConnected = connectedDevices.includes(device.type);
-              
+
               return (
                 <MountainButton
                   key={device.type}
-                  variant={isConnected ? "accent" : "secondary"}
+                  variant={isConnected ? 'accent' : 'secondary'}
                   size="sm"
                   disabled={isConnecting}
                   loading={isConnecting}
@@ -279,7 +326,9 @@ export default function BiometricTracker({
                   {isConnected && (
                     <div className="flex items-center space-x-1">
                       <WifiIcon className="w-3 h-3 text-successGreen" />
-                      <span className="text-xs text-successGreen">Connected</span>
+                      <span className="text-xs text-successGreen">
+                        Connected
+                      </span>
                     </div>
                   )}
                 </MountainButton>
@@ -294,7 +343,7 @@ export default function BiometricTracker({
   const latest = recoveryAnalysis?.current;
 
   return (
-    <div className={clsx("space-y-6", className)}>
+    <div className={clsx('space-y-6', className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -303,19 +352,31 @@ export default function BiometricTracker({
           </div>
           <div>
             <h2 className="text-2xl font-bold text-white">Recovery Tracking</h2>
-            <p className="text-gray-400">AI-powered biometric analysis for optimal training</p>
+            <p className="text-gray-400">
+              AI-powered biometric analysis for optimal training
+            </p>
           </div>
         </div>
-        
+
         <div className="flex items-center space-x-2">
           <StatusIndicator
-            status={latest?.recovery?.score ? 
-              latest.recovery.score > 80 ? 'success' : 
-              latest.recovery.score > 60 ? 'warning' : 'danger'
-              : 'info'
+            status={
+              latest?.recovery?.score
+                ? latest.recovery.score > 80
+                  ? 'success'
+                  : latest.recovery.score > 60
+                    ? 'warning'
+                    : 'danger'
+                : 'info'
             }
-            text={latest?.recovery?.score ? `${latest.recovery.score}% Ready` : 'No Data'}
-            pulse={Boolean(latest?.recovery?.score && latest.recovery.score < 60)}
+            text={
+              latest?.recovery?.score
+                ? `${latest.recovery.score}% Ready`
+                : 'No Data'
+            }
+            pulse={Boolean(
+              latest?.recovery?.score && latest.recovery.score < 60
+            )}
           />
         </div>
       </div>
@@ -328,16 +389,16 @@ export default function BiometricTracker({
             { key: 'heart', label: 'Heart Rate', icon: HeartIcon },
             { key: 'sleep', label: 'Sleep', icon: MoonIcon },
             { key: 'stress', label: 'Stress', icon: ExclamationTriangleIcon },
-            { key: 'body', label: 'Body Comp', icon: ScaleIcon }
+            { key: 'body', label: 'Body Comp', icon: ScaleIcon },
           ].map(({ key, label, icon: IconComponent }) => (
             <button
               key={key}
               onClick={() => setSelectedMetric(key)}
               className={clsx(
-                "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
                 selectedMetric === key
-                  ? "bg-alpineBlue text-white"
-                  : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                  ? 'bg-alpineBlue text-white'
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
               )}
             >
               <IconComponent className="w-4 h-4" />
@@ -359,7 +420,9 @@ export default function BiometricTracker({
                   {latest.recovery.score}%
                 </span>
               </div>
-              <h3 className="text-sm font-medium text-gray-400 mb-2">Recovery Score</h3>
+              <h3 className="text-sm font-medium text-gray-400 mb-2">
+                Recovery Score
+              </h3>
               <ProgressBar
                 value={latest.recovery.score}
                 variant="gradient"
@@ -384,11 +447,15 @@ export default function BiometricTracker({
                   <div className="text-xs text-gray-400">bpm</div>
                 </div>
               </div>
-              <h3 className="text-sm font-medium text-gray-400 mb-2">Resting HR</h3>
+              <h3 className="text-sm font-medium text-gray-400 mb-2">
+                Resting HR
+              </h3>
               <div className="space-y-1">
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-400">HRV:</span>
-                  <span className="text-white">{latest.heartRate.variability}ms</span>
+                  <span className="text-white">
+                    {latest.heartRate.variability}ms
+                  </span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-400">Max:</span>
@@ -410,7 +477,9 @@ export default function BiometricTracker({
                   <div className="text-xs text-gray-400">sleep</div>
                 </div>
               </div>
-              <h3 className="text-sm font-medium text-gray-400 mb-2">Sleep Quality</h3>
+              <h3 className="text-sm font-medium text-gray-400 mb-2">
+                Sleep Quality
+              </h3>
               <ProgressBar
                 value={latest.sleep.quality * 100}
                 variant="gradient"
@@ -420,11 +489,15 @@ export default function BiometricTracker({
               <div className="space-y-1">
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-400">Deep:</span>
-                  <span className="text-white">{(latest.sleep.deepSleep * 100).toFixed(0)}%</span>
+                  <span className="text-white">
+                    {(latest.sleep.deepSleep * 100).toFixed(0)}%
+                  </span>
                 </div>
                 <div className="flex justify-between text-xs">
                   <span className="text-gray-400">REM:</span>
-                  <span className="text-white">{(latest.sleep.remSleep * 100).toFixed(0)}%</span>
+                  <span className="text-white">
+                    {(latest.sleep.remSleep * 100).toFixed(0)}%
+                  </span>
                 </div>
               </div>
             </GlassCard>
@@ -442,10 +515,18 @@ export default function BiometricTracker({
                   <div className="text-xs text-gray-400">stress</div>
                 </div>
               </div>
-              <h3 className="text-sm font-medium text-gray-400 mb-2">Stress Level</h3>
+              <h3 className="text-sm font-medium text-gray-400 mb-2">
+                Stress Level
+              </h3>
               <ProgressBar
                 value={latest.stress.level}
-                variant={latest.stress.level > 70 ? "danger" : latest.stress.level > 40 ? "warning" : "success"}
+                variant={
+                  latest.stress.level > 70
+                    ? 'danger'
+                    : latest.stress.level > 40
+                      ? 'warning'
+                      : 'success'
+                }
                 showValue={false}
                 className="mb-2"
               />
@@ -469,7 +550,7 @@ export default function BiometricTracker({
             const IconComponent = getInsightIcon(insight.type);
             const colorClasses = getInsightColor(insight.type);
             const TrendIcon = getTrendIcon(insight.trend);
-            
+
             return (
               <motion.div
                 key={insight.id}
@@ -480,10 +561,12 @@ export default function BiometricTracker({
               >
                 <GlassCard className="p-6 hover:bg-white/5 transition-colors duration-300">
                   <div className="flex items-start space-x-4">
-                    <div className={clsx(
-                      "p-3 rounded-xl border flex-shrink-0",
-                      colorClasses
-                    )}>
+                    <div
+                      className={clsx(
+                        'p-3 rounded-xl border flex-shrink-0',
+                        colorClasses
+                      )}
+                    >
                       <IconComponent className="w-6 h-6" />
                     </div>
 
@@ -494,15 +577,25 @@ export default function BiometricTracker({
                         </h4>
                         <div className="flex items-center space-x-2 ml-4">
                           {TrendIcon && (
-                            <TrendIcon className={clsx(
-                              "w-4 h-4",
-                              insight.trend === 'improving' ? 'text-successGreen' : 'text-dangerRed'
-                            )} />
+                            <TrendIcon
+                              className={clsx(
+                                'w-4 h-4',
+                                insight.trend === 'improving'
+                                  ? 'text-successGreen'
+                                  : 'text-dangerRed'
+                              )}
+                            />
                           )}
                           <StatusIndicator
-                            status={insight.type === 'critical' ? 'danger' : 
-                                   insight.type === 'warning' ? 'warning' : 
-                                   insight.type === 'success' ? 'success' : 'info'}
+                            status={
+                              insight.type === 'critical'
+                                ? 'danger'
+                                : insight.type === 'warning'
+                                  ? 'warning'
+                                  : insight.type === 'success'
+                                    ? 'success'
+                                    : 'info'
+                            }
                             text={insight.category}
                             size="sm"
                           />
@@ -531,12 +624,16 @@ export default function BiometricTracker({
                         <div className="flex items-center space-x-2">
                           <ClockIcon className="w-4 h-4 text-gray-400" />
                           <span className="text-xs text-gray-400">
-                            {insight.category.charAt(0).toUpperCase() + insight.category.slice(1)} Analysis
+                            {insight.category.charAt(0).toUpperCase() +
+                              insight.category.slice(1)}{' '}
+                            Analysis
                           </span>
                         </div>
-                        
+
                         <div className="flex items-center space-x-2">
-                          <span className="text-xs text-gray-400">Confidence:</span>
+                          <span className="text-xs text-gray-400">
+                            Confidence:
+                          </span>
                           <ProgressBar
                             value={insight.confidence * 100}
                             variant="gradient"
@@ -565,7 +662,8 @@ export default function BiometricTracker({
               Everything Looks Great!
             </h3>
             <p className="text-gray-400">
-              Your biometric data shows good recovery patterns. Keep up the excellent work!
+              Your biometric data shows good recovery patterns. Keep up the
+              excellent work!
             </p>
           </GlassCard>
         )}

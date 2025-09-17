@@ -1,7 +1,11 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { TrophyIcon, MicrophoneIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
+import { motion } from 'framer-motion';
+import {
+  TrophyIcon,
+  MicrophoneIcon,
+  EnvelopeIcon,
+} from '@heroicons/react/24/outline';
 
 export default function SpeakingPage() {
   return (
@@ -14,7 +18,9 @@ export default function SpeakingPage() {
           className="inline-flex items-center gap-3 bg-glacierBlue/10 backdrop-blur-sm border border-glacierBlue/30 rounded-2xl px-6 py-4 mb-8"
         >
           <MicrophoneIcon className="w-5 h-5 text-glacierBlue" />
-          <span className="text-glacierBlue font-bold text-lg">KEYNOTE SPEAKER</span>
+          <span className="text-glacierBlue font-bold text-lg">
+            KEYNOTE SPEAKER
+          </span>
           <div className="w-px h-6 bg-glacierBlue/30" />
           <span className="text-summitGold font-medium">AVAILABLE</span>
         </motion.div>
@@ -40,8 +46,9 @@ export default function SpeakingPage() {
           className="mb-12"
         >
           <p className="text-xl md:text-2xl text-white/80 mb-8 max-w-2xl mx-auto">
-            Mountains, ultra marathons, exploration. Lessons in resilience and pushing boundaries 
-            that transform how teams approach impossible challenges.
+            Mountains, ultra marathons, exploration. Lessons in resilience and
+            pushing boundaries that transform how teams approach impossible
+            challenges.
           </p>
         </motion.div>
 
@@ -53,14 +60,18 @@ export default function SpeakingPage() {
           className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12 max-w-2xl mx-auto"
         >
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Corporate Teams</h3>
+            <h3 className="text-xl font-bold text-white mb-3">
+              Corporate Teams
+            </h3>
             <p className="text-white/70 text-sm">
               Resilience & overcoming adversity through mountaineering lessons
             </p>
           </div>
-          
+
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-3xl p-6">
-            <h3 className="text-xl font-bold text-white mb-3">Leadership Events</h3>
+            <h3 className="text-xl font-bold text-white mb-3">
+              Leadership Events
+            </h3>
             <p className="text-white/70 text-sm">
               Goal-setting strategies and risk management from 20,000 feet
             </p>
@@ -96,9 +107,9 @@ export default function SpeakingPage() {
         >
           <motion.a
             href="mailto:hello@summitchronicles.com?subject=Speaking Engagement Inquiry"
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.1)"
+              boxShadow: '0 20px 25px -5px rgba(59, 130, 246, 0.1)',
             }}
             whileTap={{ scale: 0.95 }}
             className="inline-flex items-center gap-3 bg-glacierBlue text-white font-bold text-xl px-12 py-6 rounded-2xl hover:bg-blue-600 transition-colors"
@@ -106,7 +117,7 @@ export default function SpeakingPage() {
             <EnvelopeIcon className="w-6 h-6" />
             Book Speaking Engagement
           </motion.a>
-          
+
           <p className="text-white/50 text-sm mt-6">
             Available for corporate events, conferences, and workshops worldwide
           </p>

@@ -1,15 +1,14 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { 
-  WifiIcon,
-  ArrowPathIcon,
-  MapIcon
-} from "@heroicons/react/24/outline";
+import { motion } from 'framer-motion';
+import { WifiIcon, ArrowPathIcon, MapIcon } from '@heroicons/react/24/outline';
 
 export default function OfflinePage() {
   const handleRetry = () => {
-    if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
+    if (
+      'serviceWorker' in navigator &&
+      'sync' in window.ServiceWorkerRegistration.prototype
+    ) {
       navigator.serviceWorker.ready.then((registration) => {
         return (registration as any).sync.register('retry-connection');
       });
@@ -39,17 +38,20 @@ export default function OfflinePage() {
             </div>
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
               className="absolute -inset-2 border-2 border-transparent border-t-summitGold rounded-full"
             />
           </motion.div>
 
           {/* Content */}
           <div className="space-y-4">
-            <h1 className="text-2xl font-bold text-white">You&apos;re Offline</h1>
+            <h1 className="text-2xl font-bold text-white">
+              You&apos;re Offline
+            </h1>
             <p className="text-white/60 leading-relaxed">
-              It looks like you&apos;ve lost your internet connection. Don&apos;t worry - some content 
-              is still available from your last visit.
+              It looks like you&apos;ve lost your internet connection.
+              Don&apos;t worry - some content is still available from your last
+              visit.
             </p>
           </div>
 

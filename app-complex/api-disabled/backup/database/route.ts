@@ -15,35 +15,39 @@ interface BackupResult {
 
 const CRITICAL_TABLES = [
   'blog_posts',
-  'blog_categories', 
+  'blog_categories',
   'blog_tags',
   'knowledge_base',
   'document_chunks',
   'strava_activities',
-  'strava_tokens'
+  'strava_tokens',
 ];
 
 const ALL_TABLES = [
   ...CRITICAL_TABLES,
   'analytics_sessions',
-  'analytics_page_views', 
+  'analytics_page_views',
   'analytics_events',
   'analytics_ai_interactions',
-  'error_logs'
+  'error_logs',
 ];
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now();
-  
+
   // Verify this is a legitimate cron job or admin request
   const authHeader = request.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET || 'default-secret';
-  
+
   if (authHeader !== `Bearer ${cronSecret}`) {
-    await logError('Unauthorized access to backup endpoint', { 
-      endpoint: '/api/backup/database',
-      authHeader: authHeader ? 'present' : 'missing'
-    }, request);
+    await logError(
+      'Unauthorized access to backup endpoint',
+      {
+        endpoint: '/api/backup/database',
+        authHeader: authHeader ? 'present' : 'missing',
+      },
+      request
+    );
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -51,11 +55,11 @@ export async function POST(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const backupType = searchParams.get('type') || 'incremental';
     const critical_only = searchParams.get('critical') === 'true';
-    
-    await logInfo('Database backup started', { 
+
+    await logInfo('Database backup started', {
       type: backupType,
       critical_only,
-      source: 'api_endpoint'
+      source: 'api_endpoint',
     });
 
     const result = await createDatabaseBackup(
@@ -69,41 +73,46 @@ export async function POST(request: NextRequest) {
     if (result.success) {
       await logInfo('Database backup completed successfully', {
         ...result,
-        duration
+        duration,
       });
-      
+
       return NextResponse.json({
         success: true,
         message: 'Database backup completed',
-        result
+        result,
       });
     } else {
       await logCritical('Database backup failed', {
         error: result.error,
         duration,
-        type: backupType
+        type: backupType,
       });
-      
-      return NextResponse.json({
-        success: false,
-        error: result.error
-      }, { status: 500 });
-    }
 
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.error,
+        },
+        { status: 500 }
+      );
+    }
   } catch (error: any) {
     const duration = Date.now() - startTime;
-    
+
     await logCritical('Database backup system error', {
       error: error.message,
       duration,
-      stack: error.stack
+      stack: error.stack,
     });
 
-    return NextResponse.json({
-      success: false,
-      error: 'Database backup system error',
-      details: error.message
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Database backup system error',
+        details: error.message,
+      },
+      { status: 500 }
+    );
   }
 }
 
@@ -114,7 +123,7 @@ export async function GET(request: NextRequest) {
     endpoint: '/api/backup/database',
     methods: ['POST'],
     description: 'Automated database backup service',
-    last_backup: await getLastBackupInfo()
+    last_backup: await getLastBackupInfo(),
   });
 }
 
@@ -124,7 +133,7 @@ async function createDatabaseBackup(
 ): Promise<BackupResult> {
   const supabase = getSupabaseAdmin();
   const timestamp = new Date().toISOString();
-  
+
   const result: BackupResult = {
     success: false,
     timestamp,
@@ -132,20 +141,21 @@ async function createDatabaseBackup(
     tablesBackedUp: 0,
     recordsBackedUp: 0,
     backupSize: 0,
-    duration: 0
+    duration: 0,
   };
 
   try {
     const tablesToBackup = criticalOnly ? CRITICAL_TABLES : ALL_TABLES;
     const backupData: Record<string, any[]> = {};
-    
+
     // Get last backup timestamp for incremental backups
-    const sinceDate = type === 'incremental' ? await getLastBackupTimestamp() : null;
-    
+    const sinceDate =
+      type === 'incremental' ? await getLastBackupTimestamp() : null;
+
     for (const tableName of tablesToBackup) {
       try {
         let query = supabase.from(tableName).select('*');
-        
+
         // For incremental backups, only get recent changes
         if (type === 'incremental' && sinceDate) {
           // Assume most tables have 'updated_at' or 'created_at'
@@ -160,7 +170,9 @@ async function createDatabaseBackup(
         if (error) {
           console.error(`Error backing up ${tableName}:`, error);
           if (CRITICAL_TABLES.includes(tableName)) {
-            throw new Error(`Critical table backup failed: ${tableName} - ${error.message}`);
+            throw new Error(
+              `Critical table backup failed: ${tableName} - ${error.message}`
+            );
           }
           continue;
         }
@@ -170,7 +182,6 @@ async function createDatabaseBackup(
           result.tablesBackedUp++;
           result.recordsBackedUp += data.length;
         }
-
       } catch (tableError: any) {
         console.error(`Failed to backup table ${tableName}:`, tableError);
         if (CRITICAL_TABLES.includes(tableName)) {
@@ -186,7 +197,7 @@ async function createDatabaseBackup(
       tables_backed_up: result.tablesBackedUp,
       records_backed_up: result.recordsBackedUp,
       success: true,
-      critical_only: criticalOnly
+      critical_only: criticalOnly,
     });
 
     // In production, you'd want to store this in cloud storage (S3, etc.)
@@ -195,17 +206,16 @@ async function createDatabaseBackup(
       timestamp,
       type,
       metadata: result,
-      data: backupData
+      data: backupData,
     });
-    
+
     result.backupSize = Buffer.byteLength(backupJson, 'utf8');
     result.success = true;
 
     return result;
-
   } catch (error: any) {
     result.error = error.message;
-    
+
     // Store failed backup attempt
     await storeBackupMetadata({
       timestamp,
@@ -214,7 +224,7 @@ async function createDatabaseBackup(
       records_backed_up: result.recordsBackedUp,
       success: false,
       error_message: error.message,
-      critical_only: criticalOnly
+      critical_only: criticalOnly,
     });
 
     return result;
@@ -224,23 +234,23 @@ async function createDatabaseBackup(
 async function getTableTimeField(tableName: string): Promise<string | null> {
   // Map of tables to their timestamp fields for incremental backups
   const timeFieldMap: Record<string, string> = {
-    'blog_posts': 'updated_at',
-    'knowledge_base': 'updated_at', 
-    'strava_activities': 'start_date',
-    'analytics_sessions': 'created_at',
-    'analytics_page_views': 'created_at',
-    'analytics_events': 'created_at',
-    'analytics_ai_interactions': 'created_at',
-    'error_logs': 'created_at'
+    blog_posts: 'updated_at',
+    knowledge_base: 'updated_at',
+    strava_activities: 'start_date',
+    analytics_sessions: 'created_at',
+    analytics_page_views: 'created_at',
+    analytics_events: 'created_at',
+    analytics_ai_interactions: 'created_at',
+    error_logs: 'created_at',
   };
-  
+
   return timeFieldMap[tableName] || null;
 }
 
 async function getLastBackupTimestamp(): Promise<string | null> {
   try {
     const supabase = getSupabaseAdmin();
-    
+
     const { data, error } = await supabase
       .from('backup_logs')
       .select('timestamp')
@@ -268,13 +278,11 @@ async function getLastBackupTimestamp(): Promise<string | null> {
 async function storeBackupMetadata(metadata: any): Promise<void> {
   try {
     const supabase = getSupabaseAdmin();
-    
+
     // First, ensure the backup_logs table exists
     await ensureBackupLogsTable();
-    
-    const { error } = await supabase
-      .from('backup_logs')
-      .insert([metadata]);
+
+    const { error } = await supabase.from('backup_logs').insert([metadata]);
 
     if (error) {
       console.error('Failed to store backup metadata:', error);
@@ -287,7 +295,7 @@ async function storeBackupMetadata(metadata: any): Promise<void> {
 async function ensureBackupLogsTable(): Promise<void> {
   try {
     const supabase = getSupabaseAdmin();
-    
+
     // Try to create the table if it doesn't exist
     // Note: In production, this should be handled by proper migrations
     const createTableQuery = `
@@ -304,7 +312,7 @@ async function ensureBackupLogsTable(): Promise<void> {
         created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
       );
     `;
-    
+
     await supabase.rpc('exec_sql', { sql: createTableQuery });
   } catch (error) {
     // Table might already exist or we might not have permissions
@@ -316,7 +324,7 @@ async function ensureBackupLogsTable(): Promise<void> {
 async function getLastBackupInfo(): Promise<any> {
   try {
     const supabase = getSupabaseAdmin();
-    
+
     const { data, error } = await supabase
       .from('backup_logs')
       .select('*')
@@ -330,7 +338,7 @@ async function getLastBackupInfo(): Promise<any> {
     return {
       last_backup: data[0],
       recent_backups: data.length,
-      last_successful: data.find(b => b.success)
+      last_successful: data.find((b) => b.success),
     };
   } catch (error) {
     return { status: 'unable_to_check', error: error };

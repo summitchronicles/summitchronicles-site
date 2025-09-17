@@ -10,7 +10,7 @@ export interface DesignReviewReport {
     testDuration: number;
     summitChroniclesVersion?: string;
   };
-  
+
   summary: {
     overallScore: number;
     totalIssues: number;
@@ -18,7 +18,7 @@ export interface DesignReviewReport {
     warningIssues: number;
     infoIssues: number;
   };
-  
+
   visualQuality: {
     score: number;
     issues: VisualIssue[];
@@ -27,7 +27,7 @@ export interface DesignReviewReport {
     typographyIssues: number;
     layoutProblems: number;
   };
-  
+
   console: {
     score: number;
     errors: ConsoleError[];
@@ -35,19 +35,19 @@ export interface DesignReviewReport {
     networkErrors: number;
     performanceWarnings: number;
   };
-  
+
   responsive: {
     score: number;
     viewportResults: ViewportTestResult[];
     failedViewports: string[];
     totalResponsiveIssues: number;
   };
-  
+
   screenshots: {
     fullPage: string;
     viewports: { [key: string]: string };
   };
-  
+
   recommendations: Recommendation[];
 }
 
@@ -64,7 +64,11 @@ export class ReportGenerator {
   generateReport(
     url: string,
     visualIssues: VisualIssue[],
-    consoleErrors: { javascript: ConsoleError[]; network: ConsoleError[]; performance: ConsoleError[] },
+    consoleErrors: {
+      javascript: ConsoleError[];
+      network: ConsoleError[];
+      performance: ConsoleError[];
+    },
     responsiveResults: ViewportTestResult[],
     startTime: number
   ): DesignReviewReport {
@@ -73,17 +77,23 @@ export class ReportGenerator {
       ...consoleErrors.javascript,
       ...consoleErrors.network,
       ...consoleErrors.performance,
-      ...responsiveResults.flatMap(r => r.issues)
+      ...responsiveResults.flatMap((r) => r.issues),
     ];
 
-    const criticalCount = allIssues.filter(i => i.severity === 'critical').length;
-    const warningCount = allIssues.filter(i => i.severity === 'warning').length;
-    const infoCount = allIssues.filter(i => i.severity === 'info').length;
+    const criticalCount = allIssues.filter(
+      (i) => i.severity === 'critical'
+    ).length;
+    const warningCount = allIssues.filter(
+      (i) => i.severity === 'warning'
+    ).length;
+    const infoCount = allIssues.filter((i) => i.severity === 'info').length;
 
     const visualScore = this.calculateVisualScore(visualIssues);
     const consoleScore = this.calculateConsoleScore(consoleErrors);
     const responsiveScore = this.calculateResponsiveScore(responsiveResults);
-    const overallScore = Math.round((visualScore + consoleScore + responsiveScore) / 3);
+    const overallScore = Math.round(
+      (visualScore + consoleScore + responsiveScore) / 3
+    );
 
     const report: DesignReviewReport = {
       metadata: {
@@ -92,48 +102,70 @@ export class ReportGenerator {
         userAgent: 'Summit Chronicles Design Reviewer',
         testDuration: Date.now() - startTime,
       },
-      
+
       summary: {
         overallScore,
         totalIssues: allIssues.length,
         criticalIssues: criticalCount,
         warningIssues: warningCount,
-        infoIssues: infoCount
+        infoIssues: infoCount,
       },
-      
+
       visualQuality: {
         score: visualScore,
         issues: visualIssues,
-        brokenImagesCount: visualIssues.filter(i => i.type === 'broken-image').length,
-        colorComplianceIssues: visualIssues.filter(i => i.type === 'color-violation').length,
-        typographyIssues: visualIssues.filter(i => i.type === 'typography-issue').length,
-        layoutProblems: visualIssues.filter(i => i.type === 'layout-problem').length
+        brokenImagesCount: visualIssues.filter((i) => i.type === 'broken-image')
+          .length,
+        colorComplianceIssues: visualIssues.filter(
+          (i) => i.type === 'color-violation'
+        ).length,
+        typographyIssues: visualIssues.filter(
+          (i) => i.type === 'typography-issue'
+        ).length,
+        layoutProblems: visualIssues.filter((i) => i.type === 'layout-problem')
+          .length,
       },
-      
+
       console: {
         score: consoleScore,
-        errors: [...consoleErrors.javascript, ...consoleErrors.network, ...consoleErrors.performance],
+        errors: [
+          ...consoleErrors.javascript,
+          ...consoleErrors.network,
+          ...consoleErrors.performance,
+        ],
         javascriptErrors: consoleErrors.javascript.length,
         networkErrors: consoleErrors.network.length,
-        performanceWarnings: consoleErrors.performance.length
+        performanceWarnings: consoleErrors.performance.length,
       },
-      
+
       responsive: {
         score: responsiveScore,
         viewportResults: responsiveResults,
-        failedViewports: responsiveResults.filter(r => !r.passed).map(r => r.name),
-        totalResponsiveIssues: responsiveResults.reduce((sum, r) => sum + r.issues.length, 0)
+        failedViewports: responsiveResults
+          .filter((r) => !r.passed)
+          .map((r) => r.name),
+        totalResponsiveIssues: responsiveResults.reduce(
+          (sum, r) => sum + r.issues.length,
+          0
+        ),
       },
-      
+
       screenshots: {
         fullPage: 'agents/design-reviewer/reports/screenshots/full-page.png',
-        viewports: responsiveResults.reduce((acc, r) => {
-          acc[r.name] = r.screenshot;
-          return acc;
-        }, {} as { [key: string]: string })
+        viewports: responsiveResults.reduce(
+          (acc, r) => {
+            acc[r.name] = r.screenshot;
+            return acc;
+          },
+          {} as { [key: string]: string }
+        ),
       },
-      
-      recommendations: this.generateRecommendations(visualIssues, consoleErrors, responsiveResults)
+
+      recommendations: this.generateRecommendations(
+        visualIssues,
+        consoleErrors,
+        responsiveResults
+      ),
     };
 
     return report;
@@ -141,85 +173,117 @@ export class ReportGenerator {
 
   private calculateVisualScore(issues: VisualIssue[]): number {
     let score = 100;
-    
-    issues.forEach(issue => {
+
+    issues.forEach((issue) => {
       switch (issue.severity) {
-        case 'critical': score -= 20; break;
-        case 'warning': score -= 5; break;
-        case 'info': score -= 1; break;
+        case 'critical':
+          score -= 20;
+          break;
+        case 'warning':
+          score -= 5;
+          break;
+        case 'info':
+          score -= 1;
+          break;
       }
     });
-    
+
     return Math.max(0, score);
   }
 
-  private calculateConsoleScore(errors: { javascript: ConsoleError[]; network: ConsoleError[]; performance: ConsoleError[] }): number {
+  private calculateConsoleScore(errors: {
+    javascript: ConsoleError[];
+    network: ConsoleError[];
+    performance: ConsoleError[];
+  }): number {
     let score = 100;
-    const allErrors = [...errors.javascript, ...errors.network, ...errors.performance];
-    
-    allErrors.forEach(error => {
+    const allErrors = [
+      ...errors.javascript,
+      ...errors.network,
+      ...errors.performance,
+    ];
+
+    allErrors.forEach((error) => {
       switch (error.severity) {
-        case 'critical': score -= 25; break;
-        case 'warning': score -= 10; break;
-        case 'info': score -= 2; break;
+        case 'critical':
+          score -= 25;
+          break;
+        case 'warning':
+          score -= 10;
+          break;
+        case 'info':
+          score -= 2;
+          break;
       }
     });
-    
+
     return Math.max(0, score);
   }
 
   private calculateResponsiveScore(results: ViewportTestResult[]): number {
     let score = 100;
     const totalIssues = results.reduce((sum, r) => sum + r.issues.length, 0);
-    
-    results.forEach(result => {
-      result.issues.forEach(issue => {
+
+    results.forEach((result) => {
+      result.issues.forEach((issue) => {
         switch (issue.severity) {
-          case 'critical': score -= 15; break;
-          case 'warning': score -= 8; break;
-          case 'info': score -= 2; break;
+          case 'critical':
+            score -= 15;
+            break;
+          case 'warning':
+            score -= 8;
+            break;
+          case 'info':
+            score -= 2;
+            break;
         }
       });
     });
-    
+
     return Math.max(0, score);
   }
 
   private generateRecommendations(
     visualIssues: VisualIssue[],
-    consoleErrors: { javascript: ConsoleError[]; network: ConsoleError[]; performance: ConsoleError[] },
+    consoleErrors: {
+      javascript: ConsoleError[];
+      network: ConsoleError[];
+      performance: ConsoleError[];
+    },
     responsiveResults: ViewportTestResult[]
   ): Recommendation[] {
     const recommendations: Recommendation[] = [];
 
     // Visual recommendations
-    if (visualIssues.filter(i => i.type === 'broken-image').length > 0) {
+    if (visualIssues.filter((i) => i.type === 'broken-image').length > 0) {
       recommendations.push({
         priority: 'high',
         category: 'visual',
         title: 'Fix broken images',
-        description: 'Several images are failing to load properly, affecting the visual experience.',
+        description:
+          'Several images are failing to load properly, affecting the visual experience.',
         actionItems: [
           'Check image file paths and ensure files exist',
           'Verify image URLs are correct and accessible',
-          'Add fallback alt text for better accessibility'
+          'Add fallback alt text for better accessibility',
         ],
-        estimatedEffort: 'quick'
+        estimatedEffort: 'quick',
       });
     }
 
-    if (visualIssues.filter(i => i.type === 'color-violation').length > 0) {
+    if (visualIssues.filter((i) => i.type === 'color-violation').length > 0) {
       recommendations.push({
         priority: 'medium',
         category: 'visual',
         title: 'Ensure brand color consistency',
-        description: 'Non-brand colors detected that may not align with Summit Chronicles design system.',
+        description:
+          'Non-brand colors detected that may not align with Summit Chronicles design system.',
         actionItems: [
           'Review CSS custom properties in globals.css',
           'Replace hardcoded colors with Tailwind brand classes',
-          'Use alpineBlue, summitGold, and other defined brand colors'
+          'Use alpineBlue, summitGold, and other defined brand colors',
         ],
-        estimatedEffort: 'medium'
+        estimatedEffort: 'medium',
       });
     }
 
@@ -229,13 +293,14 @@ export class ReportGenerator {
         priority: 'high',
         category: 'console',
         title: 'Resolve JavaScript errors',
-        description: 'JavaScript errors can break functionality and user experience.',
+        description:
+          'JavaScript errors can break functionality and user experience.',
         actionItems: [
           'Check browser developer tools for detailed error information',
           'Review recent code changes that might have introduced errors',
-          'Test Strava API integration thoroughly'
+          'Test Strava API integration thoroughly',
         ],
-        estimatedEffort: 'medium'
+        estimatedEffort: 'medium',
       });
     }
 
@@ -244,31 +309,32 @@ export class ReportGenerator {
         priority: 'high',
         category: 'console',
         title: 'Fix network request issues',
-        description: 'Network requests are failing, potentially affecting data loading.',
+        description:
+          'Network requests are failing, potentially affecting data loading.',
         actionItems: [
           'Verify API endpoints are accessible',
           'Check Strava API token and authentication',
-          'Implement proper error handling for failed requests'
+          'Implement proper error handling for failed requests',
         ],
-        estimatedEffort: 'medium'
+        estimatedEffort: 'medium',
       });
     }
 
     // Responsive recommendations
-    const failedViewports = responsiveResults.filter(r => !r.passed);
+    const failedViewports = responsiveResults.filter((r) => !r.passed);
     if (failedViewports.length > 0) {
       recommendations.push({
         priority: 'high',
         category: 'responsive',
         title: 'Fix responsive design issues',
-        description: `Design issues detected on ${failedViewports.map(v => v.name).join(', ')} viewports.`,
+        description: `Design issues detected on ${failedViewports.map((v) => v.name).join(', ')} viewports.`,
         actionItems: [
           'Review and fix horizontal scroll issues',
           'Ensure touch targets meet minimum size requirements (44x44px)',
           'Test layout at different screen sizes',
-          'Use responsive Tailwind classes instead of fixed dimensions'
+          'Use responsive Tailwind classes instead of fixed dimensions',
         ],
-        estimatedEffort: 'large'
+        estimatedEffort: 'large',
       });
     }
 
@@ -363,36 +429,50 @@ export class ReportGenerator {
 
     <div class="card">
       <h2>Recommendations</h2>
-      ${report.recommendations.map(rec => `
+      ${report.recommendations
+        .map(
+          (rec) => `
         <div class="recommendation ${rec.priority}">
           <h3>${rec.title}</h3>
           <p><strong>Priority:</strong> ${rec.priority.toUpperCase()} | <strong>Category:</strong> ${rec.category} | <strong>Effort:</strong> ${rec.estimatedEffort}</p>
           <p>${rec.description}</p>
           <ul>
-            ${rec.actionItems.map(item => `<li>${item}</li>`).join('')}
+            ${rec.actionItems.map((item) => `<li>${item}</li>`).join('')}
           </ul>
         </div>
-      `).join('')}
+      `
+        )
+        .join('')}
     </div>
 
     <div class="card">
       <h2>All Issues</h2>
-      ${[...report.visualQuality.issues, ...report.console.errors].map(issue => `
+      ${[...report.visualQuality.issues, ...report.console.errors]
+        .map(
+          (issue) => `
         <div class="issue ${issue.severity}">
           <strong>${issue.type || 'Console'}:</strong> ${issue.message}
           ${'element' in issue && issue.element ? `<br><em>Element: ${issue.element}</em>` : ''}
           ${'expected' in issue && 'actual' in issue && issue.expected && issue.actual ? `<br><em>Expected: ${issue.expected} | Actual: ${issue.actual}</em>` : ''}
         </div>
-      `).join('')}
+      `
+        )
+        .join('')}
       
-      ${report.responsive.viewportResults.map(result => 
-        result.issues.map(issue => `
+      ${report.responsive.viewportResults
+        .map((result) =>
+          result.issues
+            .map(
+              (issue) => `
           <div class="issue ${issue.severity}">
             <strong>${issue.type} (${issue.viewport}):</strong> ${issue.message}
             ${issue.element ? `<br><em>Element: ${issue.element}</em>` : ''}
           </div>
-        `).join('')
-      ).join('')}
+        `
+            )
+            .join('')
+        )
+        .join('')}
     </div>
   </div>
 </body>

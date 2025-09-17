@@ -1,1 +1,1 @@
-export { CinematicBlogGrid } from './CinematicBlogGrid'
+export { CinematicBlogGrid } from './CinematicBlogGrid';

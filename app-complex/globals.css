@@ -5,138 +5,171 @@
 /* ===== Enhanced Design System - "Ascent by Design" ===== */
 :root {
   /* Brand Colors - Mountain Palette */
-  --color-alpine-blue: #1e3a8a;     /* Primary deep alpine blue */
-  --color-summit-gold: #fbbf24;     /* Achievement gold */
-  --color-charcoal: #1f2937;        /* Technical precision */
-  --color-light-gray: #f9fafb;      /* Clean base camp */
-  --color-snow-white: #ffffff;      /* Pure summit */
-  
+  --color-alpine-blue: #1e3a8a; /* Primary deep alpine blue */
+  --color-summit-gold: #fbbf24; /* Achievement gold */
+  --color-charcoal: #1f2937; /* Technical precision */
+  --color-light-gray: #f9fafb; /* Clean base camp */
+  --color-snow-white: #ffffff; /* Pure summit */
+
   /* Extended Color Palette */
-  --color-glacier-blue: #0ea5e9;    /* Active states, progress */
-  --color-stone-gray: #6b7280;      /* Supporting text */
-  --color-warning-orange: #f59e0b;  /* Safety alerts */
-  --color-success-green: #10b981;   /* Safe conditions */
-  --color-danger-red: #ef4444;      /* Emergency states */
-  
+  --color-glacier-blue: #0ea5e9; /* Active states, progress */
+  --color-stone-gray: #6b7280; /* Supporting text */
+  --color-warning-orange: #f59e0b; /* Safety alerts */
+  --color-success-green: #10b981; /* Safe conditions */
+  --color-danger-red: #ef4444; /* Emergency states */
+
   /* Typography Scale - Technical Precision */
-  --font-size-xs: 0.75rem;          /* 12px - Fine details */
-  --font-size-sm: 0.875rem;         /* 14px - Supporting info */
-  --font-size-base: 1rem;           /* 16px - Body text */
-  --font-size-lg: 1.125rem;         /* 18px - Emphasis */
-  --font-size-xl: 1.25rem;          /* 20px - Small headings */
-  --font-size-2xl: 1.5rem;          /* 24px - Section headers */
-  --font-size-3xl: 1.875rem;        /* 30px - Page titles */
-  --font-size-4xl: 2.25rem;         /* 36px - Hero headings */
-  --font-size-5xl: 3rem;            /* 48px - Major displays */
-  
+  --font-size-xs: 0.75rem; /* 12px - Fine details */
+  --font-size-sm: 0.875rem; /* 14px - Supporting info */
+  --font-size-base: 1rem; /* 16px - Body text */
+  --font-size-lg: 1.125rem; /* 18px - Emphasis */
+  --font-size-xl: 1.25rem; /* 20px - Small headings */
+  --font-size-2xl: 1.5rem; /* 24px - Section headers */
+  --font-size-3xl: 1.875rem; /* 30px - Page titles */
+  --font-size-4xl: 2.25rem; /* 36px - Hero headings */
+  --font-size-5xl: 3rem; /* 48px - Major displays */
+
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
-  
+
   --line-height-tight: 1.25;
   --line-height-normal: 1.5;
   --line-height-relaxed: 1.75;
-  
+
   /* Spacing Scale - Altitude Zones */
-  --space-1: 0.25rem;    /* 4px - Micro spacing */
-  --space-2: 0.5rem;     /* 8px - Tight spacing */
-  --space-3: 0.75rem;    /* 12px - Small gaps */
-  --space-4: 1rem;       /* 16px - Standard spacing */
-  --space-6: 1.5rem;     /* 24px - Section spacing */
-  --space-8: 2rem;       /* 32px - Component spacing */
-  --space-12: 3rem;      /* 48px - Large sections */
-  --space-16: 4rem;      /* 64px - Major sections */
-  --space-24: 6rem;      /* 96px - Page sections */
-  
+  --space-1: 0.25rem; /* 4px - Micro spacing */
+  --space-2: 0.5rem; /* 8px - Tight spacing */
+  --space-3: 0.75rem; /* 12px - Small gaps */
+  --space-4: 1rem; /* 16px - Standard spacing */
+  --space-6: 1.5rem; /* 24px - Section spacing */
+  --space-8: 2rem; /* 32px - Component spacing */
+  --space-12: 3rem; /* 48px - Large sections */
+  --space-16: 4rem; /* 64px - Major sections */
+  --space-24: 6rem; /* 96px - Page sections */
+
   /* Border Radius - Mountain Contours */
-  --radius-sm: 0.25rem;   /* 4px - Small elements */
-  --radius-md: 0.5rem;    /* 8px - Standard cards */
-  --radius-lg: 0.75rem;   /* 12px - Large cards */
-  --radius-xl: 1rem;      /* 16px - Hero elements */
-  --radius-2xl: 1.5rem;   /* 24px - Feature cards */
-  --radius-full: 9999px;  /* Circular elements */
-  
+  --radius-sm: 0.25rem; /* 4px - Small elements */
+  --radius-md: 0.5rem; /* 8px - Standard cards */
+  --radius-lg: 0.75rem; /* 12px - Large cards */
+  --radius-xl: 1rem; /* 16px - Hero elements */
+  --radius-2xl: 1.5rem; /* 24px - Feature cards */
+  --radius-full: 9999px; /* Circular elements */
+
   /* Shadows - Elevation Depth */
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.03);
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-  --shadow-xl: 0 20px 25px rgba(0,0,0,0.15);
-  --shadow-2xl: 0 25px 50px rgba(0,0,0,0.25);
-  
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+
   /* Animation Timings - Natural Movement */
-  --duration-fast: 150ms;     /* Micro interactions */
-  --duration-normal: 250ms;   /* Standard transitions */
-  --duration-slow: 350ms;     /* Content transitions */
-  --duration-slower: 500ms;   /* Page transitions */
-  
+  --duration-fast: 150ms; /* Micro interactions */
+  --duration-normal: 250ms; /* Standard transitions */
+  --duration-slow: 350ms; /* Content transitions */
+  --duration-slower: 500ms; /* Page transitions */
+
   --easing-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  
+
   /* Interactive States - Expedition Feedback */
   --hover-scale: 1.02;
   --active-scale: 0.98;
   --focus-ring: 0 0 0 2px var(--color-alpine-blue);
   --focus-ring-offset: 2px;
-  
+
   /* Gradients - Mountain Atmosphere */
-  --gradient-alpine: linear-gradient(135deg, var(--color-alpine-blue) 0%, #3b82f6 100%);
-  --gradient-summit: linear-gradient(135deg, var(--color-summit-gold) 0%, #fcd34d 100%);
-  --gradient-sky: linear-gradient(to bottom, #0ea5e9 0%, var(--color-alpine-blue) 100%);
-  --gradient-elevation: linear-gradient(to top, var(--color-light-gray) 0%, var(--color-snow-white) 100%);
-  
+  --gradient-alpine: linear-gradient(
+    135deg,
+    var(--color-alpine-blue) 0%,
+    #3b82f6 100%
+  );
+  --gradient-summit: linear-gradient(
+    135deg,
+    var(--color-summit-gold) 0%,
+    #fcd34d 100%
+  );
+  --gradient-sky: linear-gradient(
+    to bottom,
+    #0ea5e9 0%,
+    var(--color-alpine-blue) 100%
+  );
+  --gradient-elevation: linear-gradient(
+    to top,
+    var(--color-light-gray) 0%,
+    var(--color-snow-white) 100%
+  );
+
   /* Phase 1 Extensions - Advanced Visual System */
-  
+
   /* 3D Transform & Perspective */
   --perspective: 1000px;
   --transform-3d-scale: 1.05;
   --transform-3d-rotate-x: -5deg;
   --transform-3d-rotate-y: 15deg;
   --transform-preserve-3d: preserve-3d;
-  
+
   /* Advanced Animation Variables */
   --animation-bounce-in: cubic-bezier(0.68, -0.55, 0.265, 1.55);
   --animation-elastic: cubic-bezier(0.175, 0.885, 0.32, 1.275);
   --animation-mountain-lift: cubic-bezier(0.23, 1, 0.32, 1);
   --duration-ultra-slow: 800ms;
   --duration-page-transition: 1200ms;
-  
+
   /* Glassmorphism Effects */
   --glass-background: rgba(255, 255, 255, 0.1);
   --glass-background-dark: rgba(0, 0, 0, 0.1);
   --glass-border: rgba(255, 255, 255, 0.2);
   --glass-blur: 16px;
   --glass-backdrop-filter: blur(var(--glass-blur)) saturate(180%);
-  
+
   /* Particle & Effect Colors */
   --particle-snow: rgba(255, 255, 255, 0.8);
   --particle-mist: rgba(135, 206, 250, 0.3);
   --aurora-green: #00ff88;
   --aurora-blue: #0088ff;
   --aurora-purple: #8800ff;
-  
+
   /* Advanced Gradients */
-  --gradient-aurora: linear-gradient(45deg, var(--aurora-green) 0%, var(--aurora-blue) 50%, var(--aurora-purple) 100%);
-  --gradient-mountain-mist: radial-gradient(ellipse at center, var(--particle-mist) 0%, transparent 70%);
-  --gradient-glass: linear-gradient(135deg, var(--glass-background) 0%, rgba(255,255,255,0.05) 100%);
-  --gradient-depth: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 100%);
-  
+  --gradient-aurora: linear-gradient(
+    45deg,
+    var(--aurora-green) 0%,
+    var(--aurora-blue) 50%,
+    var(--aurora-purple) 100%
+  );
+  --gradient-mountain-mist: radial-gradient(
+    ellipse at center,
+    var(--particle-mist) 0%,
+    transparent 70%
+  );
+  --gradient-glass: linear-gradient(
+    135deg,
+    var(--glass-background) 0%,
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  --gradient-depth: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+
   /* Altitude Zone Colors */
-  --altitude-base: #22c55e;      /* Base Camp - Green */
-  --altitude-low: #3b82f6;       /* Low Altitude - Blue */
-  --altitude-mid: #f59e0b;       /* Mid Altitude - Orange */
-  --altitude-high: #ef4444;      /* High Altitude - Red */
-  --altitude-summit: #8b5cf6;    /* Summit - Purple */
-  
+  --altitude-base: #22c55e; /* Base Camp - Green */
+  --altitude-low: #3b82f6; /* Low Altitude - Blue */
+  --altitude-mid: #f59e0b; /* Mid Altitude - Orange */
+  --altitude-high: #ef4444; /* High Altitude - Red */
+  --altitude-summit: #8b5cf6; /* Summit - Purple */
+
   /* Interactive Feedback */
   --haptic-light: scale(1.02);
   --haptic-medium: scale(1.05);
   --haptic-strong: scale(1.08);
   --ripple-duration: 600ms;
-  
+
   /* Content Layers - Z-index system */
   --z-base: 0;
   --z-content: 10;
@@ -275,7 +308,12 @@ body {
   right: 0;
   width: 40px;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   animation: shimmer 2s infinite;
 }
 
@@ -311,7 +349,12 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
   transform: translateX(-100%);
   transition: transform var(--duration-slow) var(--easing-ease-out);
 }
@@ -372,8 +415,12 @@ body {
 
 /* Animations */
 @keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
 @keyframes fadeInUp {
@@ -425,7 +472,8 @@ body {
 }
 
 @keyframes floatUp {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px);
   }
   50% {
@@ -463,7 +511,8 @@ body {
 }
 
 @keyframes aurora {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -482,7 +531,8 @@ body {
   animation: slideInRight var(--duration-slow) var(--easing-ease-out);
 }
 .animate-mountain-lift {
-  animation: mountainLift var(--duration-ultra-slow) var(--animation-mountain-lift);
+  animation: mountainLift var(--duration-ultra-slow)
+    var(--animation-mountain-lift);
 }
 .animate-float-up {
   animation: floatUp 3s ease-in-out infinite;
@@ -516,7 +566,12 @@ body {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
 }
 
 .glass-card-dark {
@@ -536,7 +591,8 @@ body {
 }
 
 .card-3d:hover {
-  transform: rotateX(var(--transform-3d-rotate-x)) rotateY(var(--transform-3d-rotate-y)) scale(var(--transform-3d-scale));
+  transform: rotateX(var(--transform-3d-rotate-x))
+    rotateY(var(--transform-3d-rotate-y)) scale(var(--transform-3d-scale));
 }
 
 /* Altitude Zone Navigation */
@@ -545,24 +601,44 @@ body {
   transition: all var(--duration-slow) var(--animation-mountain-lift);
 }
 
-.altitude-zone[data-zone="base"] {
-  background: linear-gradient(135deg, var(--altitude-base), rgba(34, 197, 94, 0.8));
+.altitude-zone[data-zone='base'] {
+  background: linear-gradient(
+    135deg,
+    var(--altitude-base),
+    rgba(34, 197, 94, 0.8)
+  );
 }
 
-.altitude-zone[data-zone="low"] {
-  background: linear-gradient(135deg, var(--altitude-low), rgba(59, 130, 246, 0.8));
+.altitude-zone[data-zone='low'] {
+  background: linear-gradient(
+    135deg,
+    var(--altitude-low),
+    rgba(59, 130, 246, 0.8)
+  );
 }
 
-.altitude-zone[data-zone="mid"] {
-  background: linear-gradient(135deg, var(--altitude-mid), rgba(245, 158, 11, 0.8));
+.altitude-zone[data-zone='mid'] {
+  background: linear-gradient(
+    135deg,
+    var(--altitude-mid),
+    rgba(245, 158, 11, 0.8)
+  );
 }
 
-.altitude-zone[data-zone="high"] {
-  background: linear-gradient(135deg, var(--altitude-high), rgba(239, 68, 68, 0.8));
+.altitude-zone[data-zone='high'] {
+  background: linear-gradient(
+    135deg,
+    var(--altitude-high),
+    rgba(239, 68, 68, 0.8)
+  );
 }
 
-.altitude-zone[data-zone="summit"] {
-  background: linear-gradient(135deg, var(--altitude-summit), rgba(139, 92, 246, 0.8));
+.altitude-zone[data-zone='summit'] {
+  background: linear-gradient(
+    135deg,
+    var(--altitude-summit),
+    rgba(139, 92, 246, 0.8)
+  );
 }
 
 /* Interactive Ripple Effect */
@@ -596,7 +672,12 @@ body {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left var(--duration-slow) var(--easing-ease-out);
 }
 
@@ -688,7 +769,9 @@ body {
 
 .search-enhanced input:focus {
   background: var(--glass-background);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), var(--shadow-lg);
+  box-shadow:
+    0 0 0 3px rgba(59, 130, 246, 0.1),
+    var(--shadow-lg);
   border-color: var(--color-alpine-blue);
 }
 
@@ -701,10 +784,12 @@ body {
 
 /* Content Loading States */
 .content-shimmer {
-  background: linear-gradient(90deg, 
-    var(--color-light-gray) 0%, 
-    rgba(255,255,255,0.8) 50%, 
-    var(--color-light-gray) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--color-light-gray) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    var(--color-light-gray) 100%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--radius-md);
@@ -736,12 +821,12 @@ body {
     --color-charcoal: #f9fafb;
     --color-stone-gray: #9ca3af;
   }
-  
+
   .strava-card {
     background: #1f2937;
     border-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .skeleton {
     background: linear-gradient(90deg, #374151 0%, #4b5563 50%, #374151 100%);
   }
@@ -752,84 +837,87 @@ body {
   @apply w-full py-6 text-center text-sm;
   background-color: var(--color-charcoal);
   color: var(--color-snow-white);
-  border-top: 1px solid rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* ===== Enhanced Mobile Experience ===== */
 @media (max-width: 768px) {
   /* Better touch targets - iOS/Android standard 44px minimum */
-  button, a, input, textarea {
+  button,
+  a,
+  input,
+  textarea {
     min-height: 44px;
     min-width: 44px;
   }
-  
+
   /* Prevent horizontal scrolling on mobile */
   body {
     overflow-x: hidden;
   }
-  
+
   /* Improved text readability on small screens */
   .text-4xl {
     @apply text-2xl;
   }
-  
+
   .text-5xl {
     @apply text-3xl;
   }
-  
+
   .text-6xl {
     @apply text-3xl;
   }
-  
+
   /* Better spacing on mobile */
   .py-24 {
     @apply py-12;
   }
-  
+
   .py-16 {
     @apply py-8;
   }
-  
+
   .py-12 {
     @apply py-8;
   }
-  
+
   /* Mobile-friendly padding */
   .px-6 {
     @apply px-4;
   }
-  
+
   /* Better mobile form inputs - prevents iOS zoom */
-  input[type="text"], 
-  input[type="email"], 
-  input[type="search"],
+  input[type='text'],
+  input[type='email'],
+  input[type='search'],
   textarea {
     font-size: 16px !important;
   }
-  
+
   /* Mobile-optimized grid gaps */
   .grid {
     gap: 0.75rem;
   }
-  
+
   /* Better mobile card layout */
   .md\:grid-cols-2 {
     @apply grid-cols-1;
   }
-  
+
   .lg\:grid-cols-3 {
     @apply grid-cols-1;
   }
-  
+
   .lg\:grid-cols-4 {
     @apply grid-cols-2;
   }
-  
+
   /* Mobile filter improvements */
   .flex-wrap {
     gap: 0.5rem;
   }
-  
+
   /* Mobile conversation history improvements */
   .space-y-6 > * + * {
     margin-top: 1rem;
@@ -842,15 +930,15 @@ body {
   .hover\:scale-105:hover {
     transform: scale(1.05);
   }
-  
+
   .hover\:bg-white\/10:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .hover\:bg-white\/20:hover {
     background-color: rgba(255, 255, 255, 0.2);
   }
-  
+
   .hover\:text-summitGold:hover {
     color: var(--color-summit-gold);
   }
@@ -882,13 +970,17 @@ html {
 /* ===== Mobile Safari specific optimizations ===== */
 @supports (-webkit-touch-callout: none) {
   /* iOS Safari specific styles */
-  input, textarea, button {
+  input,
+  textarea,
+  button {
     -webkit-appearance: none;
     border-radius: 0;
   }
-  
+
   /* Prevent zoom on focus */
-  select, input, textarea {
+  select,
+  input,
+  textarea {
     font-size: 16px;
   }
 }

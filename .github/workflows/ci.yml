@@ -2,9 +2,9 @@ name: CI/CD Pipeline
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
   push:
-    branches: [ "main" ]
+    branches: ['main']
   workflow_dispatch:
 
 jobs:
@@ -68,7 +68,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     environment:
       name: production
-      url: https://summitchronicles.com   # ✅ your custom domain
+      url: https://summitchronicles.com # ✅ your custom domain
 
     steps:
       - name: Checkout repo

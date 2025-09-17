@@ -1,22 +1,22 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import useSWR from 'swr'
-import { 
-  Activity, 
-  TrendingUp, 
-  Mountain, 
-  Timer, 
-  Heart, 
+import { useState, useEffect } from 'react';
+import useSWR from 'swr';
+import {
+  Activity,
+  TrendingUp,
+  Mountain,
+  Timer,
+  Heart,
   MapPin,
   Calendar,
   Target,
   Zap,
-  Trophy
-} from 'lucide-react'
-import { 
-  StravaActivity, 
-  StravaStats, 
+  Trophy,
+} from 'lucide-react';
+import {
+  StravaActivity,
+  StravaStats,
   AthleteProfile,
   getMockStravaData,
   formatDistance,
@@ -24,89 +24,86 @@ import {
   formatElevation,
   formatActivityDate,
   getActivityIcon,
-  getActivityColor
-} from '@/lib/integrations/strava'
+  getActivityColor,
+} from '@/lib/integrations/strava';
 
 interface TrainingDashboardProps {
-  showMockData?: boolean
+  showMockData?: boolean;
 }
 
 // SWR fetcher function
-const fetcher = (url: string) => fetch(url).then(res => res.json())
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-export function TrainingDashboard({ showMockData = false }: TrainingDashboardProps) {
-  const [selectedTimeframe, setSelectedTimeframe] = useState<'recent' | 'ytd' | 'all'>('recent')
-  
+export function TrainingDashboard({
+  showMockData = false,
+}: TrainingDashboardProps) {
+  const [selectedTimeframe, setSelectedTimeframe] = useState<
+    'recent' | 'ytd' | 'all'
+  >('recent');
+
   // Fetch real Strava data using SWR for automatic caching and revalidation
-  const { 
-    data: activities, 
-    error: activitiesError 
-  } = useSWR<StravaActivity[]>(
-    showMockData ? null : '/api/strava/activities', 
-    fetcher, 
-    { 
+  const { data: activities, error: activitiesError } = useSWR<StravaActivity[]>(
+    showMockData ? null : '/api/strava/activities',
+    fetcher,
+    {
       refreshInterval: 300000, // Refresh every 5 minutes
-      fallbackData: []
+      fallbackData: [],
     }
-  )
-  
-  const { 
-    data: stats, 
-    error: statsError 
-  } = useSWR<StravaStats>(
-    showMockData ? null : '/api/strava/stats', 
-    fetcher,
-    { 
-      refreshInterval: 600000, // Refresh every 10 minutes
-      fallbackData: undefined
-    }
-  )
+  );
 
-  const { 
-    data: profile 
-  } = useSWR<AthleteProfile>(
-    showMockData ? null : '/api/strava/profile', 
+  const { data: stats, error: statsError } = useSWR<StravaStats>(
+    showMockData ? null : '/api/strava/stats',
     fetcher,
-    { 
-      refreshInterval: 3600000, // Refresh every hour
-      fallbackData: undefined
+    {
+      refreshInterval: 600000, // Refresh every 10 minutes
+      fallbackData: undefined,
     }
-  )
+  );
+
+  const { data: profile } = useSWR<AthleteProfile>(
+    showMockData ? null : '/api/strava/profile',
+    fetcher,
+    {
+      refreshInterval: 3600000, // Refresh every hour
+      fallbackData: undefined,
+    }
+  );
 
   // Use mock data if specified or if API fails
-  const mockData = getMockStravaData()
-  const displayActivities = showMockData || activitiesError ? mockData.activities : (activities || [])
-  const displayStats = showMockData || statsError ? mockData.stats : stats
-  const displayProfile = showMockData ? mockData.profile : profile
+  const mockData = getMockStravaData();
+  const displayActivities =
+    showMockData || activitiesError ? mockData.activities : activities || [];
+  const displayStats = showMockData || statsError ? mockData.stats : stats;
+  const displayProfile = showMockData ? mockData.profile : profile;
 
   const getCurrentStats = () => {
-    if (!displayStats) return null
-    
+    if (!displayStats) return null;
+
     switch (selectedTimeframe) {
       case 'recent':
         return {
           runs: displayStats.recent_run_totals,
-          rides: displayStats.recent_ride_totals
-        }
+          rides: displayStats.recent_ride_totals,
+        };
       case 'ytd':
         return {
           runs: displayStats.ytd_run_totals,
-          rides: displayStats.ytd_ride_totals
-        }
+          rides: displayStats.ytd_ride_totals,
+        };
       case 'all':
         return {
           runs: displayStats.all_run_totals,
-          rides: displayStats.all_ride_totals
-        }
+          rides: displayStats.all_ride_totals,
+        };
       default:
         return {
           runs: displayStats.recent_run_totals,
-          rides: displayStats.recent_ride_totals
-        }
+          rides: displayStats.recent_ride_totals,
+        };
     }
-  }
+  };
 
-  const currentStats = getCurrentStats()
+  const currentStats = getCurrentStats();
 
   return (
     <div className="space-y-8">
@@ -120,13 +117,13 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
             Real-time Strava integration showing training progress and metrics
           </p>
         </div>
-        
+
         {/* Timeframe Selector */}
         <div className="flex bg-spa-stone/10 rounded-lg p-1">
           {[
             { key: 'recent', label: 'Recent' },
             { key: 'ytd', label: 'This Year' },
-            { key: 'all', label: 'All Time' }
+            { key: 'all', label: 'All Time' },
           ].map(({ key, label }) => (
             <button
               key={key}
@@ -187,14 +184,15 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
               </div>
               <div>
                 <div className="text-2xl font-light text-spa-charcoal">
-                  {formatElevation(currentStats.runs.elevation_gain + currentStats.rides.elevation_gain)}
+                  {formatElevation(
+                    currentStats.runs.elevation_gain +
+                      currentStats.rides.elevation_gain
+                  )}
                 </div>
                 <div className="text-sm text-spa-charcoal/70">Elevation</div>
               </div>
             </div>
-            <div className="text-sm text-spa-charcoal/70">
-              Total gained
-            </div>
+            <div className="text-sm text-spa-charcoal/70">Total gained</div>
           </div>
 
           <div className="bg-white rounded-xl p-6 shadow-spa-soft">
@@ -204,14 +202,15 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
               </div>
               <div>
                 <div className="text-2xl font-light text-spa-charcoal">
-                  {formatDuration(currentStats.runs.moving_time + currentStats.rides.moving_time)}
+                  {formatDuration(
+                    currentStats.runs.moving_time +
+                      currentStats.rides.moving_time
+                  )}
                 </div>
                 <div className="text-sm text-spa-charcoal/70">Moving Time</div>
               </div>
             </div>
-            <div className="text-sm text-spa-charcoal/70">
-              Total active
-            </div>
+            <div className="text-sm text-spa-charcoal/70">Total active</div>
           </div>
         </div>
       )}
@@ -220,19 +219,19 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
       <div className="bg-white rounded-xl p-6 shadow-spa-soft">
         <div className="flex items-center gap-3 mb-6">
           <Trophy className="w-6 h-6 text-alpine-blue" />
-          <h3 className="text-xl font-medium text-spa-charcoal">Recent Activities</h3>
+          <h3 className="text-xl font-medium text-spa-charcoal">
+            Recent Activities
+          </h3>
         </div>
 
         <div className="space-y-4">
           {displayActivities.slice(0, 5).map((activity) => (
-            <div 
-              key={activity.id} 
+            <div
+              key={activity.id}
               className="flex items-center justify-between p-4 bg-spa-stone/5 rounded-lg hover:bg-spa-stone/10 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="text-2xl">
-                  {getActivityIcon(activity.type)}
-                </div>
+                <div className="text-2xl">{getActivityIcon(activity.type)}</div>
                 <div>
                   <div className="font-medium text-spa-charcoal mb-1">
                     {activity.name}
@@ -259,7 +258,7 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
                   </div>
                 </div>
               </div>
-              
+
               <div className="text-right">
                 <div className="text-sm text-spa-charcoal/70 mb-1">
                   {formatActivityDate(activity.start_date)}
@@ -277,7 +276,9 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
           <div className="text-center py-8 text-spa-charcoal/70">
             <Activity className="w-12 h-12 mx-auto mb-4 opacity-50" />
             <p>No recent activities found</p>
-            <p className="text-sm">Connect your Strava account to see training data</p>
+            <p className="text-sm">
+              Connect your Strava account to see training data
+            </p>
           </div>
         )}
       </div>
@@ -287,9 +288,11 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
         <div className="bg-white rounded-xl p-6 shadow-spa-soft">
           <div className="flex items-center gap-3 mb-6">
             <Target className="w-6 h-6 text-alpine-blue" />
-            <h3 className="text-xl font-medium text-spa-charcoal">Training Focus</h3>
+            <h3 className="text-xl font-medium text-spa-charcoal">
+              Training Focus
+            </h3>
           </div>
-          
+
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-spa-charcoal/70">Endurance Training</span>
@@ -300,7 +303,7 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
                 <span className="text-sm font-medium">75%</span>
               </div>
             </div>
-            
+
             <div className="flex justify-between items-center">
               <span className="text-spa-charcoal/70">Strength Training</span>
               <div className="flex items-center gap-2">
@@ -310,7 +313,7 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
                 <span className="text-sm font-medium">50%</span>
               </div>
             </div>
-            
+
             <div className="flex justify-between items-center">
               <span className="text-spa-charcoal/70">Technical Skills</span>
               <div className="flex items-center gap-2">
@@ -326,9 +329,11 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
         <div className="bg-white rounded-xl p-6 shadow-spa-soft">
           <div className="flex items-center gap-3 mb-6">
             <TrendingUp className="w-6 h-6 text-alpine-blue" />
-            <h3 className="text-xl font-medium text-spa-charcoal">Performance Trends</h3>
+            <h3 className="text-xl font-medium text-spa-charcoal">
+              Performance Trends
+            </h3>
           </div>
-          
+
           <div className="space-y-4">
             <div className="p-4 bg-green-50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
@@ -339,17 +344,19 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
                 Average pace has improved by 12% this month
               </div>
             </div>
-            
+
             <div className="p-4 bg-blue-50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Mountain className="w-4 h-4 text-blue-600" />
-                <span className="font-medium text-blue-800">Elevation Goal</span>
+                <span className="font-medium text-blue-800">
+                  Elevation Goal
+                </span>
               </div>
               <div className="text-sm text-blue-700">
                 85% complete for monthly elevation target
               </div>
             </div>
-            
+
             <div className="p-4 bg-orange-50 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
                 <Heart className="w-4 h-4 text-orange-600" />
@@ -371,5 +378,5 @@ export function TrainingDashboard({ showMockData = false }: TrainingDashboardPro
         </div>
       )}
     </div>
-  )
+  );
 }

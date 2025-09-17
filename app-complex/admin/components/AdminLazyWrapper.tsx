@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { Suspense } from 'react';
 
@@ -15,7 +15,9 @@ function AdminFallback({ title }: { title: string }) {
         <div className="max-w-7xl mx-auto">
           <div className="text-center py-20">
             <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-summitGold mx-auto mb-6"></div>
-            <h2 className="text-2xl font-bold text-white mb-2">Loading {title}</h2>
+            <h2 className="text-2xl font-bold text-white mb-2">
+              Loading {title}
+            </h2>
             <p className="text-white/60">Preparing admin dashboard...</p>
           </div>
         </div>
@@ -24,10 +26,11 @@ function AdminFallback({ title }: { title: string }) {
   );
 }
 
-export default function AdminLazyWrapper({ children, title }: AdminLazyWrapperProps) {
+export default function AdminLazyWrapper({
+  children,
+  title,
+}: AdminLazyWrapperProps) {
   return (
-    <Suspense fallback={<AdminFallback title={title} />}>
-      {children}
-    </Suspense>
+    <Suspense fallback={<AdminFallback title={title} />}>{children}</Suspense>
   );
 }

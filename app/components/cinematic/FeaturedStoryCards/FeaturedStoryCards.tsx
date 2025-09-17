@@ -1,44 +1,56 @@
-'use client'
+'use client';
 
-import { motion, useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowRight, Calendar, Clock, MapPin, Mountain, Eye, BookOpen, Award } from 'lucide-react'
+import { motion, useInView } from 'framer-motion';
+import { useRef, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import {
+  ArrowRight,
+  Calendar,
+  Clock,
+  MapPin,
+  Mountain,
+  Eye,
+  BookOpen,
+  Award,
+} from 'lucide-react';
 
 interface StoryCard {
-  id: string
-  title: string
-  subtitle: string
-  excerpt: string
-  location: string
-  date: string
-  readTime: string
-  category: string
-  image: string
-  slug: string
-  featured?: boolean
+  id: string;
+  title: string;
+  subtitle: string;
+  excerpt: string;
+  location: string;
+  date: string;
+  readTime: string;
+  category: string;
+  image: string;
+  slug: string;
+  featured?: boolean;
   stats?: {
-    views: string
-    likes: string
-  }
+    views: string;
+    likes: string;
+  };
 }
 
 interface FeaturedStoryCardsProps {
-  className?: string
+  className?: string;
 }
 
-export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null)
+export function FeaturedStoryCards({
+  className = '',
+}: FeaturedStoryCardsProps) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
 
   const stories: StoryCard[] = [
     {
       id: 'everest-prep',
       title: 'The Mental Game',
       subtitle: 'Preparing Mind and Body for Everest 2027',
-      excerpt: 'Every summit begins in the mind. Discover the psychological preparation behind the world\'s ultimate mountaineering challenge, where mental fortitude matters as much as physical strength.',
+      excerpt:
+        "Every summit begins in the mind. Discover the psychological preparation behind the world's ultimate mountaineering challenge, where mental fortitude matters as much as physical strength.",
       location: 'Training Grounds, California',
       date: 'December 2024',
       readTime: '12 min read',
@@ -48,14 +60,15 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
       featured: true,
       stats: {
         views: '2.1K',
-        likes: '156'
-      }
+        likes: '156',
+      },
     },
     {
       id: 'kilimanjaro',
       title: 'Conquering Kilimanjaro',
-      subtitle: 'Lessons from Africa\'s Rooftop',
-      excerpt: 'Standing at 5,895 meters above sea level, Kilimanjaro taught me that every step toward a summit is a decision to continue when everything says stop.',
+      subtitle: "Lessons from Africa's Rooftop",
+      excerpt:
+        'Standing at 5,895 meters above sea level, Kilimanjaro taught me that every step toward a summit is a decision to continue when everything says stop.',
       location: 'Tanzania, Africa',
       date: 'March 2024',
       readTime: '8 min read',
@@ -64,14 +77,15 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
       slug: 'kilimanjaro-lessons-from-africas-rooftop',
       stats: {
         views: '3.2K',
-        likes: '287'
-      }
+        likes: '287',
+      },
     },
     {
       id: 'data-driven-training',
       title: 'Analytics in Action',
       subtitle: 'How Data Transforms Athletic Performance',
-      excerpt: 'From heart rate variability to altitude acclimatization metrics, discover how systematic data analysis revolutionizes mountaineering preparation and performance optimization.',
+      excerpt:
+        'From heart rate variability to altitude acclimatization metrics, discover how systematic data analysis revolutionizes mountaineering preparation and performance optimization.',
       location: 'Various Training Locations',
       date: 'November 2024',
       readTime: '15 min read',
@@ -80,23 +94,23 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
       slug: 'data-driven-mountaineering-performance',
       stats: {
         views: '1.8K',
-        likes: '124'
-      }
-    }
-  ]
+        likes: '124',
+      },
+    },
+  ];
 
   const getCategoryColor = (category: string) => {
     switch (category.toLowerCase()) {
       case 'training':
-        return 'bg-blue-100 text-blue-800'
+        return 'bg-blue-100 text-blue-800';
       case 'achievement':
-        return 'bg-summit-gold text-spa-charcoal'
+        return 'bg-summit-gold text-spa-charcoal';
       case 'technology':
-        return 'bg-purple-100 text-purple-800'
+        return 'bg-purple-100 text-purple-800';
       default:
-        return 'bg-slate-100 text-slate-800'
+        return 'bg-slate-100 text-slate-800';
     }
-  }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -104,23 +118,23 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
       opacity: 1,
       transition: {
         staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
-    }
-  }
+        delayChildren: 0.2,
+      },
+    },
+  };
 
   const cardVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       y: 60,
-      scale: 0.9
+      scale: 0.9,
     },
     visible: {
       opacity: 1,
       y: 0,
-      scale: 1
-    }
-  }
+      scale: 1,
+    },
+  };
 
   return (
     <section className={`py-20 bg-white ${className}`}>
@@ -135,8 +149,9 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
             Stories from the Summit
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-            Each expedition holds lessons beyond the summit. Dive deep into the experiences, 
-            challenges, and insights that shape the journey toward the Seven Summits.
+            Each expedition holds lessons beyond the summit. Dive deep into the
+            experiences, challenges, and insights that shape the journey toward
+            the Seven Summits.
           </p>
         </motion.div>
 
@@ -144,7 +159,7 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
           ref={ref}
           variants={containerVariants}
           initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
+          animate={isInView ? 'visible' : 'hidden'}
           className="grid grid-cols-1 lg:grid-cols-2 gap-8"
         >
           {/* Featured Story - Large Card */}
@@ -189,10 +204,12 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
                 {/* Content */}
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <div className="space-y-4">
-                    <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(stories[0].category)}`}>
+                    <div
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(stories[0].category)}`}
+                    >
                       {stories[0].category}
                     </div>
-                    
+
                     <div>
                       <h3 className="text-3xl md:text-4xl font-bold text-white mb-2 group-hover:text-summit-gold transition-colors duration-300">
                         {stories[0].title}
@@ -220,7 +237,7 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
                           <span>{stories[0].readTime}</span>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2 text-summit-gold group-hover:translate-x-2 transition-transform duration-300">
                         <span className="font-medium">Read Story</span>
                         <ArrowRight className="w-4 h-4" />
@@ -257,7 +274,9 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
                     {/* Content */}
                     <div className="flex-1 space-y-3">
                       <div className="flex items-start justify-between gap-4">
-                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(story.category)}`}>
+                        <div
+                          className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${getCategoryColor(story.category)}`}
+                        >
                           {story.category}
                         </div>
                         {story.stats && (
@@ -291,7 +310,7 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
                             <span>{story.readTime}</span>
                           </div>
                         </div>
-                        
+
                         <div className="flex items-center space-x-1 text-alpine-blue opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300">
                           <span className="font-medium text-xs">Read More</span>
                           <ArrowRight className="w-3 h-3" />
@@ -313,14 +332,12 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
           className="text-center mt-16"
         >
           <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-            Follow my complete journey through detailed expedition reports, training insights, 
-            and the lessons learned from every summit attempt.
+            Follow my complete journey through detailed expedition reports,
+            training insights, and the lessons learned from every summit
+            attempt.
           </p>
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            className="inline-block"
-          >
-            <Link 
+          <motion.div whileHover={{ scale: 1.05 }} className="inline-block">
+            <Link
               href="/blog"
               className="inline-flex items-center gap-3 bg-slate-900 text-white px-8 py-4 rounded-2xl font-medium hover:bg-slate-800 transition-all duration-300 shadow-lg hover:shadow-xl"
             >
@@ -340,10 +357,11 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
         >
           <h3 className="text-2xl font-bold mb-4">Never Miss a Summit Story</h3>
           <p className="text-slate-300 mb-6 max-w-2xl mx-auto">
-            Get exclusive expedition updates, training insights, and behind-the-scenes content 
-            delivered directly to your inbox every week.
+            Get exclusive expedition updates, training insights, and
+            behind-the-scenes content delivered directly to your inbox every
+            week.
           </p>
-          <Link 
+          <Link
             href="/newsletter"
             className="inline-flex items-center gap-2 bg-summit-gold text-spa-charcoal px-6 py-3 rounded-xl font-medium hover:bg-yellow-500 transition-colors duration-300"
           >
@@ -353,5 +371,5 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

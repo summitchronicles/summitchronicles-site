@@ -1,79 +1,98 @@
-import dynamic from 'next/dynamic'
-import React from 'react'
+import dynamic from 'next/dynamic';
+import React from 'react';
 
 // Loading component for dynamic imports
 const LoadingSpinner: React.FC = () => (
   <div className="flex items-center justify-center p-8">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-alpine-blue"></div>
   </div>
-)
+);
 
 // Error component for failed dynamic imports
-const ErrorComponent: React.FC<{ error: Error; retry: () => void }> = ({ error, retry }) => (
+const ErrorComponent: React.FC<{ error: Error; retry: () => void }> = ({
+  error,
+  retry,
+}) => (
   <div className="flex flex-col items-center justify-center p-8 text-center">
     <div className="text-red-600 mb-4">Failed to load component</div>
-    <button 
+    <button
       onClick={retry}
       className="px-4 py-2 bg-alpine-blue text-white rounded-lg hover:bg-alpine-blue/90"
     >
       Retry
     </button>
   </div>
-)
+);
 
 // Dynamic imports for heavy components with code splitting
 
 // AI Components (large bundle due to LLM integration)
 export const DynamicSmartSearch = dynamic(
-  () => import('../ai/SmartSearch').then(mod => ({ default: mod.SmartSearch })),
+  () =>
+    import('../ai/SmartSearch').then((mod) => ({ default: mod.SmartSearch })),
   {
     loading: LoadingSpinner,
-    ssr: false // Client-side only for AI features
+    ssr: false, // Client-side only for AI features
   }
-)
+);
 
 export const DynamicTrainingInsights = dynamic(
-  () => import('../ai/TrainingInsights').then(mod => ({ default: mod.TrainingInsights })),
+  () =>
+    import('../ai/TrainingInsights').then((mod) => ({
+      default: mod.TrainingInsights,
+    })),
   {
     loading: LoadingSpinner,
-    ssr: false
+    ssr: false,
   }
-)
+);
 
 // Analytics Components (heavy due to chart libraries)
 export const DynamicAdvancedAnalytics = dynamic(
-  () => import('../analytics/AdvancedAnalytics').then(mod => ({ default: mod.AdvancedAnalytics })),
+  () =>
+    import('../analytics/AdvancedAnalytics').then((mod) => ({
+      default: mod.AdvancedAnalytics,
+    })),
   {
     loading: LoadingSpinner,
-    ssr: false
+    ssr: false,
   }
-)
+);
 
 export const DynamicTrainingCharts = dynamic(
-  () => import('../TrainingCharts').then(mod => ({ default: mod.TrainingCharts })),
+  () =>
+    import('../TrainingCharts').then((mod) => ({
+      default: mod.TrainingCharts,
+    })),
   {
     loading: LoadingSpinner,
-    ssr: true // Keep SSR for SEO
+    ssr: true, // Keep SSR for SEO
   }
-)
+);
 
 // Real-time Components (heavy due to data fetching)
 export const DynamicSyncManager = dynamic(
-  () => import('../realtime/SyncManager').then(mod => ({ default: mod.SyncManager })),
+  () =>
+    import('../realtime/SyncManager').then((mod) => ({
+      default: mod.SyncManager,
+    })),
   {
     loading: LoadingSpinner,
-    ssr: false
+    ssr: false,
   }
-)
+);
 
 // Personalization Components
 export const DynamicPersonalizedDashboard = dynamic(
-  () => import('../personalization/PersonalizedDashboard').then(mod => ({ default: mod.PersonalizedDashboard })),
+  () =>
+    import('../personalization/PersonalizedDashboard').then((mod) => ({
+      default: mod.PersonalizedDashboard,
+    })),
   {
     loading: LoadingSpinner,
-    ssr: false
+    ssr: false,
   }
-)
+);
 
 // CMS Components (large due to Sanity integration)
 // export const DynamicBlogCMS = dynamic(
@@ -86,19 +105,22 @@ export const DynamicPersonalizedDashboard = dynamic(
 
 // Sanity Studio (very large bundle)
 export const DynamicSanityStudio = dynamic(
-  () => import('next-sanity/studio').then(mod => ({ default: mod.NextStudio })),
+  () =>
+    import('next-sanity/studio').then((mod) => ({ default: mod.NextStudio })),
   {
     loading: () => (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <LoadingSpinner />
-          <div className="mt-4 text-spa-charcoal/60">Loading Sanity Studio...</div>
+          <div className="mt-4 text-spa-charcoal/60">
+            Loading Sanity Studio...
+          </div>
         </div>
       </div>
     ),
-    ssr: false
+    ssr: false,
   }
-)
+);
 
 // Chart/Visualization Components
 // export const DynamicChart = dynamic(
@@ -179,7 +201,7 @@ export const DynamicComponents = {
   TrainingCharts: DynamicTrainingCharts,
   SyncManager: DynamicSyncManager,
   PersonalizedDashboard: DynamicPersonalizedDashboard,
-  SanityStudio: DynamicSanityStudio
+  SanityStudio: DynamicSanityStudio,
   // Commented out components will be added when implemented:
   // BlogCMS: DynamicBlogCMS,
   // Chart: DynamicChart,
@@ -190,26 +212,27 @@ export const DynamicComponents = {
   // Model3D: Dynamic3DModel,
   // RichTextEditor: DynamicRichTextEditor,
   // Calendar: DynamicCalendar
-}
+};
 
 // Helper to create optimized dynamic imports
 export const createOptimizedDynamic = <T extends any>(
   importFn: () => Promise<{ default: React.ComponentType<T> }>,
   options: {
-    ssr?: boolean
-    loading?: () => React.ReactElement
-    name?: string
+    ssr?: boolean;
+    loading?: () => React.ReactElement;
+    name?: string;
   } = {}
 ) => {
   return dynamic(importFn, {
     ssr: options.ssr ?? false,
     loading: options.loading ?? (() => <LoadingSpinner />),
     // Add performance tracking in development
-    ...(process.env.NODE_ENV === 'development' && options.name && {
-      onLoad: () => console.log(`Dynamic component loaded: ${options.name}`)
-    })
-  })
-}
+    ...(process.env.NODE_ENV === 'development' &&
+      options.name && {
+        onLoad: () => console.log(`Dynamic component loaded: ${options.name}`),
+      }),
+  });
+};
 
 // Preload critical dynamic components
 export const preloadCriticalComponents = () => {
@@ -219,4 +242,4 @@ export const preloadCriticalComponents = () => {
     // DynamicTrainingCharts.preload?.()
     // DynamicSmartSearch.preload?.()
   }
-}
+};

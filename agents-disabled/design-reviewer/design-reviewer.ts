@@ -34,19 +34,20 @@ export class DesignReviewer {
       // Navigate to the site
       console.log('📄 Loading page...');
       await this.page.goto(url, { waitUntil: 'networkidle' });
-      
+
       // Wait for any initial loading
       await this.page.waitForTimeout(2000);
 
       // Take full page screenshot
-      await this.page.screenshot({ 
+      await this.page.screenshot({
         path: path.join(screenshotDir, 'full-page.png'),
-        fullPage: true 
+        fullPage: true,
       });
 
       console.log('👀 Running visual inspection...');
       // Run visual inspection
-      const visualIssues = await this.visualInspector.performFullVisualInspection();
+      const visualIssues =
+        await this.visualInspector.performFullVisualInspection();
 
       console.log('🖥️ Checking console health...');
       // Check console errors
@@ -88,7 +89,9 @@ export class DesignReviewer {
         htmlReport
       );
 
-      console.log(`✅ Design review complete! Overall score: ${report.summary.overallScore}/100`);
+      console.log(
+        `✅ Design review complete! Overall score: ${report.summary.overallScore}/100`
+      );
       console.log(`📁 Reports saved to: ${reportsDir}`);
       console.log(`   - JSON: ${reportFileName}.json`);
       console.log(`   - HTML: ${reportFileName}.html`);
@@ -97,7 +100,6 @@ export class DesignReviewer {
       this.printSummary(report);
 
       return report;
-
     } catch (error) {
       console.error('❌ Design review failed:', error);
       throw error;
@@ -109,8 +111,10 @@ export class DesignReviewer {
     console.log('🎯 DESIGN REVIEW SUMMARY');
     console.log('='.repeat(60));
     console.log(`Overall Score: ${report.summary.overallScore}/100`);
-    console.log(`Total Issues: ${report.summary.totalIssues} (${report.summary.criticalIssues} critical, ${report.summary.warningIssues} warnings)`);
-    
+    console.log(
+      `Total Issues: ${report.summary.totalIssues} (${report.summary.criticalIssues} critical, ${report.summary.warningIssues} warnings)`
+    );
+
     console.log(`\n📊 Category Scores:`);
     console.log(`  Visual Quality: ${report.visualQuality.score}/100`);
     console.log(`  Console Health: ${report.console.score}/100`);
@@ -132,10 +136,10 @@ export function createDesignReviewTest(url: string = 'http://localhost:3000') {
   test(`Design Review: ${url}`, async ({ page }) => {
     const reviewer = new DesignReviewer(page);
     const report = await reviewer.reviewSite(url);
-    
+
     // Add test assertions based on your quality standards
     expect(report.summary.overallScore).toBeGreaterThan(70); // Minimum acceptable score
-    expect(report.summary.criticalIssues).toBeLessThan(5);   // Maximum critical issues
-    expect(report.console.javascriptErrors).toBe(0);        // No JS errors allowed
+    expect(report.summary.criticalIssues).toBeLessThan(5); // Maximum critical issues
+    expect(report.console.javascriptErrors).toBe(0); // No JS errors allowed
   });
 }

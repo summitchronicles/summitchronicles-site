@@ -8,5 +8,11 @@ export * from './config';
 // Convenience exports for types
 export type { VisualIssue } from './lib/visual-inspector';
 export type { ConsoleError } from './lib/console-monitor';
-export type { ResponsiveIssue, ViewportTestResult } from './lib/responsive-tester';
-export type { DesignReviewReport, Recommendation } from './lib/report-generator';
+export type {
+  ResponsiveIssue,
+  ViewportTestResult,
+} from './lib/responsive-tester';
+export type {
+  DesignReviewReport,
+  Recommendation,
+} from './lib/report-generator';

@@ -5,8 +5,9 @@ Summit Chronicles now has **dual analytics tracking** for comprehensive insights
 ## 🎯 **Current Setup**
 
 ### 1. **Custom Analytics** ✅ (Already Active)
+
 - **Purpose**: Detailed user behavior, AI interactions, and performance metrics
-- **Features**: 
+- **Features**:
   - Session tracking with fingerprinting
   - Page view analytics with scroll depth
   - AI interaction tracking (question categorization, response time)
@@ -17,6 +18,7 @@ Summit Chronicles now has **dual analytics tracking** for comprehensive insights
 - **Dashboard**: Available at `/analytics` page
 
 ### 2. **Google Analytics 4** ✅ (Ready to Activate)
+
 - **Purpose**: Industry-standard analytics, goal tracking, audience insights
 - **Integration**: Complete - needs only environment variable
 - **Events Tracked**:
@@ -29,12 +31,14 @@ Summit Chronicles now has **dual analytics tracking** for comprehensive insights
 ## 🔧 **Activation Steps**
 
 ### To Enable Google Analytics:
+
 1. **Get GA4 Measurement ID**:
    - Go to [Google Analytics](https://analytics.google.com)
    - Create property for `summitchronicles.com`
    - Copy Measurement ID (format: `G-XXXXXXXXXX`)
 
 2. **Add Environment Variable**:
+
    ```bash
    # Add to Vercel environment variables
    NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
@@ -47,12 +51,14 @@ Summit Chronicles now has **dual analytics tracking** for comprehensive insights
 ## 📈 **Key Metrics Being Tracked**
 
 ### **Custom Analytics** (Always Active):
+
 - **Session Data**: User fingerprinting, location, referrer, UTM parameters
 - **Page Analytics**: Time on page, scroll depth, interactions
 - **AI Interactions**: Question categories, response times, helpfulness ratings
 - **Performance**: API response times, error rates
 
 ### **Google Analytics** (When Activated):
+
 - **Standard GA4 Events**: Page views, sessions, user demographics
 - **Custom Events**:
   - AI query categorization (altitude_training, gear_advice, etc.)
@@ -64,12 +70,14 @@ Summit Chronicles now has **dual analytics tracking** for comprehensive insights
 ## 🎛️ **Analytics Dashboard**
 
 **Internal Dashboard**: Visit `/analytics` for real-time custom analytics
+
 - User sessions and geography
 - AI interaction patterns
 - Performance metrics
 - Error monitoring
 
 **Google Analytics**: Standard GA4 dashboard with custom events
+
 - Audience insights
 - Conversion tracking
 - Goal completion
@@ -85,6 +93,7 @@ Summit Chronicles now has **dual analytics tracking** for comprehensive insights
 ## 📊 **Event Categories**
 
 ### AI Interaction Categories:
+
 - `altitude_training` - High altitude and acclimatization
 - `gear_advice` - Equipment and gear recommendations
 - `training_advice` - Fitness and workout guidance
@@ -95,6 +104,7 @@ Summit Chronicles now has **dual analytics tracking** for comprehensive insights
 - `general_mountaineering` - Other mountaineering topics
 
 ### Business Events:
+
 - Newsletter signups (conversion tracking)
 - Sponsorship inquiries (lead generation)
 - Training page engagement (content performance)

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { ArrowRightIcon, TrophyIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
+import { motion } from 'framer-motion';
+import { ArrowRightIcon, TrophyIcon } from '@heroicons/react/24/outline';
+import { useState } from 'react';
 
 export default function MinimalHero() {
   const [status, setStatus] = useState<'idle' | 'ok'>('idle');
@@ -12,14 +12,14 @@ export default function MinimalHero() {
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-gray-900 to-black overflow-hidden">
       {/* Hero Background Image */}
       <div className="absolute inset-0">
-        <img 
-          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&h=1500&fit=crop&crop=center&auto=format&q=80" 
+        <img
+          src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2000&h=1500&fit=crop&crop=center&auto=format&q=80"
           alt="Sunith Kumar mountaineering expedition"
           className="w-full h-full object-cover opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70" />
       </div>
-      
+
       {/* Main Content */}
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         {/* Achievement Badge */}
@@ -30,7 +30,9 @@ export default function MinimalHero() {
           className="inline-flex items-center gap-3 bg-summitGold/10 backdrop-blur-sm border border-summitGold/30 rounded-2xl px-6 py-4 mb-4"
         >
           <TrophyIcon className="w-5 h-5 text-summitGold" />
-          <span className="text-summitGold font-bold text-lg">MULTI-DISCIPLINE ADVENTURER</span>
+          <span className="text-summitGold font-bold text-lg">
+            MULTI-DISCIPLINE ADVENTURER
+          </span>
           <div className="w-px h-6 bg-summitGold/30" />
           <span className="text-glacierBlue font-medium">KOSCIUSZKO 2025</span>
         </motion.div>
@@ -47,7 +49,8 @@ export default function MinimalHero() {
               🏔️ 4 OF 7 SUMMITS CONQUERED
             </div>
             <div className="text-lg md:text-xl text-white font-medium">
-              2013-2024 | <span className="text-summitGold">NEXT: KOSCIUSZKO 2025</span>
+              2013-2024 |{' '}
+              <span className="text-summitGold">NEXT: KOSCIUSZKO 2025</span>
             </div>
           </div>
         </motion.div>
@@ -72,8 +75,11 @@ export default function MinimalHero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-xl md:text-2xl text-white/80 max-w-2xl mx-auto mb-12 leading-relaxed"
         >
-          Mountains, ultra marathons, unexplored places.<br />
-          <span className="text-summitGold">11 years of pushing boundaries.</span>
+          Mountains, ultra marathons, unexplored places.
+          <br />
+          <span className="text-summitGold">
+            11 years of pushing boundaries.
+          </span>
         </motion.p>
 
         {/* Key Stats */}
@@ -106,9 +112,9 @@ export default function MinimalHero() {
         >
           <motion.a
             href="/the-journey"
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.1)"
+              boxShadow: '0 20px 25px -5px rgba(245, 158, 11, 0.1)',
             }}
             whileTap={{ scale: 0.95 }}
             className="group relative px-8 py-4 bg-summitGold text-black font-bold text-lg rounded-2xl hover:bg-yellow-400 transition-colors"
@@ -137,15 +143,19 @@ export default function MinimalHero() {
           className="bg-gradient-to-r from-white/5 to-white/10 backdrop-blur-sm border border-white/10 rounded-3xl p-8 max-w-2xl mx-auto"
         >
           <div className="text-center mb-6">
-            <h3 className="text-2xl font-bold text-white mb-2">📧 Join the Adventure</h3>
+            <h3 className="text-2xl font-bold text-white mb-2">
+              📧 Join the Adventure
+            </h3>
             <p className="text-white/70">
-              Get expedition updates, training insights, and behind-the-scenes content from the Seven Summits journey.
+              Get expedition updates, training insights, and behind-the-scenes
+              content from the Seven Summits journey.
             </p>
           </div>
-          
-{!username ? (
+
+          {!username ? (
             <p className="text-amber-300 text-sm">
-              Newsletter configuration needed. Add NEXT_PUBLIC_BUTTONDOWN_USERNAME to environment.
+              Newsletter configuration needed. Add
+              NEXT_PUBLIC_BUTTONDOWN_USERNAME to environment.
             </p>
           ) : (
             <form
@@ -187,7 +197,7 @@ export default function MinimalHero() {
               ✅ Thanks! Check your inbox to confirm your subscription.
             </motion.p>
           )}
-          
+
           <p className="text-white/50 text-sm text-center mt-4">
             Join 1000+ future mountaineers. No spam, unsubscribe anytime.
           </p>

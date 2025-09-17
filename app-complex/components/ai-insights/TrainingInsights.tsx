@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
-import { clsx } from "clsx";
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { clsx } from 'clsx';
 import {
   SparklesIcon,
   ExclamationTriangleIcon,
@@ -15,10 +15,10 @@ import {
   CalendarDaysIcon,
   ChartBarIcon,
   LightBulbIcon,
-  ShieldCheckIcon
-} from "@heroicons/react/24/outline";
-import { GlassCard, StatusIndicator, ProgressBar } from "@/app/components/ui";
-import { TrainingInsight, AITrainingAnalyzer } from "@/lib/ai-training";
+  ShieldCheckIcon,
+} from '@heroicons/react/24/outline';
+import { GlassCard, StatusIndicator, ProgressBar } from '@/app/components/ui';
+import { TrainingInsight, AITrainingAnalyzer } from '@/lib/ai-training';
 
 interface TrainingInsightsProps {
   activities: any[];
@@ -29,44 +29,66 @@ interface TrainingInsightsProps {
 
 const getInsightIcon = (type: TrainingInsight['type']) => {
   switch (type) {
-    case 'recommendation': return LightBulbIcon;
-    case 'warning': return ExclamationTriangleIcon;
-    case 'achievement': return CheckCircleIcon;
-    case 'pattern': return TrendingUpIcon;
-    case 'prediction': return SparklesIcon;
-    default: return BoltIcon;
+    case 'recommendation':
+      return LightBulbIcon;
+    case 'warning':
+      return ExclamationTriangleIcon;
+    case 'achievement':
+      return CheckCircleIcon;
+    case 'pattern':
+      return TrendingUpIcon;
+    case 'prediction':
+      return SparklesIcon;
+    default:
+      return BoltIcon;
   }
 };
 
-const getInsightColor = (type: TrainingInsight['type'], priority: TrainingInsight['priority']) => {
-  if (priority === 'critical') return 'text-dangerRed bg-dangerRed/10 border-dangerRed/20';
-  
+const getInsightColor = (
+  type: TrainingInsight['type'],
+  priority: TrainingInsight['priority']
+) => {
+  if (priority === 'critical')
+    return 'text-dangerRed bg-dangerRed/10 border-dangerRed/20';
+
   switch (type) {
-    case 'recommendation': return 'text-glacierBlue bg-glacierBlue/10 border-glacierBlue/20';
-    case 'warning': return 'text-warningOrange bg-warningOrange/10 border-warningOrange/20';
-    case 'achievement': return 'text-successGreen bg-successGreen/10 border-successGreen/20';
-    case 'pattern': return 'text-summitGold bg-summitGold/10 border-summitGold/20';
-    case 'prediction': return 'text-aurora-purple bg-purple-500/10 border-purple-500/20';
-    default: return 'text-stoneGray bg-gray-500/10 border-gray-500/20';
+    case 'recommendation':
+      return 'text-glacierBlue bg-glacierBlue/10 border-glacierBlue/20';
+    case 'warning':
+      return 'text-warningOrange bg-warningOrange/10 border-warningOrange/20';
+    case 'achievement':
+      return 'text-successGreen bg-successGreen/10 border-successGreen/20';
+    case 'pattern':
+      return 'text-summitGold bg-summitGold/10 border-summitGold/20';
+    case 'prediction':
+      return 'text-aurora-purple bg-purple-500/10 border-purple-500/20';
+    default:
+      return 'text-stoneGray bg-gray-500/10 border-gray-500/20';
   }
 };
 
 const getCategoryIcon = (category: TrainingInsight['category']) => {
   switch (category) {
-    case 'fitness': return BoltIcon;
-    case 'recovery': return HeartIcon;
-    case 'nutrition': return SparklesIcon;
-    case 'technique': return AcademicCapIcon;
-    case 'planning': return CalendarDaysIcon;
-    default: return ChartBarIcon;
+    case 'fitness':
+      return BoltIcon;
+    case 'recovery':
+      return HeartIcon;
+    case 'nutrition':
+      return SparklesIcon;
+    case 'technique':
+      return AcademicCapIcon;
+    case 'planning':
+      return CalendarDaysIcon;
+    default:
+      return ChartBarIcon;
   }
 };
 
-export default function TrainingInsights({ 
-  activities, 
-  biometrics = [], 
+export default function TrainingInsights({
+  activities,
+  biometrics = [],
   goals = [],
-  className = "" 
+  className = '',
 }: TrainingInsightsProps) {
   const [insights, setInsights] = useState<TrainingInsight[]>([]);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -76,27 +98,30 @@ export default function TrainingInsights({
   // Generate insights when data changes
   const generatedInsights = useMemo(() => {
     if (activities.length === 0) return [];
-    
+
     // Convert activities to the expected format
-    const formattedActivities = activities.map(activity => ({
+    const formattedActivities = activities.map((activity) => ({
       id: activity.id?.toString() || Math.random().toString(),
       name: activity.name || activity.title || 'Untitled Activity',
       type: activity.type || 'Run',
       distance: activity.distance || 0,
       moving_time: activity.moving_time || activity.duration || 3600,
-      total_elevation_gain: activity.total_elevation_gain || activity.elevation_gain || 0,
-      start_date: activity.start_date || activity.date || new Date().toISOString(),
+      total_elevation_gain:
+        activity.total_elevation_gain || activity.elevation_gain || 0,
+      start_date:
+        activity.start_date || activity.date || new Date().toISOString(),
       average_speed: activity.average_speed,
       max_speed: activity.max_speed,
       average_heartrate: activity.average_heartrate,
       max_heartrate: activity.max_heartrate,
       suffer_score: activity.suffer_score,
-      calories: activity.calories
+      calories: activity.calories,
     }));
 
     // Analyze training patterns
-    const patterns = AITrainingAnalyzer.analyzeTrainingPatterns(formattedActivities);
-    
+    const patterns =
+      AITrainingAnalyzer.analyzeTrainingPatterns(formattedActivities);
+
     // Generate insights
     return AITrainingAnalyzer.generateTrainingInsights(
       formattedActivities,
@@ -108,7 +133,7 @@ export default function TrainingInsights({
 
   useEffect(() => {
     setIsAnalyzing(true);
-    
+
     // Simulate analysis time for better UX
     const timer = setTimeout(() => {
       setInsights(generatedInsights);
@@ -119,13 +144,22 @@ export default function TrainingInsights({
   }, [generatedInsights]);
 
   // Filter insights based on selections
-  const filteredInsights = insights.filter(insight => {
-    if (selectedCategory !== 'all' && insight.category !== selectedCategory) return false;
-    if (selectedPriority !== 'all' && insight.priority !== selectedPriority) return false;
+  const filteredInsights = insights.filter((insight) => {
+    if (selectedCategory !== 'all' && insight.category !== selectedCategory)
+      return false;
+    if (selectedPriority !== 'all' && insight.priority !== selectedPriority)
+      return false;
     return true;
   });
 
-  const categories = ['all', 'fitness', 'recovery', 'nutrition', 'technique', 'planning'];
+  const categories = [
+    'all',
+    'fitness',
+    'recovery',
+    'nutrition',
+    'technique',
+    'planning',
+  ];
   const priorities = ['all', 'critical', 'high', 'medium', 'low'];
 
   const container = {
@@ -134,39 +168,40 @@ export default function TrainingInsights({
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
+        delayChildren: 0.2,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.23, 1, 0.32, 1]
-      }
-    }
+        ease: [0.23, 1, 0.32, 1],
+      },
+    },
   };
 
   if (activities.length === 0) {
     return (
-      <GlassCard className={clsx("p-8 text-center", className)}>
+      <GlassCard className={clsx('p-8 text-center', className)}>
         <div className="text-6xl mb-4">🤖</div>
         <h3 className="text-xl font-semibold text-white mb-2">
           AI Training Analysis
         </h3>
         <p className="text-gray-400">
-          Upload some training activities to get personalized AI insights and recommendations.
+          Upload some training activities to get personalized AI insights and
+          recommendations.
         </p>
       </GlassCard>
     );
   }
 
   return (
-    <div className={clsx("space-y-6", className)}>
+    <div className={clsx('space-y-6', className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -174,16 +209,20 @@ export default function TrainingInsights({
             <SparklesIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">AI Training Insights</h2>
-            <p className="text-gray-400">Personalized recommendations powered by machine learning</p>
+            <h2 className="text-2xl font-bold text-white">
+              AI Training Insights
+            </h2>
+            <p className="text-gray-400">
+              Personalized recommendations powered by machine learning
+            </p>
           </div>
         </div>
-        
+
         {isAnalyzing && (
           <div className="flex items-center space-x-2 text-aurora-blue">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
             >
               <SparklesIcon className="w-5 h-5" />
             </motion.div>
@@ -199,20 +238,27 @@ export default function TrainingInsights({
             <span className="text-sm font-medium text-white">Category:</span>
             <div className="flex flex-wrap gap-2">
               {categories.map((category) => {
-                const CategoryIcon = category !== 'all' ? getCategoryIcon(category as any) : ChartBarIcon;
+                const CategoryIcon =
+                  category !== 'all'
+                    ? getCategoryIcon(category as any)
+                    : ChartBarIcon;
                 return (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
                     className={clsx(
-                      "flex items-center space-x-1 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200",
+                      'flex items-center space-x-1 px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200',
                       selectedCategory === category
-                        ? "bg-alpineBlue text-white"
-                        : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                        ? 'bg-alpineBlue text-white'
+                        : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
                     )}
                   >
                     <CategoryIcon className="w-3 h-3" />
-                    <span>{category === 'all' ? 'All' : category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                    <span>
+                      {category === 'all'
+                        ? 'All'
+                        : category.charAt(0).toUpperCase() + category.slice(1)}
+                    </span>
                   </button>
                 );
               })}
@@ -227,19 +273,21 @@ export default function TrainingInsights({
                   key={priority}
                   onClick={() => setSelectedPriority(priority)}
                   className={clsx(
-                    "px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200",
+                    'px-3 py-1 rounded-lg text-xs font-medium transition-all duration-200',
                     selectedPriority === priority
-                      ? "bg-summitGold text-charcoal"
-                      : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                      ? 'bg-summitGold text-charcoal'
+                      : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
                   )}
                 >
-                  {priority === 'all' ? 'All' : priority.charAt(0).toUpperCase() + priority.slice(1)}
+                  {priority === 'all'
+                    ? 'All'
+                    : priority.charAt(0).toUpperCase() + priority.slice(1)}
                 </button>
               ))}
             </div>
           </div>
         </div>
-        
+
         {(selectedCategory !== 'all' || selectedPriority !== 'all') && (
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10">
             <span className="text-sm text-gray-400">
@@ -294,17 +342,22 @@ export default function TrainingInsights({
               {filteredInsights.map((insight) => {
                 const IconComponent = getInsightIcon(insight.type);
                 const CategoryIcon = getCategoryIcon(insight.category);
-                const colorClasses = getInsightColor(insight.type, insight.priority);
-                
+                const colorClasses = getInsightColor(
+                  insight.type,
+                  insight.priority
+                );
+
                 return (
                   <motion.div key={insight.id} variants={item}>
                     <GlassCard className="p-6 hover:bg-white/5 transition-colors duration-300">
                       <div className="flex items-start space-x-4">
                         {/* Insight Icon */}
-                        <div className={clsx(
-                          "p-3 rounded-xl border flex-shrink-0",
-                          colorClasses
-                        )}>
+                        <div
+                          className={clsx(
+                            'p-3 rounded-xl border flex-shrink-0',
+                            colorClasses
+                          )}
+                        >
                           <IconComponent className="w-6 h-6" />
                         </div>
 
@@ -320,12 +373,18 @@ export default function TrainingInsights({
                                 {insight.description}
                               </p>
                             </div>
-                            
+
                             <div className="flex items-center space-x-2 ml-4">
                               <StatusIndicator
-                                status={insight.priority === 'critical' ? 'danger' : 
-                                       insight.priority === 'high' ? 'warning' : 
-                                       insight.priority === 'medium' ? 'info' : 'success'}
+                                status={
+                                  insight.priority === 'critical'
+                                    ? 'danger'
+                                    : insight.priority === 'high'
+                                      ? 'warning'
+                                      : insight.priority === 'medium'
+                                        ? 'info'
+                                        : 'success'
+                                }
                                 text={insight.priority}
                                 size="sm"
                               />
@@ -353,12 +412,15 @@ export default function TrainingInsights({
                               <div className="flex items-center space-x-2">
                                 <CategoryIcon className="w-4 h-4 text-gray-400" />
                                 <span className="text-xs text-gray-400">
-                                  {insight.category.charAt(0).toUpperCase() + insight.category.slice(1)}
+                                  {insight.category.charAt(0).toUpperCase() +
+                                    insight.category.slice(1)}
                                 </span>
                               </div>
-                              
+
                               <div className="flex items-center space-x-2">
-                                <span className="text-xs text-gray-400">Confidence:</span>
+                                <span className="text-xs text-gray-400">
+                                  Confidence:
+                                </span>
                                 <ProgressBar
                                   value={insight.confidence * 100}
                                   variant="gradient"
@@ -381,7 +443,10 @@ export default function TrainingInsights({
                                 </summary>
                                 <div className="mt-2 space-y-1">
                                   {insight.reasoning.map((reason, index) => (
-                                    <div key={index} className="flex items-start space-x-2 text-xs text-gray-400">
+                                    <div
+                                      key={index}
+                                      className="flex items-start space-x-2 text-xs text-gray-400"
+                                    >
                                       <div className="w-1 h-1 bg-gray-400 rounded-full flex-shrink-0 mt-2" />
                                       <span>{reason}</span>
                                     </div>
@@ -393,12 +458,16 @@ export default function TrainingInsights({
                             {/* Trend Indicator */}
                             {insight.data.trend && (
                               <div className="flex items-center space-x-2">
-                                <TrendingUpIcon className={clsx(
-                                  "w-4 h-4",
-                                  insight.data.trend === 'improving' ? 'text-successGreen' :
-                                  insight.data.trend === 'declining' ? 'text-dangerRed' :
-                                  'text-gray-400'
-                                )} />
+                                <TrendingUpIcon
+                                  className={clsx(
+                                    'w-4 h-4',
+                                    insight.data.trend === 'improving'
+                                      ? 'text-successGreen'
+                                      : insight.data.trend === 'declining'
+                                        ? 'text-dangerRed'
+                                        : 'text-gray-400'
+                                  )}
+                                />
                                 <span className="text-xs text-gray-400">
                                   Trend: {insight.data.trend}
                                 </span>
@@ -413,17 +482,15 @@ export default function TrainingInsights({
               })}
             </motion.div>
           ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               <GlassCard className="p-8 text-center">
                 <ShieldCheckIcon className="w-12 h-12 text-successGreen mx-auto mb-4" />
                 <h3 className="text-xl font-semibold text-white mb-2">
                   All Good!
                 </h3>
                 <p className="text-gray-400">
-                  No critical insights or recommendations at this time. Keep up the great training!
+                  No critical insights or recommendations at this time. Keep up
+                  the great training!
                 </p>
               </GlassCard>
             </motion.div>

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ import {
   ArchiveBoxIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
-  StarIcon
+  StarIcon,
 } from '@heroicons/react/24/outline';
 
 interface BlogPost {
@@ -42,21 +42,21 @@ export default function BlogAdminPage() {
   const [filter, setFilter] = useState({
     status: 'all',
     category: 'all',
-    search: ''
+    search: '',
   });
 
   const fetchPosts = async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
-      
+
       if (filter.status !== 'all') params.append('status', filter.status);
       if (filter.category !== 'all') params.append('category', filter.category);
       if (filter.search) params.append('search', filter.search);
-      
+
       const response = await fetch(`/api/blog/posts?${params.toString()}`);
       const data = await response.json();
-      
+
       if (response.ok) {
         setPosts(data.posts || []);
       } else {
@@ -79,11 +79,11 @@ export default function BlogAdminPage() {
 
     try {
       const response = await fetch(`/api/blog/posts/${postId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
       });
 
       if (response.ok) {
-        setPosts(posts.filter(post => post.id !== postId));
+        setPosts(posts.filter((post) => post.id !== postId));
       } else {
         const data = await response.json();
         alert(data.error || 'Failed to delete post');
@@ -99,13 +99,15 @@ export default function BlogAdminPage() {
       const response = await fetch(`/api/blog/posts/${post.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ featured: !post.featured })
+        body: JSON.stringify({ featured: !post.featured }),
       });
 
       if (response.ok) {
-        setPosts(posts.map(p => 
-          p.id === post.id ? { ...p, featured: !p.featured } : p
-        ));
+        setPosts(
+          posts.map((p) =>
+            p.id === post.id ? { ...p, featured: !p.featured } : p
+          )
+        );
       }
     } catch (err) {
       console.error('Error toggling featured:', err);
@@ -114,11 +116,16 @@ export default function BlogAdminPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'published': return 'bg-green-100 text-green-800 border-green-200';
-      case 'draft': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
-      case 'scheduled': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'archived': return 'bg-gray-100 text-gray-800 border-gray-200';
-      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+      case 'published':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'draft':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'scheduled':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'archived':
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
   };
 
@@ -137,8 +144,12 @@ export default function BlogAdminPage() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-white mb-2">Blog Management</h1>
-              <p className="text-white/60">Create and manage your mountaineering content</p>
+              <h1 className="text-3xl font-bold text-white mb-2">
+                Blog Management
+              </h1>
+              <p className="text-white/60">
+                Create and manage your mountaineering content
+              </p>
             </div>
             <Link
               href="/admin/blog/new"
@@ -161,14 +172,18 @@ export default function BlogAdminPage() {
                 type="text"
                 placeholder="Search posts..."
                 value={filter.search}
-                onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
+                onChange={(e) =>
+                  setFilter((prev) => ({ ...prev, search: e.target.value }))
+                }
                 className="w-full bg-white/5 border border-white/10 rounded-xl pl-12 pr-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-summitGold/50"
               />
             </div>
-            
+
             <select
               value={filter.status}
-              onChange={(e) => setFilter(prev => ({ ...prev, status: e.target.value }))}
+              onChange={(e) =>
+                setFilter((prev) => ({ ...prev, status: e.target.value }))
+              }
               className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-summitGold/50"
             >
               <option value="all">All Status</option>
@@ -180,7 +195,9 @@ export default function BlogAdminPage() {
 
             <select
               value={filter.category}
-              onChange={(e) => setFilter(prev => ({ ...prev, category: e.target.value }))}
+              onChange={(e) =>
+                setFilter((prev) => ({ ...prev, category: e.target.value }))
+              }
               className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-summitGold/50"
             >
               <option value="all">All Categories</option>
@@ -210,17 +227,32 @@ export default function BlogAdminPage() {
             <table className="w-full">
               <thead className="bg-white/5 border-b border-white/10">
                 <tr>
-                  <th className="text-left p-6 text-white font-semibold">Title</th>
-                  <th className="text-left p-6 text-white font-semibold">Category</th>
-                  <th className="text-left p-6 text-white font-semibold">Status</th>
-                  <th className="text-left p-6 text-white font-semibold">Stats</th>
-                  <th className="text-left p-6 text-white font-semibold">Updated</th>
-                  <th className="text-left p-6 text-white font-semibold">Actions</th>
+                  <th className="text-left p-6 text-white font-semibold">
+                    Title
+                  </th>
+                  <th className="text-left p-6 text-white font-semibold">
+                    Category
+                  </th>
+                  <th className="text-left p-6 text-white font-semibold">
+                    Status
+                  </th>
+                  <th className="text-left p-6 text-white font-semibold">
+                    Stats
+                  </th>
+                  <th className="text-left p-6 text-white font-semibold">
+                    Updated
+                  </th>
+                  <th className="text-left p-6 text-white font-semibold">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {posts.map((post) => (
-                  <tr key={post.id} className="border-b border-white/5 hover:bg-white/2">
+                  <tr
+                    key={post.id}
+                    className="border-b border-white/5 hover:bg-white/2"
+                  >
                     <td className="p-6">
                       <div className="flex items-center gap-3">
                         {post.featured && (
@@ -246,13 +278,15 @@ export default function BlogAdminPage() {
                         </div>
                       </div>
                     </td>
-                    
+
                     <td className="p-6">
                       <span className="text-white/70">{post.category}</span>
                     </td>
 
                     <td className="p-6">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(post.status)}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium border ${getStatusColor(post.status)}`}
+                      >
                         {post.status}
                       </span>
                     </td>
@@ -281,11 +315,15 @@ export default function BlogAdminPage() {
                         <button
                           onClick={() => toggleFeatured(post)}
                           className={`p-2 rounded-xl transition-colors ${
-                            post.featured 
-                              ? 'bg-summitGold text-black' 
+                            post.featured
+                              ? 'bg-summitGold text-black'
                               : 'bg-white/10 text-white/60 hover:bg-white/20'
                           }`}
-                          title={post.featured ? 'Remove from featured' : 'Mark as featured'}
+                          title={
+                            post.featured
+                              ? 'Remove from featured'
+                              : 'Mark as featured'
+                          }
                         >
                           <StarIcon className="w-4 h-4" />
                         </button>

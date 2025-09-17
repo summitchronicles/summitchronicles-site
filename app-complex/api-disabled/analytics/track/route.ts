@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getSupabaseAdmin } from '@/lib/supabaseServer'
-import { z } from 'zod'
-import crypto from 'crypto'
+import { NextRequest, NextResponse } from 'next/server';
+import { getSupabaseAdmin } from '@/lib/supabaseServer';
+import { z } from 'zod';
+import crypto from 'crypto';
 
-export const runtime = 'nodejs'
+export const runtime = 'nodejs';
 
 // Validation schemas
 const SessionSchema = z.object({
@@ -17,7 +17,7 @@ const SessionSchema = z.object({
   utmSource: z.string().optional(),
   utmMedium: z.string().optional(),
   utmCampaign: z.string().optional(),
-})
+});
 
 const PageViewSchema = z.object({
   sessionId: z.string(),
@@ -27,7 +27,7 @@ const PageViewSchema = z.object({
   timeOnPage: z.number().optional(),
   scrollDepth: z.number().optional(),
   interactions: z.number().optional(),
-})
+});
 
 const AIInteractionSchema = z.object({
   sessionId: z.string(),
@@ -43,51 +43,51 @@ const AIInteractionSchema = z.object({
   tokensUsed: z.number().optional(),
   errorOccurred: z.boolean().optional(),
   errorType: z.string().optional(),
-})
+});
 
 const TrackingRequestSchema = z.object({
   type: z.enum(['session', 'pageview', 'ai_interaction']),
-  data: z.union([SessionSchema, PageViewSchema, AIInteractionSchema])
-})
+  data: z.union([SessionSchema, PageViewSchema, AIInteractionSchema]),
+});
 
 // Helper functions
 function parseUserAgent(userAgent: string) {
-  const deviceRegex = /Mobile|Android|iPhone|iPad/i
-  const browserRegex = /Chrome|Firefox|Safari|Edge/i
-  const osRegex = /Windows|Mac|Linux|Android|iOS/i
-  
+  const deviceRegex = /Mobile|Android|iPhone|iPad/i;
+  const browserRegex = /Chrome|Firefox|Safari|Edge/i;
+  const osRegex = /Windows|Mac|Linux|Android|iOS/i;
+
   return {
     deviceType: deviceRegex.test(userAgent) ? 'mobile' : 'desktop',
     browser: userAgent.match(browserRegex)?.[0] || 'unknown',
-    os: userAgent.match(osRegex)?.[0] || 'unknown'
-  }
+    os: userAgent.match(osRegex)?.[0] || 'unknown',
+  };
 }
 
 function generateFingerprint(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || ''
-  const userAgent = req.headers.get('user-agent') || ''
-  const acceptLanguage = req.headers.get('accept-language') || ''
-  
-  const seed = `${ip}::${userAgent}::${acceptLanguage}`
-  return crypto.createHash('sha256').update(seed).digest('hex').slice(0, 32)
+  const ip =
+    req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || '';
+  const userAgent = req.headers.get('user-agent') || '';
+  const acceptLanguage = req.headers.get('accept-language') || '';
+
+  const seed = `${ip}::${userAgent}::${acceptLanguage}`;
+  return crypto.createHash('sha256').update(seed).digest('hex').slice(0, 32);
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
-    const { type, data } = TrackingRequestSchema.parse(body)
-    
-    const supabase = getSupabaseAdmin()
-    
+    const body = await req.json();
+    const { type, data } = TrackingRequestSchema.parse(body);
+
+    const supabase = getSupabaseAdmin();
+
     switch (type) {
       case 'session': {
-        const sessionData = data as z.infer<typeof SessionSchema>
-        const userAgentInfo = parseUserAgent(sessionData.userAgent || '')
-        const fingerprint = sessionData.fingerprint || generateFingerprint(req)
-        
-        const { error } = await supabase
-          .from('analytics_sessions')
-          .upsert({
+        const sessionData = data as z.infer<typeof SessionSchema>;
+        const userAgentInfo = parseUserAgent(sessionData.userAgent || '');
+        const fingerprint = sessionData.fingerprint || generateFingerprint(req);
+
+        const { error } = await supabase.from('analytics_sessions').upsert(
+          {
             session_id: sessionData.sessionId,
             fingerprint,
             country: sessionData.country,
@@ -101,50 +101,51 @@ export async function POST(req: NextRequest) {
             utm_source: sessionData.utmSource,
             utm_medium: sessionData.utmMedium,
             utm_campaign: sessionData.utmCampaign,
-          }, {
-            onConflict: 'session_id'
-          })
-        
-        if (error) throw error
-        break
+          },
+          {
+            onConflict: 'session_id',
+          }
+        );
+
+        if (error) throw error;
+        break;
       }
-      
+
       case 'pageview': {
-        const pageViewData = data as z.infer<typeof PageViewSchema>
-        
-        const { error } = await supabase
-          .from('analytics_page_views')
-          .insert({
-            session_id: pageViewData.sessionId,
-            page_url: pageViewData.pageUrl,
-            page_title: pageViewData.pageTitle,
-            referrer_url: pageViewData.referrerUrl,
-            time_on_page: pageViewData.timeOnPage,
-            scroll_depth: pageViewData.scrollDepth,
-            interactions: pageViewData.interactions,
-          })
-        
-        if (error) throw error
-        
+        const pageViewData = data as z.infer<typeof PageViewSchema>;
+
+        const { error } = await supabase.from('analytics_page_views').insert({
+          session_id: pageViewData.sessionId,
+          page_url: pageViewData.pageUrl,
+          page_title: pageViewData.pageTitle,
+          referrer_url: pageViewData.referrerUrl,
+          time_on_page: pageViewData.timeOnPage,
+          scroll_depth: pageViewData.scrollDepth,
+          interactions: pageViewData.interactions,
+        });
+
+        if (error) throw error;
+
         // Update content performance
-        await supabase
-          .from('analytics_content_performance')
-          .upsert({
+        await supabase.from('analytics_content_performance').upsert(
+          {
             page_url: pageViewData.pageUrl,
             page_title: pageViewData.pageTitle,
             total_views: 1,
             unique_visitors: 1,
             avg_time_on_page: pageViewData.timeOnPage || 0,
-          }, {
-            onConflict: 'page_url'
-          })
-        
-        break
+          },
+          {
+            onConflict: 'page_url',
+          }
+        );
+
+        break;
       }
-      
+
       case 'ai_interaction': {
-        const aiData = data as z.infer<typeof AIInteractionSchema>
-        
+        const aiData = data as z.infer<typeof AIInteractionSchema>;
+
         const { error } = await supabase
           .from('analytics_ai_interactions')
           .insert({
@@ -163,20 +164,20 @@ export async function POST(req: NextRequest) {
             tokens_used: aiData.tokensUsed,
             error_occurred: aiData.errorOccurred,
             error_type: aiData.errorType,
-          })
-        
-        if (error) throw error
-        break
+          });
+
+        if (error) throw error;
+        break;
       }
     }
-    
-    return NextResponse.json({ success: true })
+
+    return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error('Analytics tracking error:', error)
+    console.error('Analytics tracking error:', error);
     return NextResponse.json(
       { error: 'Failed to track analytics' },
       { status: 400 }
-    )
+    );
   }
 }
 
@@ -184,6 +185,6 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   return NextResponse.json({
     status: 'Analytics tracking endpoint active',
-    timestamp: new Date().toISOString()
-  })
+    timestamp: new Date().toISOString(),
+  });
 }

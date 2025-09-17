@@ -7,16 +7,16 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
-  
+
   try {
     const { searchParams } = request.nextUrl;
     const days = parseInt(searchParams.get('days') || '14'); // Default: last 14 days
     const format = searchParams.get('format') || 'markdown'; // 'markdown' or 'html'
-    
+
     await logInfo('Newsletter draft generation started', { days, format });
 
     // Calculate date threshold
@@ -26,82 +26,102 @@ export async function GET(request: NextRequest) {
     // Fetch recent published posts
     const { data: posts, error } = await supabase
       .from('blog_posts')
-      .select(`
+      .select(
+        `
         *,
         blog_post_tags(blog_tags(name))
-      `)
+      `
+      )
       .eq('status', 'published')
       .gte('published_at', dateThreshold.toISOString())
       .order('published_at', { ascending: false });
 
     if (error) {
       console.error('Newsletter draft error:', error);
-      await logError(error, { 
-        endpoint: '/api/newsletter/draft',
-        action: 'fetch_posts',
-        days,
-        format 
-      }, request);
+      await logError(
+        error,
+        {
+          endpoint: '/api/newsletter/draft',
+          action: 'fetch_posts',
+          days,
+          format,
+        },
+        request
+      );
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://summitchronicles.com';
-    
+    const siteUrl =
+      process.env.NEXT_PUBLIC_SITE_URL || 'https://summitchronicles.com';
+
     if (!posts || posts.length === 0) {
       return NextResponse.json({
-        draft: format === 'markdown' 
-          ? generateEmptyMarkdownNewsletter()
-          : generateEmptyHtmlNewsletter(),
+        draft:
+          format === 'markdown'
+            ? generateEmptyMarkdownNewsletter()
+            : generateEmptyHtmlNewsletter(),
         posts_count: 0,
         period_days: days,
-        message: `No new posts published in the last ${days} days. Here's a template to share expedition updates.`
+        message: `No new posts published in the last ${days} days. Here's a template to share expedition updates.`,
       });
     }
 
-    const draft = format === 'markdown' 
-      ? generateMarkdownNewsletter(posts, siteUrl, days)
-      : generateHtmlNewsletter(posts, siteUrl, days);
+    const draft =
+      format === 'markdown'
+        ? generateMarkdownNewsletter(posts, siteUrl, days)
+        : generateHtmlNewsletter(posts, siteUrl, days);
 
     const duration = Date.now() - startTime;
     await logPerformance('/api/newsletter/draft', duration, true);
-    await logInfo('Newsletter draft generated successfully', { 
+    await logInfo('Newsletter draft generated successfully', {
       posts_count: posts.length,
       period_days: days,
       format,
-      duration
+      duration,
     });
 
     return NextResponse.json({
       draft,
       posts_count: posts.length,
       period_days: days,
-      posts: posts.map(post => ({
+      posts: posts.map((post) => ({
         title: post.title,
         slug: post.slug,
         published_at: post.published_at,
-        category: post.category
-      }))
+        category: post.category,
+      })),
     });
   } catch (error) {
     console.error('Newsletter draft generation error:', error);
     const duration = Date.now() - startTime;
-    
-    await logError(error instanceof Error ? error : String(error), {
-      endpoint: '/api/newsletter/draft',
-      action: 'generate_draft',
-      duration
-    }, request);
+
+    await logError(
+      error instanceof Error ? error : String(error),
+      {
+        endpoint: '/api/newsletter/draft',
+        action: 'generate_draft',
+        duration,
+      },
+      request
+    );
     await logPerformance('/api/newsletter/draft', duration, false);
-    
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
-function generateMarkdownNewsletter(posts: any[], siteUrl: string, days: number): string {
-  const today = new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+function generateMarkdownNewsletter(
+  posts: any[],
+  siteUrl: string,
+  days: number
+): string {
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
   return `# Summit Chronicles Update - ${today}
@@ -112,20 +132,28 @@ Hope you're crushing your training goals this week. I've got some updates from t
 
 ## 🏔️ Latest Expedition Insights
 
-${posts.map(post => {
-  const tags = post.blog_post_tags?.map((pt: any) => pt.blog_tags?.name).filter(Boolean) || [];
-  const publishedDate = new Date(post.published_at).toLocaleDateString('en-US', { 
-    month: 'short', 
-    day: 'numeric' 
-  });
-  
-  return `### [${post.title}](${siteUrl}/blogs/${post.slug})
+${posts
+  .map((post) => {
+    const tags =
+      post.blog_post_tags
+        ?.map((pt: any) => pt.blog_tags?.name)
+        .filter(Boolean) || [];
+    const publishedDate = new Date(post.published_at).toLocaleDateString(
+      'en-US',
+      {
+        month: 'short',
+        day: 'numeric',
+      }
+    );
+
+    return `### [${post.title}](${siteUrl}/blogs/${post.slug})
 *${publishedDate} • ${post.category}${tags.length ? ' • ' + tags.join(', ') : ''}*
 
 ${post.excerpt || 'Check out the full post for all the details.'}
 
 **[Read the full story →](${siteUrl}/blogs/${post.slug})**`;
-}).join('\n\n')}
+  })
+  .join('\n\n')}
 
 ## 🎯 What's Next
 
@@ -150,11 +178,15 @@ Sunith Kumar
 *You're receiving this because you signed up for Summit Chronicles updates. [Unsubscribe here]({{unsubscribe_url}})*`;
 }
 
-function generateHtmlNewsletter(posts: any[], siteUrl: string, days: number): string {
-  const today = new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+function generateHtmlNewsletter(
+  posts: any[],
+  siteUrl: string,
+  days: number
+): string {
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
   return `<h1>Summit Chronicles Update - ${today}</h1>
@@ -165,20 +197,28 @@ function generateHtmlNewsletter(posts: any[], siteUrl: string, days: number): st
 
 <h2>🏔️ Latest Expedition Insights</h2>
 
-${posts.map(post => {
-  const tags = post.blog_post_tags?.map((pt: any) => pt.blog_tags?.name).filter(Boolean) || [];
-  const publishedDate = new Date(post.published_at).toLocaleDateString('en-US', { 
-    month: 'short', 
-    day: 'numeric' 
-  });
-  
-  return `<h3><a href="${siteUrl}/blogs/${post.slug}">${post.title}</a></h3>
+${posts
+  .map((post) => {
+    const tags =
+      post.blog_post_tags
+        ?.map((pt: any) => pt.blog_tags?.name)
+        .filter(Boolean) || [];
+    const publishedDate = new Date(post.published_at).toLocaleDateString(
+      'en-US',
+      {
+        month: 'short',
+        day: 'numeric',
+      }
+    );
+
+    return `<h3><a href="${siteUrl}/blogs/${post.slug}">${post.title}</a></h3>
 <p><em>${publishedDate} • ${post.category}${tags.length ? ' • ' + tags.join(', ') : ''}</em></p>
 
 <p>${post.excerpt || 'Check out the full post for all the details.'}</p>
 
 <p><strong><a href="${siteUrl}/blogs/${post.slug}">Read the full story →</a></strong></p>`;
-}).join('\n')}
+  })
+  .join('\n')}
 
 <h2>🎯 What's Next</h2>
 
@@ -206,10 +246,10 @@ Sunith Kumar</p>
 }
 
 function generateEmptyMarkdownNewsletter(): string {
-  const today = new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
   return `# Summit Chronicles Update - ${today}
@@ -244,10 +284,10 @@ Sunith Kumar
 }
 
 function generateEmptyHtmlNewsletter(): string {
-  const today = new Date().toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const today = new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
   });
 
   return `<h1>Summit Chronicles Update - ${today}</h1>

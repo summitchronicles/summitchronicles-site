@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { GlassCard } from "@/app/components/ui";
-import { TrophyIcon } from "@heroicons/react/24/outline";
+import { GlassCard } from '@/app/components/ui';
+import { TrophyIcon } from '@heroicons/react/24/outline';
 
 export default function GoalSettingSimple() {
   return (
@@ -13,8 +13,12 @@ export default function GoalSettingSimple() {
             <TrophyIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">Smart Goal Setting</h2>
-            <p className="text-gray-400">AI-powered goal tracking with success predictions</p>
+            <h2 className="text-2xl font-bold text-white">
+              Smart Goal Setting
+            </h2>
+            <p className="text-gray-400">
+              AI-powered goal tracking with success predictions
+            </p>
           </div>
         </div>
       </div>
@@ -25,15 +29,17 @@ export default function GoalSettingSimple() {
           Summit Mount Rainier
         </h3>
         <p className="text-gray-300 mb-4">
-          Complete a successful summit attempt of Mount Rainier via Disappointment Cleaver route
+          Complete a successful summit attempt of Mount Rainier via
+          Disappointment Cleaver route
         </p>
-        
+
         <div className="bg-summitGold/10 rounded-lg p-3 border-l-4 border-summitGold">
           <h5 className="text-sm font-medium text-summitGold mb-2">
             AI Success Prediction:
           </h5>
           <p className="text-xs text-gray-300">
-            Based on your current training, you have a 78% probability of successfully completing this goal.
+            Based on your current training, you have a 78% probability of
+            successfully completing this goal.
           </p>
         </div>
       </GlassCard>
@@ -44,7 +50,8 @@ export default function GoalSettingSimple() {
           Goal Setting Test
         </h3>
         <p className="text-gray-400">
-          This is a simplified version to test if the component renders properly.
+          This is a simplified version to test if the component renders
+          properly.
         </p>
       </GlassCard>
     </div>

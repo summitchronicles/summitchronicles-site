@@ -11,12 +11,12 @@ interface OptimizedImageProps {
   className?: string;
 }
 
-export default function OptimizedImage({ 
-  src, 
-  alt, 
-  width = 800, 
-  height = 400, 
-  className = "rounded-xl shadow-2xl" 
+export default function OptimizedImage({
+  src,
+  alt,
+  width = 800,
+  height = 400,
+  className = 'rounded-xl shadow-2xl',
 }: OptimizedImageProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -28,7 +28,7 @@ export default function OptimizedImage({
           <div className="text-white/60">Loading image...</div>
         </div>
       )}
-      
+
       {error ? (
         <div className="w-full h-48 bg-white/10 border-2 border-dashed border-white/20 flex items-center justify-center">
           <div className="text-center text-white/60">
@@ -42,7 +42,11 @@ export default function OptimizedImage({
           alt={alt}
           width={width}
           height={height}
-          className={isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-300'}
+          className={
+            isLoading
+              ? 'opacity-0'
+              : 'opacity-100 transition-opacity duration-300'
+          }
           onLoad={() => setIsLoading(false)}
           onError={() => {
             setError(true);

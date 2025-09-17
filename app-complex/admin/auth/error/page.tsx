@@ -1,25 +1,26 @@
-"use client";
+'use client';
 
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
-import Link from "next/link";
-import { motion } from "framer-motion";
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 import {
   ExclamationTriangleIcon,
-  ArrowLeftIcon
-} from "@heroicons/react/24/outline";
+  ArrowLeftIcon,
+} from '@heroicons/react/24/outline';
 
 const errorMessages: Record<string, string> = {
-  Configuration: "There is a problem with the server configuration.",
-  AccessDenied: "Access denied. You are not authorized to access this admin area.",
-  Verification: "The verification token has expired or has already been used.",
-  Default: "An error occurred during authentication. Please try again.",
+  Configuration: 'There is a problem with the server configuration.',
+  AccessDenied:
+    'Access denied. You are not authorized to access this admin area.',
+  Verification: 'The verification token has expired or has already been used.',
+  Default: 'An error occurred during authentication. Please try again.',
 };
 
 function AuthErrorContent() {
   const searchParams = useSearchParams();
-  const error = searchParams?.get("error") || "Default";
-  
+  const error = searchParams?.get('error') || 'Default';
+
   const message = errorMessages[error] || errorMessages.Default;
 
   return (
@@ -44,10 +45,8 @@ function AuthErrorContent() {
         <h1 className="text-2xl font-bold text-white mb-4">
           Authentication Error
         </h1>
-        
-        <p className="text-white/70 mb-8">
-          {message}
-        </p>
+
+        <p className="text-white/70 mb-8">{message}</p>
 
         {/* Action Buttons */}
         <div className="space-y-4">
@@ -57,7 +56,7 @@ function AuthErrorContent() {
           >
             Try Again
           </Link>
-          
+
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-white/60 hover:text-summitGold transition-colors text-sm"
@@ -68,7 +67,7 @@ function AuthErrorContent() {
         </div>
 
         {/* Error Details (for debugging) */}
-        {process.env.NODE_ENV === "development" && (
+        {process.env.NODE_ENV === 'development' && (
           <div className="mt-8 p-4 bg-white/5 border border-white/10 rounded-lg">
             <p className="text-xs text-white/40 mb-2">Debug Info:</p>
             <p className="text-xs text-white/60 font-mono">Error: {error}</p>
@@ -81,11 +80,13 @@ function AuthErrorContent() {
 
 export default function AuthError() {
   return (
-    <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
-        <div className="text-white">Loading...</div>
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
+          <div className="text-white">Loading...</div>
+        </div>
+      }
+    >
       <AuthErrorContent />
     </Suspense>
   );

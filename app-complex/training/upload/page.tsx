@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
@@ -9,7 +9,7 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   ArrowLeftIcon,
-  CalendarDaysIcon
+  CalendarDaysIcon,
 } from '@heroicons/react/24/outline';
 
 interface UploadResult {
@@ -27,14 +27,16 @@ export default function TrainingUploadPage() {
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
-  const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
+  const [startDate, setStartDate] = useState(
+    new Date().toISOString().split('T')[0]
+  );
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
+    if (e.type === 'dragenter' || e.type === 'dragover') {
       setDragActive(true);
-    } else if (e.type === "dragleave") {
+    } else if (e.type === 'dragleave') {
       setDragActive(false);
     }
   };
@@ -43,7 +45,7 @@ export default function TrainingUploadPage() {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFile(e.dataTransfer.files[0]);
     }
@@ -59,7 +61,7 @@ export default function TrainingUploadPage() {
     if (!file.name.endsWith('.xlsx')) {
       setResult({
         success: false,
-        error: 'Please upload an Excel file (.xlsx)'
+        error: 'Please upload an Excel file (.xlsx)',
       });
       return;
     }
@@ -79,11 +81,10 @@ export default function TrainingUploadPage() {
 
       const data = await response.json();
       setResult(data);
-
     } catch (error) {
       setResult({
         success: false,
-        error: 'Upload failed. Please try again.'
+        error: 'Upload failed. Please try again.',
       });
     } finally {
       setUploading(false);
@@ -94,8 +95,8 @@ export default function TrainingUploadPage() {
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black py-8">
       <div className="max-w-4xl mx-auto px-6">
         {/* Back Navigation */}
-        <Link 
-          href="/training" 
+        <Link
+          href="/training"
           className="inline-flex items-center gap-2 text-white/70 hover:text-summitGold transition-colors duration-300 mb-8"
         >
           <ArrowLeftIcon className="w-4 h-4" />
@@ -147,9 +148,10 @@ export default function TrainingUploadPage() {
           <div
             className={`
               relative border-2 border-dashed rounded-3xl p-12 text-center transition-all duration-300
-              ${dragActive 
-                ? 'border-summitGold bg-summitGold/10' 
-                : 'border-white/20 bg-white/5 hover:border-white/30 hover:bg-white/10'
+              ${
+                dragActive
+                  ? 'border-summitGold bg-summitGold/10'
+                  : 'border-white/20 bg-white/5 hover:border-white/30 hover:bg-white/10'
               }
               ${uploading ? 'pointer-events-none opacity-50' : ''}
             `}
@@ -165,21 +167,23 @@ export default function TrainingUploadPage() {
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               disabled={uploading}
             />
-            
+
             <div className="space-y-4">
               <div className="w-16 h-16 mx-auto bg-summitGold/20 rounded-full flex items-center justify-center">
                 <ArrowUpTrayIcon className="w-8 h-8 text-summitGold" />
               </div>
-              
+
               <div>
                 <h3 className="text-xl font-semibold text-white mb-2">
                   {uploading ? 'Processing...' : 'Drop your Excel file here'}
                 </h3>
                 <p className="text-white/60">
-                  {uploading ? 'Parsing training plan...' : 'or click to browse files'}
+                  {uploading
+                    ? 'Parsing training plan...'
+                    : 'or click to browse files'}
                 </p>
               </div>
-              
+
               <div className="text-sm text-white/50">
                 Supports: .xlsx files with the standard training plan format
               </div>
@@ -194,9 +198,10 @@ export default function TrainingUploadPage() {
             animate={{ opacity: 1, y: 0 }}
             className={`
               rounded-2xl border p-6 mb-8
-              ${result.success 
-                ? 'border-green-500/30 bg-green-500/10' 
-                : 'border-red-500/30 bg-red-500/10'
+              ${
+                result.success
+                  ? 'border-green-500/30 bg-green-500/10'
+                  : 'border-red-500/30 bg-red-500/10'
               }
             `}
           >
@@ -206,7 +211,7 @@ export default function TrainingUploadPage() {
               ) : (
                 <ExclamationTriangleIcon className="w-6 h-6 text-red-400 flex-shrink-0 mt-1" />
               )}
-              
+
               <div className="flex-1">
                 {result.success ? (
                   <div>
@@ -214,9 +219,13 @@ export default function TrainingUploadPage() {
                       Training Plan Uploaded Successfully!
                     </h3>
                     <div className="space-y-2 text-white/80">
-                      <p><strong>Title:</strong> {result.title}</p>
+                      <p>
+                        <strong>Title:</strong> {result.title}
+                      </p>
                       {result.weekNumber && (
-                        <p><strong>Week:</strong> {result.weekNumber}</p>
+                        <p>
+                          <strong>Week:</strong> {result.weekNumber}
+                        </p>
                       )}
                       <div className="grid grid-cols-3 gap-4 mt-4 text-sm">
                         <div>
@@ -230,15 +239,15 @@ export default function TrainingUploadPage() {
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="flex gap-4 mt-6">
-                      <Link 
+                      <Link
                         href={`/training/plans?id=${result.planId}`}
                         className="px-6 py-3 bg-summitGold text-black font-semibold rounded-xl hover:bg-yellow-400 transition-colors"
                       >
                         View Plan Details
                       </Link>
-                      <Link 
+                      <Link
                         href="/training/workout"
                         className="px-6 py-3 border border-white/20 text-white font-semibold rounded-xl hover:bg-white/5 transition-colors"
                       >
@@ -273,9 +282,18 @@ export default function TrainingUploadPage() {
                 Excel File Requirements
               </h3>
               <ul className="space-y-2 text-white/70 text-sm">
-                <li>• <strong>Sheet 1:</strong> "Sunith's WP" - Strength training with exercises, sets, reps, RPE</li>
-                <li>• <strong>Sheet 2:</strong> "Week Plan" - Cardio sessions with duration, pace, HR zones</li>
-                <li>• <strong>Sheet 3:</strong> "Fuel & Safeguards" - Training guidelines and protocols</li>
+                <li>
+                  • <strong>Sheet 1:</strong> "Sunith's WP" - Strength training
+                  with exercises, sets, reps, RPE
+                </li>
+                <li>
+                  • <strong>Sheet 2:</strong> "Week Plan" - Cardio sessions with
+                  duration, pace, HR zones
+                </li>
+                <li>
+                  • <strong>Sheet 3:</strong> "Fuel & Safeguards" - Training
+                  guidelines and protocols
+                </li>
                 <li>• File format: .xlsx (Excel format)</li>
                 <li>• Date format: Sep-08, Sep-09, etc.</li>
               </ul>

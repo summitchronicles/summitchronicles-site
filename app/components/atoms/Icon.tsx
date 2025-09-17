@@ -9,8 +9,10 @@ interface IconProps {
 }
 
 const Icon: React.FC<IconProps> = ({ name, size = 'md', className }) => {
-  const IconComponent = LucideIcons[name] as React.ComponentType<LucideIcons.LucideProps>;
-  
+  const IconComponent = LucideIcons[
+    name
+  ] as React.ComponentType<LucideIcons.LucideProps>;
+
   if (!IconComponent) {
     console.warn(`Icon "${name}" not found in lucide-react`);
     return null;
@@ -24,9 +26,7 @@ const Icon: React.FC<IconProps> = ({ name, size = 'md', className }) => {
   };
 
   return (
-    <IconComponent 
-      className={cn(sizeMap[size], 'text-current', className)} 
-    />
+    <IconComponent className={cn(sizeMap[size], 'text-current', className)} />
   );
 };
 

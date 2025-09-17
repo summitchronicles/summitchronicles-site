@@ -57,9 +57,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     ),
     priority,
     quality,
-    loading: priority ? 'eager' as const : loading,
-    placeholder: blurDataURL || placeholder === 'blur' ? 'blur' as const : 'empty' as const,
-    blurDataURL: blurDataURL || (placeholder === 'blur' ? defaultBlurDataURL : undefined),
+    loading: priority ? ('eager' as const) : loading,
+    placeholder:
+      blurDataURL || placeholder === 'blur'
+        ? ('blur' as const)
+        : ('empty' as const),
+    blurDataURL:
+      blurDataURL || (placeholder === 'blur' ? defaultBlurDataURL : undefined),
     onLoadingComplete,
     onError,
     ...props,
@@ -71,7 +75,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         <Image
           {...imageProps}
           fill
-          sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+          sizes={
+            sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+          }
           style={{
             objectFit,
             objectPosition,
@@ -82,13 +88,17 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   }
 
   if (!width || !height) {
-    console.warn('OptimizedImage: width and height should be provided when not using fill prop');
+    console.warn(
+      'OptimizedImage: width and height should be provided when not using fill prop'
+    );
     return (
       <div className="relative overflow-hidden">
         <Image
           {...imageProps}
           fill
-          sizes={sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'}
+          sizes={
+            sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+          }
           style={{
             objectFit,
             objectPosition,

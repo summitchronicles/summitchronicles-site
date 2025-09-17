@@ -1,1 +1,1 @@
-export { RedBullBlogGrid } from './RedBullBlogGrid'
+export { RedBullBlogGrid } from './RedBullBlogGrid';

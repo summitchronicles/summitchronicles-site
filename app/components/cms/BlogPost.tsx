@@ -1,21 +1,21 @@
-'use client'
+'use client';
 
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Calendar, Clock, User, Tag, Share2, BookOpen } from 'lucide-react'
-import { Post } from '@/lib/sanity/types'
-import { urlFor } from '@/lib/sanity/client'
-import { PortableText } from '@portabletext/react'
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Calendar, Clock, User, Tag, Share2, BookOpen } from 'lucide-react';
+import { Post } from '@/lib/sanity/types';
+import { urlFor } from '@/lib/sanity/client';
+import { PortableText } from '@portabletext/react';
 
 interface BlogPostProps {
-  post: Post
-  preview?: boolean
+  post: Post;
+  preview?: boolean;
 }
 
 interface BlogPostListProps {
-  posts: Post[]
-  featured?: boolean
+  posts: Post[];
+  featured?: boolean;
 }
 
 // Portable Text components for rich content rendering
@@ -46,7 +46,7 @@ const portableTextComponents = {
           </div>
         </div>
       </div>
-    )
+    ),
   },
   block: {
     h2: ({ children }: { children: React.ReactNode }) => (
@@ -60,15 +60,13 @@ const portableTextComponents = {
       </h3>
     ),
     normal: ({ children }: { children: React.ReactNode }) => (
-      <p className="text-spa-charcoal/80 leading-relaxed mb-4">
-        {children}
-      </p>
+      <p className="text-spa-charcoal/80 leading-relaxed mb-4">{children}</p>
     ),
     blockquote: ({ children }: { children: React.ReactNode }) => (
       <blockquote className="border-l-4 border-summit-gold pl-6 my-6 italic text-spa-charcoal/90">
         {children}
       </blockquote>
-    )
+    ),
   },
   marks: {
     link: ({ children, value }: { children: React.ReactNode; value?: any }) => (
@@ -86,42 +84,42 @@ const portableTextComponents = {
     ),
     emphasis: ({ children }: { children: React.ReactNode }) => (
       <em className="italic">{children}</em>
-    )
-  }
-}
+    ),
+  },
+};
 
 // Individual blog post component
 export function BlogPost({ post, preview = false }: BlogPostProps) {
-  const [isSharing, setIsSharing] = useState(false)
+  const [isSharing, setIsSharing] = useState(false);
 
   const handleShare = async () => {
-    setIsSharing(true)
+    setIsSharing(true);
     try {
       if (navigator.share) {
         await navigator.share({
           title: post.title,
           text: post.excerpt || '',
-          url: window.location.href
-        })
+          url: window.location.href,
+        });
       } else {
         // Fallback: copy to clipboard
-        await navigator.clipboard.writeText(window.location.href)
+        await navigator.clipboard.writeText(window.location.href);
         // Could show a toast notification here
       }
     } catch (error) {
-      console.error('Error sharing:', error)
+      console.error('Error sharing:', error);
     } finally {
-      setIsSharing(false)
+      setIsSharing(false);
     }
-  }
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
-    })
-  }
+      day: 'numeric',
+    });
+  };
 
   return (
     <article className="max-w-4xl mx-auto">
@@ -142,7 +140,7 @@ export function BlogPost({ post, preview = false }: BlogPostProps) {
               {formatDate(post.publishedAt)}
             </time>
           </div>
-          
+
           {post.readTime && (
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4" />
@@ -208,7 +206,9 @@ export function BlogPost({ post, preview = false }: BlogPostProps) {
       {/* Content */}
       <div className="prose prose-lg max-w-none">
         {/* <PortableText value={post.body} components={portableTextComponents} /> */}
-        <div>Content placeholder - PortableText temporarily disabled for build</div>
+        <div>
+          Content placeholder - PortableText temporarily disabled for build
+        </div>
       </div>
 
       {/* Author Bio */}
@@ -236,24 +236,24 @@ export function BlogPost({ post, preview = false }: BlogPostProps) {
         </div>
       )}
     </article>
-  )
+  );
 }
 
 // Blog post list component
 export function BlogPostList({ posts, featured = false }: BlogPostListProps) {
-  const [displayedPosts, setDisplayedPosts] = useState(featured ? 6 : 9)
+  const [displayedPosts, setDisplayedPosts] = useState(featured ? 6 : 9);
 
   const loadMore = () => {
-    setDisplayedPosts(prev => prev + 6)
-  }
+    setDisplayedPosts((prev) => prev + 6);
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       month: 'short',
       day: 'numeric',
-      year: 'numeric'
-    })
-  }
+      year: 'numeric',
+    });
+  };
 
   return (
     <div className="space-y-8">
@@ -336,5 +336,5 @@ export function BlogPostList({ posts, featured = false }: BlogPostListProps) {
         </div>
       )}
     </div>
-  )
+  );
 }

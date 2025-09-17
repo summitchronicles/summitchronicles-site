@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
-import { 
-  ArrowRightIcon, 
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import {
+  ArrowRightIcon,
   PlayIcon,
   ChevronDownIcon,
   MapPinIcon,
   TrophyIcon,
-  CalendarIcon
-} from "@heroicons/react/24/outline";
+  CalendarIcon,
+} from '@heroicons/react/24/outline';
 
 export default function ModernHero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"]
+    offset: ['start start', 'end start'],
   });
 
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
@@ -46,15 +46,15 @@ export default function ModernHero() {
     >
       {/* Animated Background Grid */}
       <div className="absolute inset-0 opacity-20">
-        <div 
-          className="absolute inset-0" 
+        <div
+          className="absolute inset-0"
           style={{
             backgroundImage: `
               linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
               linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
             `,
             backgroundSize: '50px 50px',
-            transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`
+            transform: `translate(${mousePosition.x * 0.01}px, ${mousePosition.y * 0.01}px)`,
           }}
         />
       </div>
@@ -109,10 +109,14 @@ export default function ModernHero() {
           <span className="block">I&apos;m Sunith Kumar,</span>
           <motion.span
             className="block bg-gradient-to-r from-summitGold via-yellow-400 to-summitGold bg-clip-text text-transparent"
-            initial={{ backgroundPosition: "0% 50%" }}
-            animate={{ backgroundPosition: "100% 50%" }}
-            transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-            style={{ backgroundSize: "200% 200%" }}
+            initial={{ backgroundPosition: '0% 50%' }}
+            animate={{ backgroundPosition: '100% 50%' }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              repeatType: 'reverse',
+            }}
+            style={{ backgroundSize: '200% 200%' }}
           >
             and I&apos;m climbing
           </motion.span>
@@ -126,10 +130,13 @@ export default function ModernHero() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-xl md:text-2xl text-white/70 max-w-3xl mx-auto leading-relaxed mb-12"
         >
-          Follow my journey to the world&apos;s highest peaks. Real insights from{" "}
-          <span className="text-white font-medium">actual expeditions</span>,{" "}
-          <span className="text-summitGold font-medium">training wisdom</span>, and{" "}
-          <span className="text-glacierBlue font-medium">gear that works</span> at altitude.
+          Follow my journey to the world&apos;s highest peaks. Real insights
+          from{' '}
+          <span className="text-white font-medium">actual expeditions</span>,{' '}
+          <span className="text-summitGold font-medium">training wisdom</span>,
+          and{' '}
+          <span className="text-glacierBlue font-medium">gear that works</span>{' '}
+          at altitude.
         </motion.p>
 
         {/* Stats Cards */}
@@ -140,9 +147,24 @@ export default function ModernHero() {
           className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12"
         >
           {[
-            { icon: MapPinIcon, label: "Next Target", value: "Everest 2027", color: "text-alpineBlue" },
-            { icon: CalendarIcon, label: "Training Days", value: "365+ Active", color: "text-successGreen" },
-            { icon: TrophyIcon, label: "Progress", value: "4 of 7", color: "text-summitGold" }
+            {
+              icon: MapPinIcon,
+              label: 'Next Target',
+              value: 'Everest 2027',
+              color: 'text-alpineBlue',
+            },
+            {
+              icon: CalendarIcon,
+              label: 'Training Days',
+              value: '365+ Active',
+              color: 'text-successGreen',
+            },
+            {
+              icon: TrophyIcon,
+              label: 'Progress',
+              value: '4 of 7',
+              color: 'text-summitGold',
+            },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
@@ -154,14 +176,18 @@ export default function ModernHero() {
             >
               <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-6 hover:bg-white/10 transition-all duration-300">
                 <div className="flex items-center justify-center mb-4">
-                  <div className={`p-3 rounded-xl bg-gradient-to-br from-white/10 to-white/5 ${stat.color}`}>
+                  <div
+                    className={`p-3 rounded-xl bg-gradient-to-br from-white/10 to-white/5 ${stat.color}`}
+                  >
                     <stat.icon className="w-6 h-6" />
                   </div>
                 </div>
-                <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-2xl font-bold text-white mb-1">
+                  {stat.value}
+                </div>
                 <div className="text-sm text-white/60">{stat.label}</div>
               </div>
-              
+
               {/* Hover Glow Effect */}
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-alpineBlue/20 to-summitGold/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10 blur-xl" />
             </motion.div>
@@ -178,9 +204,10 @@ export default function ModernHero() {
           {/* For Marketing Manager Mike - Sponsorship */}
           <motion.a
             href="/sponsorship"
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              boxShadow: "0 20px 25px -5px rgba(245, 158, 11, 0.1), 0 10px 10px -5px rgba(245, 158, 11, 0.04)"
+              boxShadow:
+                '0 20px 25px -5px rgba(245, 158, 11, 0.1), 0 10px 10px -5px rgba(245, 158, 11, 0.04)',
             }}
             whileTap={{ scale: 0.95 }}
             className="group relative px-8 py-4 bg-summitGold text-black font-semibold rounded-2xl overflow-hidden shadow-lg"
@@ -194,9 +221,10 @@ export default function ModernHero() {
           {/* For Aspiring Adventurer Alex - Inspiration */}
           <motion.a
             href="/start-your-journey"
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              boxShadow: "0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04)"
+              boxShadow:
+                '0 20px 25px -5px rgba(59, 130, 246, 0.1), 0 10px 10px -5px rgba(59, 130, 246, 0.04)',
             }}
             whileTap={{ scale: 0.95 }}
             className="group relative px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-2xl overflow-hidden shadow-lg hover:bg-white/20"
@@ -210,9 +238,10 @@ export default function ModernHero() {
           {/* For CEO Sarah - Professional */}
           <motion.a
             href="/speaking"
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              boxShadow: "0 20px 25px -5px rgba(16, 185, 129, 0.1), 0 10px 10px -5px rgba(16, 185, 129, 0.04)"
+              boxShadow:
+                '0 20px 25px -5px rgba(16, 185, 129, 0.1), 0 10px 10px -5px rgba(16, 185, 129, 0.04)',
             }}
             whileTap={{ scale: 0.95 }}
             className="group relative px-8 py-4 bg-transparent border-2 border-glacierBlue text-glacierBlue font-semibold rounded-2xl overflow-hidden shadow-lg hover:bg-glacierBlue hover:text-black"
@@ -223,37 +252,41 @@ export default function ModernHero() {
             </span>
             <motion.div
               className="absolute inset-0 bg-gradient-to-r from-summitGold to-yellow-400"
-              initial={{ x: "-100%" }}
-              whileHover={{ x: "0%" }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+              initial={{ x: '-100%' }}
+              whileHover={{ x: '0%' }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
             />
             {/* Animated particles */}
             <motion.div
               className="absolute top-1/2 left-1/2 w-32 h-32 bg-gradient-to-r from-summitGold/20 to-yellow-400/20 rounded-full blur-xl"
-              animate={isHovered ? {
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3]
-              } : {}}
+              animate={
+                isHovered
+                  ? {
+                      scale: [1, 1.2, 1],
+                      opacity: [0.3, 0.6, 0.3],
+                    }
+                  : {}
+              }
               transition={{ duration: 2, repeat: Infinity }}
-              style={{ transform: "translate(-50%, -50%)" }}
+              style={{ transform: 'translate(-50%, -50%)' }}
             />
           </motion.a>
 
           <motion.button
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              backgroundColor: "rgba(255, 255, 255, 0.1)",
-              borderColor: "rgba(255, 255, 255, 0.4)",
-              boxShadow: "0 10px 25px -5px rgba(255, 255, 255, 0.1)"
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              borderColor: 'rgba(255, 255, 255, 0.4)',
+              boxShadow: '0 10px 25px -5px rgba(255, 255, 255, 0.1)',
             }}
             whileTap={{ scale: 0.95 }}
             className="group relative px-8 py-4 border border-white/20 text-white font-semibold rounded-2xl backdrop-blur-sm overflow-hidden"
           >
             <span className="relative z-10 flex items-center gap-2">
               <motion.div
-                whileHover={{ 
+                whileHover={{
                   scale: 1.2,
-                  rotate: [0, -10, 10, 0] 
+                  rotate: [0, -10, 10, 0],
                 }}
                 transition={{ duration: 0.4 }}
               >
@@ -265,7 +298,7 @@ export default function ModernHero() {
             <motion.div
               className="absolute inset-0 bg-white/5 rounded-2xl"
               initial={{ scale: 0, opacity: 0 }}
-              whileHover={{ 
+              whileHover={{
                 scale: 1,
                 opacity: [0, 0.5, 0],
               }}
@@ -274,16 +307,17 @@ export default function ModernHero() {
             {/* Border glow */}
             <motion.div
               className="absolute inset-0 rounded-2xl"
-              initial={{ 
-                background: "linear-gradient(45deg, transparent, transparent)" 
+              initial={{
+                background: 'linear-gradient(45deg, transparent, transparent)',
               }}
-              whileHover={{ 
-                background: "linear-gradient(45deg, rgba(245, 158, 11, 0.3), rgba(59, 130, 246, 0.3), rgba(245, 158, 11, 0.3))",
-                backgroundSize: "200% 200%",
-                backgroundPosition: ["0% 50%", "100% 50%"]
+              whileHover={{
+                background:
+                  'linear-gradient(45deg, rgba(245, 158, 11, 0.3), rgba(59, 130, 246, 0.3), rgba(245, 158, 11, 0.3))',
+                backgroundSize: '200% 200%',
+                backgroundPosition: ['0% 50%', '100% 50%'],
               }}
               transition={{ duration: 2, repeat: Infinity }}
-              style={{ padding: "1px" }}
+              style={{ padding: '1px' }}
             />
           </motion.button>
         </motion.div>

@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
@@ -18,22 +18,27 @@ export async function GET() {
       .limit(1);
 
     if (error) {
-      return NextResponse.json({ 
-        error: 'Database connection failed', 
-        details: error.message 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Database connection failed',
+          details: error.message,
+        },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Database connection working',
       timestamp: new Date().toISOString(),
-      found_posts: data?.length || 0
+      found_posts: data?.length || 0,
     });
-
   } catch (error: any) {
-    return NextResponse.json({ 
-      error: error.message 
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: error.message,
+      },
+      { status: 500 }
+    );
   }
 }

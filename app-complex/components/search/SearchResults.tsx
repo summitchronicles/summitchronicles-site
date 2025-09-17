@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { clsx } from "clsx";
-import { 
+import { motion, AnimatePresence } from 'framer-motion';
+import { clsx } from 'clsx';
+import {
   MagnifyingGlassIcon,
   ClockIcon,
   StarIcon,
   LinkIcon,
   TagIcon,
-  ArrowTopRightOnSquareIcon
-} from "@heroicons/react/24/outline";
-import { GlassCard, StatusIndicator, ProgressBar } from "@/app/components/ui";
+  ArrowTopRightOnSquareIcon,
+} from '@heroicons/react/24/outline';
+import { GlassCard, StatusIndicator, ProgressBar } from '@/app/components/ui';
 
 interface SearchResult {
   id: string;
@@ -38,21 +38,31 @@ interface SearchResultsProps {
 
 const getResultTypeIcon = (type: string) => {
   switch (type) {
-    case 'blog': return '📝';
-    case 'gear': return '🎒';
-    case 'training': return '💪';
-    case 'expedition': return '🏔️';
-    default: return '📄';
+    case 'blog':
+      return '📝';
+    case 'gear':
+      return '🎒';
+    case 'training':
+      return '💪';
+    case 'expedition':
+      return '🏔️';
+    default:
+      return '📄';
   }
 };
 
 const getResultTypeColor = (type: string) => {
   switch (type) {
-    case 'blog': return 'text-blue-400';
-    case 'gear': return 'text-green-400';
-    case 'training': return 'text-purple-400';
-    case 'expedition': return 'text-red-400';
-    default: return 'text-gray-400';
+    case 'blog':
+      return 'text-blue-400';
+    case 'gear':
+      return 'text-green-400';
+    case 'training':
+      return 'text-purple-400';
+    case 'expedition':
+      return 'text-red-400';
+    default:
+      return 'text-gray-400';
   }
 };
 
@@ -63,7 +73,7 @@ export default function SearchResults({
   totalResults,
   searchTime,
   onResultClick,
-  className = ""
+  className = '',
 }: SearchResultsProps) {
   const container = {
     hidden: { opacity: 0 },
@@ -71,21 +81,21 @@ export default function SearchResults({
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.1
-      }
-    }
+        delayChildren: 0.1,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.23, 1, 0.32, 1]
-      }
-    }
+        ease: [0.23, 1, 0.32, 1],
+      },
+    },
   };
 
   const handleResultClick = (result: SearchResult) => {
@@ -94,7 +104,7 @@ export default function SearchResults({
 
   if (isLoading) {
     return (
-      <div className={clsx("space-y-6", className)}>
+      <div className={clsx('space-y-6', className)}>
         {/* Loading skeleton */}
         {Array.from({ length: 5 }).map((_, index) => (
           <GlassCard key={index} className="p-6">
@@ -127,7 +137,7 @@ export default function SearchResults({
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className={clsx("text-center py-12", className)}
+        className={clsx('text-center py-12', className)}
       >
         <GlassCard className="p-12">
           <div className="text-6xl mb-4">🔍</div>
@@ -135,7 +145,8 @@ export default function SearchResults({
             No results found
           </h3>
           <p className="text-gray-400 mb-6">
-            We couldn&apos;t find anything matching <span className="text-summitGold">&ldquo;{query}&rdquo;</span>
+            We couldn&apos;t find anything matching{' '}
+            <span className="text-summitGold">&ldquo;{query}&rdquo;</span>
           </p>
           <div className="space-y-2 text-sm text-gray-500">
             <p>Try:</p>
@@ -151,7 +162,7 @@ export default function SearchResults({
   }
 
   return (
-    <div className={clsx("space-y-6", className)}>
+    <div className={clsx('space-y-6', className)}>
       {/* Search Stats */}
       {(totalResults || searchTime) && (
         <motion.div
@@ -161,9 +172,7 @@ export default function SearchResults({
         >
           <div className="flex items-center space-x-4">
             {totalResults && (
-              <span>
-                About {totalResults.toLocaleString()} results
-              </span>
+              <span>About {totalResults.toLocaleString()} results</span>
             )}
             {searchTime && (
               <span className="flex items-center space-x-1">
@@ -172,7 +181,7 @@ export default function SearchResults({
               </span>
             )}
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <MagnifyingGlassIcon className="w-4 h-4" />
             <span>for &ldquo;{query}&rdquo;</span>
@@ -194,7 +203,7 @@ export default function SearchResults({
             whileHover={{ scale: 1.01, y: -2 }}
             className="cursor-pointer"
           >
-            <GlassCard 
+            <GlassCard
               className="p-6 hover:bg-white/5 transition-colors duration-300"
               onClick={() => handleResultClick(result)}
             >
@@ -218,7 +227,7 @@ export default function SearchResults({
                     )}
                   </div>
                 </div>
-                
+
                 {/* Relevance Score */}
                 <div className="flex items-center space-x-2">
                   <div className="text-xs text-gray-400">
@@ -236,7 +245,7 @@ export default function SearchResults({
               </div>
 
               {/* Title */}
-              <motion.h3 
+              <motion.h3
                 className="text-lg font-semibold text-white mb-2 hover:text-summitGold transition-colors"
                 whileHover={{ x: 4 }}
               >
@@ -270,18 +279,16 @@ export default function SearchResults({
                     <LinkIcon className="w-3 h-3" />
                     <span>{result.url}</span>
                   </div>
-                  
+
                   {result.readTime && (
                     <div className="flex items-center space-x-1">
                       <ClockIcon className="w-3 h-3" />
                       <span>{result.readTime} min read</span>
                     </div>
                   )}
-                  
+
                   {result.timestamp && (
-                    <div>
-                      {result.timestamp.toLocaleDateString()}
-                    </div>
+                    <div>{result.timestamp.toLocaleDateString()}</div>
                   )}
                 </div>
 
@@ -293,12 +300,13 @@ export default function SearchResults({
                   <ArrowTopRightOnSquareIcon className="w-3 h-3" />
                 </motion.div>
               </div>
-              
+
               {/* Hover effect overlay */}
               <motion.div
                 className="absolute inset-0 rounded-inherit pointer-events-none"
-                style={{ 
-                  background: 'linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1))' 
+                style={{
+                  background:
+                    'linear-gradient(45deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1))',
                 }}
                 initial={{ opacity: 0 }}
                 whileHover={{ opacity: 1 }}

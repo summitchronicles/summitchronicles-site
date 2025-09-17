@@ -1,76 +1,76 @@
-'use client'
+'use client';
 
-import React, { useEffect, useRef } from 'react'
-import { motion, useAnimation, useInView } from 'framer-motion'
+import React, { useEffect, useRef } from 'react';
+import { motion, useAnimation, useInView } from 'framer-motion';
 
 interface AnimatedLogoProps {
-  size?: number
-  className?: string
-  variant?: 'standard' | 'detailed' | 'minimal'
-  animateOnScroll?: boolean
+  size?: number;
+  className?: string;
+  variant?: 'standard' | 'detailed' | 'minimal';
+  animateOnScroll?: boolean;
   colors?: {
-    primary: string
-    secondary: string
-    accent: string
-  }
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
 }
 
-export function AnimatedLogo({ 
-  size = 40, 
+export function AnimatedLogo({
+  size = 40,
   className = '',
   variant = 'standard',
   animateOnScroll = true,
   colors = {
     primary: '#1e3a8a', // alpine-blue
     secondary: '#fbbf24', // summit-gold
-    accent: '#334155' // spa-charcoal
-  }
+    accent: '#334155', // spa-charcoal
+  },
 }: AnimatedLogoProps) {
-  const controls = useAnimation()
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+  const controls = useAnimation();
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
   useEffect(() => {
     if (animateOnScroll && isInView) {
-      controls.start('visible')
+      controls.start('visible');
     } else if (!animateOnScroll) {
-      controls.start('visible')
+      controls.start('visible');
     }
-  }, [controls, isInView, animateOnScroll])
+  }, [controls, isInView, animateOnScroll]);
 
   // Animation variants for different elements
   const pathVariants = {
-    hidden: { 
+    hidden: {
       pathLength: 0,
-      opacity: 0
+      opacity: 0,
     },
     visible: {
       pathLength: 1,
-      opacity: 1
-    }
-  }
+      opacity: 1,
+    },
+  };
 
   const fillVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
-      scale: 0.8
+      scale: 0.8,
     },
     visible: {
       opacity: 1,
-      scale: 1
-    }
-  }
+      scale: 1,
+    },
+  };
 
   const detailVariants = {
-    hidden: { 
+    hidden: {
       pathLength: 0,
-      opacity: 0
+      opacity: 0,
     },
     visible: {
       pathLength: 1,
-      opacity: 1
-    }
-  }
+      opacity: 1,
+    },
+  };
 
   // Render different variants
   const renderStandardLogo = () => (
@@ -93,7 +93,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Secondary peak */}
       <motion.path
         d="M40 80 L50 45 L65 35 L80 80"
@@ -104,7 +104,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Summit point */}
       <motion.circle
         cx="50"
@@ -115,7 +115,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Base line */}
       <motion.line
         x1="20"
@@ -128,7 +128,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Climbing route (if detailed variant) */}
       {variant === 'detailed' && (
         <motion.path
@@ -143,7 +143,7 @@ export function AnimatedLogo({
         />
       )}
     </svg>
-  )
+  );
 
   const renderDetailedLogo = () => (
     <svg
@@ -165,7 +165,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Snow caps */}
       <motion.path
         d="M40 25 L45 15 L50 25 Z"
@@ -174,7 +174,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       <motion.path
         d="M60 15 L65 8 L70 15 Z"
         fill={colors.secondary}
@@ -182,7 +182,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Trees/forest */}
       <motion.path
         d="M15 80 L20 70 L25 80 M30 82 L35 72 L40 82 M50 81 L55 71 L60 81"
@@ -192,7 +192,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Climbing path */}
       <motion.path
         d="M20 80 Q30 65 40 50 Q50 35 60 25"
@@ -204,7 +204,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Climber figure */}
       <motion.circle
         cx="58"
@@ -216,7 +216,7 @@ export function AnimatedLogo({
         animate={controls}
       />
     </svg>
-  )
+  );
 
   const renderMinimalLogo = () => (
     <svg
@@ -238,7 +238,7 @@ export function AnimatedLogo({
         initial="hidden"
         animate={controls}
       />
-      
+
       {/* Summit dot */}
       <motion.circle
         cx="50"
@@ -250,16 +250,16 @@ export function AnimatedLogo({
         animate={controls}
       />
     </svg>
-  )
+  );
 
   // Return appropriate variant
   switch (variant) {
     case 'detailed':
-      return renderDetailedLogo()
+      return renderDetailedLogo();
     case 'minimal':
-      return renderMinimalLogo()
+      return renderMinimalLogo();
     case 'standard':
     default:
-      return renderStandardLogo()
+      return renderStandardLogo();
   }
 }

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import Link from "next/link";
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 import {
   PencilIcon,
   ClockIcon,
   TagIcon,
   ArrowRightIcon,
-  LightBulbIcon
-} from "@heroicons/react/24/outline";
-import { useEffect, useState } from "react";
+  LightBulbIcon,
+} from '@heroicons/react/24/outline';
+import { useEffect, useState } from 'react';
 
 interface BlogPost {
   id: string;
@@ -47,8 +47,8 @@ export default function InsightsPage() {
     }
   };
 
-  const featuredPosts = posts.filter(post => post.featured);
-  const regularPosts = posts.filter(post => !post.featured);
+  const featuredPosts = posts.filter((post) => post.featured);
+  const regularPosts = posts.filter((post) => !post.featured);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
@@ -71,15 +71,16 @@ export default function InsightsPage() {
           </motion.div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-8">
-            Insights from{" "}
+            Insights from{' '}
             <span className="bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
               My Expeditions
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-white/70 leading-relaxed mb-12">
-            Authentic stories, training insights, gear reviews, and lessons learned 
-            from my Seven Summits journey. No fluff, just real experiences from the mountains.
+            Authentic stories, training insights, gear reviews, and lessons
+            learned from my Seven Summits journey. No fluff, just real
+            experiences from the mountains.
           </p>
         </motion.div>
       </section>
@@ -104,8 +105,12 @@ export default function InsightsPage() {
                     transition={{ duration: 0.8 }}
                     className="text-center mb-12"
                   >
-                    <h2 className="text-3xl font-bold text-white mb-4">Featured Insights</h2>
-                    <p className="text-white/60">The most impactful lessons from my recent expeditions</p>
+                    <h2 className="text-3xl font-bold text-white mb-4">
+                      Featured Insights
+                    </h2>
+                    <p className="text-white/60">
+                      The most impactful lessons from my recent expeditions
+                    </p>
                   </motion.div>
 
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -153,7 +158,9 @@ export default function InsightsPage() {
                               </div>
 
                               <div className="flex items-center gap-1 text-summitGold group-hover:gap-2 transition-all">
-                                <span className="text-sm font-medium">Read More</span>
+                                <span className="text-sm font-medium">
+                                  Read More
+                                </span>
                                 <ArrowRightIcon className="w-4 h-4" />
                               </div>
                             </div>
@@ -174,8 +181,13 @@ export default function InsightsPage() {
                   transition={{ duration: 0.8 }}
                   className="text-center mb-12"
                 >
-                  <h2 className="text-3xl font-bold text-white mb-4">All Insights</h2>
-                  <p className="text-white/60">Stories, lessons, and insights from my mountaineering journey</p>
+                  <h2 className="text-3xl font-bold text-white mb-4">
+                    All Insights
+                  </h2>
+                  <p className="text-white/60">
+                    Stories, lessons, and insights from my mountaineering
+                    journey
+                  </p>
                 </motion.div>
 
                 {regularPosts.length === 0 && featuredPosts.length === 0 ? (
@@ -187,10 +199,13 @@ export default function InsightsPage() {
                     className="text-center py-20"
                   >
                     <PencilIcon className="w-16 h-16 text-white/40 mx-auto mb-6" />
-                    <h3 className="text-2xl font-bold text-white mb-4">Coming Soon</h3>
+                    <h3 className="text-2xl font-bold text-white mb-4">
+                      Coming Soon
+                    </h3>
                     <p className="text-white/60 max-w-md mx-auto">
-                      I&apos;m currently preparing my first insights from recent expeditions. 
-                      Check back soon for authentic stories from the mountains.
+                      I&apos;m currently preparing my first insights from recent
+                      expeditions. Check back soon for authentic stories from
+                      the mountains.
                     </p>
                   </motion.div>
                 ) : (
@@ -226,7 +241,9 @@ export default function InsightsPage() {
                             </p>
 
                             <div className="flex items-center gap-1 text-summitGold group-hover:gap-2 transition-all">
-                              <span className="text-xs font-medium">Read More</span>
+                              <span className="text-xs font-medium">
+                                Read More
+                              </span>
                               <ArrowRightIcon className="w-3 h-3" />
                             </div>
                           </div>
@@ -256,8 +273,9 @@ export default function InsightsPage() {
                 Get New Insights First
               </h3>
               <p className="text-lg text-white/70 mb-8">
-                Be the first to read my latest expedition stories, training insights, 
-                and gear recommendations. No spam, just authentic content from the mountains.
+                Be the first to read my latest expedition stories, training
+                insights, and gear recommendations. No spam, just authentic
+                content from the mountains.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <input

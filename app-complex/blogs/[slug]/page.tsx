@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { motion } from "framer-motion";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import OptimizedImage from "../../components/blog/OptimizedImage";
-import StructuredData from "../../components/seo/StructuredData";
-import { getArticleSchema, getBreadcrumbSchema } from "@/lib/seo";
-import { trackBlogPost } from "../../components/GoogleAnalytics";
-import { 
+import { useState, useEffect } from 'react';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import OptimizedImage from '../../components/blog/OptimizedImage';
+import StructuredData from '../../components/seo/StructuredData';
+import { getArticleSchema, getBreadcrumbSchema } from '@/lib/seo';
+import { trackBlogPost } from '../../components/GoogleAnalytics';
+import {
   ArrowLeftIcon,
   ClockIcon,
   CalendarIcon,
@@ -18,8 +18,8 @@ import {
   TagIcon,
   HeartIcon,
   ShareIcon,
-  EyeIcon
-} from "@heroicons/react/24/outline";
+  EyeIcon,
+} from '@heroicons/react/24/outline';
 
 interface BlogPost {
   id: string;
@@ -68,12 +68,13 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       setLoading(true);
       const response = await fetch(`/api/blog/posts/${params.slug}`);
       const data = await response.json();
-      
+
       if (response.ok) {
         setPost(data.post);
         setLikeCount(data.post.likes || 0);
         // Check if user has liked this post (using localStorage)
-        const hasLiked = localStorage.getItem(`liked-${params.slug}`) === 'true';
+        const hasLiked =
+          localStorage.getItem(`liked-${params.slug}`) === 'true';
         setLiked(hasLiked);
       } else if (response.status === 404) {
         notFound();
@@ -92,47 +93,54 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      'Training': 'text-blue-400 border-blue-400/20 bg-blue-400/10',
-      'Expeditions': 'text-orange-400 border-orange-400/20 bg-orange-400/10',
-      'Gear': 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10',
-      'Mental': 'text-purple-400 border-purple-400/20 bg-purple-400/10',
-      'Nutrition': 'text-green-400 border-green-400/20 bg-green-400/10',
-      'Recovery': 'text-cyan-400 border-cyan-400/20 bg-cyan-400/10'
+      Training: 'text-blue-400 border-blue-400/20 bg-blue-400/10',
+      Expeditions: 'text-orange-400 border-orange-400/20 bg-orange-400/10',
+      Gear: 'text-yellow-400 border-yellow-400/20 bg-yellow-400/10',
+      Mental: 'text-purple-400 border-purple-400/20 bg-purple-400/10',
+      Nutrition: 'text-green-400 border-green-400/20 bg-green-400/10',
+      Recovery: 'text-cyan-400 border-cyan-400/20 bg-cyan-400/10',
     };
-    return colors[category] || 'text-gray-400 border-gray-400/20 bg-gray-400/10';
+    return (
+      colors[category] || 'text-gray-400 border-gray-400/20 bg-gray-400/10'
+    );
   };
 
   const handleLike = () => {
     const newLiked = !liked;
     setLiked(newLiked);
-    setLikeCount(prev => newLiked ? prev + 1 : prev - 1);
+    setLikeCount((prev) => (newLiked ? prev + 1 : prev - 1));
     localStorage.setItem(`liked-${params.slug}`, newLiked.toString());
   };
 
   const handleShare = () => {
     const url = window.location.href;
     const title = post?.title || 'Check out this blog post';
-    
+
     if (navigator.share) {
       // Use native sharing if available
-      navigator.share({
-        title: title,
-        url: url,
-      }).catch(console.error);
+      navigator
+        .share({
+          title: title,
+          url: url,
+        })
+        .catch(console.error);
     } else {
       // Fallback to copying URL to clipboard
-      navigator.clipboard.writeText(url).then(() => {
-        alert('Link copied to clipboard!');
-      }).catch(() => {
-        // Final fallback - show the URL
-        prompt('Copy this link:', url);
-      });
+      navigator.clipboard
+        .writeText(url)
+        .then(() => {
+          alert('Link copied to clipboard!');
+        })
+        .catch(() => {
+          // Final fallback - show the URL
+          prompt('Copy this link:', url);
+        });
     }
   };
 
@@ -140,11 +148,11 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   const renderContent = (content: string) => {
     // Check if content contains HTML tags (from NovelEditor)
     const containsHTML = /<[^>]+>/.test(content);
-    
+
     if (containsHTML) {
       // Content is HTML from NovelEditor - render directly
       return (
-        <div 
+        <div
           className="prose prose-invert prose-lg max-w-none blog-content
             prose-headings:text-white prose-headings:font-bold
             prose-a:text-summitGold prose-a:no-underline hover:prose-a:underline
@@ -162,7 +170,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
     } else {
       // Content is Markdown - use ReactMarkdown
       return (
-        <div className="prose prose-invert prose-lg max-w-none
+        <div
+          className="prose prose-invert prose-lg max-w-none
           prose-headings:text-white prose-headings:font-bold
           prose-p:text-white/80 prose-p:leading-relaxed prose-p:mb-4
           prose-a:text-summitGold prose-a:no-underline hover:prose-a:underline
@@ -173,8 +182,9 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           prose-li:text-white/80 prose-li:mb-1
           prose-img:rounded-xl prose-img:shadow-2xl
           prose-code:text-summitGold prose-code:bg-white/10 prose-code:px-1 prose-code:rounded
-          prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20">
-          <ReactMarkdown 
+          prose-pre:bg-white/10 prose-pre:border prose-pre:border-white/20"
+        >
+          <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
               img: ({ src, alt, ...props }) => (
@@ -185,7 +195,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                   height={400}
                   className="rounded-xl shadow-2xl my-6"
                 />
-              )
+              ),
             }}
           >
             {content}
@@ -221,22 +231,28 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   // Generate structured data for the post
-  const structuredData = post ? [
-    getArticleSchema({
-      title: post.title,
-      description: post.excerpt || 'Expert mountaineering insights from Summit Chronicles',
-      datePublished: new Date(post.published_at).toISOString(),
-      dateModified: new Date(post.updated_at || post.published_at).toISOString(),
-      author: post.author || 'Sunith Kumar',
-      image: post.featured_image,
-      url: `/blogs/${post.slug}`,
-    }),
-    getBreadcrumbSchema([
-      { name: 'Home', url: '/' },
-      { name: 'Blog', url: '/blogs' },
-      { name: post.title, url: `/blogs/${post.slug}` },
-    ])
-  ] : [];
+  const structuredData = post
+    ? [
+        getArticleSchema({
+          title: post.title,
+          description:
+            post.excerpt ||
+            'Expert mountaineering insights from Summit Chronicles',
+          datePublished: new Date(post.published_at).toISOString(),
+          dateModified: new Date(
+            post.updated_at || post.published_at
+          ).toISOString(),
+          author: post.author || 'Sunith Kumar',
+          image: post.featured_image,
+          url: `/blogs/${post.slug}`,
+        }),
+        getBreadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'Blog', url: '/blogs' },
+          { name: post.title, url: `/blogs/${post.slug}` },
+        ]),
+      ]
+    : [];
 
   return (
     <article className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
@@ -245,12 +261,16 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
       {/* Header */}
       <header className="relative py-16 bg-black">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-            backgroundSize: '60px 60px'
-          }}></div>
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+              backgroundSize: '60px 60px',
+            }}
+          ></div>
         </div>
-        
+
         <div className="relative z-10 max-w-4xl mx-auto px-6">
           {/* Back Link */}
           <motion.div
@@ -258,8 +278,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             animate={{ opacity: 1, x: 0 }}
             className="mb-8"
           >
-            <Link 
-              href="/blogs" 
+            <Link
+              href="/blogs"
               className="inline-flex items-center gap-2 text-white/70 hover:text-summitGold transition-colors duration-300"
             >
               <ArrowLeftIcon className="w-4 h-4" />
@@ -274,14 +294,16 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             transition={{ delay: 0.1 }}
             className="mb-4"
           >
-            <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(post.category)}`}>
+            <span
+              className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium border ${getCategoryColor(post.category)}`}
+            >
               <TagIcon className="w-3 h-3" />
               {post.category}
             </span>
           </motion.div>
 
           {/* Title */}
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
@@ -370,18 +392,20 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
             className="flex items-center justify-between border-t border-white/10 pt-8"
           >
             <div className="flex items-center gap-4">
-              <button 
+              <button
                 onClick={handleLike}
                 className={`flex items-center gap-2 px-4 py-2 border rounded-xl transition-colors duration-300 ${
-                  liked 
-                    ? 'bg-red-400/20 hover:bg-red-400/30 border-red-400/40 text-red-400' 
+                  liked
+                    ? 'bg-red-400/20 hover:bg-red-400/30 border-red-400/40 text-red-400'
                     : 'bg-white/5 hover:bg-white/10 border-white/10 text-white/80'
                 }`}
               >
-                <HeartIcon className={`w-4 h-4 ${liked ? 'text-red-400 fill-red-400' : 'text-red-400'}`} />
+                <HeartIcon
+                  className={`w-4 h-4 ${liked ? 'text-red-400 fill-red-400' : 'text-red-400'}`}
+                />
                 <span>Like ({likeCount})</span>
               </button>
-              <button 
+              <button
                 onClick={handleShare}
                 className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors duration-300 text-white/80"
               >
@@ -389,8 +413,8 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
                 <span>Share</span>
               </button>
             </div>
-            
-            <Link 
+
+            <Link
               href="/blogs"
               className="text-summitGold hover:text-summitGold/80 transition-colors duration-300 font-medium"
             >
@@ -399,7 +423,7 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           </motion.div>
         </div>
       </footer>
-      
+
       {/* Custom CSS for proper paragraph spacing */}
       <style jsx global>{`
         /* Blog content paragraph spacing - preserve user's intended spacing */
@@ -409,24 +433,24 @@ export default function BlogPostPage({ params }: BlogPostPageProps) {
           margin: 1em 0 !important;
           min-height: 1.2em !important;
         }
-        
+
         /* Preserve empty paragraphs in rendered blog content */
         .blog-content p:empty::before {
           content: '\\200B' !important; /* Zero-width space */
           display: inline-block !important;
         }
-        
+
         /* Ensure proper spacing between consecutive paragraphs */
         .blog-content p + p {
           margin-top: 1em !important;
         }
-        
+
         /* Handle paragraphs with only whitespace */
         .blog-content .paragraph-block {
           margin: 1em 0 !important;
           min-height: 1.2em !important;
         }
-        
+
         /* Hard break styling for Shift+Enter line breaks in rendered content */
         .blog-content br {
           display: block !important;

@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { 
-  CheckCircleIcon, 
-  ClockIcon, 
+import { motion } from 'framer-motion';
+import {
+  CheckCircleIcon,
+  ClockIcon,
   MapPinIcon,
   CalendarIcon,
-  TrophyIcon
-} from "@heroicons/react/24/outline";
+  TrophyIcon,
+} from '@heroicons/react/24/outline';
 
 interface Summit {
   name: string;
   elevation: string;
   continent: string;
-  status: "completed" | "in_progress" | "planned";
+  status: 'completed' | 'in_progress' | 'planned';
   completedDate?: string;
   targetDate?: string;
   description: string;
@@ -23,91 +23,96 @@ interface Summit {
 
 const sevenSummits: Summit[] = [
   {
-    name: "Mount Elbrus",
-    elevation: "5,642m",
-    continent: "Europe",
-    status: "completed",
-    completedDate: "July 2022",
-    description: "The highest peak in Europe, conquered during summer climbing season.",
+    name: 'Mount Elbrus',
+    elevation: '5,642m',
+    continent: 'Europe',
+    status: 'completed',
+    completedDate: 'July 2022',
+    description:
+      'The highest peak in Europe, conquered during summer climbing season.',
     difficulty: 3,
-    flag: "🇷🇺"
+    flag: '🇷🇺',
   },
   {
-    name: "Mount Kilimanjaro",
-    elevation: "5,895m",
-    continent: "Africa", 
-    status: "completed",
-    completedDate: "March 2023",
-    description: "Africa's rooftop. An incredible journey through five climate zones.",
+    name: 'Mount Kilimanjaro',
+    elevation: '5,895m',
+    continent: 'Africa',
+    status: 'completed',
+    completedDate: 'March 2023',
+    description:
+      "Africa's rooftop. An incredible journey through five climate zones.",
     difficulty: 2,
-    flag: "🇹🇿"
+    flag: '🇹🇿',
   },
   {
-    name: "Aconcagua",
-    elevation: "6,961m",
-    continent: "South America",
-    status: "completed", 
-    completedDate: "December 2023",
-    description: "The Stone Sentinel. My first real test at high altitude.",
+    name: 'Aconcagua',
+    elevation: '6,961m',
+    continent: 'South America',
+    status: 'completed',
+    completedDate: 'December 2023',
+    description: 'The Stone Sentinel. My first real test at high altitude.',
     difficulty: 4,
-    flag: "🇦🇷"
+    flag: '🇦🇷',
   },
   {
-    name: "Mount McKinley",
-    elevation: "6,190m",
-    continent: "North America",
-    status: "planned",
-    targetDate: "June 2025",
-    description: "Denali - the ultimate cold weather and technical challenge.",
+    name: 'Mount McKinley',
+    elevation: '6,190m',
+    continent: 'North America',
+    status: 'planned',
+    targetDate: 'June 2025',
+    description: 'Denali - the ultimate cold weather and technical challenge.',
     difficulty: 5,
-    flag: "🇺🇸"
+    flag: '🇺🇸',
   },
   {
-    name: "Carstensz Pyramid", 
-    elevation: "4,884m",
-    continent: "Oceania",
-    status: "planned",
-    targetDate: "September 2026",
-    description: "The technical climb. More rock climbing than mountaineering.",
+    name: 'Carstensz Pyramid',
+    elevation: '4,884m',
+    continent: 'Oceania',
+    status: 'planned',
+    targetDate: 'September 2026',
+    description: 'The technical climb. More rock climbing than mountaineering.',
     difficulty: 5,
-    flag: "🇮🇩"
+    flag: '🇮🇩',
   },
   {
-    name: "Mount Vinson",
-    elevation: "4,892m", 
-    continent: "Antarctica",
-    status: "planned",
-    targetDate: "December 2026",
-    description: "The bottom of the world. Logistics and isolation are the main challenges.",
+    name: 'Mount Vinson',
+    elevation: '4,892m',
+    continent: 'Antarctica',
+    status: 'planned',
+    targetDate: 'December 2026',
+    description:
+      'The bottom of the world. Logistics and isolation are the main challenges.',
     difficulty: 4,
-    flag: "🇦🇶"
+    flag: '🇦🇶',
   },
   {
-    name: "Mount Everest",
-    elevation: "8,849m",
-    continent: "Asia",
-    status: "in_progress",
-    targetDate: "May 2027",
-    description: "The ultimate goal. Everything leads to this moment.",
+    name: 'Mount Everest',
+    elevation: '8,849m',
+    continent: 'Asia',
+    status: 'in_progress',
+    targetDate: 'May 2027',
+    description: 'The ultimate goal. Everything leads to this moment.',
     difficulty: 5,
-    flag: "🇳🇵"
-  }
+    flag: '🇳🇵',
+  },
 ];
 
 const statusColors = {
-  completed: "text-successGreen",
-  in_progress: "text-summitGold",
-  planned: "text-white/60"
+  completed: 'text-successGreen',
+  in_progress: 'text-summitGold',
+  planned: 'text-white/60',
 };
 
 const statusBackgrounds = {
-  completed: "bg-successGreen/20 border-successGreen/30",
-  in_progress: "bg-summitGold/20 border-summitGold/30", 
-  planned: "bg-white/5 border-white/10"
+  completed: 'bg-successGreen/20 border-successGreen/30',
+  in_progress: 'bg-summitGold/20 border-summitGold/30',
+  planned: 'bg-white/5 border-white/10',
 };
 
 export default function SevenSummitsTracker() {
-  const completedCount = sevenSummits.filter(s => s.status === "completed").length;
+  const completedCount = sevenSummits.filter(
+    (s) => s.status === 'completed'
+  ).length;
   const progressPercentage = (completedCount / 7) * 100;
 
   return (
@@ -133,15 +138,16 @@ export default function SevenSummitsTracker() {
           </motion.div>
 
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            My Journey to the{" "}
+            My Journey to the{' '}
             <span className="bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
               Top of Each Continent
             </span>
           </h2>
 
           <p className="text-xl text-white/70 max-w-3xl mx-auto mb-8">
-            The Seven Summits represent the highest peaks on each continent. 
-            Follow my progress as I work toward completing this legendary mountaineering challenge.
+            The Seven Summits represent the highest peaks on each continent.
+            Follow my progress as I work toward completing this legendary
+            mountaineering challenge.
           </p>
 
           {/* Progress Bar */}
@@ -180,37 +186,43 @@ export default function SevenSummitsTracker() {
               {/* Status Indicator */}
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
-                  {summit.status === "completed" && (
+                  {summit.status === 'completed' && (
                     <CheckCircleIcon className="w-5 h-5 text-successGreen" />
                   )}
-                  {summit.status === "in_progress" && (
+                  {summit.status === 'in_progress' && (
                     <ClockIcon className="w-5 h-5 text-summitGold" />
                   )}
-                  {summit.status === "planned" && (
+                  {summit.status === 'planned' && (
                     <CalendarIcon className="w-5 h-5 text-white/60" />
                   )}
-                  <span className={`text-xs font-medium uppercase tracking-wide ${statusColors[summit.status]}`}>
-                    {summit.status === "in_progress" ? "Active" : summit.status}
+                  <span
+                    className={`text-xs font-medium uppercase tracking-wide ${statusColors[summit.status]}`}
+                  >
+                    {summit.status === 'in_progress' ? 'Active' : summit.status}
                   </span>
                 </div>
                 <span className="text-2xl">{summit.flag}</span>
               </div>
 
               {/* Summit Info */}
-              <h3 className="text-xl font-bold text-white mb-2">{summit.name}</h3>
+              <h3 className="text-xl font-bold text-white mb-2">
+                {summit.name}
+              </h3>
               <p className="text-white/60 text-sm mb-3">{summit.continent}</p>
-              
+
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center gap-1 text-white/80">
                   <MapPinIcon className="w-4 h-4" />
-                  <span className="text-sm font-medium">{summit.elevation}</span>
+                  <span className="text-sm font-medium">
+                    {summit.elevation}
+                  </span>
                 </div>
                 <div className="flex gap-1">
                   {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
                       className={`w-2 h-2 rounded-full ${
-                        i < summit.difficulty ? "bg-red-500" : "bg-white/20"
+                        i < summit.difficulty ? 'bg-red-500' : 'bg-white/20'
                       }`}
                     />
                   ))}
@@ -228,18 +240,20 @@ export default function SevenSummitsTracker() {
                     ✓ Completed {summit.completedDate}
                   </span>
                 )}
-                {summit.targetDate && summit.status !== "completed" && (
-                  <span className={`font-medium ${statusColors[summit.status]}`}>
+                {summit.targetDate && summit.status !== 'completed' && (
+                  <span
+                    className={`font-medium ${statusColors[summit.status]}`}
+                  >
                     Target: {summit.targetDate}
                   </span>
                 )}
               </div>
 
               {/* Hover Glow Effect */}
-              {summit.status === "completed" && (
+              {summit.status === 'completed' && (
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-successGreen/10 to-summitGold/10 opacity-0 hover:opacity-100 transition-opacity duration-300 -z-10" />
               )}
-              {summit.status === "in_progress" && (
+              {summit.status === 'in_progress' && (
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-summitGold/10 to-yellow-400/10 opacity-0 hover:opacity-100 transition-opacity duration-300 -z-10" />
               )}
             </motion.div>
@@ -259,8 +273,9 @@ export default function SevenSummitsTracker() {
               Follow the Journey
             </h3>
             <p className="text-white/70 mb-6">
-              Get exclusive insights from my expeditions, training updates, and gear recommendations 
-              as I work toward completing the Seven Summits.
+              Get exclusive insights from my expeditions, training updates, and
+              gear recommendations as I work toward completing the Seven
+              Summits.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button

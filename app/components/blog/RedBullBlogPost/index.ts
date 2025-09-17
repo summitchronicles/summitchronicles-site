@@ -1,1 +1,1 @@
-export { RedBullBlogPost } from './RedBullBlogPost'
+export { RedBullBlogPost } from './RedBullBlogPost';

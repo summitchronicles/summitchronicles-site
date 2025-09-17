@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
-import { clsx } from "clsx";
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { clsx } from 'clsx';
 import {
   CalendarDaysIcon,
   CloudIcon,
@@ -15,9 +15,14 @@ import {
   ArrowPathIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  InformationCircleIcon
-} from "@heroicons/react/24/outline";
-import { GlassCard, StatusIndicator, MountainButton, ProgressBar } from "@/app/components/ui";
+  InformationCircleIcon,
+} from '@heroicons/react/24/outline';
+import {
+  GlassCard,
+  StatusIndicator,
+  MountainButton,
+  ProgressBar,
+} from '@/app/components/ui';
 
 interface WeatherCondition {
   date: Date;
@@ -68,26 +73,26 @@ interface SmartSchedulerProps {
 const generateMockWeather = (): WeatherCondition[] => {
   const conditions = ['sunny', 'cloudy', 'rain', 'snow', 'storm'] as const;
   const weather: WeatherCondition[] = [];
-  
+
   for (let i = 0; i < 7; i++) {
     const date = new Date();
     date.setDate(date.getDate() + i);
-    
+
     weather.push({
       date,
-      temperature: { 
-        min: Math.round(Math.random() * 20 - 5), 
-        max: Math.round(Math.random() * 25 + 5) 
+      temperature: {
+        min: Math.round(Math.random() * 20 - 5),
+        max: Math.round(Math.random() * 25 + 5),
       },
       humidity: Math.round(Math.random() * 40 + 30),
       windSpeed: Math.round(Math.random() * 25 + 5),
       precipitation: Math.round(Math.random() * 80),
       condition: conditions[Math.floor(Math.random() * conditions.length)],
       visibility: Math.round(Math.random() * 5 + 5),
-      uvIndex: Math.round(Math.random() * 10 + 1)
+      uvIndex: Math.round(Math.random() * 10 + 1),
     });
   }
-  
+
   return weather;
 };
 
@@ -103,7 +108,10 @@ const trainingSessionTemplates: TrainingSession[] = [
     weatherSensitive: true,
     equipment: ['hiking boots', 'backpack', 'layers'],
     description: 'Extended hike focusing on aerobic endurance and leg strength',
-    adaptations: ['Indoor if severe weather', 'Treadmill with incline alternative']
+    adaptations: [
+      'Indoor if severe weather',
+      'Treadmill with incline alternative',
+    ],
   },
   {
     id: 'hill-repeats',
@@ -115,7 +123,7 @@ const trainingSessionTemplates: TrainingSession[] = [
     weatherSensitive: false,
     equipment: ['running shoes', 'layers'],
     description: 'High-intensity hill repeats for power and lactate threshold',
-    adaptations: ['Stadium stairs alternative', 'Treadmill intervals']
+    adaptations: ['Stadium stairs alternative', 'Treadmill intervals'],
   },
   {
     id: 'recovery-walk',
@@ -127,7 +135,7 @@ const trainingSessionTemplates: TrainingSession[] = [
     weatherSensitive: false,
     equipment: ['comfortable shoes'],
     description: 'Easy pace walk for active recovery and movement quality',
-    adaptations: ['Indoor walking if preferred', 'Stretching alternative']
+    adaptations: ['Indoor walking if preferred', 'Stretching alternative'],
   },
   {
     id: 'strength-training',
@@ -139,7 +147,10 @@ const trainingSessionTemplates: TrainingSession[] = [
     weatherSensitive: false,
     equipment: ['gym access', 'weights'],
     description: 'Compound movements focusing on hiking-specific strength',
-    adaptations: ['Bodyweight version available', 'Resistance band alternative']
+    adaptations: [
+      'Bodyweight version available',
+      'Resistance band alternative',
+    ],
   },
   {
     id: 'technical-scramble',
@@ -151,7 +162,7 @@ const trainingSessionTemplates: TrainingSession[] = [
     weatherSensitive: true,
     equipment: ['climbing shoes', 'helmet', 'harness'],
     description: 'Rock scrambling practice for technical mountain skills',
-    adaptations: ['Climbing gym alternative', 'Balance training indoors']
+    adaptations: ['Climbing gym alternative', 'Balance training indoors'],
   },
   {
     id: 'bike-cross-train',
@@ -163,53 +174,72 @@ const trainingSessionTemplates: TrainingSession[] = [
     weatherSensitive: true,
     equipment: ['bicycle', 'helmet'],
     description: 'Low-impact cardio for active recovery and leg turnover',
-    adaptations: ['Indoor trainer alternative', 'Stationary bike option']
-  }
+    adaptations: ['Indoor trainer alternative', 'Stationary bike option'],
+  },
 ];
 
 const getWeatherIcon = (condition: string) => {
   switch (condition) {
-    case 'sunny': return SunIcon;
-    case 'cloudy': return CloudIcon;
-    case 'rain': return CloudRainIcon;
-    case 'snow': return SnowflakeIcon;
-    case 'storm': return WindIcon;
-    default: return CloudIcon;
+    case 'sunny':
+      return SunIcon;
+    case 'cloudy':
+      return CloudIcon;
+    case 'rain':
+      return CloudRainIcon;
+    case 'snow':
+      return SnowflakeIcon;
+    case 'storm':
+      return WindIcon;
+    default:
+      return CloudIcon;
   }
 };
 
 const getWeatherColor = (condition: string) => {
   switch (condition) {
-    case 'sunny': return 'text-yellow-400';
-    case 'cloudy': return 'text-gray-400';
-    case 'rain': return 'text-blue-400';
-    case 'snow': return 'text-blue-200';
-    case 'storm': return 'text-red-400';
-    default: return 'text-gray-400';
+    case 'sunny':
+      return 'text-yellow-400';
+    case 'cloudy':
+      return 'text-gray-400';
+    case 'rain':
+      return 'text-blue-400';
+    case 'snow':
+      return 'text-blue-200';
+    case 'storm':
+      return 'text-red-400';
+    default:
+      return 'text-gray-400';
   }
 };
 
 const getIntensityColor = (intensity: string) => {
   switch (intensity) {
-    case 'easy': return 'text-successGreen';
-    case 'moderate': return 'text-summitGold';
-    case 'hard': return 'text-warningOrange';
-    case 'max': return 'text-dangerRed';
-    default: return 'text-gray-400';
+    case 'easy':
+      return 'text-successGreen';
+    case 'moderate':
+      return 'text-summitGold';
+    case 'hard':
+      return 'text-warningOrange';
+    case 'max':
+      return 'text-dangerRed';
+    default:
+      return 'text-gray-400';
   }
 };
 
-export default function SmartScheduler({ 
-  activities, 
+export default function SmartScheduler({
+  activities,
   preferences = {
     preferredTimes: [6, 17], // 6 AM and 5 PM
     preferredDays: [0, 2, 4, 6], // Sun, Tue, Thu, Sat
     maxWeeklyHours: 10,
-    avoidBadWeather: true
+    avoidBadWeather: true,
   },
-  className = "" 
+  className = '',
 }: SmartSchedulerProps) {
-  const [weatherForecast, setWeatherForecast] = useState<WeatherCondition[]>([]);
+  const [weatherForecast, setWeatherForecast] = useState<WeatherCondition[]>(
+    []
+  );
   const [schedule, setSchedule] = useState<ScheduleRecommendation[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
@@ -225,26 +255,33 @@ export default function SmartScheduler({
 
     const recommendations: ScheduleRecommendation[] = [];
     let weeklyHours = 0;
-    
+
     // Calculate current training load
-    const recentVolume = activities.slice(0, 7).reduce((sum, activity) => 
-      sum + ((activity.moving_time || activity.duration || 3600) / 3600), 0
-    );
-    
+    const recentVolume = activities
+      .slice(0, 7)
+      .reduce(
+        (sum, activity) =>
+          sum + (activity.moving_time || activity.duration || 3600) / 3600,
+        0
+      );
+
     weatherForecast.forEach((weather, index) => {
       const dayOfWeek = weather.date.getDay();
-      
+
       // Check if it's a preferred training day
       if (!preferences.preferredDays.includes(dayOfWeek)) return;
-      
+
       // Find suitable session based on weather and current load
       let session = selectOptimalSession(weather, recentVolume, weeklyHours);
-      
-      if (session && weeklyHours + (session.duration / 60) <= preferences.maxWeeklyHours) {
+
+      if (
+        session &&
+        weeklyHours + session.duration / 60 <= preferences.maxWeeklyHours
+      ) {
         const adaptations = generateAdaptations(session, weather);
         const confidence = calculateConfidence(session, weather, preferences);
         const reasoning = generateReasoning(session, weather, preferences);
-        
+
         recommendations.push({
           date: weather.date,
           session,
@@ -252,91 +289,104 @@ export default function SmartScheduler({
           confidence,
           reasoning,
           adaptations,
-          alternatives: getAlternativeSessions(session, weather)
+          alternatives: getAlternativeSessions(session, weather),
         });
-        
+
         weeklyHours += session.duration / 60;
       }
     });
-    
+
     return recommendations;
   }, [weatherForecast, activities, preferences]);
 
   useEffect(() => {
     if (generateOptimizedSchedule.length > 0) {
       setIsGenerating(true);
-      
+
       const timer = setTimeout(() => {
         setSchedule(generateOptimizedSchedule);
         setIsGenerating(false);
       }, 1500);
-      
+
       return () => clearTimeout(timer);
     }
   }, [generateOptimizedSchedule]);
 
   function selectOptimalSession(
-    weather: WeatherCondition, 
-    recentVolume: number, 
+    weather: WeatherCondition,
+    recentVolume: number,
     currentWeeklyHours: number
   ): TrainingSession | null {
     // Recovery day if high recent volume
     if (recentVolume > 8) {
-      return trainingSessionTemplates.find(s => s.type === 'recovery') || null;
+      return (
+        trainingSessionTemplates.find((s) => s.type === 'recovery') || null
+      );
     }
-    
+
     // Weather-based selection
     if (weather.condition === 'sunny' && weather.temperature.max > 10) {
       // Good weather - outdoor activities
-      const outdoorSessions = trainingSessionTemplates.filter(s => 
-        s.location === 'outdoor' || s.location === 'flexible'
+      const outdoorSessions = trainingSessionTemplates.filter(
+        (s) => s.location === 'outdoor' || s.location === 'flexible'
       );
-      return outdoorSessions[Math.floor(Math.random() * outdoorSessions.length)];
+      return outdoorSessions[
+        Math.floor(Math.random() * outdoorSessions.length)
+      ];
     }
-    
+
     if (weather.condition === 'rain' || weather.condition === 'storm') {
       // Bad weather - indoor activities
-      const indoorSessions = trainingSessionTemplates.filter(s => 
-        s.location === 'indoor' || !s.weatherSensitive
+      const indoorSessions = trainingSessionTemplates.filter(
+        (s) => s.location === 'indoor' || !s.weatherSensitive
       );
       return indoorSessions[Math.floor(Math.random() * indoorSessions.length)];
     }
-    
+
     // Default selection based on weekly balance
-    const sessionTypes = ['endurance', 'strength', 'technical', 'cross-training'];
-    const randomType = sessionTypes[Math.floor(Math.random() * sessionTypes.length)];
-    return trainingSessionTemplates.find(s => s.type === randomType) || null;
+    const sessionTypes = [
+      'endurance',
+      'strength',
+      'technical',
+      'cross-training',
+    ];
+    const randomType =
+      sessionTypes[Math.floor(Math.random() * sessionTypes.length)];
+    return trainingSessionTemplates.find((s) => s.type === randomType) || null;
   }
 
-  function generateAdaptations(session: TrainingSession, weather: WeatherCondition): string[] {
+  function generateAdaptations(
+    session: TrainingSession,
+    weather: WeatherCondition
+  ): string[] {
     const adaptations: string[] = [];
-    
+
     if (weather.condition === 'rain' && session.location === 'outdoor') {
       adaptations.push('Move indoors or use covered area');
     }
-    
+
     if (weather.temperature.min < 0 && session.location === 'outdoor') {
       adaptations.push('Add extra layers and warm-up time');
     }
-    
+
     if (weather.windSpeed > 20 && session.weatherSensitive) {
       adaptations.push('Consider sheltered location or indoor alternative');
     }
-    
+
     if (weather.uvIndex > 7 && session.location === 'outdoor') {
       adaptations.push('Use sunscreen and consider early morning timing');
     }
-    
+
     return adaptations;
   }
 
   function calculateConfidence(
-    session: TrainingSession, 
-    weather: WeatherCondition, 
+    session: TrainingSession,
+    weather: WeatherCondition,
     prefs: typeof preferences
   ): number {
     let confidence = 0.7; // Base confidence
-    
+
     // Weather suitability
     if (session.location === 'indoor' || !session.weatherSensitive) {
       confidence += 0.2;
@@ -345,53 +395,62 @@ export default function SmartScheduler({
     } else if (weather.condition === 'rain' || weather.condition === 'storm') {
       confidence -= 0.3;
     }
-    
+
     // Temperature considerations
     if (weather.temperature.max > 5 && weather.temperature.max < 25) {
       confidence += 0.1;
     }
-    
+
     return Math.max(0, Math.min(1, confidence));
   }
 
   function generateReasoning(
-    session: TrainingSession, 
-    weather: WeatherCondition, 
+    session: TrainingSession,
+    weather: WeatherCondition,
     prefs: typeof preferences
   ): string[] {
     const reasons: string[] = [];
-    
-    reasons.push(`${session.type.charAt(0).toUpperCase() + session.type.slice(1)} training scheduled for optimal progression`);
-    
+
+    reasons.push(
+      `${session.type.charAt(0).toUpperCase() + session.type.slice(1)} training scheduled for optimal progression`
+    );
+
     if (weather.condition === 'sunny') {
       reasons.push('Clear weather conditions ideal for outdoor training');
     }
-    
+
     if (session.location === 'indoor') {
-      reasons.push('Indoor session ensures consistent training regardless of weather');
+      reasons.push(
+        'Indoor session ensures consistent training regardless of weather'
+      );
     }
-    
+
     if (session.intensity === 'easy') {
-      reasons.push('Easy intensity supports recovery and aerobic base building');
+      reasons.push(
+        'Easy intensity supports recovery and aerobic base building'
+      );
     }
-    
+
     return reasons;
   }
 
   function getAlternativeSessions(
-    primarySession: TrainingSession, 
+    primarySession: TrainingSession,
     weather: WeatherCondition
   ): TrainingSession[] {
     return trainingSessionTemplates
-      .filter(s => s.id !== primarySession.id)
-      .filter(s => !s.weatherSensitive || weather.condition !== 'storm')
+      .filter((s) => s.id !== primarySession.id)
+      .filter((s) => !s.weatherSensitive || weather.condition !== 'storm')
       .slice(0, 2);
   }
 
-  const totalWeeklyHours = schedule.reduce((sum, rec) => sum + (rec.session.duration / 60), 0);
+  const totalWeeklyHours = schedule.reduce(
+    (sum, rec) => sum + rec.session.duration / 60,
+    0
+  );
 
   return (
-    <div className={clsx("space-y-6", className)}>
+    <div className={clsx('space-y-6', className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -399,16 +458,20 @@ export default function SmartScheduler({
             <CalendarDaysIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">Smart Training Scheduler</h2>
-            <p className="text-gray-400">AI-optimized training schedule based on weather and your patterns</p>
+            <h2 className="text-2xl font-bold text-white">
+              Smart Training Scheduler
+            </h2>
+            <p className="text-gray-400">
+              AI-optimized training schedule based on weather and your patterns
+            </p>
           </div>
         </div>
-        
+
         {isGenerating && (
           <div className="flex items-center space-x-2 text-glacierBlue">
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
             >
               <ArrowPathIcon className="w-5 h-5" />
             </motion.div>
@@ -420,19 +483,25 @@ export default function SmartScheduler({
       {/* Weekly Overview */}
       <GlassCard className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-white">Weekly Training Overview</h3>
+          <h3 className="text-lg font-semibold text-white">
+            Weekly Training Overview
+          </h3>
           <div className="flex items-center space-x-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-summitGold">{schedule.length}</div>
+              <div className="text-2xl font-bold text-summitGold">
+                {schedule.length}
+              </div>
               <div className="text-xs text-gray-400">Sessions</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-glacierBlue">{Math.round(totalWeeklyHours)}h</div>
+              <div className="text-2xl font-bold text-glacierBlue">
+                {Math.round(totalWeeklyHours)}h
+              </div>
               <div className="text-xs text-gray-400">Total Time</div>
             </div>
           </div>
         </div>
-        
+
         <ProgressBar
           value={(totalWeeklyHours / preferences.maxWeeklyHours) * 100}
           variant="gradient"
@@ -470,9 +539,11 @@ export default function SmartScheduler({
       ) : (
         <div className="space-y-4">
           {schedule.map((recommendation, index) => {
-            const WeatherIcon = getWeatherIcon(recommendation.weather.condition);
+            const WeatherIcon = getWeatherIcon(
+              recommendation.weather.condition
+            );
             const isExpanded = selectedDay === index;
-            
+
             return (
               <motion.div
                 key={recommendation.session.id}
@@ -485,16 +556,27 @@ export default function SmartScheduler({
                     {/* Date & Weather */}
                     <div className="flex-shrink-0 text-center">
                       <div className="w-16 h-16 bg-white/5 rounded-xl flex items-center justify-center mb-2">
-                        <WeatherIcon className={clsx("w-8 h-8", getWeatherColor(recommendation.weather.condition))} />
+                        <WeatherIcon
+                          className={clsx(
+                            'w-8 h-8',
+                            getWeatherColor(recommendation.weather.condition)
+                          )}
+                        />
                       </div>
                       <div className="text-sm font-medium text-white">
-                        {recommendation.date.toLocaleDateString('en-US', { weekday: 'short' })}
+                        {recommendation.date.toLocaleDateString('en-US', {
+                          weekday: 'short',
+                        })}
                       </div>
                       <div className="text-xs text-gray-400">
-                        {recommendation.date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                        {recommendation.date.toLocaleDateString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                        })}
                       </div>
                       <div className="text-xs text-gray-400">
-                        {recommendation.weather.temperature.max}°/{recommendation.weather.temperature.min}°
+                        {recommendation.weather.temperature.max}°/
+                        {recommendation.weather.temperature.min}°
                       </div>
                     </div>
 
@@ -509,17 +591,23 @@ export default function SmartScheduler({
                             {recommendation.session.description}
                           </p>
                         </div>
-                        
+
                         <div className="text-right ml-4">
                           <div className="flex items-center space-x-2 mb-1">
                             <ClockIcon className="w-4 h-4 text-gray-400" />
                             <span className="text-sm text-white">
-                              {Math.round(recommendation.session.duration / 60)}h {recommendation.session.duration % 60}min
+                              {Math.round(recommendation.session.duration / 60)}
+                              h {recommendation.session.duration % 60}min
                             </span>
                           </div>
                           <StatusIndicator
-                            status={recommendation.confidence >= 0.8 ? 'success' : 
-                                   recommendation.confidence >= 0.6 ? 'info' : 'warning'}
+                            status={
+                              recommendation.confidence >= 0.8
+                                ? 'success'
+                                : recommendation.confidence >= 0.6
+                                  ? 'info'
+                                  : 'warning'
+                            }
                             text={`${Math.round(recommendation.confidence * 100)}% match`}
                             size="sm"
                           />
@@ -529,18 +617,32 @@ export default function SmartScheduler({
                       {/* Session Metadata */}
                       <div className="flex items-center space-x-4 mb-3">
                         <div className="flex items-center space-x-1">
-                          <BoltIcon className={clsx("w-4 h-4", getIntensityColor(recommendation.session.intensity))} />
+                          <BoltIcon
+                            className={clsx(
+                              'w-4 h-4',
+                              getIntensityColor(
+                                recommendation.session.intensity
+                              )
+                            )}
+                          />
                           <span className="text-sm text-gray-400">
-                            {recommendation.session.intensity.charAt(0).toUpperCase() + recommendation.session.intensity.slice(1)}
+                            {recommendation.session.intensity
+                              .charAt(0)
+                              .toUpperCase() +
+                              recommendation.session.intensity.slice(1)}
                           </span>
                         </div>
-                        
+
                         <div className="text-sm text-gray-400">
-                          {recommendation.session.location.charAt(0).toUpperCase() + recommendation.session.location.slice(1)}
+                          {recommendation.session.location
+                            .charAt(0)
+                            .toUpperCase() +
+                            recommendation.session.location.slice(1)}
                         </div>
-                        
+
                         <div className="text-sm text-gray-400">
-                          {recommendation.session.type.charAt(0).toUpperCase() + recommendation.session.type.slice(1)}
+                          {recommendation.session.type.charAt(0).toUpperCase() +
+                            recommendation.session.type.slice(1)}
                         </div>
                       </div>
 
@@ -549,11 +651,16 @@ export default function SmartScheduler({
                         <div className="mb-3">
                           <div className="flex items-center space-x-1 mb-1">
                             <InformationCircleIcon className="w-4 h-4 text-glacierBlue" />
-                            <span className="text-sm font-medium text-white">Weather Adaptations</span>
+                            <span className="text-sm font-medium text-white">
+                              Weather Adaptations
+                            </span>
                           </div>
                           <div className="space-y-1">
                             {recommendation.adaptations.map((adaptation, i) => (
-                              <div key={i} className="text-xs text-gray-400 pl-5">
+                              <div
+                                key={i}
+                                className="text-xs text-gray-400 pl-5"
+                              >
                                 • {adaptation}
                               </div>
                             ))}
@@ -564,12 +671,16 @@ export default function SmartScheduler({
                       {/* Actions */}
                       <div className="flex items-center justify-between">
                         <button
-                          onClick={() => setSelectedDay(isExpanded ? null : index)}
+                          onClick={() =>
+                            setSelectedDay(isExpanded ? null : index)
+                          }
                           className="text-sm text-summitGold hover:text-yellow-400 transition-colors"
                         >
-                          {isExpanded ? 'Show less' : 'View details & alternatives'}
+                          {isExpanded
+                            ? 'Show less'
+                            : 'View details & alternatives'}
                         </button>
-                        
+
                         <div className="flex space-x-2">
                           <MountainButton
                             variant="ghost"
@@ -593,10 +704,15 @@ export default function SmartScheduler({
                           >
                             {/* Reasoning */}
                             <div>
-                              <h4 className="text-sm font-medium text-white mb-2">AI Reasoning</h4>
+                              <h4 className="text-sm font-medium text-white mb-2">
+                                AI Reasoning
+                              </h4>
                               <div className="space-y-1">
                                 {recommendation.reasoning.map((reason, i) => (
-                                  <div key={i} className="text-xs text-gray-400">
+                                  <div
+                                    key={i}
+                                    className="text-xs text-gray-400"
+                                  >
                                     • {reason}
                                   </div>
                                 ))}
@@ -605,37 +721,59 @@ export default function SmartScheduler({
 
                             {/* Equipment */}
                             <div>
-                              <h4 className="text-sm font-medium text-white mb-2">Required Equipment</h4>
+                              <h4 className="text-sm font-medium text-white mb-2">
+                                Required Equipment
+                              </h4>
                               <div className="flex flex-wrap gap-2">
-                                {recommendation.session.equipment.map((item, i) => (
-                                  <span key={i} className="px-2 py-1 bg-white/5 rounded text-xs text-gray-300">
-                                    {item}
-                                  </span>
-                                ))}
+                                {recommendation.session.equipment.map(
+                                  (item, i) => (
+                                    <span
+                                      key={i}
+                                      className="px-2 py-1 bg-white/5 rounded text-xs text-gray-300"
+                                    >
+                                      {item}
+                                    </span>
+                                  )
+                                )}
                               </div>
                             </div>
 
                             {/* Alternative Sessions */}
-                            {recommendation.alternatives && recommendation.alternatives.length > 0 && (
-                              <div>
-                                <h4 className="text-sm font-medium text-white mb-2">Alternative Sessions</h4>
-                                <div className="space-y-2">
-                                  {recommendation.alternatives.map((alt, i) => (
-                                    <div key={i} className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                                      <div>
-                                        <div className="text-sm font-medium text-white">{alt.name}</div>
-                                        <div className="text-xs text-gray-400">
-                                          {Math.round(alt.duration / 60)}h {alt.duration % 60}min • {alt.intensity} • {alt.location}
+                            {recommendation.alternatives &&
+                              recommendation.alternatives.length > 0 && (
+                                <div>
+                                  <h4 className="text-sm font-medium text-white mb-2">
+                                    Alternative Sessions
+                                  </h4>
+                                  <div className="space-y-2">
+                                    {recommendation.alternatives.map(
+                                      (alt, i) => (
+                                        <div
+                                          key={i}
+                                          className="flex items-center justify-between p-3 bg-white/5 rounded-lg"
+                                        >
+                                          <div>
+                                            <div className="text-sm font-medium text-white">
+                                              {alt.name}
+                                            </div>
+                                            <div className="text-xs text-gray-400">
+                                              {Math.round(alt.duration / 60)}h{' '}
+                                              {alt.duration % 60}min •{' '}
+                                              {alt.intensity} • {alt.location}
+                                            </div>
+                                          </div>
+                                          <MountainButton
+                                            variant="ghost"
+                                            size="sm"
+                                          >
+                                            Switch
+                                          </MountainButton>
                                         </div>
-                                      </div>
-                                      <MountainButton variant="ghost" size="sm">
-                                        Switch
-                                      </MountainButton>
-                                    </div>
-                                  ))}
+                                      )
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )}
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -656,7 +794,8 @@ export default function SmartScheduler({
             No Training Scheduled
           </h3>
           <p className="text-gray-400 mb-4">
-            Add some training preferences or activities to generate an optimized schedule.
+            Add some training preferences or activities to generate an optimized
+            schedule.
           </p>
           <MountainButton variant="gradient" size="lg">
             Set Training Preferences

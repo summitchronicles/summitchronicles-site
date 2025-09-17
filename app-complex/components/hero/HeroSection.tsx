@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
-import ExpeditionStatus from "./ExpeditionStatus";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import ExpeditionStatus from './ExpeditionStatus';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
 interface HeroSectionProps {
   className?: string;
 }
 
-export default function HeroSection({ className = "" }: HeroSectionProps) {
+export default function HeroSection({ className = '' }: HeroSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"]
+    offset: ['start start', 'end start'],
   });
 
   // Parallax effects for different layers
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
   const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const [mounted, setMounted] = useState(false);
@@ -34,11 +34,12 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
           <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
-            Stories from the World&rsquo;s{" "}
+            Stories from the World&rsquo;s{' '}
             <span className="text-gradient-summit">Peaks</span>
           </h1>
           <p className="text-xl md:text-2xl mb-12 text-white/90 max-w-3xl mx-auto leading-relaxed">
-            Follow the Seven Summits journey - from base camp to summit, every step documented with precision and passion.
+            Follow the Seven Summits journey - from base camp to summit, every
+            step documented with precision and passion.
           </p>
           <ExpeditionStatus />
         </div>
@@ -52,18 +53,15 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
       className={`relative h-screen flex items-center justify-center overflow-hidden ${className}`}
     >
       {/* Background Mountain Image with Parallax */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        style={{ y: backgroundY }}
-      >
-        <div 
+      <motion.div className="absolute inset-0 z-0" style={{ y: backgroundY }}>
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-110"
           style={{
-            backgroundImage: `url('https://images.unsplash.com/photo-1464822759844-d150baec3011?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`
+            backgroundImage: `url('https://images.unsplash.com/photo-1464822759844-d150baec3011?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')`,
           }}
         />
         {/* Gradient Overlay for Better Text Readability */}
-        <motion.div 
+        <motion.div
           className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/40"
           style={{ opacity: overlayOpacity }}
         />
@@ -73,7 +71,7 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
       <div className="absolute inset-0 z-5">
         {/* Mountain Ridge Silhouette */}
         <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/60 to-transparent"></div>
-        
+
         {/* Subtle Cloud Overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent mix-blend-overlay"></div>
       </div>
@@ -87,14 +85,14 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
         transition={{ duration: 1, delay: 0.5 }}
       >
         {/* Hero Title */}
-        <motion.h1 
+        <motion.h1
           className="text-4xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          Stories from the World&rsquo;s{" "}
-          <motion.span 
+          Stories from the World&rsquo;s{' '}
+          <motion.span
             className="relative inline-block"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -104,7 +102,7 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
               Peaks
             </span>
             {/* Decorative underline */}
-            <motion.div 
+            <motion.div
               className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-summitGold to-yellow-400 rounded-full"
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -114,14 +112,15 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
         </motion.h1>
 
         {/* Hero Subtitle */}
-        <motion.p 
+        <motion.p
           className="text-lg md:text-xl lg:text-2xl mb-8 text-white/90 max-w-3xl mx-auto leading-relaxed font-medium"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          Follow the Seven Summits journey - from base camp to summit, every step documented with{" "}
-          <span className="text-glacierBlue font-semibold">precision</span> and{" "}
+          Follow the Seven Summits journey - from base camp to summit, every
+          step documented with{' '}
+          <span className="text-glacierBlue font-semibold">precision</span> and{' '}
           <span className="text-summitGold font-semibold">passion</span>.
         </motion.p>
 
@@ -135,7 +134,7 @@ export default function HeroSection({ className = "" }: HeroSectionProps) {
         </motion.div>
 
         {/* Call to Action Buttons */}
-        <motion.div 
+        <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

@@ -1,79 +1,90 @@
-'use client'
+'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { useRef, useEffect, useState } from 'react'
-import Link from 'next/link'
-import { ChevronDown, Mountain, TrendingUp, BookOpen, Users, ArrowRight } from 'lucide-react'
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
+import Link from 'next/link';
+import {
+  ChevronDown,
+  Mountain,
+  TrendingUp,
+  BookOpen,
+  Users,
+  ArrowRight,
+} from 'lucide-react';
 
 interface NavigationItem {
-  id: string
-  title: string
-  subtitle: string
-  description: string
-  icon: React.ComponentType<{ className?: string }>
-  href: string
-  color: string
-  gradient: string
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+  href: string;
+  color: string;
+  gradient: string;
 }
 
 interface JourneyNavigationProps {
-  className?: string
+  className?: string;
 }
 
-export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
-  const containerRef = useRef(null)
+export function JourneyNavigation({ className = '' }: JourneyNavigationProps) {
+  const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
-  })
+    offset: ['start end', 'end start'],
+  });
 
-  const [activeItem, setActiveItem] = useState<string | null>(null)
+  const [activeItem, setActiveItem] = useState<string | null>(null);
 
   const navigationItems: NavigationItem[] = [
     {
       id: 'journey',
       title: 'The Journey',
       subtitle: 'Seven Summits Timeline',
-      description: 'Explore my complete mountaineering timeline, from first training climbs to the ultimate Everest expedition in 2027.',
+      description:
+        'Explore my complete mountaineering timeline, from first training climbs to the ultimate Everest expedition in 2027.',
       icon: Mountain,
       href: '/journey',
       color: 'text-blue-600',
-      gradient: 'from-blue-500 to-blue-600'
+      gradient: 'from-blue-500 to-blue-600',
     },
     {
       id: 'training',
       title: 'Training Data',
       subtitle: 'Performance Analytics',
-      description: 'Dive deep into the metrics, methodologies, and systematic approach behind every training session and expedition.',
+      description:
+        'Dive deep into the metrics, methodologies, and systematic approach behind every training session and expedition.',
       icon: TrendingUp,
       href: '/training',
       color: 'text-green-600',
-      gradient: 'from-green-500 to-emerald-600'
+      gradient: 'from-green-500 to-emerald-600',
     },
     {
       id: 'stories',
       title: 'Summit Stories',
       subtitle: 'Expedition Chronicles',
-      description: 'Read detailed accounts from each summit attempt, including challenges faced, lessons learned, and victories achieved.',
+      description:
+        'Read detailed accounts from each summit attempt, including challenges faced, lessons learned, and victories achieved.',
       icon: BookOpen,
       href: '/blog',
       color: 'text-purple-600',
-      gradient: 'from-purple-500 to-purple-600'
+      gradient: 'from-purple-500 to-purple-600',
     },
     {
       id: 'community',
       title: 'Join the Journey',
       subtitle: 'Community & Support',
-      description: 'Connect with fellow adventurers, get training insights, and follow along as I prepare for the ultimate summit challenge.',
+      description:
+        'Connect with fellow adventurers, get training insights, and follow along as I prepare for the ultimate summit challenge.',
       icon: Users,
       href: '/support',
       color: 'text-summit-gold',
-      gradient: 'from-yellow-500 to-orange-500'
-    }
-  ]
+      gradient: 'from-yellow-500 to-orange-500',
+    },
+  ];
 
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100])
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
+  const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -81,16 +92,16 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
       opacity: 1,
       transition: {
         staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
-    }
-  }
+        delayChildren: 0.3,
+      },
+    },
+  };
 
   const itemVariants = {
-    hidden: { 
+    hidden: {
       opacity: 0,
       y: 80,
-      scale: 0.8
+      scale: 0.8,
     },
     visible: {
       opacity: 1,
@@ -98,12 +109,12 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
       scale: 1,
       transition: {
         duration: 0.8,
-      }
-    }
-  }
+      },
+    },
+  };
 
   return (
-    <motion.section 
+    <motion.section
       ref={containerRef}
       style={{ y, opacity }}
       className={`py-20 bg-gradient-to-br from-slate-50 to-white relative overflow-hidden ${className}`}
@@ -127,10 +138,11 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
             Continue the Adventure
           </h2>
           <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
-            Ready to dive deeper? Choose your path and explore the complete story behind 
-            the Seven Summits challenge through data, stories, and community.
+            Ready to dive deeper? Choose your path and explore the complete
+            story behind the Seven Summits challenge through data, stories, and
+            community.
           </p>
-          
+
           {/* Scroll Indicator */}
           <motion.div
             animate={{ y: [0, 8, 0] }}
@@ -145,13 +157,13 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: true, margin: '-100px' }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
           {navigationItems.map((item, index) => {
-            const IconComponent = item.icon
-            const isActive = activeItem === item.id
-            
+            const IconComponent = item.icon;
+            const isActive = activeItem === item.id;
+
             return (
               <motion.div
                 key={item.id}
@@ -161,12 +173,16 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
                 className="group"
               >
                 <Link href={item.href} className="block">
-                  <div className={`relative h-64 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
-                    isActive ? 'scale-105' : ''
-                  }`}>
+                  <div
+                    className={`relative h-64 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 ${
+                      isActive ? 'scale-105' : ''
+                    }`}
+                  >
                     {/* Background Gradient */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-90`} />
-                    
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-90`}
+                    />
+
                     {/* Pattern Overlay */}
                     <div className="absolute inset-0 opacity-10">
                       <div className="absolute top-4 right-4 w-20 h-20 border-2 border-white rounded-full" />
@@ -204,7 +220,9 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
                           Click to explore
                         </div>
                         <div className="flex items-center space-x-2 text-white group-hover:translate-x-2 transition-transform duration-300">
-                          <span className="font-medium text-sm">Learn More</span>
+                          <span className="font-medium text-sm">
+                            Learn More
+                          </span>
                           <ArrowRight className="w-4 h-4" />
                         </div>
                       </div>
@@ -215,7 +233,7 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
                   </div>
                 </Link>
               </motion.div>
-            )
+            );
           })}
         </motion.div>
 
@@ -228,20 +246,23 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
           className="text-center mt-20"
         >
           <div className="bg-slate-900 rounded-3xl p-8 md:p-12 text-white">
-            <h3 className="text-3xl font-bold mb-4">Ready for Your Own Adventure?</h3>
+            <h3 className="text-3xl font-bold mb-4">
+              Ready for Your Own Adventure?
+            </h3>
             <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto">
-              Whether you're training for your first peak or planning your own Seven Summits challenge, 
-              let's connect and share the journey together.
+              Whether you're training for your first peak or planning your own
+              Seven Summits challenge, let's connect and share the journey
+              together.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link 
+              <Link
                 href="/connect"
                 className="inline-flex items-center gap-2 bg-summit-gold text-spa-charcoal px-8 py-4 rounded-2xl font-medium hover:bg-yellow-500 transition-colors duration-300 shadow-lg hover:shadow-xl"
               >
                 <Users className="w-5 h-5" />
                 <span>Connect With Me</span>
               </Link>
-              <Link 
+              <Link
                 href="/newsletter"
                 className="inline-flex items-center gap-2 bg-transparent border-2 border-white text-white px-8 py-4 rounded-2xl font-medium hover:bg-white hover:text-slate-900 transition-all duration-300"
               >
@@ -253,5 +274,5 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
         </motion.div>
       </div>
     </motion.section>
-  )
+  );
 }

@@ -1,9 +1,9 @@
-import { MetadataRoute } from 'next'
-import { getSupabaseAdmin } from '@/lib/supabaseServer'
+import { MetadataRoute } from 'next';
+import { getSupabaseAdmin } from '@/lib/supabaseServer';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://summitchronicles.com'
-  
+  const baseUrl = 'https://summitchronicles.com';
+
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
     {
@@ -54,28 +54,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
-  ]
-  
+  ];
+
   try {
-    const supabase = getSupabaseAdmin()
-    
+    const supabase = getSupabaseAdmin();
+
     // Get dynamic blog posts
     const { data: blogPosts } = await supabase
       .from('blog_posts')
       .select('slug, updated_at, created_at, status')
       .eq('status', 'published')
-      .order('updated_at', { ascending: false })
-    
-    const blogPages: MetadataRoute.Sitemap = (blogPosts || []).map(post => ({
+      .order('updated_at', { ascending: false });
+
+    const blogPages: MetadataRoute.Sitemap = (blogPosts || []).map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
       lastModified: new Date(post.updated_at || post.created_at),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
-    }))
-    
-    return [...staticPages, ...blogPages]
+    }));
+
+    return [...staticPages, ...blogPages];
   } catch (error) {
-    console.error('Error generating sitemap:', error)
-    return staticPages
+    console.error('Error generating sitemap:', error);
+    return staticPages;
   }
 }

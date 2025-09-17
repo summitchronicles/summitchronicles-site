@@ -26,7 +26,9 @@ interface ContentItem {
 }
 
 const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
-  const [selectedFilter, setSelectedFilter] = useState<'all' | 'published' | 'draft' | 'archived'>('all');
+  const [selectedFilter, setSelectedFilter] = useState<
+    'all' | 'published' | 'draft' | 'archived'
+  >('all');
   const [searchQuery, setSearchQuery] = useState('');
 
   // Mock data - in real implementation, this would come from your CMS
@@ -41,7 +43,7 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
       createdAt: '2024-12-14',
       updatedAt: '2024-12-14',
       wordCount: 1240,
-      views: 342
+      views: 342,
     },
     {
       id: '2',
@@ -52,7 +54,7 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
       author: 'Summit Chronicles',
       createdAt: '2024-12-13',
       updatedAt: '2024-12-14',
-      wordCount: 890
+      wordCount: 890,
     },
     {
       id: '3',
@@ -64,7 +66,7 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
       createdAt: '2024-12-10',
       updatedAt: '2024-12-12',
       wordCount: 1560,
-      views: 567
+      views: 567,
     },
     {
       id: '4',
@@ -76,31 +78,38 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
       createdAt: '2024-12-08',
       updatedAt: '2024-12-10',
       wordCount: 2100,
-      views: 234
-    }
+      views: 234,
+    },
   ]);
 
-  const filteredContent = contentItems.filter(item => {
-    const matchesFilter = selectedFilter === 'all' || item.status === selectedFilter;
-    const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.category.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredContent = contentItems.filter((item) => {
+    const matchesFilter =
+      selectedFilter === 'all' || item.status === selectedFilter;
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
   const stats = {
     total: contentItems.length,
-    published: contentItems.filter(item => item.status === 'published').length,
-    draft: contentItems.filter(item => item.status === 'draft').length,
-    archived: contentItems.filter(item => item.status === 'archived').length,
-    totalViews: contentItems.reduce((sum, item) => sum + (item.views || 0), 0)
+    published: contentItems.filter((item) => item.status === 'published')
+      .length,
+    draft: contentItems.filter((item) => item.status === 'draft').length,
+    archived: contentItems.filter((item) => item.status === 'archived').length,
+    totalViews: contentItems.reduce((sum, item) => sum + (item.views || 0), 0),
   };
 
   const getStatusVariant = (status: string) => {
     switch (status) {
-      case 'published': return 'success';
-      case 'draft': return 'warning';
-      case 'archived': return 'default';
-      default: return 'default';
+      case 'published':
+        return 'success';
+      case 'draft':
+        return 'warning';
+      case 'archived':
+        return 'default';
+      default:
+        return 'default';
     }
   };
 
@@ -124,27 +133,37 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
       {/* Stats Overview */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         <Card variant="elevated" padding="md" className="text-center">
-          <div className="text-2xl font-bold text-alpine-blue mb-1">{stats.total}</div>
+          <div className="text-2xl font-bold text-alpine-blue mb-1">
+            {stats.total}
+          </div>
           <Body className="text-spa-slate">Total Posts</Body>
         </Card>
-        
+
         <Card variant="elevated" padding="md" className="text-center">
-          <div className="text-2xl font-bold text-green-600 mb-1">{stats.published}</div>
+          <div className="text-2xl font-bold text-green-600 mb-1">
+            {stats.published}
+          </div>
           <Body className="text-spa-slate">Published</Body>
         </Card>
-        
+
         <Card variant="elevated" padding="md" className="text-center">
-          <div className="text-2xl font-bold text-summit-gold mb-1">{stats.draft}</div>
+          <div className="text-2xl font-bold text-summit-gold mb-1">
+            {stats.draft}
+          </div>
           <Body className="text-spa-slate">Drafts</Body>
         </Card>
-        
+
         <Card variant="elevated" padding="md" className="text-center">
-          <div className="text-2xl font-bold text-spa-slate mb-1">{stats.archived}</div>
+          <div className="text-2xl font-bold text-spa-slate mb-1">
+            {stats.archived}
+          </div>
           <Body className="text-spa-slate">Archived</Body>
         </Card>
-        
+
         <Card variant="elevated" padding="md" className="text-center">
-          <div className="text-2xl font-bold text-alpine-blue mb-1">{stats.totalViews.toLocaleString()}</div>
+          <div className="text-2xl font-bold text-alpine-blue mb-1">
+            {stats.totalViews.toLocaleString()}
+          </div>
           <Body className="text-spa-slate">Total Views</Body>
         </Card>
       </div>
@@ -153,24 +172,30 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
       <Card variant="elevated" padding="md">
         <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
           <div className="flex flex-wrap gap-2">
-            {(['all', 'published', 'draft', 'archived'] as const).map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setSelectedFilter(filter)}
-                className={cn(
-                  'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
-                  selectedFilter === filter
-                    ? 'bg-alpine-blue text-white shadow-spa-soft'
-                    : 'bg-spa-mist text-spa-charcoal hover:bg-spa-cloud'
-                )}
-              >
-                {filter.charAt(0).toUpperCase() + filter.slice(1)}
-              </button>
-            ))}
+            {(['all', 'published', 'draft', 'archived'] as const).map(
+              (filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setSelectedFilter(filter)}
+                  className={cn(
+                    'px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
+                    selectedFilter === filter
+                      ? 'bg-alpine-blue text-white shadow-spa-soft'
+                      : 'bg-spa-mist text-spa-charcoal hover:bg-spa-cloud'
+                  )}
+                >
+                  {filter.charAt(0).toUpperCase() + filter.slice(1)}
+                </button>
+              )
+            )}
           </div>
 
           <div className="relative w-full sm:w-80">
-            <Icon name="Search" size="sm" className="absolute left-3 top-1/2 transform -translate-y-1/2 text-spa-slate" />
+            <Icon
+              name="Search"
+              size="sm"
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-spa-slate"
+            />
             <input
               type="text"
               placeholder="Search content..."
@@ -187,44 +212,56 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
         {filteredContent.length === 0 ? (
           <Card variant="elevated" padding="lg">
             <div className="text-center py-8">
-              <Icon name="FileText" size="xl" className="text-spa-slate mx-auto mb-4" />
+              <Icon
+                name="FileText"
+                size="xl"
+                className="text-spa-slate mx-auto mb-4"
+              />
               <H3 className="text-spa-charcoal mb-2">No content found</H3>
               <Body className="text-spa-slate">
-                {searchQuery ? 'Try adjusting your search terms' : 'Create your first piece of content to get started'}
+                {searchQuery
+                  ? 'Try adjusting your search terms'
+                  : 'Create your first piece of content to get started'}
               </Body>
             </div>
           </Card>
         ) : (
           filteredContent.map((item) => (
-            <Card key={item.id} variant="elevated" padding="lg" className="hover:shadow-spa-medium transition-shadow duration-200">
+            <Card
+              key={item.id}
+              variant="elevated"
+              padding="lg"
+              className="hover:shadow-spa-medium transition-shadow duration-200"
+            >
               <div className="flex flex-col lg:flex-row lg:items-center gap-4">
                 {/* Content Info */}
                 <div className="flex-1 space-y-2">
                   <div className="flex items-start justify-between gap-4">
                     <H3 className="text-spa-charcoal">{item.title}</H3>
                     <StatusBadge variant={getStatusVariant(item.status)}>
-                      {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                      {item.status.charAt(0).toUpperCase() +
+                        item.status.slice(1)}
                     </StatusBadge>
                   </div>
-                  
+
                   <div className="flex flex-wrap items-center gap-4 text-sm text-spa-slate">
                     <span className="flex items-center gap-1">
                       <Icon name="Folder" size="sm" />
                       {item.category}
                     </span>
-                    
+
                     <span className="flex items-center gap-1">
                       <Icon name="FileText" size="sm" />
                       {item.wordCount} words
                     </span>
-                    
+
                     {item.views && (
                       <span className="flex items-center gap-1">
                         <Icon name="Eye" size="sm" />
                         {item.views} views
                       </span>
                     )}
-                    
+
                     <span className="flex items-center gap-1">
                       <Icon name="Calendar" size="sm" />
                       {new Date(item.updatedAt).toLocaleDateString()}
@@ -238,13 +275,17 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
                     <Icon name="Eye" size="sm" />
                     Preview
                   </Button>
-                  
+
                   <Button variant="secondary" size="sm">
                     <Icon name="Edit" size="sm" />
                     Edit
                   </Button>
-                  
-                  <Button variant="ghost" size="sm" className="text-red-600 hover:text-red-700">
+
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-600 hover:text-red-700"
+                  >
                     <Icon name="Trash2" size="sm" />
                     Delete
                   </Button>
@@ -256,7 +297,11 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
       </div>
 
       {/* Quick Actions */}
-      <Card variant="premium" padding="lg" className="bg-gradient-to-r from-spa-mist to-white border-2 border-spa-cloud/30">
+      <Card
+        variant="premium"
+        padding="lg"
+        className="bg-gradient-to-r from-spa-mist to-white border-2 border-spa-cloud/30"
+      >
         <div className="text-center space-y-4">
           <H3 className="text-spa-charcoal">Quick Actions</H3>
           <div className="flex flex-wrap justify-center gap-4">
@@ -264,17 +309,17 @@ const ContentDashboard: React.FC<ContentDashboardProps> = ({ className }) => {
               <Icon name="FileText" size="sm" />
               New Training Update
             </Button>
-            
+
             <Button variant="secondary">
               <Icon name="Camera" size="sm" />
               Upload Images
             </Button>
-            
+
             <Button variant="ghost">
               <Icon name="Settings" size="sm" />
               Content Settings
             </Button>
-            
+
             <Button variant="ghost">
               <Icon name="BarChart3" size="sm" />
               Analytics

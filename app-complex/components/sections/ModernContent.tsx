@@ -1,44 +1,50 @@
-"use client";
+'use client';
 
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
-import { 
-  BookOpenIcon, 
+import { motion, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import {
+  BookOpenIcon,
   MapIcon,
   Cog6ToothIcon,
   ChatBubbleBottomCenterTextIcon,
   ArrowRightIcon,
-  SparklesIcon
-} from "@heroicons/react/24/outline";
+  SparklesIcon,
+} from '@heroicons/react/24/outline';
 
 const contentSections = [
   {
     icon: MapIcon,
-    title: "Expedition Chronicles",
-    subtitle: "Kilimanjaro 2023",
-    description: "My first of the Seven Summits - a journey of discovery, challenge, and triumph at 19,341 feet above sea level.",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    tag: "Latest",
-    color: "from-blue-500 to-cyan-500"
+    title: 'Expedition Chronicles',
+    subtitle: 'Kilimanjaro 2023',
+    description:
+      'My first of the Seven Summits - a journey of discovery, challenge, and triumph at 19,341 feet above sea level.',
+    image:
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    tag: 'Latest',
+    color: 'from-blue-500 to-cyan-500',
   },
   {
     icon: Cog6ToothIcon,
-    title: "Gear & Equipment",
-    subtitle: "La Sportiva Boots",
-    description: "Field-tested on Elbrus slopes. Comprehensive review of performance, durability, and comfort in extreme conditions.",
-    image: "https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    tag: "Review",
-    color: "from-green-500 to-emerald-500"
+    title: 'Gear & Equipment',
+    subtitle: 'La Sportiva Boots',
+    description:
+      'Field-tested on Elbrus slopes. Comprehensive review of performance, durability, and comfort in extreme conditions.',
+    image:
+      'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    tag: 'Review',
+    color: 'from-green-500 to-emerald-500',
   },
   {
     icon: BookOpenIcon,
-    title: "Mountain Wisdom",
-    subtitle: "Aconcagua Reflections",
-    description: "Lessons learned from the high camps of South America's highest peak. Mental preparation and altitude strategies.",
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    tag: "Insights",
-    color: "from-purple-500 to-violet-500"
-  }
+    title: 'Mountain Wisdom',
+    subtitle: 'Aconcagua Reflections',
+    description:
+      "Lessons learned from the high camps of South America's highest peak. Mental preparation and altitude strategies.",
+    image:
+      'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    tag: 'Insights',
+    color: 'from-purple-500 to-violet-500',
+  },
 ];
 
 export default function ModernContent() {
@@ -51,25 +57,28 @@ export default function ModernContent() {
       opacity: 1,
       transition: {
         staggerChildren: 0.2,
-        delayChildren: 0.3
-      }
-    }
+        delayChildren: 0.3,
+      },
+    },
   };
 
   const item = {
     hidden: { opacity: 0, y: 30 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.25, 0.25, 0.25, 0.75]
-      }
-    }
+        ease: [0.25, 0.25, 0.25, 0.75],
+      },
+    },
   };
 
   return (
-    <section ref={ref} className="py-24 bg-gradient-to-b from-black via-gray-900 to-black">
+    <section
+      ref={ref}
+      className="py-24 bg-gradient-to-b from-black via-gray-900 to-black"
+    >
       <div className="max-w-7xl mx-auto px-6">
         {/* Section Header */}
         <motion.div
@@ -85,13 +94,14 @@ export default function ModernContent() {
             <SparklesIcon className="w-4 h-4 text-summitGold" />
             Stories & Insights
           </motion.div>
-          
+
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
             Beyond the <span className="text-summitGold">Summit</span>
           </h2>
-          
+
           <p className="text-xl text-white/60 max-w-3xl mx-auto leading-relaxed">
-            Dive deep into expedition stories, gear reviews, and hard-won wisdom from the world&rsquo;s highest peaks.
+            Dive deep into expedition stories, gear reviews, and hard-won wisdom
+            from the world&rsquo;s highest peaks.
           </p>
         </motion.div>
 
@@ -99,7 +109,7 @@ export default function ModernContent() {
         <motion.div
           variants={container}
           initial="hidden"
-          animate={isInView ? "show" : "hidden"}
+          animate={isInView ? 'show' : 'hidden'}
           className="grid grid-cols-1 lg:grid-cols-3 gap-8"
         >
           {contentSections.map((section, index) => (
@@ -118,7 +128,7 @@ export default function ModernContent() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                  
+
                   {/* Tag */}
                   <motion.div
                     initial={{ opacity: 0, scale: 0.8 }}
@@ -150,7 +160,7 @@ export default function ModernContent() {
                       {section.subtitle}
                     </p>
                   </div>
-                  
+
                   <p className="text-white/70 leading-relaxed mb-6">
                     {section.description}
                   </p>
@@ -162,20 +172,22 @@ export default function ModernContent() {
                     className="flex items-center gap-2 text-white/80 hover:text-white transition-colors duration-300 group/button"
                   >
                     <span className="text-sm font-medium">Read More</span>
-                    <motion.div
-                      className="group-hover/button:translate-x-1 transition-transform duration-300"
-                    >
+                    <motion.div className="group-hover/button:translate-x-1 transition-transform duration-300">
                       <ArrowRightIcon className="w-4 h-4" />
                     </motion.div>
                   </motion.button>
                 </div>
 
                 {/* Hover Glow */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${section.color}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`} />
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br ${section.color}/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl`}
+                />
               </div>
 
               {/* External Glow Effect */}
-              <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${section.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl`} />
+              <div
+                className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${section.color} opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl`}
+              />
             </motion.div>
           ))}
         </motion.div>
@@ -194,17 +206,20 @@ export default function ModernContent() {
             >
               {/* Background Pattern */}
               <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0" style={{
-                  backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
-                  backgroundSize: '24px 24px'
-                }} />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+                    backgroundSize: '24px 24px',
+                  }}
+                />
               </div>
 
               <div className="relative z-10">
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
+                  transition={{ delay: 0.8, type: 'spring', stiffness: 200 }}
                   className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-alpineBlue to-glacierBlue rounded-2xl mb-6"
                 >
                   <ChatBubbleBottomCenterTextIcon className="w-8 h-8 text-white" />
@@ -213,9 +228,10 @@ export default function ModernContent() {
                 <h3 className="text-3xl md:text-4xl font-bold text-white mb-4">
                   Ask the <span className="text-summitGold">Mountain</span>
                 </h3>
-                
+
                 <p className="text-lg text-white/70 max-w-2xl mx-auto mb-8 leading-relaxed">
-                  Get instant answers about expeditions, training techniques, gear recommendations, and mountaineering wisdom powered by AI.
+                  Get instant answers about expeditions, training techniques,
+                  gear recommendations, and mountaineering wisdom powered by AI.
                 </p>
 
                 <motion.button
@@ -225,9 +241,7 @@ export default function ModernContent() {
                 >
                   <span className="flex items-center gap-2">
                     Start Conversation
-                    <motion.div
-                      className="group-hover/cta:translate-x-1 transition-transform duration-300"
-                    >
+                    <motion.div className="group-hover/cta:translate-x-1 transition-transform duration-300">
                       <ArrowRightIcon className="w-5 h-5" />
                     </motion.div>
                   </span>

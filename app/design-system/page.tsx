@@ -2,24 +2,29 @@
 
 import React from 'react';
 import { Button } from '../components/atoms/Button';
-import { 
-  Display, 
-  DisplayLarge, 
-  H1, 
-  H1Large, 
-  H2, 
-  H3, 
-  H4, 
-  Body, 
-  BodyLarge, 
-  Small, 
+import {
+  Display,
+  DisplayLarge,
+  H1,
+  H1Large,
+  H2,
+  H3,
+  H4,
+  Body,
+  BodyLarge,
+  Small,
   Caption,
   SeriaText,
-  SerifQuote
+  SerifQuote,
 } from '../components/atoms/Typography';
 import { Input, Textarea } from '../components/atoms/Input';
 import { Icon } from '../components/atoms/Icon';
-import { Card, CardHeader, CardContent, CardFooter } from '../components/molecules/Card';
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from '../components/molecules/Card';
 import { FormField } from '../components/molecules/FormField';
 import { StatusBadge } from '../components/molecules/StatusBadge';
 
@@ -31,8 +36,9 @@ export default function DesignSystemPage() {
         <div className="text-center space-y-6">
           <DisplayLarge>Swiss Spa Design System</DisplayLarge>
           <BodyLarge className="max-w-2xl mx-auto text-spa-slate">
-            A premium design system for Summit Chronicles, embodying Swiss spa aesthetics 
-            with clean lines, generous white space, and sophisticated typography.
+            A premium design system for Summit Chronicles, embodying Swiss spa
+            aesthetics with clean lines, generous white space, and sophisticated
+            typography.
           </BodyLarge>
         </div>
 
@@ -47,10 +53,16 @@ export default function DesignSystemPage() {
               { name: 'Spa Mist', class: 'bg-spa-mist', hex: '#e2e8f0' },
               { name: 'Spa Cloud', class: 'bg-spa-cloud', hex: '#cbd5e1' },
               { name: 'Spa Slate', class: 'bg-spa-slate', hex: '#64748b' },
-              { name: 'Spa Charcoal', class: 'bg-spa-charcoal', hex: '#334155' },
+              {
+                name: 'Spa Charcoal',
+                class: 'bg-spa-charcoal',
+                hex: '#334155',
+              },
             ].map((color) => (
               <Card key={color.name} variant="elevated" padding="md">
-                <div className={`w-full h-16 rounded-md ${color.class} mb-3`}></div>
+                <div
+                  className={`w-full h-16 rounded-md ${color.class} mb-3`}
+                ></div>
                 <H4>{color.name}</H4>
                 <Small className="font-mono">{color.hex}</Small>
               </Card>
@@ -94,32 +106,39 @@ export default function DesignSystemPage() {
               <div>
                 <Caption>Body Large (18px)</Caption>
                 <BodyLarge>
-                  Premium body text for important content and introductions that deserve extra attention.
+                  Premium body text for important content and introductions that
+                  deserve extra attention.
                 </BodyLarge>
               </div>
               <div>
                 <Caption>Body (16px)</Caption>
                 <Body>
-                  Standard body text for comfortable reading experiences across all content areas.
-                  Designed with optimal line spacing and character width for extended reading sessions.
+                  Standard body text for comfortable reading experiences across
+                  all content areas. Designed with optimal line spacing and
+                  character width for extended reading sessions.
                 </Body>
               </div>
               <div>
                 <Caption>Small (14px)</Caption>
-                <Small>Smaller text for captions, metadata, and secondary information.</Small>
+                <Small>
+                  Smaller text for captions, metadata, and secondary
+                  information.
+                </Small>
               </div>
               <div>
                 <Caption>Serif Text (18px)</Caption>
                 <SeriaText>
-                  Elegant serif typography for premium content and storytelling sections 
-                  that require a more sophisticated typographic treatment.
+                  Elegant serif typography for premium content and storytelling
+                  sections that require a more sophisticated typographic
+                  treatment.
                 </SeriaText>
               </div>
               <div>
                 <Caption>Serif Quote</Caption>
                 <SerifQuote>
-                  "The mountains are calling and I must go. Every step towards the summit 
-                  is a step towards understanding both the mountain and myself."
+                  "The mountains are calling and I must go. Every step towards
+                  the summit is a step towards understanding both the mountain
+                  and myself."
                 </SerifQuote>
               </div>
             </div>
@@ -160,15 +179,23 @@ export default function DesignSystemPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card variant="default" padding="lg">
               <H4>Default Card</H4>
-              <Body>Subtle shadow with spa-soft elevation for basic content containers.</Body>
+              <Body>
+                Subtle shadow with spa-soft elevation for basic content
+                containers.
+              </Body>
             </Card>
             <Card variant="elevated" padding="lg">
               <H4>Elevated Card</H4>
-              <Body>Enhanced shadow with hover effects for interactive content areas.</Body>
+              <Body>
+                Enhanced shadow with hover effects for interactive content
+                areas.
+              </Body>
             </Card>
             <Card variant="premium" padding="lg">
               <H4>Premium Card</H4>
-              <Body>Gradient background with maximum elevation for featured content.</Body>
+              <Body>
+                Gradient background with maximum elevation for featured content.
+              </Body>
             </Card>
           </div>
         </section>
@@ -182,27 +209,39 @@ export default function DesignSystemPage() {
               <div className="space-y-6">
                 <Input placeholder="Standard input field" />
                 <Input label="Labeled Input" placeholder="Enter your email" />
-                <Input label="Required Field" placeholder="Required input" required />
-                <Input label="Error State" placeholder="Invalid input" error="This field is required" />
-                <Textarea label="Message" placeholder="Enter your message..." rows={4} />
+                <Input
+                  label="Required Field"
+                  placeholder="Required input"
+                  required
+                />
+                <Input
+                  label="Error State"
+                  placeholder="Invalid input"
+                  error="This field is required"
+                />
+                <Textarea
+                  label="Message"
+                  placeholder="Enter your message..."
+                  rows={4}
+                />
               </div>
             </Card>
             <Card variant="elevated" padding="lg">
               <H3 className="mb-6">Form Fields</H3>
               <div className="space-y-6">
-                <FormField 
-                  label="Full Name" 
+                <FormField
+                  label="Full Name"
                   placeholder="John Doe"
                   description="Enter your full legal name"
                 />
-                <FormField 
-                  label="Email Address" 
+                <FormField
+                  label="Email Address"
                   type="email"
                   placeholder="john@example.com"
                   required
                 />
-                <FormField 
-                  label="Training Goal" 
+                <FormField
+                  label="Training Goal"
                   placeholder="e.g., Mount Everest 2024"
                   description="What summit are you training for?"
                 />
@@ -230,8 +269,12 @@ export default function DesignSystemPage() {
               <div>
                 <H4 className="mb-3">Badge Sizes</H4>
                 <div className="flex flex-wrap items-center gap-3">
-                  <StatusBadge size="sm" variant="success">Small</StatusBadge>
-                  <StatusBadge size="md" variant="success">Medium</StatusBadge>
+                  <StatusBadge size="sm" variant="success">
+                    Small
+                  </StatusBadge>
+                  <StatusBadge size="md" variant="success">
+                    Medium
+                  </StatusBadge>
                 </div>
               </div>
             </div>
@@ -256,11 +299,28 @@ export default function DesignSystemPage() {
                 <H4 className="mb-3">Common Icons</H4>
                 <div className="grid grid-cols-6 md:grid-cols-12 gap-4">
                   {[
-                    'Mountain', 'Trophy', 'Target', 'Calendar', 'Clock', 'Activity',
-                    'Heart', 'MapPin', 'Camera', 'Share2', 'Download', 'Upload'
+                    'Mountain',
+                    'Trophy',
+                    'Target',
+                    'Calendar',
+                    'Clock',
+                    'Activity',
+                    'Heart',
+                    'MapPin',
+                    'Camera',
+                    'Share2',
+                    'Download',
+                    'Upload',
                   ].map((iconName) => (
-                    <div key={iconName} className="flex flex-col items-center gap-2">
-                      <Icon name={iconName as any} size="lg" className="text-alpine-blue" />
+                    <div
+                      key={iconName}
+                      className="flex flex-col items-center gap-2"
+                    >
+                      <Icon
+                        name={iconName as any}
+                        size="lg"
+                        className="text-alpine-blue"
+                      />
                       <Caption>{iconName}</Caption>
                     </div>
                   ))}
@@ -287,7 +347,11 @@ export default function DesignSystemPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Icon name="Activity" size="sm" className="text-alpine-blue" />
+                    <Icon
+                      name="Activity"
+                      size="sm"
+                      className="text-alpine-blue"
+                    />
                     <H4>Distance</H4>
                   </div>
                   <Display>127</Display>
@@ -295,7 +359,11 @@ export default function DesignSystemPage() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <Icon name="Mountain" size="sm" className="text-alpine-blue" />
+                    <Icon
+                      name="Mountain"
+                      size="sm"
+                      className="text-alpine-blue"
+                    />
                     <H4>Elevation</H4>
                   </div>
                   <Display>2,840</Display>
@@ -311,9 +379,10 @@ export default function DesignSystemPage() {
                 </div>
               </div>
               <SeriaText>
-                This week marked a significant milestone in our Everest preparation journey. 
-                The combination of high-altitude training and technical skill development 
-                is building the foundation needed for the ultimate ascent.
+                This week marked a significant milestone in our Everest
+                preparation journey. The combination of high-altitude training
+                and technical skill development is building the foundation
+                needed for the ultimate ascent.
               </SeriaText>
             </CardContent>
             <CardFooter>

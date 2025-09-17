@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
-import { clsx } from "clsx";
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useMemo } from 'react';
+import { clsx } from 'clsx';
 import {
   TrophyIcon,
   TagIcon as TargetIcon,
@@ -20,9 +20,14 @@ import {
   ArrowRightIcon,
   PlusIcon,
   TrashIcon,
-  PencilIcon
-} from "@heroicons/react/24/outline";
-import { GlassCard, StatusIndicator, ProgressBar, MountainButton } from "@/app/components/ui";
+  PencilIcon,
+} from '@heroicons/react/24/outline';
+import {
+  GlassCard,
+  StatusIndicator,
+  ProgressBar,
+  MountainButton,
+} from '@/app/components/ui';
 
 interface Goal {
   id: string;
@@ -77,49 +82,65 @@ const PRESET_GOALS = [
   {
     category: 'expedition',
     title: 'Summit Mount Rainier',
-    description: 'Complete a successful summit attempt of Mount Rainier via Disappointment Cleaver route',
-    metrics: { target: 1, current: 0, unit: 'summit', type: 'percentage' as const },
+    description:
+      'Complete a successful summit attempt of Mount Rainier via Disappointment Cleaver route',
+    metrics: {
+      target: 1,
+      current: 0,
+      unit: 'summit',
+      type: 'percentage' as const,
+    },
     subgoals: [
       'Complete glacier travel course',
       'Achieve 15-mile hiking endurance',
       'Practice technical skills on local peaks',
-      'Complete gear shakedown'
-    ]
+      'Complete gear shakedown',
+    ],
   },
   {
     category: 'fitness',
     title: 'Peak Cardiovascular Fitness',
     description: 'Reach target VO2 max for high-altitude performance',
-    metrics: { target: 55, current: 45, unit: 'ml/kg/min', type: 'percentage' as const },
+    metrics: {
+      target: 55,
+      current: 45,
+      unit: 'ml/kg/min',
+      type: 'percentage' as const,
+    },
     subgoals: [
       'Maintain 5x/week cardio schedule',
       'Complete monthly fitness assessment',
       'Achieve target heart rate zones',
-      'Complete altitude simulation training'
-    ]
+      'Complete altitude simulation training',
+    ],
   },
   {
     category: 'technical',
     title: 'Advanced Ice Climbing',
     description: 'Master advanced ice climbing techniques and lead WI4+ routes',
-    metrics: { target: 4, current: 2, unit: 'WI grade', type: 'percentage' as const },
+    metrics: {
+      target: 4,
+      current: 2,
+      unit: 'WI grade',
+      type: 'percentage' as const,
+    },
     subgoals: [
       'Complete ice climbing course',
       'Lead 10 WI3 routes',
       'Practice ice tool techniques',
-      'Complete multi-pitch ice route'
-    ]
-  }
+      'Complete multi-pitch ice route',
+    ],
+  },
 ];
 
 export default function GoalSetting({
   userProfile,
   trainingData = [],
   biometricData = [],
-  className = "",
+  className = '',
   onGoalCreate,
   onGoalUpdate,
-  onGoalDelete
+  onGoalDelete,
 }: GoalSettingProps) {
   const [goals, setGoals] = useState<Goal[]>([]);
   const [predictions, setPredictions] = useState<SuccessPrediction[]>([]);
@@ -137,17 +158,21 @@ export default function GoalSetting({
         description: preset.description,
         category: preset.category as any,
         priority: 'high',
-        targetDate: new Date(Date.now() + (90 + index * 30) * 24 * 60 * 60 * 1000).toISOString(),
+        targetDate: new Date(
+          Date.now() + (90 + index * 30) * 24 * 60 * 60 * 1000
+        ).toISOString(),
         metrics: preset.metrics,
         subgoals: preset.subgoals.map((title, subIndex) => ({
           id: `subgoal-${index}-${subIndex}`,
           title,
           completed: Math.random() > 0.6,
-          dueDate: new Date(Date.now() + (30 + subIndex * 15) * 24 * 60 * 60 * 1000).toISOString()
+          dueDate: new Date(
+            Date.now() + (30 + subIndex * 15) * 24 * 60 * 60 * 1000
+          ).toISOString(),
         })),
-        status: index === 0 ? 'in_progress' : 'not_started'
+        status: index === 0 ? 'in_progress' : 'not_started',
       }));
-      
+
       setGoals(sampleGoals);
     }
   }, [goals.length]);
@@ -155,13 +180,15 @@ export default function GoalSetting({
   // Generate success predictions when goals change
   const successPredictions = useMemo(() => {
     if (goals.length === 0) return [];
-    
-    return goals.map(goal => generateSuccessPrediction(goal, trainingData, biometricData));
+
+    return goals.map((goal) =>
+      generateSuccessPrediction(goal, trainingData, biometricData)
+    );
   }, [goals, trainingData, biometricData]);
 
   useEffect(() => {
     setIsAnalyzing(true);
-    
+
     const timer = setTimeout(() => {
       setPredictions(successPredictions);
       setIsAnalyzing(false);
@@ -171,68 +198,93 @@ export default function GoalSetting({
   }, [successPredictions]);
 
   const generateSuccessPrediction = (
-    goal: Goal, 
-    trainingData: any[], 
+    goal: Goal,
+    trainingData: any[],
     biometricData: any[]
   ): SuccessPrediction => {
     // Simulate AI prediction analysis
-    const daysTilTarget = Math.ceil((new Date(goal.targetDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-    const completedSubgoals = goal.subgoals.filter(sg => sg.completed).length;
+    const daysTilTarget = Math.ceil(
+      (new Date(goal.targetDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+    );
+    const completedSubgoals = goal.subgoals.filter((sg) => sg.completed).length;
     const totalSubgoals = goal.subgoals.length;
-    const progressRate = totalSubgoals > 0 ? completedSubgoals / totalSubgoals : 0;
-    
+    const progressRate =
+      totalSubgoals > 0 ? completedSubgoals / totalSubgoals : 0;
+
     // Calculate base probability
     let baseProbability = 0.5;
-    
+
     // Adjust for progress rate
     baseProbability += progressRate * 0.3;
-    
+
     // Adjust for timeline
     if (daysTilTarget > 120) baseProbability += 0.15;
     else if (daysTilTarget < 30) baseProbability -= 0.2;
-    
+
     // Adjust for training consistency (mock analysis)
     const hasConsistentTraining = trainingData.length > 10;
     if (hasConsistentTraining) baseProbability += 0.1;
-    
+
     // Adjust for category difficulty
     const categoryDifficulty = {
-      'expedition': -0.1,
-      'technical': -0.05,
-      'fitness': 0.05,
-      'endurance': 0.02,
-      'strength': 0.03
+      expedition: -0.1,
+      technical: -0.05,
+      fitness: 0.05,
+      endurance: 0.02,
+      strength: 0.03,
     };
     baseProbability += categoryDifficulty[goal.category] || 0;
-    
+
     // Clamp between 0.1 and 0.95
     const successProbability = Math.max(0.1, Math.min(0.95, baseProbability));
-    
+
     // Generate factors
     const positiveFactors = [];
     const negativeFactors = [];
     const neutralFactors = [];
-    
-    if (progressRate > 0.5) positiveFactors.push(`Strong progress: ${Math.round(progressRate * 100)}% of subgoals completed`);
-    if (hasConsistentTraining) positiveFactors.push('Consistent training pattern detected');
-    if (daysTilTarget > 90) positiveFactors.push('Adequate timeline for preparation');
-    
-    if (progressRate < 0.3) negativeFactors.push('Limited progress on subgoals');
-    if (daysTilTarget < 30) negativeFactors.push('Aggressive timeline may increase risk');
-    if (!hasConsistentTraining) negativeFactors.push('Training consistency needs improvement');
-    
+
+    if (progressRate > 0.5)
+      positiveFactors.push(
+        `Strong progress: ${Math.round(progressRate * 100)}% of subgoals completed`
+      );
+    if (hasConsistentTraining)
+      positiveFactors.push('Consistent training pattern detected');
+    if (daysTilTarget > 90)
+      positiveFactors.push('Adequate timeline for preparation');
+
+    if (progressRate < 0.3)
+      negativeFactors.push('Limited progress on subgoals');
+    if (daysTilTarget < 30)
+      negativeFactors.push('Aggressive timeline may increase risk');
+    if (!hasConsistentTraining)
+      negativeFactors.push('Training consistency needs improvement');
+
     neutralFactors.push(`${daysTilTarget} days remaining until target date`);
     neutralFactors.push(`Goal category: ${goal.category}`);
-    
+
     // Generate recommendations
     const recommendations = [];
-    if (progressRate < 0.5) recommendations.push('Focus on completing remaining subgoals to stay on track');
-    if (daysTilTarget < 60 && progressRate < 0.7) recommendations.push('Consider adjusting timeline or reducing scope');
-    if (goal.category === 'expedition') recommendations.push('Ensure all safety and technical training is prioritized');
-    recommendations.push('Regular progress reviews and plan adjustments are recommended');
-    
-    const riskLevel = successProbability > 0.7 ? 'low' : successProbability > 0.4 ? 'medium' : 'high';
-    
+    if (progressRate < 0.5)
+      recommendations.push(
+        'Focus on completing remaining subgoals to stay on track'
+      );
+    if (daysTilTarget < 60 && progressRate < 0.7)
+      recommendations.push('Consider adjusting timeline or reducing scope');
+    if (goal.category === 'expedition')
+      recommendations.push(
+        'Ensure all safety and technical training is prioritized'
+      );
+    recommendations.push(
+      'Regular progress reviews and plan adjustments are recommended'
+    );
+
+    const riskLevel =
+      successProbability > 0.7
+        ? 'low'
+        : successProbability > 0.4
+          ? 'medium'
+          : 'high';
+
     return {
       goalId: goal.id,
       successProbability,
@@ -240,43 +292,63 @@ export default function GoalSetting({
       factors: {
         positive: positiveFactors,
         negative: negativeFactors,
-        neutral: neutralFactors
+        neutral: neutralFactors,
       },
       recommendations,
-      timelineAdjustment: daysTilTarget < 30 && progressRate < 0.7 ? {
-        suggested: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000).toISOString(),
-        reasoning: 'Current progress rate suggests additional time needed for safe completion'
-      } : undefined,
-      riskLevel
+      timelineAdjustment:
+        daysTilTarget < 30 && progressRate < 0.7
+          ? {
+              suggested: new Date(
+                Date.now() + 120 * 24 * 60 * 60 * 1000
+              ).toISOString(),
+              reasoning:
+                'Current progress rate suggests additional time needed for safe completion',
+            }
+          : undefined,
+      riskLevel,
     };
   };
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'expedition': return BeakerIcon;
-      case 'fitness': return BoltIcon;
-      case 'technical': return TargetIcon;
-      case 'endurance': return ClockIcon;
-      case 'strength': return FireIcon;
-      default: return TrophyIcon;
+      case 'expedition':
+        return BeakerIcon;
+      case 'fitness':
+        return BoltIcon;
+      case 'technical':
+        return TargetIcon;
+      case 'endurance':
+        return ClockIcon;
+      case 'strength':
+        return FireIcon;
+      default:
+        return TrophyIcon;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-successGreen bg-successGreen/10 border-successGreen/20';
-      case 'in_progress': return 'text-glacierBlue bg-glacierBlue/10 border-glacierBlue/20';
-      case 'overdue': return 'text-dangerRed bg-dangerRed/10 border-dangerRed/20';
-      default: return 'text-gray-400 bg-gray-500/10 border-gray-500/20';
+      case 'completed':
+        return 'text-successGreen bg-successGreen/10 border-successGreen/20';
+      case 'in_progress':
+        return 'text-glacierBlue bg-glacierBlue/10 border-glacierBlue/20';
+      case 'overdue':
+        return 'text-dangerRed bg-dangerRed/10 border-dangerRed/20';
+      default:
+        return 'text-gray-400 bg-gray-500/10 border-gray-500/20';
     }
   };
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'low': return 'text-successGreen';
-      case 'medium': return 'text-warningOrange';
-      case 'high': return 'text-dangerRed';
-      default: return 'text-gray-400';
+      case 'low':
+        return 'text-successGreen';
+      case 'medium':
+        return 'text-warningOrange';
+      case 'high':
+        return 'text-dangerRed';
+      default:
+        return 'text-gray-400';
     }
   };
 
@@ -284,14 +356,21 @@ export default function GoalSetting({
     setShowCreateModal(true);
   };
 
-  const filteredGoals = goals.filter(goal => 
-    selectedCategory === 'all' || goal.category === selectedCategory
+  const filteredGoals = goals.filter(
+    (goal) => selectedCategory === 'all' || goal.category === selectedCategory
   );
 
-  const categories = ['all', 'expedition', 'fitness', 'technical', 'endurance', 'strength'];
+  const categories = [
+    'all',
+    'expedition',
+    'fitness',
+    'technical',
+    'endurance',
+    'strength',
+  ];
 
   return (
-    <div className={clsx("space-y-6", className)}>
+    <div className={clsx('space-y-6', className)}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
@@ -299,11 +378,15 @@ export default function GoalSetting({
             <TrophyIcon className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">Smart Goal Setting</h2>
-            <p className="text-gray-400">AI-powered goal tracking with success predictions</p>
+            <h2 className="text-2xl font-bold text-white">
+              Smart Goal Setting
+            </h2>
+            <p className="text-gray-400">
+              AI-powered goal tracking with success predictions
+            </p>
           </div>
         </div>
-        
+
         <MountainButton
           variant="primary"
           onClick={handleCreateGoal}
@@ -318,20 +401,25 @@ export default function GoalSetting({
       <GlassCard className="p-4">
         <div className="flex flex-wrap gap-2">
           {categories.map((category) => {
-            const CategoryIcon = category !== 'all' ? getCategoryIcon(category) : ChartBarIcon;
+            const CategoryIcon =
+              category !== 'all' ? getCategoryIcon(category) : ChartBarIcon;
             return (
               <button
                 key={category}
                 onClick={() => setSelectedCategory(category)}
                 className={clsx(
-                  "flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                  'flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200',
                   selectedCategory === category
-                    ? "bg-alpineBlue text-white"
-                    : "bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                    ? 'bg-alpineBlue text-white'
+                    : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
                 )}
               >
                 <CategoryIcon className="w-4 h-4" />
-                <span>{category === 'all' ? 'All Goals' : category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                <span>
+                  {category === 'all'
+                    ? 'All Goals'
+                    : category.charAt(0).toUpperCase() + category.slice(1)}
+                </span>
               </button>
             );
           })}
@@ -342,11 +430,14 @@ export default function GoalSetting({
       <div className="space-y-4">
         <AnimatePresence>
           {filteredGoals.map((goal, index) => {
-            const prediction = predictions.find(p => p.goalId === goal.id);
+            const prediction = predictions.find((p) => p.goalId === goal.id);
             const CategoryIcon = getCategoryIcon(goal.category);
             const statusColor = getStatusColor(goal.status);
-            const daysRemaining = Math.ceil((new Date(goal.targetDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-            
+            const daysRemaining = Math.ceil(
+              (new Date(goal.targetDate).getTime() - Date.now()) /
+                (1000 * 60 * 60 * 24)
+            );
+
             return (
               <motion.div
                 key={goal.id}
@@ -360,22 +451,30 @@ export default function GoalSetting({
                     {/* Goal Header */}
                     <div className="flex items-start justify-between">
                       <div className="flex items-start space-x-4">
-                        <div className={clsx(
-                          "p-3 rounded-xl border flex-shrink-0",
-                          statusColor
-                        )}>
+                        <div
+                          className={clsx(
+                            'p-3 rounded-xl border flex-shrink-0',
+                            statusColor
+                          )}
+                        >
                           <CategoryIcon className="w-6 h-6" />
                         </div>
-                        
+
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center space-x-3 mb-2">
                             <h3 className="text-xl font-semibold text-white">
                               {goal.title}
                             </h3>
                             <StatusIndicator
-                              status={goal.status === 'completed' ? 'success' :
-                                     goal.status === 'in_progress' ? 'info' :
-                                     goal.status === 'overdue' ? 'danger' : 'warning'}
+                              status={
+                                goal.status === 'completed'
+                                  ? 'success'
+                                  : goal.status === 'in_progress'
+                                    ? 'info'
+                                    : goal.status === 'overdue'
+                                      ? 'danger'
+                                      : 'warning'
+                              }
                               text={goal.status.replace('_', ' ')}
                               size="sm"
                             />
@@ -383,28 +482,34 @@ export default function GoalSetting({
                           <p className="text-gray-300 text-sm mb-4">
                             {goal.description}
                           </p>
-                          
+
                           {/* Goal Progress */}
                           <div className="space-y-2">
                             <div className="flex items-center justify-between text-sm">
                               <span className="text-gray-400">Progress</span>
                               <span className="text-white">
-                                {goal.metrics.current} / {goal.metrics.target} {goal.metrics.unit}
+                                {goal.metrics.current} / {goal.metrics.target}{' '}
+                                {goal.metrics.unit}
                               </span>
                             </div>
                             <ProgressBar
-                              value={(goal.metrics.current / goal.metrics.target) * 100}
+                              value={
+                                (goal.metrics.current / goal.metrics.target) *
+                                100
+                              }
                               variant="gradient"
                               showValue={false}
                             />
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2 ml-4">
                         <div className="text-right text-sm">
                           <div className="text-white font-medium">
-                            {daysRemaining > 0 ? `${daysRemaining} days` : 'Overdue'}
+                            {daysRemaining > 0
+                              ? `${daysRemaining} days`
+                              : 'Overdue'}
                           </div>
                           <div className="text-gray-400">
                             {new Date(goal.targetDate).toLocaleDateString()}
@@ -425,18 +530,35 @@ export default function GoalSetting({
                         <div className="flex items-center justify-between mb-4">
                           <div className="flex items-center space-x-2">
                             <SparklesIcon className="w-5 h-5 text-aurora-purple" />
-                            <span className="font-medium text-white">AI Success Prediction</span>
+                            <span className="font-medium text-white">
+                              AI Success Prediction
+                            </span>
                           </div>
                           <div className="flex items-center space-x-4">
                             <div className="text-right">
-                              <div className={clsx("text-lg font-bold", getRiskColor(prediction.riskLevel))}>
-                                {Math.round(prediction.successProbability * 100)}%
+                              <div
+                                className={clsx(
+                                  'text-lg font-bold',
+                                  getRiskColor(prediction.riskLevel)
+                                )}
+                              >
+                                {Math.round(
+                                  prediction.successProbability * 100
+                                )}
+                                %
                               </div>
-                              <div className="text-xs text-gray-400">Success Rate</div>
+                              <div className="text-xs text-gray-400">
+                                Success Rate
+                              </div>
                             </div>
                             <StatusIndicator
-                              status={prediction.riskLevel === 'low' ? 'success' :
-                                     prediction.riskLevel === 'medium' ? 'warning' : 'danger'}
+                              status={
+                                prediction.riskLevel === 'low'
+                                  ? 'success'
+                                  : prediction.riskLevel === 'medium'
+                                    ? 'warning'
+                                    : 'danger'
+                              }
                               text={`${prediction.riskLevel} risk`}
                               size="sm"
                             />
@@ -452,12 +574,17 @@ export default function GoalSetting({
                                 <span>Strengths</span>
                               </h5>
                               <ul className="space-y-1">
-                                {prediction.factors.positive.map((factor, i) => (
-                                  <li key={i} className="text-xs text-gray-300 flex items-start space-x-1">
-                                    <div className="w-1 h-1 bg-successGreen rounded-full flex-shrink-0 mt-1.5" />
-                                    <span>{factor}</span>
-                                  </li>
-                                ))}
+                                {prediction.factors.positive.map(
+                                  (factor, i) => (
+                                    <li
+                                      key={i}
+                                      className="text-xs text-gray-300 flex items-start space-x-1"
+                                    >
+                                      <div className="w-1 h-1 bg-successGreen rounded-full flex-shrink-0 mt-1.5" />
+                                      <span>{factor}</span>
+                                    </li>
+                                  )
+                                )}
                               </ul>
                             </div>
                           )}
@@ -470,12 +597,17 @@ export default function GoalSetting({
                                 <span>Challenges</span>
                               </h5>
                               <ul className="space-y-1">
-                                {prediction.factors.negative.map((factor, i) => (
-                                  <li key={i} className="text-xs text-gray-300 flex items-start space-x-1">
-                                    <div className="w-1 h-1 bg-dangerRed rounded-full flex-shrink-0 mt-1.5" />
-                                    <span>{factor}</span>
-                                  </li>
-                                ))}
+                                {prediction.factors.negative.map(
+                                  (factor, i) => (
+                                    <li
+                                      key={i}
+                                      className="text-xs text-gray-300 flex items-start space-x-1"
+                                    >
+                                      <div className="w-1 h-1 bg-dangerRed rounded-full flex-shrink-0 mt-1.5" />
+                                      <span>{factor}</span>
+                                    </li>
+                                  )
+                                )}
                               </ul>
                             </div>
                           )}
@@ -488,7 +620,10 @@ export default function GoalSetting({
                           </h5>
                           <ul className="space-y-1">
                             {prediction.recommendations.map((rec, i) => (
-                              <li key={i} className="text-xs text-gray-300 flex items-start space-x-2">
+                              <li
+                                key={i}
+                                className="text-xs text-gray-300 flex items-start space-x-2"
+                              >
                                 <ArrowRightIcon className="w-3 h-3 text-summitGold flex-shrink-0 mt-0.5" />
                                 <span>{rec}</span>
                               </li>
@@ -506,14 +641,18 @@ export default function GoalSetting({
                               {prediction.timelineAdjustment.reasoning}
                             </p>
                             <p className="text-xs text-white">
-                              Suggested date: {new Date(prediction.timelineAdjustment.suggested).toLocaleDateString()}
+                              Suggested date:{' '}
+                              {new Date(
+                                prediction.timelineAdjustment.suggested
+                              ).toLocaleDateString()}
                             </p>
                           </div>
                         )}
 
                         <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/10">
                           <span className="text-xs text-gray-400">
-                            Confidence: {Math.round(prediction.confidence * 100)}%
+                            Confidence:{' '}
+                            {Math.round(prediction.confidence * 100)}%
                           </span>
                           <ProgressBar
                             value={prediction.confidence * 100}
@@ -533,11 +672,17 @@ export default function GoalSetting({
                           <div className="flex items-center space-x-2">
                             <motion.div
                               animate={{ rotate: 360 }}
-                              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                ease: 'linear',
+                              }}
                             >
                               <SparklesIcon className="w-5 h-5 text-aurora-purple" />
                             </motion.div>
-                            <span className="font-medium text-white">Analyzing success probability...</span>
+                            <span className="font-medium text-white">
+                              Analyzing success probability...
+                            </span>
                           </div>
                           <div className="space-y-2">
                             <div className="h-3 bg-gray-700 rounded w-3/4" />
@@ -549,37 +694,46 @@ export default function GoalSetting({
 
                     {/* Subgoals */}
                     <div>
-                      <h4 className="text-lg font-medium text-white mb-3">Milestones</h4>
+                      <h4 className="text-lg font-medium text-white mb-3">
+                        Milestones
+                      </h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {goal.subgoals.map((subgoal) => (
                           <div
                             key={subgoal.id}
                             className={clsx(
-                              "flex items-center space-x-3 p-3 rounded-lg border transition-colors",
+                              'flex items-center space-x-3 p-3 rounded-lg border transition-colors',
                               subgoal.completed
-                                ? "bg-successGreen/10 border-successGreen/20"
-                                : "bg-white/5 border-white/10 hover:bg-white/10"
+                                ? 'bg-successGreen/10 border-successGreen/20'
+                                : 'bg-white/5 border-white/10 hover:bg-white/10'
                             )}
                           >
-                            <div className={clsx(
-                              "w-5 h-5 rounded-full border-2 flex items-center justify-center",
-                              subgoal.completed
-                                ? "bg-successGreen border-successGreen"
-                                : "border-gray-400"
-                            )}>
+                            <div
+                              className={clsx(
+                                'w-5 h-5 rounded-full border-2 flex items-center justify-center',
+                                subgoal.completed
+                                  ? 'bg-successGreen border-successGreen'
+                                  : 'border-gray-400'
+                              )}
+                            >
                               {subgoal.completed && (
                                 <CheckCircleIcon className="w-3 h-3 text-white" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className={clsx(
-                                "text-sm font-medium",
-                                subgoal.completed ? "text-white line-through" : "text-gray-300"
-                              )}>
+                              <div
+                                className={clsx(
+                                  'text-sm font-medium',
+                                  subgoal.completed
+                                    ? 'text-white line-through'
+                                    : 'text-gray-300'
+                                )}
+                              >
                                 {subgoal.title}
                               </div>
                               <div className="text-xs text-gray-400">
-                                Due: {new Date(subgoal.dueDate).toLocaleDateString()}
+                                Due:{' '}
+                                {new Date(subgoal.dueDate).toLocaleDateString()}
                               </div>
                             </div>
                           </div>
@@ -601,10 +755,9 @@ export default function GoalSetting({
             No Goals Found
           </h3>
           <p className="text-gray-400 mb-4">
-            {selectedCategory === 'all' 
-              ? "Create your first goal to start tracking your mountaineering progress."
-              : `No goals in the ${selectedCategory} category.`
-            }
+            {selectedCategory === 'all'
+              ? 'Create your first goal to start tracking your mountaineering progress.'
+              : `No goals in the ${selectedCategory} category.`}
           </p>
           <MountainButton variant="primary" onClick={handleCreateGoal}>
             Create Your First Goal

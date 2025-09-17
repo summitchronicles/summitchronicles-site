@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect, ReactNode } from "react";
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, ReactNode } from 'react';
 
 interface ProtectedRouteProps {
   children: ReactNode;
-  requireRole?: "admin" | "owner";
+  requireRole?: 'admin' | 'owner';
   fallbackUrl?: string;
 }
 
-export default function ProtectedRoute({ 
-  children, 
-  requireRole = "admin", 
-  fallbackUrl = "/admin/auth/signin" 
+export default function ProtectedRoute({
+  children,
+  requireRole = 'admin',
+  fallbackUrl = '/admin/auth/signin',
 }: ProtectedRouteProps) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "loading") return; // Still loading session
+    if (status === 'loading') return; // Still loading session
 
     if (!session) {
       router.push(fallbackUrl);
@@ -28,20 +28,20 @@ export default function ProtectedRoute({
 
     // Check role requirements
     const userRole = (session.user as any)?.role;
-    
-    if (requireRole === "owner" && userRole !== "owner") {
-      router.push("/admin/auth/error?error=AccessDenied");
+
+    if (requireRole === 'owner' && userRole !== 'owner') {
+      router.push('/admin/auth/error?error=AccessDenied');
       return;
     }
-    
-    if (requireRole === "admin" && !["admin", "owner"].includes(userRole)) {
-      router.push("/admin/auth/error?error=AccessDenied");
+
+    if (requireRole === 'admin' && !['admin', 'owner'].includes(userRole)) {
+      router.push('/admin/auth/error?error=AccessDenied');
       return;
     }
   }, [session, status, router, requireRole, fallbackUrl]);
 
   // Show loading state while checking authentication
-  if (status === "loading") {
+  if (status === 'loading') {
     return (
       <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
         <div className="text-center">
@@ -58,11 +58,11 @@ export default function ProtectedRoute({
   }
 
   const userRole = (session.user as any)?.role;
-  if (requireRole === "owner" && userRole !== "owner") {
+  if (requireRole === 'owner' && userRole !== 'owner') {
     return null;
   }
-  
-  if (requireRole === "admin" && !["admin", "owner"].includes(userRole)) {
+
+  if (requireRole === 'admin' && !['admin', 'owner'].includes(userRole)) {
     return null;
   }
 

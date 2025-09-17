@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { useState, useEffect, useRef } from 'react'
-import { motion, useInView, useAnimation } from 'framer-motion'
-import { 
-  Target, 
-  TrendingUp, 
-  Calendar, 
-  Mountain, 
-  Activity, 
-  Heart, 
+import { useState, useEffect, useRef } from 'react';
+import { motion, useInView, useAnimation } from 'framer-motion';
+import {
+  Target,
+  TrendingUp,
+  Calendar,
+  Mountain,
+  Activity,
+  Heart,
   Zap,
   Award,
   Timer,
@@ -21,50 +21,50 @@ import {
   AlertCircle,
   ArrowUp,
   ArrowDown,
-  Minus
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { GoalTracker } from './GoalTracker'
-import { PerformanceAnalytics } from './PerformanceAnalytics'
+  Minus,
+} from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { GoalTracker } from './GoalTracker';
+import { PerformanceAnalytics } from './PerformanceAnalytics';
 
 interface Goal {
-  id: string
-  title: string
-  description?: string
-  target: number
-  current: number
-  unit: string
-  startDate: string
-  deadline: string
-  category: 'endurance' | 'strength' | 'technical' | 'recovery' | 'nutrition'
-  priority: 'high' | 'medium' | 'low'
-  status: 'active' | 'completed' | 'paused' | 'overdue'
-  milestones?: { value: number; date: string; achieved: boolean }[]
+  id: string;
+  title: string;
+  description?: string;
+  target: number;
+  current: number;
+  unit: string;
+  startDate: string;
+  deadline: string;
+  category: 'endurance' | 'strength' | 'technical' | 'recovery' | 'nutrition';
+  priority: 'high' | 'medium' | 'low';
+  status: 'active' | 'completed' | 'paused' | 'overdue';
+  milestones?: { value: number; date: string; achieved: boolean }[];
 }
 
 interface PerformanceMetric {
-  id: string
-  name: string
-  value: number
-  change: number
-  unit: string
-  trend: 'up' | 'down' | 'stable'
-  category: string
-  icon: any
+  id: string;
+  name: string;
+  value: number;
+  change: number;
+  unit: string;
+  trend: 'up' | 'down' | 'stable';
+  category: string;
+  icon: any;
 }
 
 interface PredictionData {
-  metric: string
-  current: number
-  predicted: number
-  confidence: number
-  timeframe: string
+  metric: string;
+  current: number;
+  predicted: number;
+  confidence: number;
+  timeframe: string;
 }
 
 export function AdvancedTrainingDashboard() {
-  const [selectedTimeframe, setSelectedTimeframe] = useState('30d')
-  const [showGoalModal, setShowGoalModal] = useState(false)
-  
+  const [selectedTimeframe, setSelectedTimeframe] = useState('30d');
+  const [showGoalModal, setShowGoalModal] = useState(false);
+
   // Sample goals data
   const [goals, setGoals] = useState<Goal[]>([
     {
@@ -77,7 +77,7 @@ export function AdvancedTrainingDashboard() {
       deadline: '2024-12-31',
       category: 'endurance',
       priority: 'high',
-      status: 'active'
+      status: 'active',
     },
     {
       id: '2',
@@ -89,7 +89,7 @@ export function AdvancedTrainingDashboard() {
       deadline: '2024-12-31',
       category: 'endurance',
       priority: 'high',
-      status: 'active'
+      status: 'active',
     },
     {
       id: '3',
@@ -101,7 +101,7 @@ export function AdvancedTrainingDashboard() {
       deadline: '2024-12-31',
       category: 'technical',
       priority: 'medium',
-      status: 'active'
+      status: 'active',
     },
     {
       id: '4',
@@ -113,30 +113,32 @@ export function AdvancedTrainingDashboard() {
       deadline: '2024-12-31',
       category: 'recovery',
       priority: 'medium',
-      status: 'overdue'
-    }
-  ])
+      status: 'overdue',
+    },
+  ]);
 
   // Goal management functions
-  const handleAddGoal = (newGoalData: Omit<Goal, 'id' | 'status' | 'current'>) => {
+  const handleAddGoal = (
+    newGoalData: Omit<Goal, 'id' | 'status' | 'current'>
+  ) => {
     const newGoal: Goal = {
       ...newGoalData,
       id: Date.now().toString(),
       current: 0,
-      status: 'active'
-    }
-    setGoals(prev => [...prev, newGoal])
-  }
+      status: 'active',
+    };
+    setGoals((prev) => [...prev, newGoal]);
+  };
 
   const handleUpdateGoal = (id: string, updates: Partial<Goal>) => {
-    setGoals(prev => prev.map(goal => 
-      goal.id === id ? { ...goal, ...updates } : goal
-    ))
-  }
+    setGoals((prev) =>
+      prev.map((goal) => (goal.id === id ? { ...goal, ...updates } : goal))
+    );
+  };
 
   const handleDeleteGoal = (id: string) => {
-    setGoals(prev => prev.filter(goal => goal.id !== id))
-  }
+    setGoals((prev) => prev.filter((goal) => goal.id !== id));
+  };
 
   const performanceMetrics: PerformanceMetric[] = [
     {
@@ -147,7 +149,7 @@ export function AdvancedTrainingDashboard() {
       unit: 'ml/kg/min',
       trend: 'up',
       category: 'Cardiovascular',
-      icon: Heart
+      icon: Heart,
     },
     {
       id: '2',
@@ -157,7 +159,7 @@ export function AdvancedTrainingDashboard() {
       unit: 'watts',
       trend: 'up',
       category: 'Strength',
-      icon: Zap
+      icon: Zap,
     },
     {
       id: '3',
@@ -167,7 +169,7 @@ export function AdvancedTrainingDashboard() {
       unit: 'bpm',
       trend: 'down',
       category: 'Endurance',
-      icon: Activity
+      icon: Activity,
     },
     {
       id: '4',
@@ -177,9 +179,9 @@ export function AdvancedTrainingDashboard() {
       unit: '%',
       trend: 'stable',
       category: 'Recovery',
-      icon: Timer
-    }
-  ]
+      icon: Timer,
+    },
+  ];
 
   const predictions: PredictionData[] = [
     {
@@ -187,61 +189,79 @@ export function AdvancedTrainingDashboard() {
       current: 72,
       predicted: 87,
       confidence: 0.85,
-      timeframe: '6 months'
+      timeframe: '6 months',
     },
     {
       metric: 'Max Altitude Capability',
       current: 5500,
       predicted: 6800,
       confidence: 0.78,
-      timeframe: '4 months'
+      timeframe: '4 months',
     },
     {
       metric: 'Endurance Index',
       current: 8.2,
       predicted: 9.1,
       confidence: 0.92,
-      timeframe: '3 months'
-    }
-  ]
+      timeframe: '3 months',
+    },
+  ];
 
   const getGoalStatusColor = (status: Goal['status']) => {
     switch (status) {
-      case 'completed': return 'bg-emerald-100 text-emerald-800 border-emerald-200'
-      case 'active': return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'paused': return 'bg-orange-100 text-orange-800 border-orange-200'
-      case 'overdue': return 'bg-red-100 text-red-800 border-red-200'
-      default: return 'bg-gray-100 text-gray-800 border-gray-200'
+      case 'completed':
+        return 'bg-emerald-100 text-emerald-800 border-emerald-200';
+      case 'active':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'paused':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'overdue':
+        return 'bg-red-100 text-red-800 border-red-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
     }
-  }
+  };
 
   const getGoalStatusIcon = (status: Goal['status']) => {
     switch (status) {
-      case 'completed': return Check
-      case 'active': return Target
-      case 'paused': return Timer
-      case 'overdue': return AlertCircle
-      default: return Minus
+      case 'completed':
+        return Check;
+      case 'active':
+        return Target;
+      case 'paused':
+        return Timer;
+      case 'overdue':
+        return AlertCircle;
+      default:
+        return Minus;
     }
-  }
+  };
 
   const getCategoryIcon = (category: Goal['category']) => {
     switch (category) {
-      case 'endurance': return Activity
-      case 'strength': return Zap
-      case 'technical': return Mountain
-      case 'recovery': return Heart
-      default: return Target
+      case 'endurance':
+        return Activity;
+      case 'strength':
+        return Zap;
+      case 'technical':
+        return Mountain;
+      case 'recovery':
+        return Heart;
+      default:
+        return Target;
     }
-  }
+  };
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
-      case 'up': return ArrowUp
-      case 'down': return ArrowDown
-      default: return Minus
+      case 'up':
+        return ArrowUp;
+      case 'down':
+        return ArrowDown;
+      default:
+        return Minus;
     }
-  }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -249,24 +269,24 @@ export function AdvancedTrainingDashboard() {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2
-      }
-    }
-  }
+        delayChildren: 0.2,
+      },
+    },
+  };
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.95 },
     visible: {
       opacity: 1,
       y: 0,
-      scale: 1
-    }
-  }
+      scale: 1,
+    },
+  };
 
   return (
     <div className="space-y-8">
       {/* Header */}
-      <motion.div 
+      <motion.div
         className="flex flex-col lg:flex-row lg:items-center justify-between gap-6"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -277,7 +297,8 @@ export function AdvancedTrainingDashboard() {
             Advanced Training Analytics
           </h1>
           <p className="text-gray-600">
-            AI-powered insights and predictive analytics for Everest 2027 preparation
+            AI-powered insights and predictive analytics for Everest 2027
+            preparation
           </p>
         </div>
 
@@ -311,58 +332,73 @@ export function AdvancedTrainingDashboard() {
       </motion.div>
 
       {/* Performance Metrics Grid */}
-      <motion.div 
+      <motion.div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
         {performanceMetrics.map((metric) => {
-          const IconComponent = metric.icon
-          const TrendIcon = getTrendIcon(metric.trend)
-          
+          const IconComponent = metric.icon;
+          const TrendIcon = getTrendIcon(metric.trend);
+
           return (
             <motion.div
               key={metric.id}
               className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300"
               variants={cardVariants}
-              whileHover={{ y: -2, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+              whileHover={{
+                y: -2,
+                boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
+              }}
             >
               <div className="flex items-start justify-between mb-4">
-                <div className={cn(
-                  'p-3 rounded-xl',
-                  metric.trend === 'up' && 'bg-green-100',
-                  metric.trend === 'down' && 'bg-red-100',
-                  metric.trend === 'stable' && 'bg-blue-100'
-                )}>
-                  <IconComponent className={cn(
-                    'w-6 h-6',
-                    metric.trend === 'up' && 'text-green-600',
-                    metric.trend === 'down' && 'text-red-600',
-                    metric.trend === 'stable' && 'text-blue-600'
-                  )} />
+                <div
+                  className={cn(
+                    'p-3 rounded-xl',
+                    metric.trend === 'up' && 'bg-green-100',
+                    metric.trend === 'down' && 'bg-red-100',
+                    metric.trend === 'stable' && 'bg-blue-100'
+                  )}
+                >
+                  <IconComponent
+                    className={cn(
+                      'w-6 h-6',
+                      metric.trend === 'up' && 'text-green-600',
+                      metric.trend === 'down' && 'text-red-600',
+                      metric.trend === 'stable' && 'text-blue-600'
+                    )}
+                  />
                 </div>
-                
-                <div className={cn(
-                  'flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium',
-                  metric.trend === 'up' && 'bg-green-100 text-green-700',
-                  metric.trend === 'down' && 'bg-red-100 text-red-700',
-                  metric.trend === 'stable' && 'bg-gray-100 text-gray-700'
-                )}>
+
+                <div
+                  className={cn(
+                    'flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium',
+                    metric.trend === 'up' && 'bg-green-100 text-green-700',
+                    metric.trend === 'down' && 'bg-red-100 text-red-700',
+                    metric.trend === 'stable' && 'bg-gray-100 text-gray-700'
+                  )}
+                >
                   <TrendIcon className="w-3 h-3" />
-                  {metric.change > 0 ? '+' : ''}{metric.change}
+                  {metric.change > 0 ? '+' : ''}
+                  {metric.change}
                 </div>
               </div>
 
               <div>
                 <div className="text-2xl font-semibold text-gray-900 mb-1">
-                  {metric.value} <span className="text-lg font-normal text-gray-500">{metric.unit}</span>
+                  {metric.value}{' '}
+                  <span className="text-lg font-normal text-gray-500">
+                    {metric.unit}
+                  </span>
                 </div>
-                <div className="text-sm font-medium text-gray-900">{metric.name}</div>
+                <div className="text-sm font-medium text-gray-900">
+                  {metric.name}
+                </div>
                 <div className="text-xs text-gray-500">{metric.category}</div>
               </div>
             </motion.div>
-          )
+          );
         })}
       </motion.div>
 
@@ -377,16 +413,18 @@ export function AdvancedTrainingDashboard() {
           viewport={{ once: true }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-semibold text-gray-900">Training Goals</h3>
+            <h3 className="text-xl font-semibold text-gray-900">
+              Training Goals
+            </h3>
             <Target className="w-5 h-5 text-red-600" />
           </div>
 
           <div className="space-y-4">
             {goals.map((goal) => {
-              const progress = (goal.current / goal.target) * 100
-              const StatusIcon = getGoalStatusIcon(goal.status)
-              const CategoryIcon = getCategoryIcon(goal.category)
-              
+              const progress = (goal.current / goal.target) * 100;
+              const StatusIcon = getGoalStatusIcon(goal.status);
+              const CategoryIcon = getCategoryIcon(goal.category);
+
               return (
                 <motion.div
                   key={goal.id}
@@ -399,17 +437,21 @@ export function AdvancedTrainingDashboard() {
                         <CategoryIcon className="w-4 h-4 text-gray-600" />
                       </div>
                       <div>
-                        <h4 className="font-medium text-gray-900">{goal.title}</h4>
+                        <h4 className="font-medium text-gray-900">
+                          {goal.title}
+                        </h4>
                         <p className="text-sm text-gray-500">
                           {goal.current} / {goal.target} {goal.unit}
                         </p>
                       </div>
                     </div>
 
-                    <div className={cn(
-                      'flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border',
-                      getGoalStatusColor(goal.status)
-                    )}>
+                    <div
+                      className={cn(
+                        'flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border',
+                        getGoalStatusColor(goal.status)
+                      )}
+                    >
                       <StatusIcon className="w-3 h-3" />
                       {goal.status.replace('-', ' ')}
                     </div>
@@ -432,10 +474,12 @@ export function AdvancedTrainingDashboard() {
 
                   <div className="flex justify-between items-center mt-2 text-xs text-gray-500">
                     <span>{progress.toFixed(1)}% complete</span>
-                    <span>Due: {new Date(goal.deadline).toLocaleDateString()}</span>
+                    <span>
+                      Due: {new Date(goal.deadline).toLocaleDateString()}
+                    </span>
                   </div>
                 </motion.div>
-              )
+              );
             })}
           </div>
         </motion.div>
@@ -449,7 +493,9 @@ export function AdvancedTrainingDashboard() {
           viewport={{ once: true }}
         >
           <div className="flex items-center justify-between mb-6">
-            <h3 className="text-xl font-semibold text-gray-900">AI Performance Predictions</h3>
+            <h3 className="text-xl font-semibold text-gray-900">
+              AI Performance Predictions
+            </h3>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-xs text-gray-500">Live AI Model</span>
@@ -466,33 +512,45 @@ export function AdvancedTrainingDashboard() {
                 transition={{ delay: index * 0.2 }}
               >
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium text-gray-900">{prediction.metric}</h4>
+                  <h4 className="font-medium text-gray-900">
+                    {prediction.metric}
+                  </h4>
                   <div className="flex items-center gap-2">
                     <span className="text-sm text-gray-500">
                       {(prediction.confidence * 100).toFixed(0)}% confidence
                     </span>
-                    <div className={cn(
-                      'w-2 h-2 rounded-full',
-                      prediction.confidence > 0.8 ? 'bg-green-500' :
-                      prediction.confidence > 0.6 ? 'bg-yellow-500' : 'bg-red-500'
-                    )}></div>
+                    <div
+                      className={cn(
+                        'w-2 h-2 rounded-full',
+                        prediction.confidence > 0.8
+                          ? 'bg-green-500'
+                          : prediction.confidence > 0.6
+                            ? 'bg-yellow-500'
+                            : 'bg-red-500'
+                      )}
+                    ></div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-4">
                   <div className="flex-1">
                     <div className="flex justify-between text-sm mb-1">
-                      <span className="text-gray-600">Current: {prediction.current}</span>
+                      <span className="text-gray-600">
+                        Current: {prediction.current}
+                      </span>
                       <span className="text-gray-900 font-medium">
-                        Predicted: {prediction.predicted} in {prediction.timeframe}
+                        Predicted: {prediction.predicted} in{' '}
+                        {prediction.timeframe}
                       </span>
                     </div>
-                    
+
                     <div className="relative w-full bg-gray-100 rounded-full h-2">
                       <motion.div
                         className="absolute left-0 top-0 h-full bg-blue-500 rounded-full"
                         initial={{ width: 0 }}
-                        animate={{ width: `${(prediction.current / prediction.predicted) * 100}%` }}
+                        animate={{
+                          width: `${(prediction.current / prediction.predicted) * 100}%`,
+                        }}
                         transition={{ duration: 1.5, delay: index * 0.3 }}
                       />
                       <motion.div
@@ -506,7 +564,13 @@ export function AdvancedTrainingDashboard() {
 
                   <div className="text-right">
                     <div className="text-lg font-semibold text-green-600">
-                      +{((prediction.predicted - prediction.current) / prediction.current * 100).toFixed(0)}%
+                      +
+                      {(
+                        ((prediction.predicted - prediction.current) /
+                          prediction.current) *
+                        100
+                      ).toFixed(0)}
+                      %
                     </div>
                     <div className="text-xs text-gray-500">improvement</div>
                   </div>
@@ -528,5 +592,5 @@ export function AdvancedTrainingDashboard() {
       {/* Performance Analytics Section */}
       <PerformanceAnalytics />
     </div>
-  )
+  );
 }

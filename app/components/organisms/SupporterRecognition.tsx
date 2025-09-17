@@ -1,20 +1,20 @@
-'use client'
+'use client';
 
-import { Award, Star, Heart, Calendar, Users, Crown, Gift } from 'lucide-react'
-import { Badge } from '../atoms/Badge'
-import { Button } from '../atoms/Button'
-import { cn } from '@/lib/utils'
+import { Award, Star, Heart, Calendar, Users, Crown, Gift } from 'lucide-react';
+import { Badge } from '../atoms/Badge';
+import { Button } from '../atoms/Button';
+import { cn } from '@/lib/utils';
 
 interface Supporter {
-  id: string
-  name: string
-  joinedDate: string
-  level: 'supporter' | 'champion' | 'ambassador' | 'legend'
-  contributions: string[]
-  monthlyHighlight?: string
-  avatar?: string
-  location?: string
-  favoriteActivity?: string
+  id: string;
+  name: string;
+  joinedDate: string;
+  level: 'supporter' | 'champion' | 'ambassador' | 'legend';
+  contributions: string[];
+  monthlyHighlight?: string;
+  avatar?: string;
+  location?: string;
+  favoriteActivity?: string;
 }
 
 export function SupporterRecognition() {
@@ -30,9 +30,10 @@ export function SupporterRecognition() {
         'Completed 3 community challenges',
         'Shared training insights with 50+ comments',
         'Encouraged 15+ community members',
-        'Newsletter subscriber for 8+ months'
+        'Newsletter subscriber for 8+ months',
       ],
-      monthlyHighlight: 'Inspired 5 new members to start their own expedition training after sharing her systematic approach success story.'
+      monthlyHighlight:
+        'Inspired 5 new members to start their own expedition training after sharing her systematic approach success story.',
     },
     {
       id: '2',
@@ -45,9 +46,10 @@ export function SupporterRecognition() {
         'Answered 100+ community questions',
         'Mentored new expedition planners',
         'Completed 5 community challenges',
-        'Shared detailed gear reviews'
+        'Shared detailed gear reviews',
       ],
-      monthlyHighlight: 'Created comprehensive gear guide that helped 20+ community members make informed equipment decisions.'
+      monthlyHighlight:
+        'Created comprehensive gear guide that helped 20+ community members make informed equipment decisions.',
     },
     {
       id: '3',
@@ -60,28 +62,31 @@ export function SupporterRecognition() {
         'Active in weekly discussions',
         'Shared personal climbing achievements',
         'Participated in 2 challenges',
-        'Consistent newsletter engagement'
+        'Consistent newsletter engagement',
       ],
-      monthlyHighlight: 'Completed her first multi-pitch climb using systematic training principles from the community.'
-    }
-  ]
+      monthlyHighlight:
+        'Completed her first multi-pitch climb using systematic training principles from the community.',
+    },
+  ];
 
   const getLevelBadge = (level: string) => {
     const levels = {
       supporter: { color: 'bg-blue-100 text-blue-700', icon: Heart },
       champion: { color: 'bg-purple-100 text-purple-700', icon: Star },
       ambassador: { color: 'bg-amber-100 text-amber-700', icon: Crown },
-      legend: { color: 'bg-red-100 text-red-700', icon: Award }
-    }
-    return levels[level as keyof typeof levels] || levels.supporter
-  }
+      legend: { color: 'bg-red-100 text-red-700', icon: Award },
+    };
+    return levels[level as keyof typeof levels] || levels.supporter;
+  };
 
   const formatJoinDate = (dateString: string) => {
-    const date = new Date(dateString)
-    const now = new Date()
-    const months = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 30))
-    return `${months} months`
-  }
+    const date = new Date(dateString);
+    const now = new Date();
+    const months = Math.floor(
+      (now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24 * 30)
+    );
+    return `${months} months`;
+  };
 
   return (
     <section className="py-16 bg-white">
@@ -90,11 +95,14 @@ export function SupporterRecognition() {
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-2 mb-4">
             <Award className="w-6 h-6 text-amber-600" />
-            <h2 className="text-3xl font-light text-spa-charcoal">Community Champions</h2>
+            <h2 className="text-3xl font-light text-spa-charcoal">
+              Community Champions
+            </h2>
           </div>
           <p className="text-spa-charcoal/70 max-w-2xl mx-auto">
-            Celebrating supporters who contribute to our community's growth, 
-            share valuable insights, and inspire fellow adventurers on their journeys.
+            Celebrating supporters who contribute to our community's growth,
+            share valuable insights, and inspire fellow adventurers on their
+            journeys.
           </p>
         </div>
 
@@ -103,29 +111,49 @@ export function SupporterRecognition() {
           <h3 className="text-xl font-medium text-spa-charcoal text-center mb-8">
             Recognition Levels
           </h3>
-          
+
           <div className="grid md:grid-cols-4 gap-6">
             {[
-              { level: 'supporter', label: 'Supporter', description: 'Active community participation' },
-              { level: 'champion', label: 'Champion', description: 'Consistent engagement & challenges' },
-              { level: 'ambassador', label: 'Ambassador', description: 'Mentoring & community leadership' },
-              { level: 'legend', label: 'Legend', description: 'Exceptional long-term contribution' }
+              {
+                level: 'supporter',
+                label: 'Supporter',
+                description: 'Active community participation',
+              },
+              {
+                level: 'champion',
+                label: 'Champion',
+                description: 'Consistent engagement & challenges',
+              },
+              {
+                level: 'ambassador',
+                label: 'Ambassador',
+                description: 'Mentoring & community leadership',
+              },
+              {
+                level: 'legend',
+                label: 'Legend',
+                description: 'Exceptional long-term contribution',
+              },
             ].map(({ level, label, description }) => {
-              const badge = getLevelBadge(level)
-              const Icon = badge.icon
-              
+              const badge = getLevelBadge(level);
+              const Icon = badge.icon;
+
               return (
                 <div key={level} className="text-center">
-                  <div className={cn(
-                    'w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3',
-                    badge.color
-                  )}>
+                  <div
+                    className={cn(
+                      'w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3',
+                      badge.color
+                    )}
+                  >
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h4 className="font-medium text-spa-charcoal mb-1">{label}</h4>
+                  <h4 className="font-medium text-spa-charcoal mb-1">
+                    {label}
+                  </h4>
                   <p className="text-spa-charcoal/60 text-sm">{description}</p>
                 </div>
-              )
+              );
             })}
           </div>
         </div>
@@ -133,9 +161,9 @@ export function SupporterRecognition() {
         {/* Featured Supporters */}
         <div className="space-y-8">
           {supporters.map((supporter) => {
-            const badge = getLevelBadge(supporter.level)
-            const Icon = badge.icon
-            
+            const badge = getLevelBadge(supporter.level);
+            const Icon = badge.icon;
+
             return (
               <div
                 key={supporter.id}
@@ -148,15 +176,17 @@ export function SupporterRecognition() {
                       <div className="w-16 h-16 bg-alpine-blue/10 rounded-full flex items-center justify-center flex-shrink-0">
                         <Icon className="w-8 h-8 text-alpine-blue" />
                       </div>
-                      
+
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-lg font-medium text-spa-charcoal">{supporter.name}</h3>
+                          <h3 className="text-lg font-medium text-spa-charcoal">
+                            {supporter.name}
+                          </h3>
                           <Badge className={badge.color}>
                             {supporter.level}
                           </Badge>
                         </div>
-                        
+
                         <div className="space-y-1 text-sm text-spa-charcoal/60">
                           {supporter.location && (
                             <div className="flex items-center gap-1">
@@ -164,17 +194,19 @@ export function SupporterRecognition() {
                               <span>{supporter.location}</span>
                             </div>
                           )}
-                          
+
                           {supporter.favoriteActivity && (
                             <div className="flex items-center gap-1">
                               <span>🏔️</span>
                               <span>{supporter.favoriteActivity}</span>
                             </div>
                           )}
-                          
+
                           <div className="flex items-center gap-1">
                             <Calendar className="w-3 h-3" />
-                            <span>Member for {formatJoinDate(supporter.joinedDate)}</span>
+                            <span>
+                              Member for {formatJoinDate(supporter.joinedDate)}
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -188,7 +220,9 @@ export function SupporterRecognition() {
                       <div className="bg-gradient-to-br from-amber-50 to-white rounded-lg p-4 border border-amber-200">
                         <div className="flex items-center gap-2 mb-2">
                           <Star className="w-4 h-4 text-amber-600" />
-                          <span className="text-sm font-medium text-amber-800">February Highlight</span>
+                          <span className="text-sm font-medium text-amber-800">
+                            February Highlight
+                          </span>
                         </div>
                         <p className="text-amber-700 text-sm leading-relaxed">
                           {supporter.monthlyHighlight}
@@ -204,9 +238,14 @@ export function SupporterRecognition() {
                       </h4>
                       <div className="grid md:grid-cols-2 gap-2">
                         {supporter.contributions.map((contribution, index) => (
-                          <div key={index} className="flex items-start gap-2 text-sm">
+                          <div
+                            key={index}
+                            className="flex items-start gap-2 text-sm"
+                          >
                             <div className="w-1.5 h-1.5 bg-alpine-blue rounded-full mt-2 flex-shrink-0" />
-                            <span className="text-spa-charcoal/80">{contribution}</span>
+                            <span className="text-spa-charcoal/80">
+                              {contribution}
+                            </span>
                           </div>
                         ))}
                       </div>
@@ -214,7 +253,7 @@ export function SupporterRecognition() {
                   </div>
                 </div>
               </div>
-            )
+            );
           })}
         </div>
 
@@ -228,8 +267,9 @@ export function SupporterRecognition() {
               </h3>
             </div>
             <p className="text-spa-charcoal/70 mb-6 max-w-2xl mx-auto">
-              Active community participation, helping fellow adventurers, and sharing your journey 
-              can lead to recognition in our monthly highlights and special supporter features.
+              Active community participation, helping fellow adventurers, and
+              sharing your journey can lead to recognition in our monthly
+              highlights and special supporter features.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="summit" asChild>
@@ -243,5 +283,5 @@ export function SupporterRecognition() {
         </div>
       </div>
     </section>
-  )
+  );
 }

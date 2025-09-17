@@ -1,1 +1,1 @@
-export { JourneyNavigation } from './JourneyNavigation'
+export { JourneyNavigation } from './JourneyNavigation';

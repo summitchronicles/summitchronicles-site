@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -7,11 +7,13 @@ import {
   ArrowLeftIcon,
   CheckCircleIcon,
   ExclamationTriangleIcon,
-  ArrowTopRightOnSquareIcon
+  ArrowTopRightOnSquareIcon,
 } from '@heroicons/react/24/outline';
 
 export default function StravaAdminPage() {
-  const [connectionStatus, setConnectionStatus] = useState<'checking' | 'connected' | 'disconnected'>('checking');
+  const [connectionStatus, setConnectionStatus] = useState<
+    'checking' | 'connected' | 'disconnected'
+  >('checking');
   const [tokenInfo, setTokenInfo] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,7 +25,7 @@ export default function StravaAdminPage() {
     try {
       const response = await fetch('/api/strava/recent');
       const data = await response.json();
-      
+
       if (data.source === 'mock') {
         setConnectionStatus('disconnected');
       } else {
@@ -40,16 +42,17 @@ export default function StravaAdminPage() {
     const clientId = process.env.NEXT_PUBLIC_STRAVA_CLIENT_ID || '172794';
     const redirectUri = 'https://summitchronicles.com/api/strava/callback';
     const scope = 'read,activity:read_all';
-    
-    const authUrl = `https://www.strava.com/oauth/authorize?` +
+
+    const authUrl =
+      `https://www.strava.com/oauth/authorize?` +
       `client_id=${clientId}&` +
       `response_type=code&` +
       `redirect_uri=${encodeURIComponent(redirectUri)}&` +
       `scope=${scope}`;
-    
+
     console.log('Strava Auth URL:', authUrl);
     console.log('Client ID being used:', clientId);
-    
+
     window.location.href = authUrl;
   };
 
@@ -67,8 +70,12 @@ export default function StravaAdminPage() {
                 <ArrowLeftIcon className="w-5 h-5 text-white" />
               </Link>
               <div>
-                <h1 className="text-3xl font-bold text-white mb-2">Strava Integration</h1>
-                <p className="text-white/60">Connect your Strava account to display real training data</p>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  Strava Integration
+                </h1>
+                <p className="text-white/60">
+                  Connect your Strava account to display real training data
+                </p>
               </div>
             </div>
           </div>
@@ -77,7 +84,7 @@ export default function StravaAdminPage() {
 
       <div className="max-w-4xl mx-auto px-6 py-8">
         {/* Connection Status Card */}
-        <motion.div 
+        <motion.div
           className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -92,7 +99,7 @@ export default function StravaAdminPage() {
             {connectionStatus === 'disconnected' && (
               <ExclamationTriangleIcon className="w-8 h-8 text-yellow-400" />
             )}
-            
+
             <div>
               <h2 className="text-xl font-semibold text-white">
                 {connectionStatus === 'checking' && 'Checking Connection...'}
@@ -100,9 +107,12 @@ export default function StravaAdminPage() {
                 {connectionStatus === 'disconnected' && 'Strava Not Connected'}
               </h2>
               <p className="text-white/60">
-                {connectionStatus === 'checking' && 'Verifying your Strava integration status'}
-                {connectionStatus === 'connected' && 'Your real training data is being displayed'}
-                {connectionStatus === 'disconnected' && 'Currently showing mock data - connect to see your real activities'}
+                {connectionStatus === 'checking' &&
+                  'Verifying your Strava integration status'}
+                {connectionStatus === 'connected' &&
+                  'Your real training data is being displayed'}
+                {connectionStatus === 'disconnected' &&
+                  'Currently showing mock data - connect to see your real activities'}
               </p>
             </div>
           </div>
@@ -113,8 +123,14 @@ export default function StravaAdminPage() {
                 <div className="flex items-start gap-3">
                   <ExclamationTriangleIcon className="w-5 h-5 text-yellow-400 mt-0.5" />
                   <div className="text-sm text-yellow-200">
-                    <p className="font-medium mb-1">Mock Data Currently Active</p>
-                    <p>The application is showing generated training data. Connect your Strava account to display your actual mountaineering and training activities.</p>
+                    <p className="font-medium mb-1">
+                      Mock Data Currently Active
+                    </p>
+                    <p>
+                      The application is showing generated training data.
+                      Connect your Strava account to display your actual
+                      mountaineering and training activities.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -123,8 +139,12 @@ export default function StravaAdminPage() {
                 onClick={handleStravaConnect}
                 className="flex items-center gap-3 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-xl transition-colors"
               >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.917"/>
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.917" />
                 </svg>
                 Connect with Strava
                 <ArrowTopRightOnSquareIcon className="w-4 h-4" />
@@ -138,7 +158,10 @@ export default function StravaAdminPage() {
                 <CheckCircleIcon className="w-5 h-5 text-green-400 mt-0.5" />
                 <div className="text-sm text-green-200">
                   <p className="font-medium mb-1">Successfully Connected</p>
-                  <p>Your Strava account is connected and your real training data is being displayed throughout the application.</p>
+                  <p>
+                    Your Strava account is connected and your real training data
+                    is being displayed throughout the application.
+                  </p>
                   <div className="mt-3 space-y-1 text-xs text-green-300">
                     <p>• Training analytics show your actual activities</p>
                     <p>• Recent workouts display your latest sessions</p>
@@ -163,29 +186,51 @@ export default function StravaAdminPage() {
         </motion.div>
 
         {/* Instructions */}
-        <motion.div 
+        <motion.div
           className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <h3 className="text-lg font-semibold text-white mb-4">How to Connect Your Strava Account</h3>
+          <h3 className="text-lg font-semibold text-white mb-4">
+            How to Connect Your Strava Account
+          </h3>
           <div className="space-y-3 text-white/80">
             <div className="flex items-start gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-summitGold text-black rounded-full flex items-center justify-center text-sm font-medium">1</span>
-              <p>Click &quot;Connect with Strava&quot; above to start the authorization process</p>
+              <span className="flex-shrink-0 w-6 h-6 bg-summitGold text-black rounded-full flex items-center justify-center text-sm font-medium">
+                1
+              </span>
+              <p>
+                Click &quot;Connect with Strava&quot; above to start the
+                authorization process
+              </p>
             </div>
             <div className="flex items-start gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-summitGold text-black rounded-full flex items-center justify-center text-sm font-medium">2</span>
-              <p>You&apos;ll be redirected to Strava to authorize Summit Chronicles to access your activities</p>
+              <span className="flex-shrink-0 w-6 h-6 bg-summitGold text-black rounded-full flex items-center justify-center text-sm font-medium">
+                2
+              </span>
+              <p>
+                You&apos;ll be redirected to Strava to authorize Summit
+                Chronicles to access your activities
+              </p>
             </div>
             <div className="flex items-start gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-summitGold text-black rounded-full flex items-center justify-center text-sm font-medium">3</span>
-              <p>After authorization, you&apos;ll be redirected back and your real training data will appear</p>
+              <span className="flex-shrink-0 w-6 h-6 bg-summitGold text-black rounded-full flex items-center justify-center text-sm font-medium">
+                3
+              </span>
+              <p>
+                After authorization, you&apos;ll be redirected back and your
+                real training data will appear
+              </p>
             </div>
             <div className="flex items-start gap-3">
-              <span className="flex-shrink-0 w-6 h-6 bg-summitGold text-black rounded-full flex items-center justify-center text-sm font-medium">4</span>
-              <p>Visit the training analytics page to see your actual mountaineering and training progress</p>
+              <span className="flex-shrink-0 w-6 h-6 bg-summitGold text-black rounded-full flex items-center justify-center text-sm font-medium">
+                4
+              </span>
+              <p>
+                Visit the training analytics page to see your actual
+                mountaineering and training progress
+              </p>
             </div>
           </div>
         </motion.div>

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -12,7 +12,7 @@ import {
   ClockIcon,
   StarIcon,
   BookmarkIcon,
-  PaperAirplaneIcon
+  PaperAirplaneIcon,
 } from '@heroicons/react/24/outline';
 import ImageUpload from '../../../components/blog/ImageUpload';
 import AdvancedEditorLazy from '../../../components/editor/AdvancedEditorLazy';
@@ -39,7 +39,7 @@ export default function NewBlogPost() {
     meta_description: '',
     tags: [] as string[],
     scheduled_for: '',
-    read_time: 5
+    read_time: 5,
   });
   const [tagInput, setTagInput] = useState('');
   const [previewMode, setPreviewMode] = useState(false);
@@ -55,7 +55,10 @@ export default function NewBlogPost() {
       if (response.ok) {
         setCategories(data.categories || []);
         if (data.categories?.length > 0) {
-          setFormData(prev => ({ ...prev, category: data.categories[0].name }));
+          setFormData((prev) => ({
+            ...prev,
+            category: data.categories[0].name,
+          }));
         }
       }
     } catch (error) {
@@ -71,28 +74,28 @@ export default function NewBlogPost() {
   };
 
   const handleTitleChange = (title: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       title,
       slug: prev.slug || generateSlug(title),
-      meta_title: prev.meta_title || title
+      meta_title: prev.meta_title || title,
     }));
   };
 
   const addTag = () => {
     if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
-        tags: [...prev.tags, tagInput.trim()]
+        tags: [...prev.tags, tagInput.trim()],
       }));
       setTagInput('');
     }
   };
 
   const removeTag = (tagToRemove: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      tags: prev.tags.filter((tag) => tag !== tagToRemove),
     }));
   };
 
@@ -103,14 +106,16 @@ export default function NewBlogPost() {
   };
 
   const handleContentChange = (content: string) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       content,
-      read_time: estimateReadTime(content)
+      read_time: estimateReadTime(content),
     }));
   };
 
-  const handleSave = async (status: 'draft' | 'published' | 'scheduled' = 'draft') => {
+  const handleSave = async (
+    status: 'draft' | 'published' | 'scheduled' = 'draft'
+  ) => {
     if (!formData.title || !formData.content || !formData.category) {
       alert('Please fill in title, content, and category');
       return;
@@ -121,14 +126,19 @@ export default function NewBlogPost() {
       const payload = {
         ...formData,
         status,
-        excerpt: formData.excerpt || formData.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
-        meta_description: formData.meta_description || formData.excerpt || formData.content.replace(/<[^>]*>/g, '').substring(0, 160)
+        excerpt:
+          formData.excerpt ||
+          formData.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
+        meta_description:
+          formData.meta_description ||
+          formData.excerpt ||
+          formData.content.replace(/<[^>]*>/g, '').substring(0, 160),
       };
 
       const response = await fetch('/api/blog/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -160,8 +170,12 @@ export default function NewBlogPost() {
                 <ArrowLeftIcon className="w-5 h-5 text-white" />
               </button>
               <div>
-                <h1 className="text-2xl font-bold text-white">Create New Post</h1>
-                <p className="text-white/60">Share your mountaineering insights</p>
+                <h1 className="text-2xl font-bold text-white">
+                  Create New Post
+                </h1>
+                <p className="text-white/60">
+                  Share your mountaineering insights
+                </p>
               </div>
             </div>
 
@@ -173,7 +187,7 @@ export default function NewBlogPost() {
                 <EyeIcon className="w-4 h-4" />
                 Preview
               </button>
-              
+
               <button
                 onClick={() => handleSave('draft')}
                 disabled={saving}
@@ -209,13 +223,15 @@ export default function NewBlogPost() {
                 onChange={(e) => handleTitleChange(e.target.value)}
                 className="w-full bg-transparent text-3xl font-bold text-white placeholder-white/50 focus:outline-none"
               />
-              
+
               <div className="mt-4 flex items-center gap-2 text-sm text-white/60">
                 <span>Slug:</span>
                 <input
                   type="text"
                   value={formData.slug}
-                  onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, slug: e.target.value }))
+                  }
                   className="bg-white/10 border border-white/20 rounded-lg px-3 py-1 text-white focus:outline-none focus:border-summitGold/50"
                 />
               </div>
@@ -223,11 +239,15 @@ export default function NewBlogPost() {
 
             {/* Excerpt */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-              <label className="block text-white font-medium mb-3">Excerpt</label>
+              <label className="block text-white font-medium mb-3">
+                Excerpt
+              </label>
               <textarea
                 placeholder="Brief description of your post..."
                 value={formData.excerpt}
-                onChange={(e) => setFormData(prev => ({ ...prev, excerpt: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, excerpt: e.target.value }))
+                }
                 rows={3}
                 className="w-full bg-white/5 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-white/50 focus:outline-none focus:border-summitGold/50 resize-none"
               />
@@ -235,8 +255,10 @@ export default function NewBlogPost() {
 
             {/* Content Editor */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-              <label className="block text-white font-medium mb-3">Content</label>
-              
+              <label className="block text-white font-medium mb-3">
+                Content
+              </label>
+
               <AdvancedEditorLazy
                 content={formData.content}
                 onChange={handleContentChange}
@@ -249,14 +271,23 @@ export default function NewBlogPost() {
           <div className="space-y-6">
             {/* Status & Visibility */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
-              <h3 className="text-white font-semibold mb-4">Publish Settings</h3>
-              
+              <h3 className="text-white font-semibold mb-4">
+                Publish Settings
+              </h3>
+
               <div className="space-y-4">
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">Status</label>
+                  <label className="block text-white/80 text-sm mb-2">
+                    Status
+                  </label>
                   <select
                     value={formData.status}
-                    onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as any }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        status: e.target.value as any,
+                      }))
+                    }
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-summitGold/50"
                   >
                     <option value="draft">Draft</option>
@@ -267,11 +298,18 @@ export default function NewBlogPost() {
 
                 {formData.status === 'scheduled' && (
                   <div>
-                    <label className="block text-white/80 text-sm mb-2">Schedule For</label>
+                    <label className="block text-white/80 text-sm mb-2">
+                      Schedule For
+                    </label>
                     <input
                       type="datetime-local"
                       value={formData.scheduled_for}
-                      onChange={(e) => setFormData(prev => ({ ...prev, scheduled_for: e.target.value }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          scheduled_for: e.target.value,
+                        }))
+                      }
                       className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-summitGold/50"
                     />
                   </div>
@@ -281,7 +319,12 @@ export default function NewBlogPost() {
                   <input
                     type="checkbox"
                     checked={formData.featured}
-                    onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        featured: e.target.checked,
+                      }))
+                    }
                     className="rounded"
                   />
                   <label className="text-white/80 text-sm">Featured Post</label>
@@ -295,7 +338,9 @@ export default function NewBlogPost() {
               <h3 className="text-white font-semibold mb-4">Category</h3>
               <select
                 value={formData.category}
-                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                onChange={(e) =>
+                  setFormData((prev) => ({ ...prev, category: e.target.value }))
+                }
                 className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-summitGold/50"
               >
                 {categories.map((cat) => (
@@ -309,14 +354,16 @@ export default function NewBlogPost() {
             {/* Tags */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
               <h3 className="text-white font-semibold mb-4">Tags</h3>
-              
+
               <div className="flex gap-2 mb-4">
                 <input
                   type="text"
                   placeholder="Add tag..."
                   value={tagInput}
                   onChange={(e) => setTagInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
+                  onKeyPress={(e) =>
+                    e.key === 'Enter' && (e.preventDefault(), addTag())
+                  }
                   className="flex-1 bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white placeholder-white/50 focus:outline-none focus:border-summitGold/50"
                 />
                 <button
@@ -348,14 +395,21 @@ export default function NewBlogPost() {
             {/* SEO */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
               <h3 className="text-white font-semibold mb-4">SEO</h3>
-              
+
               <div className="space-y-4">
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">Meta Title</label>
+                  <label className="block text-white/80 text-sm mb-2">
+                    Meta Title
+                  </label>
                   <input
                     type="text"
                     value={formData.meta_title}
-                    onChange={(e) => setFormData(prev => ({ ...prev, meta_title: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        meta_title: e.target.value,
+                      }))
+                    }
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-summitGold/50"
                     maxLength={60}
                   />
@@ -365,10 +419,17 @@ export default function NewBlogPost() {
                 </div>
 
                 <div>
-                  <label className="block text-white/80 text-sm mb-2">Meta Description</label>
+                  <label className="block text-white/80 text-sm mb-2">
+                    Meta Description
+                  </label>
                   <textarea
                     value={formData.meta_description}
-                    onChange={(e) => setFormData(prev => ({ ...prev, meta_description: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        meta_description: e.target.value,
+                      }))
+                    }
                     rows={3}
                     className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-summitGold/50"
                     maxLength={160}
@@ -383,14 +444,14 @@ export default function NewBlogPost() {
             {/* Media Upload */}
             <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6">
               <h3 className="text-white font-semibold mb-4">Images</h3>
-              <ImageUpload 
+              <ImageUpload
                 showGallery={true}
                 onImageUploaded={(imageUrl) => {
                   // Insert image markdown into content
                   const markdown = `\n![Image](${imageUrl})\n`;
-                  setFormData(prev => ({
+                  setFormData((prev) => ({
                     ...prev,
-                    content: prev.content + markdown
+                    content: prev.content + markdown,
                   }));
                 }}
               />

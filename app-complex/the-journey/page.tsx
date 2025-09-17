@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import SevenSummitsTracker from "../components/sections/SevenSummitsTracker";
-import SevenSummitsWorldMap from "../components/sections/SevenSummitsWorldMap";
-import ExpeditionTimeline from "../components/sections/ExpeditionTimeline";
+import { motion } from 'framer-motion';
+import SevenSummitsTracker from '../components/sections/SevenSummitsTracker';
+import SevenSummitsWorldMap from '../components/sections/SevenSummitsWorldMap';
+import ExpeditionTimeline from '../components/sections/ExpeditionTimeline';
 import {
   MapPinIcon,
   TrophyIcon,
   CalendarIcon,
-  ClockIcon
-} from "@heroicons/react/24/outline";
+  ClockIcon,
+} from '@heroicons/react/24/outline';
 
 export default function TheJourneyPage() {
   return (
@@ -33,16 +33,17 @@ export default function TheJourneyPage() {
           </motion.div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-8">
-            The{" "}
+            The{' '}
             <span className="bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
               Seven Summits
-            </span>{" "}
+            </span>{' '}
             Journey
           </h1>
 
           <p className="text-xl md:text-2xl text-white/70 leading-relaxed mb-12">
-            Follow my progress as I work toward climbing the highest peak on each continent. 
-            Real expeditions, authentic stories, and lessons learned at altitude.
+            Follow my progress as I work toward climbing the highest peak on
+            each continent. Real expeditions, authentic stories, and lessons
+            learned at altitude.
           </p>
 
           {/* Current Status */}
@@ -79,7 +80,7 @@ export default function TheJourneyPage() {
       <ExpeditionTimeline />
 
       {/* Old Timeline - Remove this section */}
-      <section className="py-20" style={{display: "none"}}>
+      <section className="py-20" style={{ display: 'none' }}>
         <div className="max-w-4xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -89,13 +90,14 @@ export default function TheJourneyPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-white mb-6">
-              The Journey{" "}
+              The Journey{' '}
               <span className="bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
                 Timeline
               </span>
             </h2>
             <p className="text-xl text-white/70">
-              Every peak tells a story. Here's the chronological journey through my Seven Summits challenge.
+              Every peak tells a story. Here's the chronological journey through
+              my Seven Summits challenge.
             </p>
           </motion.div>
 
@@ -103,75 +105,96 @@ export default function TheJourneyPage() {
           <div className="space-y-8">
             {[
               {
-                date: "July 2022",
-                peak: "Mount Elbrus",
-                continent: "Europe",
-                status: "completed",
-                story: "My first major summit. The weather window was perfect, but I learned hard lessons about proper acclimatization and the importance of starting early. The descent in whiteout conditions taught me respect for mountain weather.",
-                elevation: "5,642m",
-                difficulty: "Moderate",
-                lessons: ["Weather can change instantly", "Proper layering is crucial", "Mental preparation matters as much as physical"]
+                date: 'July 2022',
+                peak: 'Mount Elbrus',
+                continent: 'Europe',
+                status: 'completed',
+                story:
+                  'My first major summit. The weather window was perfect, but I learned hard lessons about proper acclimatization and the importance of starting early. The descent in whiteout conditions taught me respect for mountain weather.',
+                elevation: '5,642m',
+                difficulty: 'Moderate',
+                lessons: [
+                  'Weather can change instantly',
+                  'Proper layering is crucial',
+                  'Mental preparation matters as much as physical',
+                ],
               },
               {
-                date: "March 2023", 
-                peak: "Mount Kilimanjaro",
-                continent: "Africa",
-                status: "completed", 
-                story: "The Machame route via Barranco Wall. This climb taught me about altitude sickness management and the importance of 'pole pole' (slowly slowly). The sunrise at Uhuru Peak was life-changing.",
-                elevation: "5,895m",
-                difficulty: "Moderate",
-                lessons: ["Altitude affects everyone differently", "Mental toughness on summit day", "Proper hydration is critical"]
+                date: 'March 2023',
+                peak: 'Mount Kilimanjaro',
+                continent: 'Africa',
+                status: 'completed',
+                story:
+                  "The Machame route via Barranco Wall. This climb taught me about altitude sickness management and the importance of 'pole pole' (slowly slowly). The sunrise at Uhuru Peak was life-changing.",
+                elevation: '5,895m',
+                difficulty: 'Moderate',
+                lessons: [
+                  'Altitude affects everyone differently',
+                  'Mental toughness on summit day',
+                  'Proper hydration is critical',
+                ],
               },
               {
-                date: "December 2023",
-                peak: "Aconcagua", 
-                continent: "South America",
-                status: "completed",
-                story: "The Stone Sentinel pushed me to my limits. High winds, brutal cold, and my first real experience with high altitude. I had to turn back once due to weather, but returned stronger and made the summit on my second attempt.",
-                elevation: "6,961m", 
-                difficulty: "Technical",
-                lessons: ["Know when to turn back", "High altitude changes everything", "Proper gear can save your life"]
+                date: 'December 2023',
+                peak: 'Aconcagua',
+                continent: 'South America',
+                status: 'completed',
+                story:
+                  'The Stone Sentinel pushed me to my limits. High winds, brutal cold, and my first real experience with high altitude. I had to turn back once due to weather, but returned stronger and made the summit on my second attempt.',
+                elevation: '6,961m',
+                difficulty: 'Technical',
+                lessons: [
+                  'Know when to turn back',
+                  'High altitude changes everything',
+                  'Proper gear can save your life',
+                ],
               },
               {
-                date: "June 2025",
-                peak: "Mount McKinley (Denali)",
-                continent: "North America", 
-                status: "planned",
-                story: "My next major challenge. Denali's extreme cold and technical climbing sections will test everything I've learned so far. Currently in intensive cold weather training and crevasse rescue practice.",
-                elevation: "6,190m",
-                difficulty: "Very Technical", 
-                lessons: ["Currently preparing..."]
+                date: 'June 2025',
+                peak: 'Mount McKinley (Denali)',
+                continent: 'North America',
+                status: 'planned',
+                story:
+                  "My next major challenge. Denali's extreme cold and technical climbing sections will test everything I've learned so far. Currently in intensive cold weather training and crevasse rescue practice.",
+                elevation: '6,190m',
+                difficulty: 'Very Technical',
+                lessons: ['Currently preparing...'],
               },
               {
-                date: "September 2026",
-                peak: "Carstensz Pyramid", 
-                continent: "Oceania",
-                status: "planned",
-                story: "The technical climb that's more rock climbing than mountaineering. Already working with climbing coaches to improve my technical rock skills for this unique challenge.",
-                elevation: "4,884m",
-                difficulty: "Extremely Technical",
-                lessons: ["Future expedition..."]
+                date: 'September 2026',
+                peak: 'Carstensz Pyramid',
+                continent: 'Oceania',
+                status: 'planned',
+                story:
+                  "The technical climb that's more rock climbing than mountaineering. Already working with climbing coaches to improve my technical rock skills for this unique challenge.",
+                elevation: '4,884m',
+                difficulty: 'Extremely Technical',
+                lessons: ['Future expedition...'],
               },
               {
-                date: "December 2026", 
-                peak: "Mount Vinson",
-                continent: "Antarctica",
-                status: "planned",
-                story: "Antarctica - the bottom of the world. The logistics alone are staggering. Currently researching expedition companies and building the budget for this remote adventure.",
-                elevation: "4,892m",
-                difficulty: "Logistically Complex",
-                lessons: ["Planning phase..."]
+                date: 'December 2026',
+                peak: 'Mount Vinson',
+                continent: 'Antarctica',
+                status: 'planned',
+                story:
+                  'Antarctica - the bottom of the world. The logistics alone are staggering. Currently researching expedition companies and building the budget for this remote adventure.',
+                elevation: '4,892m',
+                difficulty: 'Logistically Complex',
+                lessons: ['Planning phase...'],
               },
               {
-                date: "May 2027",
-                peak: "Mount Everest", 
-                continent: "Asia",
-                status: "in_progress",
-                story: "The ultimate goal. Everything I've learned, every training session, every summit leads to this moment. Currently in the multi-year preparation phase with altitude training, technical skill development, and expedition planning.",
-                elevation: "8,849m",
-                difficulty: "Extreme",
-                lessons: ["The journey of a lifetime begins with preparation..."]
-              }
+                date: 'May 2027',
+                peak: 'Mount Everest',
+                continent: 'Asia',
+                status: 'in_progress',
+                story:
+                  "The ultimate goal. Everything I've learned, every training session, every summit leads to this moment. Currently in the multi-year preparation phase with altitude training, technical skill development, and expedition planning.",
+                elevation: '8,849m',
+                difficulty: 'Extreme',
+                lessons: [
+                  'The journey of a lifetime begins with preparation...',
+                ],
+              },
             ].map((expedition, index) => (
               <motion.div
                 key={expedition.peak}
@@ -181,41 +204,59 @@ export default function TheJourneyPage() {
                 transition={{ duration: 0.8, delay: index * 0.1 }}
                 className="relative"
               >
-                <div className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 ${
-                  expedition.status === 'completed' ? 'border-successGreen/30' : 
-                  expedition.status === 'in_progress' ? 'border-summitGold/30' : 'border-white/10'
-                }`}>
+                <div
+                  className={`bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8 ${
+                    expedition.status === 'completed'
+                      ? 'border-successGreen/30'
+                      : expedition.status === 'in_progress'
+                        ? 'border-summitGold/30'
+                        : 'border-white/10'
+                  }`}
+                >
                   <div className="flex flex-col md:flex-row gap-6">
                     <div className="md:w-1/3">
                       <div className="flex items-center gap-2 mb-2">
-                        <div className={`w-3 h-3 rounded-full ${
-                          expedition.status === 'completed' ? 'bg-successGreen' :
-                          expedition.status === 'in_progress' ? 'bg-summitGold' : 'bg-white/40'
-                        }`} />
+                        <div
+                          className={`w-3 h-3 rounded-full ${
+                            expedition.status === 'completed'
+                              ? 'bg-successGreen'
+                              : expedition.status === 'in_progress'
+                                ? 'bg-summitGold'
+                                : 'bg-white/40'
+                          }`}
+                        />
                         <span className="text-sm text-white/60 uppercase tracking-wide">
                           {expedition.date}
                         </span>
                       </div>
-                      <h3 className="text-2xl font-bold text-white mb-1">{expedition.peak}</h3>
-                      <p className="text-white/60 mb-4">{expedition.continent}</p>
-                      
+                      <h3 className="text-2xl font-bold text-white mb-1">
+                        {expedition.peak}
+                      </h3>
+                      <p className="text-white/60 mb-4">
+                        {expedition.continent}
+                      </p>
+
                       <div className="space-y-2 text-sm">
                         <div className="flex items-center gap-2">
                           <MapPinIcon className="w-4 h-4 text-summitGold" />
-                          <span className="text-white/80">{expedition.elevation}</span>
+                          <span className="text-white/80">
+                            {expedition.elevation}
+                          </span>
                         </div>
                         <div className="flex items-center gap-2">
                           <TrophyIcon className="w-4 h-4 text-summitGold" />
-                          <span className="text-white/80">{expedition.difficulty}</span>
+                          <span className="text-white/80">
+                            {expedition.difficulty}
+                          </span>
                         </div>
                       </div>
                     </div>
-                    
+
                     <div className="md:w-2/3">
                       <p className="text-white/80 leading-relaxed mb-6">
                         {expedition.story}
                       </p>
-                      
+
                       {expedition.lessons.length > 0 && (
                         <div>
                           <h4 className="text-sm font-semibold text-summitGold mb-2 uppercase tracking-wide">
@@ -223,7 +264,10 @@ export default function TheJourneyPage() {
                           </h4>
                           <ul className="space-y-1">
                             {expedition.lessons.map((lesson, i) => (
-                              <li key={i} className="text-sm text-white/70 flex items-start gap-2">
+                              <li
+                                key={i}
+                                className="text-sm text-white/70 flex items-start gap-2"
+                              >
                                 <div className="w-1.5 h-1.5 bg-summitGold rounded-full mt-2 flex-shrink-0" />
                                 {lesson}
                               </li>
@@ -255,8 +299,9 @@ export default function TheJourneyPage() {
                 Want to Follow the Journey?
               </h3>
               <p className="text-lg text-white/70 mb-8">
-                Get behind-the-scenes access to my training, expedition planning, 
-                gear testing, and the real challenges of pursuing the Seven Summits.
+                Get behind-the-scenes access to my training, expedition
+                planning, gear testing, and the real challenges of pursuing the
+                Seven Summits.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button

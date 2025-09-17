@@ -1,54 +1,57 @@
-'use client'
+'use client';
 
-import React from 'react'
-import { useErrorReporting } from '@/lib/error-monitor'
-import { trackAIQuery } from '@/app/components/GoogleAnalytics'
+import React from 'react';
+import { useErrorReporting } from '@/lib/error-monitor';
+import { trackAIQuery } from '@/app/components/GoogleAnalytics';
 
 export default function SearchPage() {
-  const [q, setQ] = React.useState('')
-  const [answer, setAnswer] = React.useState<string | null>(null)
-  const [sources, setSources] = React.useState<{source:string; url:string}[]>([])
-  const [loading, setLoading] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
-  const { reportError } = useErrorReporting()
+  const [q, setQ] = React.useState('');
+  const [answer, setAnswer] = React.useState<string | null>(null);
+  const [sources, setSources] = React.useState<
+    { source: string; url: string }[]
+  >([]);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
+  const { reportError } = useErrorReporting();
 
   async function onAsk(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    setError(null)
-    setAnswer(null)
-    setSources([])
-    
-    const startTime = Date.now()
-    
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+    setAnswer(null);
+    setSources([]);
+
+    const startTime = Date.now();
+
     try {
       const res = await fetch('/api/ask', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ q: q }),
-      })
-      const json = await res.json()
-      if (!res.ok || json.error) throw new Error(json.error || 'Request failed')
-      
-      const responseTime = Date.now() - startTime
-      
-      setAnswer(json.answer || json.response)
-      setSources(json.sources || [])
-      
+      });
+      const json = await res.json();
+      if (!res.ok || json.error)
+        throw new Error(json.error || 'Request failed');
+
+      const responseTime = Date.now() - startTime;
+
+      setAnswer(json.answer || json.response);
+      setSources(json.sources || []);
+
       // Track successful AI interaction
-      trackAIQuery(q, responseTime)
+      trackAIQuery(q, responseTime);
     } catch (err: any) {
-      const errorMessage = err.message || 'Something went wrong'
-      setError(errorMessage)
-      
+      const errorMessage = err.message || 'Something went wrong';
+      setError(errorMessage);
+
       // Report error to monitoring system
       reportError(err, {
         action: 'search_query',
         question: q,
-        endpoint: '/api/ask'
-      })
+        endpoint: '/api/ask',
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -60,7 +63,8 @@ export default function SearchPage() {
             Search Summit Chronicles
           </h1>
           <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Ask questions about mountaineering, training, expeditions, and adventure stories
+            Ask questions about mountaineering, training, expeditions, and
+            adventure stories
           </p>
         </div>
 
@@ -101,17 +105,29 @@ export default function SearchPage() {
             <div className="space-y-4">
               {sources.map((src, i) => (
                 <div key={i} className="bg-black/20 rounded-2xl p-4">
-                  <div className="font-semibold text-white mb-2">{src.source || 'Summit Chronicles Knowledge'}</div>
+                  <div className="font-semibold text-white mb-2">
+                    {src.source || 'Summit Chronicles Knowledge'}
+                  </div>
                   {src.url && (
-                    <a 
-                      className="text-summitGold hover:text-yellow-300 transition-colors inline-flex items-center gap-2" 
+                    <a
+                      className="text-summitGold hover:text-yellow-300 transition-colors inline-flex items-center gap-2"
                       href={src.url}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       View Source
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        />
                       </svg>
                     </a>
                   )}
@@ -124,15 +140,17 @@ export default function SearchPage() {
         {/* Suggested Questions */}
         {!answer && !loading && (
           <section className="text-center">
-            <h3 className="text-xl font-semibold text-white mb-6">Try asking about:</h3>
+            <h3 className="text-xl font-semibold text-white mb-6">
+              Try asking about:
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {[
-                "How do I train for high altitude?",
-                "What gear do I need for mountaineering?",
-                "How did you recover from TB?",
+                'How do I train for high altitude?',
+                'What gear do I need for mountaineering?',
+                'How did you recover from TB?',
                 "What's the cost of climbing Everest?",
-                "Best training exercises for climbing?",
-                "How to manage fear on mountains?"
+                'Best training exercises for climbing?',
+                'How to manage fear on mountains?',
               ].map((suggestion, i) => (
                 <button
                   key={i}
@@ -147,5 +165,5 @@ export default function SearchPage() {
         )}
       </div>
     </main>
-  )
+  );
 }

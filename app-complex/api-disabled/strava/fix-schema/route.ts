@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -14,28 +14,33 @@ export async function POST() {
     console.log('Fixing Strava tokens table schema...');
 
     // Step 1: Drop the existing table completely to clear schema cache
-    const dropResult = await fetch(`${process.env.SUPABASE_URL}/rest/v1/rpc/exec_sql`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-        'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY!
-      },
-      body: JSON.stringify({
-        sql: 'DROP TABLE IF EXISTS strava_tokens CASCADE;'
-      })
-    });
+    const dropResult = await fetch(
+      `${process.env.SUPABASE_URL}/rest/v1/rpc/exec_sql`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+          apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        },
+        body: JSON.stringify({
+          sql: 'DROP TABLE IF EXISTS strava_tokens CASCADE;',
+        }),
+      }
+    );
 
     // Step 2: Create clean table with only required columns
-    const createResult = await fetch(`${process.env.SUPABASE_URL}/rest/v1/rpc/exec_sql`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
-        'apikey': process.env.SUPABASE_SERVICE_ROLE_KEY!
-      },
-      body: JSON.stringify({
-        sql: `
+    const createResult = await fetch(
+      `${process.env.SUPABASE_URL}/rest/v1/rpc/exec_sql`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.SUPABASE_SERVICE_ROLE_KEY}`,
+          apikey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
+        },
+        body: JSON.stringify({
+          sql: `
           CREATE TABLE strava_tokens (
             id INTEGER PRIMARY KEY DEFAULT 1,
             access_token TEXT NOT NULL,
@@ -53,16 +58,20 @@ export async function POST() {
             refresh_token = EXCLUDED.refresh_token,
             expires_at = EXCLUDED.expires_at,
             updated_at = NOW();
-        `
-      })
-    });
+        `,
+        }),
+      }
+    );
 
     if (!createResult.ok) {
       const error = await createResult.text();
-      return NextResponse.json({ 
-        error: 'Failed to create table', 
-        details: error 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to create table',
+          details: error,
+        },
+        { status: 500 }
+      );
     }
 
     // Step 3: Verify the tokens are stored
@@ -73,23 +82,25 @@ export async function POST() {
       .single();
 
     if (selectError) {
-      return NextResponse.json({ 
-        error: 'Failed to verify storage', 
-        details: selectError 
-      }, { status: 500 });
+      return NextResponse.json(
+        {
+          error: 'Failed to verify storage',
+          details: selectError,
+        },
+        { status: 500 }
+      );
     }
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Schema fixed and tokens stored successfully',
       stored_token: {
         id: stored.id,
         access_token: stored.access_token.slice(0, 10) + '...',
         expires_at: stored.expires_at,
-        created_at: stored.created_at
-      }
+        created_at: stored.created_at,
+      },
     });
-
   } catch (error: any) {
     console.error('Schema fix error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });

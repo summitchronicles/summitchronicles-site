@@ -8,12 +8,12 @@ interface FormFieldProps extends InputProps {
   required?: boolean;
 }
 
-const FormField: React.FC<FormFieldProps> = ({ 
-  label, 
-  description, 
-  required, 
+const FormField: React.FC<FormFieldProps> = ({
+  label,
+  description,
+  required,
   className,
-  ...props 
+  ...props
 }) => {
   return (
     <div className={cn('space-y-2', className)}>
@@ -21,9 +21,7 @@ const FormField: React.FC<FormFieldProps> = ({
         {label}
         {required && <span className="text-red-500 ml-1">*</span>}
       </label>
-      {description && (
-        <p className="text-sm text-spa-slate">{description}</p>
-      )}
+      {description && <p className="text-sm text-spa-slate">{description}</p>}
       <Input {...props} />
     </div>
   );

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -24,7 +24,10 @@ export async function GET() {
     return NextResponse.json({ categories });
   } catch (error) {
     console.error('Categories API error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -49,13 +52,14 @@ export async function POST(request: NextRequest) {
         slug,
         description,
         color: color || '#D97706',
-        sort_order: sort_order || 0
+        sort_order: sort_order || 0,
       })
       .select()
       .single();
 
     if (error) {
-      if (error.code === '23505') { // Unique constraint violation
+      if (error.code === '23505') {
+        // Unique constraint violation
         return NextResponse.json(
           { error: 'Category name already exists' },
           { status: 409 }
@@ -68,6 +72,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ success: true, category }, { status: 201 });
   } catch (error) {
     console.error('Category creation error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

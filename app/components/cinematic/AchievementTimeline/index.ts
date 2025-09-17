@@ -1,1 +1,1 @@
-export { AchievementTimeline } from './AchievementTimeline'
+export { AchievementTimeline } from './AchievementTimeline';

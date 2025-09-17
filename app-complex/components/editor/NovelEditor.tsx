@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { 
-  EditorRoot, 
-  EditorContent, 
-  StarterKit, 
+import {
+  EditorRoot,
+  EditorContent,
+  StarterKit,
   HighlightExtension,
   TiptapUnderline,
   TiptapLink,
@@ -25,9 +25,9 @@ import {
   EditorCommandItem,
   EditorCommandList,
   EditorCommandEmpty,
-  type JSONContent 
-} from "novel";
-import { useState, useEffect } from "react";
+  type JSONContent,
+} from 'novel';
+import { useState, useEffect } from 'react';
 
 interface NovelEditorProps {
   content: string;
@@ -40,7 +40,7 @@ export default function NovelEditor({
   content,
   onChange,
   placeholder = "Press '/' for commands, or start writing your story...",
-  className = ""
+  className = '',
 }: NovelEditorProps) {
   const [mounted, setMounted] = useState(false);
 
@@ -137,7 +137,8 @@ export default function NovelEditor({
             extensions={extensions}
             editorProps={{
               attributes: {
-                class: 'prose prose-invert prose-lg max-w-none focus:outline-none min-h-[500px] p-6',
+                class:
+                  'prose prose-invert prose-lg max-w-none focus:outline-none min-h-[500px] p-6',
                 'data-placeholder': placeholder,
               },
               handleDOMEvents: {
@@ -164,7 +165,7 @@ export default function NovelEditor({
             }
             immediatelyRender={false}
           />
-          
+
           {/* Floating Toolbar */}
           <EditorBubble className="flex w-fit max-w-[90vw] overflow-hidden rounded-lg border border-white/20 bg-black/90 backdrop-blur-xl shadow-xl">
             <EditorBubbleItem
@@ -234,7 +235,9 @@ export default function NovelEditor({
                 </div>
                 <div>
                   <p className="font-medium">Heading 2</p>
-                  <p className="text-xs text-white/60">Medium section heading</p>
+                  <p className="text-xs text-white/60">
+                    Medium section heading
+                  </p>
                 </div>
               </EditorCommandItem>
               <EditorCommandItem
@@ -264,7 +267,9 @@ export default function NovelEditor({
                 </div>
                 <div>
                   <p className="font-medium">Bullet List</p>
-                  <p className="text-xs text-white/60">Create a simple bullet list</p>
+                  <p className="text-xs text-white/60">
+                    Create a simple bullet list
+                  </p>
                 </div>
               </EditorCommandItem>
               <EditorCommandItem
@@ -279,7 +284,9 @@ export default function NovelEditor({
                 </div>
                 <div>
                   <p className="font-medium">Numbered List</p>
-                  <p className="text-xs text-white/60">Create a numbered list</p>
+                  <p className="text-xs text-white/60">
+                    Create a numbered list
+                  </p>
                 </div>
               </EditorCommandItem>
               <EditorCommandItem
@@ -294,7 +301,9 @@ export default function NovelEditor({
                 </div>
                 <div>
                   <p className="font-medium">Task List</p>
-                  <p className="text-xs text-white/60">Create a task list with checkboxes</p>
+                  <p className="text-xs text-white/60">
+                    Create a task list with checkboxes
+                  </p>
                 </div>
               </EditorCommandItem>
               <EditorCommandItem
@@ -339,28 +348,30 @@ export default function NovelEditor({
                 </div>
                 <div>
                   <p className="font-medium">Divider</p>
-                  <p className="text-xs text-white/60">Add a horizontal divider</p>
+                  <p className="text-xs text-white/60">
+                    Add a horizontal divider
+                  </p>
                 </div>
               </EditorCommandItem>
             </EditorCommandList>
           </EditorCommand>
         </EditorRoot>
       </div>
-      
+
       <style jsx global>{`
         /* Novel Editor Dark Theme Customization */
         .novel-editor-dark {
           background: transparent !important;
           color: white !important;
         }
-        
+
         .novel-editor-dark .ProseMirror {
           background: transparent !important;
           color: white !important;
           border: none !important;
           outline: none !important;
         }
-        
+
         .novel-editor-dark .ProseMirror p.is-editor-empty:first-child::before {
           color: rgba(255, 255, 255, 0.4) !important;
           content: attr(data-placeholder) !important;
@@ -368,7 +379,7 @@ export default function NovelEditor({
           height: 0 !important;
           pointer-events: none !important;
         }
-        
+
         /* Headings */
         .novel-editor-dark .ProseMirror h1,
         .novel-editor-dark .ProseMirror h2,
@@ -379,66 +390,66 @@ export default function NovelEditor({
           color: white !important;
           font-weight: bold !important;
         }
-        
+
         /* Strong/Bold text */
         .novel-editor-dark .ProseMirror strong {
           color: white !important;
           font-weight: 600 !important;
         }
-        
+
         /* Emphasis/Italic text */
         .novel-editor-dark .ProseMirror em {
           color: rgba(255, 255, 255, 0.9) !important;
         }
-        
+
         /* Links */
         .novel-editor-dark .ProseMirror a {
-          color: #F59E0B !important; /* summitGold */
+          color: #f59e0b !important; /* summitGold */
           text-decoration: none !important;
         }
-        
+
         .novel-editor-dark .ProseMirror a:hover {
           text-decoration: underline !important;
         }
-        
+
         /* Blockquotes */
         .novel-editor-dark .ProseMirror blockquote {
-          border-left: 4px solid #F59E0B !important;
+          border-left: 4px solid #f59e0b !important;
           padding-left: 1.5rem !important;
           color: rgba(255, 255, 255, 0.7) !important;
           font-style: italic !important;
         }
-        
+
         /* Lists */
         .novel-editor-dark .ProseMirror ul,
         .novel-editor-dark .ProseMirror ol {
           color: rgba(255, 255, 255, 0.8) !important;
         }
-        
+
         .novel-editor-dark .ProseMirror li {
           color: rgba(255, 255, 255, 0.8) !important;
           margin-bottom: 0.25rem !important;
         }
-        
+
         /* Code */
         .novel-editor-dark .ProseMirror code {
           background: rgba(255, 255, 255, 0.1) !important;
-          color: #F59E0B !important;
+          color: #f59e0b !important;
           padding: 0.125rem 0.25rem !important;
           border-radius: 0.25rem !important;
         }
-        
+
         .novel-editor-dark .ProseMirror pre {
           background: rgba(255, 255, 255, 0.1) !important;
           border: 1px solid rgba(255, 255, 255, 0.2) !important;
           border-radius: 0.5rem !important;
           padding: 1rem !important;
         }
-        
+
         .novel-editor-dark .ProseMirror pre code {
           background: transparent !important;
         }
-        
+
         /* Images */
         .novel-editor-dark .ProseMirror img {
           border-radius: 0.75rem !important;
@@ -446,16 +457,16 @@ export default function NovelEditor({
           max-width: 100% !important;
           height: auto !important;
         }
-        
+
         /* Selection */
         .novel-editor-dark .ProseMirror::selection {
           background: rgba(245, 158, 11, 0.3) !important;
         }
-        
+
         .novel-editor-dark .ProseMirror *::selection {
           background: rgba(245, 158, 11, 0.3) !important;
         }
-        
+
         /* Slash command menu */
         .novel-editor-dark [data-radix-popper-content-wrapper] {
           background: rgba(0, 0, 0, 0.9) !important;
@@ -463,18 +474,18 @@ export default function NovelEditor({
           border-radius: 0.5rem !important;
           backdrop-filter: blur(12px) !important;
         }
-        
+
         /* Command menu items */
-        .novel-editor-dark [role="option"] {
+        .novel-editor-dark [role='option'] {
           color: white !important;
         }
-        
-        .novel-editor-dark [role="option"]:hover,
-        .novel-editor-dark [role="option"][data-highlighted] {
+
+        .novel-editor-dark [role='option']:hover,
+        .novel-editor-dark [role='option'][data-highlighted] {
           background: rgba(245, 158, 11, 0.2) !important;
-          color: #F59E0B !important;
+          color: #f59e0b !important;
         }
-        
+
         /* Bubble menu */
         .novel-editor-dark [data-bubble-menu] {
           background: rgba(0, 0, 0, 0.9) !important;
@@ -482,7 +493,7 @@ export default function NovelEditor({
           border-radius: 0.5rem !important;
           backdrop-filter: blur(12px) !important;
         }
-        
+
         .novel-editor-dark [data-bubble-menu] button {
           color: white !important;
           border: none !important;
@@ -491,11 +502,11 @@ export default function NovelEditor({
           border-radius: 0.25rem !important;
           transition: all 0.2s !important;
         }
-        
+
         .novel-editor-dark [data-bubble-menu] button:hover,
-        .novel-editor-dark [data-bubble-menu] button[data-state="on"] {
+        .novel-editor-dark [data-bubble-menu] button[data-state='on'] {
           background: rgba(245, 158, 11, 0.2) !important;
-          color: #F59E0B !important;
+          color: #f59e0b !important;
         }
       `}</style>
     </div>

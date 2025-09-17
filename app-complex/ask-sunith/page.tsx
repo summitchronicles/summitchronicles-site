@@ -1,68 +1,76 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { useState } from "react";
-import StructuredData from "../components/seo/StructuredData";
-import { getFAQSchema, getPersonSchema } from "@/lib/seo";
-import { trackAIQuery } from "../components/GoogleAnalytics";
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import StructuredData from '../components/seo/StructuredData';
+import { getFAQSchema, getPersonSchema } from '@/lib/seo';
+import { trackAIQuery } from '../components/GoogleAnalytics';
 import {
   ChatBubbleLeftRightIcon,
   SparklesIcon,
   TrophyIcon,
   CogIcon,
   MapIcon,
-  HeartIcon
-} from "@heroicons/react/24/outline";
+  HeartIcon,
+} from '@heroicons/react/24/outline';
 
 export default function AskSunithPage() {
-  const [question, setQuestion] = useState("");
-  const [response, setResponse] = useState("");
+  const [question, setQuestion] = useState('');
+  const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const sampleQuestions = [
-    "How do you train for high altitude?",
-    "What gear is essential for Everest?",
-    "How do you manage fear on difficult climbs?",
+    'How do you train for high altitude?',
+    'What gear is essential for Everest?',
+    'How do you manage fear on difficult climbs?',
     "What's your typical training week look like?",
-    "How do you choose climbing routes?",
-    "What's the mental preparation like for Seven Summits?"
+    'How do you choose climbing routes?',
+    "What's the mental preparation like for Seven Summits?",
   ];
 
   const getAnswer = (question: string): string => {
     const q = question.toLowerCase();
-    
+
     if (q.includes('altitude') || q.includes('acclimat')) {
       return "From my Seven Summits experience: Start training at altitude early if possible. I spend weeks acclimatizing - key is gradual ascent. Sleep low, climb high during the day. Watch for headaches, nausea, fatigue. Diamox helps but isn't magic. Listen to your body - summit attempts can wait, but brain swelling can't.";
     }
-    
+
     if (q.includes('gear') || q.includes('equipment')) {
       return "Essential gear I've learned through 4 summits: Quality boots (broken in!), layering system, reliable headlamp + backup, emergency shelter. Don't go cheap on life-critical items. Test everything multiple times before expeditions. My Elbrus summit taught me redundancy saves lives.";
     }
-    
+
     if (q.includes('fear') || q.includes('mental') || q.includes('scared')) {
       return "Fear kept me alive on Kilimanjaro and Aconcagua. It's data, not weakness. I use 3 techniques: 1) Visualize success AND failure scenarios, 2) Focus on next immediate step, not summit, 3) Remember my 40kg hospital bed start - every step up is victory. Fear means you're pushing limits.";
     }
-    
-    if (q.includes('training') || q.includes('workout') || q.includes('fitness')) {
+
+    if (
+      q.includes('training') ||
+      q.includes('workout') ||
+      q.includes('fitness')
+    ) {
       return "My training evolved from TB recovery to Seven Summits ready: 6 days/week minimum. Mix cardio endurance, strength (legs + core), loaded carries. Train tired - mountains don't care if you slept badly. I run ultras to build mental toughness, not just cardio. Consistency beats intensity.";
     }
-    
+
     if (q.includes('route') || q.includes('climb') || q.includes('path')) {
       return "Route selection: Research weather windows, avalanche risk, technical difficulty vs experience. I always have Plan B and C. Study others' trip reports but trust your gut. My rule: if weather/conditions aren't right, turn around. Mountains will be there tomorrow, you might not.";
     }
-    
+
     if (q.includes('everest') || q.includes('kosciuszko')) {
       return "Next up: Kosciuszko 2025, then Everest. Each summit teaches lessons for the next. Kosciuszko seems 'easy' but weather changes fast. Everest is the ultimate test of everything learned from 4 previous summits. Preparation for Everest started the day I left Aconcagua.";
     }
-    
+
     if (q.includes('food') || q.includes('nutrition') || q.includes('eat')) {
       return "High altitude nutrition learned the hard way: Force eating when you don't want to. High calorie density - nuts, dried fruits, energy bars. Drink more than you think you need. I carry emergency gels. Your body burns 6000+ calories/day on summit attempts. Fuel or fail.";
     }
-    
-    if (q.includes('recovery') || q.includes('tb') || q.includes('tuberculosis')) {
+
+    if (
+      q.includes('recovery') ||
+      q.includes('tb') ||
+      q.includes('tuberculosis')
+    ) {
       return "My 2013 TB recovery to mountaineering journey: Started at 40kg, couldn't walk across room. Small steps - literally. 30min walks became 5km runs became ultra marathons. Your starting point doesn't define your summit. Every day training is defying that hospital bed.";
     }
-    
+
     // Default response
     return `Great question! Based on my 11-year journey from TB recovery to 4/7 summits: Every mountain teaches something new. My experience on ${['Elbrus', 'Kilimanjaro', 'Aconcagua', 'McKinley'][Math.floor(Math.random() * 4)]} showed me that preparation and mindset matter more than raw strength. What specific aspect would you like me to dive deeper into?`;
   };
@@ -72,7 +80,7 @@ export default function AskSunithPage() {
 
     setIsLoading(true);
     const startTime = Date.now();
-    
+
     try {
       const response = await fetch('/api/ask-sunith', {
         method: 'POST',
@@ -88,19 +96,19 @@ export default function AskSunithPage() {
 
       const data = await response.json();
       const responseTime = Date.now() - startTime;
-      
+
       setResponse(data.response);
-      
+
       // Track successful AI interaction
       trackAIQuery(question.trim(), responseTime);
     } catch (error) {
       console.error('Error asking question:', error);
       const responseTime = Date.now() - startTime;
-      
+
       // Fallback to rule-based response on error
       const fallbackAnswer = getAnswer(question);
       setResponse(fallbackAnswer);
-      
+
       // Track fallback response (less helpful)
       trackAIQuery(question.trim(), responseTime, false);
     } finally {
@@ -111,31 +119,36 @@ export default function AskSunithPage() {
   // Sample FAQs for structured data (based on common mountaineering questions)
   const commonFAQs = [
     {
-      question: "How do you train for high altitude mountaineering?",
-      answer: "Start training at altitude early if possible. I spend weeks acclimatizing - key is gradual ascent. Sleep low, climb high during the day. Watch for headaches, nausea, fatigue. Listen to your body - summit attempts can wait, but brain swelling can't."
+      question: 'How do you train for high altitude mountaineering?',
+      answer:
+        "Start training at altitude early if possible. I spend weeks acclimatizing - key is gradual ascent. Sleep low, climb high during the day. Watch for headaches, nausea, fatigue. Listen to your body - summit attempts can wait, but brain swelling can't.",
     },
     {
-      question: "What essential gear do you need for mountaineering?",
-      answer: "Quality boots (broken in!), layering system, reliable headlamp + backup, emergency shelter. Don't go cheap on life-critical items. Test everything multiple times before expeditions. Redundancy saves lives."
+      question: 'What essential gear do you need for mountaineering?',
+      answer:
+        "Quality boots (broken in!), layering system, reliable headlamp + backup, emergency shelter. Don't go cheap on life-critical items. Test everything multiple times before expeditions. Redundancy saves lives.",
     },
     {
-      question: "How do you overcome fear on mountains?",
-      answer: "Fear kept me alive on mountains. It's data, not weakness. I use 3 techniques: 1) Visualize success AND failure scenarios, 2) Focus on next immediate step, not summit, 3) Remember every step up is victory. Fear means you're pushing limits."
+      question: 'How do you overcome fear on mountains?',
+      answer:
+        "Fear kept me alive on mountains. It's data, not weakness. I use 3 techniques: 1) Visualize success AND failure scenarios, 2) Focus on next immediate step, not summit, 3) Remember every step up is victory. Fear means you're pushing limits.",
     },
     {
       question: "What's your training routine for Seven Summits?",
-      answer: "6 days/week minimum. Mix cardio endurance, strength (legs + core), loaded carries. Train tired - mountains don't care if you slept badly. I run ultras to build mental toughness. Consistency beats intensity."
-    }
+      answer:
+        "6 days/week minimum. Mix cardio endurance, strength (legs + core), loaded carries. Train tired - mountains don't care if you slept badly. I run ultras to build mental toughness. Consistency beats intensity.",
+    },
   ];
 
   const personSchema = getPersonSchema({
-    name: "Sunith Kumar",
-    description: "Mountaineer pursuing the Seven Summits challenge, recovered from tuberculosis, ultra-marathon runner and adventure athlete with expeditions across 4 continents.",
-    jobTitle: "Mountaineer & Adventure Athlete",
+    name: 'Sunith Kumar',
+    description:
+      'Mountaineer pursuing the Seven Summits challenge, recovered from tuberculosis, ultra-marathon runner and adventure athlete with expeditions across 4 continents.',
+    jobTitle: 'Mountaineer & Adventure Athlete',
     sameAs: [
-      "https://summitchronicles.com",
-      "https://instagram.com/summitchronicles"
-    ]
+      'https://summitchronicles.com',
+      'https://instagram.com/summitchronicles',
+    ],
   });
 
   return (
@@ -161,15 +174,16 @@ export default function AskSunithPage() {
           </motion.div>
 
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-8">
-            Ask{" "}
+            Ask{' '}
             <span className="bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
               Sunith
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-white/70 leading-relaxed mb-12">
-            Get personalized mountaineering advice based on my Seven Summits experience, 
-            training methods, and expedition insights. Ask about gear, training, routes, or mental preparation.
+            Get personalized mountaineering advice based on my Seven Summits
+            experience, training methods, and expedition insights. Ask about
+            gear, training, routes, or mental preparation.
           </p>
 
           <motion.div
@@ -181,11 +195,14 @@ export default function AskSunithPage() {
             <div className="flex items-start gap-3">
               <SparklesIcon className="w-6 h-6 text-yellow-400 flex-shrink-0 mt-1" />
               <div className="text-left">
-                <h3 className="text-lg font-semibold text-yellow-400 mb-2">Coming Soon!</h3>
+                <h3 className="text-lg font-semibold text-yellow-400 mb-2">
+                  Coming Soon!
+                </h3>
                 <p className="text-white/80 leading-relaxed">
-                  I&apos;m currently training an AI assistant with insights from my expeditions, 
-                  training data, gear reviews, and lessons learned on the mountains. It will provide 
-                  personalized advice based on my actual Seven Summits experience.
+                  I&apos;m currently training an AI assistant with insights from
+                  my expeditions, training data, gear reviews, and lessons
+                  learned on the mountains. It will provide personalized advice
+                  based on my actual Seven Summits experience.
                 </p>
               </div>
             </div>
@@ -205,9 +222,12 @@ export default function AskSunithPage() {
           >
             <div className="text-center mb-8">
               <ChatBubbleLeftRightIcon className="w-12 h-12 text-summitGold mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-white mb-2">Ask Your Question</h2>
+              <h2 className="text-2xl font-bold text-white mb-2">
+                Ask Your Question
+              </h2>
               <p className="text-white/60">
-                What would you like to know about mountaineering, training, or expeditions?
+                What would you like to know about mountaineering, training, or
+                expeditions?
               </p>
             </div>
 
@@ -230,7 +250,7 @@ export default function AskSunithPage() {
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-3 bg-summitGold text-black font-semibold rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isLoading ? "Thinking..." : "Ask Sunith"}
+                  {isLoading ? 'Thinking...' : 'Ask Sunith'}
                 </motion.button>
               </div>
 
@@ -246,7 +266,9 @@ export default function AskSunithPage() {
                       <span className="text-black font-bold text-sm">S</span>
                     </div>
                     <div>
-                      <p className="text-white/80 leading-relaxed">{response}</p>
+                      <p className="text-white/80 leading-relaxed">
+                        {response}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -267,13 +289,14 @@ export default function AskSunithPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl font-bold text-white mb-6">
-              Popular{" "}
+              Popular{' '}
               <span className="bg-gradient-to-r from-summitGold to-yellow-400 bg-clip-text text-transparent">
                 Questions
               </span>
             </h2>
             <p className="text-white/70">
-              Get inspired by what others are asking about mountaineering and expeditions
+              Get inspired by what others are asking about mountaineering and
+              expeditions
             </p>
           </motion.div>
 
@@ -306,9 +329,12 @@ export default function AskSunithPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl font-bold text-white mb-6">What I Can Help With</h2>
+            <h2 className="text-3xl font-bold text-white mb-6">
+              What I Can Help With
+            </h2>
             <p className="text-white/70">
-              My AI assistant will be trained on these key areas of mountaineering expertise
+              My AI assistant will be trained on these key areas of
+              mountaineering expertise
             </p>
           </motion.div>
 
@@ -316,34 +342,70 @@ export default function AskSunithPage() {
             {[
               {
                 icon: TrophyIcon,
-                title: "Expedition Planning",
-                topics: ["Route selection", "Timing & seasons", "Permit requirements", "Team building", "Risk assessment"]
+                title: 'Expedition Planning',
+                topics: [
+                  'Route selection',
+                  'Timing & seasons',
+                  'Permit requirements',
+                  'Team building',
+                  'Risk assessment',
+                ],
               },
               {
                 icon: HeartIcon,
-                title: "Training Methods", 
-                topics: ["Altitude preparation", "Strength training", "Endurance building", "Recovery protocols", "Injury prevention"]
+                title: 'Training Methods',
+                topics: [
+                  'Altitude preparation',
+                  'Strength training',
+                  'Endurance building',
+                  'Recovery protocols',
+                  'Injury prevention',
+                ],
               },
               {
                 icon: CogIcon,
-                title: "Gear & Equipment",
-                topics: ["Essential gear lists", "Brand recommendations", "Gear testing", "Weight optimization", "Cold weather gear"]
+                title: 'Gear & Equipment',
+                topics: [
+                  'Essential gear lists',
+                  'Brand recommendations',
+                  'Gear testing',
+                  'Weight optimization',
+                  'Cold weather gear',
+                ],
               },
               {
                 icon: MapIcon,
-                title: "Mental Preparation",
-                topics: ["Fear management", "Goal setting", "Motivation techniques", "Stress handling", "Decision making"]
+                title: 'Mental Preparation',
+                topics: [
+                  'Fear management',
+                  'Goal setting',
+                  'Motivation techniques',
+                  'Stress handling',
+                  'Decision making',
+                ],
               },
               {
                 icon: ChatBubbleLeftRightIcon,
-                title: "Seven Summits Specific",
-                topics: ["Peak-specific advice", "Expedition logistics", "Training progressions", "Cost planning", "Timeline management"]
+                title: 'Seven Summits Specific',
+                topics: [
+                  'Peak-specific advice',
+                  'Expedition logistics',
+                  'Training progressions',
+                  'Cost planning',
+                  'Timeline management',
+                ],
               },
               {
                 icon: SparklesIcon,
-                title: "Personal Experience",
-                topics: ["Lessons learned", "Mistakes to avoid", "Success strategies", "Real expedition stories", "Honest insights"]
-              }
+                title: 'Personal Experience',
+                topics: [
+                  'Lessons learned',
+                  'Mistakes to avoid',
+                  'Success strategies',
+                  'Real expedition stories',
+                  'Honest insights',
+                ],
+              },
             ].map((area, index) => (
               <motion.div
                 key={area.title}
@@ -362,7 +424,10 @@ export default function AskSunithPage() {
 
                 <ul className="space-y-2">
                   {area.topics.map((topic) => (
-                    <li key={topic} className="text-sm text-white/70 flex items-center gap-2">
+                    <li
+                      key={topic}
+                      className="text-sm text-white/70 flex items-center gap-2"
+                    >
                       <div className="w-1 h-1 bg-summitGold rounded-full" />
                       {topic}
                     </li>
@@ -389,8 +454,9 @@ export default function AskSunithPage() {
                 Want Personal Advice Now?
               </h3>
               <p className="text-lg text-white/70 mb-8">
-                While I&apos;m building the AI assistant, you can always reach out directly 
-                for specific questions about mountaineering, training, or expeditions.
+                While I&apos;m building the AI assistant, you can always reach
+                out directly for specific questions about mountaineering,
+                training, or expeditions.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <motion.button

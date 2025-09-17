@@ -17,7 +17,11 @@ interface NavigationItem {
 const primaryNavigation: NavigationItem[] = [
   { href: '/', label: 'Home', description: 'Journey overview' },
   { href: '/about', label: 'About', description: 'My story' },
-  { href: '/journey', label: 'Journey', description: 'Timeline & achievements' },
+  {
+    href: '/journey',
+    label: 'Journey',
+    description: 'Timeline & achievements',
+  },
   { href: '/training', label: 'Training', description: 'Progress & data' },
   { href: '/blog', label: 'Blog', description: 'Insights & updates' },
 ];
@@ -25,7 +29,11 @@ const primaryNavigation: NavigationItem[] = [
 const secondaryNavigation: NavigationItem[] = [
   { href: '/media-kit', label: 'Media Kit', description: 'Press resources' },
   { href: '/speaking', label: 'Speaking', description: 'Event bookings' },
-  { href: '/sponsorship', label: 'Partnership', description: 'Sponsor opportunities' },
+  {
+    href: '/sponsorship',
+    label: 'Partnership',
+    description: 'Sponsor opportunities',
+  },
 ];
 
 const Header: React.FC = () => {
@@ -55,12 +63,14 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className={cn(
-      'fixed top-0 left-0 right-0 z-50 transition-all duration-400',
-      isScrolled 
-        ? 'bg-white/95 backdrop-blur-sm shadow-spa-soft border-b border-spa-cloud/50' 
-        : 'bg-transparent'
-    )}>
+    <header
+      className={cn(
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-400',
+        isScrolled
+          ? 'bg-white/95 backdrop-blur-sm shadow-spa-soft border-b border-spa-cloud/50'
+          : 'bg-transparent'
+      )}
+    >
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo / Brand */}
@@ -117,8 +127,8 @@ const Header: React.FC = () => {
               aria-label="Toggle mobile menu"
               aria-expanded={isMobileMenuOpen}
             >
-              <Icon 
-                name={isMobileMenuOpen ? "X" : "Menu"} 
+              <Icon
+                name={isMobileMenuOpen ? 'X' : 'Menu'}
                 size="md"
                 className="transition-transform duration-300"
               />
@@ -127,12 +137,12 @@ const Header: React.FC = () => {
         </div>
 
         {/* Mobile Navigation Menu */}
-        <div className={cn(
-          'lg:hidden overflow-hidden transition-all duration-400 ease-in-out',
-          isMobileMenuOpen 
-            ? 'max-h-96 opacity-100' 
-            : 'max-h-0 opacity-0'
-        )}>
+        <div
+          className={cn(
+            'lg:hidden overflow-hidden transition-all duration-400 ease-in-out',
+            isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          )}
+        >
           <div className="py-4 border-t border-spa-cloud bg-white/95 backdrop-blur-sm rounded-b-lg shadow-spa-medium">
             <nav className="space-y-1">
               {primaryNavigation.map((item) => (
@@ -149,12 +159,14 @@ const Header: React.FC = () => {
                   <div className="flex items-center justify-between">
                     <span>{item.label}</span>
                     {item.description && (
-                      <span className="text-sm text-spa-slate">{item.description}</span>
+                      <span className="text-sm text-spa-slate">
+                        {item.description}
+                      </span>
                     )}
                   </div>
                 </Link>
               ))}
-              
+
               {/* Secondary Navigation in Mobile */}
               <div className="pt-4 mt-4 border-t border-spa-cloud">
                 {secondaryNavigation.map((item) => (
@@ -170,7 +182,12 @@ const Header: React.FC = () => {
 
               {/* Mobile CTA */}
               <div className="px-4 pt-4 space-y-3">
-                <Button variant="secondary" size="sm" className="w-full" asChild>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="w-full"
+                  asChild
+                >
                   <Link href="/newsletter">
                     <Icon name="Mail" size="sm" />
                     Newsletter Updates

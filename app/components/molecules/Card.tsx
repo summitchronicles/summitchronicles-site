@@ -8,16 +8,18 @@ interface CardProps {
   padding?: 'none' | 'sm' | 'md' | 'lg';
 }
 
-const Card: React.FC<CardProps> = ({ 
-  children, 
-  className, 
+const Card: React.FC<CardProps> = ({
+  children,
+  className,
   variant = 'default',
-  padding = 'md'
+  padding = 'md',
 }) => {
   const variants = {
     default: 'bg-white border border-spa-cloud shadow-spa-soft',
-    elevated: 'bg-white border border-spa-cloud shadow-spa-medium hover:shadow-spa-elevated transition-shadow duration-300',
-    premium: 'bg-gradient-to-br from-white to-spa-stone border border-spa-mist shadow-spa-elevated',
+    elevated:
+      'bg-white border border-spa-cloud shadow-spa-medium hover:shadow-spa-elevated transition-shadow duration-300',
+    premium:
+      'bg-gradient-to-br from-white to-spa-stone border border-spa-mist shadow-spa-elevated',
   };
 
   const paddings = {
@@ -28,12 +30,14 @@ const Card: React.FC<CardProps> = ({
   };
 
   return (
-    <div className={cn(
-      'rounded-lg transition-colors duration-200',
-      variants[variant],
-      paddings[padding],
-      className
-    )}>
+    <div
+      className={cn(
+        'rounded-lg transition-colors duration-200',
+        variants[variant],
+        paddings[padding],
+        className
+      )}
+    >
       {children}
     </div>
   );
@@ -45,9 +49,7 @@ interface CardHeaderProps {
 }
 
 const CardHeader: React.FC<CardHeaderProps> = ({ children, className }) => (
-  <div className={cn('space-y-1.5 pb-4', className)}>
-    {children}
-  </div>
+  <div className={cn('space-y-1.5 pb-4', className)}>{children}</div>
 );
 
 interface CardContentProps {
@@ -56,9 +58,7 @@ interface CardContentProps {
 }
 
 const CardContent: React.FC<CardContentProps> = ({ children, className }) => (
-  <div className={cn('space-y-4', className)}>
-    {children}
-  </div>
+  <div className={cn('space-y-4', className)}>{children}</div>
 );
 
 interface CardFooterProps {

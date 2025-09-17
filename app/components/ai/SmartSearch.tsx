@@ -1,100 +1,115 @@
-'use client'
+'use client';
 
-import { useState, useRef, useEffect } from 'react'
-import { Search, MessageCircle, BookOpen, Brain, Loader2, CheckCircle, AlertCircle } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react';
+import {
+  Search,
+  MessageCircle,
+  BookOpen,
+  Brain,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+} from 'lucide-react';
 
 interface SearchResult {
   document: {
-    id: string
-    title: string
-    content: string
-    category: string
-    source: string
-    metadata: any
-  }
-  similarity: number
-  relevanceScore: number
+    id: string;
+    title: string;
+    content: string;
+    category: string;
+    source: string;
+    metadata: any;
+  };
+  similarity: number;
+  relevanceScore: number;
 }
 
 interface AIResponse {
-  question: string
-  answer: string
+  question: string;
+  answer: string;
   sources: Array<{
-    title: string
-    category: string
-    similarity: number
-    relevanceScore: number
-  }>
-  contextUsed: string[]
-  confidence: number
-  method: string
+    title: string;
+    category: string;
+    similarity: number;
+    relevanceScore: number;
+  }>;
+  contextUsed: string[];
+  confidence: number;
+  method: string;
 }
 
 interface SmartSearchProps {
-  placeholder?: string
-  showExamples?: boolean
-  className?: string
+  placeholder?: string;
+  showExamples?: boolean;
+  className?: string;
 }
 
-export function SmartSearch({ 
-  placeholder = "Ask anything about mountaineering and training...",
+export function SmartSearch({
+  placeholder = 'Ask anything about mountaineering and training...',
   showExamples = true,
-  className = ""
+  className = '',
 }: SmartSearchProps) {
-  const [query, setQuery] = useState('')
-  const [mode, setMode] = useState<'search' | 'ask'>('search')
-  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
-  const [aiResponse, setAiResponse] = useState<AIResponse | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [systemStatus, setSystemStatus] = useState<'checking' | 'ready' | 'error'>('checking')
-  
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [query, setQuery] = useState('');
+  const [mode, setMode] = useState<'search' | 'ask'>('search');
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [aiResponse, setAiResponse] = useState<AIResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [systemStatus, setSystemStatus] = useState<
+    'checking' | 'ready' | 'error'
+  >('checking');
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Check system status on mount
   useEffect(() => {
-    checkSystemStatus()
-  }, [])
+    checkSystemStatus();
+  }, []);
 
   const checkSystemStatus = async () => {
     try {
-      const response = await fetch('/api/ai/status')
-      const data = await response.json()
-      
-      if (data.capabilities?.semanticSearch && data.capabilities?.ragResponses) {
-        setSystemStatus('ready')
+      const response = await fetch('/api/ai/status');
+      const data = await response.json();
+
+      if (
+        data.capabilities?.semanticSearch &&
+        data.capabilities?.ragResponses
+      ) {
+        setSystemStatus('ready');
       } else {
-        setSystemStatus('error')
-        setError('AI system not fully operational. Initializing knowledge base...')
-        await initializeSystem()
+        setSystemStatus('error');
+        setError(
+          'AI system not fully operational. Initializing knowledge base...'
+        );
+        await initializeSystem();
       }
     } catch (error) {
-      setSystemStatus('error')
-      setError('Failed to connect to AI system')
+      setSystemStatus('error');
+      setError('Failed to connect to AI system');
     }
-  }
+  };
 
   const initializeSystem = async () => {
     try {
       await fetch('/api/ai/status', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'initialize' })
-      })
-      setSystemStatus('ready')
-      setError(null)
+        body: JSON.stringify({ action: 'initialize' }),
+      });
+      setSystemStatus('ready');
+      setError(null);
     } catch (error) {
-      setError('Failed to initialize AI system')
+      setError('Failed to initialize AI system');
     }
-  }
+  };
 
   const handleSearch = async () => {
-    if (!query.trim() || systemStatus !== 'ready') return
+    if (!query.trim() || systemStatus !== 'ready') return;
 
-    setIsLoading(true)
-    setError(null)
-    setSearchResults([])
-    setAiResponse(null)
+    setIsLoading(true);
+    setError(null);
+    setSearchResults([]);
+    setAiResponse(null);
 
     try {
       if (mode === 'search') {
@@ -102,64 +117,64 @@ export function SmartSearch({
         const response = await fetch('/api/ai/search', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query, limit: 8, threshold: 0.6 })
-        })
+          body: JSON.stringify({ query, limit: 8, threshold: 0.6 }),
+        });
 
         if (!response.ok) {
-          throw new Error('Search failed')
+          throw new Error('Search failed');
         }
 
-        const data = await response.json()
-        setSearchResults(data.results)
+        const data = await response.json();
+        setSearchResults(data.results);
       } else {
         // AI question mode
         const response = await fetch('/api/ai/ask', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ question: query, useRAG: true })
-        })
+          body: JSON.stringify({ question: query, useRAG: true }),
+        });
 
         if (!response.ok) {
-          throw new Error('AI request failed')
+          throw new Error('AI request failed');
         }
 
-        const data = await response.json()
-        setAiResponse(data)
+        const data = await response.json();
+        setAiResponse(data);
       }
     } catch (error) {
-      console.error('Search error:', error)
-      setError('Search failed. Please try again.')
+      console.error('Search error:', error);
+      setError('Search failed. Please try again.');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault()
-      handleSearch()
+      e.preventDefault();
+      handleSearch();
     }
-  }
+  };
 
   const exampleQueries = [
-    "How do I train for high altitude climbing?",
-    "What are the key techniques for ice climbing?",
-    "Avalanche safety and risk assessment",
-    "Nutrition strategies for expedition climbing",
-    "Acclimatization protocols for big mountains"
-  ]
+    'How do I train for high altitude climbing?',
+    'What are the key techniques for ice climbing?',
+    'Avalanche safety and risk assessment',
+    'Nutrition strategies for expedition climbing',
+    'Acclimatization protocols for big mountains',
+  ];
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return 'text-green-600'
-    if (confidence >= 0.6) return 'text-yellow-600'
-    return 'text-red-600'
-  }
+    if (confidence >= 0.8) return 'text-green-600';
+    if (confidence >= 0.6) return 'text-yellow-600';
+    return 'text-red-600';
+  };
 
   const getConfidenceText = (confidence: number) => {
-    if (confidence >= 0.8) return 'High confidence'
-    if (confidence >= 0.6) return 'Medium confidence'
-    return 'Low confidence'
-  }
+    if (confidence >= 0.8) return 'High confidence';
+    if (confidence >= 0.6) return 'Medium confidence';
+    return 'Low confidence';
+  };
 
   return (
     <div className={`max-w-4xl mx-auto ${className}`}>
@@ -250,14 +265,22 @@ export function SmartSearch({
             ) : (
               <MessageCircle className="w-4 h-4" />
             )}
-            <span>{isLoading ? 'Processing...' : mode === 'search' ? 'Search' : 'Ask AI'}</span>
+            <span>
+              {isLoading
+                ? 'Processing...'
+                : mode === 'search'
+                  ? 'Search'
+                  : 'Ask AI'}
+            </span>
           </button>
         </div>
 
         {/* Example Queries */}
         {showExamples && !query && (
           <div className="mt-6">
-            <p className="text-sm text-gray-600 mb-3">Try these example queries:</p>
+            <p className="text-sm text-gray-600 mb-3">
+              Try these example queries:
+            </p>
             <div className="flex flex-wrap gap-2">
               {exampleQueries.map((example, index) => (
                 <button
@@ -289,13 +312,17 @@ export function SmartSearch({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Brain className="w-5 h-5 text-alpine-blue" />
-              <h3 className="text-lg font-medium text-spa-charcoal">AI Assistant Response</h3>
+              <h3 className="text-lg font-medium text-spa-charcoal">
+                AI Assistant Response
+              </h3>
             </div>
-            <div className={`text-sm ${getConfidenceColor(aiResponse.confidence)}`}>
+            <div
+              className={`text-sm ${getConfidenceColor(aiResponse.confidence)}`}
+            >
               {getConfidenceText(aiResponse.confidence)}
             </div>
           </div>
-          
+
           <div className="prose prose-blue max-w-none mb-4">
             <div className="whitespace-pre-wrap text-spa-charcoal leading-relaxed">
               {aiResponse.answer}
@@ -304,7 +331,9 @@ export function SmartSearch({
 
           {aiResponse.sources.length > 0 && (
             <div className="border-t border-gray-200 pt-4">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">Sources:</h4>
+              <h4 className="text-sm font-medium text-gray-700 mb-2">
+                Sources:
+              </h4>
               <div className="flex flex-wrap gap-2">
                 {aiResponse.sources.map((source, index) => (
                   <span
@@ -331,7 +360,10 @@ export function SmartSearch({
           </div>
 
           {searchResults.map((result, index) => (
-            <div key={result.document.id} className="bg-white rounded-xl shadow-spa-soft p-6">
+            <div
+              key={result.document.id}
+              className="bg-white rounded-xl shadow-spa-soft p-6"
+            >
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <h4 className="text-lg font-medium text-spa-charcoal mb-1">
@@ -341,15 +373,17 @@ export function SmartSearch({
                     <span className="px-2 py-1 bg-gray-100 rounded">
                       {result.document.category}
                     </span>
-                    <span>Relevance: {Math.round(result.relevanceScore * 100)}%</span>
+                    <span>
+                      Relevance: {Math.round(result.relevanceScore * 100)}%
+                    </span>
                   </div>
                 </div>
               </div>
-              
+
               <p className="text-spa-charcoal leading-relaxed mb-3">
                 {result.document.content}
               </p>
-              
+
               <div className="text-xs text-gray-500">
                 Source: {result.document.source}
               </div>
@@ -359,13 +393,19 @@ export function SmartSearch({
       )}
 
       {/* No Results */}
-      {query && !isLoading && searchResults.length === 0 && !aiResponse && !error && (
-        <div className="text-center py-8">
-          <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600">No results found for "{query}"</p>
-          <p className="text-sm text-gray-500 mt-2">Try adjusting your search terms or ask a question instead</p>
-        </div>
-      )}
+      {query &&
+        !isLoading &&
+        searchResults.length === 0 &&
+        !aiResponse &&
+        !error && (
+          <div className="text-center py-8">
+            <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <p className="text-gray-600">No results found for "{query}"</p>
+            <p className="text-sm text-gray-500 mt-2">
+              Try adjusting your search terms or ask a question instead
+            </p>
+          </div>
+        )}
     </div>
-  )
+  );
 }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -17,11 +17,12 @@ export async function GET(
     const { id } = params;
 
     // Check if id is a UUID or slug
-    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-    
-    let query = supabase
-      .from('blog_posts')
-      .select(`
+    const isUUID =
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+        id
+      );
+
+    let query = supabase.from('blog_posts').select(`
         *,
         blog_post_tags(blog_tags(name, slug, color))
       `);
@@ -52,14 +53,20 @@ export async function GET(
     // Format the response
     const formattedPost = {
       ...post,
-      tags: post.blog_post_tags?.map((pt: any) => pt.blog_tags?.name).filter(Boolean) || [],
-      category_color: category?.color || '#D97706'
+      tags:
+        post.blog_post_tags
+          ?.map((pt: any) => pt.blog_tags?.name)
+          .filter(Boolean) || [],
+      category_color: category?.color || '#D97706',
     };
 
     return NextResponse.json({ post: formattedPost });
   } catch (error) {
     console.error('Blog post API error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -70,7 +77,7 @@ export async function PUT(
   try {
     const { id } = params;
     const body = await request.json();
-    
+
     const {
       title,
       slug,
@@ -83,7 +90,7 @@ export async function PUT(
       meta_description,
       tags = [],
       scheduled_for,
-      read_time
+      read_time,
     } = body;
 
     // Check if the post exists
@@ -107,7 +114,10 @@ export async function PUT(
         .single();
 
       if (conflictPost) {
-        return NextResponse.json({ error: 'Slug already exists' }, { status: 409 });
+        return NextResponse.json(
+          { error: 'Slug already exists' },
+          { status: 409 }
+        );
       }
     }
 
@@ -123,9 +133,11 @@ export async function PUT(
       ...(meta_title !== undefined && { meta_title }),
       ...(meta_description !== undefined && { meta_description }),
       ...(read_time !== undefined && { read_time }),
-      ...(scheduled_for !== undefined && { 
-        scheduled_for: scheduled_for ? new Date(scheduled_for).toISOString() : null 
-      })
+      ...(scheduled_for !== undefined && {
+        scheduled_for: scheduled_for
+          ? new Date(scheduled_for).toISOString()
+          : null,
+      }),
     };
 
     // Handle published_at when status changes to published
@@ -147,12 +159,10 @@ export async function PUT(
     }
 
     // Handle tags update
-    if (tags.length >= 0) { // Allow empty array to clear tags
+    if (tags.length >= 0) {
+      // Allow empty array to clear tags
       // Remove existing tag relationships
-      await supabase
-        .from('blog_post_tags')
-        .delete()
-        .eq('post_id', id);
+      await supabase.from('blog_post_tags').delete().eq('post_id', id);
 
       if (tags.length > 0) {
         // Create new tags if they don't exist
@@ -170,14 +180,12 @@ export async function PUT(
           .in('name', tags);
 
         if (tagData) {
-          const postTagRelations = tagData.map(tag => ({
+          const postTagRelations = tagData.map((tag) => ({
             post_id: id,
-            tag_id: tag.id
+            tag_id: tag.id,
           }));
 
-          await supabase
-            .from('blog_post_tags')
-            .insert(postTagRelations);
+          await supabase.from('blog_post_tags').insert(postTagRelations);
         }
       }
     }
@@ -185,7 +193,10 @@ export async function PUT(
     return NextResponse.json({ success: true, post: updatedPost });
   } catch (error) {
     console.error('Blog post update error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -196,10 +207,7 @@ export async function DELETE(
   try {
     const { id } = params;
 
-    const { error } = await supabase
-      .from('blog_posts')
-      .delete()
-      .eq('id', id);
+    const { error } = await supabase.from('blog_posts').delete().eq('id', id);
 
     if (error) {
       console.error('Post deletion error:', error);
@@ -209,6 +217,9 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Blog post deletion error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useSession, signOut } from "next-auth/react";
-import { motion } from "framer-motion";
-import ProtectedRoute from "@/app/components/auth/ProtectedRoute";
+import { useSession, signOut } from 'next-auth/react';
+import { motion } from 'framer-motion';
+import ProtectedRoute from '@/app/components/auth/ProtectedRoute';
 import {
   DocumentTextIcon,
   NewspaperIcon,
@@ -10,9 +10,9 @@ import {
   CheckCircleIcon,
   ExclamationTriangleIcon,
   UserIcon,
-  ArrowRightOnRectangleIcon
-} from "@heroicons/react/24/outline";
-import Link from "next/link";
+  ArrowRightOnRectangleIcon,
+} from '@heroicons/react/24/outline';
+import Link from 'next/link';
 
 interface SystemStatus {
   name: string;
@@ -26,45 +26,45 @@ function AdminDashboardContent() {
 
   const systemStatus: SystemStatus[] = [
     {
-      name: "Strava Integration",
-      status: "healthy",
+      name: 'Strava Integration',
+      status: 'healthy',
       lastChecked: new Date().toLocaleString(),
-      description: "API connection active, tokens refreshed"
+      description: 'API connection active, tokens refreshed',
     },
     {
-      name: "RAG AI System", 
-      status: "healthy",
+      name: 'RAG AI System',
+      status: 'healthy',
       lastChecked: new Date().toLocaleString(),
-      description: "Ollama + Supabase vector search operational"
+      description: 'Ollama + Supabase vector search operational',
     },
     {
-      name: "Analytics",
-      status: "healthy", 
+      name: 'Analytics',
+      status: 'healthy',
       lastChecked: new Date().toLocaleString(),
-      description: "Custom analytics + GA4 tracking active"
+      description: 'Custom analytics + GA4 tracking active',
     },
     {
-      name: "Error Monitoring",
-      status: "healthy",
+      name: 'Error Monitoring',
+      status: 'healthy',
       lastChecked: new Date().toLocaleString(),
-      description: "Comprehensive error tracking implemented"
+      description: 'Comprehensive error tracking implemented',
     },
     {
-      name: "Authentication",
-      status: "healthy",
+      name: 'Authentication',
+      status: 'healthy',
       lastChecked: new Date().toLocaleString(),
-      description: "NextAuth.js with Google OAuth + credentials"
+      description: 'NextAuth.js with Google OAuth + credentials',
     },
     {
-      name: "Blog CMS",
-      status: "healthy",
-      lastChecked: new Date().toLocaleString(), 
-      description: "Supabase CMS active"
-    }
+      name: 'Blog CMS',
+      status: 'healthy',
+      lastChecked: new Date().toLocaleString(),
+      description: 'Supabase CMS active',
+    },
   ];
 
   const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
+    signOut({ callbackUrl: '/' });
   };
 
   const getStatusIcon = (status: SystemStatus['status']) => {
@@ -109,13 +109,15 @@ function AdminDashboardContent() {
               Manage your mountaineering platform
             </p>
           </div>
-          
+
           {/* User Info & Sign Out */}
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 min-w-[200px]">
             <div className="flex items-center gap-3 mb-3">
               <UserIcon className="w-5 h-5 text-summitGold" />
               <div>
-                <p className="text-white font-medium text-sm">{session?.user?.name}</p>
+                <p className="text-white font-medium text-sm">
+                  {session?.user?.name}
+                </p>
                 <p className="text-white/60 text-xs">{session?.user?.email}</p>
                 <p className="text-summitGold text-xs capitalize">
                   {(session?.user as any)?.role || 'admin'}
@@ -153,8 +155,12 @@ function AdminDashboardContent() {
                   {getStatusIcon(system.status)}
                   <h3 className="text-white font-semibold">{system.name}</h3>
                 </div>
-                <p className="text-white/60 text-sm mb-2">{system.description}</p>
-                <p className="text-white/40 text-xs">Last checked: {system.lastChecked}</p>
+                <p className="text-white/60 text-sm mb-2">
+                  {system.description}
+                </p>
+                <p className="text-white/40 text-xs">
+                  Last checked: {system.lastChecked}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -176,7 +182,9 @@ function AdminDashboardContent() {
             >
               <DocumentTextIcon className="w-8 h-8 text-summitGold mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="text-white font-semibold mb-2">Manage Blog</h3>
-              <p className="text-white/60 text-sm">Create and edit blog posts</p>
+              <p className="text-white/60 text-sm">
+                Create and edit blog posts
+              </p>
             </Link>
 
             {/* Newsletter */}
@@ -186,7 +194,9 @@ function AdminDashboardContent() {
             >
               <NewspaperIcon className="w-8 h-8 text-summitGold mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="text-white font-semibold mb-2">Newsletter</h3>
-              <p className="text-white/60 text-sm">Generate and send newsletters</p>
+              <p className="text-white/60 text-sm">
+                Generate and send newsletters
+              </p>
             </Link>
 
             {/* Analytics */}
@@ -196,7 +206,9 @@ function AdminDashboardContent() {
             >
               <ChartBarIcon className="w-8 h-8 text-summitGold mb-4 group-hover:scale-110 transition-transform" />
               <h3 className="text-white font-semibold mb-2">Analytics</h3>
-              <p className="text-white/60 text-sm">View site metrics and insights</p>
+              <p className="text-white/60 text-sm">
+                View site metrics and insights
+              </p>
             </Link>
 
             {/* Strava Refresh */}
@@ -204,7 +216,9 @@ function AdminDashboardContent() {
               onClick={() => {
                 fetch('/api/strava/refresh-tokens', {
                   method: 'POST',
-                  headers: { 'Authorization': `Bearer ${process.env.CRON_SECRET || 'default-secret'}` }
+                  headers: {
+                    Authorization: `Bearer ${process.env.CRON_SECRET || 'default-secret'}`,
+                  },
                 }).then(() => alert('Strava tokens refreshed!'));
               }}
               className="group bg-white/5 backdrop-blur-sm border border-white/10 hover:border-summitGold/30 rounded-2xl p-6 transition-all hover:bg-white/10 text-left"
@@ -213,7 +227,9 @@ function AdminDashboardContent() {
                 <span className="text-summitGold font-bold text-sm">S</span>
               </div>
               <h3 className="text-white font-semibold mb-2">Refresh Strava</h3>
-              <p className="text-white/60 text-sm">Manually refresh Strava tokens</p>
+              <p className="text-white/60 text-sm">
+                Manually refresh Strava tokens
+              </p>
             </button>
           </div>
         </motion.div>
@@ -224,22 +240,30 @@ function AdminDashboardContent() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <h2 className="text-2xl font-bold text-white mb-6">Recent Activity</h2>
+          <h2 className="text-2xl font-bold text-white mb-6">
+            Recent Activity
+          </h2>
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6">
             <div className="space-y-4">
               <div className="flex items-center gap-4 py-3 border-b border-white/10">
                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                <span className="text-white/60 text-sm">System status check completed</span>
+                <span className="text-white/60 text-sm">
+                  System status check completed
+                </span>
                 <span className="text-white/40 text-xs ml-auto">Just now</span>
               </div>
               <div className="flex items-center gap-4 py-3 border-b border-white/10">
                 <div className="w-2 h-2 bg-summitGold rounded-full"></div>
-                <span className="text-white/60 text-sm">Admin session started</span>
+                <span className="text-white/60 text-sm">
+                  Admin session started
+                </span>
                 <span className="text-white/40 text-xs ml-auto">2 min ago</span>
               </div>
               <div className="flex items-center gap-4 py-3">
                 <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                <span className="text-white/60 text-sm">NextAuth.js authentication system activated</span>
+                <span className="text-white/60 text-sm">
+                  NextAuth.js authentication system activated
+                </span>
                 <span className="text-white/40 text-xs ml-auto">5 min ago</span>
               </div>
             </div>

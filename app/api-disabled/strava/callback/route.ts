@@ -1,21 +1,24 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { storeStravaTokens } from '@/lib/strava'
+import { NextRequest, NextResponse } from 'next/server';
+import { storeStravaTokens } from '@/lib/strava';
 
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
-  const code = searchParams.get('code')
-  const error = searchParams.get('error')
+  const { searchParams } = new URL(request.url);
+  const code = searchParams.get('code');
+  const error = searchParams.get('error');
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  const baseUrl =
+    process.env.NEXT_PUBLIC_BASE_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    'http://localhost:3000';
 
   if (error) {
-    return NextResponse.redirect(`${baseUrl}/admin?error=access_denied`)
+    return NextResponse.redirect(`${baseUrl}/admin?error=access_denied`);
   }
 
   if (!code) {
-    return NextResponse.redirect(`${baseUrl}/admin?error=no_code`)
+    return NextResponse.redirect(`${baseUrl}/admin?error=no_code`);
   }
 
   try {
@@ -31,28 +34,30 @@ export async function GET(request: NextRequest) {
         code,
         grant_type: 'authorization_code',
       }),
-    })
+    });
 
     if (!tokenResponse.ok) {
-      const errorData = await tokenResponse.text()
-      console.error('Strava token exchange failed:', errorData)
-      throw new Error('Failed to exchange code for token')
+      const errorData = await tokenResponse.text();
+      console.error('Strava token exchange failed:', errorData);
+      throw new Error('Failed to exchange code for token');
     }
 
-    const tokenData = await tokenResponse.json()
+    const tokenData = await tokenResponse.json();
 
     // Store tokens using our library
-    storeStravaTokens(tokenData)
+    storeStravaTokens(tokenData);
 
     console.log('✅ Strava connected successfully:', {
       athlete_id: tokenData.athlete?.id,
       athlete_name: `${tokenData.athlete?.firstname} ${tokenData.athlete?.lastname}`,
       expires_at: new Date(tokenData.expires_at * 1000).toISOString(),
-    })
+    });
 
-    return NextResponse.redirect(`${baseUrl}/admin?success=strava_connected&athlete=${tokenData.athlete?.firstname}`)
+    return NextResponse.redirect(
+      `${baseUrl}/admin?success=strava_connected&athlete=${tokenData.athlete?.firstname}`
+    );
   } catch (error) {
-    console.error('Strava OAuth error:', error)
-    return NextResponse.redirect(`${baseUrl}/admin?error=auth_failed`)
+    console.error('Strava OAuth error:', error);
+    return NextResponse.redirect(`${baseUrl}/admin?error=auth_failed`);
   }
 }

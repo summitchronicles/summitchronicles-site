@@ -1,1 +1,1 @@
-export { CinematicBlogPost } from './CinematicBlogPost'
+export { CinematicBlogPost } from './CinematicBlogPost';

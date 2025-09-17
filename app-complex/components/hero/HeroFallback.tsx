@@ -1,29 +1,33 @@
-"use client";
+'use client';
 
-import { motion } from "framer-motion";
-import { clsx } from "clsx";
-import { GlassCard, MountainButton, StatusIndicator } from "@/app/components/ui";
-import { 
-  MapPinIcon, 
-  FireIcon, 
+import { motion } from 'framer-motion';
+import { clsx } from 'clsx';
+import {
+  GlassCard,
+  MountainButton,
+  StatusIndicator,
+} from '@/app/components/ui';
+import {
+  MapPinIcon,
+  FireIcon,
   ArrowRightIcon,
-  SparklesIcon
-} from "@heroicons/react/24/outline";
+  SparklesIcon,
+} from '@heroicons/react/24/outline';
 
 interface HeroFallbackProps {
   className?: string;
 }
 
-export default function HeroFallback({ className = "" }: HeroFallbackProps) {
+export default function HeroFallback({ className = '' }: HeroFallbackProps) {
   const heroVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
         duration: 1,
-        staggerChildren: 0.2
-      }
-    }
+        staggerChildren: 0.2,
+      },
+    },
   };
 
   const itemVariants = {
@@ -33,9 +37,9 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: [0.23, 1, 0.32, 1]
-      }
-    }
+        ease: [0.23, 1, 0.32, 1],
+      },
+    },
   };
 
   const floatingVariants = {
@@ -44,9 +48,9 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
       transition: {
         duration: 6,
         repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
+        ease: 'easeInOut',
+      },
+    },
   };
 
   return (
@@ -55,7 +59,7 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
       initial="hidden"
       animate="visible"
       className={clsx(
-        "relative min-h-screen overflow-hidden flex items-center justify-center",
+        'relative min-h-screen overflow-hidden flex items-center justify-center',
         className
       )}
       style={{
@@ -64,7 +68,7 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
           radial-gradient(circle at 80% 70%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
           radial-gradient(circle at 50% 90%, rgba(245, 158, 11, 0.05) 0%, transparent 40%),
           linear-gradient(180deg, #0f172a 0%, #1e293b 30%, #374151 70%, #4b5563 100%)
-        `
+        `,
       }}
     >
       {/* Animated Background Elements */}
@@ -81,13 +85,13 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
             animate={{
               y: [0, -50, 0],
               opacity: [0.2, 0.6, 0.2],
-              scale: [1, 1.5, 1]
+              scale: [1, 1.5, 1],
             }}
             transition={{
               duration: 4 + Math.random() * 4,
               repeat: Infinity,
               delay: Math.random() * 2,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
           />
         ))}
@@ -104,11 +108,23 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
               fill="url(#mountainGradient2)"
             />
             <defs>
-              <linearGradient id="mountainGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <linearGradient
+                id="mountainGradient"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
                 <stop offset="0%" stopColor="rgba(59, 130, 246, 0.3)" />
                 <stop offset="100%" stopColor="rgba(30, 58, 138, 0.1)" />
               </linearGradient>
-              <linearGradient id="mountainGradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+              <linearGradient
+                id="mountainGradient2"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
                 <stop offset="0%" stopColor="rgba(139, 92, 246, 0.2)" />
                 <stop offset="100%" stopColor="rgba(88, 28, 135, 0.05)" />
               </linearGradient>
@@ -119,9 +135,11 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
 
       {/* Main Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
-        
         {/* Left Content */}
-        <motion.div variants={itemVariants} className="space-y-8 text-center lg:text-left">
+        <motion.div
+          variants={itemVariants}
+          className="space-y-8 text-center lg:text-left"
+        >
           <div className="space-y-4">
             {/* Expedition Badge */}
             <motion.div
@@ -136,26 +154,25 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
             </motion.div>
 
             {/* Main Heading */}
-            <motion.h1 
+            <motion.h1
               variants={itemVariants}
               className="text-5xl md:text-7xl font-bold text-snowWhite leading-tight"
             >
-              Summit{" "}
-              <span className="text-gradient-alpine">Chronicles</span>
+              Summit <span className="text-gradient-alpine">Chronicles</span>
             </motion.h1>
 
             {/* Subheading */}
-            <motion.p 
+            <motion.p
               variants={itemVariants}
               className="text-xl md:text-2xl text-gray-300 max-w-2xl"
             >
-              Journey through the Seven Summits with real-time tracking, 
+              Journey through the Seven Summits with real-time tracking,
               AI-powered insights, and immersive expedition documentation.
             </motion.p>
           </div>
 
           {/* Action Buttons */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
@@ -183,8 +200,8 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
 
         {/* Right Content - Status Dashboard */}
         <motion.div variants={itemVariants} className="space-y-6">
-          <GlassCard 
-            hover3D 
+          <GlassCard
+            hover3D
             glowEffect
             accentColor="rgba(59, 130, 246, 0.5)"
             className="p-8"
@@ -195,11 +212,7 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
                 <h3 className="text-xl font-bold text-snowWhite">
                   Expedition Command
                 </h3>
-                <StatusIndicator
-                  status="active"
-                  text="Live"
-                  size="sm"
-                />
+                <StatusIndicator status="active" text="Live" size="sm" />
               </div>
 
               {/* Current Status */}
@@ -212,9 +225,7 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
                   <div className="text-lg font-semibold text-snowWhite">
                     Base Camp
                   </div>
-                  <div className="text-sm text-gray-400">
-                    1,200m elevation
-                  </div>
+                  <div className="text-sm text-gray-400">1,200m elevation</div>
                 </div>
 
                 <div className="space-y-2">
@@ -225,9 +236,7 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
                   <div className="text-lg font-semibold text-snowWhite">
                     Camp I
                   </div>
-                  <div className="text-sm text-gray-400">
-                    2 weeks ETA
-                  </div>
+                  <div className="text-sm text-gray-400">2 weeks ETA</div>
                 </div>
               </div>
 
@@ -245,7 +254,7 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
                   <motion.div
                     className="h-full bg-gradient-to-r from-glacierBlue to-summitGold"
                     initial={{ width: 0 }}
-                    animate={{ width: "68%" }}
+                    animate={{ width: '68%' }}
                     transition={{ duration: 2, delay: 1 }}
                   />
                 </div>
@@ -264,11 +273,7 @@ export default function HeroFallback({ className = "" }: HeroFallbackProps) {
                     </div>
                   </div>
                 </div>
-                <StatusIndicator
-                  status="success"
-                  text="Safe"
-                  size="sm"
-                />
+                <StatusIndicator status="success" text="Safe" size="sm" />
               </div>
             </div>
           </GlassCard>

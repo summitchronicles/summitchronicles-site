@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
 // Force dynamic rendering to prevent build-time execution
-export const dynamic = 'force-dynamic'
+export const dynamic = 'force-dynamic';
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,
@@ -12,13 +12,10 @@ const supabase = createClient(
 export async function POST(request: NextRequest) {
   try {
     const { secret } = await request.json();
-    
+
     // Verify setup secret for security
     if (secret !== process.env.INGEST_SECRET) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Create the required tables by running our setup SQL
@@ -123,8 +120,8 @@ export async function POST(request: NextRequest) {
     `;
 
     // Execute the setup SQL
-    const { error: sqlError } = await supabase.rpc('exec_sql', { 
-      sql: setupSQL 
+    const { error: sqlError } = await supabase.rpc('exec_sql', {
+      sql: setupSQL,
     });
 
     if (sqlError) {
@@ -138,12 +135,11 @@ export async function POST(request: NextRequest) {
     // Insert some sample data for testing
     await insertSampleData();
 
-    return NextResponse.json({ 
+    return NextResponse.json({
       success: true,
       message: 'Database setup completed successfully',
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error: any) {
     console.error('Setup error:', error);
     return NextResponse.json(
@@ -165,17 +161,18 @@ async function insertSampleData() {
       device_type: 'desktop',
       browser: 'Chrome',
       os: 'macOS',
-      landing_page: '/'
+      landing_page: '/',
     });
 
     // Insert sample AI interaction
     await supabase.from('ai_interactions').insert({
       question: 'What is the best training for Everest?',
-      answer: 'For Everest training, focus on cardiovascular endurance, strength training, and altitude acclimatization. A comprehensive program should include...',
+      answer:
+        'For Everest training, focus on cardiovascular endurance, strength training, and altitude acclimatization. A comprehensive program should include...',
       model: 'cohere',
       response_time_ms: 1500,
       rating: 5,
-      category: 'training'
+      category: 'training',
     });
 
     // Insert sample web vitals
@@ -183,18 +180,18 @@ async function insertSampleData() {
       {
         name: 'LCP',
         value: 2.1,
-        rating: 'good'
+        rating: 'good',
       },
       {
         name: 'FCP',
         value: 1.8,
-        rating: 'good'
+        rating: 'good',
       },
       {
         name: 'CLS',
         value: 0.05,
-        rating: 'good'
-      }
+        rating: 'good',
+      },
     ]);
 
     console.log('✅ Sample data inserted successfully');
@@ -204,8 +201,8 @@ async function insertSampleData() {
 }
 
 export async function GET() {
-  return NextResponse.json({ 
+  return NextResponse.json({
     message: 'Database setup endpoint. Use POST with proper credentials.',
-    requiredFields: ['secret']
+    requiredFields: ['secret'],
   });
 }
