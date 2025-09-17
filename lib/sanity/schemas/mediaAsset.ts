@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const mediaAsset = defineType({
   name: 'mediaAsset',
@@ -10,16 +10,16 @@ export const mediaAsset = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: Rule => Rule.required().min(3).max(100)
+      validation: (Rule) => Rule.required().min(3).max(100),
     }),
     defineField({
       name: 'file',
       title: 'Media File',
       type: 'file',
       options: {
-        accept: '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.avi,.mkv'
+        accept: '.jpg,.jpeg,.png,.gif,.webp,.mp4,.mov,.avi,.mkv',
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'fileType',
@@ -30,24 +30,24 @@ export const mediaAsset = defineType({
           { title: 'Image', value: 'image' },
           { title: 'Video', value: 'video' },
           { title: 'Audio', value: 'audio' },
-          { title: 'Document', value: 'document' }
-        ]
+          { title: 'Document', value: 'document' },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'alt',
       title: 'Alternative Text',
       type: 'string',
       description: 'Important for accessibility and SEO',
-      validation: Rule => Rule.required().min(5).max(200)
+      validation: (Rule) => Rule.required().min(5).max(200),
     }),
     defineField({
       name: 'caption',
       title: 'Caption',
       type: 'text',
       rows: 3,
-      description: 'Brief description or context for the media'
+      description: 'Brief description or context for the media',
     }),
     defineField({
       name: 'tags',
@@ -55,9 +55,9 @@ export const mediaAsset = defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: {
-        layout: 'tags'
+        layout: 'tags',
       },
-      description: 'Tags for organizing and searching media'
+      description: 'Tags for organizing and searching media',
     }),
     defineField({
       name: 'location',
@@ -67,39 +67,39 @@ export const mediaAsset = defineType({
         {
           name: 'name',
           title: 'Location Name',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'coordinates',
           title: 'GPS Coordinates',
-          type: 'geopoint'
+          type: 'geopoint',
         },
         {
           name: 'altitude',
           title: 'Altitude (feet)',
-          type: 'number'
-        }
-      ]
+          type: 'number',
+        },
+      ],
     }),
     defineField({
       name: 'dateCreated',
       title: 'Date Created',
       type: 'datetime',
-      description: 'When the media was originally captured/created'
+      description: 'When the media was originally captured/created',
     }),
     defineField({
       name: 'dateUploaded',
       title: 'Date Uploaded',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
-      readOnly: true
+      readOnly: true,
     }),
     defineField({
       name: 'photographer',
       title: 'Photographer/Creator',
       type: 'reference',
       to: [{ type: 'author' }],
-      description: 'Person who created this media'
+      description: 'Person who created this media',
     }),
     defineField({
       name: 'equipment',
@@ -109,20 +109,20 @@ export const mediaAsset = defineType({
         {
           name: 'camera',
           title: 'Camera',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'lens',
           title: 'Lens',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'settings',
           title: 'Camera Settings',
           type: 'string',
-          description: 'e.g., ISO 400, f/2.8, 1/125s'
-        }
-      ]
+          description: 'e.g., ISO 400, f/2.8, 1/125s',
+        },
+      ],
     }),
     defineField({
       name: 'dimensions',
@@ -132,40 +132,40 @@ export const mediaAsset = defineType({
         {
           name: 'width',
           title: 'Width (pixels)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'height',
           title: 'Height (pixels)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'aspectRatio',
           title: 'Aspect Ratio',
           type: 'string',
-          description: 'e.g., 16:9, 4:3, 1:1'
-        }
-      ]
+          description: 'e.g., 16:9, 4:3, 1:1',
+        },
+      ],
     }),
     defineField({
       name: 'fileSize',
       title: 'File Size (MB)',
       type: 'number',
-      description: 'File size in megabytes'
+      description: 'File size in megabytes',
     }),
     defineField({
       name: 'isPublic',
       title: 'Public',
       type: 'boolean',
       initialValue: true,
-      description: 'Allow this media to be used publicly'
+      description: 'Allow this media to be used publicly',
     }),
     defineField({
       name: 'isHighlight',
       title: 'Highlight',
       type: 'boolean',
       initialValue: false,
-      description: 'Mark as a featured/highlight media'
+      description: 'Mark as a featured/highlight media',
     }),
     defineField({
       name: 'usageRights',
@@ -177,16 +177,16 @@ export const mediaAsset = defineType({
           { title: 'Creative Commons', value: 'cc' },
           { title: 'Public Domain', value: 'public' },
           { title: 'Editorial Use Only', value: 'editorial' },
-          { title: 'Personal Use Only', value: 'personal' }
-        ]
+          { title: 'Personal Use Only', value: 'personal' },
+        ],
       },
-      initialValue: 'all-rights'
+      initialValue: 'all-rights',
     }),
     defineField({
       name: 'categories',
       title: 'Categories',
       type: 'array',
-      of: [{ type: 'reference', to: [{ type: 'category' }] }]
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
     }),
     defineField({
       name: 'relatedContent',
@@ -195,10 +195,11 @@ export const mediaAsset = defineType({
       of: [
         { type: 'reference', to: [{ type: 'blogPost' }] },
         { type: 'reference', to: [{ type: 'expeditionUpdate' }] },
-        { type: 'reference', to: [{ type: 'trainingEntry' }] }
+        { type: 'reference', to: [{ type: 'trainingEntry' }] },
       ],
-      description: 'Link to related blog posts, expeditions, or training entries'
-    })
+      description:
+        'Link to related blog posts, expeditions, or training entries',
+    }),
   ],
   preview: {
     select: {
@@ -206,42 +207,42 @@ export const mediaAsset = defineType({
       fileType: 'fileType',
       isPublic: 'isPublic',
       isHighlight: 'isHighlight',
-      media: 'file'
+      media: 'file',
     },
     prepare(selection) {
-      const { fileType, isPublic, isHighlight } = selection
+      const { fileType, isPublic, isHighlight } = selection;
       const typeEmojis: Record<string, string> = {
         image: '📸',
         video: '🎥',
         audio: '🎵',
-        document: '📄'
-      }
-      
-      const highlights = []
-      if (isHighlight) highlights.push('⭐')
-      if (!isPublic) highlights.push('🔒')
-      
+        document: '📄',
+      };
+
+      const highlights = [];
+      if (isHighlight) highlights.push('⭐');
+      if (!isPublic) highlights.push('🔒');
+
       return {
         ...selection,
-        subtitle: `${typeEmojis[fileType] || '📎'} ${fileType} ${highlights.join(' ')}`
-      }
-    }
+        subtitle: `${typeEmojis[fileType] || '📎'} ${fileType} ${highlights.join(' ')}`,
+      };
+    },
   },
   orderings: [
     {
       title: 'Upload Date, New',
       name: 'uploadedDesc',
-      by: [{ field: 'dateUploaded', direction: 'desc' }]
+      by: [{ field: 'dateUploaded', direction: 'desc' }],
     },
     {
       title: 'Created Date, New',
       name: 'createdDesc',
-      by: [{ field: 'dateCreated', direction: 'desc' }]
+      by: [{ field: 'dateCreated', direction: 'desc' }],
     },
     {
       title: 'Title A-Z',
       name: 'titleAsc',
-      by: [{ field: 'title', direction: 'asc' }]
-    }
-  ]
-})
+      by: [{ field: 'title', direction: 'asc' }],
+    },
+  ],
+});

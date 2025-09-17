@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const gear = defineType({
   name: 'gear',
@@ -10,19 +10,19 @@ export const gear = defineType({
       name: 'name',
       title: 'Gear Name',
       type: 'string',
-      validation: Rule => Rule.required().min(3).max(100)
+      validation: (Rule) => Rule.required().min(3).max(100),
     }),
     defineField({
       name: 'brand',
       title: 'Brand',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'model',
       title: 'Model',
       type: 'string',
-      description: 'Specific model name or number'
+      description: 'Specific model name or number',
     }),
     defineField({
       name: 'category',
@@ -41,18 +41,18 @@ export const gear = defineType({
           { title: 'Electronics', value: 'electronics' },
           { title: 'Tools & Multi-tools', value: 'tools' },
           { title: 'Training Equipment', value: 'training' },
-          { title: 'Weather Protection', value: 'weather' }
-        ]
+          { title: 'Weather Protection', value: 'weather' },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
       rows: 4,
-      validation: Rule => Rule.required().min(50).max(1000),
-      description: 'Detailed description of the gear and its features'
+      validation: (Rule) => Rule.required().min(50).max(1000),
+      description: 'Detailed description of the gear and its features',
     }),
     defineField({
       name: 'photos',
@@ -67,34 +67,34 @@ export const gear = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative text',
-              validation: Rule => Rule.required()
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'caption',
               type: 'string',
-              title: 'Caption'
-            }
-          ]
-        }
+              title: 'Caption',
+            },
+          ],
+        },
       ],
-      validation: Rule => Rule.min(1).error('At least one photo is required')
+      validation: (Rule) => Rule.min(1).error('At least one photo is required'),
     }),
     defineField({
       name: 'featuredImage',
       title: 'Featured Image',
       type: 'image',
       options: {
-        hotspot: true
+        hotspot: true,
       },
       fields: [
         {
           name: 'alt',
           type: 'string',
           title: 'Alternative text',
-          validation: Rule => Rule.required()
-        }
+          validation: (Rule) => Rule.required(),
+        },
       ],
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'review',
@@ -105,44 +105,44 @@ export const gear = defineType({
           name: 'rating',
           title: 'Overall Rating',
           type: 'number',
-          validation: Rule => Rule.required().min(1).max(5).precision(1),
-          description: 'Rating from 1-5 stars'
+          validation: (Rule) => Rule.required().min(1).max(5).precision(1),
+          description: 'Rating from 1-5 stars',
         },
         {
           name: 'pros',
           title: 'Pros',
           type: 'array',
           of: [{ type: 'string' }],
-          description: 'What you like about this gear'
+          description: 'What you like about this gear',
         },
         {
           name: 'cons',
           title: 'Cons',
           type: 'array',
           of: [{ type: 'string' }],
-          description: 'What could be improved'
+          description: 'What could be improved',
         },
         {
           name: 'summary',
           title: 'Review Summary',
           type: 'text',
           rows: 3,
-          validation: Rule => Rule.required().min(50).max(500)
+          validation: (Rule) => Rule.required().min(50).max(500),
         },
         {
           name: 'wouldRecommend',
           title: 'Would Recommend',
           type: 'boolean',
-          initialValue: true
+          initialValue: true,
         },
         {
           name: 'bestFor',
           title: 'Best For',
           type: 'array',
           of: [{ type: 'string' }],
-          description: 'What activities/conditions this gear excels in'
-        }
-      ]
+          description: 'What activities/conditions this gear excels in',
+        },
+      ],
     }),
     defineField({
       name: 'specifications',
@@ -153,40 +153,40 @@ export const gear = defineType({
           name: 'weight',
           title: 'Weight',
           type: 'string',
-          description: 'e.g., "2.5 lbs", "850g"'
+          description: 'e.g., "2.5 lbs", "850g"',
         },
         {
           name: 'dimensions',
           title: 'Dimensions',
           type: 'string',
-          description: 'e.g., "24 x 12 x 8 inches"'
+          description: 'e.g., "24 x 12 x 8 inches"',
         },
         {
           name: 'materials',
           title: 'Materials',
           type: 'array',
           of: [{ type: 'string' }],
-          description: 'Primary materials used'
+          description: 'Primary materials used',
         },
         {
           name: 'capacity',
           title: 'Capacity/Volume',
           type: 'string',
-          description: 'e.g., "65L", "500ml", "2-person"'
+          description: 'e.g., "65L", "500ml", "2-person"',
         },
         {
           name: 'temperatureRating',
           title: 'Temperature Rating',
           type: 'string',
-          description: 'For sleeping bags, clothing, etc.'
+          description: 'For sleeping bags, clothing, etc.',
         },
         {
           name: 'waterproof',
           title: 'Waterproof Rating',
           type: 'string',
-          description: 'e.g., "10,000mm", "DWR coating"'
-        }
-      ]
+          description: 'e.g., "10,000mm", "DWR coating"',
+        },
+      ],
     }),
     defineField({
       name: 'pricing',
@@ -197,7 +197,7 @@ export const gear = defineType({
           name: 'price',
           title: 'Current Price (USD)',
           type: 'number',
-          description: 'Price in US dollars'
+          description: 'Price in US dollars',
         },
         {
           name: 'priceRange',
@@ -208,24 +208,24 @@ export const gear = defineType({
               { title: 'Budget ($0-50)', value: 'budget' },
               { title: 'Mid-range ($51-150)', value: 'mid-range' },
               { title: 'Premium ($151-300)', value: 'premium' },
-              { title: 'Luxury ($300+)', value: 'luxury' }
-            ]
-          }
+              { title: 'Luxury ($300+)', value: 'luxury' },
+            ],
+          },
         },
         {
           name: 'valueRating',
           title: 'Value for Money',
           type: 'number',
-          validation: Rule => Rule.min(1).max(5).precision(1),
-          description: 'How good is the value? (1-5 stars)'
-        }
-      ]
+          validation: (Rule) => Rule.min(1).max(5).precision(1),
+          description: 'How good is the value? (1-5 stars)',
+        },
+      ],
     }),
     defineField({
       name: 'affiliateLink',
       title: 'Affiliate/Purchase Link',
       type: 'url',
-      description: 'Link where people can purchase this gear'
+      description: 'Link where people can purchase this gear',
     }),
     defineField({
       name: 'whereToBuy',
@@ -238,21 +238,21 @@ export const gear = defineType({
             {
               name: 'retailer',
               title: 'Retailer',
-              type: 'string'
+              type: 'string',
             },
             {
               name: 'url',
               title: 'URL',
-              type: 'url'
+              type: 'url',
             },
             {
               name: 'price',
               title: 'Price',
-              type: 'number'
-            }
-          ]
-        }
-      ]
+              type: 'number',
+            },
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'experienceWith',
@@ -263,50 +263,50 @@ export const gear = defineType({
           name: 'timeOwned',
           title: 'Time Owned',
           type: 'string',
-          description: 'e.g., "2 years", "6 months"'
+          description: 'e.g., "2 years", "6 months"',
         },
         {
           name: 'milesUsed',
           title: 'Miles Used',
           type: 'number',
-          description: 'Approximate miles this gear has seen'
+          description: 'Approximate miles this gear has seen',
         },
         {
           name: 'conditionsUsed',
           title: 'Conditions Used In',
           type: 'array',
           of: [{ type: 'string' }],
-          description: 'Weather/terrain conditions you\'ve used this in'
+          description: "Weather/terrain conditions you've used this in",
         },
         {
           name: 'expeditions',
           title: 'Notable Expeditions',
           type: 'array',
           of: [{ type: 'string' }],
-          description: 'Major trips where this gear was used'
-        }
-      ]
+          description: 'Major trips where this gear was used',
+        },
+      ],
     }),
     defineField({
       name: 'alternatives',
       title: 'Similar/Alternative Gear',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'gear' }] }],
-      description: 'Other gear items that serve similar purposes'
+      description: 'Other gear items that serve similar purposes',
     }),
     defineField({
       name: 'isRecommended',
       title: 'Recommended',
       type: 'boolean',
       initialValue: true,
-      description: 'Do you recommend this gear to others?'
+      description: 'Do you recommend this gear to others?',
     }),
     defineField({
       name: 'isCurrentlyUsing',
       title: 'Currently Using',
       type: 'boolean',
       initialValue: true,
-      description: 'Are you still actively using this gear?'
+      description: 'Are you still actively using this gear?',
     }),
     defineField({
       name: 'tags',
@@ -314,8 +314,8 @@ export const gear = defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: {
-        layout: 'tags'
-      }
+        layout: 'tags',
+      },
     }),
     defineField({
       name: 'relatedContent',
@@ -324,10 +324,10 @@ export const gear = defineType({
       of: [
         { type: 'reference', to: [{ type: 'blogPost' }] },
         { type: 'reference', to: [{ type: 'expeditionUpdate' }] },
-        { type: 'reference', to: [{ type: 'achievement' }] }
+        { type: 'reference', to: [{ type: 'achievement' }] },
       ],
-      description: 'Content where this gear is featured or mentioned'
-    })
+      description: 'Content where this gear is featured or mentioned',
+    }),
   ],
   preview: {
     select: {
@@ -336,11 +336,11 @@ export const gear = defineType({
       category: 'category',
       rating: 'review.rating',
       isRecommended: 'isRecommended',
-      media: 'featuredImage'
+      media: 'featuredImage',
     },
     prepare(selection) {
-      const { brand, category, rating, isRecommended } = selection
-      
+      const { brand, category, rating, isRecommended } = selection;
+
       const categoryEmojis: Record<string, string> = {
         backpacks: '🎒',
         footwear: '👢',
@@ -353,35 +353,35 @@ export const gear = defineType({
         electronics: '📱',
         tools: '🔧',
         training: '💪',
-        weather: '☔'
-      }
-      
-      const indicators = []
-      if (rating) indicators.push(`⭐${rating}`)
-      if (isRecommended) indicators.push('✅')
-      else indicators.push('❌')
-      
+        weather: '☔',
+      };
+
+      const indicators = [];
+      if (rating) indicators.push(`⭐${rating}`);
+      if (isRecommended) indicators.push('✅');
+      else indicators.push('❌');
+
       return {
         ...selection,
-        subtitle: `${categoryEmojis[category] || '🎒'} ${brand} ${indicators.join(' ')}`
-      }
-    }
+        subtitle: `${categoryEmojis[category] || '🎒'} ${brand} ${indicators.join(' ')}`,
+      };
+    },
   },
   orderings: [
     {
       title: 'Name A-Z',
       name: 'nameAsc',
-      by: [{ field: 'name', direction: 'asc' }]
+      by: [{ field: 'name', direction: 'asc' }],
     },
     {
       title: 'Rating (High to Low)',
       name: 'ratingDesc',
-      by: [{ field: 'review.rating', direction: 'desc' }]
+      by: [{ field: 'review.rating', direction: 'desc' }],
     },
     {
       title: 'Category',
       name: 'categoryAsc',
-      by: [{ field: 'category', direction: 'asc' }]
-    }
-  ]
-})
+      by: [{ field: 'category', direction: 'asc' }],
+    },
+  ],
+});

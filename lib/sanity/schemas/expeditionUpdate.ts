@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const expeditionUpdate = defineType({
   name: 'expeditionUpdate',
@@ -10,7 +10,7 @@ export const expeditionUpdate = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: Rule => Rule.required().min(10).max(100)
+      validation: (Rule) => Rule.required().min(10).max(100),
     }),
     defineField({
       name: 'slug',
@@ -19,18 +19,16 @@ export const expeditionUpdate = defineType({
       options: {
         source: 'title',
         maxLength: 96,
-        slugify: input => input
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .slice(0, 96)
+        slugify: (input) =>
+          input.toLowerCase().replace(/\s+/g, '-').slice(0, 96),
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'date',
       title: 'Update Date',
       type: 'datetime',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'expedition',
@@ -38,7 +36,7 @@ export const expeditionUpdate = defineType({
       type: 'reference',
       to: [{ type: 'blogPost' }], // Reference to main expedition blog post
       description: 'Link to the main expedition blog post',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'content',
@@ -52,13 +50,13 @@ export const expeditionUpdate = defineType({
             { title: 'H2', value: 'h2' },
             { title: 'H3', value: 'h3' },
             { title: 'H4', value: 'h4' },
-            { title: 'Quote', value: 'blockquote' }
+            { title: 'Quote', value: 'blockquote' },
           ],
           marks: {
             decorators: [
               { title: 'Bold', value: 'strong' },
               { title: 'Italic', value: 'em' },
-              { title: 'Code', value: 'code' }
+              { title: 'Code', value: 'code' },
             ],
             annotations: [
               {
@@ -69,12 +67,12 @@ export const expeditionUpdate = defineType({
                   {
                     title: 'URL',
                     name: 'href',
-                    type: 'url'
-                  }
-                ]
-              }
-            ]
-          }
+                    type: 'url',
+                  },
+                ],
+              },
+            ],
+          },
         },
         {
           type: 'image',
@@ -84,17 +82,17 @@ export const expeditionUpdate = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative text',
-              validation: Rule => Rule.required()
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'caption',
               type: 'string',
-              title: 'Caption'
-            }
-          ]
-        }
+              title: 'Caption',
+            },
+          ],
+        },
       ],
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'location',
@@ -105,29 +103,29 @@ export const expeditionUpdate = defineType({
           name: 'name',
           title: 'Location Name',
           type: 'string',
-          validation: Rule => Rule.required()
+          validation: (Rule) => Rule.required(),
         },
         {
           name: 'coordinates',
           title: 'GPS Coordinates',
-          type: 'geopoint'
+          type: 'geopoint',
         },
         {
           name: 'altitude',
           title: 'Altitude (feet)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'weather',
           title: 'Weather Conditions',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'temperature',
           title: 'Temperature (°F)',
-          type: 'number'
-        }
-      ]
+          type: 'number',
+        },
+      ],
     }),
     defineField({
       name: 'photos',
@@ -142,16 +140,16 @@ export const expeditionUpdate = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative text',
-              validation: Rule => Rule.required()
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'caption',
               type: 'string',
-              title: 'Caption'
-            }
-          ]
-        }
-      ]
+              title: 'Caption',
+            },
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'metrics',
@@ -161,17 +159,17 @@ export const expeditionUpdate = defineType({
         {
           name: 'distance',
           title: 'Distance Covered (miles)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'elevation',
           title: 'Elevation Gained (feet)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'weather',
           title: 'Weather Summary',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'visibility',
@@ -183,14 +181,14 @@ export const expeditionUpdate = defineType({
               { title: 'Good', value: 'good' },
               { title: 'Fair', value: 'fair' },
               { title: 'Poor', value: 'poor' },
-              { title: 'Zero', value: 'zero' }
-            ]
-          }
+              { title: 'Zero', value: 'zero' },
+            ],
+          },
         },
         {
           name: 'windSpeed',
           title: 'Wind Speed (mph)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'teamMorale',
@@ -202,11 +200,11 @@ export const expeditionUpdate = defineType({
               { title: 'Good', value: 'good' },
               { title: 'Fair', value: 'fair' },
               { title: 'Low', value: 'low' },
-              { title: 'Critical', value: 'critical' }
-            ]
-          }
-        }
-      ]
+              { title: 'Critical', value: 'critical' },
+            ],
+          },
+        },
+      ],
     }),
     defineField({
       name: 'status',
@@ -221,17 +219,17 @@ export const expeditionUpdate = defineType({
           { title: 'Rest Day', value: 'rest-day' },
           { title: 'Emergency', value: 'emergency' },
           { title: 'Completed', value: 'completed' },
-          { title: 'Abandoned', value: 'abandoned' }
-        ]
+          { title: 'Abandoned', value: 'abandoned' },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'isPublic',
       title: 'Public',
       type: 'boolean',
       initialValue: true,
-      description: 'Make this update visible to the public'
+      description: 'Make this update visible to the public',
     }),
     defineField({
       name: 'tags',
@@ -239,9 +237,9 @@ export const expeditionUpdate = defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: {
-        layout: 'tags'
-      }
-    })
+        layout: 'tags',
+      },
+    }),
   ],
   preview: {
     select: {
@@ -249,39 +247,39 @@ export const expeditionUpdate = defineType({
       date: 'date',
       status: 'status',
       location: 'location.name',
-      isPublic: 'isPublic'
+      isPublic: 'isPublic',
     },
     prepare(selection) {
-      const { date, status, location, isPublic } = selection
+      const { date, status, location, isPublic } = selection;
       const statusEmojis: Record<string, string> = {
         'on-schedule': '✅',
-        'ahead': '🚀',
-        'behind': '⚠️',
+        ahead: '🚀',
+        behind: '⚠️',
         'weather-hold': '🌩️',
         'rest-day': '😴',
-        'emergency': '🚨',
-        'completed': '🏆',
-        'abandoned': '❌'
-      }
-      
-      const formattedDate = new Date(date).toLocaleDateString()
-      
+        emergency: '🚨',
+        completed: '🏆',
+        abandoned: '❌',
+      };
+
+      const formattedDate = new Date(date).toLocaleDateString();
+
       return {
         ...selection,
-        subtitle: `${statusEmojis[status] || '📍'} ${location || 'Unknown'} • ${formattedDate} ${isPublic ? '🌐' : '🔒'}`
-      }
-    }
+        subtitle: `${statusEmojis[status] || '📍'} ${location || 'Unknown'} • ${formattedDate} ${isPublic ? '🌐' : '🔒'}`,
+      };
+    },
   },
   orderings: [
     {
       title: 'Date, New',
       name: 'dateDesc',
-      by: [{ field: 'date', direction: 'desc' }]
+      by: [{ field: 'date', direction: 'desc' }],
     },
     {
       title: 'Date, Old',
       name: 'dateAsc',
-      by: [{ field: 'date', direction: 'asc' }]
-    }
-  ]
-})
+      by: [{ field: 'date', direction: 'asc' }],
+    },
+  ],
+});

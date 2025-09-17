@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const category = defineType({
   name: 'category',
@@ -10,7 +10,7 @@ export const category = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -20,13 +20,13 @@ export const category = defineType({
         source: 'title',
         maxLength: 96,
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
-      rows: 3
+      rows: 3,
     }),
     defineField({
       name: 'color',
@@ -39,31 +39,31 @@ export const category = defineType({
           { title: 'Red', value: 'red' },
           { title: 'Yellow', value: 'yellow' },
           { title: 'Purple', value: 'purple' },
-          { title: 'Orange', value: 'orange' }
-        ]
-      }
-    })
+          { title: 'Orange', value: 'orange' },
+        ],
+      },
+    }),
   ],
   preview: {
     select: {
       title: 'title',
-      color: 'color'
+      color: 'color',
     },
     prepare(selection) {
-      const { color } = selection
+      const { color } = selection;
       const colorEmojis: Record<string, string> = {
         blue: '🔵',
         green: '🟢',
         red: '🔴',
         yellow: '🟡',
         purple: '🟣',
-        orange: '🟠'
-      }
-      
+        orange: '🟠',
+      };
+
       return {
         ...selection,
-        subtitle: colorEmojis[color] || '⚪'
-      }
-    }
-  }
-})
+        subtitle: colorEmojis[color] || '⚪',
+      };
+    },
+  },
+});

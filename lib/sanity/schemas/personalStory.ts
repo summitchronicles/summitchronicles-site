@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const personalStory = defineType({
   name: 'personalStory',
@@ -10,7 +10,7 @@ export const personalStory = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: Rule => Rule.required().min(10).max(100)
+      validation: (Rule) => Rule.required().min(10).max(100),
     }),
     defineField({
       name: 'slug',
@@ -19,20 +19,18 @@ export const personalStory = defineType({
       options: {
         source: 'title',
         maxLength: 96,
-        slugify: input => input
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .slice(0, 96)
+        slugify: (input) =>
+          input.toLowerCase().replace(/\s+/g, '-').slice(0, 96),
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'excerpt',
       title: 'Excerpt',
       type: 'text',
       rows: 3,
-      validation: Rule => Rule.required().min(50).max(300),
-      description: 'A brief summary that appears in story listings'
+      validation: (Rule) => Rule.required().min(50).max(300),
+      description: 'A brief summary that appears in story listings',
     }),
     defineField({
       name: 'content',
@@ -46,13 +44,13 @@ export const personalStory = defineType({
             { title: 'H2', value: 'h2' },
             { title: 'H3', value: 'h3' },
             { title: 'H4', value: 'h4' },
-            { title: 'Quote', value: 'blockquote' }
+            { title: 'Quote', value: 'blockquote' },
           ],
           marks: {
             decorators: [
               { title: 'Bold', value: 'strong' },
               { title: 'Italic', value: 'em' },
-              { title: 'Code', value: 'code' }
+              { title: 'Code', value: 'code' },
             ],
             annotations: [
               {
@@ -63,12 +61,12 @@ export const personalStory = defineType({
                   {
                     title: 'URL',
                     name: 'href',
-                    type: 'url'
-                  }
-                ]
-              }
-            ]
-          }
+                    type: 'url',
+                  },
+                ],
+              },
+            ],
+          },
         },
         {
           type: 'image',
@@ -78,33 +76,33 @@ export const personalStory = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative text',
-              validation: Rule => Rule.required()
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'caption',
               type: 'string',
-              title: 'Caption'
-            }
-          ]
-        }
+              title: 'Caption',
+            },
+          ],
+        },
       ],
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'featuredImage',
       title: 'Featured Image',
       type: 'image',
       options: {
-        hotspot: true
+        hotspot: true,
       },
       fields: [
         {
           name: 'alt',
           type: 'string',
           title: 'Alternative text',
-          validation: Rule => Rule.required()
-        }
-      ]
+          validation: (Rule) => Rule.required(),
+        },
+      ],
     }),
     defineField({
       name: 'category',
@@ -121,10 +119,10 @@ export const personalStory = defineType({
           { title: 'Personal Growth', value: 'growth' },
           { title: 'Family & Relationships', value: 'family' },
           { title: 'Career Journey', value: 'career' },
-          { title: 'Philosophy & Values', value: 'philosophy' }
-        ]
+          { title: 'Philosophy & Values', value: 'philosophy' },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'timeframe',
@@ -135,21 +133,21 @@ export const personalStory = defineType({
           name: 'era',
           title: 'Era/Period',
           type: 'string',
-          description: 'e.g., "Early 2000s", "Childhood", "College Years"'
+          description: 'e.g., "Early 2000s", "Childhood", "College Years"',
         },
         {
           name: 'specificDate',
           title: 'Specific Date',
           type: 'date',
-          description: 'If the story happened on a specific date'
+          description: 'If the story happened on a specific date',
         },
         {
           name: 'ageRange',
           title: 'Age Range',
           type: 'string',
-          description: 'e.g., "Age 8-12", "Early 20s"'
-        }
-      ]
+          description: 'e.g., "Age 8-12", "Early 20s"',
+        },
+      ],
     }),
     defineField({
       name: 'location',
@@ -159,15 +157,15 @@ export const personalStory = defineType({
         {
           name: 'name',
           title: 'Location Name',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'significance',
           title: 'Why This Location Matters',
           type: 'text',
-          rows: 2
-        }
-      ]
+          rows: 2,
+        },
+      ],
     }),
     defineField({
       name: 'themes',
@@ -185,42 +183,42 @@ export const personalStory = defineType({
           { title: 'Friendship', value: 'friendship' },
           { title: 'Nature Connection', value: 'nature' },
           { title: 'Self-Discovery', value: 'self-discovery' },
-          { title: 'Inspiration', value: 'inspiration' }
-        ]
-      }
+          { title: 'Inspiration', value: 'inspiration' },
+        ],
+      },
     }),
     defineField({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
-      initialValue: () => new Date().toISOString()
+      initialValue: () => new Date().toISOString(),
     }),
     defineField({
       name: 'isPublished',
       title: 'Published',
       type: 'boolean',
-      initialValue: false
+      initialValue: false,
     }),
     defineField({
       name: 'isFeatured',
       title: 'Featured Story',
       type: 'boolean',
       initialValue: false,
-      description: 'Highlight this story on the main stories page'
+      description: 'Highlight this story on the main stories page',
     }),
     defineField({
       name: 'order',
       title: 'Display Order',
       type: 'number',
       description: 'Lower numbers appear first (for chronological ordering)',
-      validation: Rule => Rule.min(0)
+      validation: (Rule) => Rule.min(0),
     }),
     defineField({
       name: 'relatedStories',
       title: 'Related Stories',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'personalStory' }] }],
-      description: 'Link to other personal stories that connect to this one'
+      description: 'Link to other personal stories that connect to this one',
     }),
     defineField({
       name: 'tags',
@@ -228,8 +226,8 @@ export const personalStory = defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: {
-        layout: 'tags'
-      }
+        layout: 'tags',
+      },
     }),
     defineField({
       name: 'seo',
@@ -240,23 +238,23 @@ export const personalStory = defineType({
           name: 'metaTitle',
           title: 'Meta Title',
           type: 'string',
-          validation: Rule => Rule.max(60)
+          validation: (Rule) => Rule.max(60),
         },
         {
           name: 'metaDescription',
           title: 'Meta Description',
           type: 'text',
           rows: 3,
-          validation: Rule => Rule.max(160)
+          validation: (Rule) => Rule.max(160),
         },
         {
           name: 'keywords',
           title: 'Keywords',
           type: 'array',
-          of: [{ type: 'string' }]
-        }
-      ]
-    })
+          of: [{ type: 'string' }],
+        },
+      ],
+    }),
   ],
   preview: {
     select: {
@@ -265,11 +263,11 @@ export const personalStory = defineType({
       isPublished: 'isPublished',
       isFeatured: 'isFeatured',
       order: 'order',
-      media: 'featuredImage'
+      media: 'featuredImage',
     },
     prepare(selection) {
-      const { category, isPublished, isFeatured, order } = selection
-      
+      const { category, isPublished, isFeatured, order } = selection;
+
       const categoryEmojis: Record<string, string> = {
         origin: '🌱',
         childhood: '👶',
@@ -280,35 +278,35 @@ export const personalStory = defineType({
         growth: '🌳',
         family: '👨‍👩‍👧‍👦',
         career: '💼',
-        philosophy: '🤔'
-      }
-      
-      const indicators = []
-      if (isFeatured) indicators.push('⭐')
-      if (!isPublished) indicators.push('🔒')
-      if (order !== undefined) indicators.push(`#${order}`)
-      
+        philosophy: '🤔',
+      };
+
+      const indicators = [];
+      if (isFeatured) indicators.push('⭐');
+      if (!isPublished) indicators.push('🔒');
+      if (order !== undefined) indicators.push(`#${order}`);
+
       return {
         ...selection,
-        subtitle: `${categoryEmojis[category] || '📖'} ${category} ${indicators.join(' ')}`
-      }
-    }
+        subtitle: `${categoryEmojis[category] || '📖'} ${category} ${indicators.join(' ')}`,
+      };
+    },
   },
   orderings: [
     {
       title: 'Display Order',
       name: 'orderAsc',
-      by: [{ field: 'order', direction: 'asc' }]
+      by: [{ field: 'order', direction: 'asc' }],
     },
     {
       title: 'Published Date, New',
       name: 'publishedDesc',
-      by: [{ field: 'publishedAt', direction: 'desc' }]
+      by: [{ field: 'publishedAt', direction: 'desc' }],
     },
     {
       title: 'Title A-Z',
       name: 'titleAsc',
-      by: [{ field: 'title', direction: 'asc' }]
-    }
-  ]
-})
+      by: [{ field: 'title', direction: 'asc' }],
+    },
+  ],
+});

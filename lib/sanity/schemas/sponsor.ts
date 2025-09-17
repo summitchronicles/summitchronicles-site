@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const sponsor = defineType({
   name: 'sponsor',
@@ -10,7 +10,7 @@ export const sponsor = defineType({
       name: 'name',
       title: 'Company/Organization Name',
       type: 'string',
-      validation: Rule => Rule.required().min(2).max(100)
+      validation: (Rule) => Rule.required().min(2).max(100),
     }),
     defineField({
       name: 'slug',
@@ -19,43 +19,41 @@ export const sponsor = defineType({
       options: {
         source: 'name',
         maxLength: 96,
-        slugify: input => input
-          .toLowerCase()
-          .replace(/\s+/g, '-')
-          .slice(0, 96)
+        slugify: (input) =>
+          input.toLowerCase().replace(/\s+/g, '-').slice(0, 96),
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'logo',
       title: 'Company Logo',
       type: 'image',
       options: {
-        hotspot: true
+        hotspot: true,
       },
       fields: [
         {
           name: 'alt',
           type: 'string',
           title: 'Alternative text',
-          validation: Rule => Rule.required()
-        }
+          validation: (Rule) => Rule.required(),
+        },
       ],
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'website',
       title: 'Website',
       type: 'url',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
       title: 'Company Description',
       type: 'text',
       rows: 4,
-      validation: Rule => Rule.required().min(50).max(500),
-      description: 'Brief description of the company and what they do'
+      validation: (Rule) => Rule.required().min(50).max(500),
+      description: 'Brief description of the company and what they do',
     }),
     defineField({
       name: 'industry',
@@ -72,10 +70,10 @@ export const sponsor = defineType({
           { title: 'Health & Wellness', value: 'health' },
           { title: 'Media & Publishing', value: 'media' },
           { title: 'Training & Education', value: 'education' },
-          { title: 'Other', value: 'other' }
-        ]
+          { title: 'Other', value: 'other' },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'partnershipType',
@@ -92,10 +90,10 @@ export const sponsor = defineType({
           { title: 'Travel Partner', value: 'travel-partner' },
           { title: 'Affiliate Partner', value: 'affiliate' },
           { title: 'Ambassador', value: 'ambassador' },
-          { title: 'Supporter', value: 'supporter' }
-        ]
+          { title: 'Supporter', value: 'supporter' },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'sponsorshipTier',
@@ -107,9 +105,9 @@ export const sponsor = defineType({
           { title: 'Gold', value: 'gold' },
           { title: 'Silver', value: 'silver' },
           { title: 'Bronze', value: 'bronze' },
-          { title: 'Supporting', value: 'supporting' }
-        ]
-      }
+          { title: 'Supporting', value: 'supporting' },
+        ],
+      },
     }),
     defineField({
       name: 'partnership',
@@ -120,27 +118,27 @@ export const sponsor = defineType({
           name: 'startDate',
           title: 'Partnership Start Date',
           type: 'date',
-          validation: Rule => Rule.required()
+          validation: (Rule) => Rule.required(),
         },
         {
           name: 'endDate',
           title: 'Partnership End Date',
           type: 'date',
-          description: 'Leave blank for ongoing partnerships'
+          description: 'Leave blank for ongoing partnerships',
         },
         {
           name: 'isOngoing',
           title: 'Ongoing Partnership',
           type: 'boolean',
-          initialValue: true
+          initialValue: true,
         },
         {
           name: 'renewalDate',
           title: 'Next Renewal Date',
           type: 'date',
-          description: 'When partnership is up for renewal'
-        }
-      ]
+          description: 'When partnership is up for renewal',
+        },
+      ],
     }),
     defineField({
       name: 'supportProvided',
@@ -151,41 +149,41 @@ export const sponsor = defineType({
           name: 'financialSupport',
           title: 'Financial Support',
           type: 'boolean',
-          initialValue: false
+          initialValue: false,
         },
         {
           name: 'productSponsorship',
           title: 'Product/Gear Sponsorship',
           type: 'boolean',
-          initialValue: false
+          initialValue: false,
         },
         {
           name: 'servicesSupport',
           title: 'Services Support',
           type: 'boolean',
-          initialValue: false
+          initialValue: false,
         },
         {
           name: 'marketingSupport',
           title: 'Marketing/Promotion Support',
           type: 'boolean',
-          initialValue: false
+          initialValue: false,
         },
         {
           name: 'specificSupport',
           title: 'Specific Support Details',
           type: 'array',
           of: [{ type: 'string' }],
-          description: 'List specific items, services, or support provided'
-        }
-      ]
+          description: 'List specific items, services, or support provided',
+        },
+      ],
     }),
     defineField({
       name: 'gearProvided',
       title: 'Gear/Products Provided',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'gear' }] }],
-      description: 'Link to specific gear items provided by this sponsor'
+      description: 'Link to specific gear items provided by this sponsor',
     }),
     defineField({
       name: 'contactInfo',
@@ -195,25 +193,25 @@ export const sponsor = defineType({
         {
           name: 'primaryContact',
           title: 'Primary Contact Name',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'email',
           title: 'Contact Email',
-          type: 'email'
+          type: 'email',
         },
         {
           name: 'phone',
           title: 'Phone Number',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'address',
           title: 'Business Address',
           type: 'text',
-          rows: 2
-        }
-      ]
+          rows: 2,
+        },
+      ],
     }),
     defineField({
       name: 'socialMedia',
@@ -223,51 +221,51 @@ export const sponsor = defineType({
         {
           name: 'instagram',
           title: 'Instagram',
-          type: 'url'
+          type: 'url',
         },
         {
           name: 'facebook',
           title: 'Facebook',
-          type: 'url'
+          type: 'url',
         },
         {
           name: 'twitter',
           title: 'Twitter/X',
-          type: 'url'
+          type: 'url',
         },
         {
           name: 'linkedin',
           title: 'LinkedIn',
-          type: 'url'
+          type: 'url',
         },
         {
           name: 'youtube',
           title: 'YouTube',
-          type: 'url'
-        }
-      ]
+          type: 'url',
+        },
+      ],
     }),
     defineField({
       name: 'isActive',
       title: 'Active Partnership',
       type: 'boolean',
       initialValue: true,
-      description: 'Is this partnership currently active?'
+      description: 'Is this partnership currently active?',
     }),
     defineField({
       name: 'isPublic',
       title: 'Public',
       type: 'boolean',
       initialValue: true,
-      description: 'Show this partnership publicly on the website'
+      description: 'Show this partnership publicly on the website',
     }),
     defineField({
       name: 'displayPriority',
       title: 'Display Priority',
       type: 'number',
       description: 'Lower numbers display first (1 = highest priority)',
-      validation: Rule => Rule.min(1).max(100),
-      initialValue: 50
+      validation: (Rule) => Rule.min(1).max(100),
+      initialValue: 50,
     }),
     defineField({
       name: 'testimonial',
@@ -279,22 +277,23 @@ export const sponsor = defineType({
           title: 'Quote',
           type: 'text',
           rows: 3,
-          description: 'A quote about the partnership or mountaineering journey'
+          description:
+            'A quote about the partnership or mountaineering journey',
         },
         {
           name: 'author',
           title: 'Quote Author',
           type: 'string',
-          description: 'Name and title of person who gave the quote'
-        }
-      ]
+          description: 'Name and title of person who gave the quote',
+        },
+      ],
     }),
     defineField({
       name: 'achievements',
       title: 'Achievements Together',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'achievement' }] }],
-      description: 'Achievements accomplished with this sponsor\'s support'
+      description: "Achievements accomplished with this sponsor's support",
     }),
     defineField({
       name: 'relatedContent',
@@ -302,16 +301,16 @@ export const sponsor = defineType({
       type: 'array',
       of: [
         { type: 'reference', to: [{ type: 'blogPost' }] },
-        { type: 'reference', to: [{ type: 'expeditionUpdate' }] }
+        { type: 'reference', to: [{ type: 'expeditionUpdate' }] },
       ],
-      description: 'Blog posts or expedition updates featuring this sponsor'
+      description: 'Blog posts or expedition updates featuring this sponsor',
     }),
     defineField({
       name: 'notes',
       title: 'Internal Notes',
       type: 'text',
       rows: 3,
-      description: 'Private notes about the partnership (not shown publicly)'
+      description: 'Private notes about the partnership (not shown publicly)',
     }),
     defineField({
       name: 'tags',
@@ -319,9 +318,9 @@ export const sponsor = defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: {
-        layout: 'tags'
-      }
-    })
+        layout: 'tags',
+      },
+    }),
   ],
   preview: {
     select: {
@@ -330,11 +329,11 @@ export const sponsor = defineType({
       tier: 'sponsorshipTier',
       isActive: 'isActive',
       isPublic: 'isPublic',
-      media: 'logo'
+      media: 'logo',
     },
     prepare(selection) {
-      const { partnershipType, tier, isActive, isPublic } = selection
-      
+      const { partnershipType, tier, isActive, isPublic } = selection;
+
       const typeEmojis: Record<string, string> = {
         'title-sponsor': '👑',
         'major-sponsor': '⭐',
@@ -343,45 +342,45 @@ export const sponsor = defineType({
         'media-partner': '📺',
         'training-partner': '💪',
         'travel-partner': '✈️',
-        'affiliate': '🔗',
-        'ambassador': '🏅',
-        'supporter': '🤝'
-      }
-      
+        affiliate: '🔗',
+        ambassador: '🏅',
+        supporter: '🤝',
+      };
+
       const tierEmojis: Record<string, string> = {
         platinum: '🏆',
         gold: '🥇',
         silver: '🥈',
         bronze: '🥉',
-        supporting: '👍'
-      }
-      
-      const indicators = []
-      if (tier) indicators.push(tierEmojis[tier])
-      if (!isActive) indicators.push('⏸️')
-      if (!isPublic) indicators.push('🔒')
-      
+        supporting: '👍',
+      };
+
+      const indicators = [];
+      if (tier) indicators.push(tierEmojis[tier]);
+      if (!isActive) indicators.push('⏸️');
+      if (!isPublic) indicators.push('🔒');
+
       return {
         ...selection,
-        subtitle: `${typeEmojis[partnershipType] || '🤝'} ${partnershipType} ${indicators.join(' ')}`
-      }
-    }
+        subtitle: `${typeEmojis[partnershipType] || '🤝'} ${partnershipType} ${indicators.join(' ')}`,
+      };
+    },
   },
   orderings: [
     {
       title: 'Display Priority',
       name: 'priorityAsc',
-      by: [{ field: 'displayPriority', direction: 'asc' }]
+      by: [{ field: 'displayPriority', direction: 'asc' }],
     },
     {
       title: 'Partnership Start (New)',
       name: 'startDateDesc',
-      by: [{ field: 'partnership.startDate', direction: 'desc' }]
+      by: [{ field: 'partnership.startDate', direction: 'desc' }],
     },
     {
       title: 'Company Name A-Z',
       name: 'nameAsc',
-      by: [{ field: 'name', direction: 'asc' }]
-    }
-  ]
-})
+      by: [{ field: 'name', direction: 'asc' }],
+    },
+  ],
+});

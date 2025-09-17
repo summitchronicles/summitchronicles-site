@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const achievement = defineType({
   name: 'achievement',
@@ -10,13 +10,13 @@ export const achievement = defineType({
       name: 'title',
       title: 'Achievement Title',
       type: 'string',
-      validation: Rule => Rule.required().min(5).max(100)
+      validation: (Rule) => Rule.required().min(5).max(100),
     }),
     defineField({
       name: 'date',
       title: 'Achievement Date',
       type: 'date',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'type',
@@ -33,25 +33,26 @@ export const achievement = defineType({
           { title: 'Endurance Challenge', value: 'endurance' },
           { title: 'First Ascent', value: 'first-ascent' },
           { title: 'Speed Record', value: 'speed-record' },
-          { title: 'Rescue/Volunteer', value: 'rescue' }
-        ]
+          { title: 'Rescue/Volunteer', value: 'rescue' },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
       rows: 4,
-      validation: Rule => Rule.required().min(50).max(500),
-      description: 'Detailed description of the achievement'
+      validation: (Rule) => Rule.required().min(50).max(500),
+      description: 'Detailed description of the achievement',
     }),
     defineField({
       name: 'significance',
       title: 'Why This Matters',
       type: 'text',
       rows: 3,
-      description: 'Personal significance and what this achievement means to you'
+      description:
+        'Personal significance and what this achievement means to you',
     }),
     defineField({
       name: 'photos',
@@ -66,32 +67,32 @@ export const achievement = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative text',
-              validation: Rule => Rule.required()
+              validation: (Rule) => Rule.required(),
             },
             {
               name: 'caption',
               type: 'string',
-              title: 'Caption'
-            }
-          ]
-        }
-      ]
+              title: 'Caption',
+            },
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'featuredImage',
       title: 'Featured Image',
       type: 'image',
       options: {
-        hotspot: true
+        hotspot: true,
       },
       fields: [
         {
           name: 'alt',
           type: 'string',
           title: 'Alternative text',
-          validation: Rule => Rule.required()
-        }
-      ]
+          validation: (Rule) => Rule.required(),
+        },
+      ],
     }),
     defineField({
       name: 'metrics',
@@ -101,18 +102,18 @@ export const achievement = defineType({
         {
           name: 'elevation',
           title: 'Peak Elevation (feet)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'distance',
           title: 'Distance (miles)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'duration',
           title: 'Duration',
           type: 'string',
-          description: 'e.g., "3 days", "5 hours 30 minutes"'
+          description: 'e.g., "3 days", "5 hours 30 minutes"',
         },
         {
           name: 'difficulty',
@@ -124,22 +125,22 @@ export const achievement = defineType({
               { title: 'Intermediate', value: 'intermediate' },
               { title: 'Advanced', value: 'advanced' },
               { title: 'Expert', value: 'expert' },
-              { title: 'Elite', value: 'elite' }
-            ]
-          }
+              { title: 'Elite', value: 'elite' },
+            ],
+          },
         },
         {
           name: 'weatherConditions',
           title: 'Weather Conditions',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'teamSize',
           title: 'Team Size',
           type: 'number',
-          description: 'Number of people involved'
-        }
-      ]
+          description: 'Number of people involved',
+        },
+      ],
     }),
     defineField({
       name: 'location',
@@ -150,29 +151,29 @@ export const achievement = defineType({
           name: 'name',
           title: 'Location Name',
           type: 'string',
-          validation: Rule => Rule.required()
+          validation: (Rule) => Rule.required(),
         },
         {
           name: 'coordinates',
           title: 'GPS Coordinates',
-          type: 'geopoint'
+          type: 'geopoint',
         },
         {
           name: 'country',
           title: 'Country',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'region',
           title: 'State/Province/Region',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'mountainRange',
           title: 'Mountain Range',
-          type: 'string'
-        }
-      ]
+          type: 'string',
+        },
+      ],
     }),
     defineField({
       name: 'certification',
@@ -182,25 +183,25 @@ export const achievement = defineType({
         {
           name: 'organization',
           title: 'Certifying Organization',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'certificateNumber',
           title: 'Certificate Number',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'validUntil',
           title: 'Valid Until',
-          type: 'date'
+          type: 'date',
         },
         {
           name: 'level',
           title: 'Certification Level',
-          type: 'string'
-        }
+          type: 'string',
+        },
       ],
-      hidden: ({document}) => document?.type !== 'certification'
+      hidden: ({ document }) => document?.type !== 'certification',
     }),
     defineField({
       name: 'raceResults',
@@ -210,46 +211,47 @@ export const achievement = defineType({
         {
           name: 'placement',
           title: 'Overall Placement',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'categoryPlacement',
           title: 'Category Placement',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'category',
           title: 'Category',
           type: 'string',
-          description: 'e.g., "Men 30-39", "Elite Women"'
+          description: 'e.g., "Men 30-39", "Elite Women"',
         },
         {
           name: 'finishTime',
           title: 'Finish Time',
           type: 'string',
-          description: 'e.g., "2:45:30"'
+          description: 'e.g., "2:45:30"',
         },
         {
           name: 'totalParticipants',
           title: 'Total Participants',
-          type: 'number'
-        }
+          type: 'number',
+        },
       ],
-      hidden: ({document}) => document?.type !== 'race'
+      hidden: ({ document }) => document?.type !== 'race',
     }),
     defineField({
       name: 'gear',
       title: 'Key Gear Used',
       type: 'array',
       of: [{ type: 'reference', to: [{ type: 'gear' }] }],
-      description: 'Reference gear items that were crucial for this achievement'
+      description:
+        'Reference gear items that were crucial for this achievement',
     }),
     defineField({
       name: 'challenges',
       title: 'Challenges Overcome',
       type: 'array',
       of: [{ type: 'string' }],
-      description: 'List of specific challenges faced and overcome'
+      description: 'List of specific challenges faced and overcome',
     }),
     defineField({
       name: 'teamMembers',
@@ -262,16 +264,16 @@ export const achievement = defineType({
             {
               name: 'name',
               title: 'Name',
-              type: 'string'
+              type: 'string',
             },
             {
               name: 'role',
               title: 'Role',
-              type: 'string'
-            }
-          ]
-        }
-      ]
+              type: 'string',
+            },
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'relatedContent',
@@ -280,23 +282,24 @@ export const achievement = defineType({
       of: [
         { type: 'reference', to: [{ type: 'blogPost' }] },
         { type: 'reference', to: [{ type: 'expeditionUpdate' }] },
-        { type: 'reference', to: [{ type: 'trainingEntry' }] }
+        { type: 'reference', to: [{ type: 'trainingEntry' }] },
       ],
-      description: 'Link to blog posts, expeditions, or training that relate to this achievement'
+      description:
+        'Link to blog posts, expeditions, or training that relate to this achievement',
     }),
     defineField({
       name: 'isPublic',
       title: 'Public',
       type: 'boolean',
       initialValue: true,
-      description: 'Show this achievement publicly'
+      description: 'Show this achievement publicly',
     }),
     defineField({
       name: 'isFeatured',
       title: 'Featured Achievement',
       type: 'boolean',
       initialValue: false,
-      description: 'Highlight this achievement on main pages'
+      description: 'Highlight this achievement on main pages',
     }),
     defineField({
       name: 'tags',
@@ -304,9 +307,9 @@ export const achievement = defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: {
-        layout: 'tags'
-      }
-    })
+        layout: 'tags',
+      },
+    }),
   ],
   preview: {
     select: {
@@ -316,11 +319,11 @@ export const achievement = defineType({
       location: 'location.name',
       isPublic: 'isPublic',
       isFeatured: 'isFeatured',
-      media: 'featuredImage'
+      media: 'featuredImage',
     },
     prepare(selection) {
-      const { type, date, location, isPublic, isFeatured } = selection
-      
+      const { type, date, location, isPublic, isFeatured } = selection;
+
       const typeEmojis: Record<string, string> = {
         summit: '🏔️',
         race: '🏃‍♂️',
@@ -331,36 +334,36 @@ export const achievement = defineType({
         endurance: '💪',
         'first-ascent': '🥇',
         'speed-record': '⚡',
-        rescue: '🚑'
-      }
-      
-      const indicators = []
-      if (isFeatured) indicators.push('⭐')
-      if (!isPublic) indicators.push('🔒')
-      
-      const formattedDate = new Date(date).toLocaleDateString()
-      
+        rescue: '🚑',
+      };
+
+      const indicators = [];
+      if (isFeatured) indicators.push('⭐');
+      if (!isPublic) indicators.push('🔒');
+
+      const formattedDate = new Date(date).toLocaleDateString();
+
       return {
         ...selection,
-        subtitle: `${typeEmojis[type] || '🏆'} ${location || 'Location TBD'} • ${formattedDate} ${indicators.join(' ')}`
-      }
-    }
+        subtitle: `${typeEmojis[type] || '🏆'} ${location || 'Location TBD'} • ${formattedDate} ${indicators.join(' ')}`,
+      };
+    },
   },
   orderings: [
     {
       title: 'Date, New',
       name: 'dateDesc',
-      by: [{ field: 'date', direction: 'desc' }]
+      by: [{ field: 'date', direction: 'desc' }],
     },
     {
       title: 'Date, Old',
       name: 'dateAsc',
-      by: [{ field: 'date', direction: 'asc' }]
+      by: [{ field: 'date', direction: 'asc' }],
     },
     {
       title: 'Title A-Z',
       name: 'titleAsc',
-      by: [{ field: 'title', direction: 'asc' }]
-    }
-  ]
-})
+      by: [{ field: 'title', direction: 'asc' }],
+    },
+  ],
+});

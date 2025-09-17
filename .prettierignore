@@ -1,0 +1,56 @@
+# Dependencies
+node_modules
+.next
+dist
+build
+
+# Generated files
+.vercel
+.netlify
+
+# Documentation that should maintain original formatting
+*.md
+README*
+
+# Configuration files that may have specific formatting
+*.json
+package*.json
+tsconfig*.json
+*.config.js
+*.config.ts
+*.config.mjs
+
+# Scripts and utilities
+scripts-disabled/**
+lib-disabled/**
+components-disabled/**
+app-complex/**
+pages/**
+instrumentation-disabled/**
+sentry-disabled/**
+
+# Test files
+tests/**
+e2e/**
+*.spec.ts
+*.spec.js
+*.test.ts
+*.test.js
+
+# Build and deployment scripts
+*.js
+!app/**/*.js
+!lib/**/*.js
+
+# Data files
+data/**
+public/**
+
+# Temporary files
+*.log
+*.tmp
+
+# Agents and automation
+agents/**
+.bmad-core/**
+bmad-method/**

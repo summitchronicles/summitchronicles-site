@@ -1,43 +1,43 @@
-import axios from 'axios'
+import axios from 'axios';
 
 // Ollama API configuration
 export const ollamaConfig = {
   baseUrl: 'http://localhost:11434',
   languageModel: 'llama3.1:8b',
-  embeddingModel: 'nomic-embed-text:latest'
-}
+  embeddingModel: 'nomic-embed-text:latest',
+};
 
 // Chat completion interface
 export interface ChatMessage {
-  role: 'system' | 'user' | 'assistant'
-  content: string
+  role: 'system' | 'user' | 'assistant';
+  content: string;
 }
 
 export interface ChatResponse {
   message: {
-    role: string
-    content: string
-  }
-  done: boolean
-  total_duration?: number
-  load_duration?: number
-  prompt_eval_duration?: number
-  eval_duration?: number
+    role: string;
+    content: string;
+  };
+  done: boolean;
+  total_duration?: number;
+  load_duration?: number;
+  prompt_eval_duration?: number;
+  eval_duration?: number;
 }
 
 // Embedding interface
 export interface EmbeddingResponse {
-  embedding: number[]
+  embedding: number[];
 }
 
 // Generate chat completion
 export async function generateChatCompletion(
-  messages: ChatMessage[], 
+  messages: ChatMessage[],
   model: string = ollamaConfig.languageModel,
   options?: {
-    temperature?: number
-    top_p?: number
-    max_tokens?: number
+    temperature?: number;
+    top_p?: number;
+    max_tokens?: number;
   }
 ): Promise<string> {
   try {
@@ -48,14 +48,14 @@ export async function generateChatCompletion(
       options: {
         temperature: options?.temperature || 0.7,
         top_p: options?.top_p || 0.9,
-        num_predict: options?.max_tokens || 2048
-      }
-    })
+        num_predict: options?.max_tokens || 2048,
+      },
+    });
 
-    return response.data.message.content
+    return response.data.message.content;
   } catch (error) {
-    console.error('Error generating chat completion:', error)
-    throw new Error('Failed to generate chat completion')
+    console.error('Error generating chat completion:', error);
+    throw new Error('Failed to generate chat completion');
   }
 }
 
@@ -65,15 +65,18 @@ export async function generateEmbedding(
   model: string = ollamaConfig.embeddingModel
 ): Promise<number[]> {
   try {
-    const response = await axios.post(`${ollamaConfig.baseUrl}/api/embeddings`, {
-      model,
-      prompt: text
-    })
+    const response = await axios.post(
+      `${ollamaConfig.baseUrl}/api/embeddings`,
+      {
+        model,
+        prompt: text,
+      }
+    );
 
-    return response.data.embedding
+    return response.data.embedding;
   } catch (error) {
-    console.error('Error generating embedding:', error)
-    throw new Error('Failed to generate embedding')
+    console.error('Error generating embedding:', error);
+    throw new Error('Failed to generate embedding');
   }
 }
 
@@ -84,53 +87,53 @@ export async function generateEmbeddings(
 ): Promise<number[][]> {
   try {
     const embeddings = await Promise.all(
-      texts.map(text => generateEmbedding(text, model))
-    )
-    return embeddings
+      texts.map((text) => generateEmbedding(text, model))
+    );
+    return embeddings;
   } catch (error) {
-    console.error('Error generating embeddings:', error)
-    throw new Error('Failed to generate embeddings')
+    console.error('Error generating embeddings:', error);
+    throw new Error('Failed to generate embeddings');
   }
 }
 
 // Calculate cosine similarity between two vectors
 export function cosineSimilarity(vectorA: number[], vectorB: number[]): number {
   if (vectorA.length !== vectorB.length) {
-    throw new Error('Vectors must have the same length')
+    throw new Error('Vectors must have the same length');
   }
 
-  let dotProduct = 0
-  let normA = 0
-  let normB = 0
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
 
   for (let i = 0; i < vectorA.length; i++) {
-    dotProduct += vectorA[i] * vectorB[i]
-    normA += vectorA[i] * vectorA[i]
-    normB += vectorB[i] * vectorB[i]
+    dotProduct += vectorA[i] * vectorB[i];
+    normA += vectorA[i] * vectorA[i];
+    normB += vectorB[i] * vectorB[i];
   }
 
-  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB))
+  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
 // Test Ollama connection
 export async function testOllamaConnection(): Promise<boolean> {
   try {
-    const response = await axios.get(`${ollamaConfig.baseUrl}/api/tags`)
-    return response.status === 200
+    const response = await axios.get(`${ollamaConfig.baseUrl}/api/tags`);
+    return response.status === 200;
   } catch (error) {
-    console.error('Ollama connection test failed:', error)
-    return false
+    console.error('Ollama connection test failed:', error);
+    return false;
   }
 }
 
 // Get available models
 export async function getAvailableModels(): Promise<string[]> {
   try {
-    const response = await axios.get(`${ollamaConfig.baseUrl}/api/tags`)
-    return response.data.models.map((model: any) => model.name)
+    const response = await axios.get(`${ollamaConfig.baseUrl}/api/tags`);
+    return response.data.models.map((model: any) => model.name);
   } catch (error) {
-    console.error('Error fetching available models:', error)
-    return []
+    console.error('Error fetching available models:', error);
+    return [];
   }
 }
 
@@ -154,14 +157,14 @@ Your expertise includes:
 
 Provide detailed, practical, and safety-focused advice. Always emphasize proper training progression and risk management. Use specific examples when helpful.
 
-${context ? `Additional context: ${context}` : ''}`
+${context ? `Additional context: ${context}` : ''}`;
 
   const messages: ChatMessage[] = [
     { role: 'system', content: systemPrompt },
-    { role: 'user', content: question }
-  ]
+    { role: 'user', content: question },
+  ];
 
-  return generateChatCompletion(messages)
+  return generateChatCompletion(messages);
 }
 
 // Generate training insights
@@ -169,9 +172,12 @@ export async function generateTrainingInsights(
   activities: any[],
   goals: string[]
 ): Promise<string> {
-  const activitySummary = activities.map(activity => 
-    `${activity.type}: ${activity.distance}m, ${activity.total_elevation_gain}m elevation, ${activity.moving_time}s duration`
-  ).join('\n')
+  const activitySummary = activities
+    .map(
+      (activity) =>
+        `${activity.type}: ${activity.distance}m, ${activity.total_elevation_gain}m elevation, ${activity.moving_time}s duration`
+    )
+    .join('\n');
 
   const prompt = `Based on these recent training activities and goals, provide personalized training insights and recommendations:
 
@@ -185,9 +191,9 @@ Please analyze the training pattern and provide:
 1. Progress assessment
 2. Areas for improvement
 3. Specific recommendations for the next training cycle
-4. Risk factors to monitor`
+4. Risk factors to monitor`;
 
-  return askTrainingQuestion(prompt)
+  return askTrainingQuestion(prompt);
 }
 
 // Analyze weather for climbing conditions
@@ -208,7 +214,7 @@ Provide:
 2. Key risks and considerations
 3. Recommended timing for ascent/descent
 4. Safety recommendations
-5. Alternative plans if conditions deteriorate`
+5. Alternative plans if conditions deteriorate`;
 
-  return askTrainingQuestion(prompt)
+  return askTrainingQuestion(prompt);
 }

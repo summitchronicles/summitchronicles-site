@@ -1,6 +1,6 @@
-import { createClient } from '@sanity/client'
-import { type SanityClient } from '@sanity/client'
-import imageUrlBuilder from '@sanity/image-url'
+import { createClient } from '@sanity/client';
+import { type SanityClient } from '@sanity/client';
+import imageUrlBuilder from '@sanity/image-url';
 
 // Sanity configuration
 export const sanityConfig = {
@@ -9,30 +9,30 @@ export const sanityConfig = {
   useCdn: process.env.NODE_ENV === 'production',
   apiVersion: '2024-01-01',
   token: process.env.SANITY_API_TOKEN,
-}
+};
 
 // Create Sanity client (public)
-export const sanityClient: SanityClient = createClient(sanityConfig)
+export const sanityClient: SanityClient = createClient(sanityConfig);
 
 // Write client for CMS operations (requires token)
 export const sanityWriteClient: SanityClient = createClient({
   ...sanityConfig,
   useCdn: false,
-  perspective: 'raw' // See all content including drafts
-})
+  perspective: 'raw', // See all content including drafts
+});
 
 // Preview client for draft content
 export const sanityPreviewClient: SanityClient = createClient({
   ...sanityConfig,
   useCdn: false,
-  perspective: 'previewDrafts' // See drafts and published content
-})
+  perspective: 'previewDrafts', // See drafts and published content
+});
 
 // Image URL builder
-const builder = imageUrlBuilder(sanityClient)
+const builder = imageUrlBuilder(sanityClient);
 
 export function urlFor(source: any) {
-  return builder.image(source)
+  return builder.image(source);
 }
 
 // GROQ queries for different content types
@@ -58,8 +58,10 @@ export const queries = {
     tags,
     isFeatured
   }`,
-  
-  postBySlug: (slug: string) => `*[_type == "blogPost" && slug.current == "${slug}" && isPublished == true][0] {
+
+  postBySlug: (
+    slug: string
+  ) => `*[_type == "blogPost" && slug.current == "${slug}" && isPublished == true][0] {
     _id,
     title,
     slug,
@@ -100,7 +102,9 @@ export const queries = {
     stravaId
   }`,
 
-  trainingByDate: (date: string) => `*[_type == "trainingEntry" && date == "${date}" && isPublic == true][0] {
+  trainingByDate: (
+    date: string
+  ) => `*[_type == "trainingEntry" && date == "${date}" && isPublic == true][0] {
     _id,
     title,
     date,
@@ -131,7 +135,9 @@ export const queries = {
     body
   }`,
 
-  trainingBySlug: (slug: string) => `*[_type == "training" && slug.current == "${slug}"][0] {
+  trainingBySlug: (
+    slug: string
+  ) => `*[_type == "training" && slug.current == "${slug}"][0] {
     _id,
     title,
     slug,
@@ -180,69 +186,69 @@ export const queries = {
     contact,
     expeditionStatus,
     currentGoals[]
-  }`
-}
+  }`,
+};
 
 // Helper functions for fetching data
 export async function getAllPosts() {
   try {
-    return await sanityClient.fetch(queries.allPosts)
+    return await sanityClient.fetch(queries.allPosts);
   } catch (error) {
-    console.error('Error fetching posts:', error)
-    return []
+    console.error('Error fetching posts:', error);
+    return [];
   }
 }
 
 export async function getPostBySlug(slug: string) {
   try {
-    return await sanityClient.fetch(queries.postBySlug(slug))
+    return await sanityClient.fetch(queries.postBySlug(slug));
   } catch (error) {
-    console.error('Error fetching post:', error)
-    return null
+    console.error('Error fetching post:', error);
+    return null;
   }
 }
 
 export async function getAllTrainingPosts() {
   try {
-    return await sanityClient.fetch(queries.allTrainingPosts)
+    return await sanityClient.fetch(queries.allTrainingPosts);
   } catch (error) {
-    console.error('Error fetching training posts:', error)
-    return []
+    console.error('Error fetching training posts:', error);
+    return [];
   }
 }
 
 export async function getTrainingBySlug(slug: string) {
   try {
-    return await sanityClient.fetch(queries.trainingBySlug(slug))
+    return await sanityClient.fetch(queries.trainingBySlug(slug));
   } catch (error) {
-    console.error('Error fetching training post:', error)
-    return null
+    console.error('Error fetching training post:', error);
+    return null;
   }
 }
 
 export async function getAllExpeditionUpdates() {
   try {
-    return await sanityClient.fetch(queries.allExpeditionUpdates)
+    return await sanityClient.fetch(queries.allExpeditionUpdates);
   } catch (error) {
-    console.error('Error fetching expedition updates:', error)
-    return []
+    console.error('Error fetching expedition updates:', error);
+    return [];
   }
 }
 
 export async function getGalleryImages() {
   try {
-    return await sanityClient.fetch(queries.galleryImages)
+    return await sanityClient.fetch(queries.galleryImages);
   } catch (error) {
-    console.error('Error fetching gallery images:', error)
-    return []
+    console.error('Error fetching gallery images:', error);
+    return [];
   }
 }
 
 export async function getSiteSettings() {
   try {
-    return await sanityClient.fetch(queries.siteSettings)
+    return await sanityClient.fetch(queries.siteSettings);
   } catch (error) {
-    console.error('Error fetching site settings:', error)
-    return null
+    console.error('Error fetching site settings:', error);
+    return null;
   }
 }

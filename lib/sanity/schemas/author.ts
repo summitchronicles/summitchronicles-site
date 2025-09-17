@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const author = defineType({
   name: 'author',
@@ -10,7 +10,7 @@ export const author = defineType({
       name: 'name',
       title: 'Name',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -20,39 +20,39 @@ export const author = defineType({
         source: 'name',
         maxLength: 96,
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'avatar',
       title: 'Avatar',
       type: 'image',
       options: {
-        hotspot: true
+        hotspot: true,
       },
       fields: [
         {
           name: 'alt',
           type: 'string',
           title: 'Alternative text',
-          validation: Rule => Rule.required()
-        }
-      ]
+          validation: (Rule) => Rule.required(),
+        },
+      ],
     }),
     defineField({
       name: 'bio',
       title: 'Bio',
       type: 'text',
-      rows: 4
+      rows: 4,
     }),
     defineField({
       name: 'email',
       title: 'Email',
-      type: 'email'
+      type: 'email',
     }),
     defineField({
       name: 'website',
       title: 'Website',
-      type: 'url'
+      type: 'url',
     }),
     defineField({
       name: 'social',
@@ -62,30 +62,30 @@ export const author = defineType({
         {
           name: 'instagram',
           title: 'Instagram',
-          type: 'url'
+          type: 'url',
         },
         {
           name: 'strava',
           title: 'Strava',
-          type: 'url'
+          type: 'url',
         },
         {
           name: 'linkedin',
           title: 'LinkedIn',
-          type: 'url'
+          type: 'url',
         },
         {
           name: 'github',
           title: 'GitHub',
-          type: 'url'
-        }
-      ]
-    })
+          type: 'url',
+        },
+      ],
+    }),
   ],
   preview: {
     select: {
       title: 'name',
-      media: 'avatar'
-    }
-  }
-})
+      media: 'avatar',
+    },
+  },
+});

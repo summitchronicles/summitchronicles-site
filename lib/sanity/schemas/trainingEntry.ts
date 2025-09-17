@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType } from 'sanity';
 
 export const trainingEntry = defineType({
   name: 'trainingEntry',
@@ -10,13 +10,13 @@ export const trainingEntry = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'date',
       title: 'Training Date',
       type: 'date',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'type',
@@ -31,16 +31,16 @@ export const trainingEntry = defineType({
           { title: 'Hiking/Trekking', value: 'hiking' },
           { title: 'Climbing', value: 'climbing' },
           { title: 'Recovery', value: 'recovery' },
-          { title: 'Cross Training', value: 'cross' }
-        ]
+          { title: 'Cross Training', value: 'cross' },
+        ],
       },
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'duration',
       title: 'Duration (minutes)',
       type: 'number',
-      validation: Rule => Rule.required().min(1)
+      validation: (Rule) => Rule.required().min(1),
     }),
     defineField({
       name: 'intensity',
@@ -51,15 +51,15 @@ export const trainingEntry = defineType({
           { title: 'Low (1-3)', value: 'low' },
           { title: 'Moderate (4-6)', value: 'moderate' },
           { title: 'High (7-8)', value: 'high' },
-          { title: 'Maximum (9-10)', value: 'maximum' }
-        ]
-      }
+          { title: 'Maximum (9-10)', value: 'maximum' },
+        ],
+      },
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
-      rows: 4
+      rows: 4,
     }),
     defineField({
       name: 'metrics',
@@ -69,34 +69,34 @@ export const trainingEntry = defineType({
         {
           name: 'distance',
           title: 'Distance (miles)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'elevationGain',
           title: 'Elevation Gain (feet)',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'heartRateAvg',
           title: 'Average Heart Rate',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'heartRateMax',
           title: 'Maximum Heart Rate',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'calories',
           title: 'Calories Burned',
-          type: 'number'
+          type: 'number',
         },
         {
           name: 'weight',
           title: 'Pack Weight (lbs)',
-          type: 'number'
-        }
-      ]
+          type: 'number',
+        },
+      ],
     }),
     defineField({
       name: 'location',
@@ -106,36 +106,36 @@ export const trainingEntry = defineType({
         {
           name: 'name',
           title: 'Location Name',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'coordinates',
           title: 'GPS Coordinates',
-          type: 'geopoint'
+          type: 'geopoint',
         },
         {
           name: 'weather',
           title: 'Weather Conditions',
-          type: 'string'
+          type: 'string',
         },
         {
           name: 'temperature',
           title: 'Temperature (°F)',
-          type: 'number'
-        }
-      ]
+          type: 'number',
+        },
+      ],
     }),
     defineField({
       name: 'goals',
       title: 'Training Goals',
       type: 'array',
-      of: [{ type: 'string' }]
+      of: [{ type: 'string' }],
     }),
     defineField({
       name: 'reflections',
       title: 'Post-Training Reflections',
       type: 'text',
-      rows: 3
+      rows: 3,
     }),
     defineField({
       name: 'photos',
@@ -149,28 +149,28 @@ export const trainingEntry = defineType({
             {
               name: 'alt',
               type: 'string',
-              title: 'Alternative text'
+              title: 'Alternative text',
             },
             {
               name: 'caption',
               type: 'string',
-              title: 'Caption'
-            }
-          ]
-        }
-      ]
+              title: 'Caption',
+            },
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'stravaId',
       title: 'Strava Activity ID',
       type: 'string',
-      description: 'Link to Strava activity for automatic data sync'
+      description: 'Link to Strava activity for automatic data sync',
     }),
     defineField({
       name: 'isPublic',
       title: 'Public',
       type: 'boolean',
-      initialValue: true
+      initialValue: true,
     }),
     defineField({
       name: 'tags',
@@ -178,19 +178,19 @@ export const trainingEntry = defineType({
       type: 'array',
       of: [{ type: 'string' }],
       options: {
-        layout: 'tags'
-      }
-    })
+        layout: 'tags',
+      },
+    }),
   ],
   preview: {
     select: {
       title: 'title',
       type: 'type',
       date: 'date',
-      duration: 'duration'
+      duration: 'duration',
     },
     prepare(selection) {
-      const { type, date, duration } = selection
+      const { type, date, duration } = selection;
       const typeLabels: Record<string, string> = {
         cardio: '🏃',
         strength: '💪',
@@ -199,25 +199,25 @@ export const trainingEntry = defineType({
         hiking: '🥾',
         climbing: '🧗‍♂️',
         recovery: '🧘',
-        cross: '🏋️'
-      }
-      
+        cross: '🏋️',
+      };
+
       return {
         ...selection,
-        subtitle: `${typeLabels[type] || '🏔️'} ${date} • ${duration}min`
-      }
-    }
+        subtitle: `${typeLabels[type] || '🏔️'} ${date} • ${duration}min`,
+      };
+    },
   },
   orderings: [
     {
       title: 'Date, New',
       name: 'dateDesc',
-      by: [{ field: 'date', direction: 'desc' }]
+      by: [{ field: 'date', direction: 'desc' }],
     },
     {
       title: 'Date, Old',
       name: 'dateAsc',
-      by: [{ field: 'date', direction: 'asc' }]
-    }
-  ]
-})
+      by: [{ field: 'date', direction: 'asc' }],
+    },
+  ],
+});

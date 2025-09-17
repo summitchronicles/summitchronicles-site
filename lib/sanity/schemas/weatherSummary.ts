@@ -1,4 +1,4 @@
-import { defineType, defineField } from 'sanity'
+import { defineType, defineField } from 'sanity';
 
 export const weatherSummary = defineType({
   name: 'weatherSummary',
@@ -9,7 +9,7 @@ export const weatherSummary = defineType({
       name: 'timestamp',
       title: 'Timestamp',
       type: 'datetime',
-      validation: Rule => Rule.required()
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'locations',
@@ -22,22 +22,22 @@ export const weatherSummary = defineType({
             defineField({
               name: 'name',
               title: 'Location Name',
-              type: 'string'
+              type: 'string',
             }),
             defineField({
               name: 'temperature',
               title: 'Temperature (°C)',
-              type: 'number'
+              type: 'number',
             }),
             defineField({
               name: 'conditions',
               title: 'Weather Conditions',
-              type: 'string'
+              type: 'string',
             }),
             defineField({
               name: 'climbingWindow',
               title: 'Climbing Window Open',
-              type: 'boolean'
+              type: 'boolean',
             }),
             defineField({
               name: 'avalancheRisk',
@@ -49,25 +49,25 @@ export const weatherSummary = defineType({
                   { title: 'Moderate', value: 'moderate' },
                   { title: 'Considerable', value: 'considerable' },
                   { title: 'High', value: 'high' },
-                  { title: 'Extreme', value: 'extreme' }
-                ]
-              }
-            })
-          ]
-        }
-      ]
-    })
+                  { title: 'Extreme', value: 'extreme' },
+                ],
+              },
+            }),
+          ],
+        },
+      ],
+    }),
   ],
   preview: {
     select: {
       timestamp: 'timestamp',
-      locationCount: 'locations'
+      locationCount: 'locations',
     },
     prepare({ timestamp, locationCount }) {
       return {
         title: `Weather Summary - ${new Date(timestamp).toLocaleDateString()}`,
-        subtitle: `${locationCount?.length || 0} locations`
-      }
-    }
-  }
-})
+        subtitle: `${locationCount?.length || 0} locations`,
+      };
+    },
+  },
+});
