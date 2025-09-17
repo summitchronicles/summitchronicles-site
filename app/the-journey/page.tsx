@@ -8,7 +8,7 @@ import { Button } from '../components/atoms/Button'
 import { H1, H2, H3, Body, BodyLarge, SeriaText } from '../components/atoms/Typography'
 import { Card, CardContent, CardHeader } from '../components/molecules/Card'
 import { StatusBadge } from '../components/molecules/StatusBadge'
-import { Mountain, MapPin, Calendar, Target, Users, TrendingUp, Heart, Award, Clock, Thermometer, Wind, Eye } from 'lucide-react'
+import { Mountain, MapPin, Calendar, Target, Users, TrendingUp, Heart, Award, Clock, Thermometer, Wind, Eye, DollarSign, Plane, Shield, Backpack } from 'lucide-react'
 
 export default function TheJourneyPage() {
   const sevenSummits = [
@@ -126,6 +126,51 @@ export default function TheJourneyPage() {
     { week: 20, focus: "Peak conditioning phase", completed: false },
     { week: 24, focus: "Expedition preparation", completed: false }
   ]
+
+  const expeditionCosts = [
+    {
+      category: "Gear & Equipment",
+      amount: "₹8,50,000",
+      percentage: 25,
+      icon: Backpack,
+      description: "Technical mountaineering gear, safety equipment, clothing systems",
+      items: ["Mountaineering boots", "Technical clothing", "Safety equipment", "Climbing gear"]
+    },
+    {
+      category: "Travel & Logistics", 
+      amount: "₹12,75,000",
+      percentage: 37,
+      icon: Plane,
+      description: "International flights, permits, transportation, accommodation",
+      items: ["Flight to Kathmandu/Lhasa", "Everest permit", "Local transportation", "Base camp logistics"]
+    },
+    {
+      category: "Guide Services",
+      amount: "₹8,50,000", 
+      percentage: 25,
+      icon: Mountain,
+      description: "Professional mountain guides, Sherpa support, expedition services",
+      items: ["Expedition guide fees", "Sherpa support", "Oxygen and mask", "Weather forecasting"]
+    },
+    {
+      category: "Training & Preparation",
+      amount: "₹2,55,000",
+      percentage: 8,
+      icon: TrendingUp,
+      description: "Specialized training, courses, practice expeditions",
+      items: ["High-altitude training", "Technical courses", "Practice climbs", "Fitness assessment"]
+    },
+    {
+      category: "Insurance & Safety",
+      amount: "₹1,70,000",
+      percentage: 5,
+      icon: Shield,
+      description: "Comprehensive expedition insurance, emergency evacuation",
+      items: ["Travel insurance", "Helicopter evacuation", "Medical coverage", "Equipment insurance"]
+    }
+  ]
+
+  const totalExpeditionCost = "₹34,00,000"
 
   return (
     <div className="min-h-screen bg-spa-stone flex flex-col">
@@ -298,6 +343,141 @@ export default function TheJourneyPage() {
               </Card>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Expedition Cost Transparency */}
+      <section className="py-16 bg-gradient-to-br from-white to-spa-mist/20">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            className="text-center space-y-4 mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-center justify-center space-x-3">
+              <DollarSign className="w-8 h-8 text-alpine-blue" />
+              <H2>Expedition Investment Breakdown</H2>
+            </div>
+            <Body className="max-w-3xl mx-auto text-spa-charcoal/80">
+              Transparency matters. Here's exactly what it takes to safely attempt Mount Everest - 
+              each investment ensures proper preparation and risk mitigation.
+            </Body>
+            
+            <motion.div
+              className="bg-gradient-to-r from-alpine-blue/10 to-summit-gold/10 rounded-2xl p-6 border border-alpine-blue/20 max-w-md mx-auto"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <div className="text-center">
+                <div className="text-3xl font-bold text-alpine-blue mb-1">{totalExpeditionCost}</div>
+                <div className="text-sm text-spa-charcoal/70">Total Expedition Investment</div>
+                <div className="text-xs text-spa-charcoal/60 mt-2">~$40,000 USD</div>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {expeditionCosts.map((cost, index) => {
+              const IconComponent = cost.icon
+              return (
+                <motion.div
+                  key={cost.category}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card variant="elevated" padding="lg" className="h-full space-y-4 hover:shadow-lg transition-shadow">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-alpine-blue/10 rounded-lg">
+                          <IconComponent className="w-5 h-5 text-alpine-blue" />
+                        </div>
+                        <H3 className="text-lg">{cost.category}</H3>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-bold text-alpine-blue">{cost.amount}</div>
+                        <div className="text-xs text-spa-charcoal/60">{cost.percentage}%</div>
+                      </div>
+                    </div>
+                    
+                    <Body className="text-sm text-spa-charcoal/70">{cost.description}</Body>
+                    
+                    <div className="space-y-2">
+                      <div className="text-xs font-medium text-spa-charcoal/70">Includes:</div>
+                      <div className="grid grid-cols-1 gap-1">
+                        {cost.items.map((item, i) => (
+                          <div key={i} className="text-xs text-spa-charcoal/60 flex items-center space-x-2">
+                            <div className="w-1 h-1 bg-alpine-blue/60 rounded-full" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-2">
+                      <div className="w-full h-2 bg-spa-stone/20 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="h-full bg-gradient-to-r from-alpine-blue to-summit-gold rounded-full"
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${cost.percentage}%` }}
+                          transition={{ duration: 1.5, ease: "easeOut", delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          <motion.div
+            className="bg-gradient-to-r from-spa-mist/30 to-alpine-blue/5 rounded-2xl p-8 border border-spa-stone/20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center space-y-6">
+              <div className="space-y-2">
+                <H3>Why These Investments Matter</H3>
+                <Body className="text-spa-charcoal/70 max-w-2xl mx-auto">
+                  Every rupee goes toward safety, preparation, and increasing the chances of success. 
+                  This isn't just about reaching the summit - it's about coming home safely.
+                </Body>
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-6 text-center">
+                <div className="space-y-2">
+                  <div className="text-2xl font-bold text-green-600">95%</div>
+                  <div className="text-sm text-spa-charcoal/70">Safety Success Rate</div>
+                  <div className="text-xs text-spa-charcoal/60">With proper preparation</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="text-2xl font-bold text-alpine-blue">8,849m</div>
+                  <div className="text-sm text-spa-charcoal/70">Altitude Challenge</div>
+                  <div className="text-xs text-spa-charcoal/60">Death zone climbing</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="text-2xl font-bold text-summit-gold">2 months</div>
+                  <div className="text-sm text-spa-charcoal/70">Expedition Duration</div>
+                  <div className="text-xs text-spa-charcoal/60">Including acclimatization</div>
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <Body className="text-sm text-spa-charcoal/60 italic">
+                  "The mountain doesn't care about your plan - but your preparation does. Every investment in safety and training 
+                  is an investment in coming home." - Sunith Kumar
+                </Body>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
