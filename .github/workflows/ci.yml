@@ -76,16 +76,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      # --- Sentry Release Tracking ---
-      - name: Create Sentry release
-        run: |
-          npx sentry-cli releases new $GITHUB_SHA
-          npx sentry-cli releases set-commits $GITHUB_SHA --auto
-          npx sentry-cli releases finalize $GITHUB_SHA
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: summit-chronicles
-          SENTRY_PROJECT: javascript-nextjs
+      # --- Sentry Release Tracking (Temporarily Disabled) ---
+      # - name: Create Sentry release
+      #   run: |
+      #     npx sentry-cli releases new $GITHUB_SHA
+      #     npx sentry-cli releases set-commits $GITHUB_SHA --auto
+      #     npx sentry-cli releases finalize $GITHUB_SHA
+      #   env:
+      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      #     SENTRY_ORG: summit-chronicles
+      #     SENTRY_PROJECT: javascript-nextjs
 
       - name: Deploy to Vercel (Production)
         run: |
