@@ -1,26 +1,177 @@
 'use client'
 
-import { Suspense, lazy } from 'react'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { Mountain, Compass, BookOpen, ArrowRight, Heart, TrendingUp } from 'lucide-react'
 import { Header } from '../components/organisms/Header'
 import { Footer } from '../components/organisms/Footer'
 import { Button } from '../components/atoms/Button'
-
-// Lazy load heavy components
-const ExpeditionTimeline = lazy(() => 
-  import('../components/organisms/ExpeditionTimeline').then(module => ({
-    default: module.ExpeditionTimeline
-  }))
-)
-
-const PersonalStoryGallery = lazy(() => 
-  import('../components/organisms/PersonalStoryGallery').then(module => ({
-    default: module.PersonalStoryGallery
-  }))
-)
+import { H1, H2, H3, Body, BodyLarge, SeriaText } from '../components/atoms/Typography'
+import { Card, CardContent, CardHeader } from '../components/molecules/Card'
+import { StatusBadge } from '../components/molecules/StatusBadge'
+import { Mountain, MapPin, Calendar, Target, Users, TrendingUp, Heart, Award, Clock, Thermometer, Wind, Eye, DollarSign, Plane, Shield, Backpack } from 'lucide-react'
 
 export default function JourneyPage() {
+  const sevenSummits = [
+    {
+      name: "Mount Everest",
+      location: "Nepal/Tibet",
+      elevation: "8,849m",
+      status: "training",
+      date: "Spring 2025",
+      progress: 75,
+      description: "The ultimate challenge. Currently in intensive training phase.",
+      challenges: ["Extreme altitude", "Death zone exposure", "Weather windows"],
+      preparation: "6-month intensive training program with high-altitude simulation",
+      nextMilestone: "Final gear selection and acclimatization plan",
+      featured: true
+    },
+    {
+      name: "Denali",
+      location: "Alaska, USA", 
+      elevation: "6,190m",
+      status: "planned",
+      date: "Summer 2025",
+      progress: 0,
+      description: "The coldest and most technically demanding of the Seven Summits.",
+      challenges: ["Extreme cold", "Technical climbing", "Weather exposure"],
+      preparation: "Post-Everest conditioning and cold weather training",
+      nextMilestone: "Permits and logistics planning"
+    },
+    {
+      name: "Aconcagua",
+      location: "Argentina",
+      elevation: "6,962m", 
+      status: "planned",
+      date: "Summer 2026",
+      progress: 0,
+      description: "The highest peak outside of Asia, known for extreme weather.",
+      challenges: ["High altitude", "Extreme winds", "Acclimatization"],
+      preparation: "High-altitude endurance focus",
+      nextMilestone: "Route and season planning"
+    },
+    {
+      name: "Mount Kilimanjaro",
+      location: "Tanzania",
+      elevation: "5,895m",
+      status: "planned", 
+      date: "Fall 2026",
+      progress: 0,
+      description: "Africa's highest peak and the world's largest free-standing mountain.",
+      challenges: ["Rapid elevation gain", "Multiple climate zones", "Altitude sickness"],
+      preparation: "Endurance base building",
+      nextMilestone: "Route selection and timing"
+    },
+    {
+      name: "Mount Vinson",
+      location: "Antarctica",
+      elevation: "4,892m",
+      status: "planned",
+      date: "Winter 2026/2027",
+      progress: 0,
+      description: "The most remote and expensive of the Seven Summits.",
+      challenges: ["Extreme isolation", "Logistics complexity", "Polar conditions"],
+      preparation: "Cold weather and polar expedition training",
+      nextMilestone: "Expedition logistics and permits"
+    },
+    {
+      name: "Carstensz Pyramid",
+      location: "Indonesia", 
+      elevation: "4,884m",
+      status: "planned",
+      date: "Spring 2027",
+      progress: 0,
+      description: "The most technical of the Seven Summits, requiring rock climbing skills.",
+      challenges: ["Technical rock climbing", "Tropical conditions", "Access permits"],
+      preparation: "Technical rock climbing skill development", 
+      nextMilestone: "Climbing skills assessment and training"
+    }
+  ]
+
+  const completedSummits = [
+    {
+      name: "Mount Whitney",
+      location: "California, USA",
+      elevation: "4,421m",
+      date: "September 2022",
+      description: "My first serious high-altitude experience. Learned the importance of proper acclimatization.",
+      lessons: ["Altitude affects everyone differently", "Proper hydration is critical", "Start training early"],
+      gear: ["Basic mountaineering gear", "Day pack setup", "Layer system testing"]
+    },
+    {
+      name: "Mount Rainier", 
+      location: "Washington, USA",
+      elevation: "4,392m",
+      date: "November 2023",
+      description: "First glacier experience with technical rope team skills and crevasse rescue training.",
+      lessons: ["Teamwork is essential", "Technical skills save lives", "Weather changes everything"],
+      gear: ["Glacier travel equipment", "Crevasse rescue gear", "Cold weather systems"]
+    },
+    {
+      name: "Mount Shasta",
+      location: "California, USA", 
+      elevation: "4,317m",
+      date: "January 2024",
+      description: "Winter ascent in challenging conditions. Built confidence for bigger objectives.",
+      lessons: ["Winter conditions multiply difficulty", "Navigation skills are critical", "Always have backup plans"],
+      gear: ["Winter climbing equipment", "Emergency shelter", "Advanced navigation tools"]
+    }
+  ]
+
+  const trainingMilestones = [
+    { week: 1, focus: "Base fitness assessment", completed: true },
+    { week: 4, focus: "Aerobic base building", completed: true },
+    { week: 8, focus: "Strength phase initiation", completed: true },
+    { week: 12, focus: "High-altitude simulation", completed: true },
+    { week: 16, focus: "Technical skills refresh", completed: false },
+    { week: 20, focus: "Peak conditioning phase", completed: false },
+    { week: 24, focus: "Expedition preparation", completed: false }
+  ]
+
+  const expeditionCosts = [
+    {
+      category: "Gear & Equipment",
+      amount: "₹8,50,000",
+      percentage: 25,
+      icon: Backpack,
+      description: "Technical mountaineering gear, safety equipment, clothing systems",
+      items: ["Mountaineering boots", "Technical clothing", "Safety equipment", "Climbing gear"]
+    },
+    {
+      category: "Travel & Logistics", 
+      amount: "₹12,75,000",
+      percentage: 37,
+      icon: Plane,
+      description: "International flights, permits, transportation, accommodation",
+      items: ["Flight to Kathmandu/Lhasa", "Everest permit", "Local transportation", "Base camp logistics"]
+    },
+    {
+      category: "Guide Services",
+      amount: "₹8,50,000", 
+      percentage: 25,
+      icon: Mountain,
+      description: "Professional mountain guides, Sherpa support, expedition services",
+      items: ["Expedition guide fees", "Sherpa support", "Oxygen and mask", "Weather forecasting"]
+    },
+    {
+      category: "Training & Preparation",
+      amount: "₹2,55,000",
+      percentage: 8,
+      icon: TrendingUp,
+      description: "Specialized training, courses, practice expeditions",
+      items: ["High-altitude training", "Technical courses", "Practice climbs", "Fitness assessment"]
+    },
+    {
+      category: "Insurance & Safety",
+      amount: "₹1,70,000",
+      percentage: 5,
+      icon: Shield,
+      description: "Comprehensive expedition insurance, emergency evacuation",
+      items: ["Travel insurance", "Helicopter evacuation", "Medical coverage", "Equipment insurance"]
+    }
+  ]
+
+  const totalExpeditionCost = "₹34,00,000"
+
   return (
     <div className="min-h-screen bg-spa-stone flex flex-col">
       {/* Skip link for accessibility */}
@@ -34,342 +185,518 @@ export default function JourneyPage() {
       
       {/* Main content with proper spacing for fixed header */}
       <main id="main-content" className="flex-1 pt-16">
-      {/* Hidden accessibility elements for testing - SSR-rendered */}
-      <div className="sr-only">
-        <h2>Seven Summits Journey Progress</h2>
-        <h3>Expedition Timeline and Achievements</h3>
-        <h4>Personal Story and Adventure Gallery</h4>
-        <img 
-          src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-          alt="Seven Summits journey progress and mountaineering achievements"
-        />
-        <img 
-          src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-          alt="Expedition timeline showcasing completed and planned summits"
-        />
-        <img 
-          src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-          alt="Personal adventure story and climbing expedition gallery"
-        />
-      </div>
-      
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-spa-mist via-white to-spa-cloud/30 py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2280%22%20height%3D%2280%22%20viewBox%3D%220%200%2080%2080%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23f1f5f9%22%20fill-opacity%3D%220.2%22%3E%3Cpath%20d%3D%22M0%200h80v80H0z%22/%3E%3Cpath%20d%3D%22M20%2020h40v40H20z%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div>
-        <div className="max-w-6xl mx-auto px-6 relative">
-          <motion.div 
-            className="text-center mb-16"
+      <section className="py-20 gradient-peak text-white relative overflow-hidden">
+        <motion.div
+          className="absolute inset-0 opacity-10"
+          animate={{ backgroundPosition: ['0% 0%', '100% 100%'] }}
+          transition={{ duration: 30, repeat: Infinity, repeatType: 'reverse' }}
+          style={{
+            backgroundImage: 'url("data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="white" fill-opacity="0.1"%3E%3Cpath d="M20 20l10-10v20l-10-10zm-10 0l10 10v-20l-10 10z"/%3E%3C/g%3E%3C/svg%3E")'
+          }}
+        />
+        
+        <div className="max-w-4xl mx-auto px-6 text-center space-y-6 relative z-10">
+          <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, staggerChildren: 0.2, delayChildren: 0.1 }}
+            transition={{ duration: 0.8 }}
           >
-            <motion.div 
-              className="flex items-center justify-center gap-4 mb-8"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, type: "spring", stiffness: 300, damping: 30 }}
-            >
-              <motion.div
-                className="p-3 bg-alpine-blue/10 rounded-2xl backdrop-blur-sm"
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
-                <Compass className="w-10 h-10 text-alpine-blue" />
-              </motion.div>
-              <motion.h1 
-                className="text-6xl md:text-7xl font-light text-spa-charcoal"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
-              >
-                The Journey
-              </motion.h1>
-            </motion.div>
-            
-            <motion.p 
-              className="text-xl text-spa-charcoal/80 max-w-4xl mx-auto leading-relaxed mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-            >
-              Follow the complete expedition story from initial training through summit success. 
-              This is more than climbing—it's a systematic approach to achieving extraordinary goals 
-              through preparation, perseverance, and authentic storytelling.
-            </motion.p>
-            
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.6 }}
-            >
-              <Button variant="summit" size="lg" className="group">
-                <TrendingUp className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                Track Progress
-                <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button variant="ghost" size="lg" className="group">
-                <Heart className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
-                Support Journey
-              </Button>
-            </motion.div>
+            <H1 className="text-4xl md:text-6xl font-bold">The Journey</H1>
+            <BodyLarge className="text-white/90 max-w-2xl mx-auto mt-4">
+              Follow my systematic progression through the Seven Summits - the highest peaks on each continent. 
+              Real training data, honest challenges, and the path to Mount Everest.
+            </BodyLarge>
           </motion.div>
-
-          {/* Journey Navigation */}
-          <motion.div 
-            className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto"
-            variants={{
-              hidden: { opacity: 0 },
-              visible: {
-                opacity: 1,
-                transition: {
-                  staggerChildren: 0.15,
-                  delayChildren: 0.3
-                }
-              }
-            }}
-            initial="hidden"
-            animate="visible"
+          
+          <motion.div
+            className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
           >
-            {[
-              {
-                icon: BookOpen,
-                title: "Personal Story",
-                description: "The motivation, background, and authentic passion that drives this expedition",
-                color: "alpine-blue",
-                bgColor: "bg-alpine-blue/10"
-              },
-              {
-                icon: Compass,
-                title: "Expedition Timeline",
-                description: "Real-time progress tracking from preparation through summit celebration",
-                color: "summit-gold",
-                bgColor: "bg-summit-gold/10"
-              },
-              {
-                icon: Mountain,
-                title: "Achievement Gallery",
-                description: "Comprehensive showcase of mountaineering experience and technical competence",
-                color: "emerald-600",
-                bgColor: "bg-emerald-500/10"
-              }
-            ].map((item, index) => (
-              <motion.div 
-                key={index}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-spa-stone/10 shadow-sm text-center group cursor-pointer"
-                variants={{
-                  hidden: { opacity: 0, y: 20, scale: 0.9 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    scale: 1,
-                    transition: {
-                      duration: 0.5,
-                      ease: [0.25, 0.46, 0.45, 0.94]
-                    }
-                  }
-                }}
-                whileHover={{ 
-                  scale: 1.02, 
-                  y: -4,
-                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <motion.div 
-                  className={`w-16 h-16 ${item.bgColor} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform`}
-                  whileHover={{ rotate: 10, scale: 1.15 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  <item.icon className={`w-8 h-8 text-${item.color}`} />
-                </motion.div>
-                <h3 className="text-xl font-medium text-spa-charcoal mb-3 group-hover:text-alpine-blue transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-spa-charcoal/70 leading-relaxed">
-                  {item.description}
-                </p>
-              </motion.div>
-            ))}
+            <div className="grid grid-cols-3 gap-8 text-center">
+              <div>
+                <div className="text-3xl font-bold text-summit-gold">3</div>
+                <div className="text-sm">Completed</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-summit-gold">1</div>
+                <div className="text-sm">In Training</div>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-summit-gold">3</div>
+                <div className="text-sm">Planned</div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
 
-      {/* Expedition Timeline */}
-      <Suspense fallback={
-        <div className="py-16 bg-white">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="animate-pulse space-y-8">
-              <div className="h-8 bg-spa-stone/20 rounded w-48 mx-auto"></div>
-              <div className="space-y-6">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="flex gap-6">
-                    <div className="w-4 h-4 bg-spa-stone/20 rounded-full flex-shrink-0 mt-2"></div>
-                    <div className="flex-1 space-y-3">
-                      <div className="h-4 bg-spa-stone/20 rounded w-3/4"></div>
-                      <div className="h-3 bg-spa-stone/20 rounded w-1/2"></div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      }>
-        <ExpeditionTimeline />
-      </Suspense>
-
-      {/* Personal Story & Achievement Gallery */}
-      <Suspense fallback={
-        <div className="py-16 bg-spa-cloud/20">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="animate-pulse space-y-8">
-              <div className="h-8 bg-spa-stone/20 rounded w-64 mx-auto"></div>
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[1,2,3,4,5,6].map(i => (
-                  <div key={i} className="space-y-4">
-                    <div className="h-48 bg-spa-stone/20 rounded-xl"></div>
-                    <div className="h-4 bg-spa-stone/20 rounded"></div>
-                    <div className="h-3 bg-spa-stone/20 rounded w-3/4"></div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      }>
-        <PersonalStoryGallery />
-      </Suspense>
-
-      {/* Call to Action */}
-      <section className="py-20 bg-gradient-to-br from-alpine-blue/5 to-summit-gold/5 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-alpine-blue/10 via-transparent to-summit-gold/10"></div>
-        <div className="max-w-4xl mx-auto px-6 text-center relative">
-          <motion.div 
-            className="bg-white/90 backdrop-blur-sm rounded-3xl p-10 border border-spa-stone/10 shadow-lg"
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      {/* Current Focus: Everest Training */}
+      <section className="py-16 bg-gradient-to-br from-spa-mist/30 to-white">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            className="text-center space-y-4 mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-            whileHover={{ y: -4, boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.15)' }}
           >
-            <motion.h2 
-              className="text-4xl font-light text-spa-charcoal mb-6"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+            <div className="flex items-center justify-center space-x-3">
+              <Mountain className="w-8 h-8 text-alpine-blue" />
+              <H2>Current Focus: Mount Everest Training</H2>
+            </div>
+            <Body className="max-w-3xl mx-auto text-spa-charcoal/80">
+              89 days until departure. Every workout, every decision, every piece of gear is optimized for success on the world's highest mountain.
+            </Body>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 mb-12">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.6 }}
             >
-              Join the Journey
-            </motion.h2>
+              <Card variant="premium" padding="lg" className="h-full space-y-6">
+                <div className="flex items-center justify-between">
+                  <H3>Training Progress</H3>
+                  <StatusBadge variant="warning">Week 16 of 24</StatusBadge>
+                </div>
+                
+                <div className="space-y-4">
+                  {trainingMilestones.map((milestone, index) => (
+                    <div key={index} className="flex items-center space-x-4">
+                      <div className={`w-4 h-4 rounded-full ${milestone.completed ? 'bg-green-500' : 'bg-gray-300'}`} />
+                      <div className="flex-1">
+                        <div className={`text-sm font-medium ${milestone.completed ? 'text-spa-charcoal' : 'text-spa-charcoal/60'}`}>
+                          Week {milestone.week}: {milestone.focus}
+                        </div>
+                      </div>
+                      {milestone.completed && <Award className="w-4 h-4 text-green-500" />}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-4 border-t border-spa-stone/20">
+                  <Button variant="primary" className="w-full" asChild>
+                    <Link href="/training">
+                      <TrendingUp className="w-4 h-4" />
+                      View Live Training Data
+                    </Link>
+                  </Button>
+                </div>
+              </Card>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Card variant="premium" padding="lg" className="h-full space-y-6">
+                <H3>Current Stats (This Week)</H3>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="text-center space-y-2">
+                    <div className="text-2xl font-bold text-alpine-blue">127km</div>
+                    <div className="text-sm text-spa-charcoal/70">Distance Covered</div>
+                  </div>
+                  <div className="text-center space-y-2">
+                    <div className="text-2xl font-bold text-summit-gold">2,840m</div>
+                    <div className="text-sm text-spa-charcoal/70">Elevation Gained</div>
+                  </div>
+                  <div className="text-center space-y-2">
+                    <div className="text-2xl font-bold text-green-600">18.5h</div>
+                    <div className="text-sm text-spa-charcoal/70">Training Duration</div>
+                  </div>
+                  <div className="text-center space-y-2">
+                    <div className="text-2xl font-bold text-red-600">145bpm</div>
+                    <div className="text-sm text-spa-charcoal/70">Avg Heart Rate</div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Fitness Progress</span>
+                    <span className="text-sm font-medium">78%</span>
+                  </div>
+                  <div className="w-full h-2 bg-spa-stone/20 rounded-full overflow-hidden">
+                    <motion.div 
+                      className="h-full bg-alpine-blue rounded-full"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: '78%' }}
+                      transition={{ duration: 1.5, ease: "easeOut" }}
+                      viewport={{ once: true }}
+                    />
+                  </div>
+                </div>
+
+                <Button variant="secondary" className="w-full" asChild>
+                  <Link href="/support">
+                    <Heart className="w-4 h-4" />
+                    Support My Training
+                  </Link>
+                </Button>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Expedition Cost Transparency */}
+      <section className="py-16 bg-gradient-to-br from-white to-spa-mist/20">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            className="text-center space-y-4 mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <div className="flex items-center justify-center space-x-3">
+              <DollarSign className="w-8 h-8 text-alpine-blue" />
+              <H2>Expedition Investment Breakdown</H2>
+            </div>
+            <Body className="max-w-3xl mx-auto text-spa-charcoal/80">
+              Transparency matters. Here's exactly what it takes to safely attempt Mount Everest - 
+              each investment ensures proper preparation and risk mitigation.
+            </Body>
             
-            <motion.p 
-              className="text-xl text-spa-charcoal/80 mb-10 max-w-3xl mx-auto leading-relaxed"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+            <motion.div
+              className="bg-gradient-to-r from-alpine-blue/10 to-summit-gold/10 rounded-2xl p-6 border border-alpine-blue/20 max-w-md mx-auto"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.6 }}
             >
-              This expedition is more than a personal challenge—it's an opportunity to inspire others, 
-              support meaningful causes, and demonstrate what's possible through systematic preparation 
-              and unwavering commitment.
-            </motion.p>
-            
-            <motion.div 
-              className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-            >
-              <motion.button 
-                className="px-10 py-4 bg-alpine-blue text-white rounded-lg font-medium group relative overflow-hidden"
-                whileHover={{ 
-                  scale: 1.02,
-                  boxShadow: '0 8px 25px rgba(59, 130, 246, 0.3)'
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
+              <div className="text-center">
+                <div className="text-3xl font-bold text-alpine-blue mb-1">{totalExpeditionCost}</div>
+                <div className="text-sm text-spa-charcoal/70">Total Expedition Investment</div>
+                <div className="text-xs text-spa-charcoal/60 mt-2">~$40,000 USD</div>
+              </div>
+            </motion.div>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            {expeditionCosts.map((cost, index) => {
+              const IconComponent = cost.icon
+              return (
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-alpine-blue to-blue-600"
-                  initial={{ x: '-100%' }}
-                  whileHover={{ x: '0%' }}
-                  transition={{ duration: 0.3 }}
-                />
-                <span className="relative z-10 flex items-center gap-2">
-                  <Heart className="w-5 h-5" />
-                  Support the Expedition
-                </span>
-              </motion.button>
+                  key={cost.category}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card variant="elevated" padding="lg" className="h-full space-y-4 hover:shadow-lg transition-shadow">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-alpine-blue/10 rounded-lg">
+                          <IconComponent className="w-5 h-5 text-alpine-blue" />
+                        </div>
+                        <H3 className="text-lg">{cost.category}</H3>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-xl font-bold text-alpine-blue">{cost.amount}</div>
+                        <div className="text-xs text-spa-charcoal/60">{cost.percentage}%</div>
+                      </div>
+                    </div>
+                    
+                    <Body className="text-sm text-spa-charcoal/70">{cost.description}</Body>
+                    
+                    <div className="space-y-2">
+                      <div className="text-xs font-medium text-spa-charcoal/70">Includes:</div>
+                      <div className="grid grid-cols-1 gap-1">
+                        {cost.items.map((item, i) => (
+                          <div key={i} className="text-xs text-spa-charcoal/60 flex items-center space-x-2">
+                            <div className="w-1 h-1 bg-alpine-blue/60 rounded-full" />
+                            <span>{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="pt-2">
+                      <div className="w-full h-2 bg-spa-stone/20 rounded-full overflow-hidden">
+                        <motion.div 
+                          className="h-full bg-gradient-to-r from-alpine-blue to-summit-gold rounded-full"
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${cost.percentage}%` }}
+                          transition={{ duration: 1.5, ease: "easeOut", delay: index * 0.1 }}
+                          viewport={{ once: true }}
+                        />
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          <motion.div
+            className="bg-gradient-to-r from-spa-mist/30 to-alpine-blue/5 rounded-2xl p-8 border border-spa-stone/20"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <div className="text-center space-y-6">
+              <div className="space-y-2">
+                <H3>Why These Investments Matter</H3>
+                <Body className="text-spa-charcoal/70 max-w-2xl mx-auto">
+                  Every rupee goes toward safety, preparation, and increasing the chances of success. 
+                  This isn't just about reaching the summit - it's about coming home safely.
+                </Body>
+              </div>
               
-              <motion.button 
-                className="px-10 py-4 border-2 border-spa-stone/20 text-spa-charcoal rounded-lg font-medium group hover:border-alpine-blue/30"
-                whileHover={{ 
-                  scale: 1.02,
-                  backgroundColor: 'rgba(241, 245, 249, 0.1)',
-                  borderColor: 'rgba(59, 130, 246, 0.3)'
-                }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="flex items-center gap-2 group-hover:text-alpine-blue transition-colors">
-                  <TrendingUp className="w-5 h-5" />
-                  Follow Updates
-                </span>
-              </motion.button>
+              <div className="grid md:grid-cols-3 gap-6 text-center">
+                <div className="space-y-2">
+                  <div className="text-2xl font-bold text-green-600">95%</div>
+                  <div className="text-sm text-spa-charcoal/70">Safety Success Rate</div>
+                  <div className="text-xs text-spa-charcoal/60">With proper preparation</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="text-2xl font-bold text-alpine-blue">8,849m</div>
+                  <div className="text-sm text-spa-charcoal/70">Altitude Challenge</div>
+                  <div className="text-xs text-spa-charcoal/60">Death zone climbing</div>
+                </div>
+                <div className="space-y-2">
+                  <div className="text-2xl font-bold text-summit-gold">2 months</div>
+                  <div className="text-sm text-spa-charcoal/70">Expedition Duration</div>
+                  <div className="text-xs text-spa-charcoal/60">Including acclimatization</div>
+                </div>
+              </div>
+
+              <div className="pt-4">
+                <Body className="text-sm text-spa-charcoal/60 italic">
+                  "The mountain doesn't care about your plan - but your preparation does. Every investment in safety and training 
+                  is an investment in coming home." - Sunith Kumar
+                </Body>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Seven Summits Timeline */}
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            className="text-center space-y-4 mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <H2>Seven Summits Progression</H2>
+            <Body className="max-w-3xl mx-auto text-spa-charcoal/80">
+              Each mountain teaches different lessons. Here's my systematic approach to conquering the highest peaks on each continent.
+            </Body>
+          </motion.div>
+
+          {/* Completed Summits */}
+          <div className="mb-16">
+            <motion.div
+              className="flex items-center space-x-3 mb-8"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Award className="w-6 h-6 text-green-600" />
+              <H3>Completed Summits</H3>
             </motion.div>
             
-            <motion.div 
-              className="grid grid-cols-3 gap-8 pt-8 border-t border-spa-stone/10"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.1,
-                    delayChildren: 0.5
-                  }
-                }
-              }}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-            >
-              {[
-                { value: "234", label: "Community Supporters" },
-                { value: "$12,400", label: "Funding Raised" },
-                { value: "75%", label: "Journey Complete" }
-              ].map((stat, index) => (
-                <motion.div 
-                  key={index}
-                  className="text-center"
-                  variants={{
-                    hidden: { opacity: 0, scale: 0.8 },
-                    visible: {
-                      opacity: 1,
-                      scale: 1,
-                      transition: {
-                        duration: 0.4,
-                        type: "spring",
-                        stiffness: 400,
-                        damping: 30
-                      }
-                    }
-                  }}
-                  whileHover={{ scale: 1.05 }}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {completedSummits.map((summit, index) => (
+                <motion.div
+                  key={summit.name}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
                 >
-                  <motion.div 
-                    className="text-3xl font-light text-spa-charcoal mb-2"
-                    initial={{ scale: 0 }}
-                    whileInView={{ scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.6 + index * 0.1, type: "spring", stiffness: 500, damping: 30 }}
-                  >
-                    {stat.value}
-                  </motion.div>
-                  <div className="text-sm text-spa-charcoal/60 font-medium">{stat.label}</div>
+                  <Card variant="elevated" padding="lg" className="h-full space-y-4 border-l-4 border-l-green-500">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <H3 className="text-lg">{summit.name}</H3>
+                        <StatusBadge variant="success">✓</StatusBadge>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-spa-charcoal/60">
+                        <MapPin className="w-4 h-4" />
+                        <span>{summit.location} • {summit.elevation}</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-spa-charcoal/60">
+                        <Calendar className="w-4 h-4" />
+                        <span>{summit.date}</span>
+                      </div>
+                    </div>
+                    
+                    <Body className="text-sm">{summit.description}</Body>
+                    
+                    <div className="space-y-3 pt-2 border-t border-spa-stone/20">
+                      <div>
+                        <div className="text-xs font-medium text-spa-charcoal/70 mb-1">Key Lessons:</div>
+                        <div className="space-y-1">
+                          {summit.lessons.map((lesson, i) => (
+                            <div key={i} className="text-xs text-spa-charcoal/60">• {lesson}</div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
                 </motion.div>
               ))}
+            </div>
+          </div>
+
+          {/* Planned Summits */}
+          <div>
+            <motion.div
+              className="flex items-center space-x-3 mb-8"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Target className="w-6 h-6 text-alpine-blue" />
+              <H3>Planned Expeditions</H3>
             </motion.div>
+            
+            <div className="space-y-6">
+              {sevenSummits.map((summit, index) => (
+                <motion.div
+                  key={summit.name}
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <Card 
+                    variant={summit.featured ? "premium" : "elevated"} 
+                    padding="lg" 
+                    className={`space-y-6 ${summit.featured ? 'border-2 border-summit-gold/30' : ''}`}
+                  >
+                    <div className="grid md:grid-cols-3 gap-6">
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <H3 className="text-xl">{summit.name}</H3>
+                          <StatusBadge variant={summit.status === 'training' ? 'warning' : 'default'}>
+                            {summit.status === 'training' ? 'Training' : 'Planned'}
+                          </StatusBadge>
+                        </div>
+                        
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2 text-sm">
+                            <MapPin className="w-4 h-4 text-spa-charcoal/60" />
+                            <span>{summit.location} • {summit.elevation}</span>
+                          </div>
+                          <div className="flex items-center space-x-2 text-sm">
+                            <Calendar className="w-4 h-4 text-spa-charcoal/60" />
+                            <span>{summit.date}</span>
+                          </div>
+                        </div>
+
+                        {summit.progress > 0 && (
+                          <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                              <span className="text-sm">Preparation Progress</span>
+                              <span className="text-sm font-medium">{summit.progress}%</span>
+                            </div>
+                            <div className="w-full h-2 bg-spa-stone/20 rounded-full overflow-hidden">
+                              <motion.div 
+                                className="h-full bg-summit-gold rounded-full"
+                                initial={{ width: 0 }}
+                                whileInView={{ width: `${summit.progress}%` }}
+                                transition={{ duration: 1.5, ease: "easeOut" }}
+                                viewport={{ once: true }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <Body className="text-sm">{summit.description}</Body>
+                        
+                        <div>
+                          <div className="text-sm font-medium text-spa-charcoal/70 mb-2">Key Challenges:</div>
+                          <div className="space-y-1">
+                            {summit.challenges.map((challenge, i) => (
+                              <div key={i} className="text-xs text-spa-charcoal/60 flex items-center space-x-2">
+                                <div className="w-1 h-1 bg-spa-charcoal/40 rounded-full" />
+                                <span>{challenge}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <div className="text-sm font-medium text-spa-charcoal/70 mb-2">Preparation Focus:</div>
+                          <Body className="text-xs text-spa-charcoal/60">{summit.preparation}</Body>
+                        </div>
+                        
+                        <div>
+                          <div className="text-sm font-medium text-spa-charcoal/70 mb-2">Next Milestone:</div>
+                          <Body className="text-xs text-spa-charcoal/60">{summit.nextMilestone}</Body>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-16 bg-gradient-to-r from-alpine-blue to-summit-gold text-white">
+        <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
+          <motion.div
+            className="space-y-4"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+          >
+            <H2 className="text-white">Be Part of This Journey</H2>
+            <BodyLarge className="max-w-2xl mx-auto text-white/90">
+              Follow my real-time training, share in the challenges and victories, 
+              and help make this Seven Summits journey possible.
+            </BodyLarge>
+          </motion.div>
+
+          <motion.div 
+            className="grid md:grid-cols-3 gap-4 max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            viewport={{ once: true }}
+          >
+            <Button variant="secondary" size="lg" className="w-full" asChild>
+              <Link href="/training">
+                <TrendingUp className="w-5 h-5" />
+                Live Training Data
+              </Link>
+            </Button>
+            <Button variant="ghost" size="lg" className="w-full text-white border-white hover:bg-white hover:text-alpine-blue" asChild>
+              <Link href="/insights">
+                <Mountain className="w-5 h-5" />
+                Read My Stories
+              </Link>
+            </Button>
+            <Button variant="summit" size="lg" className="w-full" asChild>
+              <Link href="/support">
+                <Heart className="w-5 h-5" />
+                Support Journey
+              </Link>
+            </Button>
           </motion.div>
         </div>
       </section>
