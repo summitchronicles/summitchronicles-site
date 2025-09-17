@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import { Heart, Coffee, Mountain, Zap, CreditCard, Smartphone } from 'lucide-react'
 import { H3, Body } from '../atoms/Typography'
 import { Button } from '../atoms/Button'
-import { Card } from '../molecules/Card'
 
 interface SupportTier {
   id: string
@@ -206,10 +205,8 @@ export function SupportOptions({ variant = 'featured', className = '' }: Support
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
               >
-                <Card 
-                  variant="elevated" 
-                  padding="lg" 
-                  className={`h-full space-y-4 cursor-pointer transition-all duration-300 hover:shadow-lg relative ${
+                <div 
+                  className={`h-full space-y-4 cursor-pointer transition-all duration-300 hover:shadow-lg relative bg-white border border-spa-cloud shadow-spa-medium hover:shadow-spa-elevated rounded-lg p-8 ${
                     tier.popular ? 'border-2 border-summit-gold/30' : ''
                   } ${isSelected ? 'ring-2 ring-alpine-blue' : ''}`}
                   onClick={() => handleSupportClick(tier.amount)}
@@ -253,7 +250,7 @@ export function SupportOptions({ variant = 'featured', className = '' }: Support
                       <div className="animate-spin w-6 h-6 border-2 border-alpine-blue border-t-transparent rounded-full" />
                     </div>
                   )}
-                </Card>
+                </div>
               </motion.div>
             )
           })}
