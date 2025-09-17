@@ -3,6 +3,7 @@
 import React from 'react';
 import { Header } from './components/organisms/Header';
 import { Footer } from './components/organisms/Footer';
+import { SponsorRecognition } from './components/organisms/SponsorRecognition';
 import { CinematicHero, InteractiveStatsGrid, AchievementTimeline, FeaturedStoryCards, JourneyNavigation } from './components/cinematic';
 
 export default function Home() {
@@ -72,6 +73,9 @@ export default function Home() {
       </div>
       </main>
 
+      {/* Subtle Sponsor Recognition */}
+      <SponsorRecognition variant="subtle" />
+      
       <Footer />
     </div>
   );
