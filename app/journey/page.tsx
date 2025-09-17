@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Header } from '../components/organisms/Header'
 import { Footer } from '../components/organisms/Footer'
 import { SponsorRecognition } from '../components/organisms/SponsorRecognition'
+import { SupportOptions } from '../components/organisms/SupportOptions'
 import { Button } from '../components/atoms/Button'
 import { H1, H2, H3, Body, BodyLarge, SeriaText } from '../components/atoms/Typography'
 import { Card, CardContent, CardHeader } from '../components/molecules/Card'
@@ -484,6 +485,9 @@ export default function JourneyPage() {
 
       {/* Sponsor Recognition */}
       <SponsorRecognition variant="featured" />
+
+      {/* Support Options */}
+      <SupportOptions variant="featured" />
 
       {/* Seven Summits Timeline */}
       <section className="py-16">

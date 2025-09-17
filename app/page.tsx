@@ -4,6 +4,7 @@ import React from 'react';
 import { Header } from './components/organisms/Header';
 import { Footer } from './components/organisms/Footer';
 import { SponsorRecognition } from './components/organisms/SponsorRecognition';
+import { SupportOptions } from './components/organisms/SupportOptions';
 import { CinematicHero, InteractiveStatsGrid, AchievementTimeline, FeaturedStoryCards, JourneyNavigation } from './components/cinematic';
 
 export default function Home() {
@@ -52,6 +53,9 @@ export default function Home() {
 
       {/* Journey Navigation Section */}
       <JourneyNavigation />
+
+      {/* Subtle Support CTA */}
+      <SupportOptions variant="subtle" />
       
       {/* Hidden accessibility elements for testing - SSR-rendered */}
       <div className="sr-only">

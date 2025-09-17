@@ -2,6 +2,7 @@
 
 import { Header } from '../components/organisms/Header'
 import { Footer } from '../components/organisms/Footer'
+import { SupportOptions } from '../components/organisms/SupportOptions'
 import { RedBullBlogGrid } from '../components/blog'
 
 export default function BlogPage() {
@@ -40,6 +41,9 @@ export default function BlogPage() {
         {/* Red Bull Blog Grid - Full Width */}
         <RedBullBlogGrid />
       </main>
+
+      {/* Subtle Support CTA */}
+      <SupportOptions variant="subtle" />
 
       <Footer />
     </div>

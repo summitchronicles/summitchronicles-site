@@ -10,6 +10,7 @@ import { StravaActivityFeed } from '../components/StravaIntegration'
 import { PhotoShowcase } from '../components/organisms/PhotoShowcase'
 import { Header } from '../components/organisms/Header'
 import { Footer } from '../components/organisms/Footer'
+import { SupportOptions } from '../components/organisms/SupportOptions'
 import { Button } from '../components/atoms/Button'
 import { cn } from '@/lib/utils'
 
@@ -700,6 +701,9 @@ export default function TrainingPage() {
       </section>
       </main>
 
+      {/* Inline Support CTA */}
+      <SupportOptions variant="inline" className="py-8 bg-spa-mist/10" />
+      
       <Footer />
     </div>
   )
