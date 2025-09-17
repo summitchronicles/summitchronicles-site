@@ -103,8 +103,8 @@ test('Epic 3: Training Dashboard Direct Test', async ({ page }) => {
     
     console.log('✅ EPIC 3 DIRECT TEST COMPLETE');
     
-  } catch (error) {
-    console.log('❌ Error testing Epic 3:', error.message);
+  } catch (error: unknown) {
+    console.log('❌ Error testing Epic 3:', error instanceof Error ? error.message : String(error));
     
     // Take error screenshot
     await page.screenshot({ 

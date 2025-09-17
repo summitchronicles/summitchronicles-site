@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef } from 'react'
 import Image, { ImageProps } from 'next/image'
-import { getOptimizedImageProps, generateResponsiveSizes, IMAGE_CONFIGS, useProgressiveImage } from '../lib/utils/image-optimization'
-import { useIntersectionObserver } from '../lib/utils/performance'
+import { getOptimizedImageProps, generateResponsiveSizes, IMAGE_CONFIGS, useProgressiveImage } from '../../lib/utils/image-optimization'
+import { useIntersectionObserver } from '../../lib/utils/performance'
 
 interface OptimizedImageProps extends Omit<ImageProps, 'src' | 'alt'> {
   src: string
@@ -42,7 +42,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   const imageRef = useRef<HTMLDivElement>(null)
   
   // Intersection observer for lazy loading
-  const isInView = useIntersectionObserver(imageRef, {
+  const isInView = useIntersectionObserver(imageRef as React.RefObject<Element>, {
     threshold: 0.1,
     rootMargin: '50px'
   })
@@ -102,7 +102,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   // Preload image if requested
   useEffect(() => {
     if (preload && src) {
-      const img = new Image()
+      const img = new window.Image()
       img.src = src
     }
   }, [preload, src])
@@ -180,23 +180,23 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 }
 
 // Specialized image components
-export const HeroImage: React.FC<Omit<OptimizedImageProps, 'preset'>> = (props) => (
+export const HeroImage: React.FC<OptimizedImageProps> = (props) => (
   <OptimizedImage {...props} preset="hero" priority />
 )
 
-export const ThumbnailImage: React.FC<Omit<OptimizedImageProps, 'preset'>> = (props) => (
+export const ThumbnailImage: React.FC<OptimizedImageProps> = (props) => (
   <OptimizedImage {...props} preset="thumbnail" />
 )
 
-export const GalleryImage: React.FC<Omit<OptimizedImageProps, 'preset'>> = (props) => (
+export const GalleryImage: React.FC<OptimizedImageProps> = (props) => (
   <OptimizedImage {...props} preset="gallery" />
 )
 
-export const AvatarImage: React.FC<Omit<OptimizedImageProps, 'preset'>> = (props) => (
+export const AvatarImage: React.FC<OptimizedImageProps> = (props) => (
   <OptimizedImage {...props} preset="avatar" className={`rounded-full ${props.className || ''}`} />
 )
 
-export const BackgroundImage: React.FC<Omit<OptimizedImageProps, 'preset'>> = (props) => (
+export const BackgroundImage: React.FC<OptimizedImageProps> = (props) => (
   <OptimizedImage {...props} preset="background" className={`object-cover ${props.className || ''}`} />
 )
 

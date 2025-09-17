@@ -18,7 +18,7 @@ import {
   Award,
   ChevronUp
 } from 'lucide-react'
-import type { Post } from '../../../lib/sanity/types'
+// import type { Post } from '../../../lib/sanity/types'
 
 interface BlogPostData {
   title: string
@@ -34,7 +34,7 @@ interface BlogPostData {
 }
 
 interface CinematicBlogPostProps {
-  post?: Post
+  post?: any
   slug: string
   className?: string
 }

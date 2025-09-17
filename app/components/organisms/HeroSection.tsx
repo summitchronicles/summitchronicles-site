@@ -109,7 +109,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
               <Link href="/about">
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                   className="group-hover:pause"
                 >
                   <Icon name="Play" size="md" />
@@ -232,14 +231,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ className }) => {
         <motion.div 
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
           animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           variants={itemVariants}
         >
           <div className="flex flex-col items-center space-y-2 text-spa-slate font-montserrat">
             <span className="text-sm">Explore Journey</span>
             <motion.div
               animate={{ y: [0, 5, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
             >
               <Icon name="ChevronDown" size="md" />
             </motion.div>

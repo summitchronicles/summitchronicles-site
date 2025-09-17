@@ -152,8 +152,8 @@ test('Epic 4: Community Engagement & Newsletter System Direct Test', async ({ pa
     
     console.log('✅ EPIC 4 DIRECT TEST COMPLETE');
     
-  } catch (error) {
-    console.log('❌ Error testing Epic 4:', error.message);
+  } catch (error: unknown) {
+    console.log('❌ Error testing Epic 4:', error instanceof Error ? error.message : String(error));
     
     // Take error screenshot
     await page.screenshot({ 

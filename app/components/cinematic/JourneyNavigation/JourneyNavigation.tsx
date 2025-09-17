@@ -98,7 +98,6 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
       scale: 1,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
       }
     }
   }
@@ -135,7 +134,6 @@ export function JourneyNavigation({ className = "" }: JourneyNavigationProps) {
           {/* Scroll Indicator */}
           <motion.div
             animate={{ y: [0, 8, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             className="flex flex-col items-center text-slate-400 mb-8"
           >
             <span className="text-sm font-medium mb-2">Explore Below</span>

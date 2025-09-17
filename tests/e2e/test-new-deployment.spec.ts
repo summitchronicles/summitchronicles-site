@@ -62,8 +62,8 @@ test('test new deployment with Epic 1 Swiss spa styling', async ({ page }) => {
     
     console.log('✅ New deployment test completed');
     
-  } catch (error) {
-    console.log('❌ Error testing new deployment:', error.message);
+  } catch (error: unknown) {
+    console.log('❌ Error testing new deployment:', error instanceof Error ? error.message : String(error));
     
     // Take screenshot anyway to see what's there
     await page.screenshot({ 

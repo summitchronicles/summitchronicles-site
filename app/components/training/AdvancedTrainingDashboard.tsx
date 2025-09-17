@@ -30,13 +30,16 @@ import { PerformanceAnalytics } from './PerformanceAnalytics'
 interface Goal {
   id: string
   title: string
+  description?: string
   target: number
   current: number
   unit: string
+  startDate: string
   deadline: string
-  category: 'endurance' | 'strength' | 'technical' | 'recovery'
+  category: 'endurance' | 'strength' | 'technical' | 'recovery' | 'nutrition'
   priority: 'high' | 'medium' | 'low'
-  status: 'on-track' | 'behind' | 'completed' | 'at-risk'
+  status: 'active' | 'completed' | 'paused' | 'overdue'
+  milestones?: { value: number; date: string; achieved: boolean }[]
 }
 
 interface PerformanceMetric {
@@ -70,10 +73,11 @@ export function AdvancedTrainingDashboard() {
       target: 3000,
       current: 2840,
       unit: 'm',
+      startDate: '2024-01-01',
       deadline: '2024-12-31',
       category: 'endurance',
       priority: 'high',
-      status: 'on-track'
+      status: 'active'
     },
     {
       id: '2',
@@ -81,10 +85,11 @@ export function AdvancedTrainingDashboard() {
       target: 15,
       current: 12.5,
       unit: 'hrs',
+      startDate: '2024-01-01',
       deadline: '2024-12-31',
       category: 'endurance',
       priority: 'high',
-      status: 'behind'
+      status: 'active'
     },
     {
       id: '3',
@@ -92,10 +97,11 @@ export function AdvancedTrainingDashboard() {
       target: 8,
       current: 5,
       unit: 'sessions',
+      startDate: '2024-01-01',
       deadline: '2024-12-31',
       category: 'technical',
       priority: 'medium',
-      status: 'on-track'
+      status: 'active'
     },
     {
       id: '4',
@@ -103,10 +109,11 @@ export function AdvancedTrainingDashboard() {
       target: 55,
       current: 58,
       unit: 'bpm',
+      startDate: '2024-01-01',
       deadline: '2024-12-31',
       category: 'recovery',
       priority: 'medium',
-      status: 'at-risk'
+      status: 'overdue'
     }
   ])
 
@@ -116,7 +123,7 @@ export function AdvancedTrainingDashboard() {
       ...newGoalData,
       id: Date.now().toString(),
       current: 0,
-      status: 'on-track'
+      status: 'active'
     }
     setGoals(prev => [...prev, newGoal])
   }
@@ -201,9 +208,9 @@ export function AdvancedTrainingDashboard() {
   const getGoalStatusColor = (status: Goal['status']) => {
     switch (status) {
       case 'completed': return 'bg-emerald-100 text-emerald-800 border-emerald-200'
-      case 'on-track': return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'behind': return 'bg-orange-100 text-orange-800 border-orange-200'
-      case 'at-risk': return 'bg-red-100 text-red-800 border-red-200'
+      case 'active': return 'bg-blue-100 text-blue-800 border-blue-200'
+      case 'paused': return 'bg-orange-100 text-orange-800 border-orange-200'
+      case 'overdue': return 'bg-red-100 text-red-800 border-red-200'
       default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
@@ -211,9 +218,9 @@ export function AdvancedTrainingDashboard() {
   const getGoalStatusIcon = (status: Goal['status']) => {
     switch (status) {
       case 'completed': return Check
-      case 'on-track': return Target
-      case 'behind': return Timer
-      case 'at-risk': return AlertCircle
+      case 'active': return Target
+      case 'paused': return Timer
+      case 'overdue': return AlertCircle
       default: return Minus
     }
   }
@@ -252,11 +259,7 @@ export function AdvancedTrainingDashboard() {
     visible: {
       opacity: 1,
       y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.5,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      }
+      scale: 1
     }
   }
 
@@ -417,9 +420,9 @@ export function AdvancedTrainingDashboard() {
                       className={cn(
                         'h-full rounded-full',
                         goal.status === 'completed' && 'bg-emerald-500',
-                        goal.status === 'on-track' && 'bg-blue-500',
-                        goal.status === 'behind' && 'bg-orange-500',
-                        goal.status === 'at-risk' && 'bg-red-500'
+                        goal.status === 'active' && 'bg-blue-500',
+                        goal.status === 'paused' && 'bg-orange-500',
+                        goal.status === 'overdue' && 'bg-red-500'
                       )}
                       initial={{ width: 0 }}
                       animate={{ width: `${Math.min(progress, 100)}%` }}

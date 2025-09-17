@@ -25,7 +25,7 @@ const ErrorComponent: React.FC<{ error: Error; retry: () => void }> = ({ error, 
 
 // AI Components (large bundle due to LLM integration)
 export const DynamicSmartSearch = dynamic(
-  () => import('../ai/SmartSearch'),
+  () => import('../ai/SmartSearch').then(mod => ({ default: mod.SmartSearch })),
   {
     loading: LoadingSpinner,
     ssr: false // Client-side only for AI features
@@ -33,7 +33,7 @@ export const DynamicSmartSearch = dynamic(
 )
 
 export const DynamicTrainingInsights = dynamic(
-  () => import('../ai/TrainingInsights'),
+  () => import('../ai/TrainingInsights').then(mod => ({ default: mod.TrainingInsights })),
   {
     loading: LoadingSpinner,
     ssr: false
@@ -42,7 +42,7 @@ export const DynamicTrainingInsights = dynamic(
 
 // Analytics Components (heavy due to chart libraries)
 export const DynamicAdvancedAnalytics = dynamic(
-  () => import('../analytics/AdvancedAnalytics'),
+  () => import('../analytics/AdvancedAnalytics').then(mod => ({ default: mod.AdvancedAnalytics })),
   {
     loading: LoadingSpinner,
     ssr: false
@@ -50,7 +50,7 @@ export const DynamicAdvancedAnalytics = dynamic(
 )
 
 export const DynamicTrainingCharts = dynamic(
-  () => import('../TrainingCharts'),
+  () => import('../TrainingCharts').then(mod => ({ default: mod.TrainingCharts })),
   {
     loading: LoadingSpinner,
     ssr: true // Keep SSR for SEO
@@ -59,7 +59,7 @@ export const DynamicTrainingCharts = dynamic(
 
 // Real-time Components (heavy due to data fetching)
 export const DynamicSyncManager = dynamic(
-  () => import('../realtime/SyncManager'),
+  () => import('../realtime/SyncManager').then(mod => ({ default: mod.SyncManager })),
   {
     loading: LoadingSpinner,
     ssr: false
@@ -68,7 +68,7 @@ export const DynamicSyncManager = dynamic(
 
 // Personalization Components
 export const DynamicPersonalizedDashboard = dynamic(
-  () => import('../personalization/PersonalizedDashboard'),
+  () => import('../personalization/PersonalizedDashboard').then(mod => ({ default: mod.PersonalizedDashboard })),
   {
     loading: LoadingSpinner,
     ssr: false
@@ -76,17 +76,17 @@ export const DynamicPersonalizedDashboard = dynamic(
 )
 
 // CMS Components (large due to Sanity integration)
-export const DynamicBlogCMS = dynamic(
-  () => import('../cms/BlogCMS'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const DynamicBlogCMS = dynamic(
+//   () => import('../cms/BlogCMS').then(mod => ({ default: mod.BlogCMS })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
 // Sanity Studio (very large bundle)
 export const DynamicSanityStudio = dynamic(
-  () => import('next-sanity/studio'),
+  () => import('next-sanity/studio').then(mod => ({ default: mod.NextStudio })),
   {
     loading: () => (
       <div className="min-h-screen flex items-center justify-center">
@@ -101,75 +101,75 @@ export const DynamicSanityStudio = dynamic(
 )
 
 // Chart/Visualization Components
-export const DynamicChart = dynamic(
-  () => import('../charts/Chart'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const DynamicChart = dynamic(
+//   () => import('../charts/Chart').then(mod => ({ default: mod.Chart })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
 // Interactive Map (if needed in future)
-export const DynamicInteractiveMap = dynamic(
-  () => import('../maps/InteractiveMap'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const DynamicInteractiveMap = dynamic(
+//   () => import('../maps/InteractiveMap').then(mod => ({ default: mod.InteractiveMap })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
 // Heavy Form Components
-export const DynamicAdvancedForm = dynamic(
-  () => import('../forms/AdvancedForm'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const DynamicAdvancedForm = dynamic(
+//   () => import('../forms/AdvancedForm').then(mod => ({ default: mod.AdvancedForm })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
 // Media Components (video players, galleries)
-export const DynamicVideoPlayer = dynamic(
-  () => import('../media/VideoPlayer'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const DynamicVideoPlayer = dynamic(
+//   () => import('../media/VideoPlayer').then(mod => ({ default: mod.VideoPlayer })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
-export const DynamicImageGallery = dynamic(
-  () => import('../media/ImageGallery'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const DynamicImageGallery = dynamic(
+//   () => import('../media/ImageGallery').then(mod => ({ default: mod.ImageGallery })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
 // 3D/WebGL Components (if added in future)
-export const Dynamic3DModel = dynamic(
-  () => import('../3d/Model3D'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const Dynamic3DModel = dynamic(
+//   () => import('../3d/Model3D').then(mod => ({ default: mod.Model3D })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
 // Advanced Editor Components
-export const DynamicRichTextEditor = dynamic(
-  () => import('../editor/RichTextEditor'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const DynamicRichTextEditor = dynamic(
+//   () => import('../editor/RichTextEditor').then(mod => ({ default: mod.RichTextEditor })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
 // Calendar/Scheduling Components
-export const DynamicCalendar = dynamic(
-  () => import('../calendar/Calendar'),
-  {
-    loading: LoadingSpinner,
-    ssr: false
-  }
-)
+// export const DynamicCalendar = dynamic(
+//   () => import('../calendar/Calendar').then(mod => ({ default: mod.Calendar })),
+//   {
+//     loading: LoadingSpinner,
+//     ssr: false
+//   }
+// )
 
 // Export all dynamic components with performance monitoring
 export const DynamicComponents = {
@@ -179,16 +179,17 @@ export const DynamicComponents = {
   TrainingCharts: DynamicTrainingCharts,
   SyncManager: DynamicSyncManager,
   PersonalizedDashboard: DynamicPersonalizedDashboard,
-  BlogCMS: DynamicBlogCMS,
-  SanityStudio: DynamicSanityStudio,
-  Chart: DynamicChart,
-  InteractiveMap: DynamicInteractiveMap,
-  AdvancedForm: DynamicAdvancedForm,
-  VideoPlayer: DynamicVideoPlayer,
-  ImageGallery: DynamicImageGallery,
-  Model3D: Dynamic3DModel,
-  RichTextEditor: DynamicRichTextEditor,
-  Calendar: DynamicCalendar
+  SanityStudio: DynamicSanityStudio
+  // Commented out components will be added when implemented:
+  // BlogCMS: DynamicBlogCMS,
+  // Chart: DynamicChart,
+  // InteractiveMap: DynamicInteractiveMap,
+  // AdvancedForm: DynamicAdvancedForm,
+  // VideoPlayer: DynamicVideoPlayer,
+  // ImageGallery: DynamicImageGallery,
+  // Model3D: Dynamic3DModel,
+  // RichTextEditor: DynamicRichTextEditor,
+  // Calendar: DynamicCalendar
 }
 
 // Helper to create optimized dynamic imports
@@ -196,13 +197,13 @@ export const createOptimizedDynamic = <T extends any>(
   importFn: () => Promise<{ default: React.ComponentType<T> }>,
   options: {
     ssr?: boolean
-    loading?: React.ComponentType
+    loading?: () => React.ReactElement
     name?: string
   } = {}
 ) => {
   return dynamic(importFn, {
     ssr: options.ssr ?? false,
-    loading: options.loading ?? LoadingSpinner,
+    loading: options.loading ?? (() => <LoadingSpinner />),
     // Add performance tracking in development
     ...(process.env.NODE_ENV === 'development' && options.name && {
       onLoad: () => console.log(`Dynamic component loaded: ${options.name}`)
@@ -214,7 +215,8 @@ export const createOptimizedDynamic = <T extends any>(
 export const preloadCriticalComponents = () => {
   if (typeof window !== 'undefined') {
     // Preload components that might be needed soon
-    DynamicTrainingCharts.preload?.()
-    DynamicSmartSearch.preload?.()
+    // Note: preload() is not available in this version of Next.js dynamic imports
+    // DynamicTrainingCharts.preload?.()
+    // DynamicSmartSearch.preload?.()
   }
 }

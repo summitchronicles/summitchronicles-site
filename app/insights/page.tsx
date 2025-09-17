@@ -182,7 +182,7 @@ export default function InsightsPage() {
               <Card variant="elevated" padding="lg" className="h-full group-hover:shadow-spa-medium transition-all duration-300">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <StatusBadge variant="muted">{insight.category}</StatusBadge>
+                    <StatusBadge variant="default">{insight.category}</StatusBadge>
                     <ArrowRight className="w-4 h-4 text-spa-charcoal/40 group-hover:text-alpine-blue group-hover:translate-x-1 transition-all" />
                   </div>
                   

@@ -404,7 +404,7 @@ export default function TheJourneyPage() {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between">
                           <H3 className="text-xl">{summit.name}</H3>
-                          <StatusBadge variant={summit.status === 'training' ? 'warning' : 'muted'}>
+                          <StatusBadge variant={summit.status === 'training' ? 'warning' : 'default'}>
                             {summit.status === 'training' ? 'Training' : 'Planned'}
                           </StatusBadge>
                         </div>

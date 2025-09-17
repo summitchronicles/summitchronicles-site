@@ -156,11 +156,11 @@ export class ErrorMonitor {
     switch (entry.entryType) {
       case 'navigation':
         const navEntry = entry as PerformanceNavigationTiming
-        if (navEntry.loadEventEnd - navEntry.navigationStart > 3000) {
+        if (navEntry.loadEventEnd - navEntry.startTime > 3000) {
           this.capturePerformanceIssue({
             type: 'slow_load',
             metric: 'loadTime',
-            value: navEntry.loadEventEnd - navEntry.navigationStart,
+            value: navEntry.loadEventEnd - navEntry.startTime,
             threshold: 3000
           })
         }
@@ -441,7 +441,7 @@ export const withErrorMonitoring = <P extends object>(
           return React.createElement(Component, { ...this.props, ref } as any)
         }
       }
-      MonitoredErrorBoundary.displayName = `ErrorBoundary(${Component.displayName || Component.name})`
+      ;(MonitoredErrorBoundary as any).displayName = `ErrorBoundary(${Component.displayName || Component.name})`
       return MonitoredErrorBoundary
     }, [captureError])
 

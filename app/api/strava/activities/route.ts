@@ -48,10 +48,7 @@ const mockStravaActivities = [
     },
     trainer_gear: false,
     visibility: 'everyone',
-    flagged: false,
-    gear_id: null,
     from_accepted_tag: false,
-    upload_id: 11234567890,
     average_temp: 8, // Celsius
     device_name: 'Garmin Fenix 7X'
   },

@@ -32,8 +32,8 @@ test('Epic 5: Quick Support Page Test', async ({ page }) => {
       console.log('⚠️ Epic 5 support page issues detected');
     }
     
-  } catch (error) {
-    console.log('❌ Error:', error.message);
+  } catch (error: unknown) {
+    console.log('❌ Error:', error instanceof Error ? error.message : String(error));
     await page.screenshot({ path: 'epic5-support-error.png', fullPage: true });
   }
 });

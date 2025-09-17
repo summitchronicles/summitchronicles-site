@@ -54,11 +54,7 @@ function LineChart({ data, title, color, unit, height = 200 }: ChartProps) {
     visible: {
       opacity: 1,
       scale: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      }
+      y: 0
     }
   }
 
@@ -136,7 +132,6 @@ function LineChart({ data, title, color, unit, height = 200 }: ChartProps) {
             initial={{ pathLength: 0, opacity: 0 }}
             animate={{ pathLength: 1, opacity: 1 }}
             transition={{ 
-              pathLength: { duration: 2, ease: "easeInOut", delay: 0.5 },
               opacity: { duration: 0.3, delay: 0.3 }
             }}
           />

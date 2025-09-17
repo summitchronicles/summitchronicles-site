@@ -129,15 +129,16 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
       
       console.log(`✅ ${pageTest.name.toUpperCase()} PAGE TEST COMPLETE`);
       
-    } catch (error) {
-      console.log(`❌ ERROR testing ${pageTest.name}: ${error.message}`);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      console.log(`❌ ERROR testing ${pageTest.name}: ${errorMessage}`);
       
       const pageResult = {
         page: pageTest.name,
         epic: pageTest.epic,
         url: pageTest.url,
         status: 'FAIL',
-        errors: [error.message]
+        errors: [errorMessage]
       };
       
       allPagesResults.push(pageResult);
@@ -167,29 +168,29 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
   
   // Epic-by-epic breakdown
   console.log('\n📋 EPIC-BY-EPIC BREAKDOWN:');
-  const epicGroups = allPagesResults.reduce((acc, result) => {
+  const epicGroups = allPagesResults.reduce((acc: Record<string, any[]>, result) => {
     if (!acc[result.epic]) acc[result.epic] = [];
     acc[result.epic].push(result);
     return acc;
   }, {});
   
   Object.entries(epicGroups).forEach(([epic, pages]) => {
-    const epicPassed = pages.filter(p => p.status === 'PASS').length;
-    const epicTotal = pages.length;
+    const epicPassed = (pages as any[]).filter((p: any) => p.status === 'PASS').length;
+    const epicTotal = (pages as any[]).length;
     console.log(`${epic}: ${epicPassed}/${epicTotal} pages passing`);
-    pages.forEach(page => {
+    (pages as any[]).forEach((page: any) => {
       console.log(`  └─ ${page.page}: ${page.status}`);
     });
   });
   
   // Swiss Spa Styling Analysis
   console.log('\n🎨 SWISS SPA STYLING ANALYSIS:');
-  const styledPages = allPagesResults.filter(r => r.swissSpaStyling).length;
+  const styledPages = allPagesResults.filter((r: any) => r.swissSpaStyling).length;
   console.log(`Swiss Spa Styling Present: ${styledPages}/${totalPages} pages`);
   
   // Navigation Analysis
   console.log('\n🧭 NAVIGATION ANALYSIS:');
-  const navPages = allPagesResults.filter(r => r.navigation).length;
+  const navPages = allPagesResults.filter((r: any) => r.navigation).length;
   console.log(`Navigation Present: ${navPages}/${totalPages} pages`);
   
   // Overall Assessment

@@ -2,12 +2,12 @@
 
 import { Suspense, lazy, useState, useEffect, useRef } from 'react'
 
-// Lazy load the MeshGradient component
-const MeshGradient = lazy(() => 
-  import('@paper-design/shaders-react').then(module => ({
-    default: module.MeshGradient
-  }))
-)
+// Lazy load the MeshGradient component - temporarily disabled
+// const MeshGradient = lazy(() => 
+//   import('@paper-design/shaders-react').then(module => ({
+//     default: module.MeshGradient
+//   }))
+// )
 
 interface InteractiveBackgroundProps {
   variant?: 'hero' | 'section' | 'subtle'
@@ -112,23 +112,8 @@ export function InteractiveBackground({
 
   return (
     <div ref={ref} className={`absolute inset-0 -z-10 ${className}`}>
-      {shouldLoad ? (
-        <Suspense fallback={<StaticBackground />}>
-          <MeshGradient 
-            colors={colors}
-            distortion={settings.distortion}
-            swirl={settings.swirl}
-            speed={settings.speed}
-            style={{
-              width: '100%',
-              height: '100%',
-              opacity: 0.6
-            }} 
-          />
-        </Suspense>
-      ) : (
-        <StaticBackground />
-      )}
+      {/* Temporarily use static background while MeshGradient is disabled */}
+      <StaticBackground />
       
       {/* Overlay to maintain readability */}
       <div 

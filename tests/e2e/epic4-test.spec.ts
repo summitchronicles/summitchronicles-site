@@ -135,7 +135,7 @@ test('Epic 4: Community Engagement & Newsletter System - Comprehensive Test', as
         await emailInput.fill('test@example.com');
         console.log('📧 Story 4.1 - Newsletter form interaction: Working');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.log('ℹ️ Newsletter form interaction test skipped');
     }
     
@@ -196,8 +196,8 @@ test('Epic 4: Community Engagement & Newsletter System - Comprehensive Test', as
     
     console.log('📱 Epic 4 - Mobile & Desktop responsiveness tested');
     
-  } catch (error) {
-    console.log('❌ Error testing Epic 4:', error.message);
+  } catch (error: unknown) {
+    console.log('❌ Error testing Epic 4:', error instanceof Error ? error.message : String(error));
     
     // Take error screenshot
     await page.screenshot({ 

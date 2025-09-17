@@ -24,7 +24,7 @@ interface AchievementTimelineProps {
 
 export function AchievementTimeline({ className = "" }: AchievementTimelineProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, threshold: 0.1 })
+  const isInView = useInView(ref, { once: true })
   const [selectedSummit, setSelectedSummit] = useState<string | null>(null)
 
   const summits: Summit[] = [
@@ -171,11 +171,7 @@ export function AchievementTimeline({ className = "" }: AchievementTimelineProps
     visible: {
       opacity: 1,
       x: 0,
-      scale: 1,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
+      scale: 1
     }
   }
 

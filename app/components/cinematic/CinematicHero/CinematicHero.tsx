@@ -73,7 +73,6 @@ export function CinematicHero({
           className="space-y-8"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
         >
           {/* Quote */}
           <motion.div
@@ -131,7 +130,6 @@ export function CinematicHero({
         >
           <motion.div
             animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             className="text-white/70 flex flex-col items-center gap-2"
           >
             <span className="text-sm font-medium">Discover My Journey</span>

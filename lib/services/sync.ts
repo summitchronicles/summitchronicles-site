@@ -159,7 +159,7 @@ class DataSyncService {
 
       // Create or update in Sanity
       const transaction = sanityWriteClient.transaction()
-      trainingEntries.forEach(entry => {
+      trainingEntries.forEach((entry: any) => {
         transaction.createOrReplace(entry)
       })
       

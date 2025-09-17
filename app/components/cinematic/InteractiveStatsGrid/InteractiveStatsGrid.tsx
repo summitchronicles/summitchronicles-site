@@ -19,7 +19,7 @@ interface InteractiveStatsGridProps {
 
 export function InteractiveStatsGrid({ className = "" }: InteractiveStatsGridProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, threshold: 0.3 })
+  const isInView = useInView(ref, { once: true })
   const [animatedValues, setAnimatedValues] = useState<Record<string, number>>({})
 
   const stats: StatItem[] = [
@@ -91,7 +91,7 @@ export function InteractiveStatsGrid({ className = "" }: InteractiveStatsGridPro
       stats.forEach((stat, index) => {
         if (typeof stat.value === 'number') {
           setTimeout(() => {
-            animateValue(0, stat.value, 2000, `stat-${index}`)
+            animateValue(0, Number(stat.value), 2000, `stat-${index}`)
           }, index * 200)
         }
       })
@@ -121,7 +121,6 @@ export function InteractiveStatsGrid({ className = "" }: InteractiveStatsGridPro
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
       }
     }
   }

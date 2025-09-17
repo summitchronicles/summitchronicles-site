@@ -426,7 +426,6 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
                 className="h-full bg-gradient-to-r from-emerald-500 to-alpine-blue rounded-full"
                 initial={{ width: '0%' }}
                 animate={{ width: `${progressPercentage}%` }}
-                transition={{ delay: 0.8, duration: 1.5, ease: "easeOut" }}
               />
             </div>
             <motion.div 
@@ -439,7 +438,6 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
               transition={{ 
                 delay: 1.2, 
                 duration: 1.2, 
-                ease: "easeOut",
                 scale: { type: "spring", stiffness: 500, damping: 30 }
               }}
               whileHover={{ scale: 1.2 }}
@@ -531,7 +529,6 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
             className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-500 via-alpine-blue to-spa-stone/30"
             initial={{ scaleY: 0, originY: 0 }}
             animate={{ scaleY: 1 }}
-            transition={{ duration: 2, ease: "easeOut", delay: 0.5 }}
           />
           
           {/* Milestones */}
@@ -591,7 +588,6 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
                           repeat: Infinity,
                           duration: 2,
                           type: "tween",
-                          ease: "easeInOut"
                         })
                       }}
                       whileHover={{ scale: 1.2, rotate: 10 }}
@@ -673,7 +669,6 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
                             )}
                             <motion.div
                               animate={{ rotate: isExpanded ? 180 : 0 }}
-                              transition={{ duration: 0.3, ease: "easeInOut" }}
                             >
                               <ChevronDown className="w-5 h-5 text-spa-charcoal/60" />
                             </motion.div>
@@ -702,7 +697,6 @@ export const ExpeditionTimeline: React.FC<ExpeditionTimelineProps> = ({ classNam
                                 height: 0,
                                 transition: {
                                   duration: 0.3,
-                                  ease: "easeInOut"
                                 }
                               }}
                             >

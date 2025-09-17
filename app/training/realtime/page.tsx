@@ -95,7 +95,7 @@ export default function RealtimeTrainingPage() {
     let totalElevation = 0
     let totalTime = 0
     let weeklyDistance = 0
-    let lastActivity = null
+    let lastActivity: any = null
 
     activities.forEach(activity => {
       const activityDate = new Date(activity.start_date)

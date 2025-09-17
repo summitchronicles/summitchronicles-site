@@ -92,7 +92,6 @@ export function AnimatedLogo({
         variants={pathVariants}
         initial="hidden"
         animate={controls}
-        transition={{ duration: 2, ease: "easeInOut" }}
       />
       
       {/* Secondary peak */}
@@ -104,7 +103,6 @@ export function AnimatedLogo({
         variants={pathVariants}
         initial="hidden"
         animate={controls}
-        transition={{ duration: 2, ease: "easeInOut", delay: 0.5 }}
       />
       
       {/* Summit point */}
@@ -116,7 +114,6 @@ export function AnimatedLogo({
         variants={fillVariants}
         initial="hidden"
         animate={controls}
-        transition={{ duration: 1, ease: "easeInOut", delay: 1.5 }}
       />
       
       {/* Base line */}

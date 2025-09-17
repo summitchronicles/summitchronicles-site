@@ -17,10 +17,10 @@ import {
   Award,
   ChevronDown
 } from 'lucide-react'
-import type { Post } from '../../../lib/sanity/types'
+// import type { Post } from '../../../lib/sanity/types'
 
 interface RedBullBlogPostProps {
-  post?: Post
+  post?: any
   slug: string
   className?: string
 }
@@ -101,7 +101,7 @@ export function RedBullBlogPost({ post, slug, className = "" }: RedBullBlogPostP
     location: 'Training Grounds, California',
     heroImage: post.mainImage ? '/stories/everest-prep.jpg' : '/stories/everest-prep.jpg',
     views: '2.1K',
-    tags: post.categories?.map(cat => cat.title) || samplePost.tags,
+    tags: post.categories?.map((cat: any) => cat.title) || samplePost.tags,
     content: samplePost.content // TODO: Convert portable text
   } : samplePost
 
@@ -282,7 +282,7 @@ export function RedBullBlogPost({ post, slug, className = "" }: RedBullBlogPostP
         {/* Tags */}
         <div className="mt-16 pt-8 border-t border-gray-200">
           <div className="flex flex-wrap gap-3">
-            {displayPost.tags.map((tag, index) => (
+            {displayPost.tags.map((tag: string, index: number) => (
               <span
                 key={index}
                 className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full hover:bg-red-50 hover:text-red-700 transition-colors cursor-pointer"

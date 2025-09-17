@@ -109,7 +109,7 @@ test('Epic 3: Strava Training Data Integration & Visualization - Comprehensive T
         await page.waitForTimeout(1000);
         console.log('📊 Story 3.3 - Interactive Metric Selection: Working');
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.log('ℹ️ Interactive elements test skipped');
     }
     
@@ -180,8 +180,8 @@ test('Epic 3: Strava Training Data Integration & Visualization - Comprehensive T
     
     console.log('📱 Epic 3 - Mobile & Desktop responsiveness tested');
     
-  } catch (error) {
-    console.log('❌ Error testing Epic 3:', error.message);
+  } catch (error: unknown) {
+    console.log('❌ Error testing Epic 3:', error instanceof Error ? error.message : String(error));
     
     // Take error screenshot
     await page.screenshot({ 

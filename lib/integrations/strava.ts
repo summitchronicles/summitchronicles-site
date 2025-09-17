@@ -165,10 +165,11 @@ export async function getAthleteProfile(): Promise<AthleteProfile | null> {
     let accessToken = stravaConfig.accessToken
     
     if (!accessToken) {
-      accessToken = await refreshAccessToken()
-      if (!accessToken) {
+      const newAccessToken = await refreshAccessToken()
+      if (!newAccessToken) {
         throw new Error('Failed to get access token')
       }
+      accessToken = newAccessToken
     }
 
     const response = await axios.get(`${stravaConfig.apiUrl}/athlete`, {
@@ -190,10 +191,11 @@ export async function getRecentActivities(limit: number = 30): Promise<StravaAct
     let accessToken = stravaConfig.accessToken
     
     if (!accessToken) {
-      accessToken = await refreshAccessToken()
-      if (!accessToken) {
+      const newAccessToken = await refreshAccessToken()
+      if (!newAccessToken) {
         throw new Error('Failed to get access token')
       }
+      accessToken = newAccessToken
     }
 
     const response = await axios.get(`${stravaConfig.apiUrl}/athlete/activities`, {
@@ -219,10 +221,11 @@ export async function getAthleteStats(athleteId: number): Promise<StravaStats | 
     let accessToken = stravaConfig.accessToken
     
     if (!accessToken) {
-      accessToken = await refreshAccessToken()
-      if (!accessToken) {
+      const newAccessToken = await refreshAccessToken()
+      if (!newAccessToken) {
         throw new Error('Failed to get access token')
       }
+      accessToken = newAccessToken
     }
 
     const response = await axios.get(`${stravaConfig.apiUrl}/athletes/${athleteId}/stats`, {

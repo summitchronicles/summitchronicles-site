@@ -363,7 +363,6 @@ export function GoalTracker({
                     )}
                     initial={{ width: 0 }}
                     animate={{ width: `${Math.min(progress, 100)}%` }}
-                    transition={{ duration: 1, ease: "easeOut" }}
                   />
                 </div>
               </div>

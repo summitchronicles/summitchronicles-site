@@ -5,7 +5,7 @@ import { useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar, Clock, ArrowRight, Eye, BookOpen, Mountain, TrendingUp, Award, User } from 'lucide-react'
-import type { Post } from '../../../lib/sanity/types'
+// import type { Post } from '../../../lib/sanity/types'
 
 interface BlogPost {
   slug: string
@@ -21,13 +21,13 @@ interface BlogPost {
 }
 
 interface CinematicBlogGridProps {
-  posts?: Post[]
+  posts?: BlogPost[]
   className?: string
 }
 
 export function CinematicBlogGrid({ posts = [], className = "" }: CinematicBlogGridProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, threshold: 0.1 })
+  const isInView = useInView(ref, { once: true })
   const [hoveredPost, setHoveredPost] = useState<string | null>(null)
 
   // Fallback sample posts for demonstration
@@ -108,14 +108,14 @@ export function CinematicBlogGrid({ posts = [], className = "" }: CinematicBlogG
 
   const displayPosts = posts.length > 0 
     ? posts.map(post => ({
-        slug: post.slug.current,
+        slug: post.slug,
         title: post.title,
         excerpt: post.excerpt || '',
-        date: new Date(post.publishedAt).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+        date: post.date || 'October 2024',
         readTime: `${post.readTime || 8} min read`,
-        category: post.categories?.[0]?.title || 'Story',
-        author: post.author?.name || 'Sunith Kumar',
-        image: post.mainImage ? '/stories/everest-prep.jpg' : '/hero.jpg', // Placeholder
+        category: post.category || 'Story',
+        author: post.author || 'Sunith Kumar',
+        image: post.image || '/hero.jpg',
         views: '1.2K',
         featured: post.featured || false
       }))
@@ -184,11 +184,7 @@ export function CinematicBlogGrid({ posts = [], className = "" }: CinematicBlogG
     visible: {
       opacity: 1,
       y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.8,
-        ease: "easeOut"
-      }
+      scale: 1
     }
   }
 

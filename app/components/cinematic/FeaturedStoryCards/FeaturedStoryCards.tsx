@@ -30,7 +30,7 @@ interface FeaturedStoryCardsProps {
 
 export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, threshold: 0.1 })
+  const isInView = useInView(ref, { once: true })
   const [hoveredCard, setHoveredCard] = useState<string | null>(null)
 
   const stories: StoryCard[] = [
@@ -118,11 +118,7 @@ export function FeaturedStoryCards({ className = "" }: FeaturedStoryCardsProps) 
     visible: {
       opacity: 1,
       y: 0,
-      scale: 1,
-      transition: {
-        duration: 0.7,
-        ease: "easeOut"
-      }
+      scale: 1
     }
   }
 

@@ -145,7 +145,7 @@ test('Epic 5: Multi-Channel Funding & Sponsor Dashboard System Test', async ({ p
       // Return to support
       await page.goto(supportUrl);
       await page.waitForLoadState('networkidle');
-    } catch (error) {
+    } catch (error: unknown) {
       console.log('📧 Newsletter navigation not found from support page');
     }
     
@@ -159,7 +159,7 @@ test('Epic 5: Multi-Channel Funding & Sponsor Dashboard System Test', async ({ p
       // Return to support
       await page.goto(supportUrl);
       await page.waitForLoadState('networkidle');
-    } catch (error) {
+    } catch (error: unknown) {
       console.log('🤝 Community navigation not found from support page');
     }
     
@@ -173,7 +173,7 @@ test('Epic 5: Multi-Channel Funding & Sponsor Dashboard System Test', async ({ p
       // Return to support
       await page.goto(supportUrl);
       await page.waitForLoadState('networkidle');
-    } catch (error) {
+    } catch (error: unknown) {
       console.log('🏋️ Training navigation not found from support page');
     }
     
@@ -218,8 +218,8 @@ test('Epic 5: Multi-Channel Funding & Sponsor Dashboard System Test', async ({ p
     
     console.log('✅ EPIC 5 COMPREHENSIVE TEST COMPLETE');
     
-  } catch (error) {
-    console.log('❌ Error testing Epic 5:', error.message);
+  } catch (error: unknown) {
+    console.log('❌ Error testing Epic 5:', error instanceof Error ? error.message : String(error));
     
     // Take error screenshot
     await page.screenshot({ 

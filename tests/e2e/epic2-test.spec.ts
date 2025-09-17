@@ -93,7 +93,7 @@ test('Epic 2: Personal Journey Documentation Platform - Comprehensive Test', asy
         const hasExpandedContent = await page.locator('text=Key Metrics').count() > 0;
         console.log('📖 Story 2.2 - Milestone Expansion:', hasExpandedContent);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.log('ℹ️ Story 2.2 - Milestone expansion test skipped');
     }
     
@@ -142,7 +142,7 @@ test('Epic 2: Personal Journey Documentation Platform - Comprehensive Test', asy
                                 await page.locator('text=Climbing Magazine').count() > 0;
         console.log('📺 Story 2.3 - Media Coverage:', hasMediaCoverage);
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.log('ℹ️ Story 2.3 - Section navigation test skipped');
     }
     
@@ -193,8 +193,8 @@ test('Epic 2: Personal Journey Documentation Platform - Comprehensive Test', asy
     
     console.log('📱 Epic 2 - Mobile & Desktop responsiveness tested');
     
-  } catch (error) {
-    console.log('❌ Error testing Epic 2:', error.message);
+  } catch (error: unknown) {
+    console.log('❌ Error testing Epic 2:', error instanceof Error ? error.message : String(error));
     
     // Take error screenshot
     await page.screenshot({ 

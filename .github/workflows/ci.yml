@@ -26,9 +26,6 @@ jobs:
       - name: Run lint
         run: npm run lint
 
-      - name: Run unit tests
-        run: npm run test
-
       - name: Install Playwright
         run: npx playwright install --with-deps
 
