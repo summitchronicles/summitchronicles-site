@@ -122,8 +122,14 @@ class DataSyncService {
 
   // Sync Strava activities to Sanity CMS
   private async syncStravaData() {
+    // Skip API calls during build phase
+    if (process.env.NEXT_PHASE === 'phase-production-build' || process.env.BUILDING) {
+      throw new Error('Skipping sync during build phase')
+    }
+    
     try {
-      const response = await fetch('/api/strava/sync?limit=10')
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
+      const response = await fetch(`${baseUrl}/api/strava/sync?limit=10`)
       const data = await response.json()
 
       if (!data.success || !data.data.activities?.length) {
@@ -176,11 +182,17 @@ class DataSyncService {
 
   // Sync weather data for multiple locations
   private async syncWeatherData() {
+    // Skip API calls during build phase
+    if (process.env.NEXT_PHASE === 'phase-production-build' || process.env.BUILDING) {
+      throw new Error('Skipping sync during build phase')
+    }
+    
     try {
       const locations = ['everest', 'denali', 'kilimanjaro', 'rainier', 'whitney']
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'
       
       const weatherPromises = locations.map(async (location) => {
-        const response = await fetch(`/api/weather?location=${location}`)
+        const response = await fetch(`${baseUrl}/api/weather?location=${location}`)
         const data = await response.json()
         return { location, data: data.success ? data.data : null }
       })
@@ -317,7 +329,10 @@ class DataSyncService {
 // Singleton instance
 export const syncService = new DataSyncService()
 
-// Auto-start in production
-if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
+// Auto-start in production runtime (not during build)
+if (typeof window === 'undefined' && 
+    process.env.NODE_ENV === 'production' && 
+    process.env.NEXT_PHASE !== 'phase-production-build' &&
+    !process.env.BUILDING) {
   syncService.start()
 }
