@@ -160,7 +160,7 @@ export const getOptimizedImageProps = (
 })
 
 // Bundle size utilities
-export const dynamicImport = <T>(
+export const dynamicImport = <T extends React.ComponentType<any>>(
   importFn: () => Promise<{ default: T }>,
   options?: {
     loading?: React.ComponentType
@@ -170,15 +170,16 @@ export const dynamicImport = <T>(
   return React.lazy(async () => {
     try {
       const importedModule = await importFn()
-      return importedModule
+      return importedModule as { default: React.ComponentType<any> }
     } catch (error) {
       if (options?.error) {
+        const ErrorComponent = options.error
         return {
-          default: () => React.createElement(options.error!, {
+          default: () => React.createElement(ErrorComponent, {
             error: error as Error,
             retry: () => window.location.reload()
-          })
-        }
+          }) as React.ReactElement
+        } as { default: React.ComponentType<any> }
       }
       throw error
     }
@@ -249,7 +250,7 @@ export const withPerformanceTracking = <P extends object>(
       })
     })
 
-    return React.createElement(Component, { ...props, ref })
+    return React.createElement(Component, { ...props, ref } as any)
   })
   
   WrappedComponent.displayName = `withPerformanceTracking(${componentName})`

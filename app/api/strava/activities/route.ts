@@ -47,9 +47,6 @@ const mockStravaActivities = [
       resource_state: 2
     },
     trainer_gear: false,
-    commute: false,
-    manual: false,
-    private: false,
     visibility: 'everyone',
     flagged: false,
     gear_id: null,

@@ -73,7 +73,7 @@ export class BrowserCache {
     const isExpired = age > entry.ttl
     const withinSWR = entry.staleWhileRevalidate && age < (entry.ttl + entry.staleWhileRevalidate)
 
-    return isExpired && withinSWR
+    return isExpired && !!withinSWR
   }
 
   private isValid<T>(entry: CacheEntry<T>): boolean {

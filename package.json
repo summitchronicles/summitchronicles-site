@@ -15,10 +15,15 @@
     "typecheck": "tsc --noEmit",
     "perf": "npm run build && npm run start",
     "audit:security": "npm audit",
-    "audit:deps": "npm outdated"
+    "audit:deps": "npm outdated",
+    "pre-change-check": "npm run lint && npm run typecheck && npm run format:check",
+    "test:local": "npm run pre-change-check && npm run build && playwright test --project=chromium",
+    "test:evals": "playwright test tests/evaluations/ --project=chromium",
+    "audit:packages": "npm outdated && npm audit && echo 'Check for unused dependencies manually'",
+    "test:production": "playwright test tests/production/ --project=chromium",
+    "devops:workflow": "npm run test:local && npm run test:evals && npm run audit:packages"
   },
   "dependencies": {
-    "@paper-design/shaders-react": "^0.0.52",
     "@portabletext/react": "^4.0.3",
     "@portabletext/types": "^2.0.15",
     "@sanity/client": "^7.11.1",
@@ -26,7 +31,6 @@
     "@sanity/vision": "^4.9.0",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
-    "critters": "^0.0.23",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.544.0",

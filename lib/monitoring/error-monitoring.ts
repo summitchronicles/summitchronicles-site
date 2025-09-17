@@ -7,6 +7,7 @@ export interface ErrorContext {
   timestamp: string
   buildVersion?: string
   environment: 'development' | 'production' | 'staging'
+  metadata?: Record<string, any>
 }
 
 export interface ErrorReport {
@@ -437,14 +438,14 @@ export const withErrorMonitoring = <P extends object>(
             return React.createElement('div', null, 'Something went wrong.')
           }
 
-          return React.createElement(Component, { ...this.props, ref })
+          return React.createElement(Component, { ...this.props, ref } as any)
         }
       }
       MonitoredErrorBoundary.displayName = `ErrorBoundary(${Component.displayName || Component.name})`
       return MonitoredErrorBoundary
     }, [captureError])
 
-    return React.createElement(ErrorBoundary, props)
+    return React.createElement(ErrorBoundary, props as any)
   })
   
   WrappedComponent.displayName = `withErrorMonitoring(${Component.displayName || Component.name})`
