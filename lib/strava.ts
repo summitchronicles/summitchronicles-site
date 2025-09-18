@@ -44,10 +44,8 @@ export interface StravaTokens {
 let cachedTokens: StravaTokens | null = null;
 
 export async function getStravaAccessToken(): Promise<string | null> {
-  // In development, return null to use mock data
-  if (process.env.NODE_ENV === 'development') {
-    return null;
-  }
+  // Try to get access token from environment or refresh if needed
+  // Note: Removed development mode restriction to enable real API calls
 
   // Check if we have cached valid tokens
   if (cachedTokens && cachedTokens.expires_at > Date.now() / 1000) {
