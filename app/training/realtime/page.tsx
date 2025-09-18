@@ -63,12 +63,10 @@ export default function RealtimeTrainingPage() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Fetched data:', data);
         setIsConnected(true);
 
         // Process activities into metrics
         const processedMetrics = processActivities(data.activities || []);
-        console.log('Processed metrics:', processedMetrics);
         setMetrics(processedMetrics);
       } else {
         // Fallback to mock data
