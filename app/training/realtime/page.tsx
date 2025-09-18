@@ -62,11 +62,13 @@ export default function RealtimeTrainingPage() {
       const response = await fetch('/api/strava/activities');
 
       if (response.ok) {
-        const activities = await response.json();
+        const data = await response.json();
+        console.log('Fetched data:', data);
         setIsConnected(true);
 
         // Process activities into metrics
-        const processedMetrics = processActivities(activities);
+        const processedMetrics = processActivities(data.activities || []);
+        console.log('Processed metrics:', processedMetrics);
         setMetrics(processedMetrics);
       } else {
         // Fallback to mock data
@@ -103,7 +105,7 @@ export default function RealtimeTrainingPage() {
 
     activities.forEach((activity) => {
       const activityDate = new Date(activity.date || activity.start_date);
-      const distance = parseFloat(activity.distance) || 0; // API returns km as string
+      const distance = (parseFloat(activity.distance) || 0) / 1000; // API returns meters, convert to km
       const elevation = parseInt(activity.elevation || activity.total_elevation_gain) || 0;
       const duration = parseInt(activity.duration || activity.moving_time) || 0;
       
@@ -119,7 +121,7 @@ export default function RealtimeTrainingPage() {
         lastActivity = {
           name: activity.name,
           date: activity.date || activity.start_date,
-          distance: distance,
+          distance: distance * 1000, // Convert back to meters for display
           elevation: elevation,
           type: activity.type || 'Unknown',
         };
@@ -128,7 +130,7 @@ export default function RealtimeTrainingPage() {
 
     return {
       totalActivities: activities.length,
-      totalDistance: Math.round(totalDistance), // Already in km from API
+      totalDistance: Math.round(totalDistance), // Converted from meters to km
       totalElevation: Math.round(totalElevation),
       totalTime: Math.round(totalTime / 3600), // Convert seconds to hours
       weeklyProgress: Math.round((weeklyDistance / 50) * 100), // Assume 50km weekly goal
