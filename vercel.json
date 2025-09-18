@@ -65,6 +65,11 @@
       "source": "/posts/(.*)",
       "destination": "/blog/$1",
       "permanent": true
+    },
+    {
+      "source": "/api-disabled/(.*)",
+      "destination": "/404",
+      "permanent": false
     }
   ]
 }
