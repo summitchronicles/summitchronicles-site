@@ -1,144 +1,171 @@
-// Strava API integration for personal account data
+// lib/strava.ts
+import { createClient } from "@supabase/supabase-js";
 
-export interface StravaActivity {
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+const STRAVA_TOKEN_TABLE = "strava_tokens";
+
+interface StravaTokenRow {
   id: number;
-  name: string;
-  type: string;
-  start_date: string;
-  distance: number;
-  moving_time: number;
-  total_elevation_gain: number;
-  average_heartrate?: number;
-  max_heartrate?: number;
-  location_city?: string;
-  location_state?: string;
-  map?: {
-    summary_polyline?: string;
-  };
-  kudos_count?: number;
-  photo_count?: number;
-}
-
-export interface StravaAthlete {
-  id: number;
-  firstname: string;
-  lastname: string;
-  city: string;
-  state: string;
-  country: string;
-  profile: string;
-  profile_medium: string;
-  follower_count: number;
-  friend_count: number;
-}
-
-export interface StravaTokens {
   access_token: string;
   refresh_token: string;
   expires_at: number;
-  athlete: StravaAthlete;
 }
 
-// In a production app, these would be stored in a secure database
-// For now, we'll simulate with environment variables or temporary storage
-let cachedTokens: StravaTokens | null = null;
+// Rate limiting helper
+let lastApiCall = 0;
+const API_CALL_DELAY = 1000; // 1 second between calls
 
-export async function getStravaAccessToken(): Promise<string | null> {
-  // Try to get access token from environment or refresh if needed
-  // Note: Removed development mode restriction to enable real API calls
-
-  // Check if we have cached valid tokens
-  if (cachedTokens && cachedTokens.expires_at > Date.now() / 1000) {
-    return cachedTokens.access_token;
+export async function rateLimitedFetch(url: string, options?: RequestInit): Promise<Response> {
+  const now = Date.now();
+  const timeSinceLastCall = now - lastApiCall;
+  
+  if (timeSinceLastCall < API_CALL_DELAY) {
+    await new Promise(resolve => setTimeout(resolve, API_CALL_DELAY - timeSinceLastCall));
   }
-
-  // If we have a refresh token, try to refresh
-  if (cachedTokens?.refresh_token) {
-    try {
-      const response = await fetch('https://www.strava.com/oauth/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          client_id: process.env.STRAVA_CLIENT_ID,
-          client_secret: process.env.STRAVA_CLIENT_SECRET,
-          grant_type: 'refresh_token',
-          refresh_token: cachedTokens.refresh_token,
-        }),
-      });
-
-      if (response.ok) {
-        const newTokens = await response.json();
-        cachedTokens = newTokens;
-        return newTokens.access_token;
-      }
-    } catch (error) {
-      console.error('Error refreshing Strava token:', error);
-    }
-  }
-
-  return null;
+  
+  lastApiCall = Date.now();
+  return fetch(url, options);
 }
 
-export async function fetchStravaActivities(
-  page = 1,
-  perPage = 30
-): Promise<StravaActivity[]> {
-  const accessToken = await getStravaAccessToken();
+/**
+ * Get a valid Strava access token.
+ * Priority:
+ *  1. Supabase stored token
+ *  2. If missing → fallback to .env.local values
+ * If expired, refresh and persist new tokens in Supabase.
+ */
+export async function getStravaAccessToken(): Promise<string> {
+  // 1. Try load token row from Supabase
+  const { data, error } = await supabase
+    .from(STRAVA_TOKEN_TABLE)
+    .select("*")
+    .single<StravaTokenRow>();
 
-  if (!accessToken) {
-    // Return mock data for development or when not authenticated
-    return getMockActivities();
+  let access_token: string | null = null;
+  let refresh_token: string | null = null;
+  let expires_at: number | null = null;
+
+  if (!error && data) {
+    access_token = data.access_token;
+    refresh_token = data.refresh_token;
+    expires_at = data.expires_at;
+  } else {
+    console.warn("⚠️ No tokens in Supabase, falling back to env vars");
+    access_token = process.env.STRAVA_ACCESS_TOKEN || null;
+    refresh_token = process.env.STRAVA_REFRESH_TOKEN || null;
+    expires_at = Math.floor(Date.now() / 1000) + 3600; // assume 1h validity
   }
 
+  if (!refresh_token) {
+    throw new Error("No Strava refresh token available (Supabase + env both empty)");
+  }
+
+  const now = Math.floor(Date.now() / 1000);
+
+  // 2. If still valid, return
+  if (access_token && expires_at && expires_at > now + 60) {
+    return access_token;
+  }
+
+  // 3. Refresh if expired
+  const res = await rateLimitedFetch("https://www.strava.com/oauth/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      client_id: process.env.STRAVA_CLIENT_ID,
+      client_secret: process.env.STRAVA_CLIENT_SECRET,
+      grant_type: "refresh_token",
+      refresh_token,
+    }),
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Failed to refresh Strava token: ${res.status} - ${errText}`);
+  }
+
+  const json = await res.json();
+
+  // 4. Save new tokens in Supabase
+  const { error: upsertError } = await supabase
+    .from(STRAVA_TOKEN_TABLE)
+    .upsert({
+      id: 1,
+      access_token: json.access_token,
+      refresh_token: json.refresh_token,
+      expires_at: json.expires_at,
+    });
+
+  if (upsertError) {
+    console.error("⚠️ Failed to persist refreshed token in Supabase:", upsertError.message);
+  } else {
+    console.log("✅ Refreshed Strava token persisted in Supabase");
+  }
+
+  return json.access_token;
+}
+
+/**
+ * Fetch recent activities from Strava
+ */
+export async function fetchStravaActivities(page = 1, perPage = 30) {
   try {
-    const response = await fetch(
-      `https://www.strava.com/api/v3/athlete/activities?page=${page}&per_page=${perPage}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`Strava API error: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error fetching Strava activities:', error);
-    return getMockActivities(); // Fallback to mock data
-  }
-}
-
-export async function fetchStravaAthlete(): Promise<StravaAthlete | null> {
-  const accessToken = await getStravaAccessToken();
-
-  if (!accessToken) {
-    return null;
-  }
-
-  try {
-    const response = await fetch('https://www.strava.com/api/v3/athlete', {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
+    const token = await getStravaAccessToken();
+    
+    const url = new URL("https://www.strava.com/api/v3/athlete/activities");
+    url.searchParams.set("page", String(page));
+    url.searchParams.set("per_page", String(perPage));
+    
+    const response = await rateLimitedFetch(url.toString(), {
+      headers: { Authorization: `Bearer ${token}` },
+      cache: "no-store",
     });
 
     if (!response.ok) {
       throw new Error(`Strava API error: ${response.status}`);
     }
 
-    return await response.json();
+    const activities = await response.json();
+    console.log(`✅ Fetched ${activities.length} activities from Strava API`);
+    
+    return activities;
   } catch (error) {
-    console.error('Error fetching Strava athlete:', error);
-    return null;
+    console.error('❌ Error fetching Strava activities:', error);
+    // Return mock data as fallback
+    return getMockActivities();
   }
 }
 
-function getMockActivities(): StravaActivity[] {
+/**
+ * Store Strava tokens (used by OAuth callback)
+ */
+export async function storeStravaTokens(tokens: any) {
+  const { error } = await supabase
+    .from(STRAVA_TOKEN_TABLE)
+    .upsert({
+      id: 1,
+      access_token: tokens.access_token,
+      refresh_token: tokens.refresh_token,
+      expires_at: tokens.expires_at,
+    });
+
+  if (error) {
+    console.error('❌ Failed to store tokens:', error);
+    throw error;
+  }
+
+  console.log('✅ Strava tokens stored successfully');
+}
+
+/**
+ * Mock activities for fallback
+ */
+function getMockActivities() {
   return [
     {
       id: 10234567890,
@@ -154,9 +181,6 @@ function getMockActivities(): StravaActivity[] {
       location_state: 'Colorado',
       kudos_count: 23,
       photo_count: 8,
-      map: {
-        summary_polyline: 'mock_polyline_data',
-      },
     },
     {
       id: 10234567891,
@@ -172,85 +196,6 @@ function getMockActivities(): StravaActivity[] {
       location_state: 'Colorado',
       kudos_count: 15,
       photo_count: 2,
-      map: {
-        summary_polyline: 'mock_polyline_data',
-      },
-    },
-    {
-      id: 10234567892,
-      name: 'Technical Ice Climbing - Ouray',
-      type: 'IceClimb',
-      start_date: '2024-09-05T09:00:00Z',
-      distance: 2100,
-      moving_time: 7200,
-      total_elevation_gain: 800,
-      location_city: 'Ouray',
-      location_state: 'Colorado',
-      kudos_count: 34,
-      photo_count: 12,
-      map: {
-        summary_polyline: 'mock_polyline_data',
-      },
-    },
-    {
-      id: 10234567893,
-      name: 'Weighted Pack Training - Bear Peak',
-      type: 'Hike',
-      start_date: '2024-09-02T05:45:00Z',
-      distance: 9800,
-      moving_time: 10800,
-      total_elevation_gain: 980,
-      average_heartrate: 148,
-      max_heartrate: 162,
-      location_city: 'Boulder',
-      location_state: 'Colorado',
-      kudos_count: 18,
-      photo_count: 5,
-      map: {
-        summary_polyline: 'mock_polyline_data',
-      },
-    },
-    {
-      id: 10234567894,
-      name: 'Interval Training - Flagstaff',
-      type: 'Run',
-      start_date: '2024-08-30T06:15:00Z',
-      distance: 6500,
-      moving_time: 2700,
-      total_elevation_gain: 320,
-      average_heartrate: 168,
-      max_heartrate: 182,
-      location_city: 'Boulder',
-      location_state: 'Colorado',
-      kudos_count: 12,
-      photo_count: 1,
-      map: {
-        summary_polyline: 'mock_polyline_data',
-      },
-    },
-    {
-      id: 10234567895,
-      name: 'Recovery Hike - Chautauqua Park',
-      type: 'Hike',
-      start_date: '2024-08-28T08:00:00Z',
-      distance: 5200,
-      moving_time: 4500,
-      total_elevation_gain: 280,
-      average_heartrate: 125,
-      max_heartrate: 138,
-      location_city: 'Boulder',
-      location_state: 'Colorado',
-      kudos_count: 8,
-      photo_count: 3,
-      map: {
-        summary_polyline: 'mock_polyline_data',
-      },
-    },
+    }
   ];
-}
-
-export function storeStravaTokens(tokens: StravaTokens) {
-  cachedTokens = tokens;
-  // In production, store these securely in a database
-  console.log('Strava tokens stored for athlete:', tokens.athlete.id);
 }
