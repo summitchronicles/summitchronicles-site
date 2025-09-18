@@ -223,7 +223,7 @@ export function SupportOptions({
               <span>Join on Patreon</span>
               <ExternalLink className="w-4 h-4" />
             </Button>
-            
+
             <div className="text-xs text-spa-charcoal/50">
               Secure monthly support • Cancel anytime • Exclusive updates
             </div>
