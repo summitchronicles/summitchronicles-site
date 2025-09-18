@@ -106,9 +106,10 @@ export default function RealtimeTrainingPage() {
     activities.forEach((activity) => {
       const activityDate = new Date(activity.date || activity.start_date);
       const distance = (parseFloat(activity.distance) || 0) / 1000; // API returns meters, convert to km
-      const elevation = parseInt(activity.elevation || activity.total_elevation_gain) || 0;
+      const elevation =
+        parseInt(activity.elevation || activity.total_elevation_gain) || 0;
       const duration = parseInt(activity.duration || activity.moving_time) || 0;
-      
+
       totalDistance += distance;
       totalElevation += elevation;
       totalTime += duration;
