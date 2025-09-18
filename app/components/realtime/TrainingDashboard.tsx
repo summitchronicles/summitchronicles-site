@@ -32,7 +32,14 @@ interface TrainingDashboardProps {
 }
 
 // SWR fetcher function
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = (url: string) => 
+  fetch(url).then((res) => res.json()).then((data) => {
+    // Handle /api/strava/activities response structure
+    if (url.includes('/api/strava/activities') && data.activities) {
+      return data.activities;
+    }
+    return data;
+  });
 
 export function TrainingDashboard({
   showMockData = false,
