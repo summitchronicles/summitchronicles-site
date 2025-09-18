@@ -75,3 +75,55 @@ This week I shifted from basic setup to creating features that actually solve pr
 Adding my actual Seven Summits knowledge to the AI system, tackling image personalization (replacing generic stock photos), and potentially exploring partnership tracking features.
 
 The site is becoming less "portfolio" and more "working product" — exactly what I wanted.
+
+---
+
+## Week 4: When Everything Breaks, You Build It Better
+
+The last week started with disaster and ended with the most systematic development process I've ever experienced.
+
+**The Disaster**
+Tuesday morning: Vercel deployment completely broken. TypeScript errors everywhere. Dependencies conflicting. After hours of debugging, I made the nuclear decision: delete everything and start from scratch.
+
+**The Discovery**
+While rebuilding, I discovered **BMAD (Business-Motivated Agile Development)** — an AI-powered framework for systematic product development. Instead of cowboy coding, I used BMAD to rebuild the entire strategy from the ground up.
+
+**Tools That Saved My Sanity**
+- **BMAD Framework**: AI-driven PRD creation, user story mapping, and strategic pivoting
+- **Claude Code**: AI pair programming that actually understands context and business logic
+- **GitHub Actions**: Automated CI/CD pipeline with quality gates
+- **Playwright**: End-to-end testing that catches deployment issues before production
+- **Vercel**: Edge deployment with automatic preview environments
+- **Sentry**: Error monitoring that shows real user impact
+
+**Strategic Pivot**
+The rebuild forced me to question everything. BMAD helped identify what I was building and what are the different components I need to consider rather than just prompting my way into a site. It helped me go back to the basics: what am I building, who am I building it for, and what is the end goal?
+
+**AI DevOps in Action**
+- **Automated Evaluations**: Playwright tests that verify functionality across deployment pipeline
+- **Quality Gates**: TypeScript, ESLint, and Prettier checks preventing broken deployments
+- **Intelligent Monitoring**: Real-time error tracking and performance analytics
+- **Self-Healing Architecture**: Graceful degradation when services are unavailable
+
+**Production Reality Check**
+The "simple" deployment turned into a 12-hour debugging marathon:
+- Prettier formatting conflicts across 300+ files
+- TypeScript compilation errors in production environment
+- Playwright test port conflicts breaking CI pipeline
+- Sentry CLI integration failures blocking releases
+
+Each problem required systematic debugging, not just "try random fixes until it works."
+
+**Technical Wins**
+- **Complete expedition cost transparency**: $40K USD breakdown showing exactly where money goes
+- **Payment integration**: UPI support for Indian market with secure verification
+- **AI-powered content strategy**: RAG system providing mountaineering knowledge and training data set for future deployments
+- **Production-grade architecture**: Monitoring, testing, and deployment automation
+
+**The Learning**
+Building software is 20% writing code, 80% systems thinking. BMAD taught me that rushed development creates technical debt that compounds exponentially. Better to rebuild thoughtfully than patch endlessly.
+
+**Next Week Preview**
+Switching from Razorpay to Patreon integration, adding real expedition knowledge to the AI system, and documenting this entire BMAD-driven process for others to learn from.
+
+The expedition preparation continues: 30% physical training, 70% building systems that can handle the complexity of modern adventure logistics.
