@@ -102,21 +102,25 @@ export default function RealtimeTrainingPage() {
     let lastActivity: any = null;
 
     activities.forEach((activity) => {
-      const activityDate = new Date(activity.start_date);
-      totalDistance += activity.distance || 0;
-      totalElevation += activity.total_elevation_gain || 0;
-      totalTime += activity.moving_time || 0;
+      const activityDate = new Date(activity.date || activity.start_date);
+      const distance = parseFloat(activity.distance) || 0; // API returns km as string
+      const elevation = parseInt(activity.elevation || activity.total_elevation_gain) || 0;
+      const duration = parseInt(activity.duration || activity.moving_time) || 0;
+      
+      totalDistance += distance;
+      totalElevation += elevation;
+      totalTime += duration;
 
       if (activityDate >= weekStart) {
-        weeklyDistance += activity.distance || 0;
+        weeklyDistance += distance;
       }
 
       if (!lastActivity || activityDate > new Date(lastActivity.date)) {
         lastActivity = {
           name: activity.name,
-          date: activity.start_date,
-          distance: activity.distance || 0,
-          elevation: activity.total_elevation_gain || 0,
+          date: activity.date || activity.start_date,
+          distance: distance,
+          elevation: elevation,
           type: activity.type || 'Unknown',
         };
       }
@@ -124,10 +128,10 @@ export default function RealtimeTrainingPage() {
 
     return {
       totalActivities: activities.length,
-      totalDistance: Math.round(totalDistance / 1000), // Convert to km
+      totalDistance: Math.round(totalDistance), // Already in km from API
       totalElevation: Math.round(totalElevation),
-      totalTime: Math.round(totalTime / 3600), // Convert to hours
-      weeklyProgress: Math.round((weeklyDistance / 1000 / 50) * 100), // Assume 50km weekly goal
+      totalTime: Math.round(totalTime / 3600), // Convert seconds to hours
+      weeklyProgress: Math.round((weeklyDistance / 50) * 100), // Assume 50km weekly goal
       monthlyGoal: 200, // 200km monthly goal
       lastActivity,
     };
