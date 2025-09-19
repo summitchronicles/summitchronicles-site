@@ -3,7 +3,6 @@
 import { Brain, Search, BookOpen, Zap } from 'lucide-react';
 import { SmartSearch } from '../components/ai/SmartSearch';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 
 export default function AISearchPage() {
   return (
@@ -195,7 +194,6 @@ export default function AISearchPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

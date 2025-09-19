@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { SponsorRecognition } from '../components/organisms/SponsorRecognition';
 import { SupportOptions } from '../components/organisms/SupportOptions';
 import { Button } from '../components/atoms/Button';
@@ -942,7 +941,6 @@ export default function JourneyPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

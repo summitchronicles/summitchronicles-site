@@ -96,7 +96,7 @@ function LineChart({ data, title, color, unit, height = 200 }: ChartProps) {
               {title}
             </h3>
             <p className="text-sm text-spa-charcoal/60">
-              Latest: {data[data.length - 1]?.value.toFixed(1)} {unit}
+              Latest: {data[data.length - 1]?.value?.toFixed(1) || '0.0'} {unit}
             </p>
           </div>
         </div>
@@ -106,10 +106,9 @@ function LineChart({ data, title, color, unit, height = 200 }: ChartProps) {
           whileHover={{ scale: 1.05 }}
         >
           +
-          {(
-            ((data[data.length - 1]?.value - data[0]?.value) / data[0]?.value) *
-            100
-          ).toFixed(1)}
+          {(data[data.length - 1]?.value && data[0]?.value) 
+            ? (((data[data.length - 1].value - data[0].value) / data[0].value) * 100).toFixed(1)
+            : '0.0'}
           %
         </motion.div>
       </div>

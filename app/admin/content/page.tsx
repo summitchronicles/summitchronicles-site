@@ -1,6 +1,5 @@
 import React from 'react';
 import { Header } from '../../components/organisms/Header';
-import { Footer } from '../../components/organisms/Footer';
 import { ContentDashboard } from '../../components/organisms/ContentDashboard';
 
 export default function ContentPage() {
@@ -22,7 +21,6 @@ export default function ContentPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

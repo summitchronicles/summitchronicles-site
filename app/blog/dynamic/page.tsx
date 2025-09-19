@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { Calendar, Clock, ArrowRight, Mail, RefreshCw } from 'lucide-react';
 import { NewsletterModal } from '../../components/Modal';
 import { Header } from '../../components/organisms/Header';
-import { Footer } from '../../components/organisms/Footer';
 import { getAllPosts } from '@/lib/sanity/client';
 
 interface BlogPost {
@@ -280,7 +279,6 @@ export default function DynamicBlogPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

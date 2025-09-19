@@ -9,7 +9,6 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { CommunityFeed } from '../components/organisms/CommunityFeed';
 import { QuestionSubmission } from '../components/organisms/QuestionSubmission';
 import { CommunityChallenge } from '../components/organisms/CommunityChallenge';
@@ -177,7 +176,6 @@ export default function CommunityPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

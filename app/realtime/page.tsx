@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { SyncManager } from '../components/realtime/SyncManager';
 import { TrainingInsights } from '../components/ai/TrainingInsights';
 import { motion } from 'framer-motion';
@@ -164,7 +163,6 @@ export default function RealtimePage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -486,7 +484,6 @@ export default function RealtimePage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

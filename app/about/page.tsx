@@ -1,7 +1,6 @@
 'use client';
 
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { motion } from 'framer-motion';
 import {
   Mountain,
@@ -381,7 +380,6 @@ export default function AboutPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

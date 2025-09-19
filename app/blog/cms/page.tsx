@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
-import { Footer } from '../../components/organisms/Footer';
 import { sanityClient, queries } from '../../../lib/sanity/client';
 import { motion } from 'framer-motion';
 import { Calendar, User, Eye, Edit3 } from 'lucide-react';
@@ -69,7 +68,6 @@ export default function CMSBlogPage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -92,7 +90,6 @@ export default function CMSBlogPage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -304,7 +301,6 @@ export default function CMSBlogPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

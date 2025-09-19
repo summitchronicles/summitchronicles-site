@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { Button } from '../components/atoms/Button';
 import {
   H1,
@@ -441,7 +440,6 @@ export default function MyStoryPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

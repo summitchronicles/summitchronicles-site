@@ -9,7 +9,6 @@ import {
   Heart,
 } from 'lucide-react';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { NewsletterSubscriptionForm } from '../components/organisms/NewsletterSubscriptionForm';
 import { NewsletterArchive } from '../components/organisms/NewsletterArchive';
 import { Metadata } from 'next';
@@ -307,7 +306,6 @@ export default function NewsletterPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { SupportOptions } from '../components/organisms/SupportOptions';
 import { H1, H2, Body, BodyLarge } from '../components/atoms/Typography';
 import { Heart, Mountain, Users, Target } from 'lucide-react';
@@ -240,7 +239,6 @@ export default function SupportPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

@@ -1,6 +1,5 @@
 import React from 'react';
 import { Header } from '../../components/organisms/Header';
-import { Footer } from '../../components/organisms/Footer';
 import { ContentEditor } from '../../components/organisms/ContentEditor';
 
 export default function EditorPage() {
@@ -22,7 +21,6 @@ export default function EditorPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

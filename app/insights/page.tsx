@@ -12,7 +12,6 @@ import {
   Heart,
 } from 'lucide-react';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { H1, H2, H3, Body, BodyLarge } from '../components/atoms/Typography';
 import { Button } from '../components/atoms/Button';
 import { Card } from '../components/molecules/Card';
@@ -327,7 +326,6 @@ export default function InsightsPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

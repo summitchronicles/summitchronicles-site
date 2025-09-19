@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
-import { Footer } from '../../components/organisms/Footer';
 import { sanityClient, queries } from '../../../lib/sanity/client';
 import { motion } from 'framer-motion';
 import {
@@ -112,7 +111,6 @@ export default function CMSTrainingPage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -135,7 +133,6 @@ export default function CMSTrainingPage() {
             </div>
           </div>
         </main>
-        <Footer />
       </div>
     );
   }
@@ -353,7 +350,6 @@ export default function CMSTrainingPage() {
         </section>
       </main>
 
-      <Footer />
     </div>
   );
 }

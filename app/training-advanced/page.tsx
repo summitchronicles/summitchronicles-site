@@ -1,7 +1,6 @@
 'use client';
 
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import { AdvancedTrainingDashboard } from '../components/training/AdvancedTrainingDashboard';
 
 export default function AdvancedTrainingPage() {
@@ -23,7 +22,6 @@ export default function AdvancedTrainingPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

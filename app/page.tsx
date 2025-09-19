@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { Header } from './components/organisms/Header';
-import { Footer } from './components/organisms/Footer';
 import { SponsorRecognition } from './components/organisms/SponsorRecognition';
 import { SupportOptions } from './components/organisms/SupportOptions';
 import {
@@ -86,7 +85,6 @@ export default function Home() {
       {/* Subtle Sponsor Recognition */}
       <SponsorRecognition variant="subtle" />
 
-      <Footer />
     </div>
   );
 }

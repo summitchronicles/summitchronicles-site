@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
-import { Footer } from '../../components/organisms/Footer';
 import { TrainingDashboard } from '../../components/realtime/TrainingDashboard';
 import {
   Activity,
@@ -415,7 +414,6 @@ export default function RealtimeTrainingPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }

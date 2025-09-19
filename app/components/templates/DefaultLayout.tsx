@@ -1,6 +1,5 @@
 import React from 'react';
 import { Header } from '../organisms/Header';
-import { Footer } from '../organisms/Footer';
 import { cn } from '@/lib/utils';
 
 interface DefaultLayoutProps {
@@ -63,7 +62,6 @@ const DefaultLayout: React.FC<DefaultLayoutProps> = ({
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 };

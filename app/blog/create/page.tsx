@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Header } from '../../components/organisms/Header';
-import { Footer } from '../../components/organisms/Footer';
 import {
   Save,
   Eye,
@@ -461,7 +460,6 @@ export default function CreateBlogPost() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

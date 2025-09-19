@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from '../components/organisms/Header';
-import { Footer } from '../components/organisms/Footer';
 import {
   Bot,
   Zap,
@@ -501,7 +500,6 @@ export default function AutomationPage() {
         </div>
       </main>
 
-      <Footer />
     </div>
   );
 }
