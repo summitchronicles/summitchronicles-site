@@ -18,12 +18,12 @@ const primaryNavigation: NavigationItem[] = [
   { href: '/', label: 'Home', description: 'Journey overview' },
   { href: '/about', label: 'About', description: 'My story' },
   {
-    href: '/journey',
-    label: 'Journey',
-    description: 'Timeline & achievements',
+    href: '/expeditions',
+    label: 'Expeditions',
+    description: 'Mountain documentation',
   },
-  { href: '/training', label: 'Training', description: 'Progress & data' },
-  { href: '/blog', label: 'Blog', description: 'Insights & updates' },
+  { href: '/training', label: 'Training', description: 'Preparation insights' },
+  { href: '/blog', label: 'Stories', description: 'Field reports' },
 ];
 
 const secondaryNavigation: NavigationItem[] = [

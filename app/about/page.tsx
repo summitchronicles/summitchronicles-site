@@ -4,382 +4,347 @@ import { Header } from '../components/organisms/Header';
 import { motion } from 'framer-motion';
 import {
   Mountain,
-  Users,
   Target,
-  Award,
-  Heart,
-  Code,
-  Compass,
   TrendingUp,
-  Globe,
-  Briefcase,
-  GraduationCap,
+  MapPin,
+  Calendar,
+  Award,
+  Camera,
+  Compass,
 } from 'lucide-react';
 
 export default function AboutPage() {
+  const achievements = [
+    {
+      year: '2023',
+      mountain: 'Mount Kilimanjaro',
+      elevation: '19,341 ft',
+      location: 'Tanzania',
+      significance: 'First Seven Summits achievement. Proof that systematic preparation works.',
+    },
+    {
+      year: '2024',
+      mountain: 'Mount Whitney',
+      elevation: '14,505 ft',
+      location: 'California',
+      significance: 'Redemption climb. Technical alpine preparation and mental resilience testing.',
+    },
+    {
+      year: '2024',
+      mountain: 'Mount Washington',
+      elevation: '6,288 ft',
+      location: 'New Hampshire',
+      significance: 'Winter conditions mastery. Sub-zero training for extreme environments.',
+    },
+  ];
+
   return (
-    <div className="min-h-screen bg-spa-stone flex flex-col">
-      {/* Skip link for accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-alpine-blue text-white px-4 py-2 rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-alpine-blue"
-      >
-        Skip to main content
-      </a>
+    <div className="min-h-screen bg-black text-white">
       <Header />
 
-      {/* Main content with proper spacing for fixed header */}
-      <main id="main-content" className="flex-1 pt-16">
-        {/* Hidden accessibility elements for testing - SSR-rendered */}
-        <div className="sr-only">
-          <h2>About Sunith Kumar - Adventure Athlete</h2>
-          <h3>Professional Background and Athletic Philosophy</h3>
-          <h4>Data-Driven Training Methodology</h4>
+      {/* Hero Section - Full screen with portrait */}
+      <section className="relative h-screen flex items-center">
+        <div className="absolute inset-0">
           <img
-            src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-            alt="Sunith Kumar adventure athlete profile and mountaineering background"
+            src="/stories/kilimanjaro.jpg"
+            alt="Sunith Kumar - Mountaineer and Expedition Photographer"
+            className="w-full h-full object-cover opacity-50"
           />
-          <img
-            src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-            alt="Data-driven athletic training methodology and systematic approach"
-          />
-          <img
-            src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-            alt="Professional background combining athletics and analytical excellence"
-          />
+          <div className="absolute inset-0 bg-black/60"></div>
         </div>
-
-        <div className="min-h-screen py-8">
-          <div className="max-w-4xl mx-auto px-4">
-            <motion.h1
-              className="text-4xl font-light text-spa-charcoal mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              About Sunith
-            </motion.h1>
-
-            {/* Personal Introduction */}
-            <motion.div
-              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm p-8 mb-8 border border-spa-stone/10"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-alpine-blue/10 rounded-xl">
-                  <Briefcase className="w-6 h-6 text-alpine-blue" />
-                </div>
-                <h2 className="text-2xl font-medium text-spa-charcoal">
-                  Who I Am
-                </h2>
+        
+        <div className="relative z-10 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+          {/* Portrait */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1 }}
+            className="space-y-6"
+          >
+            <div className="relative">
+              <img
+                src="/stories/data-training.jpg"
+                alt="Sunith Kumar Portrait"
+                className="w-full max-w-md rounded-lg shadow-2xl"
+              />
+              <div className="absolute -bottom-4 -right-4 bg-white text-black px-4 py-2 text-sm font-medium">
+                EXPEDITION PHOTOGRAPHER
               </div>
-              <p className="text-spa-charcoal/80 mb-4 leading-relaxed">
-                I'm a data-driven adventure athlete who discovered that
-                systematic thinking, methodical training, and analytical
-                performance tracking can unlock extraordinary athletic
-                achievements. What started as weekend hiking has evolved into a
-                comprehensive pursuit of the Seven Summits, marathons,
-                ultra-marathons, cycling challenges, and multi-sport adventures.
+            </div>
+          </motion.div>
+
+          {/* Bio */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="space-y-8"
+          >
+            <div>
+              <h1 className="text-5xl md:text-7xl font-light tracking-wide mb-4">
+                SUNITH KUMAR
+              </h1>
+              <div className="flex items-center space-x-8 text-sm tracking-widest uppercase opacity-80 mb-8">
+                <span>Mountaineer</span>
+                <span>•</span>
+                <span>Engineer</span>
+                <span>•</span>
+                <span>Storyteller</span>
+              </div>
+            </div>
+            
+            <div className="space-y-6 text-lg font-light leading-relaxed">
+              <p>
+                <strong className="text-white">The systematic approach to impossible goals.</strong> 
+                What started as a failure on Mount Whitney became a methodical journey toward 
+                the Seven Summits, driven by engineering principles and data-driven preparation.
               </p>
-              <p className="text-spa-charcoal/80 mb-4 leading-relaxed">
-                My approach to athletic training combines rigorous data analysis
-                with systematic preparation—treating each challenge as a
-                carefully planned project with measurable goals, progressive
-                training phases, and continuous performance optimization through
-                real-time metrics and analytics.
+              <p>
+                Based in the Pacific Northwest, I combine technical expertise with adventure 
+                sports, documenting the intersection of systematic thinking and extreme mountaineering.
               </p>
-              <p className="text-spa-charcoal/80 leading-relaxed">
-                Based in the Pacific Northwest, I leverage cutting-edge training
-                technology and performance analytics to push the boundaries of
-                what's possible in adventure sports, creating compelling content
-                and measurable results that demonstrate the power of systematic
-                athletic excellence.
+            </div>
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-gray-700">
+              <div>
+                <div className="text-2xl font-light">4/7</div>
+                <div className="text-xs uppercase tracking-wide text-gray-400">Summits</div>
+              </div>
+              <div>
+                <div className="text-2xl font-light">541</div>
+                <div className="text-xs uppercase tracking-wide text-gray-400">Days to Everest</div>
+              </div>
+              <div>
+                <div className="text-2xl font-light">7</div>
+                <div className="text-xs uppercase tracking-wide text-gray-400">Years Climbing</div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* The Story - Origin */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-light tracking-wide mb-8">
+              THE STORY
+            </h2>
+            <div className="h-px w-24 bg-white/30 mx-auto"></div>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="space-y-6"
+            >
+              <h3 className="text-2xl font-light tracking-wide">From Failure to System</h3>
+              <p className="text-gray-300 leading-relaxed">
+                <strong>14,000 feet. Mount Whitney. 2021.</strong> Gasping for air, watching my 
+                climbing partner disappear into the clouds. That failure became the foundation 
+                for everything that followed.
+              </p>
+              <p className="text-gray-300 leading-relaxed">
+                I approached mountaineering the same way I approach engineering problems: 
+                systematic analysis, iterative improvement, and measured progress toward 
+                seemingly impossible goals.
+              </p>
+              <p className="text-gray-300 leading-relaxed">
+                <strong>The Seven Summits became my laboratory</strong> for testing whether 
+                methodical preparation could achieve extraordinary results in the world's 
+                most unforgiving environments.
               </p>
             </motion.div>
 
-            {/* Origin Story */}
             <motion.div
-              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm p-8 mb-8 border border-spa-stone/10"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
             >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-summit-gold/10 rounded-xl">
-                  <Compass className="w-6 h-6 text-summit-gold" />
-                </div>
-                <h2 className="text-2xl font-medium text-spa-charcoal">
-                  The Origin Story
-                </h2>
-              </div>
-              <p className="text-spa-charcoal/80 mb-4 leading-relaxed">
-                The journey began with a simple realization: the same systematic
-                thinking that drives success in any field—breaking down complex
-                challenges, structured planning, and iterative improvement—could
-                be applied to seemingly impossible athletic achievements.
-              </p>
-              <p className="text-spa-charcoal/80 mb-4 leading-relaxed">
-                After completing numerous marathons and ultra-marathons, I was
-                drawn to challenges that would test not just physical endurance,
-                but mental resilience and systematic preparation. The Seven
-                Summits represent the ultimate athletic challenge: requiring
-                precise training planning, resource optimization, risk
-                management, and flawless execution under extreme conditions.
-              </p>
-              <p className="text-spa-charcoal/80 leading-relaxed">
-                What makes this journey unique is the integration of modern
-                training technology with traditional adventure sports—using
-                performance analytics, real-time data tracking, and systematic
-                documentation to both optimize performance and share valuable
-                insights with the adventure community.
-              </p>
-            </motion.div>
-
-            {/* Core Values & Philosophy */}
-            <motion.div
-              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm p-8 mb-8 border border-spa-stone/10"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-emerald-500/10 rounded-xl">
-                  <Heart className="w-6 h-6 text-emerald-600" />
-                </div>
-                <h2 className="text-2xl font-medium text-spa-charcoal">
-                  Core Values & Philosophy
-                </h2>
-              </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-medium text-spa-charcoal mb-3">
-                    Athletic Excellence
-                  </h4>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed mb-4">
-                    Applying systematic training principles to adventure sports:
-                    rigorous planning, data-driven decisions, and continuous
-                    improvement through performance measurement.
-                  </p>
-                  <h4 className="font-medium text-spa-charcoal mb-3">
-                    Authentic Documentation
-                  </h4>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed">
-                    Sharing both triumphs and setbacks transparently, creating
-                    genuine value for sponsors and others pursuing similar
-                    athletic challenges.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-spa-charcoal mb-3">
-                    Technology Integration
-                  </h4>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed mb-4">
-                    Leveraging modern training technology and analytics to
-                    optimize performance and showcase measurable results across
-                    multiple disciplines.
-                  </p>
-                  <h4 className="font-medium text-spa-charcoal mb-3">
-                    Community Impact
-                  </h4>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed">
-                    Using this platform to inspire others, demonstrate
-                    systematic training approaches, and contribute meaningfully
-                    to the adventure sports community.
-                  </p>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Unique Perspective & Expertise */}
-            <motion.div
-              className="grid md:grid-cols-3 gap-6 mb-8"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-            >
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-spa-stone/10">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-alpine-blue/10 rounded-xl">
-                    <Code className="w-5 h-5 text-alpine-blue" />
-                  </div>
-                  <h3 className="text-lg font-medium text-spa-charcoal">
-                    Performance Analytics
-                  </h3>
-                </div>
-                <p className="text-spa-charcoal/70 text-sm leading-relaxed">
-                  Utilizing advanced training technology to create detailed
-                  performance insights, automated progress tracking, and
-                  innovative training optimization tools.
-                </p>
-              </div>
-
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-spa-stone/10">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-summit-gold/10 rounded-xl">
-                    <TrendingUp className="w-5 h-5 text-summit-gold" />
-                  </div>
-                  <h3 className="text-lg font-medium text-spa-charcoal">
-                    Systematic Training
-                  </h3>
-                </div>
-                <p className="text-spa-charcoal/70 text-sm leading-relaxed">
-                  Applying data-driven methodologies to athletic preparation
-                  across multiple disciplines, creating systematic approaches to
-                  fitness, skill development, and performance optimization.
-                </p>
-              </div>
-
-              <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm p-6 border border-spa-stone/10">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-emerald-500/10 rounded-xl">
-                    <Users className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <h3 className="text-lg font-medium text-spa-charcoal">
-                    Sponsorship Value
-                  </h3>
-                </div>
-                <p className="text-spa-charcoal/70 text-sm leading-relaxed">
-                  Delivering measurable brand exposure and authentic
-                  storytelling across adventure sports, with documented reach
-                  and engagement metrics that demonstrate ROI for partners.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Personal Stakes & Motivation */}
-            <motion.div
-              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm p-8 mb-8 border border-spa-stone/10"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-summit-gold/10 rounded-xl">
-                  <Target className="w-6 h-6 text-summit-gold" />
-                </div>
-                <h2 className="text-2xl font-medium text-spa-charcoal">
-                  Why This Matters
-                </h2>
-              </div>
-              <p className="text-spa-charcoal/80 mb-4 leading-relaxed">
-                This journey represents more than personal achievement—it's
-                about proving that systematic training and data-driven
-                preparation can achieve extraordinary results in the most
-                demanding environments. Every summit, marathon, and cycling
-                challenge is a test of methodologies that demonstrate the power
-                of consistent, measured progress toward seemingly impossible
-                goals.
-              </p>
-              <p className="text-spa-charcoal/80 mb-6 leading-relaxed">
-                These adventures showcase not just physical achievement, but the
-                compelling story of systematic excellence that resonates with
-                audiences and provides authentic, measurable value for sponsors.
-                The mountains, trails, and roads teach lessons about persistence
-                and preparation that inspire others to pursue their own
-                extraordinary challenges.
-              </p>
-
-              <div className="bg-gradient-to-r from-alpine-blue/5 to-summit-gold/5 p-6 rounded-xl border border-alpine-blue/10">
-                <h3 className="font-medium text-spa-charcoal mb-4 flex items-center gap-2">
-                  <Mountain className="w-4 h-4" />
-                  Current Seven Summits Progress
-                </h3>
-                <div className="grid md:grid-cols-2 gap-4 text-sm">
-                  <div className="flex items-center gap-2 text-emerald-600">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                    Mount Whitney (14,505 ft) - Technical alpine preparation
-                  </div>
-                  <div className="flex items-center gap-2 text-emerald-600">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                    Mount Washington (6,288 ft) - Winter conditions mastery
-                  </div>
-                  <div className="flex items-center gap-2 text-emerald-600">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                    Mount Katahdin (5,267 ft) - Endurance foundation
-                  </div>
-                  <div className="flex items-center gap-2 text-alpine-blue">
-                    <div className="w-2 h-2 bg-alpine-blue rounded-full animate-pulse"></div>
-                    Multiple marathons & ultra-marathons completed
-                  </div>
-                  <div className="flex items-center gap-2 text-alpine-blue">
-                    <div className="w-2 h-2 bg-alpine-blue rounded-full animate-pulse"></div>
-                    Denali expedition - Major 2025 milestone
-                  </div>
-                  <div className="flex items-center gap-2 text-spa-charcoal/40">
-                    <div className="w-2 h-2 bg-spa-stone/40 rounded-full"></div>
-                    Everest - Ultimate systematic athletic challenge
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Vision Beyond Climbing */}
-            <motion.div
-              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm p-8 border border-spa-stone/10"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-alpine-blue/10 rounded-xl">
-                  <Globe className="w-6 h-6 text-alpine-blue" />
-                </div>
-                <h2 className="text-2xl font-medium text-spa-charcoal">
-                  Vision Beyond the Summits
-                </h2>
-              </div>
-              <div className="grid md:grid-cols-2 gap-8">
-                <div>
-                  <h4 className="font-medium text-spa-charcoal mb-3 flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4" />
-                    Training Methodology
-                  </h4>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed mb-6">
-                    Sharing comprehensive training insights and systematic
-                    approaches that help others achieve their own extraordinary
-                    athletic goals across multiple adventure sports disciplines.
-                  </p>
-
-                  <h4 className="font-medium text-spa-charcoal mb-3 flex items-center gap-2">
-                    <Code className="w-4 h-4" />
-                    Content Platform
-                  </h4>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed">
-                    Creating engaging content and resources that showcase
-                    systematic training approaches, performance analytics, and
-                    authentic adventure storytelling for the sports community.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-spa-charcoal mb-3 flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    Brand Partnerships
-                  </h4>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed mb-6">
-                    Delivering authentic brand integration opportunities with
-                    documented reach, engagement metrics, and genuine product
-                    testing across diverse adventure sports environments.
-                  </p>
-
-                  <h4 className="font-medium text-spa-charcoal mb-3 flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4" />
-                    Measurable Impact
-                  </h4>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed">
-                    Providing quantifiable results through systematic
-                    documentation of achievements, audience growth, and
-                    community engagement that demonstrate clear ROI for sponsors
-                    and partners.
-                  </p>
-                </div>
-              </div>
+              <img
+                src="/stories/everest-prep.jpg"
+                alt="Mount Whitney failure and learning"
+                className="w-full rounded-lg shadow-xl"
+              />
             </motion.div>
           </div>
         </div>
-      </main>
+      </section>
 
+      {/* Achievements Timeline */}
+      <section className="py-20 bg-black">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-light tracking-wide mb-8">
+              EXPEDITION RECORD
+            </h2>
+            <div className="h-px w-24 bg-white/30 mx-auto"></div>
+          </motion.div>
+
+          <div className="space-y-12">
+            {achievements.map((achievement, index) => (
+              <motion.div
+                key={achievement.mountain}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="grid md:grid-cols-4 gap-6 items-center border-b border-gray-800 pb-8"
+              >
+                <div className="text-center md:text-left">
+                  <div className="text-3xl font-light">{achievement.year}</div>
+                  <div className="text-sm text-gray-400 uppercase tracking-wide">Year</div>
+                </div>
+                
+                <div>
+                  <h3 className="text-xl font-light tracking-wide mb-2">{achievement.mountain}</h3>
+                  <div className="flex items-center space-x-4 text-sm text-gray-400">
+                    <span className="flex items-center space-x-1">
+                      <TrendingUp className="w-4 h-4" />
+                      <span>{achievement.elevation}</span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <MapPin className="w-4 h-4" />
+                      <span>{achievement.location}</span>
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="md:col-span-2">
+                  <p className="text-gray-300 leading-relaxed text-sm">
+                    {achievement.significance}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Philosophy & Approach */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-light tracking-wide mb-8">
+              METHODOLOGY
+            </h2>
+            <div className="h-px w-24 bg-white/30 mx-auto"></div>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="text-center space-y-4"
+            >
+              <div className="mx-auto w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                <Target className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-light tracking-wide">Systematic Preparation</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Every expedition follows detailed preparation protocols. Data-driven training, 
+                equipment testing, and risk assessment replace guesswork with measured progress.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="text-center space-y-4"
+            >
+              <div className="mx-auto w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                <Camera className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-light tracking-wide">Visual Documentation</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Capturing both the triumph and struggle of extreme mountaineering. Every expedition 
+                becomes a story that inspires others to pursue their own impossible goals.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="text-center space-y-4"
+            >
+              <div className="mx-auto w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                <Compass className="w-8 h-8" />
+              </div>
+              <h3 className="text-xl font-light tracking-wide">Community Impact</h3>
+              <p className="text-gray-300 text-sm leading-relaxed">
+                Sharing methodologies, failures, and insights that help other adventure athletes 
+                achieve their goals through systematic training and preparation.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action */}
+      <section className="py-20 bg-black">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="space-y-8"
+          >
+            <h3 className="text-3xl md:text-4xl font-light tracking-wide">
+              Follow the Journey to Everest
+            </h3>
+            <p className="text-xl text-gray-300 font-light leading-relaxed">
+              541 days of systematic preparation documented through field reports, 
+              training insights, and expedition photography.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="/expeditions"
+                className="inline-flex items-center space-x-2 border border-white text-white px-8 py-3 font-medium tracking-wide hover:bg-white hover:text-black transition-colors"
+              >
+                <Mountain className="w-5 h-5" />
+                <span>View Expeditions</span>
+              </a>
+              <a
+                href="/support"
+                className="inline-flex items-center space-x-2 bg-white text-black px-8 py-3 font-medium tracking-wide hover:bg-gray-200 transition-colors"
+              >
+                <span>Support the Mission</span>
+              </a>
+            </div>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 }
+

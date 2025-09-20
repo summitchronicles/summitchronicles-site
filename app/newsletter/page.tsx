@@ -1,310 +1,328 @@
+'use client';
+
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Header } from '../components/organisms/Header';
 import {
+  Radio,
+  MapPin,
+  Clock,
+  Calendar,
+  Mountain,
+  Signal,
+  Zap,
   Mail,
   Users,
-  Calendar,
-  Gift,
-  CheckCircle,
-  Mountain,
-  TrendingUp,
-  Heart,
+  Compass,
+  Activity
 } from 'lucide-react';
-import { Header } from '../components/organisms/Header';
-import { NewsletterSubscriptionForm } from '../components/organisms/NewsletterSubscriptionForm';
-import { NewsletterArchive } from '../components/organisms/NewsletterArchive';
-import { Metadata } from 'next';
-import { cn } from '@/lib/utils';
 
-export const metadata: Metadata = {
-  title: 'Newsletter | Summit Chronicles',
-  description:
-    'Join thousands of adventurers following the Mount Everest expedition journey. Get weekly training updates, behind-the-scenes insights, and exclusive content.',
-  openGraph: {
-    title: 'Summit Chronicles Newsletter - Join the Journey',
-    description:
-      'Weekly expedition updates, training insights, and behind-the-scenes stories from the Mount Everest preparation journey.',
-  },
-};
 
 export default function NewsletterPage() {
-  const benefits = [
+  const expeditionUpdates = [
     {
-      icon: TrendingUp,
-      title: 'Training Progress Updates',
-      description:
-        'Weekly insights into systematic training methodology, performance metrics, and preparation milestones achieved.',
+      title: 'FIELD REPORT #47',
+      date: 'March 15, 2024',
+      location: 'Base Camp Training, Colorado',
+      summary: 'High-altitude simulation protocols. VO2 max improvements tracking above baseline targets.',
+      status: 'ACTIVE'
     },
     {
-      icon: Mountain,
-      title: 'Behind-the-Scenes Stories',
-      description:
-        'Authentic expedition preparation stories, challenges overcome, and lessons learned on the journey to Everest.',
+      title: 'EQUIPMENT UPDATE #12',
+      date: 'March 10, 2024',
+      location: 'Gear Testing Facility',
+      summary: 'Oxygen system validation complete. Backup regulator performance verified at -40°C.',
+      status: 'VERIFIED'
     },
     {
-      icon: Heart,
-      title: 'Community Connection',
-      description:
-        'Join a supportive community of adventurers, receive encouragement, and share in celebration of achievements.',
-    },
-    {
-      icon: Gift,
-      title: 'Exclusive Content',
-      description:
-        'Subscriber-only training guides, gear recommendations, and early access to expedition planning insights.',
-    },
+      title: 'TRAINING LOG #156',
+      date: 'March 5, 2024',
+      location: 'Mount Rainier, Washington',
+      summary: 'Cold weather endurance test. 14-hour exposure, pack weight 75lbs. Mental resilience protocols operational.',
+      status: 'COMPLETE'
+    }
   ];
 
-  const testimonials = [
+  const transmissionTypes = [
     {
-      quote:
-        "The weekly updates keep me motivated in my own training. Sunith's systematic approach is incredibly inspiring.",
-      author: 'Sarah M.',
-      role: 'Trail Runner & Mountaineer',
+      icon: Radio,
+      type: 'FIELD REPORTS',
+      frequency: 'Every 3 Days',
+      description: 'Direct transmissions from training locations. Raw data, performance metrics, environmental conditions.',
+      coverage: 'Technical Analysis'
     },
     {
-      quote:
-        "I love the authentic storytelling and detailed training insights. It's like having a personal expedition mentor.",
-      author: 'Mike T.',
-      role: 'Adventure Enthusiast',
+      icon: Signal,
+      type: 'EXPEDITION UPDATES',
+      frequency: 'Weekly',
+      description: 'Systematic preparation progress. Equipment testing results. Route planning modifications.',
+      coverage: 'Strategic Planning'
     },
     {
-      quote:
-        "The community aspect is amazing. We're all supporting each other's adventures and celebrating together.",
-      author: 'Elena R.',
-      role: 'Rock Climber',
-    },
+      icon: Zap,
+      type: 'CRITICAL ALERTS',
+      frequency: 'As Required',
+      description: 'Weather window notifications. Equipment failures. Timeline modifications. Safety protocols.',
+      coverage: 'Emergency Communications'
+    }
   ];
 
-  const stats = [
-    { label: 'Active Subscribers', value: '2,847', icon: Users },
-    { label: 'Weekly Updates', value: '52+', icon: Calendar },
-    { label: 'Training Insights', value: '150+', icon: TrendingUp },
-    { label: 'Community Stories', value: '89', icon: Heart },
+  const currentStats = [
+    { label: 'Active Subscribers', value: '2,847', icon: Users, description: 'Following expedition' },
+    { label: 'Days to Everest', value: '541', icon: Calendar, description: 'Countdown active' },
+    { label: 'Field Reports Sent', value: '89', icon: Radio, description: 'From preparation zones' },
+    { label: 'Training Hours', value: '1,247', icon: Activity, description: 'Systematic preparation' }
   ];
 
   return (
-    <div className="min-h-screen bg-spa-stone flex flex-col">
-      {/* Skip link for accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-alpine-blue text-white px-4 py-2 rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-alpine-blue"
-      >
-        Skip to main content
-      </a>
+    <div className="min-h-screen bg-black text-white">
       <Header />
-
-      {/* Main content with proper spacing for fixed header */}
-      <main id="main-content" className="flex-1 pt-16">
-        {/* Hero Section */}
-        <section className="bg-gradient-to-br from-spa-mist via-white to-spa-cloud py-20">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <Mail className="w-8 h-8 text-alpine-blue" />
-              <h1 className="text-4xl lg:text-5xl font-light text-spa-charcoal">
-                Join the Journey
+      
+      {/* Hero Section */}
+      <section className="relative h-96 flex items-center justify-center">
+        <div className="absolute inset-0">
+          <img
+            src="/stories/data-training.jpg"
+            alt="Expedition Communication Hub"
+            className="w-full h-full object-cover opacity-50"
+          />
+          <div className="absolute inset-0 bg-black/70"></div>
+        </div>
+        
+        <div className="relative z-10 text-center px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <div className="flex items-center justify-center space-x-3 mb-6">
+              <Radio className="w-8 h-8" />
+              <h1 className="text-5xl md:text-7xl font-light tracking-wide">
+                EXPEDITION DISPATCH
               </h1>
             </div>
-
-            <p className="text-xl text-spa-charcoal/80 mb-8 leading-relaxed">
-              Get weekly updates on the Mount Everest expedition preparation,
-              training insights, and behind-the-scenes stories delivered to your
-              inbox.
+            <p className="text-xl font-light tracking-wider opacity-90">
+              Field Updates • 541 Days to Everest
             </p>
+          </motion.div>
+        </div>
+      </section>
 
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-spa-stone/10 shadow-sm mb-12">
-              <NewsletterSubscriptionForm variant="hero" />
-            </div>
+      {/* Current Stats */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-8">
+              COMMUNICATION STATUS
+            </h2>
+            <div className="h-px w-24 bg-white/30 mx-auto"></div>
+          </motion.div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-              {stats.map(({ label, value, icon: Icon }) => (
-                <div key={label} className="text-center">
-                  <div className="inline-flex items-center justify-center w-12 h-12 bg-alpine-blue/10 rounded-xl mb-3">
-                    <Icon className="w-6 h-6 text-alpine-blue" />
-                  </div>
-                  <div className="text-2xl font-light text-spa-charcoal mb-1">
-                    {value}
-                  </div>
-                  <div className="text-sm text-spa-charcoal/70">{label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Benefits Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-light text-spa-charcoal mb-4">
-                What You'll Receive
-              </h2>
-              <p className="text-spa-charcoal/70 text-lg">
-                Every newsletter edition is carefully crafted with valuable
-                insights and authentic storytelling
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {benefits.map(({ icon: Icon, title, description }) => (
-                <div
-                  key={title}
-                  className="bg-gradient-to-br from-spa-mist/20 to-white rounded-xl p-6 border border-spa-stone/10"
+          <div className="grid md:grid-cols-4 gap-8">
+            {currentStats.map((stat, index) => {
+              const IconComponent = stat.icon;
+              return (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="text-center space-y-4"
                 >
-                  <div className="w-12 h-12 bg-alpine-blue/10 rounded-xl flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-alpine-blue" />
+                  <div className="mx-auto w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                    <IconComponent className="w-8 h-8" />
                   </div>
-                  <h3 className="text-lg font-medium text-spa-charcoal mb-3">
-                    {title}
-                  </h3>
-                  <p className="text-spa-charcoal/70 text-sm leading-relaxed">
-                    {description}
-                  </p>
-                </div>
-              ))}
-            </div>
+                  <div>
+                    <div className="text-3xl font-light mb-1">{stat.value}</div>
+                    <div className="text-sm font-medium tracking-wide mb-2">{stat.label}</div>
+                    <div className="text-xs text-gray-400">{stat.description}</div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Content Preview Section */}
-        <section className="py-16 bg-gradient-to-br from-spa-cloud/30 to-white">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-light text-spa-charcoal mb-4">
-                Newsletter Content Preview
-              </h2>
-              <p className="text-spa-charcoal/70">
-                Here's what you can expect in your weekly Summit Chronicles
-                update
+      {/* Transmission Types */}
+      <section className="py-20 bg-black">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-8">
+              TRANSMISSION TYPES
+            </h2>
+            <div className="h-px w-24 bg-white/30 mx-auto"></div>
+          </motion.div>
+
+          <div className="space-y-12">
+            {transmissionTypes.map((transmission, index) => {
+              const IconComponent = transmission.icon;
+              return (
+                <motion.div
+                  key={transmission.type}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="border border-gray-800 rounded-lg p-8"
+                >
+                  <div className="grid md:grid-cols-4 gap-6 items-center">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-light tracking-wide">{transmission.type}</h3>
+                        <div className="text-sm text-gray-400">{transmission.frequency}</div>
+                      </div>
+                    </div>
+                    <div className="md:col-span-2">
+                      <p className="text-gray-300 leading-relaxed">
+                        {transmission.description}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm text-gray-400 uppercase tracking-wide">
+                        {transmission.coverage}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Recent Transmissions */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-6xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-8">
+              RECENT TRANSMISSIONS
+            </h2>
+            <div className="h-px w-24 bg-white/30 mx-auto"></div>
+          </motion.div>
+
+          <div className="space-y-8">
+            {expeditionUpdates.map((update, index) => (
+              <motion.div
+                key={update.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: index * 0.1 }}
+                viewport={{ once: true }}
+                className="border border-gray-700 rounded-lg p-6 bg-gray-800/50"
+              >
+                <div className="grid md:grid-cols-4 gap-4 items-start">
+                  <div>
+                    <h3 className="text-lg font-light tracking-wide text-white mb-1">
+                      {update.title}
+                    </h3>
+                    <div className="flex items-center space-x-2 text-sm text-gray-400">
+                      <Calendar className="w-4 h-4" />
+                      <span>{update.date}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2 text-sm text-gray-400">
+                    <MapPin className="w-4 h-4" />
+                    <span>{update.location}</span>
+                  </div>
+                  
+                  <div className="md:col-span-1">
+                    <p className="text-gray-300 text-sm leading-relaxed">
+                      {update.summary}
+                    </p>
+                  </div>
+                  
+                  <div className="text-right">
+                    <span className={`px-2 py-1 text-xs font-medium tracking-wider uppercase rounded ${
+                      update.status === 'ACTIVE' ? 'bg-green-900/50 text-green-400' :
+                      update.status === 'VERIFIED' ? 'bg-blue-900/50 text-blue-400' :
+                      'bg-gray-700/50 text-gray-300'
+                    }`}>
+                      {update.status}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Subscription Protocol */}
+      <section className="py-20 bg-black">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-8">
+              ESTABLISH COMMUNICATION LINK
+            </h2>
+            <div className="h-px w-24 bg-white/30 mx-auto"></div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="bg-gray-900 border border-gray-700 rounded-lg p-8"
+          >
+            <div className="text-center space-y-6">
+              <div className="flex items-center justify-center space-x-3 mb-6">
+                <Signal className="w-6 h-6" />
+                <span className="text-lg font-light tracking-wide">EXPEDITION FREQUENCY: 541 DAYS</span>
+              </div>
+              
+              <p className="text-gray-300 leading-relaxed mb-8">
+                Receive systematic preparation updates, training data, and field reports from the Everest expedition timeline. 
+                All transmissions authenticated and verified from preparation zones.
               </p>
-            </div>
-
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-spa-stone/10 shadow-sm">
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-5 h-5 text-emerald-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-spa-charcoal mb-2">
-                      Training Highlights
-                    </h3>
-                    <p className="text-spa-charcoal/70 text-sm">
-                      Weekly training metrics, progression analytics, and
-                      methodology insights from systematic Everest preparation.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-spa-charcoal mb-2">
-                      Personal Reflections
-                    </h3>
-                    <p className="text-spa-charcoal/70 text-sm">
-                      Authentic stories about challenges, victories, and
-                      learning experiences from the preparation journey.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-spa-charcoal mb-2">
-                      Community Spotlight
-                    </h3>
-                    <p className="text-spa-charcoal/70 text-sm">
-                      Celebrating subscriber achievements, answering community
-                      questions, and sharing supporter stories.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-4">
-                  <div className="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <CheckCircle className="w-5 h-5 text-amber-600" />
-                  </div>
-                  <div>
-                    <h3 className="font-medium text-spa-charcoal mb-2">
-                      Upcoming Milestones
-                    </h3>
-                    <p className="text-spa-charcoal/70 text-sm">
-                      Preview of upcoming training phases, expedition
-                      preparations, and opportunities for community
-                      participation.
-                    </p>
-                  </div>
-                </div>
+              
+              <div className="space-y-4">
+                <input
+                  type="email"
+                  placeholder="Enter communication coordinates (email)"
+                  className="w-full bg-gray-800 border border-gray-600 rounded px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:border-white"
+                />
+                <button className="w-full bg-white text-black py-3 font-medium tracking-wide hover:bg-gray-200 transition-colors">
+                  ESTABLISH LINK
+                </button>
+              </div>
+              
+              <div className="text-sm text-gray-400 pt-4">
+                <p>Secure transmission • 2,847 active subscribers • Terminate link anytime</p>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-light text-spa-charcoal mb-4">
-                Community Voices
-              </h2>
-              <p className="text-spa-charcoal/70">
-                What our subscribers say about joining the Summit Chronicles
-                journey
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {testimonials.map(({ quote, author, role }, index) => (
-                <div
-                  key={index}
-                  className="bg-gradient-to-br from-spa-mist/20 to-white rounded-xl p-6 border border-spa-stone/10"
-                >
-                  <p className="text-spa-charcoal/80 italic mb-4 leading-relaxed">
-                    "{quote}"
-                  </p>
-                  <div className="text-sm">
-                    <div className="font-medium text-spa-charcoal">
-                      {author}
-                    </div>
-                    <div className="text-spa-charcoal/60">{role}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Newsletter Archive */}
-        <NewsletterArchive />
-
-        {/* Final CTA Section */}
-        <section className="py-16 bg-gradient-to-br from-spa-charcoal to-alpine-blue text-white">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-3xl font-light mb-4">
-              Ready to Join the Adventure?
-            </h2>
-            <p className="text-white/80 mb-8 leading-relaxed">
-              Be part of a community that celebrates systematic preparation,
-              authentic storytelling, and the journey toward ambitious goals.
-            </p>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-              <NewsletterSubscriptionForm variant="cta" />
-            </div>
-
-            <div className="mt-8 text-sm text-white/60">
-              <p>
-                Join 2,847+ adventurers • Weekly updates • Unsubscribe anytime
-              </p>
-            </div>
-          </div>
-        </section>
-      </main>
+          </motion.div>
+        </div>
+      </section>
 
     </div>
   );

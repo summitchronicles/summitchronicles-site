@@ -6,11 +6,11 @@ import { RedBullBlogGrid } from '../components/blog';
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-spa-stone flex flex-col">
       {/* Skip link for accessibility */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-red-600 text-white px-4 py-2 rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-red-600"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-alpine-blue text-white px-4 py-2 rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-alpine-blue"
       >
         Skip to main content
       </a>
@@ -18,31 +18,30 @@ export default function BlogPage() {
 
       {/* Hidden accessibility elements for testing - SSR-rendered */}
       <div className="sr-only">
-        <h2>Mountain Chronicle Blog Stories</h2>
-        <h3>Expedition Chronicles and Training Insights</h3>
-        <h4>Visual Storytelling and Adventure Documentation</h4>
+        <h2>Authentic Journey Stories</h2>
+        <h3>Real struggles, real breakthroughs, real preparation</h3>
+        <h4>The human side of extreme mountaineering</h4>
         <img
           src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-          alt="Nicolas Hojac-inspired mountain chronicle blog featuring immersive expedition stories"
+          alt="Authentic mountain journey blog with personal stories and real challenges"
         />
         <img
           src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-          alt="Cinematic blog layout with large hero images and visual storytelling elements"
+          alt="Simple, focused blog design emphasizing authentic storytelling"
         />
         <img
           src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-          alt="Interactive blog cards with expedition photography and story previews"
+          alt="Personal mountaineering blog with emotional connection and real experiences"
         />
       </div>
 
       {/* Main content with proper spacing for fixed header */}
       <main id="main-content" className="flex-1 pt-16">
-        {/* Red Bull Blog Grid - Full Width */}
         <RedBullBlogGrid />
       </main>
 
-      {/* Subtle Support CTA */}
-      <SupportOptions variant="subtle" />
+      {/* Support CTA - More prominent per Steve Jobs analysis */}
+      <SupportOptions variant="featured" />
 
     </div>
   );

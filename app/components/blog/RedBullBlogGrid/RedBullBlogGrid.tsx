@@ -33,78 +33,78 @@ interface RedBullBlogGridProps {
 }
 
 export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
-  // Red Bull-style sample posts
+  // Authentic blog posts with emotional storytelling
   const samplePosts: BlogPost[] = [
     {
-      slug: 'mental-preparation-everest-2027',
-      title: 'The Mental Game',
+      slug: 'why-the-seven-summits',
+      title: 'Why the Seven Summits?',
       subtitle:
-        'Preparing Mind and Body for Everest 2027: A Systematic Approach to Peak Performance',
-      category: 'MENTAL PREPARATION',
+        'A Journey of Purpose, Passion, and Perseverance - The real reason I risk everything for some mountains',
+      category: 'PURPOSE',
       author: 'Sunith Kumar',
-      date: 'December 15, 2024',
-      readTime: '12 min read',
-      views: '2.1K',
+      date: 'March 15, 2024',
+      readTime: '5 min read',
+      views: '3.2K',
       image: '/stories/everest-prep.jpg',
       featured: true,
     },
     {
-      slug: 'kilimanjaro-data-analysis',
-      title: 'Data-Driven Ascent',
-      subtitle: 'How Analytics Transformed My Kilimanjaro Training Strategy',
-      category: 'TRAINING',
+      slug: 'systematic-thinking-beats-motivation',
+      title: 'Why Systems Beat Motivation',
+      subtitle: 'Motivation is like mountain weather - unreliable when you need it most. Here\'s what actually works.',
+      category: 'MINDSET',
       author: 'Sunith Kumar',
-      date: 'November 28, 2024',
-      readTime: '8 min read',
-      views: '1.8K',
+      date: 'March 22, 2024',
+      readTime: '4 min read',
+      views: '2.8K',
+      image: '/stories/data-training.jpg',
+      featured: false,
+    },
+    {
+      slug: 'the-fear-of-failure',
+      title: 'The Fear That Keeps Me Going',
+      subtitle: 'Everyone asks about success. I think about failure every single day. Here\'s why that\'s my secret weapon.',
+      category: 'MINDSET',
+      author: 'Sunith Kumar',
+      date: 'March 29, 2024',
+      readTime: '3 min read',
+      views: '2.1K',
       image: '/stories/kilimanjaro.jpg',
       featured: false,
     },
     {
-      slug: 'altitude-acclimatization-science',
-      title: 'Breathing at the Edge',
-      subtitle: 'The Science Behind High-Altitude Acclimatization',
-      category: 'EXPEDITION',
+      slug: 'the-day-motivation-failed',
+      title: 'The Day I Nearly Quit',
+      subtitle: 'February 18th, 5:47 AM. Rain pounding. Body aching. Motivation score: Zero. I went anyway.',
+      category: 'STORIES',
       author: 'Sunith Kumar',
-      date: 'November 12, 2024',
-      readTime: '10 min read',
-      views: '1.5K',
-      image: '/stories/data-training.jpg',
-      featured: false,
-    },
-    {
-      slug: 'gear-optimization-strategy',
-      title: 'Every Gram Matters',
-      subtitle: 'Optimizing Gear Selection for Multi-Day Expeditions',
-      category: 'GEAR',
-      author: 'Sunith Kumar',
-      date: 'October 30, 2024',
+      date: 'February 18, 2024',
       readTime: '6 min read',
-      views: '1.2K',
+      views: '4.1K',
       image: '/stories/everest-prep.jpg',
       featured: false,
     },
     {
-      slug: 'team-dynamics-mountain',
-      title: 'Trust at Altitude',
-      subtitle: 'Building Team Dynamics for Life-or-Death Situations',
-      category: 'EXPEDITION',
+      slug: 'mount-whitney-failure',
+      title: 'My First Mountain Failure',
+      subtitle: 'At 14,000 feet, gasping for air, watching my partner disappear into the clouds. That night changed everything.',
+      category: 'STORIES',
       author: 'Sunith Kumar',
-      date: 'October 18, 2024',
-      readTime: '9 min read',
-      views: '943',
+      date: 'January 10, 2024',
+      readTime: '8 min read',
+      views: '5.3K',
       image: '/stories/data-training.jpg',
       featured: false,
     },
     {
-      slug: 'nutrition-extreme-environments',
-      title: 'Fueling the Summit',
-      subtitle: 'Nutrition Strategies for Extreme High-Altitude Performance',
-      category: 'TRAINING',
+      slug: 'everest-statistics-reality',
+      title: 'The Numbers That Haunt Me',
+      subtitle: '60% success rate. 1.2% fatality rate. These aren\'t abstract - they\'re real people who didn\'t come home.',
+      category: 'REALITY',
       author: 'Sunith Kumar',
-      date: 'October 5, 2024',
+      date: 'April 5, 2024',
       readTime: '7 min read',
-      views: '1.7K',
+      views: '1.9K',
       image: '/stories/kilimanjaro.jpg',
       featured: false,
     },
@@ -112,12 +112,14 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
-      case 'MENTAL PREPARATION':
-        return TrendingUp;
-      case 'EXPEDITION':
+      case 'PURPOSE':
         return Mountain;
-      case 'TRAINING':
-        return Award;
+      case 'MINDSET':
+        return TrendingUp;
+      case 'STORIES':
+        return User;
+      case 'REALITY':
+        return Eye;
       default:
         return Mountain;
     }
@@ -125,13 +127,13 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
 
   const getCategoryColor = (category: string) => {
     switch (category) {
-      case 'MENTAL PREPARATION':
-        return 'bg-purple-600';
-      case 'EXPEDITION':
+      case 'PURPOSE':
         return 'bg-blue-600';
-      case 'TRAINING':
+      case 'MINDSET':
+        return 'bg-purple-600';
+      case 'STORIES':
         return 'bg-green-600';
-      case 'GEAR':
+      case 'REALITY':
         return 'bg-orange-600';
       default:
         return 'bg-red-600';
@@ -142,23 +144,31 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
   const regularPosts = samplePosts.filter((post) => !post.featured);
 
   return (
-    <div className={`bg-white min-h-screen ${className}`}>
+    <div className={`bg-black text-white min-h-screen ${className}`}>
       {/* Header */}
-      <section className="bg-red-600 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-16">
+      <section className="relative py-20">
+        <div className="absolute inset-0">
+          <img
+            src="/stories/data-training.jpg"
+            alt="Field Stories from the Mountains"
+            className="w-full h-full object-cover opacity-40"
+          />
+          <div className="absolute inset-0 bg-black/60"></div>
+        </div>
+        
+        <div className="relative z-10 max-w-6xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="text-center space-y-6"
           >
-            <h1 className="text-5xl md:text-7xl font-black">
-              MOUNTAIN CHRONICLES
+            <h1 className="text-5xl md:text-7xl font-light tracking-wide">
+              FIELD STORIES
             </h1>
-            <p className="text-xl md:text-2xl font-light max-w-3xl mx-auto leading-relaxed">
-              Stories from the summit. Data-driven insights from extreme
-              environments. The systematic journey toward mountaineering
-              excellence.
+            <p className="text-xl md:text-2xl font-light max-w-3xl mx-auto leading-relaxed opacity-90">
+              Raw stories from the mountains. Unfiltered insights from extreme preparation. 
+              The human side of systematic mountaineering.
             </p>
           </motion.div>
         </div>
@@ -166,7 +176,7 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
 
       {/* Featured Story */}
       {featuredPost && (
-        <section className="border-b-4 border-red-600">
+        <section className="border-b border-gray-800">
           <Link href={`/blog/${featuredPost.slug}`} className="block group">
             <div className="relative">
               <div className="relative h-[60vh] overflow-hidden">
@@ -230,10 +240,10 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
       {/* Stories Grid */}
       <section className="max-w-7xl mx-auto px-6 py-16">
         <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4">
-            LATEST STORIES
+          <h2 className="text-3xl md:text-4xl font-light text-white mb-4 tracking-wide">
+            EXPEDITION REPORTS
           </h2>
-          <div className="h-1 w-24 bg-red-600"></div>
+          <div className="h-px w-24 bg-white/30"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -250,7 +260,7 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
                 className="group"
               >
                 <Link href={`/blog/${post.slug}`} className="block">
-                  <div className="bg-white border border-gray-200 overflow-hidden hover:border-red-600 transition-all duration-300 hover:shadow-lg">
+                  <div className="bg-gray-900 border border-gray-700 overflow-hidden hover:border-white/50 transition-all duration-300 hover:shadow-2xl">
                     {/* Image */}
                     <div className="relative h-64 overflow-hidden">
                       <Image
@@ -272,11 +282,11 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
 
                     {/* Content */}
                     <div className="p-6">
-                      <h3 className="text-xl font-bold text-gray-900 leading-tight mb-3 group-hover:text-red-600 transition-colors">
+                      <h3 className="text-xl font-bold text-white leading-tight mb-3 group-hover:text-gray-300 transition-colors">
                         {post.title}
                       </h3>
 
-                      <p className="text-gray-600 leading-relaxed mb-4 text-sm">
+                      <p className="text-gray-400 leading-relaxed mb-4 text-sm">
                         {post.subtitle}
                       </p>
 
@@ -315,20 +325,20 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
       </section>
 
       {/* Newsletter CTA */}
-      <section className="bg-gray-900 text-white">
+      <section className="bg-gray-800 text-white border-t border-gray-700">
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <h3 className="text-3xl md:text-4xl font-black mb-6">
-            GET THE INSIDE STORY
+          <h3 className="text-3xl md:text-4xl font-light tracking-wide mb-6">
+            EXPEDITION UPDATES
           </h3>
-          <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-            Exclusive expedition updates, training data, and behind-the-scenes
-            insights delivered directly to your inbox every week.
+          <p className="text-xl text-gray-300 mb-8 leading-relaxed font-light">
+            Field reports from the mountains. Training insights and preparation updates. 
+            Raw stories from the systematic journey to Everest.
           </p>
           <Link
             href="/newsletter"
-            className="inline-flex items-center space-x-3 bg-red-600 text-white px-8 py-4 font-bold uppercase tracking-wide hover:bg-red-700 transition-colors"
+            className="inline-flex items-center space-x-3 bg-white text-black px-8 py-4 font-medium tracking-wide hover:bg-gray-200 transition-colors"
           >
-            <span>Subscribe Now</span>
+            <span>Subscribe to Updates</span>
             <ChevronRight className="w-5 h-5" />
           </Link>
         </div>
