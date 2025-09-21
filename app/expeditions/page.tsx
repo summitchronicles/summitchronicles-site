@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
 import { MapPin, Calendar, TrendingUp, Camera } from 'lucide-react';
@@ -140,10 +141,12 @@ export default function ExpeditionsPage() {
       {/* Hero Section */}
       <section className="relative h-96 flex items-center justify-center">
         <div className="absolute inset-0">
-          <img
+          <Image
             src="/stories/everest-prep.jpg"
             alt="Seven Summits Expeditions"
-            className="w-full h-full object-cover opacity-60"
+            fill
+            className="object-cover opacity-60"
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/50"></div>
         </div>
@@ -180,10 +183,12 @@ export default function ExpeditionsPage() {
                 <div className={`grid md:grid-cols-2 gap-8 ${index % 2 === 1 ? 'md:grid-flow-col-dense' : ''}`}>
                   {/* Image */}
                   <div className={`relative h-96 overflow-hidden ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
-                    <img
+                    <Image
                       src={expedition.image}
                       alt={`${expedition.mountain} expedition`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-700"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                     />
                     <div className="absolute top-6 left-6">
                       <div className={`px-3 py-1 text-xs font-medium tracking-wider uppercase ${getStatusColor(expedition.status)} bg-black/70 rounded`}>

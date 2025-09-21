@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
 import { 
@@ -142,10 +143,12 @@ export default function TrainingPage() {
       {/* Hero Section */}
       <section className="relative h-96 flex items-center justify-center">
         <div className="absolute inset-0">
-          <img
+          <Image
             src="/stories/data-training.jpg"
             alt="Training for Everest Expedition"
-            className="w-full h-full object-cover opacity-50"
+            fill
+            className="object-cover opacity-50"
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/60"></div>
         </div>
@@ -257,9 +260,11 @@ export default function TrainingPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <img
+              <Image
                 src="/stories/kilimanjaro.jpg"
                 alt="Systematic training approach"
+                width={600}
+                height={400}
                 className="w-full rounded-lg shadow-xl"
               />
             </motion.div>

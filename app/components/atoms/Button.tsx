@@ -34,9 +34,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const sizes = {
-      sm: 'h-8 px-3 text-sm',
-      md: 'h-10 px-4 py-2',
-      lg: 'h-12 px-6 text-lg',
+      sm: 'h-11 px-4 text-base min-h-[44px]', // Mobile-optimized: 44px minimum touch target
+      md: 'h-12 px-6 py-3 min-h-[48px]', // Mobile-optimized: 48px minimum touch target  
+      lg: 'h-14 px-8 text-lg min-h-[56px]', // Mobile-optimized: 56px touch target
     };
 
     if (asChild && React.isValidElement(children)) {

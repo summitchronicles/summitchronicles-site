@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header } from '../../components/organisms/Header';
-import { ContentEditor } from '../../components/organisms/ContentEditor';
+import { MagazineBlogEditor } from '../../components/organisms/MagazineBlogEditor';
 
 export default function EditorPage() {
   return (
@@ -17,7 +17,7 @@ export default function EditorPage() {
       {/* Main content with proper spacing for fixed header */}
       <main id="main-content" className="flex-1 pt-16">
         <div className="py-8">
-          <ContentEditor />
+          <MagazineBlogEditor />
         </div>
       </main>
 

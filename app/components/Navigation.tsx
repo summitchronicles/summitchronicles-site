@@ -38,12 +38,12 @@ export default function Navigation() {
           {/* Logo */}
           <Link
             href="/"
-            className="flex items-center space-x-3 group brand"
+            className="flex items-center space-x-3 group brand min-h-[44px] py-2 px-2 -mx-2 rounded-lg hover:bg-white/60 transition-all duration-300"
             onClick={() => setIsOpen(false)}
           >
-            <div className="w-8 h-8 gradient-summit rounded-xl flex items-center justify-center group-hover:animate-glow transition-all duration-300 relative overflow-hidden">
+            <div className="w-10 h-10 gradient-summit rounded-xl flex items-center justify-center group-hover:animate-glow transition-all duration-300 relative overflow-hidden">
               <AnimatedLogo
-                size={20}
+                size={22}
                 variant="minimal"
                 animateOnScroll={false}
                 colors={{
@@ -64,10 +64,10 @@ export default function Navigation() {
               <Link
                 key={href}
                 href={href}
-                className="group flex items-center space-x-2 px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all duration-200"
+                className="group flex items-center space-x-2 px-4 py-3 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all duration-200 min-h-[44px] text-base"
               >
                 <Icon className="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
-                <span className="text-sm font-medium">{label}</span>
+                <span className="text-base font-medium">{label}</span>
               </Link>
             ))}
           </div>
@@ -75,9 +75,11 @@ export default function Navigation() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-colors"
+            className="md:hidden p-3 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-colors min-h-[48px] min-w-[48px] flex items-center justify-center"
+            aria-label="Toggle mobile menu"
+            aria-expanded={isOpen}
           >
-            {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
@@ -90,7 +92,7 @@ export default function Navigation() {
                   key={href}
                   href={href}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center space-x-3 px-4 py-3 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all duration-200"
+                  className="flex items-center space-x-3 px-6 py-4 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-white/60 transition-all duration-200 min-h-[48px] text-base"
                 >
                   <Icon className="w-5 h-5" />
                   <span className="text-base font-medium">{label}</span>

@@ -146,12 +146,14 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
   return (
     <div className={`bg-black text-white min-h-screen ${className}`}>
       {/* Header */}
-      <section className="relative py-20">
+      <section className="relative py-12 md:py-20">
         <div className="absolute inset-0">
-          <img
+          <Image
             src="/stories/data-training.jpg"
             alt="Field Stories from the Mountains"
-            className="w-full h-full object-cover opacity-40"
+            fill
+            className="object-cover opacity-40"
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/60"></div>
         </div>
@@ -163,10 +165,10 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
             transition={{ duration: 0.8 }}
             className="text-center space-y-6"
           >
-            <h1 className="text-5xl md:text-7xl font-light tracking-wide">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-light tracking-wide">
               FIELD STORIES
             </h1>
-            <p className="text-xl md:text-2xl font-light max-w-3xl mx-auto leading-relaxed opacity-90">
+            <p className="text-lg md:text-xl lg:text-2xl font-light max-w-3xl mx-auto leading-relaxed opacity-90">
               Raw stories from the mountains. Unfiltered insights from extreme preparation. 
               The human side of systematic mountaineering.
             </p>
@@ -238,9 +240,9 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
       )}
 
       {/* Stories Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-6 py-12 md:py-16">
         <div className="mb-12">
-          <h2 className="text-3xl md:text-4xl font-light text-white mb-4 tracking-wide">
+          <h2 className="text-2xl md:text-3xl font-light text-white mb-4 tracking-wide">
             EXPEDITION REPORTS
           </h2>
           <div className="h-px w-24 bg-white/30"></div>
@@ -326,11 +328,11 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
 
       {/* Newsletter CTA */}
       <section className="bg-gray-800 text-white border-t border-gray-700">
-        <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <h3 className="text-3xl md:text-4xl font-light tracking-wide mb-6">
+        <div className="max-w-4xl mx-auto px-6 py-12 md:py-16 text-center">
+          <h3 className="text-2xl md:text-3xl font-light tracking-wide mb-6">
             EXPEDITION UPDATES
           </h3>
-          <p className="text-xl text-gray-300 mb-8 leading-relaxed font-light">
+          <p className="text-lg md:text-xl text-gray-300 mb-8 leading-relaxed font-light">
             Field reports from the mountains. Training insights and preparation updates. 
             Raw stories from the systematic journey to Everest.
           </p>

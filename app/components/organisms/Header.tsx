@@ -66,16 +66,16 @@ const Header: React.FC = () => {
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-400',
-        isScrolled
+        isScrolled || isMobileMenuOpen
           ? 'bg-white/95 backdrop-blur-sm shadow-spa-soft border-b border-spa-cloud/50'
           : 'bg-transparent'
       )}
     >
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between min-h-[64px] h-16 mobile-padding">
           {/* Logo / Brand */}
-          <Link href="/" className="flex items-center space-x-3 group brand">
-            <div className="flex items-center justify-center w-10 h-10 bg-alpine-blue rounded-md group-hover:bg-blue-800 transition-colors duration-300">
+          <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
+            <div className="flex items-center justify-center w-12 h-12 bg-alpine-blue rounded-md group-hover:bg-blue-800 transition-colors duration-300">
               <Icon name="Mountain" className="text-white" size="md" />
             </div>
             <H3 className="hidden sm:block text-spa-charcoal group-hover:text-alpine-blue transition-colors duration-300">
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'relative px-3 py-2 text-sm font-medium transition-all duration-300 group',
+                  'relative px-4 py-3 text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
                   isActivePath(item.href)
                     ? 'text-alpine-blue'
                     : 'text-spa-slate hover:text-alpine-blue'
@@ -123,13 +123,13 @@ const Header: React.FC = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-2 text-spa-slate hover:text-alpine-blue transition-colors duration-300"
+              className="lg:hidden p-3 text-spa-slate hover:text-alpine-blue transition-colors duration-300 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-md hover:bg-spa-stone"
               aria-label="Toggle mobile menu"
               aria-expanded={isMobileMenuOpen}
             >
               <Icon
                 name={isMobileMenuOpen ? 'X' : 'Menu'}
-                size="md"
+                size="lg"
                 className="transition-transform duration-300"
               />
             </button>
@@ -139,25 +139,25 @@ const Header: React.FC = () => {
         {/* Mobile Navigation Menu */}
         <div
           className={cn(
-            'lg:hidden overflow-hidden transition-all duration-400 ease-in-out',
-            isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+            'lg:hidden overflow-hidden transition-all duration-400 ease-in-out mobile-safe',
+            isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
           )}
         >
-          <div className="py-4 border-t border-spa-cloud bg-white/95 backdrop-blur-sm rounded-b-lg shadow-spa-medium">
+          <div className="py-6 border-t border-spa-cloud bg-white backdrop-blur-sm rounded-b-lg shadow-spa-medium mobile-nav">
             <nav className="space-y-1">
               {primaryNavigation.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'block px-4 py-3 text-base font-medium transition-all duration-300',
+                    'block px-6 py-4 text-base font-medium transition-all duration-300 min-h-[48px] flex items-center',
                     isActivePath(item.href)
                       ? 'text-alpine-blue bg-spa-stone border-l-4 border-alpine-blue'
-                      : 'text-spa-slate hover:text-alpine-blue hover:bg-spa-stone'
+                      : 'text-spa-charcoal hover:text-alpine-blue hover:bg-spa-stone'
                   )}
                 >
-                  <div className="flex items-center justify-between">
-                    <span>{item.label}</span>
+                  <div className="flex items-center justify-between w-full">
+                    <span className="text-base">{item.label}</span>
                     {item.description && (
                       <span className="text-sm text-spa-slate">
                         {item.description}
@@ -173,7 +173,7 @@ const Header: React.FC = () => {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block px-4 py-2 text-sm text-spa-slate hover:text-alpine-blue transition-colors duration-300"
+                    className="block px-6 py-3 text-base text-spa-charcoal hover:text-alpine-blue transition-colors duration-300 min-h-[44px] flex items-center"
                   >
                     {item.label}
                   </Link>

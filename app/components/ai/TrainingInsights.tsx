@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   Brain,
@@ -56,14 +56,7 @@ export function TrainingInsights({
   const [error, setError] = useState<string | null>(null);
   const [lastAnalysis, setLastAnalysis] = useState<Date | null>(null);
 
-  // Auto-generate insights when activities change
-  useEffect(() => {
-    if (activities.length > 0 && !lastAnalysis) {
-      generateInsights();
-    }
-  }, [activities]);
-
-  const generateInsights = async () => {
+  const generateInsights = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -102,7 +95,14 @@ export function TrainingInsights({
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  // Auto-generate insights when activities change
+  useEffect(() => {
+    if (activities.length > 0 && !lastAnalysis) {
+      generateInsights();
+    }
+  }, [activities, lastAnalysis, generateInsights]);
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 0.8) return 'text-green-600 bg-green-100';

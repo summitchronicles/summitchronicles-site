@@ -123,12 +123,17 @@ module.exports = {
           winter: '#3b82f6'
         }
       },
-      // Swiss spa typography system
+      // Swiss spa typography system - Mobile-optimized
       fontSize: {
         'display': ['4rem', { lineHeight: '1.1', fontWeight: '300' }], // 64px
         'display-lg': ['4.5rem', { lineHeight: '1.1', fontWeight: '300' }], // 72px
         'h1': ['2.25rem', { lineHeight: '1.2', fontWeight: '400' }], // 36px
         'h1-lg': ['3rem', { lineHeight: '1.2', fontWeight: '400' }], // 48px
+        // Mobile-optimized text sizes (minimum 16px for readability)
+        'sm': ['1rem', { lineHeight: '1.5' }], // 16px minimum for mobile
+        'base': ['1rem', { lineHeight: '1.5' }], // 16px base
+        'lg': ['1.125rem', { lineHeight: '1.5' }], // 18px
+        'xl': ['1.25rem', { lineHeight: '1.5' }], // 20px
       },
       // 8px grid spacing system
       spacing: {
@@ -160,5 +165,45 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Mobile-optimized utilities plugin
+    function({ addUtilities }) {
+      addUtilities({
+        // Prevent horizontal overflow
+        '.mobile-safe': {
+          'max-width': '100vw',
+          'overflow-x': 'hidden',
+          'box-sizing': 'border-box',
+        },
+        // Mobile touch target utilities
+        '.touch-target': {
+          'min-height': '44px',
+          'min-width': '44px',
+        },
+        '.touch-target-lg': {
+          'min-height': '48px',
+          'min-width': '48px',
+        },
+        // Mobile typography
+        '.mobile-text': {
+          'font-size': '1rem', // 16px minimum
+          'line-height': '1.5',
+        },
+        // Responsive containers
+        '.container-mobile': {
+          'width': '100%',
+          'max-width': '100vw',
+          'padding-left': '1rem',
+          'padding-right': '1rem',
+          'margin-left': 'auto',
+          'margin-right': 'auto',
+        },
+        // Mobile safe area
+        '.mobile-padding': {
+          'padding-left': 'max(1rem, env(safe-area-inset-left))',
+          'padding-right': 'max(1rem, env(safe-area-inset-right))',
+        },
+      })
+    }
+  ],
 }

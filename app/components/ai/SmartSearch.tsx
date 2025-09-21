@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import {
   Search,
   MessageCircle,
@@ -61,12 +61,7 @@ export function SmartSearch({
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Check system status on mount
-  useEffect(() => {
-    checkSystemStatus();
-  }, []);
-
-  const checkSystemStatus = async () => {
+  const checkSystemStatus = useCallback(async () => {
     try {
       const response = await fetch('/api/ai/status');
       const data = await response.json();
@@ -87,7 +82,12 @@ export function SmartSearch({
       setSystemStatus('error');
       setError('Failed to connect to AI system');
     }
-  };
+  }, []);
+
+  // Check system status on mount
+  useEffect(() => {
+    checkSystemStatus();
+  }, [checkSystemStatus]);
 
   const initializeSystem = async () => {
     try {

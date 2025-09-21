@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
 import { H3, Body } from '../atoms/Typography';
@@ -23,6 +24,10 @@ interface ContentData {
   category: string;
   tags: string[];
   featuredImage?: string;
+  author?: string;
+  location?: string;
+  readTime?: string;
+  date?: string;
 }
 
 const ContentEditor: React.FC<ContentEditorProps> = ({
@@ -37,19 +42,62 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
       content: '',
       excerpt: '',
       status: 'draft',
-      category: 'training',
+      category: 'PURPOSE',
       tags: [],
       featuredImage: undefined,
+      author: 'Sunith Kumar',
+      location: 'Training Grounds, California',
+      readTime: '',
+      date: '',
     }
   );
 
   const [isPreview, setIsPreview] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSave = () => {
-    if (onSave) {
-      onSave(content);
+  // Handle client-side mounting to prevent hydration errors
+  useEffect(() => {
+    setMounted(true);
+    if (!content.date) {
+      setContent(prev => ({
+        ...prev,
+        date: new Date().toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+      }));
     }
-    console.log('Content saved:', content);
+  }, []);
+
+  const handleSave = async () => {
+    // Calculate read time
+    const wordCount = content.content.split(/\s+/).filter(word => word.length > 0).length;
+    const readTime = `${Math.ceil(wordCount / 200)} min read`;
+
+    const finalContent = {
+      ...content,
+      readTime,
+      date: content.date || new Date().toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }),
+    };
+
+    if (onSave) {
+      onSave(finalContent);
+    }
+
+    console.log('Content saved:', finalContent);
+
+    // Save to localStorage as backup
+    localStorage.setItem('blog_draft_' + finalContent.slug, JSON.stringify(finalContent));
+
+    alert('Blog post saved! Check console for data structure.');
   };
 
   const generateSlug = (title: string) => {
@@ -65,6 +113,76 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
       ...prev,
       title,
       slug: generateSlug(title),
+    }));
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please select an image file.');
+      return;
+    }
+
+    // Validate file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Image size should be less than 5MB.');
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const imageUrl = e.target?.result as string;
+        setImagePreview(imageUrl);
+        setContent(prev => ({
+          ...prev,
+          featuredImage: imageUrl
+        }));
+      };
+      reader.readAsDataURL(file);
+
+      // In a real app, you'd upload to your storage service here
+      // For now, we'll use the data URL
+      console.log('Image uploaded:', file.name);
+
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error uploading image. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setImagePreview(null);
+    setContent(prev => ({
+      ...prev,
+      featuredImage: undefined
+    }));
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleTagAdd = (tag: string) => {
+    if (tag && !content.tags.includes(tag)) {
+      setContent(prev => ({
+        ...prev,
+        tags: [...prev.tags, tag]
+      }));
+    }
+  };
+
+  const handleTagRemove = (tagToRemove: string) => {
+    setContent(prev => ({
+      ...prev,
+      tags: prev.tags.filter(tag => tag !== tagToRemove)
     }));
   };
 
@@ -87,7 +205,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
               {content.status.charAt(0).toUpperCase() + content.status.slice(1)}
             </StatusBadge>
             <Body className="text-spa-slate text-sm">
-              Last modified: {new Date().toLocaleDateString()}
+              Last modified: {mounted ? new Date().toLocaleDateString() : '--'}
             </Body>
           </div>
         </div>
@@ -142,11 +260,51 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                 </div>
               </Card>
 
+              {/* Author & Meta Info */}
+              <Card variant="elevated" padding="md">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-spa-charcoal mb-2">
+                      Author
+                    </label>
+                    <input
+                      type="text"
+                      value={content.author || ''}
+                      onChange={(e) =>
+                        setContent((prev) => ({
+                          ...prev,
+                          author: e.target.value,
+                        }))
+                      }
+                      className="w-full px-4 py-3 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-alpine-blue"
+                      placeholder="Sunith Kumar"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-spa-charcoal mb-2">
+                      Location
+                    </label>
+                    <input
+                      type="text"
+                      value={content.location || ''}
+                      onChange={(e) =>
+                        setContent((prev) => ({
+                          ...prev,
+                          location: e.target.value,
+                        }))
+                      }
+                      className="w-full px-4 py-3 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-alpine-blue"
+                      placeholder="Training Grounds, California"
+                    />
+                  </div>
+                </div>
+              </Card>
+
               {/* Excerpt */}
               <Card variant="elevated" padding="md">
                 <div className="space-y-4">
                   <label className="block text-sm font-medium text-spa-charcoal">
-                    Excerpt
+                    Excerpt/Subtitle
                   </label>
                   <textarea
                     value={content.excerpt}
@@ -158,7 +316,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                     }
                     rows={3}
                     className="w-full px-4 py-3 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-alpine-blue resize-none"
-                    placeholder="Brief description of this content..."
+                    placeholder="A compelling subtitle that draws readers in..."
                   />
                 </div>
               </Card>
@@ -177,9 +335,9 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                         content: e.target.value,
                       }))
                     }
-                    rows={20}
-                    className="w-full px-4 py-3 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-alpine-blue resize-none font-mono text-sm"
-                    placeholder="Write your content in Markdown format..."
+                    rows={25}
+                    className="w-full px-4 py-3 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-alpine-blue resize-none font-mono text-sm leading-relaxed"
+                    placeholder="Write your authentic story here...\n\nYou can use simple formatting:\n- **bold text**\n- *italic text*\n- ## Headings\n- > Quotes\n- Lists and paragraphs"
                   />
                   <Body className="text-spa-slate text-sm">
                     Supports Markdown formatting. Use **bold**, *italic*, ##
@@ -252,11 +410,13 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                   }
                   className="w-full px-3 py-2 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue"
                 >
-                  <option value="training">Training</option>
-                  <option value="expedition">Expedition</option>
-                  <option value="gear">Gear Review</option>
-                  <option value="insights">Insights</option>
-                  <option value="updates">Updates</option>
+                  <option value="PURPOSE">PURPOSE</option>
+                  <option value="MINDSET">MINDSET</option>
+                  <option value="STORIES">STORIES</option>
+                  <option value="REALITY">REALITY</option>
+                  <option value="TRAINING">TRAINING</option>
+                  <option value="EXPEDITION">EXPEDITION</option>
+                  <option value="GEAR">GEAR</option>
                 </select>
               </div>
             </CardContent>
@@ -268,20 +428,115 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
               <H3 className="text-spa-charcoal text-lg">Featured Image</H3>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="aspect-video bg-spa-mist rounded-lg border-2 border-dashed border-spa-cloud flex items-center justify-center">
-                <div className="text-center space-y-2">
-                  <Icon
-                    name="Upload"
-                    size="lg"
-                    className="text-spa-slate mx-auto"
+              {imagePreview || content.featuredImage ? (
+                <div className="relative aspect-video bg-spa-mist rounded-lg overflow-hidden">
+                  <Image
+                    src={imagePreview || content.featuredImage || ''}
+                    alt="Featured image preview"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 400px"
                   />
-                  <Body className="text-spa-slate text-sm">Upload Image</Body>
+                  <button
+                    onClick={handleRemoveImage}
+                    className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition-colors"
+                  >
+                    <Icon name="X" size="sm" />
+                  </button>
                 </div>
-              </div>
-              <Button variant="ghost" size="sm" className="w-full">
+              ) : (
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="aspect-video bg-spa-mist rounded-lg border-2 border-dashed border-spa-cloud flex items-center justify-center cursor-pointer hover:border-alpine-blue transition-colors"
+                >
+                  <div className="text-center space-y-2">
+                    <Icon
+                      name={isUploading ? "Loader2" : "Upload"}
+                      size="lg"
+                      className={`text-spa-slate mx-auto ${isUploading ? 'animate-spin' : ''}`}
+                    />
+                    <Body className="text-spa-slate text-sm">
+                      {isUploading ? 'Uploading...' : 'Click to Upload Image'}
+                    </Body>
+                    <Body className="text-spa-slate text-xs">
+                      Supports JPG, PNG, GIF (max 5MB)
+                    </Body>
+                  </div>
+                </div>
+              )}
+
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+
+              <Button
+                variant="ghost"
+                size="sm"
+                className="w-full"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+              >
                 <Icon name="Upload" size="sm" />
-                Choose File
+                {imagePreview || content.featuredImage ? 'Change Image' : 'Choose File'}
               </Button>
+            </CardContent>
+          </Card>
+
+          {/* Tags */}
+          <Card variant="elevated" padding="md">
+            <CardHeader>
+              <H3 className="text-spa-charcoal text-lg">Tags</H3>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex flex-wrap gap-2">
+                {content.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="inline-flex items-center space-x-1 px-3 py-1 bg-alpine-blue/10 text-alpine-blue text-sm rounded-full"
+                  >
+                    <span>{tag}</span>
+                    <button
+                      onClick={() => handleTagRemove(tag)}
+                      className="text-alpine-blue/70 hover:text-alpine-blue ml-1"
+                    >
+                      <Icon name="X" size="sm" />
+                    </button>
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex space-x-2">
+                <input
+                  type="text"
+                  placeholder="Add a tag..."
+                  className="flex-1 px-3 py-2 rounded-lg border border-spa-cloud focus:outline-none focus:ring-2 focus:ring-alpine-blue text-sm"
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      handleTagAdd(e.currentTarget.value);
+                      e.currentTarget.value = '';
+                    }
+                  }}
+                />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={(e) => {
+                    const input = e.currentTarget.previousElementSibling as HTMLInputElement;
+                    handleTagAdd(input.value);
+                    input.value = '';
+                  }}
+                >
+                  Add
+                </Button>
+              </div>
+
+              <div className="text-xs text-spa-slate">
+                Suggested: everest, training, mindset, preparation, mountaineering
+              </div>
             </CardContent>
           </Card>
 

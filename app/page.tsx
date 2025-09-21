@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Header } from './components/organisms/Header';
 import { SponsorRecognition } from './components/organisms/SponsorRecognition';
@@ -24,10 +25,13 @@ export default function Home() {
         <section className="relative h-screen flex items-center justify-center overflow-hidden">
           {/* Background Image */}
           <div className="absolute inset-0">
-            <img
+            <Image
               src="/hero.jpg"
               alt="Summit Chronicles - Seven Summits Journey"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
             />
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
@@ -72,10 +76,12 @@ export default function Home() {
         <section className="py-0 bg-black">
           <div className="grid grid-cols-1 md:grid-cols-3 h-96">
             <div className="relative group overflow-hidden">
-              <img
+              <Image
                 src="/stories/kilimanjaro.jpg"
                 alt="Mount Kilimanjaro Expedition"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors">
                 <div className="absolute bottom-6 left-6 text-white">
@@ -85,10 +91,12 @@ export default function Home() {
               </div>
             </div>
             <div className="relative group overflow-hidden">
-              <img
+              <Image
                 src="/stories/data-training.jpg"
                 alt="Mount Whitney Training"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors">
                 <div className="absolute bottom-6 left-6 text-white">
@@ -98,10 +106,12 @@ export default function Home() {
               </div>
             </div>
             <div className="relative group overflow-hidden">
-              <img
+              <Image
                 src="/stories/everest-prep.jpg"
                 alt="Everest Preparation"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                sizes="(max-width: 768px) 100vw, 33vw"
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors">
                 <div className="absolute bottom-6 left-6 text-white">
@@ -154,23 +164,27 @@ export default function Home() {
           <h2>Seven Summits Challenge Progress</h2>
           <h3>Training Methodology</h3>
           <h4>Equipment and Safety</h4>
-          <img
+          <Image
             src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
             alt="Sunith Kumar climbing Mount Kilimanjaro summit, showing determination and adventure spirit"
+            width={1}
+            height={1}
           />
-          <img
+          <Image
             src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
             alt="Training session data visualization showing progress towards Seven Summits challenge"
+            width={1}
+            height={1}
           />
-          <img
+          <Image
             src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
             alt="Mountaineering equipment and gear setup for high-altitude expedition climbing"
+            width={1}
+            height={1}
           />
         </div>
       </main>
 
-      {/* Subtle Sponsor Recognition */}
-      <SponsorRecognition variant="subtle" />
 
     </div>
   );

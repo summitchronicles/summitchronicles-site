@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { Header } from '../components/organisms/Header';
 import { SupportOptions } from '../components/organisms/SupportOptions';
 import { RedBullBlogGrid } from '../components/blog';
@@ -21,17 +22,23 @@ export default function BlogPage() {
         <h2>Authentic Journey Stories</h2>
         <h3>Real struggles, real breakthroughs, real preparation</h3>
         <h4>The human side of extreme mountaineering</h4>
-        <img
+        <Image
           src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
           alt="Authentic mountain journey blog with personal stories and real challenges"
+          width={1}
+          height={1}
         />
-        <img
+        <Image
           src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
           alt="Simple, focused blog design emphasizing authentic storytelling"
+          width={1}
+          height={1}
         />
-        <img
+        <Image
           src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
           alt="Personal mountaineering blog with emotional connection and real experiences"
+          width={1}
+          height={1}
         />
       </div>
 
@@ -40,8 +47,6 @@ export default function BlogPage() {
         <RedBullBlogGrid />
       </main>
 
-      {/* Support CTA - More prominent per Steve Jobs analysis */}
-      <SupportOptions variant="featured" />
 
     </div>
   );

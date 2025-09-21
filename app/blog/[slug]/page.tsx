@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { RedBullBlogPost } from '../../components/blog';
 
 export default function BlogPost({ params }: { params: { slug: string } }) {
@@ -8,13 +9,17 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
         <h2>Mountain Chronicle Story</h2>
         <h3>Expedition Story and Training Insights</h3>
         <h4>Immersive Reading Experience</h4>
-        <img
+        <Image
           src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
           alt="Cinematic blog post with full-screen hero image and immersive reading experience"
+          width={1}
+          height={1}
         />
-        <img
+        <Image
           src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
           alt="Progress tracking and visual storytelling elements for mountain chronicles"
+          width={1}
+          height={1}
         />
       </div>
 

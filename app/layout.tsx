@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import './globals-mobile.css';
 import { Montserrat, Amatic_SC, Oswald } from 'next/font/google';
 import {
   OrganizationStructuredData,
@@ -71,11 +72,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <OrganizationStructuredData />
         <BreadcrumbStructuredData />
       </head>
       <body
-        className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-spa-charcoal bg-spa-stone`}
+        className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-spa-charcoal bg-spa-stone mobile-safe`}
       >
         {children}
       </body>
