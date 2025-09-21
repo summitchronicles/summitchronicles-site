@@ -1,10 +1,13 @@
 // lib/strava.ts
 import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Create Supabase client only if environment variables are available
+const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
+  ? createClient(
+      process.env.SUPABASE_URL,
+      process.env.SUPABASE_SERVICE_ROLE_KEY
+    )
+  : null;
 
 const STRAVA_TOKEN_TABLE = "strava_tokens";
 
@@ -39,21 +42,30 @@ export async function rateLimitedFetch(url: string, options?: RequestInit): Prom
  * If expired, refresh and persist new tokens in Supabase.
  */
 export async function getStravaAccessToken(): Promise<string> {
-  // 1. Try load token row from Supabase
-  const { data, error } = await supabase
-    .from(STRAVA_TOKEN_TABLE)
-    .select("*")
-    .single<StravaTokenRow>();
-
   let access_token: string | null = null;
   let refresh_token: string | null = null;
   let expires_at: number | null = null;
 
-  if (!error && data) {
-    access_token = data.access_token;
-    refresh_token = data.refresh_token;
-    expires_at = data.expires_at;
-  } else {
+  // 1. Try load token row from Supabase if available
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from(STRAVA_TOKEN_TABLE)
+        .select("*")
+        .single<StravaTokenRow>();
+
+      if (!error && data) {
+        access_token = data.access_token;
+        refresh_token = data.refresh_token;
+        expires_at = data.expires_at;
+      }
+    } catch (error) {
+      console.warn("⚠️ Supabase query failed, falling back to env vars");
+    }
+  }
+
+  // 2. Fall back to environment variables if Supabase unavailable or no data
+  if (!access_token) {
     console.warn("⚠️ No tokens in Supabase, falling back to env vars");
     access_token = process.env.STRAVA_ACCESS_TOKEN || null;
     refresh_token = process.env.STRAVA_REFRESH_TOKEN || null;
@@ -91,20 +103,24 @@ export async function getStravaAccessToken(): Promise<string> {
 
   const json = await res.json();
 
-  // 4. Save new tokens in Supabase
-  const { error: upsertError } = await supabase
-    .from(STRAVA_TOKEN_TABLE)
-    .upsert({
-      id: 1,
-      access_token: json.access_token,
-      refresh_token: json.refresh_token,
-      expires_at: json.expires_at,
-    });
+  // 4. Save new tokens in Supabase (if available)
+  if (supabase) {
+    const { error: upsertError } = await supabase
+      .from(STRAVA_TOKEN_TABLE)
+      .upsert({
+        id: 1,
+        access_token: json.access_token,
+        refresh_token: json.refresh_token,
+        expires_at: json.expires_at,
+      });
 
-  if (upsertError) {
-    console.error("⚠️ Failed to persist refreshed token in Supabase:", upsertError.message);
+    if (upsertError) {
+      console.error("⚠️ Failed to persist refreshed token in Supabase:", upsertError.message);
+    } else {
+      console.log("✅ Refreshed Strava token persisted in Supabase");
+    }
   } else {
-    console.log("✅ Refreshed Strava token persisted in Supabase");
+    console.warn("⚠️ Supabase unavailable, cannot persist refreshed token");
   }
 
   return json.access_token;
@@ -145,6 +161,11 @@ export async function fetchStravaActivities(page = 1, perPage = 30) {
  * Store Strava tokens (used by OAuth callback)
  */
 export async function storeStravaTokens(tokens: any) {
+  if (!supabase) {
+    console.warn('⚠️ Supabase unavailable, cannot store tokens');
+    return;
+  }
+
   const { error } = await supabase
     .from(STRAVA_TOKEN_TABLE)
     .upsert({
