@@ -6,6 +6,7 @@ import {
   OrganizationStructuredData,
   BreadcrumbStructuredData,
 } from './components/seo/StructuredData';
+import { FloatingAIButton } from './components/ai/FloatingAIButton';
 
 const montserrat = Montserrat({
   subsets: ['latin'],
@@ -80,6 +81,7 @@ export default function RootLayout({
         className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-spa-charcoal bg-spa-stone mobile-safe`}
       >
         {children}
+        <FloatingAIButton />
       </body>
     </html>
   );

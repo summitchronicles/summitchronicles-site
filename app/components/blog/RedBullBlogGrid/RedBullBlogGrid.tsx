@@ -14,6 +14,7 @@ import {
   ChevronRight,
   Plus,
 } from 'lucide-react';
+import { getAllPosts, hasGeneratedPosts } from '@/lib/posts';
 
 interface BlogPost {
   slug: string;
@@ -33,7 +34,28 @@ interface RedBullBlogGridProps {
 }
 
 export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
-  // Authentic blog posts with emotional storytelling
+  // Try to use generated posts first, fallback to sample data
+  const generatedPosts = hasGeneratedPosts() ? getAllPosts() : [];
+
+  // Convert generated posts to component format
+  const convertedPosts: BlogPost[] = generatedPosts.map(post => ({
+    slug: post.slug,
+    title: post.title,
+    subtitle: post.excerpt,
+    category: post.category.toUpperCase(),
+    author: 'Sunith Kumar',
+    date: new Date(post.date).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }),
+    readTime: `${post.readTime} min read`,
+    views: '2.1K', // You could track this in the future
+    image: post.heroImage,
+    featured: false // You could add featured flag to frontmatter
+  }));
+
+  // Fallback sample posts if no generated content
   const samplePosts: BlogPost[] = [
     {
       slug: 'why-the-seven-summits',
@@ -140,8 +162,11 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
     }
   };
 
-  const featuredPost = samplePosts.find((post) => post.featured);
-  const regularPosts = samplePosts.filter((post) => !post.featured);
+  // Use generated posts if available, fallback to sample posts
+  const posts = convertedPosts.length > 0 ? convertedPosts : samplePosts;
+
+  const featuredPost = posts.find((post) => post.featured) || posts[0]; // First post as featured if none marked
+  const regularPosts = posts.filter((post) => !post.featured);
 
   return (
     <div className={`bg-black text-white min-h-screen ${className}`}>

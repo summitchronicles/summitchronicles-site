@@ -71,8 +71,8 @@ const Header: React.FC = () => {
           : 'bg-transparent'
       )}
     >
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between min-h-[64px] h-16 mobile-padding">
+      <div className="max-w-7xl mx-auto px-2 sm:px-3">
+        <div className="flex items-center justify-between min-h-[64px] h-16">
           {/* Logo / Brand */}
           <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
             <div className="flex items-center justify-center w-12 h-12 bg-alpine-blue rounded-md group-hover:bg-blue-800 transition-colors duration-300">
@@ -84,7 +84,7 @@ const Header: React.FC = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-4 lg:space-x-8">
             {primaryNavigation.map((item) => (
               <Link
                 key={item.href}
@@ -106,9 +106,9 @@ const Header: React.FC = () => {
           </nav>
 
           {/* CTA & Mobile Menu */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 md:space-x-4 ml-auto">
             {/* Support CTA - Desktop */}
-            <div className="hidden md:flex items-center space-x-2">
+            <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/newsletter">Newsletter</Link>
               </Button>
@@ -123,7 +123,7 @@ const Header: React.FC = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="lg:hidden p-3 text-spa-slate hover:text-alpine-blue transition-colors duration-300 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-md hover:bg-spa-stone"
+              className="md:hidden p-3 text-spa-slate hover:text-alpine-blue transition-colors duration-300 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-md hover:bg-spa-stone"
               aria-label="Toggle mobile menu"
               aria-expanded={isMobileMenuOpen}
             >
@@ -139,7 +139,7 @@ const Header: React.FC = () => {
         {/* Mobile Navigation Menu */}
         <div
           className={cn(
-            'lg:hidden overflow-hidden transition-all duration-400 ease-in-out mobile-safe',
+            'md:hidden overflow-hidden transition-all duration-400 ease-in-out mobile-safe',
             isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
           )}
         >

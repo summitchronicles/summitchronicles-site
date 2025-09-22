@@ -2,6 +2,9 @@
 node_modules/
 .npm-cache/
 
+# semantic content pipeline generated files
+generated/
+
 # next.js
 .next/
 out/

@@ -49,7 +49,7 @@ export default function Home() {
               <p className="text-xl md:text-2xl font-light tracking-wider opacity-90 mb-8">
                 Seven Summits • One Journey • 541 Days to Everest
               </p>
-              <div className="flex items-center justify-center space-x-8 text-sm tracking-widest uppercase opacity-80">
+              <div className="flex items-center justify-center space-x-2 md:space-x-3 text-sm tracking-widest uppercase opacity-80">
                 <span>Mountaineer</span>
                 <span>•</span>
                 <span>Photographer</span>

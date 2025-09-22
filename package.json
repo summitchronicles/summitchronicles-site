@@ -18,6 +18,8 @@
     "test:mobile:issues": "playwright test tests/e2e/mobile-issues-detection.spec.ts",
     "test:mobile:pipeline": "playwright test tests/e2e/mobile-aidevops-pipeline.spec.ts",
     "typecheck": "tsc --noEmit",
+    "build-posts": "node scripts/process-posts.js",
+    "build-posts:single": "node scripts/process-posts.js single",
     "perf": "npm run build && npm run start",
     "audit:security": "npm audit",
     "audit:deps": "npm outdated",
@@ -39,6 +41,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.544.0",
     "next": "14.2.32",
     "next-sanity": "^9.12.3",
@@ -47,7 +50,8 @@
     "sanity": "^3.99.0",
     "styled-components": "^6.1.19",
     "swr": "^2.3.6",
-    "tailwind-merge": "^3.3.1"
+    "tailwind-merge": "^3.3.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^15.5.3",

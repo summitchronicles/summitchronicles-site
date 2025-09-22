@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
 import { TrainingDashboard } from '../../components/realtime/TrainingDashboard';
+import { TrainingCalendar } from '../../components/training/TrainingCalendar';
 import {
   Activity,
   TrendingUp,
@@ -160,7 +161,7 @@ export default function RealtimeTrainingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-spa-stone flex flex-col">
+    <div className="bg-black text-white">
       {/* Skip link for accessibility */}
       <a
         href="#main-content"
@@ -170,18 +171,35 @@ export default function RealtimeTrainingPage() {
       </a>
       <Header />
 
-      {/* Main content with proper spacing for fixed header */}
-      <main id="main-content" className="flex-1 pt-16">
-        <div className="min-h-screen py-8">
-          <div className="max-w-7xl mx-auto px-4">
-            {/* Header */}
-            <div className="flex items-center justify-between mb-8">
+      {/* Hero Section */}
+      <section className="relative h-80 flex items-center justify-center">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-gray-900/80"></div>
+        </div>
+
+        <div className="relative z-10 text-center px-6">
+          <h1 className="text-5xl md:text-6xl font-light tracking-wide mb-4">
+            LIVE TRAINING DATA
+          </h1>
+          <p className="text-xl font-light tracking-wider opacity-90">
+            Real-time Metrics • Systematic Progress • 541 Days to Everest
+          </p>
+        </div>
+      </section>
+
+      {/* Main content */}
+      <main id="main-content">
+        <div className="bg-gray-900 py-8">
+          <div className="max-w-7xl mx-auto px-6">
+            {/* Status Header */}
+            <div className="flex items-center justify-between mb-12">
               <div>
-                <h1 className="text-4xl font-light text-spa-charcoal mb-2">
-                  Real-time Training Dashboard
-                </h1>
-                <p className="text-spa-charcoal/70">
-                  Live tracking of your mountaineering preparation progress
+                <div className="h-px w-24 bg-white/30 mb-6"></div>
+                <h2 className="text-3xl font-light tracking-wide text-white mb-2">
+                  PERFORMANCE DASHBOARD
+                </h2>
+                <p className="text-gray-400">
+                  Live tracking of mountaineering preparation progress
                 </p>
               </div>
 
@@ -189,15 +207,15 @@ export default function RealtimeTrainingPage() {
                 <div className="flex items-center space-x-2 text-sm">
                   {isConnected ? (
                     <>
-                      <Wifi className="w-4 h-4 text-green-600" />
-                      <span className="text-green-600">
+                      <Wifi className="w-4 h-4 text-green-400" />
+                      <span className="text-green-400">
                         Connected to Strava
                       </span>
                     </>
                   ) : (
                     <>
-                      <WifiOff className="w-4 h-4 text-amber-600" />
-                      <span className="text-amber-600">Using demo data</span>
+                      <WifiOff className="w-4 h-4 text-yellow-400" />
+                      <span className="text-yellow-400">Using demo data</span>
                     </>
                   )}
                 </div>
@@ -205,7 +223,7 @@ export default function RealtimeTrainingPage() {
                 <button
                   onClick={loadTrainingData}
                   disabled={loading}
-                  className="flex items-center space-x-2 px-4 py-2 bg-alpine-blue text-white rounded-lg hover:bg-alpine-blue/90 transition-colors disabled:opacity-50"
+                  className="flex items-center space-x-2 border border-white text-white px-4 py-2 font-medium tracking-wide hover:bg-white hover:text-black transition-colors disabled:opacity-50"
                 >
                   <RefreshCw
                     className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}
@@ -216,93 +234,93 @@ export default function RealtimeTrainingPage() {
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-                <p className="text-red-800">{error}</p>
+              <div className="bg-red-900/20 border border-red-600/30 rounded-lg p-4 mb-8">
+                <p className="text-red-400">{error}</p>
               </div>
             )}
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <Activity className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                    <Activity className="w-6 h-6 text-white" />
                   </div>
-                  <span className="text-2xl font-bold text-spa-charcoal">
+                  <span className="text-3xl font-light text-white">
                     {metrics.totalActivities}
                   </span>
                 </div>
-                <h3 className="font-medium text-spa-charcoal">
-                  Total Activities
+                <h3 className="font-medium text-white tracking-wide mb-1">
+                  TOTAL ACTIVITIES
                 </h3>
-                <p className="text-sm text-spa-charcoal/60">
+                <p className="text-xs text-gray-400 uppercase tracking-wide">
                   This training cycle
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <TrendingUp className="w-6 h-6 text-green-600" />
+                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                    <TrendingUp className="w-6 h-6 text-white" />
                   </div>
-                  <span className="text-2xl font-bold text-spa-charcoal">
+                  <span className="text-3xl font-light text-white">
                     {metrics.totalDistance}km
                   </span>
                 </div>
-                <h3 className="font-medium text-spa-charcoal">
-                  Distance Covered
+                <h3 className="font-medium text-white tracking-wide mb-1">
+                  DISTANCE COVERED
                 </h3>
-                <p className="text-sm text-spa-charcoal/60">Total kilometers</p>
+                <p className="text-xs text-gray-400 uppercase tracking-wide">Total kilometers</p>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <Mountain className="w-6 h-6 text-purple-600" />
+                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                    <Mountain className="w-6 h-6 text-white" />
                   </div>
-                  <span className="text-2xl font-bold text-spa-charcoal">
+                  <span className="text-3xl font-light text-white">
                     {metrics.totalElevation.toLocaleString()}m
                   </span>
                 </div>
-                <h3 className="font-medium text-spa-charcoal">
-                  Elevation Gain
+                <h3 className="font-medium text-white tracking-wide mb-1">
+                  ELEVATION GAIN
                 </h3>
-                <p className="text-sm text-spa-charcoal/60">Total ascent</p>
+                <p className="text-xs text-gray-400 uppercase tracking-wide">Total ascent</p>
               </div>
 
-              <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-2 bg-orange-100 rounded-lg">
-                    <Clock className="w-6 h-6 text-orange-600" />
+                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                    <Clock className="w-6 h-6 text-white" />
                   </div>
-                  <span className="text-2xl font-bold text-spa-charcoal">
+                  <span className="text-3xl font-light text-white">
                     {metrics.totalTime}h
                   </span>
                 </div>
-                <h3 className="font-medium text-spa-charcoal">Training Time</h3>
-                <p className="text-sm text-spa-charcoal/60">Total hours</p>
+                <h3 className="font-medium text-white tracking-wide mb-1">TRAINING TIME</h3>
+                <p className="text-xs text-gray-400 uppercase tracking-wide">Total hours</p>
               </div>
             </div>
 
             {/* Progress Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-              <div className="bg-white rounded-xl p-6 shadow-spa-soft">
-                <h3 className="text-lg font-medium text-spa-charcoal mb-4">
-                  Weekly Progress
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                <h3 className="text-lg font-light tracking-wide text-white mb-6">
+                  WEEKLY PROGRESS
                 </h3>
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-spa-charcoal/70">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm text-gray-400 tracking-wide uppercase">
                         Distance Goal
                       </span>
-                      <span className="text-sm font-medium text-spa-charcoal">
+                      <span className="text-lg font-light text-white">
                         {metrics.weeklyProgress}%
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="w-full bg-gray-700 rounded-full h-2">
                       <div
-                        className="bg-alpine-blue h-2 rounded-full transition-all duration-500"
+                        className="bg-white h-2 rounded-full transition-all duration-500"
                         style={{
                           width: `${Math.min(metrics.weeklyProgress, 100)}%`,
                         }}
@@ -310,8 +328,8 @@ export default function RealtimeTrainingPage() {
                     </div>
                   </div>
 
-                  <div className="pt-4 border-t border-gray-100">
-                    <div className="flex items-center space-x-2 text-sm text-spa-charcoal/70">
+                  <div className="pt-4 border-t border-gray-700">
+                    <div className="flex items-center space-x-2 text-sm text-gray-400">
                       <Target className="w-4 h-4" />
                       <span>Monthly goal: {metrics.monthlyGoal}km</span>
                     </div>
@@ -320,42 +338,42 @@ export default function RealtimeTrainingPage() {
               </div>
 
               {metrics.lastActivity && (
-                <div className="bg-white rounded-xl p-6 shadow-spa-soft">
-                  <h3 className="text-lg font-medium text-spa-charcoal mb-4">
-                    Latest Activity
+                <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+                  <h3 className="text-lg font-light tracking-wide text-white mb-6">
+                    LATEST ACTIVITY
                   </h3>
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     <div>
-                      <h4 className="font-medium text-spa-charcoal">
+                      <h4 className="font-medium text-white">
                         {metrics.lastActivity.name}
                       </h4>
-                      <p className="text-sm text-spa-charcoal/60">
+                      <p className="text-sm text-gray-400">
                         {new Date(
                           metrics.lastActivity.date
                         ).toLocaleDateString()}
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4 pt-3 border-t border-gray-100">
+                    <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-700">
                       <div className="text-center">
-                        <p className="text-lg font-bold text-spa-charcoal">
+                        <p className="text-2xl font-light text-white mb-1">
                           {(metrics.lastActivity.distance / 1000).toFixed(1)}km
                         </p>
-                        <p className="text-xs text-spa-charcoal/60">Distance</p>
+                        <p className="text-xs text-gray-400 uppercase tracking-wide">Distance</p>
                       </div>
                       <div className="text-center">
-                        <p className="text-lg font-bold text-spa-charcoal">
+                        <p className="text-2xl font-light text-white mb-1">
                           {metrics.lastActivity.elevation}m
                         </p>
-                        <p className="text-xs text-spa-charcoal/60">
+                        <p className="text-xs text-gray-400 uppercase tracking-wide">
                           Elevation
                         </p>
                       </div>
                       <div className="text-center">
-                        <p className="text-lg font-bold text-spa-charcoal">
+                        <p className="text-2xl font-light text-white mb-1">
                           {metrics.lastActivity.type}
                         </p>
-                        <p className="text-xs text-spa-charcoal/60">Type</p>
+                        <p className="text-xs text-gray-400 uppercase tracking-wide">Type</p>
                       </div>
                     </div>
                   </div>
@@ -363,15 +381,42 @@ export default function RealtimeTrainingPage() {
               )}
             </div>
 
-            {/* Real-time Dashboard Component */}
-            <div className="bg-white rounded-xl shadow-spa-soft overflow-hidden">
-              <div className="p-6 border-b border-gray-100">
+            </div>
+        </div>
+
+        {/* Training Calendar Section */}
+        <div className="bg-black py-8">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-8">
+              <div className="h-px w-24 bg-white/30 mb-6"></div>
+              <h2 className="text-3xl font-light tracking-wide text-white mb-4">
+                TRAINING CALENDAR
+              </h2>
+            </div>
+            <TrainingCalendar
+              onActivityComplete={(activityId) => {
+                console.log('Activity completed:', activityId);
+                // Could trigger analytics or RAG updates here
+              }}
+              onPlanUpload={(planData) => {
+                console.log('New training plan uploaded:', planData);
+                // Could feed into RAG system here
+              }}
+            />
+          </div>
+        </div>
+
+        {/* Real-time Dashboard Component */}
+        <div className="bg-gray-900 py-8">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
+              <div className="p-6 border-b border-gray-700">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-medium text-spa-charcoal">
-                    Advanced Analytics
+                  <h2 className="text-xl font-light tracking-wide text-white">
+                    ADVANCED ANALYTICS
                   </h2>
                   {lastUpdated && (
-                    <p className="text-sm text-spa-charcoal/60">
+                    <p className="text-sm text-gray-400">
                       Last updated: {lastUpdated.toLocaleTimeString()}
                     </p>
                   )}
@@ -379,32 +424,36 @@ export default function RealtimeTrainingPage() {
               </div>
               <TrainingDashboard />
             </div>
+          </div>
+        </div>
 
-            {/* Real-time Features */}
-            <div className="mt-8 bg-gradient-to-r from-alpine-blue/5 to-summit-gold/5 rounded-xl p-6">
-              <div className="flex items-center space-x-3 mb-4">
-                <Zap className="w-6 h-6 text-alpine-blue" />
-                <h3 className="text-lg font-medium text-spa-charcoal">
-                  Phase 3 Real-time Features
+        {/* Real-time Features */}
+        <div className="bg-black py-8">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 border border-gray-700 rounded-lg p-8">
+              <div className="flex items-center space-x-3 mb-6">
+                <Zap className="w-6 h-6 text-white" />
+                <h3 className="text-lg font-light tracking-wide text-white">
+                  PHASE 3 REAL-TIME FEATURES
                 </h3>
               </div>
 
               <div className="grid md:grid-cols-3 gap-4 text-sm">
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-spa-charcoal/70">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-gray-300">
                     Live Strava integration
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-spa-charcoal/70">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-gray-300">
                     Auto-refreshing metrics
                   </span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-spa-charcoal/70">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-gray-300">
                     Training insights AI
                   </span>
                 </div>
@@ -413,7 +462,6 @@ export default function RealtimeTrainingPage() {
           </div>
         </div>
       </main>
-
     </div>
   );
 }

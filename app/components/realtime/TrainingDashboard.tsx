@@ -113,20 +113,20 @@ export function TrainingDashboard({
   const currentStats = getCurrentStats();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-light text-spa-charcoal mb-2">
+          <h2 className="text-3xl font-light text-white mb-2">
             Live Training Data
           </h2>
-          <p className="text-spa-charcoal/70">
+          <p className="text-gray-400">
             Real-time Strava integration showing training progress and metrics
           </p>
         </div>
 
         {/* Timeframe Selector */}
-        <div className="flex bg-spa-stone/10 rounded-lg p-1">
+        <div className="flex bg-gray-700 rounded-lg p-1">
           {[
             { key: 'recent', label: 'Recent' },
             { key: 'ytd', label: 'This Year' },
@@ -137,8 +137,8 @@ export function TrainingDashboard({
               onClick={() => setSelectedTimeframe(key as any)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                 selectedTimeframe === key
-                  ? 'bg-alpine-blue text-white shadow-sm'
-                  : 'text-spa-charcoal/70 hover:text-spa-charcoal hover:bg-white/50'
+                  ? 'bg-white text-black shadow-sm'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-600'
               }`}
             >
               {label}
@@ -150,83 +150,83 @@ export function TrainingDashboard({
       {/* Stats Overview */}
       {currentStats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+          <div className="bg-gray-700 border border-gray-600 rounded-lg p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <Activity className="w-5 h-5 text-red-600" />
+              <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                <Activity className="w-5 h-5 text-white" />
               </div>
               <div>
-                <div className="text-2xl font-light text-spa-charcoal">
+                <div className="text-2xl font-light text-white">
                   {currentStats.runs.count}
                 </div>
-                <div className="text-sm text-spa-charcoal/70">Runs</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wide">Runs</div>
               </div>
             </div>
-            <div className="text-sm text-spa-charcoal/70">
+            <div className="text-sm text-gray-400">
               {formatDistance(currentStats.runs.distance)}
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+          <div className="bg-gray-700 border border-gray-600 rounded-lg p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Activity className="w-5 h-5 text-blue-600" />
+              <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                <Activity className="w-5 h-5 text-white" />
               </div>
               <div>
-                <div className="text-2xl font-light text-spa-charcoal">
+                <div className="text-2xl font-light text-white">
                   {currentStats.rides.count}
                 </div>
-                <div className="text-sm text-spa-charcoal/70">Rides</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wide">Rides</div>
               </div>
             </div>
-            <div className="text-sm text-spa-charcoal/70">
+            <div className="text-sm text-gray-400">
               {formatDistance(currentStats.rides.distance)}
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+          <div className="bg-gray-700 border border-gray-600 rounded-lg p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Mountain className="w-5 h-5 text-green-600" />
+              <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                <Mountain className="w-5 h-5 text-white" />
               </div>
               <div>
-                <div className="text-2xl font-light text-spa-charcoal">
+                <div className="text-2xl font-light text-white">
                   {formatElevation(
                     currentStats.runs.elevation_gain +
                       currentStats.rides.elevation_gain
                   )}
                 </div>
-                <div className="text-sm text-spa-charcoal/70">Elevation</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wide">Elevation</div>
               </div>
             </div>
-            <div className="text-sm text-spa-charcoal/70">Total gained</div>
+            <div className="text-sm text-gray-400">Total gained</div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+          <div className="bg-gray-700 border border-gray-600 rounded-lg p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Timer className="w-5 h-5 text-purple-600" />
+              <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
+                <Timer className="w-5 h-5 text-white" />
               </div>
               <div>
-                <div className="text-2xl font-light text-spa-charcoal">
+                <div className="text-2xl font-light text-white">
                   {formatDuration(
                     currentStats.runs.moving_time +
                       currentStats.rides.moving_time
                   )}
                 </div>
-                <div className="text-sm text-spa-charcoal/70">Moving Time</div>
+                <div className="text-sm text-gray-400 uppercase tracking-wide">Moving Time</div>
               </div>
             </div>
-            <div className="text-sm text-spa-charcoal/70">Total active</div>
+            <div className="text-sm text-gray-400">Total active</div>
           </div>
         </div>
       )}
 
       {/* Recent Activities */}
-      <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+      <div className="bg-gray-700 border border-gray-600 rounded-lg p-6">
         <div className="flex items-center gap-3 mb-6">
-          <Trophy className="w-6 h-6 text-alpine-blue" />
-          <h3 className="text-xl font-medium text-spa-charcoal">
+          <Trophy className="w-6 h-6 text-white" />
+          <h3 className="text-xl font-light tracking-wide text-white">
             Recent Activities
           </h3>
         </div>
@@ -235,15 +235,15 @@ export function TrainingDashboard({
           {displayActivities.slice(0, 5).map((activity) => (
             <div
               key={activity.id}
-              className="flex items-center justify-between p-4 bg-spa-stone/5 rounded-lg hover:bg-spa-stone/10 transition-colors"
+              className="flex items-center justify-between p-4 bg-gray-600/50 rounded-lg hover:bg-gray-600/70 transition-colors"
             >
               <div className="flex items-center gap-4">
                 <div className="text-2xl">{getActivityIcon(activity.type)}</div>
                 <div>
-                  <div className="font-medium text-spa-charcoal mb-1">
+                  <div className="font-medium text-white mb-1">
                     {activity.name}
                   </div>
-                  <div className="flex items-center gap-4 text-sm text-spa-charcoal/70">
+                  <div className="flex items-center gap-4 text-sm text-gray-300">
                     <span className="flex items-center gap-1">
                       <MapPin className="w-3 h-3" />
                       {formatDistance(activity.distance)}
@@ -267,7 +267,7 @@ export function TrainingDashboard({
               </div>
 
               <div className="text-right">
-                <div className="text-sm text-spa-charcoal/70 mb-1">
+                <div className="text-sm text-gray-400 mb-1">
                   {formatActivityDate(activity.start_date)}
                 </div>
                 <div className="flex items-center gap-2 text-sm">
@@ -280,7 +280,7 @@ export function TrainingDashboard({
         </div>
 
         {displayActivities.length === 0 && (
-          <div className="text-center py-8 text-spa-charcoal/70">
+          <div className="text-center py-8 text-gray-400">
             <Activity className="w-12 h-12 mx-auto mb-4 opacity-50" />
             <p>No recent activities found</p>
             <p className="text-sm">
@@ -292,84 +292,84 @@ export function TrainingDashboard({
 
       {/* Training Insights */}
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+        <div className="bg-gray-700 border border-gray-600 rounded-lg p-6">
           <div className="flex items-center gap-3 mb-6">
-            <Target className="w-6 h-6 text-alpine-blue" />
-            <h3 className="text-xl font-medium text-spa-charcoal">
+            <Target className="w-6 h-6 text-white" />
+            <h3 className="text-xl font-light tracking-wide text-white">
               Training Focus
             </h3>
           </div>
 
           <div className="space-y-4">
             <div className="flex justify-between items-center">
-              <span className="text-spa-charcoal/70">Endurance Training</span>
+              <span className="text-gray-300">Endurance Training</span>
               <div className="flex items-center gap-2">
-                <div className="w-24 h-2 bg-spa-stone/20 rounded-full overflow-hidden">
-                  <div className="w-3/4 h-full bg-alpine-blue rounded-full"></div>
+                <div className="w-24 h-2 bg-gray-600 rounded-full overflow-hidden">
+                  <div className="w-3/4 h-full bg-white rounded-full"></div>
                 </div>
-                <span className="text-sm font-medium">75%</span>
+                <span className="text-sm font-medium text-white">75%</span>
               </div>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-spa-charcoal/70">Strength Training</span>
+              <span className="text-gray-300">Strength Training</span>
               <div className="flex items-center gap-2">
-                <div className="w-24 h-2 bg-spa-stone/20 rounded-full overflow-hidden">
-                  <div className="w-1/2 h-full bg-green-500 rounded-full"></div>
+                <div className="w-24 h-2 bg-gray-600 rounded-full overflow-hidden">
+                  <div className="w-1/2 h-full bg-green-400 rounded-full"></div>
                 </div>
-                <span className="text-sm font-medium">50%</span>
+                <span className="text-sm font-medium text-white">50%</span>
               </div>
             </div>
 
             <div className="flex justify-between items-center">
-              <span className="text-spa-charcoal/70">Technical Skills</span>
+              <span className="text-gray-300">Technical Skills</span>
               <div className="flex items-center gap-2">
-                <div className="w-24 h-2 bg-spa-stone/20 rounded-full overflow-hidden">
-                  <div className="w-1/3 h-full bg-summit-gold rounded-full"></div>
+                <div className="w-24 h-2 bg-gray-600 rounded-full overflow-hidden">
+                  <div className="w-1/3 h-full bg-yellow-400 rounded-full"></div>
                 </div>
-                <span className="text-sm font-medium">35%</span>
+                <span className="text-sm font-medium text-white">35%</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-spa-soft">
+        <div className="bg-gray-700 border border-gray-600 rounded-lg p-6">
           <div className="flex items-center gap-3 mb-6">
-            <TrendingUp className="w-6 h-6 text-alpine-blue" />
-            <h3 className="text-xl font-medium text-spa-charcoal">
+            <TrendingUp className="w-6 h-6 text-white" />
+            <h3 className="text-xl font-light tracking-wide text-white">
               Performance Trends
             </h3>
           </div>
 
           <div className="space-y-4">
-            <div className="p-4 bg-green-50 rounded-lg">
+            <div className="p-4 bg-green-900/30 border border-green-700/30 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <TrendingUp className="w-4 h-4 text-green-600" />
-                <span className="font-medium text-green-800">Improving</span>
+                <TrendingUp className="w-4 h-4 text-green-400" />
+                <span className="font-medium text-green-300">Improving</span>
               </div>
-              <div className="text-sm text-green-700">
+              <div className="text-sm text-green-400">
                 Average pace has improved by 12% this month
               </div>
             </div>
 
-            <div className="p-4 bg-blue-50 rounded-lg">
+            <div className="p-4 bg-blue-900/30 border border-blue-700/30 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <Mountain className="w-4 h-4 text-blue-600" />
-                <span className="font-medium text-blue-800">
+                <Mountain className="w-4 h-4 text-blue-400" />
+                <span className="font-medium text-blue-300">
                   Elevation Goal
                 </span>
               </div>
-              <div className="text-sm text-blue-700">
+              <div className="text-sm text-blue-400">
                 85% complete for monthly elevation target
               </div>
             </div>
 
-            <div className="p-4 bg-orange-50 rounded-lg">
+            <div className="p-4 bg-orange-900/30 border border-orange-700/30 rounded-lg">
               <div className="flex items-center gap-2 mb-2">
-                <Heart className="w-4 h-4 text-orange-600" />
-                <span className="font-medium text-orange-800">Recovery</span>
+                <Heart className="w-4 h-4 text-orange-400" />
+                <span className="font-medium text-orange-300">Recovery</span>
               </div>
-              <div className="text-sm text-orange-700">
+              <div className="text-sm text-orange-400">
                 Consider adding more rest days this week
               </div>
             </div>
@@ -378,8 +378,8 @@ export function TrainingDashboard({
       </div>
 
       {showMockData && (
-        <div className="bg-summit-gold/10 border border-summit-gold/30 rounded-lg p-4">
-          <p className="text-spa-charcoal font-medium">
+        <div className="bg-yellow-900/20 border border-yellow-600/30 rounded-lg p-4">
+          <p className="text-yellow-300 font-medium">
             📊 Demo Mode: Showing mock Strava data for demonstration
           </p>
         </div>

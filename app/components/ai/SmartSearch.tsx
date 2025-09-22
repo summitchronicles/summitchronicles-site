@@ -45,7 +45,7 @@ interface SmartSearchProps {
 }
 
 export function SmartSearch({
-  placeholder = 'Ask anything about mountaineering and training...',
+  placeholder = 'Ask Sunith about mountaineering techniques, training methods, and expedition strategies...',
   showExamples = true,
   className = '',
 }: SmartSearchProps) {
@@ -157,11 +157,12 @@ export function SmartSearch({
   };
 
   const exampleQueries = [
-    'How do I train for high altitude climbing?',
-    'What are the key techniques for ice climbing?',
-    'Avalanche safety and risk assessment',
-    'Nutrition strategies for expedition climbing',
-    'Acclimatization protocols for big mountains',
+    'How should I train for high altitude acclimatization?',
+    'What are Sunith\'s preferred techniques for ice climbing?',
+    'Best practices for avalanche risk assessment on expeditions',
+    'Nutrition and hydration strategies for multi-day climbs',
+    'How to design a 12-week expedition training program?',
+    'What gear recommendations for technical alpine routes?',
   ];
 
   const getConfidenceColor = (confidence: number) => {
@@ -225,7 +226,7 @@ export function SmartSearch({
               }`}
             >
               <MessageCircle className="w-4 h-4" />
-              <span>Ask AI</span>
+              <span>Ask Sunith</span>
             </button>
           </div>
         </div>
@@ -270,7 +271,7 @@ export function SmartSearch({
                 ? 'Processing...'
                 : mode === 'search'
                   ? 'Search'
-                  : 'Ask AI'}
+                  : 'Ask Sunith'}
             </span>
           </button>
         </div>
@@ -313,7 +314,7 @@ export function SmartSearch({
             <div className="flex items-center space-x-2">
               <Brain className="w-5 h-5 text-alpine-blue" />
               <h3 className="text-lg font-medium text-spa-charcoal">
-                AI Assistant Response
+                Sunith's Expert Guidance
               </h3>
             </div>
             <div
