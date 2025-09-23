@@ -264,7 +264,7 @@ export function RedBullBlogPost({
 
         {/* Content Sections */}
         <div className="space-y-12">
-          {displayPost.content.sections.map((section, index) => (
+          {displayPost.content.sections.map((section: any, index: number) => (
             <div
               key={index}
               className="space-y-6"
@@ -288,7 +288,7 @@ export function RedBullBlogPost({
               )}
 
               <div className="prose prose-lg prose-gray max-w-none">
-                {section.content.split('\n\n').map((paragraph, pIndex) => (
+                {section.content.split('\n\n').map((paragraph: string, pIndex: number) => (
                   <p
                     key={pIndex}
                     className="text-gray-700 leading-relaxed mb-6"

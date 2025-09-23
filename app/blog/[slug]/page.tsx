@@ -22,12 +22,17 @@ function convertToComponentFormat(post: any) {
   const intro = introMatch ? introMatch[1].trim() : '';
 
   // Parse sections from the raw content and extract hero image
-  const sections = [];
+  const sections: Array<{
+    title: string;
+    content: string;
+    pullQuote: string | null;
+    image: string | null;
+  }> = [];
   let heroImage = '/stories/default.jpg';
   const sectionMatches = post.content.raw.match(/🔹 Section \d+[\s\S]*?(?=🔹 Section \d+|🏷️|$)/g);
 
   if (sectionMatches) {
-    sectionMatches.forEach((sectionText, index) => {
+    sectionMatches.forEach((sectionText: string, index: number) => {
       // Extract section title
       const titleMatch = sectionText.match(/Section Title:\s*(.*?)(?=\n|$)/);
       const sectionTitle = titleMatch ? titleMatch[1].trim() : `Section ${index + 1}`;
