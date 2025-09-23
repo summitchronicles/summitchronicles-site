@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import {
   Calendar,
   Clock,
@@ -14,7 +15,6 @@ import {
   ChevronRight,
   Plus,
 } from 'lucide-react';
-import { getAllPosts, hasGeneratedPosts } from '@/lib/posts';
 
 interface BlogPost {
   slug: string;
@@ -34,103 +34,48 @@ interface RedBullBlogGridProps {
 }
 
 export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
-  // Try to use generated posts first, fallback to sample data
-  const generatedPosts = hasGeneratedPosts() ? getAllPosts() : [];
+  const [generatedPosts, setGeneratedPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch posts from API
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch('/api/posts');
+        const data = await response.json();
+        if (data.success) {
+          setGeneratedPosts(data.posts);
+        }
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, []);
 
   // Convert generated posts to component format
   const convertedPosts: BlogPost[] = generatedPosts.map(post => ({
     slug: post.slug,
-    title: post.title,
-    subtitle: post.excerpt,
-    category: post.category.toUpperCase(),
+    title: post.title || 'Untitled',
+    subtitle: post.excerpt || '',
+    category: (post.category || 'STORY').toUpperCase(),
     author: 'Sunith Kumar',
-    date: new Date(post.date).toLocaleDateString('en-US', {
+    date: post.date ? new Date(post.date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    }),
-    readTime: `${post.readTime} min read`,
+    }) : 'Recent',
+    readTime: `${post.readTime || 5} min read`,
     views: '2.1K', // You could track this in the future
-    image: post.heroImage,
+    image: post.heroImage || '/stories/default.jpg',
     featured: false // You could add featured flag to frontmatter
   }));
 
-  // Fallback sample posts if no generated content
-  const samplePosts: BlogPost[] = [
-    {
-      slug: 'why-the-seven-summits',
-      title: 'Why the Seven Summits?',
-      subtitle:
-        'A Journey of Purpose, Passion, and Perseverance - The real reason I risk everything for some mountains',
-      category: 'PURPOSE',
-      author: 'Sunith Kumar',
-      date: 'March 15, 2024',
-      readTime: '5 min read',
-      views: '3.2K',
-      image: '/stories/everest-prep.jpg',
-      featured: true,
-    },
-    {
-      slug: 'systematic-thinking-beats-motivation',
-      title: 'Why Systems Beat Motivation',
-      subtitle: 'Motivation is like mountain weather - unreliable when you need it most. Here\'s what actually works.',
-      category: 'MINDSET',
-      author: 'Sunith Kumar',
-      date: 'March 22, 2024',
-      readTime: '4 min read',
-      views: '2.8K',
-      image: '/stories/data-training.jpg',
-      featured: false,
-    },
-    {
-      slug: 'the-fear-of-failure',
-      title: 'The Fear That Keeps Me Going',
-      subtitle: 'Everyone asks about success. I think about failure every single day. Here\'s why that\'s my secret weapon.',
-      category: 'MINDSET',
-      author: 'Sunith Kumar',
-      date: 'March 29, 2024',
-      readTime: '3 min read',
-      views: '2.1K',
-      image: '/stories/kilimanjaro.jpg',
-      featured: false,
-    },
-    {
-      slug: 'the-day-motivation-failed',
-      title: 'The Day I Nearly Quit',
-      subtitle: 'February 18th, 5:47 AM. Rain pounding. Body aching. Motivation score: Zero. I went anyway.',
-      category: 'STORIES',
-      author: 'Sunith Kumar',
-      date: 'February 18, 2024',
-      readTime: '6 min read',
-      views: '4.1K',
-      image: '/stories/everest-prep.jpg',
-      featured: false,
-    },
-    {
-      slug: 'mount-whitney-failure',
-      title: 'My First Mountain Failure',
-      subtitle: 'At 14,000 feet, gasping for air, watching my partner disappear into the clouds. That night changed everything.',
-      category: 'STORIES',
-      author: 'Sunith Kumar',
-      date: 'January 10, 2024',
-      readTime: '8 min read',
-      views: '5.3K',
-      image: '/stories/data-training.jpg',
-      featured: false,
-    },
-    {
-      slug: 'everest-statistics-reality',
-      title: 'The Numbers That Haunt Me',
-      subtitle: '60% success rate. 1.2% fatality rate. These aren\'t abstract - they\'re real people who didn\'t come home.',
-      category: 'REALITY',
-      author: 'Sunith Kumar',
-      date: 'April 5, 2024',
-      readTime: '7 min read',
-      views: '1.9K',
-      image: '/stories/kilimanjaro.jpg',
-      featured: false,
-    },
-  ];
+  // Empty array - no sample posts
+  const samplePosts: BlogPost[] = [];
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -165,7 +110,7 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
   // Use generated posts if available, fallback to sample posts
   const posts = convertedPosts.length > 0 ? convertedPosts : samplePosts;
 
-  const featuredPost = posts.find((post) => post.featured) || posts[0]; // First post as featured if none marked
+  const featuredPost = posts.find((post) => post.featured) || null;
   const regularPosts = posts.filter((post) => !post.featured);
 
   return (
@@ -211,8 +156,10 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
                   src={featuredPost.image}
                   alt={featuredPost.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  className="object-contain bg-gray-900 group-hover:scale-105 transition-transform duration-700"
                   sizes="100vw"
+                  quality={100}
+                  unoptimized={true}
                   priority
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -273,8 +220,43 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
           <div className="h-px w-24 bg-white/30"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {regularPosts.map((post, index) => {
+        {loading ? (
+          /* Loading State */
+          <div className="text-center py-20">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="max-w-2xl mx-auto"
+            >
+              <div className="animate-spin w-8 h-8 border-2 border-white border-t-transparent rounded-full mx-auto mb-4"></div>
+              <p className="text-gray-400">Loading authentic expedition stories...</p>
+            </motion.div>
+          </div>
+        ) : posts.length === 0 ? (
+          /* Empty State */
+          <div className="text-center py-20">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="max-w-2xl mx-auto"
+            >
+              <Mountain className="w-16 h-16 text-gray-500 mx-auto mb-6" />
+              <h3 className="text-2xl md:text-3xl font-light text-white mb-4">
+                Stories Coming Soon
+              </h3>
+              <p className="text-gray-400 text-lg leading-relaxed mb-8">
+                Authentic expedition stories, training insights, and mountain wisdom are being prepared.
+                The first story from the Seven Summits journey will be published here soon.
+              </p>
+              <div className="text-sm text-gray-500">
+                Stories will be added through the semantic content pipeline with your authentic experiences and images.
+              </div>
+            </motion.div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            {regularPosts.map((post, index) => {
             const CategoryIcon = getCategoryIcon(post.category);
 
             return (
@@ -285,21 +267,24 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
                 className="group"
+                data-testid="post-card"
               >
                 <Link href={`/blog/${post.slug}`} className="block">
-                  <div className="bg-gray-900 border border-gray-700 overflow-hidden hover:border-white/50 transition-all duration-300 hover:shadow-2xl">
+                  <div className="bg-gray-900 border border-gray-700 rounded-lg overflow-hidden hover:border-white/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
                     {/* Image */}
-                    <div className="relative h-64 overflow-hidden">
+                    <div className="relative aspect-[4/3] overflow-hidden">
                       <Image
                         src={post.image}
                         alt={post.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        className="object-contain bg-gray-800 group-hover:scale-105 transition-transform duration-700"
                         sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        quality={100}
+                        unoptimized={true}
                       />
-                      <div className="absolute top-4 left-4">
+                      <div className="absolute top-3 left-3">
                         <div
-                          className={`${getCategoryColor(post.category)} text-white px-3 py-1 text-xs font-bold tracking-wider uppercase flex items-center space-x-1`}
+                          className={`${getCategoryColor(post.category)} text-white px-2 py-1 text-xs font-bold tracking-wider uppercase flex items-center space-x-1 rounded`}
                         >
                           <CategoryIcon className="w-3 h-3" />
                           <span>{post.category}</span>
@@ -308,21 +293,21 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
                     </div>
 
                     {/* Content */}
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold text-white leading-tight mb-3 group-hover:text-gray-300 transition-colors">
+                    <div className="p-5">
+                      <h3 className="text-lg font-bold text-white leading-tight mb-2 group-hover:text-gray-300 transition-colors" style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
                         {post.title}
                       </h3>
 
-                      <p className="text-gray-400 leading-relaxed mb-4 text-sm">
+                      <p className="text-gray-400 leading-relaxed mb-4 text-sm" style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'}}>
                         {post.subtitle}
                       </p>
 
-                      <div className="flex items-center justify-between text-xs text-gray-500">
-                        <div className="flex items-center space-x-4">
-                          <span>{post.date}</span>
-                          <span>{post.readTime}</span>
+                      <div className="flex items-center justify-between text-xs text-gray-500 mt-auto">
+                        <div className="flex items-center space-x-3">
+                          <span className="truncate">{post.date}</span>
+                          <span className="whitespace-nowrap">{post.readTime}</span>
                         </div>
-                        <div className="flex items-center space-x-1">
+                        <div className="flex items-center space-x-1 text-gray-400">
                           <Eye className="w-3 h-3" />
                           <span>{post.views}</span>
                         </div>
@@ -333,22 +318,8 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
               </motion.div>
             );
           })}
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12">
-          <Link
-            href="/blog/create"
-            className="inline-flex items-center space-x-2 bg-green-600 text-white px-8 py-3 font-bold uppercase tracking-wide hover:bg-green-700 transition-colors"
-          >
-            <Plus className="w-5 h-5" />
-            <span>Create New Story</span>
-          </Link>
-          <button className="inline-flex items-center space-x-2 bg-red-600 text-white px-8 py-3 font-bold uppercase tracking-wide hover:bg-red-700 transition-colors">
-            <span>Load More Stories</span>
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+          </div>
+        )}
       </section>
 
       {/* Newsletter CTA */}

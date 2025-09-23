@@ -1,296 +1,169 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { Button } from '../atoms/Button';
-import { Input } from '../atoms/Input';
 import { Icon } from '../atoms/Icon';
-import { H3, H4, Body, Small, Caption } from '../atoms/Typography';
-import { StatusBadge } from '../molecules/StatusBadge';
+import { H3, Body } from '../atoms/Typography';
 
-interface FooterLink {
-  href: string;
-  label: string;
-  external?: boolean;
+interface FooterSection {
+  title: string;
+  links: Array<{
+    label: string;
+    href: string;
+    external?: boolean;
+  }>;
 }
 
-const footerSections = {
-  journey: {
-    title: 'The Journey',
+const footerSections: FooterSection[] = [
+  {
+    title: 'Journey',
     links: [
-      { href: '/about', label: 'My Story' },
-      { href: '/training', label: 'Training Progress' },
-      { href: '/blog', label: 'Updates & Insights' },
-      { href: '/expeditions', label: 'Expedition Plans' },
+      { label: 'About', href: '/about' },
+      { label: 'Expeditions', href: '/expeditions' },
+      { label: 'Training', href: '/training' },
+      { label: 'Stories', href: '/blog' },
     ],
   },
-  community: {
-    title: 'Community',
+  {
+    title: 'Connect',
     links: [
-      { href: '/newsletter', label: 'Newsletter' },
-      { href: '/support', label: 'Support Journey' },
-      { href: '/sponsorship', label: 'Partnership' },
-      { href: '/speaking', label: 'Speaking Events' },
+      { label: 'Media Kit', href: '/media-kit' },
+      { label: 'Speaking', href: '/speaking' },
+      { label: 'Partnership', href: '/sponsorship' },
+      { label: 'Newsletter', href: '/newsletter' },
     ],
   },
-  resources: {
-    title: 'Resources',
+  {
+    title: 'Follow',
     links: [
-      { href: '/media-kit', label: 'Media Kit' },
-      { href: '/gear', label: 'Gear Reviews' },
-      { href: '/training-plans', label: 'Training Plans' },
-      { href: '/contact', label: 'Contact' },
+      { label: 'Instagram', href: 'https://instagram.com/summitchronicles', external: true },
+      { label: 'YouTube', href: 'https://youtube.com/@summitchronicles', external: true },
+      { label: 'Strava', href: 'https://strava.com/athletes/summitchronicles', external: true },
+      { label: 'LinkedIn', href: 'https://linkedin.com/in/summitchronicles', external: true },
     ],
-  },
-};
-
-const socialLinks = [
-  {
-    href: 'https://instagram.com/summitchronicles',
-    label: 'Instagram',
-    icon: 'Instagram' as const,
-  },
-  {
-    href: 'https://twitter.com/summitchronicles',
-    label: 'Twitter',
-    icon: 'Twitter' as const,
-  },
-  {
-    href: 'https://youtube.com/summitchronicles',
-    label: 'YouTube',
-    icon: 'Youtube' as const,
-  },
-  {
-    href: 'https://strava.com/athletes/29642479',
-    label: 'Strava',
-    icon: 'Activity' as const,
   },
 ];
 
 const Footer: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [subscriptionStatus, setSubscriptionStatus] = useState<
-    'idle' | 'loading' | 'success' | 'error'
-  >('idle');
-
-  const handleNewsletterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) return;
-
-    setSubscriptionStatus('loading');
-
-    try {
-      const response = await fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      if (response.ok) {
-        setSubscriptionStatus('success');
-        setEmail('');
-      } else {
-        setSubscriptionStatus('error');
-      }
-    } catch (error) {
-      setSubscriptionStatus('error');
-    }
-
-    // Reset status after 3 seconds
-    setTimeout(() => setSubscriptionStatus('idle'), 3000);
-  };
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-spa-charcoal text-white">
-      <div className="max-w-7xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Main Footer Content */}
-        <div className="py-12 border-b border-spa-slate/20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Newsletter & Brand Section */}
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="flex items-center justify-center w-10 h-10 bg-alpine-blue rounded-md">
-                    <Icon name="Mountain" className="text-white" size="md" />
-                  </div>
-                  <H3 className="text-white">Summit Chronicles</H3>
-                </div>
-                <Body className="text-spa-mist max-w-md">
-                  Follow my journey to the summit through systematic training,
-                  expedition preparation, and the pursuit of mountaineering
-                  excellence.
-                </Body>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+          {/* Brand Section */}
+          <div className="lg:col-span-1">
+            <div className="flex items-center space-x-3 mb-6">
+              <div className="flex items-center justify-center w-12 h-12 bg-alpine-blue rounded-md">
+                <Icon name="Mountain" className="text-white" size="md" />
               </div>
-
-              {/* Newsletter Signup */}
-              <div className="space-y-4">
-                <H4 className="text-white">Stay Connected</H4>
-                <Body className="text-spa-mist">
-                  Get weekly training updates, expedition insights, and
-                  behind-the-scenes content.
-                </Body>
-
-                <form onSubmit={handleNewsletterSubmit} className="space-y-3">
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <Input
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="flex-1 bg-spa-slate/20 border-spa-slate/30 text-white placeholder:text-spa-mist"
-                      required
-                    />
-                    <Button
-                      type="submit"
-                      variant="summit"
-                      disabled={subscriptionStatus === 'loading'}
-                      className="sm:w-auto"
-                    >
-                      {subscriptionStatus === 'loading' ? (
-                        <>
-                          <Icon
-                            name="Loader2"
-                            size="sm"
-                            className="animate-spin"
-                          />
-                          Subscribing...
-                        </>
-                      ) : (
-                        <>
-                          <Icon name="Mail" size="sm" />
-                          Subscribe
-                        </>
-                      )}
-                    </Button>
-                  </div>
-
-                  {subscriptionStatus === 'success' && (
-                    <StatusBadge variant="success" size="sm">
-                      ✓ Successfully subscribed! Check your email.
-                    </StatusBadge>
-                  )}
-
-                  {subscriptionStatus === 'error' && (
-                    <StatusBadge variant="error" size="sm">
-                      ✗ Something went wrong. Please try again.
-                    </StatusBadge>
-                  )}
-                </form>
-              </div>
-
-              {/* Social Links */}
-              <div className="space-y-3">
-                <H4 className="text-white">Follow the Journey</H4>
-                <div className="flex space-x-4">
-                  {socialLinks.map((social) => (
-                    <Link
-                      key={social.href}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center w-10 h-10 bg-spa-slate/20 hover:bg-alpine-blue rounded-md transition-colors duration-300 group"
-                      aria-label={social.label}
-                    >
-                      <Icon
-                        name={social.icon}
-                        size="sm"
-                        className="text-spa-mist group-hover:text-white transition-colors duration-300"
-                      />
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              <H3 className="text-white">Summit Chronicles</H3>
             </div>
-
-            {/* Navigation Links */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-              {Object.entries(footerSections).map(([key, section]) => (
-                <div key={key} className="space-y-4">
-                  <H4 className="text-white">{section.title}</H4>
-                  <ul className="space-y-2">
-                    {section.links.map((link) => (
-                      <li key={link.href}>
-                        <Link
-                          href={link.href}
-                          className="text-spa-mist hover:text-summit-gold transition-colors duration-300 text-sm"
-                        >
-                          {link.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Social Proof Section */}
-        <div className="py-8 border-b border-spa-slate/20">
-          <div className="text-center space-y-4">
-            <Caption className="text-spa-mist uppercase tracking-wider">
-              Expedition Status
-            </Caption>
-            <div className="flex flex-wrap justify-center gap-4">
-              <StatusBadge variant="summit" size="sm">
-                <Icon name="Target" size="sm" />
-                Everest 2024 Training
-              </StatusBadge>
-              <StatusBadge variant="info" size="sm">
+            <Body className="text-gray-300 mb-6 leading-relaxed">
+              Following the systematic journey to conquer the Seven Summits, one mountain at a time.
+              Join me as I document the preparation, challenges, and triumphs of high-altitude mountaineering.
+            </Body>
+            <div className="flex space-x-4">
+              <a
+                href="https://instagram.com/summitchronicles"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
+                aria-label="Follow on Instagram"
+              >
+                <Icon name="Instagram" size="sm" />
+              </a>
+              <a
+                href="https://youtube.com/@summitchronicles"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
+                aria-label="Subscribe on YouTube"
+              >
+                <Icon name="Youtube" size="sm" />
+              </a>
+              <a
+                href="https://strava.com/athletes/summitchronicles"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
+                aria-label="Follow on Strava"
+              >
                 <Icon name="Activity" size="sm" />
-                127km This Week
-              </StatusBadge>
-              <StatusBadge variant="success" size="sm">
-                <Icon name="Trophy" size="sm" />
-                2,840m Elevation Gained
-              </StatusBadge>
+              </a>
             </div>
-            <Small className="text-spa-mist">
-              Supporting the journey to summit Mt. Everest through systematic
-              preparation and community backing
-            </Small>
+          </div>
+
+          {/* Navigation Sections */}
+          {footerSections.map((section) => (
+            <div key={section.title}>
+              <h4 className="font-semibold text-white mb-4 text-sm tracking-wide uppercase">
+                {section.title}
+              </h4>
+              <ul className="space-y-3">
+                {section.links.map((link) => (
+                  <li key={link.href}>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-300 hover:text-white transition-colors duration-300 text-sm"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-gray-300 hover:text-white transition-colors duration-300 text-sm"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Newsletter Signup */}
+        <div className="border-t border-gray-700 pt-12 mb-12">
+          <div className="max-w-md">
+            <h4 className="font-semibold text-white mb-2">Stay Updated</h4>
+            <p className="text-gray-300 text-sm mb-4">
+              Get weekly updates on training, expeditions, and mountain stories.
+            </p>
+            <div className="flex gap-2">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-transparent"
+              />
+              <Button variant="summit" size="sm">
+                Subscribe
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Legal Footer */}
-        <div className="py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <div className="flex flex-wrap justify-center md:justify-start gap-6 text-sm text-spa-mist">
-              <Link
-                href="/privacy"
-                className="hover:text-summit-gold transition-colors duration-300"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/terms"
-                className="hover:text-summit-gold transition-colors duration-300"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="/media-kit"
-                className="hover:text-summit-gold transition-colors duration-300"
-              >
-                Press Inquiries
-              </Link>
-              <Link
-                href="/contact"
-                className="hover:text-summit-gold transition-colors duration-300"
-              >
-                Contact
-              </Link>
-            </div>
-
-            <div className="text-sm text-spa-mist text-center md:text-right">
-              <p>
-                © {new Date().getFullYear()} Summit Chronicles. All rights
-                reserved.
-              </p>
-              <p className="text-xs mt-1">
-                Built with passion for the mountains ⛰️
-              </p>
-            </div>
+        {/* Bottom Bar */}
+        <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+          <div className="mb-4 md:mb-0">
+            <p>&copy; {currentYear} Summit Chronicles. All rights reserved.</p>
+          </div>
+          <div className="flex space-x-6">
+            <Link href="/privacy" className="hover:text-white transition-colors duration-300">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-white transition-colors duration-300">
+              Terms of Service
+            </Link>
+            <Link href="/contact" className="hover:text-white transition-colors duration-300">
+              Contact
+            </Link>
           </div>
         </div>
       </div>
@@ -299,4 +172,3 @@ const Footer: React.FC = () => {
 };
 
 export { Footer };
-export type { FooterLink };

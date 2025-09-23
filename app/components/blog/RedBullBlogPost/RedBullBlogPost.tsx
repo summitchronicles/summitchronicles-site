@@ -9,6 +9,7 @@ import {
   Clock,
   ArrowLeft,
   Share2,
+  Edit3,
   Eye,
   User,
   MapPin,
@@ -110,13 +111,11 @@ export function RedBullBlogPost({
         }),
         readTime: `${post.readTime || 12} min read`,
         category: post.categories?.[0]?.title?.toUpperCase() || 'STORY',
-        location: 'Training Grounds, California',
-        heroImage: post.mainImage
-          ? '/stories/everest-prep.jpg'
-          : '/stories/everest-prep.jpg',
+        location: post.location || 'Training Grounds, California',
+        heroImage: post.mainImage || '/stories/everest-prep.jpg',
         views: '2.1K',
         tags: post.categories?.map((cat: any) => cat.title) || samplePost.tags,
-        content: samplePost.content, // TODO: Convert portable text
+        content: post.content || samplePost.content, // Use actual post content
       }
     : samplePost;
 
@@ -175,6 +174,14 @@ export function RedBullBlogPost({
               <Eye className="w-4 h-4" />
               <span>{displayPost.views}</span>
             </div>
+            <Link
+              href={`/edit/${slug}`}
+              className="flex items-center space-x-1 text-sm text-gray-600 hover:text-red-600 transition-colors"
+            >
+              <Edit3 className="w-4 h-4" />
+              <span>Edit</span>
+            </Link>
+
             <button className="flex items-center space-x-1 text-sm text-gray-600 hover:text-red-600 transition-colors">
               <Share2 className="w-4 h-4" />
               <span>Share</span>
@@ -191,8 +198,10 @@ export function RedBullBlogPost({
             src={displayPost.heroImage}
             alt={displayPost.title}
             fill
-            className="object-cover"
+            className="object-contain bg-gray-100"
             sizes="100vw"
+            quality={100}
+            unoptimized={true}
             priority
           />
           <div className="absolute inset-0 bg-black/20" />
@@ -256,12 +265,8 @@ export function RedBullBlogPost({
         {/* Content Sections */}
         <div className="space-y-12">
           {displayPost.content.sections.map((section, index) => (
-            <motion.div
+            <div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
               className="space-y-6"
             >
               <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
@@ -273,9 +278,11 @@ export function RedBullBlogPost({
                   <Image
                     src={section.image}
                     alt={section.title}
-                    width={800}
-                    height={400}
-                    className="w-full rounded-lg object-cover"
+                    width={1200}
+                    height={600}
+                    quality={100}
+                    unoptimized={true}
+                    className="w-full rounded-lg object-contain bg-gray-100"
                   />
                 </div>
               )}
@@ -296,7 +303,7 @@ export function RedBullBlogPost({
                   "{section.pullQuote}"
                 </blockquote>
               )}
-            </motion.div>
+            </div>
           ))}
         </div>
 
