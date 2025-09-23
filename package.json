@@ -31,7 +31,6 @@
     "devops:workflow": "npm run test:local && npm run test:evals && npm run audit:packages"
   },
   "dependencies": {
-    "@next/swc-darwin-arm64": "^15.5.3",
     "@portabletext/react": "^4.0.3",
     "@portabletext/types": "^2.0.15",
     "@sanity/client": "^7.11.1",
