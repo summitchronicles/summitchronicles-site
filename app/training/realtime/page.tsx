@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
 import { TrainingDashboard } from '../../components/realtime/TrainingDashboard';
 import { TrainingCalendar } from '../../components/training/TrainingCalendar';
+import { recordCacheHit } from '@/lib/monitoring';
 import {
   Activity,
   TrendingUp,
@@ -86,6 +87,7 @@ export default function RealtimeTrainingPage() {
 
       if (isCacheValid) {
         console.log('Using cached Strava data');
+        recordCacheHit(); // Record cache hit for monitoring
         const cachedData = JSON.parse(cached);
         const processedMetrics = processActivities(cachedData.activities || []);
         setMetrics(processedMetrics);
@@ -116,6 +118,7 @@ export default function RealtimeTrainingPage() {
         // Try to use stale cache if available
         if (cached) {
           console.log('API failed, using stale cache');
+          recordCacheHit(); // Record stale cache usage
           const cachedData = JSON.parse(cached);
           const processedMetrics = processActivities(cachedData.activities || []);
           setMetrics(processedMetrics);
@@ -136,6 +139,7 @@ export default function RealtimeTrainingPage() {
       const cached = localStorage.getItem('strava_activities_cache');
       if (cached) {
         console.log('Error occurred, using cached data');
+        recordCacheHit(); // Record emergency cache usage
         const cachedData = JSON.parse(cached);
         const processedMetrics = processActivities(cachedData.activities || []);
         setMetrics(processedMetrics);

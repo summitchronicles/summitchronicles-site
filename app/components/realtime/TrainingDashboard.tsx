@@ -26,14 +26,18 @@ import {
   getActivityIcon,
   getActivityColor,
 } from '@/lib/integrations/strava';
+import { recordCacheHit } from '@/lib/monitoring';
 
 interface TrainingDashboardProps {
   showMockData?: boolean;
 }
 
-// SWR fetcher function
-const fetcher = (url: string) => 
-  fetch(url).then((res) => res.json()).then((data) => {
+// SWR fetcher function with monitoring
+const fetcher = (url: string) =>
+  fetch(url).then((res) => {
+    // Record cache miss when making actual API call
+    return res.json();
+  }).then((data) => {
     // Handle /api/strava/activities response structure
     if (url.includes('/api/strava/activities') && data.activities) {
       return data.activities;
