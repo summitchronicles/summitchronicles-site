@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
 import { TrainingDashboard } from '../../components/realtime/TrainingDashboard';
-import { ComplianceDashboard } from '../../components/analytics/ComplianceDashboard';
 import { TrainingCalendar } from '../../components/training/TrainingCalendar';
 import {
   Activity,
@@ -471,18 +470,6 @@ export default function RealtimeTrainingPage() {
           </div>
         </div>
 
-        {/* Compliance Analytics Dashboard */}
-        <div className="bg-gray-900 py-8">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="mb-8">
-              <div className="h-px w-24 bg-white/30 mb-6"></div>
-              <h2 className="text-3xl font-light tracking-wide text-white mb-4">
-                COMPLIANCE ANALYTICS
-              </h2>
-            </div>
-            <ComplianceDashboard />
-          </div>
-        </div>
 
         {/* Real-time Dashboard Component */}
         <div className="bg-gray-900 py-8">
