@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
 import { TrainingDashboard } from '../../components/realtime/TrainingDashboard';
+import { ComplianceDashboard } from '../../components/analytics/ComplianceDashboard';
 import { TrainingCalendar } from '../../components/training/TrainingCalendar';
 import {
   Activity,
@@ -48,15 +49,52 @@ export default function RealtimeTrainingPage() {
 
   useEffect(() => {
     loadTrainingData();
-    // Set up real-time updates every 30 seconds
-    const interval = setInterval(loadTrainingData, 30000);
-    return () => clearInterval(interval);
-  }, []);
+    // Set up updates every 4 hours to respect Strava rate limits
+    const interval = setInterval(loadTrainingData, 4 * 60 * 60 * 1000); // 4 hours
+
+    // Smart loading: Only load when page becomes visible
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        // Check if last update was more than 1 hour ago
+        if (!lastUpdated || (Date.now() - lastUpdated.getTime()) > 60 * 60 * 1000) {
+          loadTrainingData();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [lastUpdated]);
 
   const loadTrainingData = async () => {
     try {
       setLoading(true);
       setError(null);
+
+      // Check cache first (valid for 4 hours)
+      const cacheKey = 'strava_activities_cache';
+      const cacheTimeKey = 'strava_activities_cache_time';
+      const cached = localStorage.getItem(cacheKey);
+      const cacheTime = localStorage.getItem(cacheTimeKey);
+
+      const fourHours = 4 * 60 * 60 * 1000;
+      const isCacheValid = cached && cacheTime &&
+        (Date.now() - parseInt(cacheTime)) < fourHours;
+
+      if (isCacheValid) {
+        console.log('Using cached Strava data');
+        const cachedData = JSON.parse(cached);
+        const processedMetrics = processActivities(cachedData.activities || []);
+        setMetrics(processedMetrics);
+        setIsConnected(cachedData.connected);
+        setLastUpdated(new Date(parseInt(cacheTime)));
+        setLoading(false);
+        return;
+      }
 
       // Try to fetch from Strava API
       const response = await fetch('/api/strava/activities');
@@ -65,22 +103,49 @@ export default function RealtimeTrainingPage() {
         const data = await response.json();
         setIsConnected(true);
 
+        // Cache successful response
+        localStorage.setItem(cacheKey, JSON.stringify({
+          activities: data.activities || [],
+          connected: true
+        }));
+        localStorage.setItem(cacheTimeKey, Date.now().toString());
+
         // Process activities into metrics
         const processedMetrics = processActivities(data.activities || []);
         setMetrics(processedMetrics);
       } else {
-        // Fallback to mock data
-        setIsConnected(false);
-        setMetrics(getMockTrainingData());
+        // Try to use stale cache if available
+        if (cached) {
+          console.log('API failed, using stale cache');
+          const cachedData = JSON.parse(cached);
+          const processedMetrics = processActivities(cachedData.activities || []);
+          setMetrics(processedMetrics);
+          setIsConnected(false);
+        } else {
+          // Fallback to mock data
+          setIsConnected(false);
+          setMetrics(getMockTrainingData());
+        }
       }
 
       setLastUpdated(new Date());
     } catch (err) {
       console.error('Error loading training data:', err);
       setError('Failed to load training data');
+
+      // Try to use cached data even on error
+      const cached = localStorage.getItem('strava_activities_cache');
+      if (cached) {
+        console.log('Error occurred, using cached data');
+        const cachedData = JSON.parse(cached);
+        const processedMetrics = processActivities(cachedData.activities || []);
+        setMetrics(processedMetrics);
+      } else {
+        // Use mock data as final fallback
+        setMetrics(getMockTrainingData());
+      }
+
       setIsConnected(false);
-      // Use mock data as fallback
-      setMetrics(getMockTrainingData());
       setLastUpdated(new Date());
     } finally {
       setLoading(false);
@@ -403,6 +468,19 @@ export default function RealtimeTrainingPage() {
                 // Could feed into RAG system here
               }}
             />
+          </div>
+        </div>
+
+        {/* Compliance Analytics Dashboard */}
+        <div className="bg-gray-900 py-8">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="mb-8">
+              <div className="h-px w-24 bg-white/30 mb-6"></div>
+              <h2 className="text-3xl font-light tracking-wide text-white mb-4">
+                COMPLIANCE ANALYTICS
+              </h2>
+            </div>
+            <ComplianceDashboard />
           </div>
         </div>
 

@@ -49,12 +49,16 @@ export function TrainingDashboard({
   >('recent');
 
   // Fetch real Strava data using SWR for automatic caching and revalidation
+  // Reduced intervals to respect Strava rate limits
   const { data: activities, error: activitiesError } = useSWR<StravaActivity[]>(
     showMockData ? null : '/api/strava/activities',
     fetcher,
     {
-      refreshInterval: 300000, // Refresh every 5 minutes
+      refreshInterval: 4 * 60 * 60 * 1000, // Refresh every 4 hours
+      dedupingInterval: 4 * 60 * 60 * 1000, // Cache for 4 hours
       fallbackData: [],
+      revalidateOnFocus: false, // Don't revalidate on window focus
+      revalidateOnReconnect: false, // Don't revalidate on network reconnect
     }
   );
 
@@ -62,8 +66,11 @@ export function TrainingDashboard({
     showMockData ? null : '/api/strava/stats',
     fetcher,
     {
-      refreshInterval: 600000, // Refresh every 10 minutes
+      refreshInterval: 4 * 60 * 60 * 1000, // Refresh every 4 hours
+      dedupingInterval: 4 * 60 * 60 * 1000, // Cache for 4 hours
       fallbackData: undefined,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
 
@@ -71,8 +78,11 @@ export function TrainingDashboard({
     showMockData ? null : '/api/strava/profile',
     fetcher,
     {
-      refreshInterval: 3600000, // Refresh every hour
+      refreshInterval: 24 * 60 * 60 * 1000, // Refresh every 24 hours (profile changes rarely)
+      dedupingInterval: 24 * 60 * 60 * 1000, // Cache for 24 hours
       fallbackData: undefined,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
 
