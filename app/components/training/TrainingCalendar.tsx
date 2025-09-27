@@ -1,19 +1,26 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   Calendar,
-  Upload,
-  Plus,
-  Edit3,
-  Trash2,
   Clock,
   MapPin,
   TrendingUp,
   CheckCircle,
-  AlertCircle,
-  FileSpreadsheet,
+  Dumbbell,
+  Target,
+  Heart,
+  Upload,
 } from 'lucide-react';
+
+export interface Exercise {
+  name: string;
+  sets: number;
+  reps: number;
+  rpe: string;
+  weight?: number;
+  restTime?: number;
+}
 
 export interface TrainingActivity {
   id: string;
@@ -21,10 +28,27 @@ export interface TrainingActivity {
   type: 'cardio' | 'strength' | 'technical' | 'rest' | 'expedition';
   duration: number; // minutes
   intensity: 'low' | 'medium' | 'high';
+  exercises?: Exercise[]; // For strength workouts
   location?: string;
   notes?: string;
   completed: boolean;
   date: string;
+  // Planned vs Actual tracking
+  actual?: {
+    duration?: number;
+    heartRate?: { avg: number; max: number };
+    calories?: number;
+    completedAt?: string;
+    garminActivityId?: string;
+  };
+  garminWorkoutId?: string;
+  status: 'planned' | 'synced' | 'completed' | 'skipped';
+  compliance?: {
+    durationMatch: number; // percentage
+    intensityMatch: number; // percentage
+    completed: boolean;
+    notes?: string;
+  };
 }
 
 export interface WeeklyPlan {
@@ -65,17 +89,46 @@ export function TrainingCalendar({
           notes: 'Focus on steady pace, breathing technique',
           completed: true,
           date: '2025-09-22',
+          status: 'completed',
+          actual: {
+            duration: 118,
+            heartRate: { avg: 145, max: 180 },
+            calories: 650,
+            completedAt: '2025-09-22T07:30:00Z'
+          },
+          compliance: {
+            durationMatch: 98, // 118/120 * 100
+            intensityMatch: 95,
+            completed: true,
+            notes: 'Great workout, slightly shorter than planned'
+          }
         },
         {
           id: '2',
-          title: 'Strength Training - Lower Body',
+          title: 'BB Bench Press Session',
           type: 'strength',
           duration: 60,
           intensity: 'high',
           location: 'Home Gym',
-          notes: 'Squats, lunges, calf raises with pack weight',
+          notes: 'Synced from Excel → Garmin → Calendar',
           completed: true,
           date: '2025-09-23',
+          status: 'synced',
+          exercises: [
+            { name: 'BB Bench Press', sets: 2, reps: 8, rpe: '6-7', restTime: 90 },
+            { name: 'DB Bench Press', sets: 1, reps: 6, rpe: '8-9', restTime: 90 },
+            { name: 'Bent-Over BB Rows', sets: 2, reps: 8, rpe: '6-7', restTime: 90 }
+          ],
+          actual: {
+            duration: 58,
+            completedAt: '2025-09-23T06:45:00Z'
+          },
+          compliance: {
+            durationMatch: 97, // 58/60 * 100
+            intensityMatch: 100,
+            completed: true,
+            notes: 'All exercises completed as planned'
+          }
         },
         {
           id: '3',
@@ -87,6 +140,7 @@ export function TrainingCalendar({
           notes: 'Practice alpine butterfly, clove hitch, anchor building',
           completed: false,
           date: '2025-09-24',
+          status: 'planned'
         },
         {
           id: '4',
@@ -98,6 +152,7 @@ export function TrainingCalendar({
           notes: 'Yoga, stretching, foam rolling',
           completed: false,
           date: '2025-09-25',
+          status: 'planned'
         },
         {
           id: '5',
@@ -109,6 +164,7 @@ export function TrainingCalendar({
           notes: '15kg pack, practice expedition pace',
           completed: false,
           date: '2025-09-26',
+          status: 'planned'
         },
         {
           id: '6',
@@ -120,6 +176,12 @@ export function TrainingCalendar({
           notes: 'Pull-ups, push-ups, core work',
           completed: false,
           date: '2025-09-27',
+          status: 'planned',
+          exercises: [
+            { name: 'Pull-ups', sets: 3, reps: 8, rpe: '7-8', restTime: 90 },
+            { name: 'Push-ups', sets: 3, reps: 15, rpe: '6-7', restTime: 60 },
+            { name: 'Plank Hold', sets: 3, reps: 1, rpe: '6-7', restTime: 60 }
+          ]
         },
         {
           id: '7',
@@ -131,13 +193,15 @@ export function TrainingCalendar({
           notes: 'Light pace, enjoy nature',
           completed: false,
           date: '2025-09-28',
+          status: 'planned'
         },
       ],
     },
   ]);
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isGarminConnected, setIsGarminConnected] = useState(false);
+  const [isGarminSyncing, setIsGarminSyncing] = useState(false);
+  const [garminSyncStatus, setGarminSyncStatus] = useState<string | null>(null);
+  const [syncedWorkouts, setSyncedWorkouts] = useState<TrainingActivity[]>([]);
 
   const currentPlan = weeklyPlans[currentWeek];
   const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -190,41 +254,160 @@ export function TrainingCalendar({
     onActivityComplete?.(activityId);
   };
 
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
 
-    setIsUploading(true);
-    setUploadError(null);
-
+  // Garmin Connect Integration Functions
+  const handleGarminConnect = async () => {
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('/api/training/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
-
+      const response = await fetch('/api/garmin/auth?action=login');
       const data = await response.json();
-      if (data.plans) {
-        setWeeklyPlans(data.plans);
-        onPlanUpload?.(data.plans);
+
+      if (data.success && data.authUrl) {
+        // Redirect to Garmin OAuth
+        window.location.href = data.authUrl;
+      } else {
+        console.error('Failed to get Garmin auth URL:', data.error);
+        setGarminSyncStatus('Failed to connect to Garmin Connect');
       }
     } catch (error) {
-      console.error('Upload error:', error);
-      setUploadError('Failed to parse training plan. Please check your Excel format.');
-    } finally {
-      setIsUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
+      console.error('Garmin connect error:', error);
+      setGarminSyncStatus('Error connecting to Garmin Connect');
     }
   };
+
+  const handleGarminSync = async () => {
+    if (!isGarminConnected) {
+      await handleGarminConnect();
+      return;
+    }
+
+    setIsGarminSyncing(true);
+    setGarminSyncStatus('Syncing activities...');
+
+    try {
+      // Sync activities from Garmin
+      const activitiesResponse = await fetch('/api/garmin/activities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'sync',
+          plannedWorkouts: currentPlan.activities
+        })
+      });
+
+      const activitiesData = await activitiesResponse.json();
+
+      if (activitiesData.success) {
+        // Update activities with Garmin sync data
+        const updatedActivities = currentPlan.activities.map(activity => {
+          const matchedActivity = activitiesData.syncedActivities.find(
+            (synced: any) => synced.plannedWorkout?.id === activity.id
+          );
+
+          if (matchedActivity) {
+            return {
+              ...activity,
+              actual: {
+                duration: matchedActivity.garminActivity.duration ? Math.round(matchedActivity.garminActivity.duration / 60) : activity.duration,
+                heartRate: matchedActivity.garminActivity.averageHR ? {
+                  avg: matchedActivity.garminActivity.averageHR,
+                  max: matchedActivity.garminActivity.maxHR || matchedActivity.garminActivity.averageHR + 20
+                } : undefined,
+                calories: matchedActivity.garminActivity.calories,
+                completedAt: matchedActivity.garminActivity.startTimeGMT,
+                garminActivityId: matchedActivity.garminActivity.activityId?.toString()
+              },
+              compliance: matchedActivity.compliance,
+              status: 'completed' as const,
+              completed: true
+            };
+          }
+          return activity;
+        });
+
+        // Update the current plan with synced data
+        const updatedPlans = weeklyPlans.map(plan =>
+          plan.weekNumber === currentPlan.weekNumber
+            ? { ...plan, activities: updatedActivities }
+            : plan
+        );
+
+        setWeeklyPlans(updatedPlans);
+        setGarminSyncStatus(`Successfully synced ${activitiesData.totalSynced} activities`);
+      } else {
+        setGarminSyncStatus('Failed to sync activities from Garmin');
+      }
+    } catch (error) {
+      console.error('Garmin sync error:', error);
+      setGarminSyncStatus('Error syncing with Garmin Connect');
+    } finally {
+      setIsGarminSyncing(false);
+    }
+  };
+
+  const handlePushToGarmin = async () => {
+    if (!isGarminConnected) {
+      await handleGarminConnect();
+      return;
+    }
+
+    setIsGarminSyncing(true);
+    setGarminSyncStatus('Pushing workouts to Garmin...');
+
+    try {
+      const response = await fetch('/api/garmin/workouts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'create',
+          workouts: currentPlan.activities
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setGarminSyncStatus(`Successfully pushed ${data.createdWorkouts?.length || 0} workouts to Garmin`);
+      } else {
+        setGarminSyncStatus('Failed to push workouts to Garmin');
+      }
+    } catch (error) {
+      console.error('Push to Garmin error:', error);
+      setGarminSyncStatus('Error pushing workouts to Garmin');
+    } finally {
+      setIsGarminSyncing(false);
+    }
+  };
+
+  // Fetch synced workouts from the backend
+  const fetchSyncedWorkouts = async () => {
+    try {
+      const response = await fetch('/api/training/sync');
+      const data = await response.json();
+
+      // For now, we'll check if there are any recent synced workouts
+      // In a real implementation, this would fetch from a database
+      console.log('Sync service available:', data.availableServices);
+    } catch (error) {
+      console.error('Error fetching synced workouts:', error);
+    }
+  };
+
+  // Check Garmin connection status and fetch synced workouts on component mount
+  React.useEffect(() => {
+    const checkGarminStatus = async () => {
+      try {
+        const response = await fetch('/api/garmin/auth?action=status');
+        const data = await response.json();
+        setIsGarminConnected(data.isAuthenticated);
+      } catch (error) {
+        console.error('Error checking Garmin status:', error);
+        setIsGarminConnected(false);
+      }
+    };
+
+    checkGarminStatus();
+    fetchSyncedWorkouts();
+  }, []);
 
   const completedActivities = currentPlan.activities.filter((a) => a.completed).length;
   const totalActivities = currentPlan.activities.length;
@@ -243,26 +426,47 @@ export function TrainingCalendar({
           </div>
 
           <div className="flex items-center space-x-3">
-            {/* Excel Upload */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept=".xlsx,.xls"
-              onChange={handleFileUpload}
-              className="hidden"
-            />
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
-              className="flex items-center space-x-2 px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
-            >
-              {isUploading ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+
+            {/* Garmin Connect Integration */}
+            <div className="flex items-center space-x-2">
+              {isGarminConnected ? (
+                <>
+                  <button
+                    onClick={handlePushToGarmin}
+                    disabled={isGarminSyncing}
+                    className="flex items-center space-x-2 px-3 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
+                  >
+                    {isGarminSyncing ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Upload className="w-4 h-4" />
+                    )}
+                    <span>{isGarminSyncing ? 'Pushing...' : 'Push to Garmin'}</span>
+                  </button>
+                  <button
+                    onClick={handleGarminSync}
+                    disabled={isGarminSyncing}
+                    className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  >
+                    {isGarminSyncing ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <TrendingUp className="w-4 h-4" />
+                    )}
+                    <span>{isGarminSyncing ? 'Syncing...' : 'Sync from Garmin'}</span>
+                  </button>
+                </>
               ) : (
-                <Upload className="w-4 h-4" />
+                <button
+                  onClick={handleGarminConnect}
+                  className="flex items-center space-x-2 px-3 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+                  data-testid="connect-garmin-button"
+                >
+                  <Target className="w-4 h-4" />
+                  <span>Connect Garmin</span>
+                </button>
               )}
-              <span>{isUploading ? 'Uploading...' : 'Upload Excel'}</span>
-            </button>
+            </div>
 
             {/* Week Navigation */}
             <div className="flex items-center space-x-2 bg-gray-700 rounded-lg p-1">
@@ -327,11 +531,28 @@ export function TrainingCalendar({
           </div>
         </div>
 
-        {uploadError && (
-          <div className="mt-4 bg-red-900/20 border border-red-600/30 rounded-lg p-3">
+
+        {/* Sync Status */}
+        <div className="mt-4 bg-gray-700/20 border border-gray-600/30 rounded-lg p-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2" data-testid="garmin-status">
+              <Target className="w-4 h-4 text-gray-400" />
+              <p className="text-gray-400 text-sm">
+                {isGarminConnected ? 'Connected to Garmin Connect' : 'Not Connected'}
+              </p>
+            </div>
             <div className="flex items-center space-x-2">
-              <AlertCircle className="w-4 h-4 text-red-400" />
-              <p className="text-red-400 text-sm">{uploadError}</p>
+              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+              <span className="text-xs text-green-400">Sync Service Active</span>
+            </div>
+          </div>
+        </div>
+
+        {garminSyncStatus && (
+          <div className="mt-4 bg-blue-900/20 border border-blue-600/30 rounded-lg p-3">
+            <div className="flex items-center space-x-2">
+              <Target className="w-4 h-4 text-blue-400" />
+              <p className="text-blue-400 text-sm">{garminSyncStatus}</p>
             </div>
           </div>
         )}
@@ -360,23 +581,94 @@ export function TrainingCalendar({
               >
                 {/* Activity Header */}
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="text-sm font-medium leading-tight line-clamp-2">
-                    {activity.title}
-                  </h4>
+                  <div className="flex-1 mr-2">
+                    <h4 className="text-sm font-medium leading-tight line-clamp-2">
+                      {activity.title}
+                    </h4>
+                    {/* Status Badge */}
+                    <div className="flex items-center space-x-1 mt-1">
+                      <span className={`text-xs px-2 py-0.5 rounded-full flex items-center space-x-1 ${
+                        activity.status === 'completed' ? 'bg-green-100 text-green-700 border border-green-200' :
+                        activity.status === 'synced' ? 'bg-blue-100 text-blue-700 border border-blue-200' :
+                        activity.status === 'skipped' ? 'bg-red-100 text-red-700 border border-red-200' :
+                        'bg-gray-100 text-gray-700 border border-gray-200'
+                      }`}>
+                        {activity.status === 'synced' && <Upload className="w-3 h-3" />}
+                        <span>
+                          {activity.status === 'completed' ? 'Completed' :
+                           activity.status === 'synced' ? 'Synced' :
+                           activity.status === 'skipped' ? 'Skipped' :
+                           'Planned'}
+                        </span>
+                      </span>
+                      {activity.compliance && (
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${
+                          activity.compliance.completed && activity.compliance.durationMatch >= 80
+                            ? 'bg-green-100 text-green-700 border border-green-200'
+                            : activity.compliance.completed && activity.compliance.durationMatch >= 60
+                            ? 'bg-yellow-100 text-yellow-700 border border-yellow-200'
+                            : 'bg-red-100 text-red-700 border border-red-200'
+                        }`}>
+                          {activity.compliance.durationMatch}% Match
+                        </span>
+                      )}
+                    </div>
+                  </div>
                   {activity.completed ? (
-                    <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 ml-1" />
+                    <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
                   ) : (
-                    <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0 ml-1" />
+                    <div className="w-4 h-4 border-2 border-gray-300 rounded-full flex-shrink-0" />
                   )}
                 </div>
 
                 {/* Activity Details */}
-                <div className="space-y-1">
-                  <div className="flex items-center space-x-2 text-xs">
-                    <Clock className="w-3 h-3" />
-                    <span>{Math.floor(activity.duration / 60)}h {activity.duration % 60}m</span>
+                <div className="space-y-2">
+                  {/* Duration and Intensity */}
+                  <div className="flex items-center space-x-3 text-xs">
+                    <div className="flex items-center space-x-1">
+                      <Clock className="w-3 h-3" />
+                      <span>{Math.floor(activity.duration / 60)}h {activity.duration % 60}m</span>
+                    </div>
                     {getIntensityIcon(activity.intensity)}
+                    {activity.actual?.duration && (
+                      <span className="text-blue-400">
+                        (Actual: {Math.floor(activity.actual.duration / 60)}h {activity.actual.duration % 60}m)
+                      </span>
+                    )}
                   </div>
+
+                  {/* Exercises for Strength Workouts */}
+                  {activity.exercises && activity.exercises.length > 0 && (
+                    <div className="mt-2">
+                      <div className="flex items-center space-x-1 mb-1">
+                        <Dumbbell className="w-3 h-3" />
+                        <span className="text-xs font-medium">{activity.exercises.length} Exercises</span>
+                      </div>
+                      <div className="space-y-1">
+                        {activity.exercises.slice(0, 2).map((exercise, idx) => (
+                          <div key={idx} className="text-xs text-gray-300 pl-4">
+                            {exercise.name}: {exercise.sets} × {exercise.reps} @ RPE {exercise.rpe}
+                          </div>
+                        ))}
+                        {activity.exercises.length > 2 && (
+                          <div className="text-xs text-gray-400 pl-4">
+                            +{activity.exercises.length - 2} more exercises
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Heart Rate and Performance Data */}
+                  {activity.actual?.heartRate && (
+                    <div className="flex items-center space-x-2 text-xs text-blue-400">
+                      <Heart className="w-3 h-3" />
+                      <span>HR: {activity.actual.heartRate.avg}/{activity.actual.heartRate.max} bpm</span>
+                      {activity.actual.calories && (
+                        <span>• {activity.actual.calories} cal</span>
+                      )}
+                    </div>
+                  )}
 
                   {activity.location && (
                     <div className="flex items-center space-x-2 text-xs">
@@ -390,29 +682,19 @@ export function TrainingCalendar({
                       {activity.notes}
                     </p>
                   )}
+
+                  {/* Compliance Notes */}
+                  {activity.compliance?.notes && (
+                    <p className="text-xs text-blue-400 italic mt-1">
+                      {activity.compliance.notes}
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Upload Instructions */}
-        <div className="mt-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600">
-          <div className="flex items-start space-x-3">
-            <FileSpreadsheet className="w-5 h-5 text-blue-400 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-white mb-1">Excel Upload Format</h4>
-              <p className="text-sm text-gray-300 mb-2">
-                Upload your weekly training plans in Excel format with the following columns:
-              </p>
-              <ul className="text-xs text-gray-400 space-y-1">
-                <li>• Week Number, Phase, Day, Activity Title, Type, Duration (min), Intensity, Location, Notes</li>
-                <li>• Supported types: cardio, strength, technical, rest, expedition</li>
-                <li>• Intensity levels: low, medium, high</li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
