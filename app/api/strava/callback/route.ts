@@ -76,6 +76,7 @@ export async function GET(request: NextRequest) {
     );
   } catch (error) {
     console.error('❌ Strava OAuth error:', error);
-    return NextResponse.redirect(`${baseUrl}/training/realtime?error=auth_failed&details=${encodeURIComponent(error.message)}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    return NextResponse.redirect(`${baseUrl}/training/realtime?error=auth_failed&details=${encodeURIComponent(errorMessage)}`);
   }
 }
