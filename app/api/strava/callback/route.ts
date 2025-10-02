@@ -65,7 +65,8 @@ export async function GET(request: NextRequest) {
       console.log('✅ Tokens stored successfully in Supabase');
     } catch (storageError) {
       console.error('❌ Token storage failed:', storageError);
-      throw new Error(`Token storage failed: ${storageError.message}`);
+      const errorMessage = storageError instanceof Error ? storageError.message : String(storageError);
+      throw new Error(`Token storage failed: ${errorMessage}`);
     }
 
     console.log('✅ Strava connected successfully');
