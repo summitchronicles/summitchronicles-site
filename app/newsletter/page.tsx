@@ -16,6 +16,7 @@ import {
   Compass,
   Activity
 } from 'lucide-react';
+import { getDaysToEverest, getEverestCountdownText } from '@/lib/everest-countdown';
 
 
 export default function NewsletterPage() {
@@ -69,7 +70,7 @@ export default function NewsletterPage() {
 
   const currentStats = [
     { label: 'Active Subscribers', value: '2,847', icon: Users, description: 'Following expedition' },
-    { label: 'Days to Everest', value: '541', icon: Calendar, description: 'Countdown active' },
+    { label: 'Days to Everest', value: getDaysToEverest().toString(), icon: Calendar, description: 'Countdown active' },
     { label: 'Field Reports Sent', value: '89', icon: Radio, description: 'From preparation zones' },
     { label: 'Training Hours', value: '1,247', icon: Activity, description: 'Systematic preparation' }
   ];
@@ -102,7 +103,7 @@ export default function NewsletterPage() {
               </h1>
             </div>
             <p className="text-xl font-light tracking-wider opacity-90">
-              Field Updates • 541 Days to Everest
+              Field Updates • {getEverestCountdownText()}
             </p>
           </motion.div>
         </div>
@@ -297,7 +298,7 @@ export default function NewsletterPage() {
             <div className="text-center space-y-6">
               <div className="flex items-center justify-center space-x-3 mb-6">
                 <Signal className="w-6 h-6" />
-                <span className="text-lg font-light tracking-wide">EXPEDITION FREQUENCY: 541 DAYS</span>
+                <span className="text-lg font-light tracking-wide">EXPEDITION FREQUENCY: {getDaysToEverest()} DAYS</span>
               </div>
               
               <p className="text-gray-300 leading-relaxed mb-8">

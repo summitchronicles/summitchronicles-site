@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
     const tokenData = await tokenResponse.json();
 
     // Store tokens using our library
-    storeStravaTokens(tokenData);
+    await storeStravaTokens(tokenData);
 
     console.log('✅ Strava connected successfully:', {
       athlete_id: tokenData.athlete?.id,

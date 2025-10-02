@@ -1,10 +1,24 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
-import { MapPin, Calendar, TrendingUp, Camera } from 'lucide-react';
+import {
+  MapPin,
+  Calendar,
+  TrendingUp,
+  Camera,
+  CheckCircle,
+  Target,
+  Clock,
+  Mountain,
+  Thermometer,
+  Timer,
+  Award,
+  ChevronDown,
+  ChevronUp
+} from 'lucide-react';
 
 interface Expedition {
   id: string;
@@ -20,84 +34,98 @@ interface Expedition {
     difficulty: string;
     temperature: string;
   };
+  year: string;
+  isSevenSummit: boolean;
 }
 
 export default function ExpeditionsPage() {
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
+
   const expeditions: Expedition[] = [
+    {
+      id: 'sar-pass',
+      mountain: 'Sar Pass Trek',
+      elevation: '13,845 ft',
+      location: 'Himachal Pradesh, India',
+      date: 'May 2014',
+      year: '2014',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'The spark that started everything. One year after being bedridden with tuberculosis, I stood on a Himalayan glacier. This moment changed my life forever.',
+      stats: {
+        duration: '5 days',
+        difficulty: 'Beginner',
+        temperature: '-5°C summit'
+      },
+      isSevenSummit: false
+    },
     {
       id: 'kilimanjaro',
       mountain: 'Mount Kilimanjaro',
       elevation: '19,341 ft',
       location: 'Tanzania, Africa',
-      date: 'June 2023',
+      date: 'October 2022',
+      year: '2022',
       status: 'completed',
       image: '/stories/kilimanjaro.jpg',
-      story: 'First summit. The moment everything changed. Standing on the roof of Africa at sunrise, I understood what systematic preparation could achieve.',
+      story: 'First Seven Summits achievement. Years of preparation in the Himalayas led to this moment. Standing on the roof of Africa at sunrise, proof that systematic preparation works.',
       stats: {
         duration: '7 days',
         difficulty: 'Technical',
         temperature: '-15°C summit'
-      }
-    },
-    {
-      id: 'whitney',
-      mountain: 'Mount Whitney',
-      elevation: '14,505 ft',
-      location: 'California, USA',
-      date: 'August 2024',
-      status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'Redemption climb. The mountain that broke me became the mountain that taught me resilience. Technical alpine preparation for the challenges ahead.',
-      stats: {
-        duration: '3 days',
-        difficulty: 'Alpine',
-        temperature: '-8°C summit'
-      }
-    },
-    {
-      id: 'washington',
-      mountain: 'Mount Washington',
-      elevation: '6,288 ft',
-      location: 'New Hampshire, USA',
-      date: 'December 2024',
-      status: 'completed',
-      image: '/stories/everest-prep.jpg',
-      story: 'Winter conditions mastery. Learning to navigate extreme weather, white-out conditions, and sub-zero temperatures. Essential skills for Everest.',
-      stats: {
-        duration: '2 days',
-        difficulty: 'Winter',
-        temperature: '-25°C summit'
-      }
-    },
-    {
-      id: 'denali',
-      mountain: 'Denali',
-      elevation: '20,310 ft',
-      location: 'Alaska, USA',
-      date: 'June 2025',
-      status: 'in-progress',
-      image: '/stories/data-training.jpg',
-      story: 'The major test before Everest. Three weeks on North America\'s highest peak. High-altitude acclimatization and expedition logistics.',
-      stats: {
-        duration: '21 days',
-        difficulty: 'Extreme',
-        temperature: '-40°C expected'
-      }
+      },
+      isSevenSummit: true
     },
     {
       id: 'aconcagua',
-      mountain: 'Aconcagua',
+      mountain: 'Mount Aconcagua',
       elevation: '22,837 ft',
-      location: 'Argentina',
-      date: 'January 2026',
-      status: 'planned',
+      location: 'Argentina, South America',
+      date: 'February 2023',
+      year: '2023',
+      status: 'completed',
       image: '/stories/kilimanjaro.jpg',
-      story: 'South America\'s giant. Final altitude preparation before the ultimate challenge. Testing high-altitude performance without supplemental oxygen.',
+      story: 'Highest peak outside of Asia. Technical high-altitude climbing in extreme conditions. A major step toward the ultimate goal.',
       stats: {
         duration: '18 days',
         difficulty: 'High Altitude',
-        temperature: '-30°C expected'
-      }
+        temperature: '-30°C summit'
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'elbrus',
+      mountain: 'Mount Elbrus',
+      elevation: '18,510 ft',
+      location: 'Russia, Europe',
+      date: 'July 2023',
+      year: '2023',
+      status: 'completed',
+      image: '/stories/everest-prep.jpg',
+      story: 'European summit in extreme cold conditions. Mastering cold weather mountaineering and building mental resilience.',
+      stats: {
+        duration: '7 days',
+        difficulty: 'Winter',
+        temperature: '-25°C summit'
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'denali',
+      mountain: 'Mount Denali',
+      elevation: '20,310 ft',
+      location: 'Alaska, USA',
+      date: 'June 2024',
+      year: '2024',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'Most recent Seven Summits achievement. Technical glacier travel and extreme conditions. Three weeks testing every skill learned so far.',
+      stats: {
+        duration: '21 days',
+        difficulty: 'Extreme',
+        temperature: '-40°C summit'
+      },
+      isSevenSummit: true
     },
     {
       id: 'everest',
@@ -105,23 +133,86 @@ export default function ExpeditionsPage() {
       elevation: '29,032 ft',
       location: 'Nepal/Tibet',
       date: 'March 2027',
-      status: 'planned',
+      year: '2027',
+      status: 'in-progress',
       image: '/stories/everest-prep.jpg',
       story: 'The ultimate challenge. Everything has led to this moment. Seven years of preparation, systematic training, and community support converge at the roof of the world.',
       stats: {
         duration: '60 days',
         difficulty: 'Extreme+',
         temperature: '-60°C death zone'
-      }
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'vinson',
+      mountain: 'Mount Vinson',
+      elevation: '16,050 ft',
+      location: 'Antarctica',
+      date: 'December 2027',
+      year: '2027',
+      status: 'planned',
+      image: '/stories/everest-prep.jpg',
+      story: 'The most remote and logistically challenging summit. Final steps toward completing the Seven Summits challenge.',
+      stats: {
+        duration: '14 days',
+        difficulty: 'Extreme',
+        temperature: '-50°C summit'
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'carstensz',
+      mountain: 'Carstensz Pyramid',
+      elevation: '16,024 ft',
+      location: 'Indonesia, Oceania',
+      date: 'June 2028',
+      year: '2028',
+      status: 'planned',
+      image: '/stories/data-training.jpg',
+      story: 'The technical rock climbing challenge at altitude. Completing the Seven Summits with the most technically demanding peak.',
+      stats: {
+        duration: '10 days',
+        difficulty: 'Technical Rock',
+        temperature: '+5°C summit'
+      },
+      isSevenSummit: true
     }
   ];
 
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'completed': return CheckCircle;
+      case 'in-progress': return Target;
+      case 'planned': return Clock;
+      default: return Clock;
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-500';
-      case 'in-progress': return 'text-yellow-500';
-      case 'planned': return 'text-blue-500';
-      default: return 'text-gray-500';
+      case 'completed': return 'bg-green-500/20 text-green-400 border-green-500/30';
+      case 'in-progress': return 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30';
+      case 'planned': return 'bg-blue-500/20 text-blue-400 border-blue-500/30';
+      default: return 'bg-gray-500/20 text-gray-400 border-gray-500/30';
+    }
+  };
+
+  const getCardBorderColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'border-green-500/30 hover:border-green-500/50';
+      case 'in-progress': return 'border-yellow-500/50 hover:border-yellow-500/70 shadow-yellow-500/20';
+      case 'planned': return 'border-blue-500/30 hover:border-blue-500/50';
+      default: return 'border-gray-500/30';
+    }
+  };
+
+  const getTimelineColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-green-500';
+      case 'in-progress': return 'bg-yellow-500 animate-pulse';
+      case 'planned': return 'bg-blue-500/50';
+      default: return 'bg-gray-500';
     }
   };
 
@@ -134,146 +225,300 @@ export default function ExpeditionsPage() {
     }
   };
 
+  const toggleExpanded = (id: string) => {
+    setExpandedCard(expandedCard === id ? null : id);
+  };
+
   return (
     <div className="min-h-screen bg-black text-white">
       <Header />
-      
+
       {/* Hero Section */}
-      <section className="relative h-96 flex items-center justify-center">
+      <section className="relative h-screen flex items-center justify-center">
         <div className="absolute inset-0">
           <Image
             src="/stories/everest-prep.jpg"
             alt="Seven Summits Expeditions"
             fill
-            className="object-cover opacity-60"
+            className="object-cover opacity-40"
             sizes="100vw"
+            priority
           />
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/80"></div>
         </div>
-        
-        <div className="relative z-10 text-center px-6">
+
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1 }}
+            transition={{ duration: 1.2 }}
           >
-            <h1 className="text-5xl md:text-7xl font-light tracking-wide mb-4">
-              EXPEDITIONS
+            <h1 className="text-6xl md:text-8xl font-light tracking-wide mb-8 leading-tight">
+              EXPEDITION
+              <br />
+              <span className="text-5xl md:text-7xl">TIMELINE</span>
             </h1>
-            <p className="text-xl font-light tracking-wider opacity-90">
-              Seven Summits • One Systematic Journey
+            <p className="text-2xl md:text-3xl font-light tracking-wider opacity-90 mb-8">
+              From Recovery to Seven Summits
             </p>
+            <div className="flex items-center justify-center space-x-8 text-lg">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-6 h-6 text-green-400" />
+                <span>4 Seven Summits Complete</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Target className="w-6 h-6 text-yellow-400" />
+                <span>3 More to Go</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white/70">
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ duration: 2, repeat: Infinity }}
+            className="flex flex-col items-center"
+          >
+            <span className="text-sm tracking-wider mb-3">SCROLL TO EXPLORE</span>
+            <ChevronDown className="w-6 h-6" />
           </motion.div>
         </div>
       </section>
 
-      {/* Expeditions Grid */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid gap-12">
-            {expeditions.map((expedition, index) => (
-              <motion.div
-                key={expedition.id}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group"
-              >
-                <div className={`grid md:grid-cols-2 gap-8 ${index % 2 === 1 ? 'md:grid-flow-col-dense' : ''}`}>
-                  {/* Image */}
-                  <div className={`relative h-96 overflow-hidden ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
-                    <Image
-                      src={expedition.image}
-                      alt={`${expedition.mountain} expedition`}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-700"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                    <div className="absolute top-6 left-6">
-                      <div className={`px-3 py-1 text-xs font-medium tracking-wider uppercase ${getStatusColor(expedition.status)} bg-black/70 rounded`}>
-                        {getStatusLabel(expedition.status)}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className={`flex flex-col justify-center space-y-6 ${index % 2 === 1 ? 'md:col-start-1 md:row-start-1' : ''}`}>
-                    <div>
-                      <h2 className="text-4xl md:text-5xl font-light tracking-wide mb-2">
-                        {expedition.mountain}
-                      </h2>
-                      <div className="flex items-center space-x-6 text-sm text-gray-400 mb-4">
-                        <div className="flex items-center space-x-1">
-                          <TrendingUp className="w-4 h-4" />
-                          <span>{expedition.elevation}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <MapPin className="w-4 h-4" />
-                          <span>{expedition.location}</span>
-                        </div>
-                        <div className="flex items-center space-x-1">
-                          <Calendar className="w-4 h-4" />
-                          <span>{expedition.date}</span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <p className="text-lg text-gray-300 leading-relaxed font-light">
-                      {expedition.story}
-                    </p>
-                    
-                    {/* Stats */}
-                    <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-800">
-                      <div>
-                        <div className="text-2xl font-light text-white mb-1">
-                          {expedition.stats.duration}
-                        </div>
-                        <div className="text-xs text-gray-400 uppercase tracking-wide">Duration</div>
-                      </div>
-                      <div>
-                        <div className="text-2xl font-light text-white mb-1">
-                          {expedition.stats.difficulty}
-                        </div>
-                        <div className="text-xs text-gray-400 uppercase tracking-wide">Difficulty</div>
-                      </div>
-                      <div>
-                        <div className="text-2xl font-light text-white mb-1">
-                          {expedition.stats.temperature}
-                        </div>
-                        <div className="text-xs text-gray-400 uppercase tracking-wide">Min Temp</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="py-20 bg-gray-900">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      {/* Timeline Section */}
+      <section className="py-20 relative">
+        <div className="max-w-6xl mx-auto px-6">
+          {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="text-center mb-20"
           >
-            <h3 className="text-3xl md:text-4xl font-light tracking-wide mb-6">
-              Support the Journey
-            </h3>
-            <p className="text-xl text-gray-300 mb-8 font-light">
-              Every expedition requires community support. Your contribution funds safety equipment, 
-              training, and the preparation needed to come home safely.
+            <h2 className="text-4xl md:text-5xl font-light tracking-wide mb-6">
+              THE JOURNEY
+            </h2>
+            <div className="h-px w-32 bg-white/30 mx-auto mb-6"></div>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Each expedition represents a milestone in systematic preparation,
+              personal growth, and the pursuit of seemingly impossible goals.
             </p>
-            <a
-              href="/support"
-              className="inline-flex items-center space-x-2 bg-white text-black px-8 py-4 font-medium tracking-wide hover:bg-gray-200 transition-colors"
-            >
-              <span>Support the Mission</span>
-            </a>
+          </motion.div>
+
+          {/* Timeline */}
+          <div className="relative">
+            {/* Timeline Line - Hidden on mobile, visible on desktop */}
+            <div className="hidden md:block absolute left-12 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-500 via-yellow-500 to-blue-500/50"></div>
+
+            <div className="space-y-8 md:space-y-16">
+              {expeditions.map((expedition, index) => {
+                const StatusIcon = getStatusIcon(expedition.status);
+                const isExpanded = expandedCard === expedition.id;
+
+                return (
+                  <motion.div
+                    key={expedition.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="relative"
+                  >
+                    {/* Timeline Node - Hidden on mobile */}
+                    <div className={`hidden md:block absolute left-10 top-8 w-4 h-4 rounded-full border-4 border-black ${getTimelineColor(expedition.status)} z-10`}>
+                    </div>
+
+                    {/* Year Label - Better positioning to avoid conflicts */}
+                    <div className="mb-6 md:absolute md:left-20 md:-top-8 md:mb-0 z-30">
+                      <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-3xl md:text-4xl font-black px-4 py-2 rounded-lg shadow-xl border-2 border-black text-center md:text-left inline-block">
+                        {expedition.year}
+                      </div>
+                    </div>
+
+                    {/* Card - Full width on mobile, offset on desktop */}
+                    <div className="md:ml-32">
+                      <div
+                        className={`group cursor-pointer border rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-2xl ${getCardBorderColor(expedition.status)} ${
+                          isExpanded ? 'shadow-2xl scale-[1.02]' : 'hover:scale-[1.01]'
+                        }`}
+                        onClick={() => toggleExpanded(expedition.id)}
+                      >
+                        {/* Main Card Content */}
+                        <div className="flex flex-col md:grid md:grid-cols-5 gap-0 min-h-[400px] md:min-h-[450px]">
+                          {/* Image Section */}
+                          <div className="md:col-span-2 relative flex-1 md:h-auto overflow-hidden order-1 md:order-none">
+                            <Image
+                              src={expedition.image}
+                              alt={`${expedition.mountain} expedition`}
+                              fill
+                              className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+                              sizes="(max-width: 768px) 100vw, 40vw"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+
+                            {/* Status Badge - Better positioning */}
+                            <div className="absolute top-4 left-4">
+                              <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-full border text-xs font-medium ${getStatusColor(expedition.status)}`}>
+                                <StatusIcon className="w-3 h-3" />
+                                <span>{getStatusLabel(expedition.status)}</span>
+                              </div>
+                            </div>
+
+                            {/* Seven Summits Badge - Repositioned */}
+                            {expedition.isSevenSummit && (
+                              <div className="absolute top-16 left-4">
+                                <div className="bg-gradient-to-r from-yellow-500/90 to-orange-500/90 border border-yellow-600 text-black px-2 py-1 rounded-md text-xs font-bold">
+                                  SEVEN SUMMITS
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Elevation - Better spacing and positioning */}
+                            <div className="absolute bottom-4 left-4">
+                              <div className="bg-black/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/30">
+                                <div className="text-white text-lg font-bold">
+                                  {expedition.elevation}
+                                </div>
+                                <div className="text-white/90 text-xs uppercase tracking-wide">
+                                  Elevation
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Content Section */}
+                          <div className="md:col-span-3 p-6 md:p-8 bg-gray-900/50 backdrop-blur-sm order-2 md:order-none flex flex-col justify-between">
+                            <div className="space-y-4 md:space-y-6 flex-1">
+                              {/* Header */}
+                              <div>
+                                <h3 className="text-2xl md:text-4xl font-light tracking-wide text-white mb-3">
+                                  {expedition.mountain}
+                                </h3>
+                                <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-4 text-gray-300">
+                                  <div className="flex items-center space-x-2">
+                                    <MapPin className="w-4 h-4 md:w-5 md:h-5" />
+                                    <span className="text-base md:text-lg">{expedition.location}</span>
+                                  </div>
+                                  <div className="flex items-center space-x-2">
+                                    <Calendar className="w-4 h-4 md:w-5 md:h-5" />
+                                    <span className="text-base md:text-lg">{expedition.date}</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Story */}
+                              <p className="text-gray-200 text-base md:text-lg leading-relaxed">
+                                {expedition.story}
+                              </p>
+
+                              {/* Quick Stats */}
+                              <div className="grid grid-cols-3 gap-2 md:gap-4">
+                                <div className="text-center p-2 md:p-3 bg-black/30 rounded-lg">
+                                  <Timer className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-blue-400" />
+                                  <div className="text-xs md:text-sm text-gray-400">Duration</div>
+                                  <div className="text-sm md:text-base text-white font-medium">{expedition.stats.duration}</div>
+                                </div>
+                                <div className="text-center p-2 md:p-3 bg-black/30 rounded-lg">
+                                  <Mountain className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-green-400" />
+                                  <div className="text-xs md:text-sm text-gray-400">Difficulty</div>
+                                  <div className="text-sm md:text-base text-white font-medium">{expedition.stats.difficulty}</div>
+                                </div>
+                                <div className="text-center p-2 md:p-3 bg-black/30 rounded-lg">
+                                  <Thermometer className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-red-400" />
+                                  <div className="text-xs md:text-sm text-gray-400">Temperature</div>
+                                  <div className="text-sm md:text-base text-white font-medium">{expedition.stats.temperature}</div>
+                                </div>
+                              </div>
+
+                              {/* Expand Button */}
+                              <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                                <div className="text-xs md:text-sm text-gray-400">
+                                  Click to {isExpanded ? 'collapse' : 'expand'} details
+                                </div>
+                                <div className="flex items-center space-x-2 text-gray-400">
+                                  {isExpanded ? <ChevronUp className="w-4 h-4 md:w-5 md:h-5" /> : <ChevronDown className="w-4 h-4 md:w-5 md:h-5" />}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Expanded Content */}
+                        {isExpanded && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="border-t border-gray-700 bg-gray-800/50 p-4 md:p-8"
+                          >
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+                              <div>
+                                <h4 className="text-lg md:text-xl font-light text-white mb-3 md:mb-4 flex items-center space-x-2">
+                                  <Award className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" />
+                                  <span>Key Achievements</span>
+                                </h4>
+                                <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-gray-300">
+                                  <li>• Successfully reached summit</li>
+                                  <li>• All safety protocols executed</li>
+                                  <li>• Weather window optimized</li>
+                                  <li>• Team coordination excellent</li>
+                                </ul>
+                              </div>
+                              <div>
+                                <h4 className="text-lg md:text-xl font-light text-white mb-3 md:mb-4 flex items-center space-x-2">
+                                  <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
+                                  <span>Lessons Learned</span>
+                                </h4>
+                                <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-gray-300">
+                                  <li>• High-altitude acclimatization</li>
+                                  <li>• Equipment performance testing</li>
+                                  <li>• Mental resilience building</li>
+                                  <li>• Emergency protocol mastery</li>
+                                </ul>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Summary Stats */}
+      <section className="py-20 bg-gray-900">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="grid md:grid-cols-4 gap-8 text-center"
+          >
+            <div className="bg-black/50 rounded-2xl p-8 border border-green-500/30">
+              <div className="text-4xl font-light text-green-400 mb-2">5</div>
+              <div className="text-gray-300">Expeditions Complete</div>
+            </div>
+            <div className="bg-black/50 rounded-2xl p-8 border border-yellow-500/30">
+              <div className="text-4xl font-light text-yellow-400 mb-2">4/7</div>
+              <div className="text-gray-300">Seven Summits</div>
+            </div>
+            <div className="bg-black/50 rounded-2xl p-8 border border-blue-500/30">
+              <div className="text-4xl font-light text-blue-400 mb-2">10</div>
+              <div className="text-gray-300">Years Journey</div>
+            </div>
+            <div className="bg-black/50 rounded-2xl p-8 border border-purple-500/30">
+              <div className="text-4xl font-light text-purple-400 mb-2">∞</div>
+              <div className="text-gray-300">Lessons Learned</div>
+            </div>
           </motion.div>
         </div>
       </section>

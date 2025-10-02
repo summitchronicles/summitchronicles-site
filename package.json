@@ -28,7 +28,48 @@
     "test:evals": "playwright test tests/evaluations/ --project=chromium",
     "audit:packages": "npm outdated && npm audit && echo 'Check for unused dependencies manually'",
     "test:production": "playwright test tests/production/ --project=chromium",
-    "devops:workflow": "npm run test:local && npm run test:evals && npm run audit:packages"
+    "devops:workflow": "npm run test:local && npm run test:evals && npm run audit:packages",
+
+    "test:training": "playwright test tests/training/ --project=chromium",
+    "test:training:ui": "playwright test tests/training/ --ui",
+
+    "test:phase:phase1": "playwright test tests/training/phase1-excel-calendar.spec.ts",
+    "test:phase:phase2": "playwright test tests/training/phase2-garmin-integration.spec.ts",
+    "test:phase:phase3": "playwright test tests/training/phase3-compliance-analytics.spec.ts",
+    "test:phase:phase4": "playwright test tests/training/phase4-ai-integration.spec.ts",
+
+    "test:unit:excel-parser": "jest tests/unit/excel-parser.test.ts",
+    "test:unit:garmin-api": "jest tests/unit/garmin-api.test.ts",
+    "test:unit:compliance-engine": "jest tests/unit/compliance-engine.test.ts",
+    "test:unit:rag-pipeline": "jest tests/unit/rag-pipeline.test.ts",
+    "test:unit:analytics-dashboard": "jest tests/unit/analytics-dashboard.test.ts",
+
+    "test:integration:oauth": "playwright test tests/integration/oauth-flow.spec.ts",
+    "test:integration:garmin": "playwright test tests/integration/garmin-api.spec.ts",
+    "test:integration:ai-context": "playwright test tests/integration/ai-context.spec.ts",
+    "test:integration:pattern-recognition": "jest tests/integration/pattern-recognition.test.ts",
+    "test:integration:mock": "playwright test tests/integration/ --grep 'mock'",
+
+    "test:visual:calendar": "playwright test tests/visual/training-calendar.spec.ts",
+    "test:performance:calendar": "playwright test tests/performance/calendar-load.spec.ts",
+    "test:performance:calc": "playwright test tests/performance/analytics-performance.spec.ts",
+    "test:accessibility:calendar": "playwright test tests/accessibility/training-calendar.spec.ts",
+
+    "test:security:api-endpoints": "jest tests/security/api-endpoints.test.ts",
+    "test:security:token-storage": "jest tests/security/token-storage.test.ts",
+    "test:security:oauth-flow": "jest tests/security/oauth-security.test.ts",
+    "test:security:input-validation": "jest tests/security/input-validation.test.ts",
+    "test:security:auth-bypass": "jest tests/security/auth-bypass.test.ts",
+
+    "test:accuracy:compliance-math": "jest tests/accuracy/compliance-calculations.test.ts",
+    "test:accuracy:ai-insights": "jest tests/accuracy/ai-insights.test.ts",
+
+    "quality-gate:phase1": "npm run test:phase:phase1 && npm run test:unit:excel-parser && npm run test:visual:calendar && npm run test:performance:calendar && npm run test:accessibility:calendar",
+    "quality-gate:phase2": "npm run test:phase:phase2 && npm run test:unit:garmin-api && npm run test:integration:oauth && npm run test:security:oauth-flow && npm run test:security:token-storage",
+    "quality-gate:phase3": "npm run test:phase:phase3 && npm run test:unit:compliance-engine && npm run test:unit:analytics-dashboard && npm run test:accuracy:compliance-math && npm run test:performance:calc",
+    "quality-gate:phase4": "npm run test:phase:phase4 && npm run test:unit:rag-pipeline && npm run test:integration:ai-context && npm run test:accuracy:ai-insights",
+
+    "test:garmin-sync:full": "npm run quality-gate:phase1 && npm run quality-gate:phase2 && npm run quality-gate:phase3 && npm run quality-gate:phase4"
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",
@@ -64,6 +105,7 @@
     "eslint": "^8.57.1",
     "eslint-config-next": "^15.5.3",
     "eslint-config-prettier": "^10.1.8",
+    "jest": "^29.7.0",
     "jest-environment-jsdom": "^30.1.2",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
@@ -71,5 +113,32 @@
     "ts-jest": "^29.4.2",
     "typescript": "5.9.2",
     "webpack-bundle-analyzer": "^4.10.2"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.ts"],
+    "testMatch": [
+      "<rootDir>/tests/unit/**/*.test.ts",
+      "<rootDir>/tests/integration/**/*.test.ts",
+      "<rootDir>/tests/security/**/*.test.ts",
+      "<rootDir>/tests/accuracy/**/*.test.ts"
+    ],
+    "collectCoverageFrom": [
+      "app/api/training/**/*.ts",
+      "app/components/training/**/*.tsx",
+      "lib/garmin-api.ts",
+      "lib/compliance-engine.ts",
+      "!**/*.d.ts",
+      "!**/node_modules/**"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    }
   }
 }

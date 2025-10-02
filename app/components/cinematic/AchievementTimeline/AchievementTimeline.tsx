@@ -12,6 +12,7 @@ import {
   Target,
   Award,
 } from 'lucide-react';
+import { getDaysToEverest } from '@/lib/everest-countdown';
 
 interface Summit {
   id: string;
@@ -40,41 +41,16 @@ export function AchievementTimeline({
 
   const summits: Summit[] = [
     {
-      id: 'whitney',
-      name: 'Mount Whitney',
-      elevation: '4,421m',
-      location: 'California, USA',
-      continent: 'North America',
+      id: 'sar-pass',
+      name: 'Sar Pass Trek',
+      elevation: '4,220m',
+      location: 'Himachal Pradesh, India',
+      continent: 'Asia',
       status: 'completed',
-      date: 'September 2023',
-      description: 'First serious high-altitude training ground',
+      date: 'May 2014',
+      description: 'First Himalayan trek - the spark that started everything',
       difficulty: 2,
-      lessons:
-        'Learned fundamental acclimatization techniques and gear systems',
-    },
-    {
-      id: 'rainier',
-      name: 'Mount Rainier',
-      elevation: '4,392m',
-      location: 'Washington, USA',
-      continent: 'North America',
-      status: 'completed',
-      date: 'November 2023',
-      description: 'Technical glacier training and crevasse rescue',
-      difficulty: 3,
-      lessons: 'Essential preparation for larger expedition mountaineering',
-    },
-    {
-      id: 'shasta',
-      name: 'Mount Shasta',
-      elevation: '4,317m',
-      location: 'California, USA',
-      continent: 'North America',
-      status: 'completed',
-      date: 'January 2024',
-      description: 'Winter climbing conditions and ice axe techniques',
-      difficulty: 3,
-      lessons: 'Building confidence in challenging weather scenarios',
+      lessons: 'Recovery from tuberculosis, discovering the power of mountains',
     },
     {
       id: 'kilimanjaro',
@@ -83,10 +59,46 @@ export function AchievementTimeline({
       location: 'Tanzania',
       continent: 'Africa',
       status: 'completed',
-      date: 'March 2024',
-      description: 'Highest peak in Africa and major altitude milestone',
+      date: 'October 2022',
+      description: 'First Seven Summits achievement',
       difficulty: 3,
-      lessons: 'Mastered extended high-altitude exposure and mental endurance',
+      lessons: 'Systematic preparation pays off - proof of concept for bigger goals',
+    },
+    {
+      id: 'aconcagua',
+      name: 'Mount Aconcagua',
+      elevation: '6,961m',
+      location: 'Argentina',
+      continent: 'South America',
+      status: 'completed',
+      date: 'February 2023',
+      description: 'Highest peak outside of Asia',
+      difficulty: 4,
+      lessons: 'Technical high-altitude climbing and extreme weather endurance',
+    },
+    {
+      id: 'elbrus',
+      name: 'Mount Elbrus',
+      elevation: '5,642m',
+      location: 'Russia',
+      continent: 'Europe',
+      status: 'completed',
+      date: 'July 2023',
+      description: 'European summit in extreme cold conditions',
+      difficulty: 3,
+      lessons: 'Cold weather mountaineering and mental resilience',
+    },
+    {
+      id: 'denali',
+      name: 'Denali',
+      elevation: '6,194m',
+      location: 'Alaska, USA',
+      continent: 'North America',
+      status: 'completed',
+      date: 'June 2024',
+      description: 'Most recent Seven Summits achievement',
+      difficulty: 4,
+      lessons: 'Technical glacier travel and extreme conditions mastery',
     },
     {
       id: 'everest',
@@ -101,26 +113,6 @@ export function AchievementTimeline({
       lessons: 'Currently in intensive preparation phase',
     },
     {
-      id: 'denali',
-      name: 'Denali',
-      elevation: '6,194m',
-      location: 'Alaska, USA',
-      continent: 'North America',
-      status: 'planned',
-      description: 'Extreme cold weather mountaineering',
-      difficulty: 4,
-    },
-    {
-      id: 'aconcagua',
-      name: 'Aconcagua',
-      elevation: '6,961m',
-      location: 'Argentina',
-      continent: 'South America',
-      status: 'planned',
-      description: 'Highest peak in South America',
-      difficulty: 3,
-    },
-    {
       id: 'vinson',
       name: 'Mount Vinson',
       elevation: '4,892m',
@@ -129,6 +121,16 @@ export function AchievementTimeline({
       status: 'planned',
       description: 'Most remote and challenging logistics',
       difficulty: 4,
+    },
+    {
+      id: 'carstensz',
+      name: 'Carstensz Pyramid',
+      elevation: '4,884m',
+      location: 'Indonesia',
+      continent: 'Oceania',
+      status: 'planned',
+      description: 'Technical rock climbing at altitude',
+      difficulty: 5,
     },
   ];
 
@@ -202,14 +204,13 @@ export function AchievementTimeline({
             Seven Summits Journey
           </h2>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            Each peak represents a milestone in the ultimate mountaineering
-            challenge. Four summits conquered, three more to go, with Everest as
-            the crown jewel in 2027.
+            From recovery after tuberculosis to the Seven Summits. Four summits conquered,
+            three more to go, with Everest as the ultimate goal in 2027.
           </p>
           <div className="flex items-center justify-center mt-6 space-x-8 text-sm">
             <div className="flex items-center space-x-2">
               <CheckCircle className="w-5 h-5 text-green-400" />
-              <span className="text-slate-300">Completed: 4</span>
+              <span className="text-slate-300">Seven Summits Completed: 4</span>
             </div>
             <div className="flex items-center space-x-2">
               <Target className="w-5 h-5 text-summit-gold" />
@@ -217,7 +218,7 @@ export function AchievementTimeline({
             </div>
             <div className="flex items-center space-x-2">
               <Clock className="w-5 h-5 text-slate-400" />
-              <span className="text-slate-300">Planned: 3</span>
+              <span className="text-slate-300">Planned: 2</span>
             </div>
           </div>
         </motion.div>
@@ -339,7 +340,7 @@ export function AchievementTimeline({
                               CURRENT FOCUS
                             </div>
                             <div className="text-sm text-slate-300">
-                              487 days until expedition
+                              {getDaysToEverest()} days until expedition
                             </div>
                           </div>
                         )}
@@ -404,19 +405,19 @@ export function AchievementTimeline({
         >
           <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
             <div className="text-3xl font-bold text-green-400 mb-2">4</div>
-            <div className="text-slate-300 text-sm">Summits Completed</div>
+            <div className="text-slate-300 text-sm">Seven Summits Completed</div>
           </div>
           <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
             <div className="text-3xl font-bold text-summit-gold mb-2">1</div>
             <div className="text-slate-300 text-sm">In Active Training</div>
           </div>
           <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
-            <div className="text-3xl font-bold text-blue-400 mb-2">487</div>
+            <div className="text-3xl font-bold text-blue-400 mb-2">{getDaysToEverest()}</div>
             <div className="text-slate-300 text-sm">Days to Everest</div>
           </div>
           <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
             <div className="text-3xl font-bold text-purple-400 mb-2">57%</div>
-            <div className="text-slate-300 text-sm">Journey Complete</div>
+            <div className="text-slate-300 text-sm">Seven Summits Complete</div>
           </div>
         </motion.div>
       </div>

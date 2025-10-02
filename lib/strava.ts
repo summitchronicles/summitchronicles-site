@@ -152,6 +152,22 @@ export async function fetchStravaActivities(page = 1, perPage = 30) {
     return activities;
   } catch (error) {
     console.error('❌ Error fetching Strava activities:', error);
+
+    // Add more specific error logging
+    if (error instanceof Error) {
+      console.error('❌ Error details:', {
+        message: error.message,
+        stack: error.stack?.substring(0, 500),
+        supabaseAvailable: !!supabase,
+        envVarsAvailable: {
+          STRAVA_CLIENT_ID: !!process.env.STRAVA_CLIENT_ID,
+          STRAVA_CLIENT_SECRET: !!process.env.STRAVA_CLIENT_SECRET,
+          SUPABASE_URL: !!process.env.SUPABASE_URL,
+          SUPABASE_SERVICE_ROLE_KEY: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+        }
+      });
+    }
+
     // Return mock data as fallback
     return getMockActivities();
   }

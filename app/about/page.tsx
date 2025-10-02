@@ -13,29 +13,37 @@ import {
   Camera,
   Compass,
 } from 'lucide-react';
+import { getDaysToEverest } from '@/lib/everest-countdown';
 
 export default function AboutPage() {
   const achievements = [
     {
-      year: '2023',
+      year: '2022',
       mountain: 'Mount Kilimanjaro',
       elevation: '19,341 ft',
-      location: 'Tanzania',
-      significance: 'First Seven Summits achievement. Proof that systematic preparation works.',
+      location: 'Tanzania, Africa',
+      significance: 'First Seven Summits achievement after years of preparation in the Himalayas.',
+    },
+    {
+      year: '2023',
+      mountain: 'Mount Aconcagua',
+      elevation: '22,837 ft',
+      location: 'Argentina, South America',
+      significance: 'Technical high-altitude climbing. Highest peak outside of Asia.',
+    },
+    {
+      year: '2023',
+      mountain: 'Mount Elbrus',
+      elevation: '18,510 ft',
+      location: 'Russia, Europe',
+      significance: 'European summit completion. Extreme cold weather mountaineering.',
     },
     {
       year: '2024',
-      mountain: 'Mount Whitney',
-      elevation: '14,505 ft',
-      location: 'California',
-      significance: 'Redemption climb. Technical alpine preparation and mental resilience testing.',
-    },
-    {
-      year: '2024',
-      mountain: 'Mount Washington',
-      elevation: '6,288 ft',
-      location: 'New Hampshire',
-      significance: 'Winter conditions mastery. Sub-zero training for extreme environments.',
+      mountain: 'Mount Denali',
+      elevation: '20,310 ft',
+      location: 'Alaska, North America',
+      significance: 'Most recent Seven Summits achievement. Technical glacier travel and extreme conditions.',
     },
   ];
 
@@ -100,13 +108,14 @@ export default function AboutPage() {
             
             <div className="space-y-6 text-base md:text-lg font-light leading-relaxed">
               <p className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
-                <strong className="text-white">The systematic approach to impossible goals.</strong> 
-                What started as a failure on Mount Whitney became a methodical journey toward 
-                the Seven Summits, driven by engineering principles and data-driven preparation.
+                <strong className="text-white">From bedridden to the Seven Summits.</strong>
+                In 2013, I was fighting tuberculosis and could barely walk 50 meters. A year later,
+                I stood on a Himalayan glacier during my first trek to Sar Pass. That moment sparked everything.
               </p>
               <p className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
-                Based in the Pacific Northwest, I combine technical expertise with adventure 
-                sports, documenting the intersection of systematic thinking and extreme mountaineering.
+                Since then, I've completed four of the Seven Summits - Kilimanjaro, Aconcagua, Elbrus,
+                and Denali - documenting the physical, mental, and emotional transformation that happens
+                in pursuit of something bigger than ourselves.
               </p>
             </div>
 
@@ -117,11 +126,11 @@ export default function AboutPage() {
                 <div className="text-sm uppercase tracking-wide text-gray-300">Summits</div>
               </div>
               <div className="text-center md:text-left">
-                <div className="text-2xl font-light">541</div>
+                <div className="text-2xl font-light">{getDaysToEverest()}</div>
                 <div className="text-sm uppercase tracking-wide text-gray-300">Days to Everest</div>
               </div>
               <div className="text-center md:text-left">
-                <div className="text-2xl font-light">7</div>
+                <div className="text-2xl font-light">11</div>
                 <div className="text-sm uppercase tracking-wide text-gray-300">Years Climbing</div>
               </div>
             </div>
@@ -153,21 +162,21 @@ export default function AboutPage() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              <h3 className="text-2xl font-light tracking-wide">From Failure to System</h3>
+              <h3 className="text-2xl font-light tracking-wide">From Disease to Discovery</h3>
               <p className="text-gray-300 leading-relaxed">
-                <strong>14,000 feet. Mount Whitney. 2021.</strong> Gasping for air, watching my 
-                climbing partner disappear into the clouds. That failure became the foundation 
-                for everything that followed.
+                <strong>2013. Bedridden. Tuberculosis.</strong> Multiple surgeries, barely able to walk
+                50 meters without collapsing. This was my lowest point - the foundation for everything
+                that followed.
               </p>
               <p className="text-gray-300 leading-relaxed">
-                I approached mountaineering the same way I approach engineering problems: 
-                systematic analysis, iterative improvement, and measured progress toward 
-                seemingly impossible goals.
+                <strong>2014. Sar Pass, Himalayas.</strong> Completely unprepared, out of breath, slow.
+                But I kept going. Standing on that glacier, something sparked in me that changed
+                the trajectory of my life.
               </p>
               <p className="text-gray-300 leading-relaxed">
-                <strong>The Seven Summits became my laboratory</strong> for testing whether 
-                methodical preparation could achieve extraordinary results in the world's 
-                most unforgiving environments.
+                Summit Chronicles isn't just about mountains - it's about what they do to us physically,
+                mentally, emotionally. It's about the discipline, failure, fear, and transformation
+                that happens in pursuit of something bigger than ourselves.
               </p>
             </motion.div>
 
@@ -330,8 +339,8 @@ export default function AboutPage() {
               Follow the Journey to Everest
             </h3>
             <p className="text-xl text-gray-300 font-light leading-relaxed">
-              541 days of systematic preparation documented through field reports, 
-              training insights, and expedition photography.
+              The journey continues toward Everest - documenting every step of preparation, training,
+              and the inner transformation that happens on the way to the summit.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a

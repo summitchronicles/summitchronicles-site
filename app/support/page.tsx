@@ -15,12 +15,13 @@ import {
   Target,
   Activity
 } from 'lucide-react';
+import { getDaysToEverest } from '@/lib/everest-countdown';
 
 export default function SupportPage() {
   const expeditionMetrics = [
     {
       icon: Calendar,
-      value: '541',
+      value: getDaysToEverest().toString(),
       label: 'Days Remaining',
       description: 'Until Everest departure',
       status: 'CRITICAL'
@@ -119,7 +120,7 @@ export default function SupportPage() {
               </h1>
             </div>
             <p className="text-xl font-light tracking-wider opacity-90">
-              Critical Equipment • 541 Days • ₹8.5L Required
+              Critical Equipment • {getDaysToEverest()} Days • ₹8.5L Required
             </p>
           </motion.div>
         </div>

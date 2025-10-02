@@ -16,6 +16,7 @@ import {
   Wifi,
   WifiOff,
 } from 'lucide-react';
+import { getEverestCountdownText } from '@/lib/everest-countdown';
 
 interface TrainingMetrics {
   totalActivities: number;
@@ -45,9 +46,25 @@ export default function RealtimeTrainingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [hasTokens, setHasTokens] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   useEffect(() => {
+    // Check for successful auth callback
+    const urlParams = new URLSearchParams(window.location.search);
+    const success = urlParams.get('success');
+    const athlete = urlParams.get('athlete');
+
+    if (success === 'strava_connected') {
+      setIsConnected(true);
+      setHasTokens(true);
+      if (athlete) {
+        console.log(`✅ Strava connected for athlete: ${athlete}`);
+      }
+      // Clean up URL params
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
     loadTrainingData();
     // Set up updates every 4 hours to respect Strava rate limits
     const interval = setInterval(loadTrainingData, 4 * 60 * 60 * 1000); // 4 hours
@@ -250,7 +267,7 @@ export default function RealtimeTrainingPage() {
             LIVE TRAINING DATA
           </h1>
           <p className="text-xl font-light tracking-wider opacity-90">
-            Real-time Metrics • Systematic Progress • 541 Days to Everest
+            Real-time Metrics • Systematic Progress • {getEverestCountdownText()}
           </p>
         </div>
       </section>
@@ -273,7 +290,7 @@ export default function RealtimeTrainingPage() {
 
               <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2 text-sm">
-                  {isConnected ? (
+                  {isConnected && hasTokens ? (
                     <>
                       <Wifi className="w-4 h-4 text-green-400" />
                       <span className="text-green-400">
@@ -283,21 +300,31 @@ export default function RealtimeTrainingPage() {
                   ) : (
                     <>
                       <WifiOff className="w-4 h-4 text-yellow-400" />
-                      <span className="text-yellow-400">Using demo data</span>
+                      <span className="text-yellow-400">Not Connected</span>
                     </>
                   )}
                 </div>
 
-                <button
-                  onClick={loadTrainingData}
-                  disabled={loading}
-                  className="flex items-center space-x-2 border border-white text-white px-4 py-2 font-medium tracking-wide hover:bg-white hover:text-black transition-colors disabled:opacity-50"
-                >
-                  <RefreshCw
-                    className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}
-                  />
-                  <span>Refresh</span>
-                </button>
+                {!(isConnected && hasTokens) ? (
+                  <a
+                    href="/api/strava/auth"
+                    className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 font-medium tracking-wide hover:bg-orange-700 transition-colors"
+                  >
+                    <Wifi className="w-4 h-4" />
+                    <span>Connect Strava</span>
+                  </a>
+                ) : (
+                  <button
+                    onClick={loadTrainingData}
+                    disabled={loading}
+                    className="flex items-center space-x-2 border border-white text-white px-4 py-2 font-medium tracking-wide hover:bg-white hover:text-black transition-colors disabled:opacity-50"
+                  >
+                    <RefreshCw
+                      className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}
+                    />
+                    <span>Refresh</span>
+                  </button>
+                )}
               </div>
             </div>
 

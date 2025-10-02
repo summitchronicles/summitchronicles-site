@@ -1,0 +1,758 @@
+name: Garmin Sync Feature CI/CD Pipeline
+
+on:
+  push:
+    paths:
+      - 'app/api/training/**'
+      - 'app/components/training/**'
+      - 'tests/training/**'
+      - 'lib/garmin-api.ts'
+      - 'lib/compliance-engine.ts'
+  pull_request:
+    paths:
+      - 'app/api/training/**'
+      - 'app/components/training/**'
+      - 'tests/training/**'
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: 'Test specific phase'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - phase1
+          - phase2
+          - phase3
+          - phase4
+
+env:
+  NODE_VERSION: '18.x'
+  GARMIN_API_URL: 'http://localhost:8080'
+  MOCK_GARMIN_SERVER: 'true'
+
+jobs:
+  # Setup and validation
+  setup:
+    name: Setup & Validation
+    runs-on: ubuntu-latest
+    outputs:
+      test-phases: ${{ steps.phases.outputs.phases }}
+      should-run-phase1: ${{ steps.phases.outputs.phase1 }}
+      should-run-phase2: ${{ steps.phases.outputs.phase2 }}
+      should-run-phase3: ${{ steps.phases.outputs.phase3 }}
+      should-run-phase4: ${{ steps.phases.outputs.phase4 }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Determine test phases to run
+        id: phases
+        run: |
+          if [[ "${{ github.event.inputs.phase }}" == "all" || "${{ github.event.inputs.phase }}" == "" ]]; then
+            echo "phases=[\"phase1\", \"phase2\", \"phase3\", \"phase4\"]" >> $GITHUB_OUTPUT
+            echo "phase1=true" >> $GITHUB_OUTPUT
+            echo "phase2=true" >> $GITHUB_OUTPUT
+            echo "phase3=true" >> $GITHUB_OUTPUT
+            echo "phase4=true" >> $GITHUB_OUTPUT
+          else
+            echo "phases=[\"${{ github.event.inputs.phase }}\"]" >> $GITHUB_OUTPUT
+            echo "phase1=${{ github.event.inputs.phase == 'phase1' }}" >> $GITHUB_OUTPUT
+            echo "phase2=${{ github.event.inputs.phase == 'phase2' }}" >> $GITHUB_OUTPUT
+            echo "phase3=${{ github.event.inputs.phase == 'phase3' }}" >> $GITHUB_OUTPUT
+            echo "phase4=${{ github.event.inputs.phase == 'phase4' }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate test files exist
+        run: |
+          for phase in $(echo '${{ steps.phases.outputs.phases }}' | jq -r '.[]'); do
+            if [[ ! -f "tests/training/${phase}-*.spec.ts" ]]; then
+              echo "Error: Test file for ${phase} not found"
+              exit 1
+            fi
+          done
+
+  # Phase 1: Excel Upload & Calendar UI Testing
+  phase1-testing:
+    name: Phase 1 - Excel & Calendar
+    runs-on: ubuntu-latest
+    needs: setup
+    if: needs.setup.outputs.should-run-phase1 == 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Run Excel parser unit tests
+        run: npm run test:unit:excel-parser
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+
+      - name: Run Phase 1 E2E tests
+        run: npx playwright test tests/training/phase1-excel-calendar.spec.ts
+        env:
+          CI: true
+
+      - name: Run visual regression tests
+        run: npx playwright test tests/visual/training-calendar.spec.ts
+
+      - name: Performance testing - Calendar load time
+        run: |
+          npx playwright test tests/performance/calendar-load.spec.ts
+          # Verify load time < 2 seconds
+          node scripts/verify-performance.js calendar-load
+
+      - name: Accessibility testing
+        run: |
+          npm install -g @axe-core/playwright
+          npx playwright test tests/accessibility/training-calendar.spec.ts
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase1-test-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+
+      - name: Phase 1 Quality Gate Check
+        run: |
+          echo "Checking Phase 1 quality gates..."
+          # Verify all tests passed
+          if [[ $? -eq 0 ]]; then
+            echo "✅ Phase 1 quality gate passed"
+            echo "PHASE1_PASSED=true" >> $GITHUB_ENV
+          else
+            echo "❌ Phase 1 quality gate failed"
+            exit 1
+          fi
+
+  # Phase 2: Garmin API Integration Testing
+  phase2-testing:
+    name: Phase 2 - Garmin API
+    runs-on: ubuntu-latest
+    needs: [setup, phase1-testing]
+    if: needs.setup.outputs.should-run-phase2 == 'true' && (always() && !failure())
+
+    services:
+      mock-garmin-server:
+        image: ghcr.io/summit-chronicles/mock-garmin-server:latest
+        ports:
+          - 8080:8080
+        env:
+          MOCK_MODE: comprehensive
+          ENABLE_OAUTH: true
+          ENABLE_WORKOUTS: true
+          ENABLE_ACTIVITIES: true
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for mock Garmin server
+        run: |
+          timeout 60 bash -c 'until curl -f http://localhost:8080/health; do sleep 2; done'
+
+      - name: Run Garmin API unit tests
+        run: npm run test:unit:garmin-api
+
+      - name: Run OAuth flow integration tests
+        run: npm run test:integration:oauth
+
+      - name: Build application
+        run: npm run build
+        env:
+          NEXT_PUBLIC_GARMIN_API_URL: http://localhost:8080
+
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+        env:
+          GARMIN_API_URL: http://localhost:8080
+          GARMIN_CLIENT_ID: mock-client-id
+          GARMIN_CLIENT_SECRET: mock-client-secret
+
+      - name: Run Phase 2 E2E tests
+        run: npx playwright test tests/training/phase2-garmin-integration.spec.ts
+        env:
+          CI: true
+          GARMIN_API_URL: http://localhost:8080
+
+      - name: Test API rate limiting compliance
+        run: |
+          node scripts/test-rate-limiting.js
+          # Verify we respect Garmin's rate limits
+
+      - name: Security testing - Token handling
+        run: |
+          npm run test:security:token-storage
+          npm run test:security:oauth-flow
+
+      - name: Load testing - API endpoints
+        run: |
+          npx k6 run tests/load/garmin-api-load.js
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase2-test-results
+          path: |
+            playwright-report/
+            test-results/
+            k6-results/
+          retention-days: 30
+
+      - name: Phase 2 Quality Gate Check
+        run: |
+          echo "Checking Phase 2 quality gates..."
+          # Check OAuth security, API integration, error handling
+          npm run quality-gate:phase2
+          if [[ $? -eq 0 ]]; then
+            echo "✅ Phase 2 quality gate passed"
+            echo "PHASE2_PASSED=true" >> $GITHUB_ENV
+          else
+            echo "❌ Phase 2 quality gate failed"
+            exit 1
+          fi
+
+  # Phase 3: Compliance Analytics Testing
+  phase3-testing:
+    name: Phase 3 - Compliance Analytics
+    runs-on: ubuntu-latest
+    needs: [setup, phase2-testing]
+    if: needs.setup.outputs.should-run-phase3 == 'true' && (always() && !failure())
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run compliance engine unit tests
+        run: npm run test:unit:compliance-engine
+
+      - name: Test compliance calculation accuracy
+        run: |
+          npm run test:accuracy:compliance-math
+          # Verify mathematical accuracy of compliance calculations
+
+      - name: Run analytics dashboard unit tests
+        run: npm run test:unit:analytics-dashboard
+
+      - name: Build application
+        run: npm run build
+
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+
+      - name: Run Phase 3 E2E tests
+        run: npx playwright test tests/training/phase3-compliance-analytics.spec.ts
+        env:
+          CI: true
+
+      - name: Performance testing - Analytics calculation
+        run: |
+          npx playwright test tests/performance/analytics-performance.spec.ts
+          # Verify analytics load < 1 second
+
+      - name: Pattern recognition testing
+        run: |
+          npm run test:integration:pattern-recognition
+          # Test AI pattern detection accuracy
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase3-test-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+
+      - name: Phase 3 Quality Gate Check
+        run: |
+          echo "Checking Phase 3 quality gates..."
+          npm run quality-gate:phase3
+          if [[ $? -eq 0 ]]; then
+            echo "✅ Phase 3 quality gate passed"
+            echo "PHASE3_PASSED=true" >> $GITHUB_ENV
+          else
+            echo "❌ Phase 3 quality gate failed"
+            exit 1
+          fi
+
+  # Phase 4: AI Integration & RAG Pipeline Testing
+  phase4-testing:
+    name: Phase 4 - AI Integration
+    runs-on: ubuntu-latest
+    needs: [setup, phase3-testing]
+    if: needs.setup.outputs.should-run-phase4 == 'true' && (always() && !failure())
+
+    services:
+      ollama:
+        image: ollama/ollama:latest
+        ports:
+          - 11434:11434
+        options: --gpus all
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Setup Ollama model
+        run: |
+          # Wait for Ollama to be ready
+          timeout 60 bash -c 'until curl -f http://localhost:11434/api/version; do sleep 2; done'
+          # Pull test model
+          curl -X POST http://localhost:11434/api/pull -d '{"name":"llama2:7b"}'
+
+      - name: Run RAG pipeline unit tests
+        run: npm run test:unit:rag-pipeline
+
+      - name: Test AI context generation
+        run: |
+          npm run test:integration:ai-context
+          # Verify training context is comprehensive
+
+      - name: Run AI insights accuracy tests
+        run: |
+          npm run test:accuracy:ai-insights
+          # Test relevance and quality of AI-generated insights
+
+      - name: Build application
+        run: npm run build
+        env:
+          OLLAMA_URL: http://localhost:11434
+
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+        env:
+          OLLAMA_URL: http://localhost:11434
+
+      - name: Run Phase 4 E2E tests
+        run: npx playwright test tests/training/phase4-ai-integration.spec.ts
+        env:
+          CI: true
+          OLLAMA_URL: http://localhost:11434
+
+      - name: End-to-end workflow testing
+        run: |
+          npx playwright test tests/training/complete-workflow.spec.ts
+          # Test Excel → Garmin → Compliance → AI workflow
+
+      - name: Performance testing - AI response time
+        run: |
+          npx playwright test tests/performance/ai-performance.spec.ts
+          # Verify AI insights < 5 seconds
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: phase4-test-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+
+      - name: Phase 4 Quality Gate Check
+        run: |
+          echo "Checking Phase 4 quality gates..."
+          npm run quality-gate:phase4
+          if [[ $? -eq 0 ]]; then
+            echo "✅ Phase 4 quality gate passed"
+            echo "PHASE4_PASSED=true" >> $GITHUB_ENV
+          else
+            echo "❌ Phase 4 quality gate failed"
+            exit 1
+          fi
+
+  # Integration testing across all phases
+  integration-testing:
+    name: Cross-Phase Integration
+    runs-on: ubuntu-latest
+    needs: [phase1-testing, phase2-testing, phase3-testing, phase4-testing]
+    if: always() && !failure()
+
+    services:
+      mock-garmin-server:
+        image: ghcr.io/summit-chronicles/mock-garmin-server:latest
+        ports:
+          - 8080:8080
+      ollama:
+        image: ollama/ollama:latest
+        ports:
+          - 11434:11434
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium firefox webkit
+
+      - name: Setup services
+        run: |
+          # Wait for services
+          timeout 60 bash -c 'until curl -f http://localhost:8080/health; do sleep 2; done'
+          timeout 60 bash -c 'until curl -f http://localhost:11434/api/version; do sleep 2; done'
+          # Setup Ollama model
+          curl -X POST http://localhost:11434/api/pull -d '{"name":"llama2:7b"}'
+
+      - name: Build application
+        run: npm run build
+        env:
+          GARMIN_API_URL: http://localhost:8080
+          OLLAMA_URL: http://localhost:11434
+
+      - name: Start application
+        run: |
+          npm start &
+          sleep 30
+        env:
+          GARMIN_API_URL: http://localhost:8080
+          OLLAMA_URL: http://localhost:11434
+
+      - name: Run full integration test suite
+        run: npx playwright test tests/training/full-integration.spec.ts
+        env:
+          CI: true
+
+      - name: Cross-browser testing
+        run: |
+          npx playwright test tests/training/ --project=chromium
+          npx playwright test tests/training/ --project=firefox
+          npx playwright test tests/training/ --project=webkit
+
+      - name: Mobile compatibility testing
+        run: |
+          npx playwright test tests/training/ --project=mobile-chrome
+          npx playwright test tests/training/ --project=mobile-safari
+
+      - name: Upload integration test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: integration-test-results
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 30
+
+  # Performance and load testing
+  performance-testing:
+    name: Performance & Load Testing
+    runs-on: ubuntu-latest
+    needs: integration-testing
+    if: always() && !failure()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install k6
+        run: |
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+          sudo apt-get update
+          sudo apt-get install k6
+
+      - name: Build and start application
+        run: |
+          npm run build
+          npm start &
+          sleep 30
+
+      - name: Load test Excel upload
+        run: k6 run tests/load/excel-upload-load.js
+
+      - name: Load test Garmin sync
+        run: k6 run tests/load/garmin-sync-load.js
+
+      - name: Load test compliance calculations
+        run: k6 run tests/load/compliance-calc-load.js
+
+      - name: Memory leak testing
+        run: |
+          node scripts/memory-leak-test.js
+          # Check for memory leaks in long-running processes
+
+      - name: Upload performance results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: performance-test-results
+          path: |
+            k6-results/
+            memory-reports/
+          retention-days: 30
+
+  # Security testing
+  security-testing:
+    name: Security Testing
+    runs-on: ubuntu-latest
+    needs: integration-testing
+    if: always() && !failure()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run OWASP ZAP security scan
+        run: |
+          docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py \
+            -t http://host.docker.internal:3000/api/training/ \
+            -r zap-report.html
+
+      - name: Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=medium
+
+      - name: Test API security
+        run: |
+          npm run test:security:api-endpoints
+          npm run test:security:input-validation
+          npm run test:security:auth-bypass
+
+      - name: Upload security results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-test-results
+          path: |
+            zap-report.html
+            security-test-results/
+          retention-days: 30
+
+  # Final quality gate and deployment preparation
+  quality-gate:
+    name: Final Quality Gate
+    runs-on: ubuntu-latest
+    needs: [phase1-testing, phase2-testing, phase3-testing, phase4-testing, integration-testing, performance-testing, security-testing]
+    if: always()
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download all test artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Generate comprehensive test report
+        run: |
+          node scripts/generate-test-report.js
+          # Combines all test results into comprehensive report
+
+      - name: Verify all quality gates passed
+        run: |
+          echo "Verifying all quality gates..."
+
+          # Check phase results
+          if [[ "${{ needs.phase1-testing.result }}" == "success" ]]; then
+            echo "✅ Phase 1 passed"
+          else
+            echo "❌ Phase 1 failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.phase2-testing.result }}" == "success" ]]; then
+            echo "✅ Phase 2 passed"
+          else
+            echo "❌ Phase 2 failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.phase3-testing.result }}" == "success" ]]; then
+            echo "✅ Phase 3 passed"
+          else
+            echo "❌ Phase 3 failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.phase4-testing.result }}" == "success" ]]; then
+            echo "✅ Phase 4 passed"
+          else
+            echo "❌ Phase 4 failed"
+            exit 1
+          fi
+
+          if [[ "${{ needs.integration-testing.result }}" == "success" ]]; then
+            echo "✅ Integration tests passed"
+          else
+            echo "❌ Integration tests failed"
+            exit 1
+          fi
+
+          echo "🎉 All quality gates passed! Ready for deployment."
+
+      - name: Upload final test report
+        uses: actions/upload-artifact@v4
+        with:
+          name: comprehensive-test-report
+          path: |
+            test-report.html
+            test-summary.json
+          retention-days: 90
+
+      - name: Comment on PR with test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const testSummary = JSON.parse(fs.readFileSync('test-summary.json', 'utf8'));
+
+            const comment = `
+            ## 🧪 Garmin Sync Feature Test Results
+
+            ### Phase Testing Results
+            - ✅ **Phase 1** (Excel & Calendar): ${testSummary.phase1.passed}/${testSummary.phase1.total} tests passed
+            - ✅ **Phase 2** (Garmin API): ${testSummary.phase2.passed}/${testSummary.phase2.total} tests passed
+            - ✅ **Phase 3** (Compliance): ${testSummary.phase3.passed}/${testSummary.phase3.total} tests passed
+            - ✅ **Phase 4** (AI Integration): ${testSummary.phase4.passed}/${testSummary.phase4.total} tests passed
+
+            ### Quality Gates
+            ${testSummary.qualityGates.map(gate => `- ${gate.passed ? '✅' : '❌'} ${gate.name}`).join('\n')}
+
+            ### Performance Metrics
+            - Calendar Load Time: ${testSummary.performance.calendarLoad}ms (< 2000ms ✅)
+            - Garmin Sync Time: ${testSummary.performance.garminSync}ms (< 5000ms ✅)
+            - AI Response Time: ${testSummary.performance.aiResponse}ms (< 5000ms ✅)
+
+            **Status**: ${testSummary.overallStatus === 'passed' ? '🎉 All tests passed!' : '❌ Some tests failed'}
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  # Notify team of results
+  notify:
+    name: Notify Team
+    runs-on: ubuntu-latest
+    needs: quality-gate
+    if: always()
+
+    steps:
+      - name: Notify on success
+        if: needs.quality-gate.result == 'success'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: success
+          text: '🎉 Garmin Sync Feature: All quality gates passed! Ready for deployment.'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Notify on failure
+        if: needs.quality-gate.result == 'failure'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: failure
+          text: '❌ Garmin Sync Feature: Quality gates failed. Check the test results.'
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

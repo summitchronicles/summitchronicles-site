@@ -127,3 +127,44 @@ Building software is 20% writing code, 80% systems thinking. BMAD taught me that
 Switching from Razorpay to Patreon integration, adding real expedition knowledge to the AI system, and documenting this entire BMAD-driven process for others to learn from.
 
 The expedition preparation continues: 30% physical training, 70% building systems that can handle the complexity of modern adventure logistics.
+
+---
+
+    ## Week 5: Building Trust Through Transparency
+
+    This week reinforced why I'm building SummitChronicles.com: creating something that works reliably, even when everything else breaks down.
+
+    **The Vision Reminder**
+    When I started this project, the goal was never just to build a website. It was to create a working example of how AI, APIs, and data can come together to solve real problems. This week proved why that matters.
+
+    **What Happened**
+    Tuesday morning, my training data dashboard stopped working. The connection to Strava (where I track my runs and climbs) was failing because I was asking for updates too frequently. Think of it like calling someone every 30 seconds to ask "Are we there yet?" - eventually, they stop answering.
+
+    **Why This Matters for the Bigger Picture**
+    This isn't just a technical hiccup. It's exactly the kind of reliability challenge that real mountaineering expeditions face. When you're depending on weather data at 20,000 feet, or GPS coordinates in a whiteout, your systems can't fail. They need to work predictably, every time.
+
+    **What I Built This Week**
+    Instead of just fixing the immediate problem, I built something more valuable: a system that monitors itself and tells you when things might go wrong before they actually do.
+
+    Now the site has:
+    - **Smart Data Usage**: Instead of constantly asking Strava for updates, it remembers recent information and only requests new data when needed
+    - **Real-Time Health Dashboard**: A live view of how all the systems are performing, just like the monitoring equipment on a mountain expedition
+    - **Automatic Problem Detection**: The system notices issues and can often fix them without human intervention
+
+    **Connecting Back to the Seven Summits**
+    Every successful summit requires three things: preparation, adaptation, and monitoring. You prepare your route, adapt when conditions change, and constantly monitor weather, health, and equipment status.
+
+    Building software that people can depend on requires exactly the same mindset. You prepare robust systems, adapt when things break, and monitor everything continuously.
+
+    **The Expedition Logistics Connection**
+    This week's work directly supports the bigger vision: using this platform to transparently document the entire Seven Summits journey, including the $40K+ costs, training progression, and decision-making process.
+
+    When potential sponsors or supporters visit the site, they need to trust that the data is accurate and the systems are reliable. This week's improvements ensure that trust is earned through consistent performance, not just promises.
+
+    **What's Next**
+    The monitoring system is working. Now I'm building the next layer: AI that can analyze my training patterns and provide insights about Seven Summits readiness. Not AI hype, but practical intelligence that answers questions like "Am I building enough endurance?" and "How does this month's elevation training compare to what successful Everest climbers do?"
+
+    **The Broader Lesson**
+    Whether you're building software or planning expeditions, reliability isn't glamorous but it's everything. People don't remember when things work perfectly, but they never forget when systems fail when it matters most.
+
+    The expedition prep continues: building trust through consistent execution, one system at a time.

@@ -18,6 +18,7 @@ import {
   Award,
   ChevronUp,
 } from 'lucide-react';
+import { getDaysToEverest } from '@/lib/everest-countdown';
 // import type { Post } from '../../../lib/sanity/types'
 
 interface BlogPostData {
@@ -110,7 +111,7 @@ export function CinematicBlogPost({
 
       <p>Whether you're climbing the world's highest peak or pursuing any challenging goal, the principles remain the same: systematic preparation, process focus, and the mental resilience to continue when everything tells you to stop.</p>
 
-      <p>The mountain will test everything I've learned. In 487 days, I'll find out if my preparation was enough.</p>
+      <p>The mountain will test everything I've learned. In ${getDaysToEverest()} days, I'll find out if my preparation was enough.</p>
     `,
   };
 

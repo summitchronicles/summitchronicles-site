@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { Header } from './components/organisms/Header';
 import { SponsorRecognition } from './components/organisms/SponsorRecognition';
 import { SupportOptions } from './components/organisms/SupportOptions';
+import { getEverestCountdownText, getDaysToEverest } from '@/lib/everest-countdown';
 
 export default function Home() {
   return (
@@ -47,7 +48,7 @@ export default function Home() {
                 SUMMIT CHRONICLES
               </h1>
               <p className="text-xl md:text-2xl font-light tracking-wider opacity-90 mb-8">
-                Seven Summits • One Journey • 541 Days to Everest
+                Seven Summits • One Journey • {getEverestCountdownText()}
               </p>
               <div className="flex items-center justify-center space-x-2 md:space-x-3 text-sm tracking-widest uppercase opacity-80">
                 <span>Mountaineer</span>
@@ -86,7 +87,7 @@ export default function Home() {
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors">
                 <div className="absolute bottom-6 left-6 text-white">
                   <h3 className="text-lg font-light tracking-wide">KILIMANJARO</h3>
-                  <p className="text-sm opacity-80">First Summit • 2023</p>
+                  <p className="text-sm opacity-80">First Summit • 2022</p>
                 </div>
               </div>
             </div>
@@ -136,9 +137,9 @@ export default function Home() {
                 The Seven Summits Project
               </h2>
               <p className="text-xl text-gray-600 leading-relaxed mb-12 font-light">
-                Every great journey begins with a single step. Mine began at 14,000 feet on Mount Whitney, 
-                gasping for air and watching my climbing partner disappear into the clouds. That failure 
-                became the foundation for something greater: a systematic approach to conquering the 
+                Every great journey begins with a single step. Mine began in 2013, bedridden with tuberculosis,
+                barely able to walk 50 meters. A year later, I stood on a Himalayan glacier during my first
+                trek to Sar Pass. That moment sparked something that became a journey to conquer the
                 Seven Summits, one mountain at a time.
               </p>
               <div className="grid md:grid-cols-3 gap-8 text-center">
@@ -147,7 +148,7 @@ export default function Home() {
                   <div className="text-sm tracking-wide text-gray-600 uppercase">Summits Completed</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-light text-gray-900 mb-2">541</div>
+                  <div className="text-3xl font-light text-gray-900 mb-2">{getDaysToEverest()}</div>
                   <div className="text-sm tracking-wide text-gray-600 uppercase">Days to Everest</div>
                 </div>
                 <div>

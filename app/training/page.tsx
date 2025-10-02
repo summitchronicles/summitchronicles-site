@@ -4,18 +4,23 @@ import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
-import { 
-  TrendingUp, 
-  Target, 
-  Clock, 
-  Thermometer, 
-  Heart, 
+import {
+  TrendingUp,
+  Target,
+  Clock,
+  Thermometer,
+  Heart,
   Mountain,
   Calendar,
   Activity,
   Zap,
-  Award
+  Award,
+  Wifi,
+  WifiOff,
+  RefreshCw
 } from 'lucide-react';
+import { getEverestCountdownText, getDaysToEverest } from '@/lib/everest-countdown';
+import { useTrainingMetrics } from '@/lib/hooks/useTrainingMetrics';
 
 interface TrainingPhase {
   phase: string;
@@ -30,84 +35,106 @@ interface TrainingPhase {
   }[];
 }
 
+// Helper function to get phase details
+function getPhaseDetails(phaseName: string): string {
+  const details: Record<string, string> = {
+    'Base Building': 'Post-tuberculosis recovery and establishing cardiovascular base. Building back from disease to athletic fitness.',
+    'Kilimanjaro Prep': 'Systematic preparation for first Seven Summits attempt. Altitude training and endurance building.',
+    'Technical Mountains': 'Advanced mountaineering for technical Seven Summits. Cold weather training, glacier travel, and extreme altitude preparation.',
+    'Everest Specific': 'Final preparation phase after completing four Seven Summits. Extreme altitude training, supplemental oxygen practice, and death zone simulation.'
+  };
+  return details[phaseName] || 'Training phase details';
+}
+
 export default function TrainingPage() {
-  const trainingPhases: TrainingPhase[] = [
+  const { metrics, loading, error, isRealData, lastUpdated, refresh } = useTrainingMetrics();
+
+  // Fallback data structure for TypeScript compatibility
+  const trainingPhases: TrainingPhase[] = metrics?.trainingPhases.map(phase => ({
+    phase: phase.phase,
+    duration: phase.duration,
+    focus: phase.focus,
+    status: phase.status,
+    details: getPhaseDetails(phase.phase),
+    metrics: phase.metrics
+  })) || [
     {
       phase: 'Base Building',
-      duration: 'Jan - Mar 2024',
-      focus: 'Aerobic Foundation',
+      duration: 'Jan - Mar 2022',
+      focus: 'Recovery Foundation',
       status: 'completed',
-      details: 'Establishing cardiovascular base and building consistent training habits. Focus on volume over intensity.',
+      details: 'Post-tuberculosis recovery and establishing cardiovascular base. Building back from disease to athletic fitness.',
       metrics: [
-        { label: 'Weekly Volume', value: '12 hrs', trend: 'up' },
-        { label: 'Avg Heart Rate', value: '135 bpm', trend: 'stable' },
-        { label: 'Weight', value: '165 lbs', trend: 'down' }
+        { label: 'Weekly Volume', value: '8 hrs', trend: 'up' },
+        { label: 'Walking Distance', value: '5 km', trend: 'up' },
+        { label: 'Recovery Rate', value: '90%', trend: 'up' }
       ]
     },
     {
-      phase: 'Strength & Power',
-      duration: 'Apr - Jun 2024',
-      focus: 'Functional Strength',
+      phase: 'Kilimanjaro Prep',
+      duration: 'Apr - Oct 2022',
+      focus: 'First Seven Summit',
       status: 'completed',
-      details: 'Building climbing-specific strength and power. Heavy pack training and technical skill development.',
+      details: 'Systematic preparation for first Seven Summits attempt. Altitude training and endurance building.',
       metrics: [
-        { label: 'Pack Weight', value: '65 lbs', trend: 'up' },
-        { label: 'Pull-ups', value: '25 reps', trend: 'up' },
-        { label: 'Squat 1RM', value: '225 lbs', trend: 'up' }
+        { label: 'Weekly Volume', value: '15 hrs', trend: 'up' },
+        { label: 'Max Altitude', value: '19,341 ft', trend: 'up' },
+        { label: 'Pack Weight', value: '45 lbs', trend: 'up' }
       ]
     },
     {
-      phase: 'Altitude Prep',
-      duration: 'Jul - Sep 2024',
-      focus: 'High Altitude Training',
-      status: 'current',
-      details: 'Hypoxic training and altitude simulation. Testing gear and nutrition strategies at elevation.',
+      phase: 'Technical Mountains',
+      duration: 'Nov 2022 - Jul 2024',
+      focus: 'Aconcagua, Elbrus, Denali',
+      status: 'completed',
+      details: 'Advanced mountaineering for technical Seven Summits. Cold weather training, glacier travel, and extreme altitude preparation.',
       metrics: [
-        { label: 'Training Altitude', value: '8,000 ft', trend: 'up' },
-        { label: 'VO2 Max', value: '58 ml/kg/min', trend: 'up' },
-        { label: 'Recovery HR', value: '45 bpm', trend: 'down' }
+        { label: 'Summit Success', value: '3/3', trend: 'up' },
+        { label: 'Max Altitude', value: '22,837 ft', trend: 'up' },
+        { label: 'Cold Exposure', value: '-40°C', trend: 'down' }
       ]
     },
     {
       phase: 'Everest Specific',
-      duration: 'Oct 2024 - Mar 2027',
-      focus: 'Expedition Preparation',
-      status: 'upcoming',
-      details: 'Final preparation phase with Denali and Aconcagua expeditions. Cold weather training and technical skills.',
+      duration: 'Aug 2024 - Mar 2027',
+      focus: 'Death Zone Preparation',
+      status: 'current',
+      details: 'Final preparation phase after completing four Seven Summits. Extreme altitude training, supplemental oxygen practice, and death zone simulation.',
       metrics: [
-        { label: 'Expedition Days', value: '90+ days', trend: 'up' },
-        { label: 'Cold Exposure', value: '-40°F', trend: 'down' },
-        { label: 'Load Carrying', value: '80 lbs', trend: 'up' }
+        { label: 'Training Altitude', value: '18,000 ft', trend: 'up' },
+        { label: 'VO2 Max', value: '62 ml/kg/min', trend: 'up' },
+        { label: 'Hypoxic Training', value: '40 hrs/week', trend: 'up' }
       ]
     }
   ];
 
-  const currentStats = [
+  // Dynamic current stats based on real data
+  const currentStats = metrics ? [
     {
-      label: 'Days Training',
-      value: '487',
+      label: 'Seven Summits',
+      value: metrics.currentStats.sevenSummitsCompleted?.value || '4/7',
+      icon: Mountain,
+      description: metrics.currentStats.sevenSummitsCompleted?.description || 'Completed expeditions'
+    },
+    {
+      label: 'Training Years',
+      value: metrics.currentStats.trainingYears?.value || '11',
       icon: Calendar,
-      description: 'Consecutive training days'
+      description: metrics.currentStats.trainingYears?.description || 'Since Sar Pass 2014'
     },
     {
-      label: 'Elevation Gain',
-      value: '247K ft',
+      label: 'Total Elevation',
+      value: metrics.currentStats.totalElevationThisYear?.value || '356K m',
       icon: TrendingUp,
-      description: 'Total vertical this year'
-    },
-    {
-      label: 'Training Hours',
-      value: '1,247',
-      icon: Clock,
-      description: 'Total preparation time'
+      description: metrics.currentStats.totalElevationThisYear?.description || 'Cumulative vertical gain'
     },
     {
       label: 'Resting HR',
-      value: '42 bpm',
+      value: metrics.currentStats.currentRestingHR?.value || '42 bpm',
       icon: Heart,
-      description: 'Current fitness level'
+      description: metrics.currentStats.currentRestingHR?.description || 'Current fitness level'
     }
-  ];
+  ] : [];
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -163,7 +190,7 @@ export default function TrainingPage() {
               EXPEDITION PREPARATION
             </h1>
             <p className="text-xl font-light tracking-wider opacity-90">
-              Systematic Training • 541 Days to Everest
+              Systematic Training • {getEverestCountdownText()}
             </p>
           </motion.div>
         </div>
@@ -179,9 +206,34 @@ export default function TrainingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-8">
-              CURRENT PERFORMANCE
-            </h2>
+            <div className="flex items-center justify-center space-x-4 mb-8">
+              <h2 className="text-3xl md:text-4xl font-light tracking-wide">
+                CURRENT PERFORMANCE
+              </h2>
+
+              {/* Data Source Indicator */}
+              <div className="flex items-center space-x-2 text-sm">
+                {loading ? (
+                  <RefreshCw className="w-4 h-4 animate-spin text-yellow-400" />
+                ) : isRealData ? (
+                  <Wifi className="w-4 h-4 text-green-400" />
+                ) : (
+                  <WifiOff className="w-4 h-4 text-gray-400" />
+                )}
+                <span className={`text-xs ${isRealData ? 'text-green-400' : 'text-gray-400'}`}>
+                  {loading ? 'Loading...' : isRealData ? 'Live Data' : 'Demo Data'}
+                </span>
+                {!loading && (
+                  <button
+                    onClick={refresh}
+                    className="text-blue-400 hover:text-blue-300 transition-colors p-1 rounded hover:bg-blue-900/20"
+                    title="Refresh data"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            </div>
             <div className="h-px w-24 bg-white/30 mx-auto"></div>
           </motion.div>
 
@@ -236,21 +288,22 @@ export default function TrainingPage() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              <h3 className="text-2xl font-light tracking-wide">From 40kg to Everest Ready</h3>
+              <h3 className="text-2xl font-light tracking-wide">From Tuberculosis to Everest Ready</h3>
               <p className="text-gray-300 leading-relaxed">
-                <strong>Every workout is data.</strong> Heart rate zones, power output, 
-                recovery metrics, and performance trends guide every training decision. 
-                No guesswork, no motivational speeches—just systematic progression toward 
-                a single goal.
+                <strong>From disease to the death zone.</strong> In 2013, tuberculosis left me
+                bedridden and barely able to walk 50 meters. Today, I've completed four of the
+                Seven Summits through systematic preparation and data-driven training.
               </p>
               <p className="text-gray-300 leading-relaxed">
-                The mountain doesn't care about your feelings. It cares about your preparation. 
-                <strong>541 days of systematic training</strong> will determine whether I come 
-                home safely from 29,032 feet.
+                <strong>Every expedition teaches the next.</strong> Kilimanjaro (2022) proved
+                systematic preparation works. Aconcagua (2023) taught extreme altitude endurance.
+                Elbrus (2023) mastered cold weather climbing. Denali (2024) perfected technical
+                glacier travel and expedition logistics.
               </p>
               <p className="text-gray-300 leading-relaxed">
-                <strong>Training phases are calculated backward from March 15, 2027.</strong> 
-                Every week builds specific adaptations needed for survival in the death zone.
+                <strong>Now: {getDaysToEverest()} days to Everest.</strong>
+                Every training session builds specific adaptations needed for survival at 29,032 feet.
+                The mountain doesn't care about your feelings—it cares about your preparation.
               </p>
             </motion.div>
 

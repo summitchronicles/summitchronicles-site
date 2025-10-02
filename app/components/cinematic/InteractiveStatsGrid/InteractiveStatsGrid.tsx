@@ -10,6 +10,7 @@ import {
   Clock,
   Target,
 } from 'lucide-react';
+import { getDaysToEverest } from '@/lib/everest-countdown';
 
 interface StatItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -45,7 +46,7 @@ export function InteractiveStatsGrid({
     {
       icon: Calendar,
       label: 'Days to Everest',
-      value: 487,
+      value: getDaysToEverest(),
       description: 'Spring 2027 expedition countdown',
       color: 'text-blue-400',
     },

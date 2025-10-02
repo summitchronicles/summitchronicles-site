@@ -72,19 +72,21 @@ const Header: React.FC = () => {
       )}
     >
       <div className="max-w-7xl mx-auto px-2 sm:px-3">
-        <div className="flex items-center justify-between min-h-[64px] h-16">
-          {/* Logo / Brand */}
-          <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
-            <div className="flex items-center justify-center w-12 h-12 bg-alpine-blue rounded-md group-hover:bg-blue-800 transition-colors duration-300">
-              <Icon name="Mountain" className="text-white" size="md" />
-            </div>
-            <H3 className="hidden sm:block text-spa-charcoal group-hover:text-alpine-blue transition-colors duration-300">
-              Summit Chronicles
-            </H3>
-          </Link>
+        <div className="grid grid-cols-3 items-center min-h-[64px] h-16 w-full">
+          {/* Logo / Brand - Left Corner */}
+          <div className="flex justify-start">
+            <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
+              <div className="flex items-center justify-center w-12 h-12 bg-alpine-blue rounded-md group-hover:bg-blue-800 transition-colors duration-300">
+                <Icon name="Mountain" className="text-white" size="md" />
+              </div>
+              <H3 className="hidden sm:block text-spa-charcoal group-hover:text-alpine-blue transition-colors duration-300">
+                Summit Chronicles
+              </H3>
+            </Link>
+          </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-4 lg:space-x-8">
+          {/* Desktop Navigation - Center */}
+          <nav className="hidden md:flex items-center justify-center space-x-4 lg:space-x-8">
             {primaryNavigation.map((item) => (
               <Link
                 key={item.href}
@@ -105,8 +107,8 @@ const Header: React.FC = () => {
             ))}
           </nav>
 
-          {/* CTA & Mobile Menu */}
-          <div className="flex items-center space-x-2 md:space-x-4 ml-auto">
+          {/* CTA & Mobile Menu - Right Corner */}
+          <div className="flex items-center justify-end space-x-2 md:space-x-4">
             {/* Support CTA - Desktop */}
             <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               <Button variant="ghost" size="sm" asChild>
@@ -180,7 +182,7 @@ const Header: React.FC = () => {
                 ))}
               </div>
 
-              {/* Mobile CTA */}
+              {/* Mobile CTA - Right aligned for consistency */}
               <div className="px-4 pt-4 space-y-3">
                 <Button
                   variant="secondary"
@@ -196,7 +198,7 @@ const Header: React.FC = () => {
                 <Button variant="summit" size="sm" className="w-full" asChild>
                   <Link href="/support">
                     <Icon name="Heart" size="sm" />
-                    Support My Journey
+                    Support Journey
                   </Link>
                 </Button>
               </div>
