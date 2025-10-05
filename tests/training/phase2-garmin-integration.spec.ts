@@ -144,7 +144,7 @@ test.describe('Phase 2: Garmin API Integration', () => {
       await expect(page.locator('[data-testid="sync-success"]')).toBeVisible();
 
       // Verify cardio-specific data was sent
-      const pushedData = await page.evaluate(() => window.lastGarminPushData);
+      const pushedData = await page.evaluate(() => (window as any).lastGarminPushData);
       expect(pushedData.sport).toBe('HIKING');
       expect(pushedData.estimatedDuration).toBe(7200); // 2 hours in seconds
     });
@@ -502,7 +502,7 @@ async function setupExpiredGarminToken(page: any) {
 }
 
 async function mockGarminPushAPI(page: any, workoutType: string) {
-  await page.route('/api/training/garmin-push', async route => {
+  await page.route('/api/training/garmin-push', async (route: any) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -517,7 +517,7 @@ async function mockGarminPushAPI(page: any, workoutType: string) {
 }
 
 async function mockGarminActivityData(page: any, activityData: any) {
-  await page.route('/api/training/garmin-sync', async route => {
+  await page.route('/api/training/garmin-sync', async (route: any) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -573,7 +573,7 @@ function createInvalidWorkout() {
 }
 
 async function uploadWorkoutPlan(page: any, workout: any) {
-  await page.route('/api/training/upload', async route => {
+  await page.route('/api/training/upload', async (route: any) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -585,7 +585,68 @@ async function uploadWorkoutPlan(page: any, workout: any) {
   });
 
   // Simulate file upload
-  await page.evaluate((data) => {
+  await page.evaluate((data: any) => {
     window.dispatchEvent(new CustomEvent('workoutPlanUploaded', { detail: data }));
   }, workout);
+}
+
+// Stub functions for missing implementations
+async function setupFailedTokenRefresh(page: any) {
+  // Mock failed token refresh
+  await page.route('/api/garmin/refresh-token', (route: any) => route.abort());
+}
+
+function createMockWorkout() {
+  return { type: 'running', duration: 30, intensity: 'moderate' };
+}
+
+async function mockGarminRateLimitResponse(page: any) {
+  await page.route('/api/garmin/**', (route: any) => route.fulfill({
+    status: 429,
+    body: JSON.stringify({ error: 'Rate limit exceeded' })
+  }));
+}
+
+async function mockGarminAPIFailure(page: any) {
+  await page.route('/api/garmin/**', (route: any) => route.abort());
+}
+
+async function setupPlannedWorkouts(page: any) {
+  await page.evaluate(() => {
+    (window as any).plannedWorkouts = [
+      { date: '2024-01-01', type: 'running' },
+      { date: '2024-01-02', type: 'cycling' }
+    ];
+  });
+}
+
+async function mockPeriodicActivitySync(page: any) {
+  await page.route('/api/garmin/activities', (route: any) => route.fulfill({
+    status: 200,
+    body: JSON.stringify({ activities: [], synced: true })
+  }));
+}
+
+async function mockGarminActivityAPIFailure(page: any) {
+  await page.route('/api/garmin/activities', (route: any) => route.abort());
+}
+
+async function simulateTokenExpiration(page: any) {
+  await page.evaluate(() => {
+    localStorage.setItem('garmin_token_status', 'expired');
+  });
+}
+
+async function mockTokenRefreshFailure(page: any) {
+  await page.route('/api/garmin/refresh-token', (route: any) => route.fulfill({
+    status: 401,
+    body: JSON.stringify({ error: 'Invalid refresh token' })
+  }));
+}
+
+async function mockMaliciousGarminResponse(page: any) {
+  await page.route('/api/garmin/**', (route: any) => route.fulfill({
+    status: 200,
+    body: JSON.stringify({ data: '<script>alert("xss")</script>' })
+  }));
 }

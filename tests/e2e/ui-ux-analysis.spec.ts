@@ -122,7 +122,16 @@ test.describe('UI/UX Analysis Suite', () => {
       console.log('🧪 Analyzing About Page Readability & Spacing...');
 
       const readabilityAnalysis = await page.evaluate(() => {
-        const issues = [];
+        const issues: Array<{
+          type: string,
+          element: string,
+          fontSize?: number,
+          lineHeight?: number,
+          issue?: string,
+          text?: string,
+          ratio?: number,
+          width?: number
+        }> = [];
         
         // Check text contrast and readability
         const textElements = Array.from(document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, div'))
@@ -426,7 +435,14 @@ test.describe('UI/UX Analysis Suite', () => {
         }
         
         // Check visual hierarchy (font sizes should generally decrease with heading level)
-        const visualHierarchyIssues = [];
+        const visualHierarchyIssues: Array<{
+          type: string,
+          heading: string,
+          fontSize: number,
+          issue: string,
+          shouldBeSmallerThan?: string,
+          comparisonFontSize?: number
+        }> = [];
         headingAnalysis.forEach((heading, index) => {
           const previousHeadings = headingAnalysis.slice(0, index);
           const lowerLevelHeadings = previousHeadings.filter(h => h.level < heading.level);

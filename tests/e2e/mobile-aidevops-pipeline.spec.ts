@@ -195,7 +195,7 @@ test.describe('Mobile AIDevOps Pipeline Tests', () => {
           console.log(`✅ ${pageInfo.name} mobile test completed`);
           
         } catch (error) {
-          console.log(`❌ ${pageInfo.name} test failed:`, error.message);
+          console.log(`❌ ${pageInfo.name} test failed:`, error instanceof Error ? error.message : String(error));
           
           // Try to get basic page info even if test fails
           const pageTitle = await page.title().catch(() => 'Unknown');
@@ -417,7 +417,7 @@ test.describe('Mobile AIDevOps Pipeline Tests', () => {
           await page.waitForTimeout(1000);
           interactionResults.push({ element: elementInfo, success: true });
         } catch (error) {
-          interactionResults.push({ element: elementInfo, success: false, error: error.message });
+          interactionResults.push({ element: elementInfo, success: false, error: error instanceof Error ? error.message : String(error) });
         }
       }
 

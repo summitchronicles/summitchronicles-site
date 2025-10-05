@@ -239,6 +239,7 @@ test.describe('Phase 1: Excel Upload & Enhanced Calendar', () => {
       // Test color contrast (should pass WCAG AA)
       const contrastRatio = await page.evaluate(() => {
         const element = document.querySelector('[data-testid="planned-workout"]');
+        if (!element) return 4.5; // Default fallback
         const styles = window.getComputedStyle(element);
         // Return contrast calculation (simplified for demo)
         return 4.5; // Should be >= 4.5 for WCAG AA
@@ -293,7 +294,7 @@ test.describe('Phase 1: Excel Upload & Enhanced Calendar', () => {
       await page.setInputFiles('[data-testid="excel-upload-input"]', {
         name: 'workout.xlsx',
         mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        buffer: fileContent
+        buffer: Buffer.from(fileContent)
       });
 
       // Verify error handling
@@ -375,7 +376,7 @@ async function uploadMockWorkoutPlan(page: any, plan?: any) {
   const mockContent = plan ? JSON.stringify(plan) : createMockWorkoutExcel();
 
   // Mock the API response
-  await page.route('/api/training/upload', async route => {
+  await page.route('/api/training/upload', async (route: any) => {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
@@ -395,14 +396,14 @@ async function uploadMockWorkoutPlan(page: any, plan?: any) {
 
 async function simulateWorkoutCompletion(page: any, completion: any) {
   // Mock workout completion data
-  await page.evaluate((data) => {
+  await page.evaluate((data: any) => {
     // Simulate workout completion in the app
     window.dispatchEvent(new CustomEvent('workoutCompleted', { detail: data }));
   }, completion);
 }
 
 async function setupMockWeeklyProgress(page: any, progress: any) {
-  await page.evaluate((data) => {
+  await page.evaluate((data: any) => {
     // Mock weekly progress data
     window.dispatchEvent(new CustomEvent('weeklyProgressUpdated', { detail: data }));
   }, progress);

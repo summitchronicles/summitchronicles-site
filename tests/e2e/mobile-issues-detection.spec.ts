@@ -63,7 +63,16 @@ test.describe('Mobile Issues Detection', () => {
       
       const problematicElements = await page.evaluate(() => {
         const elements = Array.from(document.querySelectorAll('*'));
-        const issues: Array<{element: string, issue: string, rect?: DOMRect}> = [];
+        const issues: Array<{
+          element: string,
+          issue: string,
+          rect?: DOMRect,
+          type?: string,
+          width?: number,
+          viewportWidth?: number,
+          left?: number,
+          right?: number
+        }> = [];
         
         elements.forEach(el => {
           const rect = el.getBoundingClientRect();
@@ -76,6 +85,7 @@ test.describe('Mobile Issues Detection', () => {
               issues.push({
                 type: 'fixed-width-too-wide',
                 element: el.tagName + (el.className ? '.' + el.className.split(' ')[0] : ''),
+                issue: 'Element has fixed width exceeding viewport',
                 width: width,
                 viewportWidth: window.innerWidth
               });
@@ -87,6 +97,7 @@ test.describe('Mobile Issues Detection', () => {
             issues.push({
               type: 'positioned-outside-viewport',
               element: el.tagName + (el.className ? '.' + el.className.split(' ')[0] : ''),
+              issue: 'Element positioned outside viewport',
               left: rect.left,
               right: rect.right,
               viewportWidth: window.innerWidth
@@ -110,7 +121,14 @@ test.describe('Mobile Issues Detection', () => {
       
       const textIssues = await page.evaluate(() => {
         const textElements = Array.from(document.querySelectorAll('p, span, div, li, a, button'));
-        const issues = [];
+        const issues: Array<{
+          type: string,
+          element: string,
+          fontSize?: number,
+          text?: string,
+          color?: string,
+          backgroundColor?: string
+        }> = [];
         
         textElements.forEach(el => {
           const styles = window.getComputedStyle(el);
@@ -163,7 +181,13 @@ test.describe('Mobile Issues Detection', () => {
       
       const touchTargetIssues = await page.evaluate(() => {
         const interactiveElements = Array.from(document.querySelectorAll('a, button, input, select, textarea, [onclick], [role="button"]'));
-        const issues = [];
+        const issues: Array<{
+          type: string,
+          element: string,
+          width?: number,
+          height?: number,
+          text?: string
+        }> = [];
         
         interactiveElements.forEach(el => {
           const rect = el.getBoundingClientRect();
@@ -389,7 +413,14 @@ test.describe('Mobile Issues Detection', () => {
       await page.waitForLoadState('networkidle');
       
       const contentIssues = await page.evaluate(() => {
-        const issues = [];
+        const issues: Array<{
+          type: string,
+          element: string,
+          width?: number,
+          height?: number,
+          maxWidth?: number,
+          viewportWidth?: number
+        }> = [];
         
         // Check for very wide tables
         const tables = Array.from(document.querySelectorAll('table'));
@@ -437,29 +468,36 @@ test.describe('Mobile Issues Detection', () => {
       await page.waitForLoadState('networkidle');
       
       const formIssues = await page.evaluate(() => {
-        const issues = [];
+        const issues: Array<{
+          type: string,
+          element: string,
+          height?: number,
+          inputType?: string,
+          marginBottom?: number
+        }> = [];
         const inputs = Array.from(document.querySelectorAll('input, textarea, select'));
         
         inputs.forEach(input => {
           const rect = input.getBoundingClientRect();
           const styles = window.getComputedStyle(input);
-          
+          const inputElement = input as HTMLInputElement;
+
           // Check input size
           if (rect.height < 44) {
             issues.push({
               type: 'input-too-small',
               height: rect.height,
-              element: input.tagName + (input.type ? `[type="${input.type}"]` : '')
+              element: input.tagName + (inputElement.type ? `[type="${inputElement.type}"]` : '')
             });
           }
-          
+
           // Check for proper spacing
           const marginBottom = parseFloat(styles.marginBottom);
           if (marginBottom < 8) {
             issues.push({
               type: 'insufficient-spacing',
               marginBottom: marginBottom,
-              element: input.tagName + (input.type ? `[type="${input.type}"]` : '')
+              element: input.tagName + (inputElement.type ? `[type="${inputElement.type}"]` : '')
             });
           }
         });
