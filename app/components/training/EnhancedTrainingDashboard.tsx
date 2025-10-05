@@ -169,7 +169,7 @@ export function EnhancedTrainingDashboard({
         color: 'yellow',
         trendData: {
           value: effectiveMetrics.weeklyProgress,
-          direction: effectiveMetrics.weeklyProgress >= 85 ? 'up' : 'stable',
+          direction: (effectiveMetrics.weeklyProgress >= 85 ? 'up' : 'stable') as 'up' | 'down' | 'stable',
           percentage: 5.2,
           period: 'vs last week'
         },
