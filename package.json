@@ -29,55 +29,48 @@
     "audit:packages": "npm outdated && npm audit && echo 'Check for unused dependencies manually'",
     "test:production": "playwright test tests/production/ --project=chromium",
     "devops:workflow": "npm run test:local && npm run test:evals && npm run audit:packages",
-
     "test:training": "playwright test tests/training/ --project=chromium",
     "test:training:ui": "playwright test tests/training/ --ui",
-
     "test:phase:phase1": "playwright test tests/training/phase1-excel-calendar.spec.ts",
     "test:phase:phase2": "playwright test tests/training/phase2-garmin-integration.spec.ts",
     "test:phase:phase3": "playwright test tests/training/phase3-compliance-analytics.spec.ts",
     "test:phase:phase4": "playwright test tests/training/phase4-ai-integration.spec.ts",
-
     "test:unit:excel-parser": "jest tests/unit/excel-parser.test.ts",
     "test:unit:garmin-api": "jest tests/unit/garmin-api.test.ts",
     "test:unit:compliance-engine": "jest tests/unit/compliance-engine.test.ts",
     "test:unit:rag-pipeline": "jest tests/unit/rag-pipeline.test.ts",
     "test:unit:analytics-dashboard": "jest tests/unit/analytics-dashboard.test.ts",
-
     "test:integration:oauth": "playwright test tests/integration/oauth-flow.spec.ts",
     "test:integration:garmin": "playwright test tests/integration/garmin-api.spec.ts",
     "test:integration:ai-context": "playwright test tests/integration/ai-context.spec.ts",
     "test:integration:pattern-recognition": "jest tests/integration/pattern-recognition.test.ts",
     "test:integration:mock": "playwright test tests/integration/ --grep 'mock'",
-
     "test:visual:calendar": "playwright test tests/visual/training-calendar.spec.ts",
     "test:performance:calendar": "playwright test tests/performance/calendar-load.spec.ts",
     "test:performance:calc": "playwright test tests/performance/analytics-performance.spec.ts",
     "test:accessibility:calendar": "playwright test tests/accessibility/training-calendar.spec.ts",
-
     "test:security:api-endpoints": "jest tests/security/api-endpoints.test.ts",
     "test:security:token-storage": "jest tests/security/token-storage.test.ts",
     "test:security:oauth-flow": "jest tests/security/oauth-security.test.ts",
     "test:security:input-validation": "jest tests/security/input-validation.test.ts",
     "test:security:auth-bypass": "jest tests/security/auth-bypass.test.ts",
-
     "test:accuracy:compliance-math": "jest tests/accuracy/compliance-calculations.test.ts",
     "test:accuracy:ai-insights": "jest tests/accuracy/ai-insights.test.ts",
-
     "quality-gate:phase1": "npm run test:phase:phase1 && npm run test:unit:excel-parser && npm run test:visual:calendar && npm run test:performance:calendar && npm run test:accessibility:calendar",
     "quality-gate:phase2": "npm run test:phase:phase2 && npm run test:unit:garmin-api && npm run test:integration:oauth && npm run test:security:oauth-flow && npm run test:security:token-storage",
     "quality-gate:phase3": "npm run test:phase:phase3 && npm run test:unit:compliance-engine && npm run test:unit:analytics-dashboard && npm run test:accuracy:compliance-math && npm run test:performance:calc",
     "quality-gate:phase4": "npm run test:phase:phase4 && npm run test:unit:rag-pipeline && npm run test:integration:ai-context && npm run test:accuracy:ai-insights",
-
     "test:garmin-sync:full": "npm run quality-gate:phase1 && npm run quality-gate:phase2 && npm run quality-gate:phase3 && npm run quality-gate:phase4"
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",
     "@portabletext/types": "^2.0.15",
+    "@react-spring/web": "^10.0.3",
     "@sanity/client": "^7.11.1",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.9.0",
-    "@supabase/supabase-js": "^2.57.4",
+    "@supabase/supabase-js": "^2.58.0",
+    "@use-gesture/react": "^10.3.1",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -88,11 +81,14 @@
     "next-sanity": "^9.12.3",
     "react": "18.3.1",
     "react-dom": "18.3.1",
+    "react-intersection-observer": "^9.16.0",
+    "react-use": "^17.6.0",
     "sanity": "^3.99.0",
     "styled-components": "^6.1.19",
     "swr": "^2.3.6",
     "tailwind-merge": "^3.3.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^15.5.3",
@@ -117,7 +113,9 @@
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": ["<rootDir>/tests/setup.ts"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/setup.ts"
+    ],
     "testMatch": [
       "<rootDir>/tests/unit/**/*.test.ts",
       "<rootDir>/tests/integration/**/*.test.ts",

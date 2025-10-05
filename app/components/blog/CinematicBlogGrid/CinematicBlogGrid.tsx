@@ -54,7 +54,7 @@ export function CinematicBlogGrid({
       readTime: '12 min read',
       category: 'Mental Preparation',
       author: 'Sunith Kumar',
-      image: '/stories/everest-prep.jpg',
+      image: '/stories/everest-prep.jpeg',
       views: '2.1K',
       featured: true,
     },

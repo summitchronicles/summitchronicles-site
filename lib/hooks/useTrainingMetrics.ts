@@ -172,15 +172,11 @@ function getFallbackMetrics(): TrainingMetrics {
         ]
       },
       {
-        phase: 'Everest Specific',
-        duration: 'Aug 2024 - Mar 2027',
-        focus: 'Death Zone Preparation',
+        phase: 'Base Training',
+        duration: 'Aug 2025 - Mar 2027',
+        focus: 'Foundation Building',
         status: 'current',
-        metrics: [
-          { label: 'Training Altitude', value: '18,000 ft', trend: 'up' },
-          { label: 'VO2 Max', value: '62 ml/kg/min', trend: 'up' },
-          { label: 'Hypoxic Training', value: '40 hrs/week', trend: 'up' }
-        ]
+        metrics: 'dynamic' // Will be replaced with real Garmin data
       }
     ],
     recentTrends: {

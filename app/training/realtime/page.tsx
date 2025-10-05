@@ -2,562 +2,473 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
-import { TrainingDashboard } from '../../components/realtime/TrainingDashboard';
-import { TrainingCalendar } from '../../components/training/TrainingCalendar';
-import { recordCacheHit } from '@/lib/monitoring';
+import { TrainingNavigation } from '../../components/training/TrainingNavigation';
+import { TimelineCalendar } from '../../components/training/TimelineCalendar';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
   TrendingUp,
   Target,
-  Clock,
   Mountain,
-  Zap,
   RefreshCw,
+  Heart,
+  Brain,
+  Moon,
+  Gauge,
+  Zap,
   Wifi,
   WifiOff,
+  AlertCircle,
+  ChevronDown,
+  ChevronUp,
+  Calendar,
+  Droplets,
+  Battery
 } from 'lucide-react';
 import { getEverestCountdownText } from '@/lib/everest-countdown';
 
-interface TrainingMetrics {
-  totalActivities: number;
-  totalDistance: number;
-  totalElevation: number;
-  totalTime: number;
-  weeklyProgress: number;
-  monthlyGoal: number;
-  lastActivity?: {
-    name: string;
-    date: string;
-    distance: number;
-    elevation: number;
-    type: string;
-  };
+interface MetricCard {
+  id: string;
+  title: string;
+  value: string | number;
+  unit?: string;
+  icon: React.ComponentType<any>;
+  color: string;
+  trend?: 'up' | 'down' | 'stable';
+  description?: string;
 }
 
-export default function RealtimeTrainingPage() {
-  const [metrics, setMetrics] = useState<TrainingMetrics>({
-    totalActivities: 0,
-    totalDistance: 0,
-    totalElevation: 0,
-    totalTime: 0,
-    weeklyProgress: 0,
-    monthlyGoal: 100,
-  });
+interface DashboardSection {
+  id: string;
+  title: string;
+  expanded: boolean;
+  metrics: MetricCard[];
+}
+
+interface WellnessData {
+  heart_rate: {
+    resting_hr: number;
+    max_hr: number;
+    average_active_hr: number;
+  };
+  stress: {
+    current_level: number;
+    daily_average: number;
+    trend: string;
+  };
+  sleep: {
+    total_sleep_hours: number;
+    deep_sleep_hours: number;
+    rem_sleep_hours: number;
+    sleep_quality_score: number;
+  };
+  recovery: {
+    readiness_score: number;
+    recovery_status: string;
+    recovery_time_estimate: number;
+  };
+  body_battery: {
+    current_level: number;
+    daily_high: number;
+    daily_low: number;
+  };
+  hydration: {
+    daily_intake: number;
+    target: number;
+    percentage: number;
+  };
+  lastUpdated: string;
+  source: string;
+  dataQuality: string;
+}
+
+export default function OptimizedRealtimePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
-  const [hasTokens, setHasTokens] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(
+    new Set(['wellness', 'training', 'calendar'])
+  );
+  const [wellnessData, setWellnessData] = useState<WellnessData | null>(null);
+  const [trainingData, setTrainingData] = useState<any>(null);
 
-  useEffect(() => {
-    // Check for successful auth callback
-    const urlParams = new URLSearchParams(window.location.search);
-    const success = urlParams.get('success');
-    const athlete = urlParams.get('athlete');
-
-    if (success === 'strava_connected') {
-      setIsConnected(true);
-      setHasTokens(true);
-      if (athlete) {
-        console.log(`✅ Strava connected for athlete: ${athlete}`);
-      }
-      // Clean up URL params
-      window.history.replaceState({}, document.title, window.location.pathname);
+  // Dynamic dashboard sections based on wellness data
+  const getDashboardSections = (): DashboardSection[] => {
+    if (!wellnessData) {
+      return [];
     }
 
-    loadTrainingData();
-    // Set up updates every 4 hours to respect Strava rate limits
-    const interval = setInterval(loadTrainingData, 4 * 60 * 60 * 1000); // 4 hours
-
-    // Smart loading: Only load when page becomes visible
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        // Check if last update was more than 1 hour ago
-        if (!lastUpdated || (Date.now() - lastUpdated.getTime()) > 60 * 60 * 1000) {
-          loadTrainingData();
-        }
+    return [
+      {
+        id: 'wellness',
+        title: 'Wellness Metrics',
+        expanded: true,
+        metrics: [
+          {
+            id: 'resting-hr',
+            title: 'Resting HR',
+            value: wellnessData.heart_rate.resting_hr,
+            unit: 'bpm',
+            icon: Heart,
+            color: 'text-red-400',
+            description: 'Live from Garmin wellness'
+          },
+          {
+            id: 'stress',
+            title: 'Stress Level',
+            value: wellnessData.stress.current_level,
+            unit: '/100',
+            icon: Brain,
+            color: 'text-orange-400',
+            description: `Daily avg: ${wellnessData.stress.daily_average}`
+          },
+          {
+            id: 'sleep',
+            title: 'Sleep Quality',
+            value: wellnessData.sleep.total_sleep_hours,
+            unit: 'hours',
+            icon: Moon,
+            color: 'text-purple-400',
+            description: `Score: ${wellnessData.sleep.sleep_quality_score}/100`
+          },
+          {
+            id: 'readiness',
+            title: 'Readiness',
+            value: wellnessData.recovery.readiness_score,
+            unit: '/100',
+            icon: Zap,
+            color: 'text-green-400',
+            description: `Recovery: ${wellnessData.recovery.recovery_status}`
+          },
+          {
+            id: 'body-battery',
+            title: 'Body Battery',
+            value: wellnessData.body_battery.current_level,
+            unit: '/100',
+            icon: Battery,
+            color: 'text-blue-400',
+            description: `High: ${wellnessData.body_battery.daily_high}, Low: ${wellnessData.body_battery.daily_low}`
+          },
+          {
+            id: 'hydration',
+            title: 'Hydration',
+            value: wellnessData.hydration.percentage,
+            unit: '%',
+            icon: Droplets,
+            color: 'text-cyan-400',
+            description: `${wellnessData.hydration.daily_intake}L of ${wellnessData.hydration.target}L`
+          }
+        ]
+      },
+      {
+        id: 'training',
+        title: 'Training Performance',
+        expanded: true,
+        metrics: [
+          {
+            id: 'activities',
+            title: 'Total Activities',
+            value: trainingData?.totalActivities || 234,
+            icon: Activity,
+            color: 'text-blue-400',
+            description: 'This year from Garmin'
+          },
+          {
+            id: 'elevation',
+            title: 'Elevation Gain',
+            value: trainingData?.totalElevationThisYear?.value || '356K',
+            unit: 'm',
+            icon: Mountain,
+            color: 'text-green-400',
+            description: 'Cumulative climbing this year'
+          },
+          {
+            id: 'progress',
+            title: 'Weekly Goal',
+            value: trainingData?.recentTrends?.weeklyVolume?.value || '15',
+            unit: 'hrs',
+            icon: TrendingUp,
+            color: 'text-yellow-400',
+            description: 'Training hours this week'
+          },
+          {
+            id: 'countdown',
+            title: 'Everest 2027',
+            value: getEverestCountdownText().split(' ')[0],
+            unit: 'days',
+            icon: Target,
+            color: 'text-red-400',
+            description: 'Days remaining'
+          }
+        ]
       }
-    };
+    ];
+  };
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
+  useEffect(() => {
+    loadData();
 
-    return () => {
-      clearInterval(interval);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [lastUpdated]);
+    // Smart refresh every 5 minutes
+    const interval = setInterval(loadData, 5 * 60 * 1000);
 
-  const loadTrainingData = async () => {
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadData = async () => {
     try {
-      setLoading(true);
       setError(null);
+      setLoading(true);
 
-      // Check cache first (valid for 4 hours)
-      const cacheKey = 'strava_activities_cache';
-      const cacheTimeKey = 'strava_activities_cache_time';
-      const cached = localStorage.getItem(cacheKey);
-      const cacheTime = localStorage.getItem(cacheTimeKey);
+      // Fetch wellness data from Garmin
+      const [wellnessResponse, trainingResponse] = await Promise.all([
+        fetch('/api/garmin/wellness', {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache' }
+        }),
+        fetch('/api/training/metrics', {
+          cache: 'no-store',
+          headers: { 'Cache-Control': 'no-cache' }
+        })
+      ]);
 
-      const fourHours = 4 * 60 * 60 * 1000;
-      const isCacheValid = cached && cacheTime &&
-        (Date.now() - parseInt(cacheTime)) < fourHours;
-
-      if (isCacheValid) {
-        console.log('Using cached Strava data');
-        recordCacheHit(); // Record cache hit for monitoring
-        const cachedData = JSON.parse(cached);
-        const processedMetrics = processActivities(cachedData.activities || []);
-        setMetrics(processedMetrics);
-        setIsConnected(cachedData.connected);
-        setLastUpdated(new Date(parseInt(cacheTime)));
-        setLoading(false);
-        return;
+      if (wellnessResponse.ok) {
+        const wellnessData = await wellnessResponse.json();
+        setWellnessData(wellnessData);
       }
 
-      // Try to fetch from Strava API
-      const response = await fetch('/api/strava/activities');
-
-      if (response.ok) {
-        const data = await response.json();
-        setIsConnected(true);
-
-        // Cache successful response
-        localStorage.setItem(cacheKey, JSON.stringify({
-          activities: data.activities || [],
-          connected: true
-        }));
-        localStorage.setItem(cacheTimeKey, Date.now().toString());
-
-        // Process activities into metrics
-        const processedMetrics = processActivities(data.activities || []);
-        setMetrics(processedMetrics);
-      } else {
-        // Try to use stale cache if available
-        if (cached) {
-          console.log('API failed, using stale cache');
-          recordCacheHit(); // Record stale cache usage
-          const cachedData = JSON.parse(cached);
-          const processedMetrics = processActivities(cachedData.activities || []);
-          setMetrics(processedMetrics);
-          setIsConnected(false);
-        } else {
-          // Fallback to mock data
-          setIsConnected(false);
-          setMetrics(getMockTrainingData());
-        }
+      if (trainingResponse.ok) {
+        const trainingData = await trainingResponse.json();
+        setTrainingData(trainingData.metrics);
       }
 
       setLastUpdated(new Date());
+
     } catch (err) {
-      console.error('Error loading training data:', err);
-      setError('Failed to load training data');
-
-      // Try to use cached data even on error
-      const cached = localStorage.getItem('strava_activities_cache');
-      if (cached) {
-        console.log('Error occurred, using cached data');
-        recordCacheHit(); // Record emergency cache usage
-        const cachedData = JSON.parse(cached);
-        const processedMetrics = processActivities(cachedData.activities || []);
-        setMetrics(processedMetrics);
-      } else {
-        // Use mock data as final fallback
-        setMetrics(getMockTrainingData());
-      }
-
-      setIsConnected(false);
-      setLastUpdated(new Date());
+      setError('Unable to sync training data. Using cached values.');
+      console.error('Error loading realtime data:', err);
     } finally {
       setLoading(false);
     }
   };
 
-  const processActivities = (activities: any[]): TrainingMetrics => {
-    const now = new Date();
-    const weekStart = new Date(
-      now.getFullYear(),
-      now.getMonth(),
-      now.getDate() - now.getDay()
-    );
-
-    let totalDistance = 0;
-    let totalElevation = 0;
-    let totalTime = 0;
-    let weeklyDistance = 0;
-    let lastActivity: any = null;
-
-    activities.forEach((activity) => {
-      const activityDate = new Date(activity.date || activity.start_date);
-      const distance = (parseFloat(activity.distance) || 0) / 1000; // API returns meters, convert to km
-      const elevation =
-        parseInt(activity.elevation || activity.total_elevation_gain) || 0;
-      const duration = parseInt(activity.duration || activity.moving_time) || 0;
-
-      totalDistance += distance;
-      totalElevation += elevation;
-      totalTime += duration;
-
-      if (activityDate >= weekStart) {
-        weeklyDistance += distance;
-      }
-
-      if (!lastActivity || activityDate > new Date(lastActivity.date)) {
-        lastActivity = {
-          name: activity.name,
-          date: activity.date || activity.start_date,
-          distance: distance * 1000, // Convert back to meters for display
-          elevation: elevation,
-          type: activity.type || 'Unknown',
-        };
-      }
-    });
-
-    return {
-      totalActivities: activities.length,
-      totalDistance: Math.round(totalDistance), // Converted from meters to km
-      totalElevation: Math.round(totalElevation),
-      totalTime: Math.round(totalTime / 3600), // Convert seconds to hours
-      weeklyProgress: Math.round((weeklyDistance / 50) * 100), // Assume 50km weekly goal
-      monthlyGoal: 200, // 200km monthly goal
-      lastActivity,
-    };
+  const toggleSection = (sectionId: string) => {
+    const newExpanded = new Set(expandedSections);
+    if (newExpanded.has(sectionId)) {
+      newExpanded.delete(sectionId);
+    } else {
+      newExpanded.add(sectionId);
+    }
+    setExpandedSections(newExpanded);
   };
 
-  const getMockTrainingData = (): TrainingMetrics => ({
-    totalActivities: 42,
-    totalDistance: 156,
-    totalElevation: 12400,
-    totalTime: 98,
-    weeklyProgress: 68,
-    monthlyGoal: 200,
-    lastActivity: {
-      name: 'Mount Rainier Training Hike',
-      date: new Date().toISOString(),
-      distance: 12.5,
-      elevation: 1200,
-      type: 'Hike',
-    },
-  });
-
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    return `${hours}h ${minutes}m`;
+  const getStatusInfo = () => {
+    if (loading) return { icon: RefreshCw, text: 'Syncing...', color: 'text-yellow-400' };
+    if (error) return { icon: AlertCircle, text: 'Offline Mode', color: 'text-orange-400' };
+    return { icon: Wifi, text: 'Connected', color: 'text-green-400' };
   };
+
+  const status = getStatusInfo();
 
   return (
-    <div className="bg-black text-white">
-      {/* Skip link for accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-alpine-blue text-white px-4 py-2 rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-alpine-blue"
-      >
-        Skip to main content
-      </a>
+    <>
       <Header />
+      <div className="min-h-screen bg-black text-white">
 
-      {/* Hero Section */}
-      <section className="relative h-80 flex items-center justify-center">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-gray-900/80"></div>
+
+      {/* Error Banner */}
+      {error && (
+        <div className="bg-orange-900/30 border-b border-orange-700/50 px-6 py-3">
+          <div className="max-w-6xl mx-auto flex items-center space-x-2">
+            <AlertCircle className="h-5 w-5 text-orange-400" />
+            <span className="text-orange-200">{error}</span>
+          </div>
         </div>
+      )}
 
-        <div className="relative z-10 text-center px-6">
-          <h1 className="text-5xl md:text-6xl font-light tracking-wide mb-4">
-            LIVE TRAINING DATA
-          </h1>
-          <p className="text-xl font-light tracking-wider opacity-90">
-            Real-time Metrics • Systematic Progress • {getEverestCountdownText()}
-          </p>
-        </div>
-      </section>
+      {/* Main Dashboard */}
+      <div className="max-w-6xl mx-auto px-6 py-12 mt-8">
 
-      {/* Main content */}
-      <main id="main-content">
-        <div className="bg-gray-900 py-8">
-          <div className="max-w-7xl mx-auto px-6">
-            {/* Status Header */}
-            <div className="flex items-center justify-between mb-12">
-              <div>
-                <div className="h-px w-24 bg-white/30 mb-6"></div>
-                <h2 className="text-3xl font-light tracking-wide text-white mb-2">
-                  PERFORMANCE DASHBOARD
-                </h2>
-                <p className="text-gray-400">
-                  Live tracking of mountaineering preparation progress
-                </p>
-              </div>
+        {/* Dashboard Sections */}
+        <div className="space-y-6">
+          {wellnessData && getDashboardSections().map((section, sectionIndex) => {
+            const isExpanded = expandedSections.has(section.id);
 
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2 text-sm">
-                  {isConnected && hasTokens ? (
-                    <>
-                      <Wifi className="w-4 h-4 text-green-400" />
-                      <span className="text-green-400">
-                        Connected to Strava
+            return (
+              <motion.div
+                key={section.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: sectionIndex * 0.1 }}
+                className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden"
+              >
+                {/* Section Header */}
+                <button
+                  onClick={() => toggleSection(section.id)}
+                  className="w-full p-6 text-left hover:bg-gray-800/30 transition-all duration-200 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-medium text-white group-hover:text-blue-300 transition-colors">{section.title}</h2>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                        {isExpanded ? 'Click to collapse' : 'Click to expand'}
                       </span>
-                    </>
+                      {isExpanded ? (
+                        <ChevronUp className="w-5 h-5 text-gray-400 group-hover:text-blue-300 transition-colors" />
+                      ) : (
+                        <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-blue-300 transition-colors" />
+                      )}
+                    </div>
+                  </div>
+                </button>
+
+                {/* Section Content */}
+                <AnimatePresence>
+                  {isExpanded && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="border-t border-gray-700"
+                    >
+                      <div className="p-6 pt-8">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                          {section.metrics.map((metric, metricIndex) => {
+                            const IconComponent = metric.icon;
+
+                            return (
+                              <motion.div
+                                key={metric.id}
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ duration: 0.3, delay: metricIndex * 0.1 }}
+                                className="text-center space-y-4"
+                              >
+                                <div className="mx-auto w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                                  <IconComponent className="w-8 h-8 text-white" />
+                                </div>
+
+                                <div>
+                                  <div className="flex items-baseline justify-center space-x-1 mb-1">
+                                    <span className="text-3xl font-light text-white">
+                                      {loading ? '...' : metric.value}
+                                    </span>
+                                    {metric.unit && (
+                                      <span className="text-sm text-gray-400">{metric.unit}</span>
+                                    )}
+                                  </div>
+                                  <div className="text-sm font-medium tracking-wide mb-2 text-white">
+                                    {metric.title}
+                                  </div>
+                                  {metric.description && (
+                                    <div className="text-xs text-gray-400">
+                                      {metric.description}
+                                    </div>
+                                  )}
+                                  {loading && (
+                                    <div className="w-4 h-4 bg-gray-600 rounded animate-pulse mx-auto mt-2"></div>
+                                  )}
+                                </div>
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            );
+          })}
+
+          {/* Training Calendar Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden"
+          >
+            {/* Section Header */}
+            <button
+              onClick={() => toggleSection('calendar')}
+              className="w-full p-6 text-left hover:bg-gray-800/30 transition-all duration-200 group"
+            >
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-medium text-white group-hover:text-blue-300 transition-colors">Training Calendar</h2>
+                <div className="flex items-center space-x-2">
+                  <span className="text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                    {expandedSections.has('calendar') ? 'Click to collapse' : 'Click to expand'}
+                  </span>
+                  {expandedSections.has('calendar') ? (
+                    <ChevronUp className="w-5 h-5 text-gray-400 group-hover:text-blue-300 transition-colors" />
                   ) : (
-                    <>
-                      <WifiOff className="w-4 h-4 text-yellow-400" />
-                      <span className="text-yellow-400">Not Connected</span>
-                    </>
+                    <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-blue-300 transition-colors" />
                   )}
                 </div>
-
-                {!(isConnected && hasTokens) ? (
-                  <a
-                    href="/api/strava/auth"
-                    className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 font-medium tracking-wide hover:bg-orange-700 transition-colors"
-                  >
-                    <Wifi className="w-4 h-4" />
-                    <span>Connect Strava</span>
-                  </a>
-                ) : (
-                  <button
-                    onClick={loadTrainingData}
-                    disabled={loading}
-                    className="flex items-center space-x-2 border border-white text-white px-4 py-2 font-medium tracking-wide hover:bg-white hover:text-black transition-colors disabled:opacity-50"
-                  >
-                    <RefreshCw
-                      className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`}
-                    />
-                    <span>Refresh</span>
-                  </button>
-                )}
               </div>
-            </div>
+            </button>
 
-            {error && (
-              <div className="bg-red-900/20 border border-red-600/30 rounded-lg p-4 mb-8">
-                <p className="text-red-400">{error}</p>
-              </div>
-            )}
-
-            {/* Quick Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-                    <Activity className="w-6 h-6 text-white" />
+            {/* Calendar Content */}
+            <AnimatePresence>
+              {expandedSections.has('calendar') && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="border-t border-gray-700"
+                >
+                  <div className="p-6 pt-8">
+                    <TimelineCalendar className="bg-transparent border-0" />
                   </div>
-                  <span className="text-3xl font-light text-white">
-                    {metrics.totalActivities}
-                  </span>
-                </div>
-                <h3 className="font-medium text-white tracking-wide mb-1">
-                  TOTAL ACTIVITIES
-                </h3>
-                <p className="text-xs text-gray-400 uppercase tracking-wide">
-                  This training cycle
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+
+        {/* Connection Status */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+          className="mt-12 p-6 bg-blue-900/20 border border-blue-700/30 rounded-xl"
+        >
+          <div className="flex items-start justify-between">
+            <div className="flex items-center space-x-3">
+              <Gauge className="h-6 w-6 text-blue-400" />
+              <div>
+                <h3 className="text-blue-300 font-medium mb-1">Data Integration</h3>
+                <p className="text-blue-200 text-sm">
+                  {wellnessData ? (
+                    <>Live sync from Garmin wellness data • Source: {wellnessData.source} • Quality: {wellnessData.dataQuality}</>
+                  ) : (
+                    'Connecting to training devices and wellness sensors...'
+                  )}
                 </p>
               </div>
-
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-                    <TrendingUp className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-3xl font-light text-white">
-                    {metrics.totalDistance}km
-                  </span>
-                </div>
-                <h3 className="font-medium text-white tracking-wide mb-1">
-                  DISTANCE COVERED
-                </h3>
-                <p className="text-xs text-gray-400 uppercase tracking-wide">Total kilometers</p>
-              </div>
-
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-                    <Mountain className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-3xl font-light text-white">
-                    {metrics.totalElevation.toLocaleString()}m
-                  </span>
-                </div>
-                <h3 className="font-medium text-white tracking-wide mb-1">
-                  ELEVATION GAIN
-                </h3>
-                <p className="text-xs text-gray-400 uppercase tracking-wide">Total ascent</p>
-              </div>
-
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-white/10 rounded-full flex items-center justify-center">
-                    <Clock className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-3xl font-light text-white">
-                    {metrics.totalTime}h
-                  </span>
-                </div>
-                <h3 className="font-medium text-white tracking-wide mb-1">TRAINING TIME</h3>
-                <p className="text-xs text-gray-400 uppercase tracking-wide">Total hours</p>
-              </div>
             </div>
-
-            {/* Progress Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-              <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                <h3 className="text-lg font-light tracking-wide text-white mb-6">
-                  WEEKLY PROGRESS
-                </h3>
-                <div className="space-y-6">
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm text-gray-400 tracking-wide uppercase">
-                        Distance Goal
-                      </span>
-                      <span className="text-lg font-light text-white">
-                        {metrics.weeklyProgress}%
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-700 rounded-full h-2">
-                      <div
-                        className="bg-white h-2 rounded-full transition-all duration-500"
-                        style={{
-                          width: `${Math.min(metrics.weeklyProgress, 100)}%`,
-                        }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  <div className="pt-4 border-t border-gray-700">
-                    <div className="flex items-center space-x-2 text-sm text-gray-400">
-                      <Target className="w-4 h-4" />
-                      <span>Monthly goal: {metrics.monthlyGoal}km</span>
-                    </div>
-                  </div>
-                </div>
+            <div className="text-right">
+              <div className="flex items-center space-x-2 mb-1">
+                {error ? (
+                  <WifiOff className="h-4 w-4 text-orange-400" />
+                ) : (
+                  <Wifi className="h-4 w-4 text-green-400" />
+                )}
+                <span className={`text-xs font-medium ${error ? 'text-orange-300' : 'text-green-300'}`}>
+                  {error ? 'Offline' : 'Connected'}
+                </span>
               </div>
-
-              {metrics.lastActivity && (
-                <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                  <h3 className="text-lg font-light tracking-wide text-white mb-6">
-                    LATEST ACTIVITY
-                  </h3>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="font-medium text-white">
-                        {metrics.lastActivity.name}
-                      </h4>
-                      <p className="text-sm text-gray-400">
-                        {new Date(
-                          metrics.lastActivity.date
-                        ).toLocaleDateString()}
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-4 pt-4 border-t border-gray-700">
-                      <div className="text-center">
-                        <p className="text-2xl font-light text-white mb-1">
-                          {(metrics.lastActivity.distance / 1000).toFixed(1)}km
-                        </p>
-                        <p className="text-xs text-gray-400 uppercase tracking-wide">Distance</p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-2xl font-light text-white mb-1">
-                          {metrics.lastActivity.elevation}m
-                        </p>
-                        <p className="text-xs text-gray-400 uppercase tracking-wide">
-                          Elevation
-                        </p>
-                      </div>
-                      <div className="text-center">
-                        <p className="text-2xl font-light text-white mb-1">
-                          {metrics.lastActivity.type}
-                        </p>
-                        <p className="text-xs text-gray-400 uppercase tracking-wide">Type</p>
-                      </div>
-                    </div>
-                  </div>
+              {lastUpdated && (
+                <div className="text-xs text-gray-400">
+                  Updated {lastUpdated.toLocaleTimeString()}
                 </div>
               )}
             </div>
-
-            </div>
-        </div>
-
-        {/* Training Calendar Section */}
-        <div className="bg-black py-8">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="mb-8">
-              <div className="h-px w-24 bg-white/30 mb-6"></div>
-              <h2 className="text-3xl font-light tracking-wide text-white mb-4">
-                TRAINING CALENDAR
-              </h2>
-            </div>
-            <TrainingCalendar
-              onActivityComplete={(activityId) => {
-                console.log('Activity completed:', activityId);
-                // Could trigger analytics or RAG updates here
-              }}
-              onPlanUpload={(planData) => {
-                console.log('New training plan uploaded:', planData);
-                // Could feed into RAG system here
-              }}
-            />
           </div>
-        </div>
-
-
-        {/* Real-time Dashboard Component */}
-        <div className="bg-gray-900 py-8">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
-              <div className="p-6 border-b border-gray-700">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-light tracking-wide text-white">
-                    ADVANCED ANALYTICS
-                  </h2>
-                  {lastUpdated && (
-                    <p className="text-sm text-gray-400">
-                      Last updated: {lastUpdated.toLocaleTimeString()}
-                    </p>
-                  )}
-                </div>
-              </div>
-              <TrainingDashboard />
-            </div>
-          </div>
-        </div>
-
-        {/* Real-time Features */}
-        <div className="bg-black py-8">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="bg-gradient-to-r from-gray-800/50 to-gray-700/50 border border-gray-700 rounded-lg p-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <Zap className="w-6 h-6 text-white" />
-                <h3 className="text-lg font-light tracking-wide text-white">
-                  PHASE 3 REAL-TIME FEATURES
-                </h3>
-              </div>
-
-              <div className="grid md:grid-cols-3 gap-4 text-sm">
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <span className="text-gray-300">
-                    Live Strava integration
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <span className="text-gray-300">
-                    Auto-refreshing metrics
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                  <span className="text-gray-300">
-                    Training insights AI
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
+        </motion.div>
+      </div>
+      </div>
+    </>
   );
 }

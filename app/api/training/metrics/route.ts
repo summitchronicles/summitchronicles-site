@@ -1,38 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchStravaActivities } from '@/lib/strava';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    // Fetch recent activities from Strava
-    const activities = await fetchStravaActivities(1, 100); // Get last 100 activities
+    // Fetch activities from Garmin proxy endpoint
+    const garminResponse = await fetch(`${process.env.VERCEL_URL || 'http://localhost:3000'}/api/garmin-proxy/activities?days_back=365&limit=200`, {
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
 
-    // Calculate real training metrics
-    const metrics = calculateTrainingMetrics(activities);
+    if (!garminResponse.ok) {
+      throw new Error(`Garmin API error: ${garminResponse.status}`);
+    }
 
+    const garminData = await garminResponse.json();
+
+    // Calculate training metrics from Garmin activities
+    const metrics = calculateTrainingMetrics(garminData.activities || []);
+
+    // Return the enhanced metrics
     return NextResponse.json({
       success: true,
-      metrics,
-      lastUpdated: new Date().toISOString(),
-      source: activities.length > 0 && activities[0].id > 10000000000 ? 'mock' : 'strava',
-      totalActivities: activities.length,
+      metrics: metrics,
+      lastUpdated: garminData.last_updated || new Date().toISOString(),
+      source: garminData.source,
+      totalActivities: garminData.total_activities,
+      dataQuality: garminData.data_quality,
+      migrationStatus: 'garmin_active',
+      summary: garminData.summary,
       debug: {
-        firstActivityId: activities.length > 0 ? activities[0].id : null,
-        isRealStrava: activities.length > 0 && activities[0].id < 10000000000
+        garmin_integration: true,
+        strava_replaced: true,
+        activity_count: garminData.total_activities,
+        data_source: garminData.source
       }
     });
 
   } catch (error) {
-    console.error('Error calculating training metrics:', error);
+    console.error('Error fetching Garmin training metrics:', error);
 
-    // Return fallback metrics if API fails
+    // Return enhanced fallback metrics if Garmin API fails
     return NextResponse.json({
       success: false,
-      metrics: getFallbackMetrics(),
+      metrics: getEnhancedFallbackMetrics(),
       lastUpdated: new Date().toISOString(),
       source: 'fallback',
-      error: 'Failed to fetch live metrics'
+      error: 'Garmin API temporarily unavailable',
+      migrationStatus: 'fallback_mode'
     });
   }
 }
@@ -103,11 +119,11 @@ function calculateTrainingMetrics(activities: any[]) {
       metrics: calculatePhaseMetrics(activities, '2022-11-01', '2024-07-31')
     },
     {
-      phase: 'Everest Specific',
-      duration: 'Aug 2024 - Mar 2027',
-      focus: 'Death Zone Preparation',
+      phase: 'Base Training',
+      duration: 'Aug 2025 - Mar 2027',
+      focus: 'Foundation Building',
       status: 'current',
-      metrics: calculatePhaseMetrics(activities, '2024-08-01', '2027-03-31')
+      metrics: calculatePhaseMetrics(activities, '2025-08-01', '2027-03-31')
     }
   ];
 
@@ -222,20 +238,23 @@ function formatElevation(meters: number): string {
 }
 
 function calculateAverageRestingHR(activities: any[]): string {
-  // Simulate resting HR calculation (would need actual HR data)
-  // In real implementation, this would use Garmin/Strava wellness data
+  // Use known resting HR value for accuracy
+  // TODO: In future, could integrate with Garmin/Strava wellness data for automatic updates
+  const knownRestingHR = 55; // User's actual resting HR
+
+  // Optional: Could analyze recent trends for validation
   const recentActivities = activities.slice(0, 10);
-  if (recentActivities.length === 0) return '42 bpm';
+  if (recentActivities.length > 0) {
+    const avgActiveHR = recentActivities
+      .filter(a => a.average_heartrate)
+      .reduce((total, activity) => total + (activity.average_heartrate || 0), 0) /
+      recentActivities.filter(a => a.average_heartrate).length;
 
-  // Rough estimation based on recent average HR
-  const avgActiveHR = recentActivities
-    .filter(a => a.average_heartrate)
-    .reduce((total, activity) => total + (activity.average_heartrate || 0), 0) /
-    recentActivities.filter(a => a.average_heartrate).length;
+    // Log for debugging/validation (actual RHR should be much lower than active HR)
+    console.log(`Average active HR: ${Math.round(avgActiveHR)}, Known resting HR: ${knownRestingHR}`);
+  }
 
-  // Estimate resting HR as ~30% lower than average active HR
-  const estimatedRestingHR = avgActiveHR ? Math.round(avgActiveHR * 0.7) : 42;
-  return `${estimatedRestingHR} bpm`;
+  return `${knownRestingHR} bpm`;
 }
 
 function calculateFitnessScore(activities: any[]): string {
@@ -259,7 +278,7 @@ function calculateFitnessScore(activities: any[]): string {
   return `${fitnessScore}/100`;
 }
 
-function getFallbackMetrics() {
+function getEnhancedFallbackMetrics() {
   return {
     currentStats: {
       sevenSummitsCompleted: {
@@ -285,15 +304,11 @@ function getFallbackMetrics() {
     },
     trainingPhases: [
       {
-        phase: 'Everest Specific',
-        duration: 'Aug 2024 - Mar 2027',
-        focus: 'Death Zone Preparation',
+        phase: 'Base Training',
+        duration: 'Aug 2025 - Mar 2027',
+        focus: 'Foundation Building',
         status: 'current',
-        metrics: [
-          { label: 'Training Altitude', value: '18,000 ft', trend: 'up' },
-          { label: 'VO2 Max', value: '62 ml/kg/min', trend: 'up' },
-          { label: 'Hypoxic Training', value: '40 hrs/week', trend: 'up' }
-        ]
+        metrics: 'dynamic' // Will be replaced with real Garmin wellness data
       }
     ],
     recentTrends: {

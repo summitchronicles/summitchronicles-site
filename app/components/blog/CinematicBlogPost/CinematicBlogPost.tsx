@@ -66,7 +66,7 @@ export function CinematicBlogPost({
     date: 'December 15, 2024',
     readTime: '12 min read',
     category: 'Mental Preparation',
-    image: '/stories/everest-prep.jpg',
+    image: '/stories/everest-prep.jpeg',
     views: '2.1K',
     location: 'Training Grounds, California',
     content: `
@@ -128,8 +128,8 @@ export function CinematicBlogPost({
         readTime: `${post.readTime || 12} min read`,
         category: post.categories?.[0]?.title || 'Story',
         image: post.mainImage
-          ? '/stories/everest-prep.jpg'
-          : '/stories/everest-prep.jpg',
+          ? '/stories/everest-prep.jpeg'
+          : '/stories/everest-prep.jpeg',
         views: '2.1K',
         location: 'Training Grounds, California',
         content: samplePost.content, // TODO: Convert portable text to HTML

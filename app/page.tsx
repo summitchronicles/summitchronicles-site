@@ -87,28 +87,28 @@ export default function Home() {
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors">
                 <div className="absolute bottom-6 left-6 text-white">
                   <h3 className="text-lg font-light tracking-wide">KILIMANJARO</h3>
-                  <p className="text-sm opacity-80">First Summit • 2022</p>
+                  <p className="text-sm opacity-80">First Summit • 2023</p>
                 </div>
               </div>
             </div>
             <div className="relative group overflow-hidden">
               <Image
-                src="/stories/data-training.jpg"
-                alt="Mount Whitney Training"
+                src="/stories/denali.jpg"
+                alt="Mount Denali Expedition"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
                 sizes="(max-width: 768px) 100vw, 33vw"
               />
               <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors">
                 <div className="absolute bottom-6 left-6 text-white">
-                  <h3 className="text-lg font-light tracking-wide">WHITNEY</h3>
-                  <p className="text-sm opacity-80">Technical Training • 2024</p>
+                  <h3 className="text-lg font-light tracking-wide">DENALI</h3>
+                  <p className="text-sm opacity-80">Latest Summit • 2025</p>
                 </div>
               </div>
             </div>
             <div className="relative group overflow-hidden">
               <Image
-                src="/stories/everest-prep.jpg"
+                src="/stories/everest-prep.jpeg"
                 alt="Everest Preparation"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"

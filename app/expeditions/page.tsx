@@ -43,6 +43,261 @@ export default function ExpeditionsPage() {
 
   const expeditions: Expedition[] = [
     {
+      id: 'everest',
+      mountain: 'Mount Everest',
+      elevation: '29,032 ft',
+      location: 'Nepal/Tibet',
+      date: 'March 2027',
+      year: '2027',
+      status: 'in-progress',
+      image: '/stories/everest-prep.jpeg',
+      story: 'The ultimate challenge. Everything has led to this moment. Thirteen years of preparation, systematic training, and community support converge at the roof of the world.',
+      stats: {
+        duration: '60 days',
+        difficulty: 'Extreme+',
+        temperature: '-60°C death zone'
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'denali',
+      mountain: 'Mount Denali',
+      elevation: '20,310 ft',
+      location: 'Alaska, USA',
+      date: 'June 2025',
+      year: '2025',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'Latest Seven Summits achievement. Technical glacier travel and extreme conditions. Three weeks testing every skill learned so far.',
+      stats: {
+        duration: '21 days',
+        difficulty: 'Extreme',
+        temperature: '-40°C summit'
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'elbrus',
+      mountain: 'Mount Elbrus',
+      elevation: '18,510 ft',
+      location: 'Russia, Europe',
+      date: 'August 2024',
+      year: '2024',
+      status: 'completed',
+      image: '/stories/everest-prep.jpeg',
+      story: 'European summit in extreme cold conditions. Mastering cold weather mountaineering and building mental resilience for the Seven Summits challenge.',
+      stats: {
+        duration: '7 days',
+        difficulty: 'Winter',
+        temperature: '-25°C summit'
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'aconcagua',
+      mountain: 'Mount Aconcagua',
+      elevation: '22,837 ft',
+      location: 'Argentina, South America',
+      date: 'December 2024',
+      year: '2024',
+      status: 'completed',
+      image: '/stories/kilimanjaro.jpg',
+      story: 'Highest peak outside of Asia. Technical high-altitude climbing in extreme conditions. A major step toward the ultimate goal.',
+      stats: {
+        duration: '18 days',
+        difficulty: 'High Altitude',
+        temperature: '-30°C summit'
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'spangnak',
+      mountain: 'Spangnak',
+      elevation: '18,100 ft',
+      location: 'Ladakh, India',
+      date: 'September 2024',
+      year: '2024',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'Remote peak in the Ladakh region. Building technical climbing skills and testing gear in harsh mountain conditions.',
+      stats: {
+        duration: '8 days',
+        difficulty: 'Technical',
+        temperature: '-20°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'mentok-kangri',
+      mountain: 'Mentok Kangri I, II, III',
+      elevation: '20,300 ft',
+      location: 'Ladakh, India',
+      date: 'August 2024',
+      year: '2024',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'Triple peak challenge in Ladakh. Technical climbing across three connected summits, testing endurance and multi-day high-altitude performance.',
+      stats: {
+        duration: '12 days',
+        difficulty: 'Technical',
+        temperature: '-25°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'kilimanjaro',
+      mountain: 'Mount Kilimanjaro',
+      elevation: '19,341 ft',
+      location: 'Tanzania, Africa',
+      date: 'February 2023',
+      year: '2023',
+      status: 'completed',
+      image: '/stories/kilimanjaro.jpg',
+      story: 'First Seven Summits achievement. Years of preparation in the Himalayas led to this moment. Standing on the roof of Africa at sunrise, proof that systematic preparation works.',
+      stats: {
+        duration: '7 days',
+        difficulty: 'Technical',
+        temperature: '-15°C summit'
+      },
+      isSevenSummit: true
+    },
+    {
+      id: 'hampta-pass',
+      mountain: 'Hampta Pass',
+      elevation: '14,100 ft',
+      location: 'Himachal Pradesh, India',
+      date: 'September 2021',
+      year: '2021',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'A dramatic valley-to-valley crossing. This trek taught me about rapid elevation changes and diverse mountain ecosystems in a single journey.',
+      stats: {
+        duration: '5 days',
+        difficulty: 'Intermediate',
+        temperature: '0°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'sandakhphu',
+      mountain: 'Sandakhphu',
+      elevation: '11,930 ft',
+      location: 'West Bengal, India',
+      date: 'April 2021',
+      year: '2021',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'The highest peak in West Bengal, offering spectacular views of four 8000m peaks including Everest. A reminder of the ultimate goal on the horizon.',
+      stats: {
+        duration: '4 days',
+        difficulty: 'Easy',
+        temperature: '5°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'brahmatal',
+      mountain: 'Brahmatal',
+      elevation: '12,250 ft',
+      location: 'Uttarakhand, India',
+      date: 'January 2020',
+      year: '2020',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'Winter mountaineering experience. Learning to handle extreme cold and snow conditions - essential skills for the bigger mountains ahead.',
+      stats: {
+        duration: '6 days',
+        difficulty: 'Winter',
+        temperature: '-15°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'rupin-pass',
+      mountain: 'Rupin Pass',
+      elevation: '15,250 ft',
+      location: 'Himachal Pradesh, India',
+      date: 'May 2019',
+      year: '2019',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'One of the most beautiful and varied treks in the Himalayas. This journey took me through diverse landscapes and weather conditions, building versatility in mountain environments.',
+      stats: {
+        duration: '7 days',
+        difficulty: 'Intermediate',
+        temperature: '-5°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'stok-kangri',
+      mountain: 'Stok Kangri',
+      elevation: '20,187 ft',
+      location: 'Ladakh, India',
+      date: 'September 2018',
+      year: '2018',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'My first 6000m+ peak. Crossing the 20,000 ft threshold was a major milestone, proving I could handle serious altitude and technical climbing.',
+      stats: {
+        duration: '8 days',
+        difficulty: 'High Altitude',
+        temperature: '-20°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'everest-base-camp',
+      mountain: 'Everest Base Camp',
+      elevation: '17,598 ft',
+      location: 'Nepal',
+      date: 'October 2017',
+      year: '2017',
+      status: 'completed',
+      image: '/stories/everest-prep.jpeg',
+      story: 'First encounter with the world\'s highest mountain. Standing at base camp, the dream of summiting Everest was born. This trek was a pilgrimage and a reconnaissance mission.',
+      stats: {
+        duration: '14 days',
+        difficulty: 'Technical',
+        temperature: '-15°C base camp'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'goecha-la',
+      mountain: 'Goecha La',
+      elevation: '16,207 ft',
+      location: 'Sikkim, India',
+      date: 'May 2016',
+      year: '2016',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'Close encounter with Kanchenjunga. This trek offered incredible views of the third highest peak in the world and deepened my connection with high-altitude environments.',
+      stats: {
+        duration: '8 days',
+        difficulty: 'Intermediate',
+        temperature: '-8°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
+      id: 'rookund',
+      mountain: 'Rookund',
+      elevation: '16,847 ft',
+      location: 'Uttarakhand, India',
+      date: 'October 2015',
+      year: '2015',
+      status: 'completed',
+      image: '/stories/data-training.jpg',
+      story: 'Building on the foundation from Sar Pass. Pushing higher into the Himalayas and testing my resilience at greater altitudes.',
+      stats: {
+        duration: '6 days',
+        difficulty: 'Intermediate',
+        temperature: '-10°C summit'
+      },
+      isSevenSummit: false
+    },
+    {
       id: 'sar-pass',
       mountain: 'Sar Pass Trek',
       elevation: '13,845 ft',
@@ -60,91 +315,6 @@ export default function ExpeditionsPage() {
       isSevenSummit: false
     },
     {
-      id: 'kilimanjaro',
-      mountain: 'Mount Kilimanjaro',
-      elevation: '19,341 ft',
-      location: 'Tanzania, Africa',
-      date: 'October 2022',
-      year: '2022',
-      status: 'completed',
-      image: '/stories/kilimanjaro.jpg',
-      story: 'First Seven Summits achievement. Years of preparation in the Himalayas led to this moment. Standing on the roof of Africa at sunrise, proof that systematic preparation works.',
-      stats: {
-        duration: '7 days',
-        difficulty: 'Technical',
-        temperature: '-15°C summit'
-      },
-      isSevenSummit: true
-    },
-    {
-      id: 'aconcagua',
-      mountain: 'Mount Aconcagua',
-      elevation: '22,837 ft',
-      location: 'Argentina, South America',
-      date: 'February 2023',
-      year: '2023',
-      status: 'completed',
-      image: '/stories/kilimanjaro.jpg',
-      story: 'Highest peak outside of Asia. Technical high-altitude climbing in extreme conditions. A major step toward the ultimate goal.',
-      stats: {
-        duration: '18 days',
-        difficulty: 'High Altitude',
-        temperature: '-30°C summit'
-      },
-      isSevenSummit: true
-    },
-    {
-      id: 'elbrus',
-      mountain: 'Mount Elbrus',
-      elevation: '18,510 ft',
-      location: 'Russia, Europe',
-      date: 'July 2023',
-      year: '2023',
-      status: 'completed',
-      image: '/stories/everest-prep.jpg',
-      story: 'European summit in extreme cold conditions. Mastering cold weather mountaineering and building mental resilience.',
-      stats: {
-        duration: '7 days',
-        difficulty: 'Winter',
-        temperature: '-25°C summit'
-      },
-      isSevenSummit: true
-    },
-    {
-      id: 'denali',
-      mountain: 'Mount Denali',
-      elevation: '20,310 ft',
-      location: 'Alaska, USA',
-      date: 'June 2024',
-      year: '2024',
-      status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'Most recent Seven Summits achievement. Technical glacier travel and extreme conditions. Three weeks testing every skill learned so far.',
-      stats: {
-        duration: '21 days',
-        difficulty: 'Extreme',
-        temperature: '-40°C summit'
-      },
-      isSevenSummit: true
-    },
-    {
-      id: 'everest',
-      mountain: 'Mount Everest',
-      elevation: '29,032 ft',
-      location: 'Nepal/Tibet',
-      date: 'March 2027',
-      year: '2027',
-      status: 'in-progress',
-      image: '/stories/everest-prep.jpg',
-      story: 'The ultimate challenge. Everything has led to this moment. Seven years of preparation, systematic training, and community support converge at the roof of the world.',
-      stats: {
-        duration: '60 days',
-        difficulty: 'Extreme+',
-        temperature: '-60°C death zone'
-      },
-      isSevenSummit: true
-    },
-    {
       id: 'vinson',
       mountain: 'Mount Vinson',
       elevation: '16,050 ft',
@@ -152,8 +322,8 @@ export default function ExpeditionsPage() {
       date: 'December 2027',
       year: '2027',
       status: 'planned',
-      image: '/stories/everest-prep.jpg',
-      story: 'The most remote and logistically challenging summit. Final steps toward completing the Seven Summits challenge.',
+      image: '/stories/everest-prep.jpeg',
+      story: 'The most remote and logistically challenging summit. Continuing the Seven Summits challenge in the most isolated continent.',
       stats: {
         duration: '14 days',
         difficulty: 'Extreme',
@@ -237,7 +407,7 @@ export default function ExpeditionsPage() {
       <section className="relative h-screen flex items-center justify-center">
         <div className="absolute inset-0">
           <Image
-            src="/stories/everest-prep.jpg"
+            src="/stories/everest-prep.jpeg"
             alt="Seven Summits Expeditions"
             fill
             className="object-cover opacity-40"
@@ -504,7 +674,7 @@ export default function ExpeditionsPage() {
             className="grid md:grid-cols-4 gap-8 text-center"
           >
             <div className="bg-black/50 rounded-2xl p-8 border border-green-500/30">
-              <div className="text-4xl font-light text-green-400 mb-2">5</div>
+              <div className="text-4xl font-light text-green-400 mb-2">14</div>
               <div className="text-gray-300">Expeditions Complete</div>
             </div>
             <div className="bg-black/50 rounded-2xl p-8 border border-yellow-500/30">
@@ -512,7 +682,7 @@ export default function ExpeditionsPage() {
               <div className="text-gray-300">Seven Summits</div>
             </div>
             <div className="bg-black/50 rounded-2xl p-8 border border-blue-500/30">
-              <div className="text-4xl font-light text-blue-400 mb-2">10</div>
+              <div className="text-4xl font-light text-blue-400 mb-2">11</div>
               <div className="text-gray-300">Years Journey</div>
             </div>
             <div className="bg-black/50 rounded-2xl p-8 border border-purple-500/30">

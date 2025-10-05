@@ -65,7 +65,7 @@ export function RedBullBlogPost({
     readTime: '12 min read',
     category: 'MENTAL PREPARATION',
     location: 'Training Grounds, California',
-    heroImage: '/stories/everest-prep.jpg',
+    heroImage: '/stories/everest-prep.jpeg',
     views: '2.1K',
     tags: ['Mental Training', 'Everest', 'Peak Performance', 'Mountaineering'],
     content: {
@@ -112,7 +112,7 @@ export function RedBullBlogPost({
         readTime: `${post.readTime || 12} min read`,
         category: post.categories?.[0]?.title?.toUpperCase() || 'STORY',
         location: post.location || 'Training Grounds, California',
-        heroImage: post.mainImage || '/stories/everest-prep.jpg',
+        heroImage: post.mainImage || '/stories/everest-prep.jpeg',
         views: '2.1K',
         tags: post.categories?.map((cat: any) => cat.title) || samplePost.tags,
         content: post.content || samplePost.content, // Use actual post content

@@ -55,7 +55,7 @@ export function FeaturedStoryCards({
       date: 'December 2024',
       readTime: '12 min read',
       category: 'Training',
-      image: '/stories/everest-prep.jpg',
+      image: '/stories/everest-prep.jpeg',
       slug: 'everest-mental-preparation-2027',
       featured: true,
       stats: {

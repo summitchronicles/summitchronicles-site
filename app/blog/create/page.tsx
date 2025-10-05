@@ -288,7 +288,7 @@ export default function CreateBlogPost() {
                       setFormData({ ...formData, heroImage: e.target.value })
                     }
                     className="w-full px-3 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-red-500 focus:border-red-500"
-                    placeholder="/stories/everest-prep.jpg"
+                    placeholder="/stories/everest-prep.jpeg"
                   />
                 </div>
               </div>

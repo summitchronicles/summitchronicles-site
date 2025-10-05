@@ -18,21 +18,14 @@ import { getDaysToEverest } from '@/lib/everest-countdown';
 export default function AboutPage() {
   const achievements = [
     {
-      year: '2022',
+      year: '2023',
       mountain: 'Mount Kilimanjaro',
       elevation: '19,341 ft',
       location: 'Tanzania, Africa',
       significance: 'First Seven Summits achievement after years of preparation in the Himalayas.',
     },
     {
-      year: '2023',
-      mountain: 'Mount Aconcagua',
-      elevation: '22,837 ft',
-      location: 'Argentina, South America',
-      significance: 'Technical high-altitude climbing. Highest peak outside of Asia.',
-    },
-    {
-      year: '2023',
+      year: '2024',
       mountain: 'Mount Elbrus',
       elevation: '18,510 ft',
       location: 'Russia, Europe',
@@ -40,10 +33,17 @@ export default function AboutPage() {
     },
     {
       year: '2024',
+      mountain: 'Mount Aconcagua',
+      elevation: '22,837 ft',
+      location: 'Argentina, South America',
+      significance: 'Technical high-altitude climbing. Highest peak outside of Asia.',
+    },
+    {
+      year: '2025',
       mountain: 'Mount Denali',
       elevation: '20,310 ft',
       location: 'Alaska, North America',
-      significance: 'Most recent Seven Summits achievement. Technical glacier travel and extreme conditions.',
+      significance: 'Latest Seven Summits achievement. Technical glacier travel and extreme conditions.',
     },
   ];
 
@@ -187,7 +187,7 @@ export default function AboutPage() {
               viewport={{ once: true }}
             >
               <Image
-                src="/stories/everest-prep.jpg"
+                src="/stories/everest-prep.jpeg"
                 alt="Mount Whitney failure and learning"
                 width={600}
                 height={400}

@@ -72,59 +72,59 @@ export function TrainingCalendar({
 }: TrainingCalendarProps) {
   const [currentWeek, setCurrentWeek] = useState(0);
   const [weeklyPlans, setWeeklyPlans] = useState<WeeklyPlan[]>([
-    // Sample data
+    // Current week: September 30 - October 6, 2025 (Week containing October 4th)
     {
-      weekStartDate: '2025-09-22',
+      weekStartDate: '2025-09-30',
       weekNumber: 1,
-      phase: 'Base Building',
-      goals: ['Build aerobic base', 'Improve hiking endurance', 'Core strength'],
+      phase: 'Base Training',
+      goals: ['Foundation building', 'Endurance development', 'Technical skills'],
       activities: [
         {
           id: '1',
-          title: 'Morning Hike - Local Trail',
+          title: 'Base Aerobic Training',
           type: 'cardio',
-          duration: 120,
-          intensity: 'medium',
-          location: 'Mount Tamalpais',
-          notes: 'Focus on steady pace, breathing technique',
+          duration: 90,
+          intensity: 'low',
+          location: 'Local Trails',
+          notes: 'Zone 1-2 aerobic base development, nasal breathing',
           completed: true,
-          date: '2025-09-22',
+          date: '2025-09-30',
           status: 'completed',
           actual: {
-            duration: 118,
-            heartRate: { avg: 145, max: 180 },
-            calories: 650,
-            completedAt: '2025-09-22T07:30:00Z'
+            duration: 88,
+            heartRate: { avg: 135, max: 165 },
+            calories: 520,
+            completedAt: '2025-09-30T07:00:00Z'
           },
           compliance: {
-            durationMatch: 98, // 118/120 * 100
+            durationMatch: 98,
             intensityMatch: 95,
             completed: true,
-            notes: 'Great workout, slightly shorter than planned'
+            notes: 'Good aerobic base session'
           }
         },
         {
           id: '2',
-          title: 'BB Bench Press Session',
+          title: 'Strength Foundation',
           type: 'strength',
           duration: 60,
-          intensity: 'high',
+          intensity: 'medium',
           location: 'Home Gym',
-          notes: 'Synced from Excel → Garmin → Calendar',
+          notes: 'Functional strength for mountaineering',
           completed: true,
-          date: '2025-09-23',
-          status: 'synced',
+          date: '2025-10-01',
+          status: 'completed',
           exercises: [
-            { name: 'BB Bench Press', sets: 2, reps: 8, rpe: '6-7', restTime: 90 },
-            { name: 'DB Bench Press', sets: 1, reps: 6, rpe: '8-9', restTime: 90 },
-            { name: 'Bent-Over BB Rows', sets: 2, reps: 8, rpe: '6-7', restTime: 90 }
+            { name: 'Squats', sets: 3, reps: 12, rpe: '6-7', restTime: 90 },
+            { name: 'Push-ups', sets: 3, reps: 15, rpe: '6-7', restTime: 60 },
+            { name: 'Lunges', sets: 3, reps: 10, rpe: '6-7', restTime: 60 }
           ],
           actual: {
-            duration: 58,
-            completedAt: '2025-09-23T06:45:00Z'
+            duration: 62,
+            completedAt: '2025-10-01T06:30:00Z'
           },
           compliance: {
-            durationMatch: 97, // 58/60 * 100
+            durationMatch: 97,
             intensityMatch: 100,
             completed: true,
             notes: 'All exercises completed as planned'
@@ -132,67 +132,82 @@ export function TrainingCalendar({
         },
         {
           id: '3',
-          title: 'Technical Skills - Knots & Anchors',
+          title: 'Active Recovery',
+          type: 'rest',
+          duration: 45,
+          intensity: 'low',
+          location: 'Home',
+          notes: 'Yoga, mobility work, foam rolling',
+          completed: true,
+          date: '2025-10-02',
+          status: 'completed',
+          actual: {
+            duration: 50,
+            completedAt: '2025-10-02T18:00:00Z'
+          },
+          compliance: {
+            durationMatch: 89,
+            intensityMatch: 100,
+            completed: true,
+            notes: 'Extended mobility session'
+          }
+        },
+        {
+          id: '4',
+          title: 'Technical Skills Practice',
           type: 'technical',
           duration: 90,
           intensity: 'low',
           location: 'Climbing Gym',
-          notes: 'Practice alpine butterfly, clove hitch, anchor building',
-          completed: false,
-          date: '2025-09-24',
-          status: 'planned'
-        },
-        {
-          id: '4',
-          title: 'Rest Day - Active Recovery',
-          type: 'rest',
-          duration: 30,
-          intensity: 'low',
-          location: 'Home',
-          notes: 'Yoga, stretching, foam rolling',
-          completed: false,
-          date: '2025-09-25',
-          status: 'planned'
+          notes: 'Knot practice, anchor building, rescue techniques',
+          completed: true,
+          date: '2025-10-03',
+          status: 'completed',
+          actual: {
+            duration: 95,
+            completedAt: '2025-10-03T19:00:00Z'
+          },
+          compliance: {
+            durationMatch: 94,
+            intensityMatch: 100,
+            completed: true,
+            notes: 'Good technical skills session'
+          }
         },
         {
           id: '5',
-          title: 'Long Hike - Pack Training',
+          title: 'Treadmill Hike',
           type: 'cardio',
-          duration: 240,
+          duration: 75,
           intensity: 'medium',
-          location: 'Point Reyes',
-          notes: '15kg pack, practice expedition pace',
+          location: 'Home Gym',
+          notes: 'Incline training, pack weight simulation',
           completed: false,
-          date: '2025-09-26',
+          date: '2025-10-04',
           status: 'planned'
         },
         {
           id: '6',
-          title: 'Upper Body Strength',
-          type: 'strength',
-          duration: 45,
-          intensity: 'high',
-          location: 'Home Gym',
-          notes: 'Pull-ups, push-ups, core work',
+          title: 'Saturday Endurance',
+          type: 'cardio',
+          duration: 150,
+          intensity: 'medium',
+          location: 'Mount Tamalpais',
+          notes: 'Long steady distance, pack training, elevation gain',
           completed: false,
-          date: '2025-09-27',
-          status: 'planned',
-          exercises: [
-            { name: 'Pull-ups', sets: 3, reps: 8, rpe: '7-8', restTime: 90 },
-            { name: 'Push-ups', sets: 3, reps: 15, rpe: '6-7', restTime: 60 },
-            { name: 'Plank Hold', sets: 3, reps: 1, rpe: '6-7', restTime: 60 }
-          ]
+          date: '2025-10-05',
+          status: 'planned'
         },
         {
           id: '7',
-          title: 'Easy Recovery Hike',
+          title: 'Recovery Walk',
           type: 'cardio',
-          duration: 60,
+          duration: 45,
           intensity: 'low',
-          location: 'Local Hills',
-          notes: 'Light pace, enjoy nature',
+          location: 'Neighborhood',
+          notes: 'Easy pace, active recovery',
           completed: false,
-          date: '2025-09-28',
+          date: '2025-10-06',
           status: 'planned'
         },
       ],
@@ -478,7 +493,7 @@ export function TrainingCalendar({
                 ← Prev
               </button>
               <span className="px-3 py-1 text-sm font-medium text-white">
-                Week {currentPlan.weekNumber}
+                Sep 30 - Oct 6, 2025
               </span>
               <button
                 onClick={() => setCurrentWeek(Math.min(weeklyPlans.length - 1, currentWeek + 1))}

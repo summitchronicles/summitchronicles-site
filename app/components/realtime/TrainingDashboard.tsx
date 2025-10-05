@@ -129,16 +129,7 @@ export function TrainingDashboard({
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-3xl font-light text-white mb-2">
-            Live Training Data
-          </h2>
-          <p className="text-gray-400">
-            Real-time Strava integration showing training progress and metrics
-          </p>
-        </div>
-
+      <div className="flex items-center justify-end">
         {/* Timeframe Selector */}
         <div className="flex bg-gray-700 rounded-lg p-1">
           {[
