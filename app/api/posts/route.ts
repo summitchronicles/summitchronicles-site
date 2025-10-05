@@ -5,8 +5,14 @@ export async function GET() {
   try {
     const posts = getAllPostsServer();
 
+    // Filter out demo content
+    const filteredPosts = posts.filter(post =>
+      !post.slug.includes("My First Climb") &&
+      !post.slug.includes("The Spark I Didn't See Coming")
+    );
+
     // Enhance posts with missing required fields and better excerpts
-    const enhancedPosts = posts.map(post => {
+    const enhancedPosts = filteredPosts.map(post => {
       // Try to get the actual post data for better title and excerpt
       const postData = getPostBySlugServer(post.slug);
 
