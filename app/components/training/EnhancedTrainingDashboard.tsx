@@ -188,7 +188,7 @@ export function EnhancedTrainingDashboard({
           comparison: {
             label: 'Target Adherence',
             value: effectiveMetrics.weeklyProgress,
-            benchmark: effectiveMetrics.weeklyProgress >= 80 ? 'above' : 'below'
+            benchmark: (effectiveMetrics.weeklyProgress >= 80 ? 'above' : 'below') as 'above' | 'below' | 'on-target'
           }
         }
       },
@@ -261,7 +261,7 @@ export function EnhancedTrainingDashboard({
           comparison: {
             label: 'Elite Endurance Range',
             value: wellnessMetrics.resting_hr <= 55 ? 95 : 75,
-            benchmark: wellnessMetrics.resting_hr <= 55 ? 'above' : 'on-target'
+            benchmark: (wellnessMetrics.resting_hr <= 55 ? 'above' : 'on-target') as 'above' | 'below' | 'on-target'
           }
         }
       },

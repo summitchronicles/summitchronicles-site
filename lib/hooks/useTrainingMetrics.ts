@@ -176,7 +176,9 @@ function getFallbackMetrics(): TrainingMetrics {
         duration: 'Aug 2025 - Mar 2027',
         focus: 'Foundation Building',
         status: 'current',
-        metrics: 'dynamic' // Will be replaced with real Garmin data
+        metrics: [
+          { label: 'Training Load', value: 'Dynamic', trend: 'stable' as const }
+        ] // Will be replaced with real Garmin data
       }
     ],
     recentTrends: {

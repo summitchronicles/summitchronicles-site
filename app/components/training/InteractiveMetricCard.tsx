@@ -74,18 +74,19 @@ export function InteractiveMetricCard({
         rotateX: hovering ? -2 : 0,
         rotateY: hovering ? 2 : 0
       });
+      // Reset rotation when not hovering
+      if (!hovering) {
+        springApi.start({ rotateX: 0, rotateY: 0, scale: 1 });
+      }
     },
     onMove: ({ xy: [x, y], currentTarget }) => {
       if (!isHovered) return;
-      const rect = currentTarget.getBoundingClientRect();
+      const rect = (currentTarget as HTMLElement).getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const rotateX = (y - centerY) / 10;
       const rotateY = (centerX - x) / 10;
       springApi.start({ rotateX, rotateY });
-    },
-    onLeave: () => {
-      springApi.start({ rotateX: 0, rotateY: 0, scale: 1 });
     }
   });
 

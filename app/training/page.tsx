@@ -483,7 +483,7 @@ export default function TrainingPage() {
                                 {phase.phase === 'Base Training' ? 'Live Training Metrics' : 'Key Metrics'}
                               </h4>
                               <div className="grid grid-cols-1 gap-3">
-                                {(phase.phase === 'Base Training' ? getDynamicMetrics() : phase.metrics).map((metric, metricIndex) => (
+                                {(phase.phase === 'Base Training' ? getDynamicMetrics() : Array.isArray(phase.metrics) ? phase.metrics : []).map((metric, metricIndex) => (
                                   <div key={metricIndex} className="bg-gray-800/50 rounded-lg p-4">
                                     <div className="flex items-center justify-between">
                                       <div>
