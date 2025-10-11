@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateRAGResponse } from '@/lib/rag/training-knowledge-base';
 import { askTrainingQuestion, generateChatCompletion } from '@/lib/integrations/ollama';
 import { checkAIAbuse, withAbuseProtection } from '@/lib/ai/abuse-prevention';
+import { getUnifiedWorkouts, getWorkoutStats, getRecentWorkoutsForAI } from '@/lib/training/unified-workouts';
 
 export const dynamic = 'force-dynamic';
 
@@ -80,7 +81,7 @@ async function getRelevantTrainingData(question: string): Promise<{
   summary: string;
 }> {
   // Simple keyword matching for now (would use semantic search in production)
-  const trainingKeywords = ['training', 'workout', 'exercise', 'progress', 'performance', 'improvement'];
+  const trainingKeywords = ['training', 'workout', 'exercise', 'progress', 'performance', 'improvement', 'garmin', 'activity'];
   const questionLower = question.toLowerCase();
 
   const isTrainingRelated = trainingKeywords.some(keyword =>
@@ -91,15 +92,40 @@ async function getRelevantTrainingData(question: string): Promise<{
     return { data: [], summary: '' };
   }
 
-  // Get recent training data (last 4 weeks simulation)
-  const recentData = mockTrainingData.slice(-10);
+  try {
+    // Get unified workouts from both historical + Garmin
+    const workouts = await getUnifiedWorkouts({ limit: 30 });
 
-  const summary = `Recent training summary: ${recentData.length} workouts over the past weeks.
+    // Get stats
+    const stats = await getWorkoutStats({
+      startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    });
+
+    const summary = `Recent training summary (last 30 days):
+- Total workouts: ${stats.total_workouts}
+- Total time: ${stats.total_duration_hours.toFixed(1)} hours
+- Total distance: ${stats.total_distance_km.toFixed(1)} km
+- Total elevation: ${stats.total_elevation_m.toFixed(0)} m
+- Average HR: ${stats.avg_heart_rate} bpm
+- Average intensity: ${stats.avg_intensity}/10
+- Data sources: ${stats.by_source.historical} from Excel, ${stats.by_source.garmin} from Garmin
+- Top activities: ${Object.entries(stats.by_type)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 3)
+  .map(([type, count]) => `${type} (${count})`)
+  .join(', ')}`;
+
+    return { data: workouts, summary };
+  } catch (error) {
+    console.error('Error fetching unified training data:', error);
+    // Fallback to mock data if database fails
+    const recentData = mockTrainingData.slice(-10);
+    const summary = `Recent training summary: ${recentData.length} workouts over the past weeks.
 Average intensity: ${(recentData.reduce((sum, w) => sum + (w.intensity || 0), 0) / recentData.length).toFixed(1)}/10.
 Average completion rate: ${(recentData.reduce((sum, w) => sum + (w.completion_rate || 0), 0) / recentData.length).toFixed(1)}%.
 Exercise types: ${[...new Set(recentData.map(w => w.exercise_type))].join(', ')}.`;
-
-  return { data: recentData, summary };
+    return { data: recentData, summary };
+  }
 }
 
 async function getRelevantBlogContent(question: string): Promise<{

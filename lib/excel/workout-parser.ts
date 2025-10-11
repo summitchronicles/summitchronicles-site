@@ -28,16 +28,16 @@ export interface ParsedWorkoutData {
 
 // Expected column mappings (flexible to handle different Excel formats)
 const COLUMN_MAPPINGS = {
-  date: ['date', 'workout_date', 'training_date', 'day'],
+  date: ['date', 'workout_date', 'training_date', 'day', 'column_1'],
   planned_duration: ['planned_duration', 'planned_time', 'target_duration', 'planned_minutes'],
-  actual_duration: ['actual_duration', 'actual_time', 'duration', 'time_minutes'],
-  exercise_type: ['exercise_type', 'activity_type', 'workout_type', 'type', 'exercise'],
-  intensity: ['intensity', 'effort', 'rpe', 'perceived_exertion'],
+  actual_duration: ['actual_duration', 'actual_time', 'duration', 'time_minutes', 'duration_(mins)'],
+  exercise_type: ['exercise_type', 'activity_type', 'workout_type', 'type', 'exercise', 'activity'],
+  intensity: ['intensity', 'effort', 'rpe', 'perceived_exertion', 'intensity_(rpe)'],
   completion_rate: ['completion_rate', 'completion', 'percent_complete', 'completed'],
   notes: ['notes', 'comments', 'description', 'remarks'],
   elevation_gain: ['elevation_gain', 'elevation', 'climb', 'ascent'],
-  distance: ['distance', 'km', 'kilometers', 'miles'],
-  heart_rate_avg: ['heart_rate_avg', 'avg_hr', 'heart_rate', 'hr_avg'],
+  distance: ['distance', 'km', 'kilometers', 'miles', 'distance_(km)'],
+  heart_rate_avg: ['heart_rate_avg', 'avg_hr', 'heart_rate', 'hr_avg', 'average_hr_(bpm)'],
   calories_burned: ['calories_burned', 'calories', 'cal', 'energy']
 };
 
@@ -354,7 +354,7 @@ function parseDate(value: any): string | null {
   for (const pattern of patterns) {
     const match = str.match(pattern);
     if (match) {
-      let [, p1, p2, p3] = match;
+      const [, p1, p2, p3] = match;
       let year, month, day;
 
       if (pattern === patterns[0]) {
@@ -382,7 +382,9 @@ function isValidExerciseType(type: string): boolean {
   const validTypes = [
     'cardio', 'strength', 'climbing', 'hiking', 'running', 'cycling',
     'swimming', 'yoga', 'rest', 'recovery', 'flexibility', 'endurance',
-    'interval', 'cross-training', 'mountaineering', 'skiing', 'snowboarding'
+    'interval', 'cross-training', 'mountaineering', 'skiing', 'snowboarding',
+    'walk', 'run', 'treadmill', 'bike', 'elliptical', 'rowing', 'weights',
+    'core', 'stretching', 'training'
   ];
 
   return validTypes.includes(type) ||

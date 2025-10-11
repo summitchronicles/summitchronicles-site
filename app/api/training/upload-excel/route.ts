@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parseWorkoutExcel, validateWorkoutData, type WorkoutRow } from '@/lib/excel/workout-parser';
 import { generateChatCompletion } from '@/lib/integrations/ollama';
+import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
-// In-memory storage for now (will move to database later)
-let workoutDatabase: WorkoutRow[] = [];
+// Initialize Supabase client
+const supabase = createClient(
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 interface UploadResponse {
   success: boolean;
@@ -56,7 +60,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
 
     // Parse Excel file
     const parseResult = await parseWorkoutExcel(fileBuffer, {
-      useAI: true // Use AI for intelligent column mapping
+      useAI: false // Disable AI for faster parsing (column names already match)
     });
 
     if (parseResult.workouts.length === 0) {
@@ -88,29 +92,58 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
       );
     }
 
-    // Store validated workouts (in real implementation, save to database)
+    // Store validated workouts in Supabase
     const newWorkouts = validation.valid;
 
-    // Remove duplicates based on date and exercise type
+    // Check for existing workouts to avoid duplicates
+    const { data: existingWorkouts, error: fetchError } = await supabase
+      .from('historical_workouts')
+      .select('date, exercise_type')
+      .in('date', newWorkouts.map(w => w.date));
+
+    if (fetchError) {
+      console.error('Error fetching existing workouts:', fetchError);
+    }
+
     const existingKeys = new Set(
-      workoutDatabase.map(w => `${w.date}-${w.exercise_type}`)
+      (existingWorkouts || []).map(w => `${w.date}-${w.exercise_type}`)
     );
 
     const uniqueNewWorkouts = newWorkouts.filter(
       workout => !existingKeys.has(`${workout.date}-${workout.exercise_type}`)
     );
 
-    workoutDatabase.push(...uniqueNewWorkouts);
+    // Insert new workouts into Supabase
+    if (uniqueNewWorkouts.length > 0) {
+      const { error: insertError } = await supabase
+        .from('historical_workouts')
+        .insert(uniqueNewWorkouts);
 
-    // Sort by date
-    workoutDatabase.sort((a, b) => a.date.localeCompare(b.date));
+      if (insertError) {
+        console.error('Error inserting workouts:', insertError);
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Failed to save workouts to database: ${insertError.message}`
+          },
+          { status: 500 }
+        );
+      }
+    }
 
     // Generate AI insights if requested
     let insights: string | undefined;
 
     if (generateInsights && uniqueNewWorkouts.length > 0) {
       try {
-        insights = await generateWorkoutInsights(uniqueNewWorkouts, workoutDatabase);
+        // Fetch recent workouts for context
+        const { data: recentWorkouts } = await supabase
+          .from('historical_workouts')
+          .select('*')
+          .order('date', { ascending: false })
+          .limit(20);
+
+        insights = await generateWorkoutInsights(uniqueNewWorkouts, recentWorkouts || []);
       } catch (error) {
         console.error('Failed to generate insights:', error);
         // Don't fail the entire upload if insights fail
@@ -148,21 +181,29 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const endDate = url.searchParams.get('end_date');
     const exerciseType = url.searchParams.get('exercise_type');
 
-    let filteredWorkouts = [...workoutDatabase];
+    // Build Supabase query with filters
+    let query = supabase
+      .from('historical_workouts')
+      .select('*')
+      .order('date', { ascending: false });
 
     // Apply filters
     if (startDate) {
-      filteredWorkouts = filteredWorkouts.filter(w => w.date >= startDate);
+      query = query.gte('date', startDate);
     }
 
     if (endDate) {
-      filteredWorkouts = filteredWorkouts.filter(w => w.date <= endDate);
+      query = query.lte('date', endDate);
     }
 
     if (exerciseType) {
-      filteredWorkouts = filteredWorkouts.filter(
-        w => w.exercise_type.toLowerCase().includes(exerciseType.toLowerCase())
-      );
+      query = query.ilike('exercise_type', `%${exerciseType}%`);
+    }
+
+    const { data: filteredWorkouts, error } = await query;
+
+    if (error) {
+      throw new Error(`Database query failed: ${error.message}`);
     }
 
     // Calculate summary statistics

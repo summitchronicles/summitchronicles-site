@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
+import { fetchGarminActivities } from '@/lib/integrations/garmin-api';
+import { isGarminConnected } from '@/lib/integrations/garmin-oauth';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,29 +9,92 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const daysBack = parseInt(searchParams.get('days_back') || '30');
   const limit = parseInt(searchParams.get('limit') || '200');
+  const userId = 'sunith'; // For now, single user
 
   try {
-    // For now, return enhanced fallback data that simulates Garmin integration
-    // This provides superior data quality vs Strava while we optimize Python deployment
-    const garminData = {
-      activities: generateEnhancedGarminActivities(limit),
-      total_activities: limit,
-      summary: {
-        total_distance_km: 1247.8,
-        total_time_hours: 187.5,
-        total_elevation_m: 62400,
-        avg_activities_per_week: 5.2
-      },
+    // Check if Garmin is connected
+    const isConnected = await isGarminConnected(userId);
+
+    if (!isConnected) {
+      console.log('Garmin not connected, returning fallback data');
+      return NextResponse.json({
+        activities: generateFallbackActivities(Math.min(limit, 50)),
+        total_activities: Math.min(limit, 50),
+        summary: {
+          total_distance_km: 850.5,
+          total_time_hours: 125.3,
+          total_elevation_m: 42500,
+          avg_activities_per_week: 4.2
+        },
+        source: 'fallback',
+        data_quality: 'estimated',
+        last_updated: new Date().toISOString(),
+        message: 'Garmin not connected. Connect your account to see real data.',
+        query_params: {
+          days_back: daysBack,
+          limit: limit
+        }
+      }, {
+        headers: {
+          'Cache-Control': 'public, max-age=60, stale-while-revalidate=30'
+        }
+      });
+    }
+
+    // Fetch real activities from Garmin
+    console.log('Fetching real Garmin activities...');
+    const { activities, total } = await fetchGarminActivities(userId, {
+      limit,
+      start: 0
+    });
+
+    // Transform to consistent format
+    const transformedActivities = activities.map(activity => ({
+      id: activity.activityId,
+      name: activity.activityName,
+      distance: activity.distance,
+      moving_time: activity.duration,
+      elapsed_time: activity.duration,
+      total_elevation_gain: activity.elevationGain || 0,
+      type: activity.activityType?.typeKey || 'unknown',
+      start_date: activity.startTimeGMT,
+      start_date_local: activity.startTimeLocal,
+      average_speed: activity.avgSpeed || 0,
+      max_speed: activity.maxSpeed || 0,
+      average_heartrate: activity.avgHR || null,
+      max_heartrate: activity.maxHR || null,
+      calories: activity.calories || 0,
+      device_name: activity.deviceName || 'Garmin Device',
+      external_id: `garmin-${activity.activityId}`,
+      has_heartrate: !!activity.avgHR,
+      private: false,
+      average_power: activity.averagePower || null,
+      training_stress_score: activity.trainingStressScore || null
+    }));
+
+    // Calculate summary
+    const summary = {
+      total_distance_km: transformedActivities.reduce((sum, a) => sum + (a.distance || 0), 0) / 1000,
+      total_time_hours: transformedActivities.reduce((sum, a) => sum + (a.moving_time || 0), 0) / 3600,
+      total_elevation_m: transformedActivities.reduce((sum, a) => sum + (a.total_elevation_gain || 0), 0),
+      avg_activities_per_week: (total / (daysBack / 7)) || 0
+    };
+
+    const responseData = {
+      activities: transformedActivities,
+      total_activities: total,
+      summary,
       source: 'garmin',
       data_quality: 'high',
       last_updated: new Date().toISOString(),
       query_params: {
         days_back: daysBack,
         limit: limit
-      }
+      },
+      fetch_time_ms: Date.now() - startTime
     };
 
-    return NextResponse.json(garminData, {
+    return NextResponse.json(responseData, {
       headers: {
         'Cache-Control': 'public, max-age=300, stale-while-revalidate=60'
       }
@@ -42,10 +103,10 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Error fetching Garmin activities:', error);
 
-    // Return enhanced fallback data
+    // Return fallback data on error
     const fallbackData = {
-      activities: generateFallbackActivities(limit),
-      total_activities: limit,
+      activities: generateFallbackActivities(Math.min(limit, 50)),
+      total_activities: Math.min(limit, 50),
       summary: {
         total_distance_km: 850.5,
         total_time_hours: 125.3,
@@ -55,7 +116,7 @@ export async function GET(request: NextRequest) {
       source: 'fallback',
       data_quality: 'estimated',
       last_updated: new Date().toISOString(),
-      error: 'Garmin API temporarily unavailable',
+      error: error instanceof Error ? error.message : 'Garmin API temporarily unavailable',
       query_params: {
         days_back: daysBack,
         limit: limit
