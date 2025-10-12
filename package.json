@@ -103,6 +103,7 @@
     "@playwright/test": "^1.55.0",
     "@types/node": "24.3.3",
     "@types/react": "19.1.13",
+    "@types/sentiment": "^5.0.4",
     "@typescript-eslint/eslint-plugin": "^8.43.0",
     "@typescript-eslint/parser": "^8.43.0",
     "autoprefixer": "^10.4.21",
