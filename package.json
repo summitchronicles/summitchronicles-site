@@ -101,6 +101,7 @@
   "devDependencies": {
     "@next/bundle-analyzer": "^15.5.3",
     "@playwright/test": "^1.55.0",
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "24.3.3",
     "@types/react": "19.1.13",
     "@types/sentiment": "^5.0.4",
