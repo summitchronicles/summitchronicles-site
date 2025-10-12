@@ -256,11 +256,13 @@ function parseWorkoutRow(
   }
 
   const dateValue = row[dateIndex];
-  workout.date = parseDate(dateValue);
+  const parsedDate = parseDate(dateValue);
 
-  if (!workout.date) {
+  if (!parsedDate) {
     throw new Error(`Invalid date format: ${dateValue}`);
   }
+
+  workout.date = parsedDate;
 
   // Extract exercise type (required field)
   const typeIndex = columnMapping.exercise_type;
