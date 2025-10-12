@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 // Mock training data access (will replace with actual database calls)
 // This simulates the workoutDatabase from the Excel upload system
-let mockTrainingData = [
+const mockTrainingData = [
   {
     date: '2024-09-15',
     exercise_type: 'cardio',
@@ -160,8 +160,8 @@ async function generateEnhancedResponse(
   let ragResponse;
   let trainingData;
   let blogContent;
-  let contextParts: string[] = [];
-  let sources: any[] = [];
+  const contextParts: string[] = [];
+  const sources: any[] = [];
 
   // Get RAG response if requested
   if (options.useRAG) {
