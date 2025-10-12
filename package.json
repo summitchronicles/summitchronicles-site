@@ -63,6 +63,7 @@
     "test:garmin-sync:full": "npm run quality-gate:phase1 && npm run quality-gate:phase2 && npm run quality-gate:phase3 && npm run quality-gate:phase4"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "@portabletext/react": "^4.0.3",
     "@portabletext/types": "^2.0.15",
     "@react-spring/web": "^10.0.3",
@@ -73,6 +74,8 @@
     "@use-gesture/react": "^10.3.1",
     "axios": "^1.12.2",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
+    "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
@@ -81,6 +84,7 @@
     "next": "14.2.32",
     "next-sanity": "^9.12.3",
     "node-cron": "^4.2.1",
+    "oauth-1.0a": "^2.2.6",
     "rate-limiter-flexible": "^8.0.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
