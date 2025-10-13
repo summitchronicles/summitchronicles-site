@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { parseTrainingPlanExcel } from '@/lib/excel/training-plan-parser';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,6 +29,57 @@ interface WeeklySchedule {
 
 export async function GET(request: NextRequest) {
   try {
+    // Import Supabase client
+    const { createClient } = await import('@supabase/supabase-js');
+    const supabase = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    );
+
+    // Try to get active training plan from Supabase
+    const { data: activePlan, error: planError } = await supabase
+      .from('training_plans')
+      .select('*')
+      .eq('is_active', true)
+      .single();
+
+    if (!planError && activePlan) {
+      // Download file from Supabase Storage
+      const { data: fileData, error: downloadError } = await supabase.storage
+        .from('workout-files')
+        .download(activePlan.storage_path);
+
+      if (!downloadError && fileData) {
+        const fileBuffer = Buffer.from(await fileData.arrayBuffer());
+        const weeklySchedule = await parseTrainingPlanExcel(fileBuffer);
+
+        return NextResponse.json({
+          success: true,
+          currentWeek: weeklySchedule,
+          allWeeks: [weeklySchedule],
+          source: activePlan.filename,
+          lastUpdated: activePlan.uploaded_at
+        });
+      }
+    }
+
+    // Fallback: Try new Excel format from file system
+    const newExcelPath = path.join(process.cwd(), 'garmin-workouts/Scheduled-workouts/Week_13-19_Oct_2025_plan.xlsx');
+
+    if (fs.existsSync(newExcelPath)) {
+      const fileBuffer = fs.readFileSync(newExcelPath);
+      const weeklySchedule = await parseTrainingPlanExcel(fileBuffer);
+
+      return NextResponse.json({
+        success: true,
+        currentWeek: weeklySchedule,
+        allWeeks: [weeklySchedule],
+        source: 'week_13-19_oct_2025_plan (local file)',
+        lastUpdated: new Date().toISOString()
+      });
+    }
+
+    // Fallback to CSV format
     const csvPath = path.join(process.cwd(), 'garmin-workouts/Scheduled-workouts/Everest_Base_Schedule-1.csv');
 
     if (!fs.existsSync(csvPath)) {
