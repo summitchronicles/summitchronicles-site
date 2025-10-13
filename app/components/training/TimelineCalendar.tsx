@@ -62,35 +62,8 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
   const [error, setError] = useState<string | null>(null);
   const [currentWeek, setCurrentWeek] = useState(1);
 
-  // Mock compliance data - in real app this would come from Garmin API
-  // Week starts Sept 29 (Monday) - Oct 5 (Sunday)
-  const [complianceData, setComplianceData] = useState<ComplianceData>({
-    'Monday': [
-      { completed: true, durationMatch: 98, intensityMatch: 95, actualDuration: 40, notes: 'Treadmill hike completed' },
-      { completed: true, durationMatch: 95, intensityMatch: 90, actualDuration: 19, notes: 'Good mobility session' }
-    ],
-    'Tuesday': [
-      { completed: true, durationMatch: 97, intensityMatch: 100, actualDuration: 44, notes: 'All exercises completed' },
-      { completed: true, durationMatch: 100, intensityMatch: 90, actualDuration: 30, notes: 'Perfect recovery walk' }
-    ],
-    'Wednesday': [
-      { completed: true, durationMatch: 100, intensityMatch: 90, actualDuration: 30, notes: 'Recovery walk completed' }
-    ],
-    'Thursday': [
-      { completed: true, durationMatch: 89, intensityMatch: 95, actualDuration: 45, notes: 'Stair workout complete' },
-      { completed: true, durationMatch: 92, intensityMatch: 88, actualDuration: 28, notes: 'Berghaus walk done' }
-    ],
-    'Friday': [
-      { completed: true, durationMatch: 95, intensityMatch: 90, actualDuration: 38, notes: 'Good strength session' },
-      { completed: true, durationMatch: 89, intensityMatch: 92, actualDuration: 58, notes: 'Treadmill hike completed' }
-    ],
-    'Saturday': [
-      { completed: false, durationMatch: 0, intensityMatch: 0 }
-    ],
-    'Sunday': [
-      { completed: false, durationMatch: 0, intensityMatch: 0 }
-    ]
-  });
+  // Compliance data - will be populated from Garmin Connect in future
+  const [complianceData, setComplianceData] = useState<ComplianceData>({});
 
   useEffect(() => {
     loadWorkoutData();
@@ -245,58 +218,22 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
           </div>
         </div>
 
-        {/* Weekly Compliance Dashboard */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-          {/* Primary Compliance Score */}
-          <div className="text-center">
-            <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full border-4 ${getComplianceColor(weeklyCompliance)}`}>
-              <span className="text-2xl font-light text-white">{weeklyCompliance}%</span>
-            </div>
-            <div className="mt-2 text-sm font-medium text-gray-400 uppercase tracking-wide">
-              Weekly Compliance
-            </div>
-          </div>
-
-          {/* Progress Stats */}
-          <div className="space-y-2">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-emerald-400" />
-              <span className="text-white font-medium">{completedCount}</span>
-              <span className="text-gray-400 text-sm">Completed</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Circle className="w-4 h-4 text-blue-400" />
-              <span className="text-white font-medium">{totalCount - completedCount}</span>
-              <span className="text-gray-400 text-sm">Remaining</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Target className="w-4 h-4 text-yellow-400" />
-              <span className="text-white font-medium">{Math.round((completedCount / totalCount) * 100)}%</span>
-              <span className="text-gray-400 text-sm">Week Progress</span>
-            </div>
-          </div>
-
-          {/* Training Phase Info */}
+        {/* Week Info */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div className="space-y-2">
             <div className="text-sm font-medium text-gray-400 uppercase tracking-wide">Training Phase</div>
             <div className="text-white font-medium">Base Training</div>
             <div className="text-sm text-gray-400">Foundation Building</div>
           </div>
 
-          {/* Week Info */}
           <div className="space-y-2">
             <div className="text-sm font-medium text-gray-400 uppercase tracking-wide">Current Week</div>
             <div className="text-white font-medium">Week {weeklyData.week}</div>
-            <div className="text-sm text-gray-400">Sep 29 - Oct 5, 2025</div>
+            <div className="text-sm text-gray-400">
+              {new Date(weeklyData.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} -
+              {' '}{new Date(new Date(weeklyData.startDate).getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </div>
           </div>
-        </div>
-
-        {/* Progress Bar */}
-        <div className="w-full bg-gray-700 rounded-full h-2">
-          <div
-            className="bg-blue-500 h-2 rounded-full transition-all duration-500"
-            style={{ width: `${(completedCount / totalCount) * 100}%` }}
-          />
         </div>
       </div>
 
@@ -306,7 +243,11 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
           {days.map((day, index) => {
             const workouts = weeklyData.workouts[day] || [];
             const compliance = complianceData[day] || [];
-            const isToday = day === 'Saturday'; // October 5th is Saturday
+
+            // Determine if this is today
+            const today = new Date();
+            const todayDayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][today.getDay()];
+            const isToday = day === todayDayName;
 
             if (!workouts || workouts.length === 0) return null;
 
@@ -341,11 +282,7 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
                         {/* Timeline marker */}
                         <div className="relative flex-shrink-0">
                           <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center ${colors.border} ${colors.bg}`}>
-                            {workoutCompliance.completed ? (
-                              <CheckCircle className="w-5 h-5 text-emerald-400" />
-                            ) : (
-                              <Circle className="w-5 h-5 text-gray-400" />
-                            )}
+                            <Circle className="w-5 h-5 text-gray-400" />
                           </div>
                         </div>
 
@@ -362,11 +299,6 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
                                 <div className="flex items-center space-x-1">
                                   <Clock className="w-4 h-4 text-gray-400" />
                                   <span className="text-white">{workout.duration} min</span>
-                                  {workoutCompliance.completed && workoutCompliance.actualDuration && (
-                                    <span className="text-gray-400">
-                                      (actual: {workoutCompliance.actualDuration} min)
-                                    </span>
-                                  )}
                                 </div>
 
                                 <div className="flex items-center space-x-1">
@@ -401,17 +333,6 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
                                 </div>
                               )}
 
-                              {/* Compliance badge and notes */}
-                              {workoutCompliance.completed && (
-                                <div className="flex items-center space-x-3">
-                                  <div className={`px-3 py-1 rounded-full border text-xs font-medium ${getComplianceColor(workoutCompliance.durationMatch)}`}>
-                                    {workoutCompliance.durationMatch}% Match
-                                  </div>
-                                  {workoutCompliance.notes && (
-                                    <span className="text-xs text-gray-400 italic">{workoutCompliance.notes}</span>
-                                  )}
-                                </div>
-                              )}
                             </div>
 
                             {/* Status indicator */}
