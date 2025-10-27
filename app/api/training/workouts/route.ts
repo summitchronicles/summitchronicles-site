@@ -29,57 +29,97 @@ interface WeeklySchedule {
 
 export async function GET(request: NextRequest) {
   try {
-    // Import Supabase client
-    const { createClient } = await import('@supabase/supabase-js');
-    const supabase = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
+    // Try Supabase first
+    try {
+      // Import Supabase client
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_SERVICE_ROLE_KEY!
+      );
 
-    // Try to get active training plan from Supabase
-    const { data: activePlan, error: planError } = await supabase
-      .from('training_plans')
-      .select('*')
-      .eq('is_active', true)
-      .single();
+      // Try to get active training plan from Supabase
+      const { data: activePlan, error: planError } = await supabase
+        .from('training_plans')
+        .select('*')
+        .eq('is_active', true)
+        .single();
 
-    if (!planError && activePlan) {
-      // Download file from Supabase Storage
-      const { data: fileData, error: downloadError } = await supabase.storage
-        .from('workout-files')
-        .download(activePlan.storage_path);
+      if (!planError && activePlan) {
+        // Download file from Supabase Storage
+        const { data: fileData, error: downloadError } = await supabase.storage
+          .from('workout-files')
+          .download(activePlan.storage_path);
 
-      if (!downloadError && fileData) {
-        const fileBuffer = Buffer.from(await fileData.arrayBuffer());
-        const weeklySchedule = await parseTrainingPlanExcel(fileBuffer);
+        if (!downloadError && fileData) {
+          const fileBuffer = Buffer.from(await fileData.arrayBuffer());
+          const weeklySchedule = await parseTrainingPlanExcel(fileBuffer);
 
-        return NextResponse.json({
-          success: true,
-          currentWeek: weeklySchedule,
-          allWeeks: [weeklySchedule],
-          source: activePlan.filename,
-          lastUpdated: activePlan.uploaded_at
-        });
+          return NextResponse.json({
+            success: true,
+            currentWeek: weeklySchedule,
+            allWeeks: [weeklySchedule],
+            source: activePlan.filename,
+            lastUpdated: activePlan.uploaded_at
+          });
+        }
+      }
+    } catch (supabaseError) {
+      console.log('Supabase unavailable, trying local files...', supabaseError instanceof Error ? supabaseError.message : '');
+    }
+
+    // Fallback 1: Try to find locally stored training plans with metadata
+    const uploadsDir = path.join(process.cwd(), 'public', 'uploads', 'training-plans');
+    const metadataDir = path.join(process.cwd(), 'public', 'uploads', 'metadata');
+
+    console.log('Checking local uploads dir:', uploadsDir, 'exists:', fs.existsSync(uploadsDir));
+
+    if (fs.existsSync(uploadsDir)) {
+      const files = fs.readdirSync(uploadsDir).filter(f => f.endsWith('.xlsx') || f.endsWith('.xls'));
+      console.log('Found local training plan files:', files);
+
+      if (files.length > 0) {
+        // Use the most recently uploaded file (latest timestamp in filename)
+        const latestFile = files.sort().reverse()[0];
+        const localFilePath = path.join(uploadsDir, latestFile);
+        console.log('Using local training plan:', latestFile);
+
+        try {
+          // Try to read metadata to get explicit week number
+          let explicitWeekNumber: number | undefined;
+          if (fs.existsSync(metadataDir)) {
+            const metadataFiles = fs.readdirSync(metadataDir).filter(f => f.endsWith('.json'));
+            if (metadataFiles.length > 0) {
+              const latestMetadataFile = metadataFiles.sort().reverse()[0];
+              const metadataPath = path.join(metadataDir, latestMetadataFile);
+              const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
+              explicitWeekNumber = metadata.week_number;
+              console.log('Using week number from metadata:', explicitWeekNumber);
+            }
+          }
+
+          const fileBuffer = fs.readFileSync(localFilePath);
+          const weeklySchedule = await parseTrainingPlanExcel(fileBuffer, {
+            explicitWeekNumber
+          });
+
+          console.log('Successfully parsed local training plan. Week:', weeklySchedule.week);
+          return NextResponse.json({
+            success: true,
+            currentWeek: weeklySchedule,
+            allWeeks: [weeklySchedule],
+            source: latestFile,
+            lastUpdated: new Date().toISOString(),
+            stored_locally: true
+          });
+        } catch (parseError) {
+          console.error('Failed to parse locally stored training plan:', parseError instanceof Error ? parseError.message : String(parseError));
+          // Continue to next fallback
+        }
       }
     }
 
-    // Fallback: Try new Excel format from file system
-    const newExcelPath = path.join(process.cwd(), 'garmin-workouts/Scheduled-workouts/Week_13-19_Oct_2025_plan.xlsx');
-
-    if (fs.existsSync(newExcelPath)) {
-      const fileBuffer = fs.readFileSync(newExcelPath);
-      const weeklySchedule = await parseTrainingPlanExcel(fileBuffer);
-
-      return NextResponse.json({
-        success: true,
-        currentWeek: weeklySchedule,
-        allWeeks: [weeklySchedule],
-        source: 'week_13-19_oct_2025_plan (local file)',
-        lastUpdated: new Date().toISOString()
-      });
-    }
-
-    // Fallback to CSV format
+    // Fallback 2: Try CSV format
     const csvPath = path.join(process.cwd(), 'garmin-workouts/Scheduled-workouts/Everest_Base_Schedule-1.csv');
 
     if (!fs.existsSync(csvPath)) {

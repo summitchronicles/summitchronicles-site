@@ -3,7 +3,7 @@
  * Fetches activity data from Garmin Connect
  */
 
-import { getGarminTokens } from './garmin-oauth';
+import { makeGarminRequest } from './garmin-oauth-1.0a';
 
 const GARMIN_API_BASE = 'https://apis.garmin.com/wellness-api/rest';
 const GARMIN_CONNECT_BASE = 'https://connect.garmin.com/modern/proxy';
@@ -49,16 +49,9 @@ export async function fetchGarminActivities(
     endDate?: string;
   } = {}
 ): Promise<GarminActivitiesResponse> {
-  const tokens = await getGarminTokens(userId);
-
-  if (!tokens) {
-    throw new Error('No valid Garmin tokens found. Please reconnect your Garmin account.');
-  }
-
   const { limit = 20, start = 0 } = options;
 
-  // Garmin Connect uses different API endpoints
-  // Activities list endpoint
+  // Garmin Connect activities list endpoint
   const url = `${GARMIN_CONNECT_BASE}/activitylist-service/activities/search/activities`;
 
   const params = new URLSearchParams({
@@ -66,13 +59,8 @@ export async function fetchGarminActivities(
     limit: limit.toString()
   });
 
-  const response = await fetch(`${url}?${params}`, {
-    method: 'GET',
-    headers: {
-      'Authorization': `${tokens.token_type} ${tokens.access_token}`,
-      'Content-Type': 'application/json'
-    }
-  });
+  // Use OAuth 1.0a authenticated request
+  const response = await makeGarminRequest(`${url}?${params}`, 'GET', userId);
 
   if (!response.ok) {
     const error = await response.text();
@@ -94,21 +82,10 @@ export async function fetchGarminActivityDetails(
   userId: string,
   activityId: number
 ): Promise<GarminActivity> {
-  const tokens = await getGarminTokens(userId);
-
-  if (!tokens) {
-    throw new Error('No valid Garmin tokens found');
-  }
-
   const url = `${GARMIN_CONNECT_BASE}/activity-service/activity/${activityId}`;
 
-  const response = await fetch(url, {
-    method: 'GET',
-    headers: {
-      'Authorization': `${tokens.token_type} ${tokens.access_token}`,
-      'Content-Type': 'application/json'
-    }
-  });
+  // Use OAuth 1.0a authenticated request
+  const response = await makeGarminRequest(url, 'GET', userId);
 
   if (!response.ok) {
     throw new Error(`Failed to fetch activity details: ${response.status}`);

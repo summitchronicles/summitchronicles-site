@@ -197,171 +197,107 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
 
   return (
     <div className={`${className} bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden`}>
-      {/* Header with Compliance Dashboard */}
+      {/* Header */}
       <div className="p-6 border-b border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
             <Calendar className="w-6 h-6 text-white" />
             <h2 className="text-xl font-light tracking-wide text-white">
-              WEEKLY TRAINING TIMELINE
+              WEEK {weeklyData.week} TRAINING SCHEDULE
             </h2>
           </div>
 
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={loadWorkoutData}
-              className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              <RefreshCw className="w-4 h-4" />
-              <span>Refresh</span>
-            </button>
-          </div>
+          <button
+            onClick={loadWorkoutData}
+            className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+            <span>Refresh</span>
+          </button>
         </div>
 
-        {/* Week Info */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="space-y-2">
-            <div className="text-sm font-medium text-gray-400 uppercase tracking-wide">Training Phase</div>
-            <div className="text-white font-medium">Base Training</div>
-            <div className="text-sm text-gray-400">Foundation Building</div>
-          </div>
-
-          <div className="space-y-2">
-            <div className="text-sm font-medium text-gray-400 uppercase tracking-wide">Current Week</div>
-            <div className="text-white font-medium">Week {weeklyData.week}</div>
-            <div className="text-sm text-gray-400">
-              {new Date(weeklyData.startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} -
-              {' '}{new Date(new Date(weeklyData.startDate).getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-            </div>
-          </div>
+        {/* Week Date Range */}
+        <div className="text-sm text-gray-400">
+          {new Date(weeklyData.startDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric' })} - {new Date(new Date(weeklyData.startDate).getTime() + 6 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
         </div>
       </div>
 
-      {/* Timeline */}
+      {/* Weekly Grid */}
       <div className="p-6">
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
           {days.map((day, index) => {
             const workouts = weeklyData.workouts[day] || [];
-            const compliance = complianceData[day] || [];
-
-            // Determine if this is today
             const today = new Date();
             const todayDayName = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][today.getDay()];
             const isToday = day === todayDayName;
-
-            if (!workouts || workouts.length === 0) return null;
+            const hasWorkouts = workouts.length > 0;
 
             return (
               <motion.div
                 key={day}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="relative"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className={`rounded-lg border-2 overflow-hidden transition-all ${
+                  isToday
+                    ? 'border-blue-500 bg-blue-500/10 ring-2 ring-blue-400 ring-opacity-50'
+                    : hasWorkouts
+                    ? 'border-gray-700 bg-gray-800/50 hover:border-gray-600'
+                    : 'border-gray-700/50 bg-gray-900/30'
+                }`}
               >
                 {/* Day Header */}
-                <div className="flex items-center space-x-3 mb-3">
-                  <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wide">{day}</h3>
-                  {isToday && (
-                    <span className="px-2 py-1 bg-blue-500 text-white text-xs rounded-full">Today</span>
+                <div className={`px-4 py-3 border-b border-gray-700 ${isToday ? 'bg-blue-600/30' : 'bg-gray-800/30'}`}>
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold text-white text-sm">{day}</h3>
+                    {isToday && <span className="text-xs bg-blue-600 text-white px-2 py-0.5 rounded">Today</span>}
+                  </div>
+                </div>
+
+                {/* Workouts */}
+                <div className="p-3 space-y-2 min-h-[300px]">
+                  {hasWorkouts ? (
+                    workouts.map((workout) => {
+                      const colors = getWorkoutTypeColor(workout.type);
+                      return (
+                        <div key={workout.id} className={`p-3 rounded text-xs ${colors.bg} border ${colors.border}`}>
+                          <div className={`font-semibold ${colors.text} mb-1 line-clamp-2`}>
+                            {workout.title}
+                          </div>
+                          <div className="text-gray-300 space-y-1 text-xs">
+                            <div className="flex items-center space-x-1">
+                              <Clock className="w-3 h-3" />
+                              <span>{workout.duration} min</span>
+                            </div>
+                            <div className="flex items-center space-x-1 capitalize">
+                              {getIntensityIcon(workout.intensity)}
+                              <span>{workout.intensity}</span>
+                            </div>
+                            {workout.zones && workout.zones.length > 0 && (
+                              <div className="text-gray-400">
+                                {workout.zones.join(', ')}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="h-full flex items-center justify-center text-gray-500 text-xs">
+                      Rest Day
+                    </div>
                   )}
                 </div>
-
-                {/* Multiple Workouts */}
-                <div className="space-y-3 ml-4">
-                  {workouts.map((workout, workoutIndex) => {
-                    const workoutCompliance = compliance[workoutIndex] || { completed: false, durationMatch: 0, intensityMatch: 0 };
-                    const colors = getWorkoutTypeColor(workout.type);
-
-                    return (
-                      <div
-                        key={workout.id}
-                        className={`relative flex items-start space-x-4 p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-lg
-                          ${colors.bg} ${colors.border} ${isToday ? 'ring-2 ring-blue-400 ring-opacity-50' : ''}`}
-                      >
-                        {/* Timeline marker */}
-                        <div className="relative flex-shrink-0">
-                          <div className={`w-10 h-10 rounded-full border-2 flex items-center justify-center ${colors.border} ${colors.bg}`}>
-                            <Circle className="w-5 h-5 text-gray-400" />
-                          </div>
-                        </div>
-
-                        {/* Workout content */}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <h4 className={`text-lg font-medium mb-2 ${colors.text}`}>
-                                {workout.title}
-                              </h4>
-
-                              {/* Workout details */}
-                              <div className="flex items-center space-x-4 mb-3 text-sm">
-                                <div className="flex items-center space-x-1">
-                                  <Clock className="w-4 h-4 text-gray-400" />
-                                  <span className="text-white">{workout.duration} min</span>
-                                </div>
-
-                                <div className="flex items-center space-x-1">
-                                  {getIntensityIcon(workout.intensity)}
-                                  <span className="text-white capitalize">{workout.intensity}</span>
-                                </div>
-
-                                {workout.zones && workout.zones.length > 0 && (
-                                  <div className="flex items-center space-x-1">
-                                    <Zap className="w-4 h-4 text-yellow-400" />
-                                    <span className="text-white">{workout.zones.join(', ')}</span>
-                                  </div>
-                                )}
-                              </div>
-
-                              {/* Exercises */}
-                              {workout.exercises && workout.exercises.length > 0 && (
-                                <div className="mb-3">
-                                  <div className="text-xs text-gray-400 mb-1">Exercises:</div>
-                                  <div className="space-y-1">
-                                    {workout.exercises.slice(0, 2).map((exercise, idx) => (
-                                      <div key={idx} className="text-sm text-gray-300 pl-2 border-l-2 border-gray-600">
-                                        {exercise}
-                                      </div>
-                                    ))}
-                                    {workout.exercises.length > 2 && (
-                                      <div className="text-sm text-gray-400 pl-2">
-                                        +{workout.exercises.length - 2} more exercises
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-
-                            </div>
-
-                            {/* Status indicator */}
-                            <div className={`w-3 h-3 rounded-full ${colors.accent} flex-shrink-0 mt-1`} />
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-
-                {/* Connecting line to next day */}
-                {index < days.length - 1 && (
-                  <div className="absolute left-6 top-full w-0.5 h-4 bg-gray-600" />
-                )}
               </motion.div>
             );
           })}
         </div>
 
-        {/* Data source */}
-        <div className="mt-6 p-4 bg-gray-800/50 rounded-lg">
-          <div className="flex items-center space-x-2 text-sm">
+        {/* Summary */}
+        <div className="mt-6 p-4 bg-gray-800/50 rounded-lg border border-gray-700">
+          <div className="flex items-center space-x-2 text-sm text-gray-400">
             <Activity className="w-4 h-4 text-green-400" />
-            <span className="text-gray-400">
-              Training schedule from Everest Base Schedule •
-              Compliance data from Garmin Connect •
-              Updated: {new Date().toLocaleTimeString()}
-            </span>
+            <span>{Object.values(weeklyData.workouts).flat().length} workouts planned • Updated {new Date().toLocaleTimeString()}</span>
           </div>
         </div>
       </div>

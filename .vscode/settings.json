@@ -37,5 +37,6 @@
   "git.enableSmartCommit": true,
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+  "kiroAgent.configureMCP": "Disabled"
 }

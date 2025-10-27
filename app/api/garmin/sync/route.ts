@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchGarminActivities, transformGarminActivity } from '@/lib/integrations/garmin-api';
-import { isGarminConnected } from '@/lib/integrations/garmin-oauth';
+import { isGarminConnected } from '@/lib/integrations/garmin-oauth-1.0a';
 import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';

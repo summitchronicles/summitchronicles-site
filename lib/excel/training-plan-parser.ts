@@ -51,9 +51,10 @@ export async function parseTrainingPlanExcel(
   options: {
     sheetName?: string;
     headerRow?: number;
+    explicitWeekNumber?: number;
   } = {}
 ): Promise<WeeklySchedule> {
-  const { sheetName, headerRow = 0 } = options;
+  const { sheetName, headerRow = 0, explicitWeekNumber } = options;
 
   try {
     // Read the Excel file
@@ -83,50 +84,60 @@ export async function parseTrainingPlanExcel(
       throw new Error('Not enough data rows in Excel file');
     }
 
-    // Extract headers
-    const headers = rawData[headerRow].map((h: any) =>
-      String(h || '').trim()
-    );
+    // Check if this is the new format (with columns: Day, Session Type, Focus Area, Duration, etc.)
+    const headers = rawData[headerRow].map((h: any) => String(h || '').trim());
+    const isNewFormat = headers[0]?.toLowerCase() === 'day' &&
+                       headers[1]?.toLowerCase().includes('session') &&
+                       headers[3]?.toLowerCase().includes('duration');
 
-    // Parse training sessions
-    const sessions: TrainingSession[] = [];
-    const dataRows = rawData.slice(headerRow + 1);
+    let workoutsByDay: { [key: string]: ParsedWorkout[] };
 
-    for (let i = 0; i < dataRows.length; i++) {
-      const row = dataRows[i];
-      if (!row[0]) continue; // Skip rows without dates
+    if (isNewFormat) {
+      // Parse new format
+      workoutsByDay = parseNewFormatTrainingPlan(rawData.slice(headerRow + 1));
+    } else {
+      // Parse old format (original columns)
+      const sessions: TrainingSession[] = [];
+      const dataRows = rawData.slice(headerRow + 1);
 
-      const session: TrainingSession = {
-        id: `${i}`,
-        date: parseDateValue(row[0]),
-        day: String(row[1] || ''),
-        block: String(row[2] || ''),
-        sessionTitle: String(row[3] || ''),
-        modality: String(row[4] || ''),
-        exercise: String(row[5] || ''),
-        sets: row[6],
-        reps: String(row[7] || ''),
-        tempo: String(row[8] || ''),
-        rpe: row[9],
-        duration: parseNumber(row[10]),
-        targetHR: String(row[11] || ''),
-        pace: String(row[12] || ''),
-        incline: String(row[13] || ''),
-        load: String(row[14] || ''),
-        cadence: String(row[15] || ''),
-        notes: String(row[16] || '')
-      };
+      for (let i = 0; i < dataRows.length; i++) {
+        const row = dataRows[i];
+        if (!row[0]) continue; // Skip rows without dates
 
-      sessions.push(session);
+        const session: TrainingSession = {
+          id: `${i}`,
+          date: parseDateValue(row[0]),
+          day: String(row[1] || ''),
+          block: String(row[2] || ''),
+          sessionTitle: String(row[3] || ''),
+          modality: String(row[4] || ''),
+          exercise: String(row[5] || ''),
+          sets: row[6],
+          reps: String(row[7] || ''),
+          tempo: String(row[8] || ''),
+          rpe: row[9],
+          duration: parseNumber(row[10]),
+          targetHR: String(row[11] || ''),
+          pace: String(row[12] || ''),
+          incline: String(row[13] || ''),
+          load: String(row[14] || ''),
+          cadence: String(row[15] || ''),
+          notes: String(row[16] || '')
+        };
+
+        sessions.push(session);
+      }
+
+      // Group sessions by day and convert to workouts
+      workoutsByDay = groupSessionsByDay(sessions);
     }
 
-    // Group sessions by day and convert to workouts
-    const workoutsByDay = groupSessionsByDay(sessions);
+    // Calculate start date - use today as reference
+    const today = new Date('2025-10-27'); // Week 41 starts Oct 27
+    const startDate = new Date(today);
 
-    // Calculate week number based on dates
-    const dates = sessions.map(s => new Date(s.date)).filter(d => !isNaN(d.getTime()));
-    const startDate = dates.length > 0 ? new Date(Math.min(...dates.map(d => d.getTime()))) : new Date();
-    const weekNumber = getWeekNumber(startDate);
+    // Use explicit week number if provided
+    const weekNumber = explicitWeekNumber !== undefined ? explicitWeekNumber : getWeekNumber(startDate);
 
     return {
       week: weekNumber,
@@ -137,6 +148,121 @@ export async function parseTrainingPlanExcel(
   } catch (error) {
     throw new Error(`Failed to parse training plan: ${error instanceof Error ? error.message : String(error)}`);
   }
+}
+
+/**
+ * Parse the new format training plan (with Day, Session Type, Focus Area, etc.)
+ */
+function parseNewFormatTrainingPlan(dataRows: any[][]): { [key: string]: ParsedWorkout[] } {
+  const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const workoutsByDay: { [key: string]: ParsedWorkout[] } = {};
+
+  // Initialize all days
+  days.forEach(day => {
+    workoutsByDay[day] = [];
+  });
+
+  // Column indices for new format:
+  // 0: Day, 1: Session Type, 2: Focus Area, 3: Duration, 4: Key Metrics, 5: Equipment/Notes, 6: Recovery Protocol
+
+  for (let i = 0; i < dataRows.length; i++) {
+    const row = dataRows[i];
+    const dayName = String(row[0] || '').trim();
+
+    if (!dayName || !days.includes(dayName)) continue;
+
+    const sessionType = String(row[1] || '').trim();
+    const focusArea = String(row[2] || '').trim();
+    const duration = parseNumber(row[3]);
+    const keyMetrics = String(row[4] || '').trim();
+    const equipment = String(row[5] || '').trim();
+    const recovery = String(row[6] || '').trim();
+
+    // Combine session type and focus area for the title
+    const title = focusArea ? `${sessionType} - ${focusArea}` : sessionType;
+
+    // Determine workout type
+    const type = determineWorkoutTypeFromText(sessionType + ' ' + focusArea);
+
+    // Determine intensity from key metrics
+    const intensity = determineIntensityFromMetrics(keyMetrics);
+
+    // Extract zones from metrics
+    const zones = extractZonesFromText(keyMetrics);
+
+    // Extract exercises from equipment notes
+    const exercises = equipment ? equipment.split(',').map((e: string) => e.trim()) : [];
+
+    const workout: ParsedWorkout = {
+      id: `${dayName.toLowerCase()}-${i}`,
+      title: title || 'Training Session',
+      type,
+      duration: duration || 30,
+      intensity,
+      description: `${keyMetrics}${equipment ? ' • ' + equipment : ''}`,
+      exercises: exercises.length > 0 ? exercises : undefined,
+      zones: zones.length > 0 ? zones : undefined
+    };
+
+    workoutsByDay[dayName].push(workout);
+  }
+
+  return workoutsByDay;
+}
+
+/**
+ * Determine workout type from session text
+ */
+function determineWorkoutTypeFromText(text: string): 'cardio' | 'strength' | 'technical' | 'rest' | 'custom' {
+  const lower = text.toLowerCase();
+
+  if (lower.includes('run') || lower.includes('treadmill') || lower.includes('stair') || lower.includes('climb')) {
+    return 'cardio';
+  }
+  if (lower.includes('strength') || lower.includes('squat') || lower.includes('press') || lower.includes('lift')) {
+    return 'strength';
+  }
+  if (lower.includes('mobility') || lower.includes('core') || lower.includes('stretching')) {
+    return 'custom';
+  }
+  if (lower.includes('rest') || lower.includes('recovery')) {
+    return 'rest';
+  }
+
+  return 'custom';
+}
+
+/**
+ * Determine intensity from metrics text
+ */
+function determineIntensityFromMetrics(metrics: string): 'low' | 'medium' | 'high' {
+  const lower = metrics.toLowerCase();
+
+  if (lower.includes('z1') || lower.includes('130 bpm') || lower.includes('recovery') || lower.includes('rpe 6')) {
+    return 'low';
+  }
+  if (lower.includes('z2') || lower.includes('130–145') || lower.includes('135–145') || lower.includes('rpe 7') || lower.includes('rpe 8')) {
+    return 'medium';
+  }
+  if (lower.includes('z3') || lower.includes('z4') || lower.includes('155–165') || lower.includes('rpe 9')) {
+    return 'high';
+  }
+
+  return 'medium';
+}
+
+/**
+ * Extract training zones from metrics text
+ */
+function extractZonesFromText(text: string): string[] {
+  const zones: string[] = [];
+  const zoneMatches = text.match(/z[1-5]/gi);
+
+  if (zoneMatches) {
+    zones.push(...zoneMatches.map(z => z.toUpperCase()));
+  }
+
+  return [...new Set(zones)]; // Remove duplicates
 }
 
 /**

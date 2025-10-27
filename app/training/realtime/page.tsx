@@ -272,8 +272,7 @@ export default function OptimizedRealtimePage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-black text-white">
-
+      <div className="min-h-screen bg-black text-white pt-24">
 
       {/* Error Banner */}
       {error && (
@@ -286,7 +285,7 @@ export default function OptimizedRealtimePage() {
       )}
 
       {/* Main Dashboard */}
-      <div className="max-w-6xl mx-auto px-6 py-12 mt-8">
+      <div className="max-w-6xl mx-auto px-6 py-12">
 
         {/* Dashboard Sections */}
         <div className="space-y-6">

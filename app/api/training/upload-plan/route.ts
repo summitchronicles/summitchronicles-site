@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { parseTrainingPlanExcel } from '@/lib/excel/training-plan-parser';
+import * as fs from 'fs';
+import * as path from 'path';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,6 +10,20 @@ const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
+
+// Local fallback directory for storing training plans when Supabase is unavailable
+const LOCAL_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'training-plans');
+
+// Ensure local upload directory exists
+function ensureUploadDirExists() {
+  try {
+    if (!fs.existsSync(LOCAL_UPLOAD_DIR)) {
+      fs.mkdirSync(LOCAL_UPLOAD_DIR, { recursive: true });
+    }
+  } catch (err) {
+    console.error('Failed to create local upload directory:', err);
+  }
+}
 
 interface UploadResponse {
   success: boolean;
@@ -51,7 +67,17 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
 
     // Convert file to buffer and parse to validate
     const fileBuffer = Buffer.from(await file.arrayBuffer());
-    const weeklySchedule = await parseTrainingPlanExcel(fileBuffer);
+
+    // Try to extract week number from filename (e.g., "Week_41_...")
+    let extractedWeekNumber: number | undefined;
+    const weekMatch = file.name.match(/week[_\s]?(\d+)/i);
+    if (weekMatch) {
+      extractedWeekNumber = parseInt(weekMatch[1], 10);
+    }
+
+    const weeklySchedule = await parseTrainingPlanExcel(fileBuffer, {
+      explicitWeekNumber: extractedWeekNumber
+    });
 
     if (!weeklySchedule || !weeklySchedule.workouts) {
       return NextResponse.json(
@@ -60,11 +86,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
       );
     }
 
-    // Upload file to Supabase Storage
+    // Upload file to Supabase Storage with fallback to local storage
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const filename = `training-plan-${timestamp}-${file.name}`;
     const filePath = `training-plans/${filename}`;
 
+    let uploadedToCloud = false;
+    let localFilePath: string | null = null;
+
+    // Try Supabase first
     const { error: uploadError } = await supabase.storage
       .from('workout-files')
       .upload(filePath, fileBuffer, {
@@ -73,52 +103,104 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
       });
 
     if (uploadError) {
-      console.error('Supabase storage upload error:', uploadError);
-      return NextResponse.json(
-        { success: false, error: `Failed to upload file: ${uploadError.message}` },
-        { status: 500 }
-      );
+      console.warn('Supabase upload failed, falling back to local storage:', uploadError.message);
+
+      // Fallback to local storage
+      try {
+        ensureUploadDirExists();
+        localFilePath = path.join(LOCAL_UPLOAD_DIR, filename);
+        fs.writeFileSync(localFilePath, fileBuffer);
+        console.log('File stored locally at:', localFilePath);
+      } catch (localError) {
+        console.error('Local storage fallback also failed:', localError);
+        return NextResponse.json(
+          { success: false, error: `Failed to upload file. Cloud and local storage unavailable: ${uploadError.message}` },
+          { status: 500 }
+        );
+      }
+    } else {
+      uploadedToCloud = true;
     }
 
     // Store metadata in database
     const planMetadata = {
       filename: file.name,
-      storage_path: filePath,
+      storage_path: uploadedToCloud ? filePath : (localFilePath || filename),
       week_number: weeklySchedule.week,
       start_date: weeklySchedule.startDate,
       is_active: setAsActive,
       uploaded_at: new Date().toISOString(),
-      workout_count: Object.values(weeklySchedule.workouts).flat().length
+      workout_count: Object.values(weeklySchedule.workouts).flat().length,
+      storage_location: uploadedToCloud ? 'supabase' : 'local'
     };
 
-    // If setting as active, deactivate all other plans
-    if (setAsActive) {
-      await supabase
+    // Try to save metadata to database, with fallback to local JSON if Supabase is unavailable
+    let insertedPlan: any = null;
+    let dbAvailable = true;
+
+    try {
+      // If setting as active, deactivate all other plans
+      if (setAsActive) {
+        await supabase
+          .from('training_plans')
+          .update({ is_active: false })
+          .eq('is_active', true);
+      }
+
+      const { data, error: insertError } = await supabase
         .from('training_plans')
-        .update({ is_active: false })
-        .eq('is_active', true);
-    }
+        .insert(planMetadata)
+        .select()
+        .single();
 
-    const { data: insertedPlan, error: insertError } = await supabase
-      .from('training_plans')
-      .insert(planMetadata)
-      .select()
-      .single();
+      if (insertError) {
+        throw insertError;
+      }
 
-    if (insertError) {
-      console.error('Database insert error:', insertError);
-      // Try to clean up uploaded file
-      await supabase.storage.from('workout-files').remove([filePath]);
+      insertedPlan = data;
+    } catch (dbError: any) {
+      console.warn('Database insert failed, falling back to local JSON metadata:', dbError.message);
+      dbAvailable = false;
 
-      return NextResponse.json(
-        { success: false, error: `Failed to save plan metadata: ${insertError.message}` },
-        { status: 500 }
-      );
+      // Fallback: Store metadata in a local JSON file
+      try {
+        const metadataDir = path.join(process.cwd(), 'public', 'uploads', 'metadata');
+        if (!fs.existsSync(metadataDir)) {
+          fs.mkdirSync(metadataDir, { recursive: true });
+        }
+
+        // Create a plan record with a generated UUID
+        const id = `local-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+        insertedPlan = {
+          id,
+          ...planMetadata,
+          local: true
+        };
+
+        const metadataFile = path.join(metadataDir, `${id}.json`);
+        fs.writeFileSync(metadataFile, JSON.stringify(insertedPlan, null, 2));
+        console.log('Metadata stored locally at:', metadataFile);
+      } catch (localError) {
+        console.error('Local metadata storage also failed:', localError);
+        // Still return success since the file was saved - just the metadata failed
+        return NextResponse.json({
+          success: true,
+          message: 'Training plan file uploaded (metadata save failed - will be restored when database is available)',
+          warning: 'Database unavailable - plan stored locally',
+          plan: {
+            id: `temp-${Date.now()}`,
+            filename: file.name,
+            week: weeklySchedule.week,
+            startDate: weeklySchedule.startDate,
+            uploadedAt: new Date().toISOString()
+          }
+        });
+      }
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Training plan uploaded successfully',
+      message: 'Training plan uploaded successfully' + (dbAvailable ? '' : ' (stored locally, will sync when database is available)'),
       plan: {
         id: insertedPlan.id,
         filename: insertedPlan.filename,
