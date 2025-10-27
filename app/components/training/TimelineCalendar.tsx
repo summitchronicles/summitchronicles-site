@@ -60,16 +60,25 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
   const [weeklyData, setWeeklyData] = useState<WeeklySchedule | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentWeek, setCurrentWeek] = useState(1);
+  const [currentWeek, setCurrentWeek] = useState<number | null>(null);
+  const [allWeeksData, setAllWeeksData] = useState<WeeklySchedule[]>([]);
 
   // Compliance data - will be populated from Garmin Connect in future
   const [complianceData, setComplianceData] = useState<ComplianceData>({});
 
+  // Initialize with API's current week on first load
   useEffect(() => {
-    loadWorkoutData();
+    loadInitialData();
+  }, []);
+
+  // Load workout data when week changes
+  useEffect(() => {
+    if (currentWeek !== null) {
+      loadWorkoutData(currentWeek);
+    }
   }, [currentWeek]);
 
-  const loadWorkoutData = async () => {
+  const loadInitialData = async () => {
     try {
       setLoading(true);
       setError(null);
@@ -85,12 +94,48 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
 
       const data = await response.json();
       setWeeklyData(data.currentWeek);
+      setAllWeeksData(data.allWeeks || [data.currentWeek]);
+      setCurrentWeek(data.currentWeek.week);
 
     } catch (err) {
       console.error('Error loading workout data:', err);
       setError('Failed to load workout schedule');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadWorkoutData = async (week: number) => {
+    try {
+      setError(null);
+
+      const response = await fetch(`/api/training/workouts?week=${week}`, {
+        cache: 'no-store',
+        headers: { 'Cache-Control': 'no-cache' }
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch workout data');
+      }
+
+      const data = await response.json();
+      setWeeklyData(data.currentWeek);
+
+    } catch (err) {
+      console.error('Error loading workout data:', err);
+      setError('Failed to load workout schedule');
+    }
+  };
+
+  const goToPreviousWeek = () => {
+    if (currentWeek && currentWeek > 1) {
+      setCurrentWeek(currentWeek - 1);
+    }
+  };
+
+  const goToNextWeek = () => {
+    if (currentWeek) {
+      setCurrentWeek(currentWeek + 1);
     }
   };
 
@@ -207,13 +252,32 @@ export function TimelineCalendar({ className = '' }: TimelineCalendarProps) {
             </h2>
           </div>
 
-          <button
-            onClick={loadWorkoutData}
-            className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <RefreshCw className="w-4 h-4" />
-            <span>Refresh</span>
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={goToPreviousWeek}
+              disabled={currentWeek === 1}
+              className="flex items-center justify-center p-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              title="Previous week"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={goToNextWeek}
+              className="flex items-center justify-center p-2 bg-gray-700 text-white rounded-lg hover:bg-gray-600 transition-colors"
+              title="Next week"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            <button
+              onClick={loadInitialData}
+              className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              <span>Refresh</span>
+            </button>
+          </div>
         </div>
 
         {/* Week Date Range */}

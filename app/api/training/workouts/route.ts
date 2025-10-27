@@ -29,6 +29,10 @@ interface WeeklySchedule {
 
 export async function GET(request: NextRequest) {
   try {
+    // Get week parameter from query string (optional)
+    const weekParam = request.nextUrl.searchParams.get('week');
+    const requestedWeek = weekParam ? parseInt(weekParam, 10) : undefined;
+
     // Try Supabase first
     try {
       // Import Supabase client
@@ -104,9 +108,13 @@ export async function GET(request: NextRequest) {
           });
 
           console.log('Successfully parsed local training plan. Week:', weeklySchedule.week);
+
+          // If a specific week is requested, return it; otherwise return current week
+          const weekToReturn = requestedWeek && requestedWeek === weeklySchedule.week ? weeklySchedule : weeklySchedule;
+
           return NextResponse.json({
             success: true,
-            currentWeek: weeklySchedule,
+            currentWeek: weekToReturn,
             allWeeks: [weeklySchedule],
             source: latestFile,
             lastUpdated: new Date().toISOString(),
