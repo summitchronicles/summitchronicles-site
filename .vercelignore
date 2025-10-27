@@ -1,0 +1,13 @@
+.git
+.next
+node_modules
+*.log
+.env.local
+.env.example
+.DS_Store
+coverage
+dist
+build
+.turbo
+.vercel
+bmad-method
