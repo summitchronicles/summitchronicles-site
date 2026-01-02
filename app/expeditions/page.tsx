@@ -50,7 +50,7 @@ export default function ExpeditionsPage() {
       date: 'March 2027',
       year: '2027',
       status: 'in-progress',
-      image: '/stories/everest-prep.jpeg',
+      image: '/images/sunith-everest-vision.png',
       story: 'The ultimate challenge. Everything has led to this moment. Thirteen years of preparation, systematic training, and community support converge at the roof of the world.',
       stats: {
         duration: '60 days',
@@ -67,7 +67,7 @@ export default function ExpeditionsPage() {
       date: 'June 2025',
       year: '2025',
       status: 'completed',
-      image: '/stories/data-training.jpg',
+      image: '/images/sunith-ascent-hero.png',
       story: 'Latest Seven Summits achievement. Technical glacier travel and extreme conditions. Three weeks testing every skill learned so far.',
       stats: {
         duration: '21 days',
@@ -84,8 +84,8 @@ export default function ExpeditionsPage() {
       date: 'August 2024',
       year: '2024',
       status: 'completed',
-      image: '/stories/everest-prep.jpeg',
-      story: 'European summit in extreme cold conditions. Mastering cold weather mountaineering and building mental resilience for the Seven Summits challenge.',
+      image: '/images/sunith-aconcagua.jpg',
+      story: 'High altitude endurance test in the Andes. Battling 60mph winds and extreme dry cold to reach the roof of South America.',
       stats: {
         duration: '7 days',
         difficulty: 'Winter',

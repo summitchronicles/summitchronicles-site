@@ -26,7 +26,7 @@ export default function Home() {
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
-              src="/hero.jpg"
+              src="/images/sunith-home-hero.jpg"
               alt="Summit Chronicles - Seven Summits Journey"
               fill
               className="object-cover"

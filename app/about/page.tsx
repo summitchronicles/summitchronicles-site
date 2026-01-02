@@ -18,8 +18,8 @@ export default function AboutPage() {
       <section className="relative h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
             <Image
-                src="/stories/kilimanjaro.jpg"
-                alt="The Ascent Begins"
+                src="/images/sunith-summit-hero.png"
+                alt="Sunith Kumar on a Himalayan Summit"
                 fill
                 className="object-cover opacity-60 grayscale scale-110"
                 priority

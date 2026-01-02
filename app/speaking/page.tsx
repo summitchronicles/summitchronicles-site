@@ -2,6 +2,7 @@
 
 import { Header } from '../components/organisms/Header';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { Calendar, Users, Presentation, CheckCircle, MapPin, Clock } from 'lucide-react';
 
 export default function SpeakingPage() {
@@ -15,7 +16,7 @@ export default function SpeakingPage() {
     {
       title: "Failure as Foundation",
       description: "Transforming setbacks into systematic preparation for extraordinary results.",
-      duration: "30-45 minutes", 
+      duration: "30-45 minutes",
       audience: "Entrepreneurship, Personal development, Teams"
     },
     {
@@ -34,7 +35,7 @@ export default function SpeakingPage() {
     },
     {
       quote: "A compelling story of how methodical preparation can achieve extraordinary results.",
-      author: "Dr. Michael Rodriguez", 
+      author: "Dr. Michael Rodriguez",
       title: "University of Washington"
     }
   ];
@@ -42,21 +43,33 @@ export default function SpeakingPage() {
   return (
     <div className="min-h-screen bg-spa-stone-50">
       <Header />
-      
+
       <div className="pt-20">
         {/* Hero Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-4xl mx-auto px-6 text-center">
+        {/* Hero Section */}
+        <section className="relative h-[60vh] flex items-center justify-center overflow-hidden bg-black">
+          <div className="absolute inset-0 z-0">
+            <Image
+              src="/images/sunith-visionary-planning.png"
+              alt="Sunith Kumar - Visionary Strategy"
+              fill
+              className="object-cover opacity-90"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/40 to-black/80"></div>
+          </div>
+
+          <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-4xl md:text-5xl font-light tracking-wide mb-6 text-spa-charcoal">
+              <h1 className="text-4xl md:text-5xl font-light tracking-wide mb-6 text-white drop-shadow-lg">
                 Speaking Engagements
               </h1>
-              <p className="text-xl text-spa-slate leading-relaxed max-w-2xl mx-auto">
-                Bringing lessons from extreme mountaineering to inspire systematic approaches 
+              <p className="text-xl text-gray-200 leading-relaxed max-w-2xl mx-auto font-light drop-shadow-md">
+                Bringing lessons from extreme mountaineering to inspire systematic approaches
                 to impossible goals in business and personal achievement.
               </p>
             </motion.div>
@@ -69,7 +82,7 @@ export default function SpeakingPage() {
             <h2 className="text-3xl font-light text-spa-charcoal mb-12 text-center">
               Speaking Topics
             </h2>
-            
+
             <div className="space-y-8">
               {topics.map((topic, index) => (
                 <motion.div
@@ -114,7 +127,7 @@ export default function SpeakingPage() {
             <h2 className="text-3xl font-light text-spa-charcoal mb-12 text-center">
               What's Included
             </h2>
-            
+
             <div className="grid md:grid-cols-2 gap-8">
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
@@ -130,7 +143,7 @@ export default function SpeakingPage() {
                     <p className="text-spa-slate text-sm">Tailored content specific to your audience and objectives</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 text-alpine-blue mt-1" />
                   <div>
@@ -138,7 +151,7 @@ export default function SpeakingPage() {
                     <p className="text-spa-slate text-sm">High-impact expedition photography and data visualizations</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 text-alpine-blue mt-1" />
                   <div>
@@ -147,7 +160,7 @@ export default function SpeakingPage() {
                   </div>
                 </div>
               </motion.div>
-              
+
               <motion.div
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -162,7 +175,7 @@ export default function SpeakingPage() {
                     <p className="text-spa-slate text-sm">Discussion to align presentation with your event goals</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 text-alpine-blue mt-1" />
                   <div>
@@ -170,7 +183,7 @@ export default function SpeakingPage() {
                     <p className="text-spa-slate text-sm">Downloadable frameworks and expedition insights</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="w-6 h-6 text-alpine-blue mt-1" />
                   <div>
@@ -189,7 +202,7 @@ export default function SpeakingPage() {
             <h2 className="text-3xl font-light text-spa-charcoal mb-12 text-center">
               What Audiences Say
             </h2>
-            
+
             <div className="grid md:grid-cols-2 gap-8">
               {testimonials.map((testimonial, index) => (
                 <motion.div

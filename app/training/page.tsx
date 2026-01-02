@@ -245,10 +245,10 @@ export default function TrainingPage() {
       <section className="relative h-96 flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/stories/data-training.jpg"
+            src="/images/sunith-grit-training.png"
             alt="Training for Everest Expedition"
             fill
-            className="object-cover opacity-60 grayscale scale-105"
+            className="object-cover opacity-80 scale-105"
             sizes="100vw"
             priority
           />
