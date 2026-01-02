@@ -153,7 +153,7 @@ export default function AboutPage() {
             </h2>
             <div className="h-px w-24 bg-white/30 mx-auto mb-10"></div>
 
-            <div className="bg-white/5 border border-white/10 rounded-2xl p-8 max-w-3xl mx-auto">
+            <div className="bg-black/20 border border-gray-800 rounded-2xl p-8 max-w-3xl mx-auto backdrop-blur-sm">
               <h3 className="text-xl font-light text-summit-gold mb-6">The Path Back (Current Focus)</h3>
               <div className="grid gap-6 text-left">
                 <div className="flex items-start space-x-4">
@@ -171,7 +171,7 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
-                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-summit-gold font-bold">3</div>
+                  <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center flex-shrink-0 text-summit-gold font-bold border border-gray-700">3</div>
                   <div>
                     <h4 className="font-medium text-white mb-1">Everest in 2028</h4>
                     <p className="text-gray-400 text-sm">The ultimate return. Targeted for the Spring 2028 window.</p>
