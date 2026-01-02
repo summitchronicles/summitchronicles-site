@@ -2,10 +2,10 @@ import { test, expect } from '@playwright/test';
 
 /**
  * Comprehensive UI/UX Analysis Suite
- * 
+ *
  * This test suite specifically analyzes UI/UX issues including:
  * - White space and layout problems
- * - Readability and spacing issues  
+ * - Readability and spacing issues
  * - Mobile-specific design problems
  * - Content alignment and flow
  */
@@ -19,9 +19,9 @@ const PAGES_TO_ANALYZE = [
 ];
 
 test.describe('UI/UX Analysis Suite', () => {
-  
+
   test.describe('White Space and Layout Analysis', () => {
-    
+
     test('Analyze Stories/Blog page white space issues', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
       await page.goto('/blog');
@@ -33,21 +33,21 @@ test.describe('UI/UX Analysis Suite', () => {
       const layoutAnalysis = await page.evaluate(() => {
         const body = document.body;
         const html = document.documentElement;
-        
+
         const pageHeight = Math.max(
           body.scrollHeight, body.offsetHeight,
           html.clientHeight, html.scrollHeight, html.offsetHeight
         );
-        
+
         const viewportHeight = window.innerHeight;
         const contentSections = Array.from(document.querySelectorAll('section, main, .container'));
-        
+
         // Analyze each section for empty space
         const sectionAnalysis = contentSections.map(section => {
           const rect = section.getBoundingClientRect();
           const styles = window.getComputedStyle(section);
           const isEmpty = section.textContent?.trim().length === 0;
-          
+
           return {
             tagName: section.tagName,
             className: section.className,
@@ -61,13 +61,13 @@ test.describe('UI/UX Analysis Suite', () => {
             hasChildren: section.children.length > 0
           };
         });
-        
+
         // Find sections with excessive white space
         const excessiveWhiteSpace = sectionAnalysis.filter(section => {
           const totalSpacing = section.paddingTop + section.paddingBottom + section.marginTop + section.marginBottom;
           return totalSpacing > 200 || (section.height > 300 && section.textLength < 50);
         });
-        
+
         return {
           pageHeight,
           viewportHeight,
@@ -78,17 +78,17 @@ test.describe('UI/UX Analysis Suite', () => {
       });
 
       console.log('📊 Stories Page Layout Analysis:', layoutAnalysis);
-      
+
       // Check for excessive white space at bottom
       const bottomWhiteSpace = await page.evaluate(() => {
         const body = document.body;
         const lastElement = body.lastElementChild;
         if (!lastElement) return { hasIssue: false };
-        
+
         const lastElementRect = lastElement.getBoundingClientRect();
         const bodyHeight = body.scrollHeight;
         const bottomSpace = bodyHeight - (lastElementRect.bottom + window.scrollY);
-        
+
         return {
           hasIssue: bottomSpace > 200,
           bottomSpace,
@@ -96,9 +96,9 @@ test.describe('UI/UX Analysis Suite', () => {
           lastElementBottom: lastElementRect.bottom + window.scrollY
         };
       });
-      
+
       console.log('📏 Bottom White Space Analysis:', bottomWhiteSpace);
-      
+
       // Log issues found
       if (layoutAnalysis.excessiveWhiteSpace.length > 0) {
         console.log('⚠️ EXCESSIVE WHITE SPACE FOUND:');
@@ -106,11 +106,11 @@ test.describe('UI/UX Analysis Suite', () => {
           console.log(`  - ${section.tagName}.${section.className}: ${section.height}px height, spacing: ${section.paddingTop + section.paddingBottom + section.marginTop + section.marginBottom}px`);
         });
       }
-      
+
       if (bottomWhiteSpace.hasIssue) {
         console.log(`⚠️ BOTTOM WHITE SPACE ISSUE: ${bottomWhiteSpace.bottomSpace}px excessive space at bottom`);
       }
-      
+
       expect(layoutAnalysis.totalSections).toBeGreaterThan(0);
     });
 
@@ -130,13 +130,14 @@ test.describe('UI/UX Analysis Suite', () => {
           issue?: string,
           text?: string,
           ratio?: number,
-          width?: number
+          width?: number,
+          height?: number
         }> = [];
-        
+
         // Check text contrast and readability
         const textElements = Array.from(document.querySelectorAll('p, h1, h2, h3, h4, h5, h6, span, div'))
           .filter(el => el.textContent && el.textContent.trim().length > 10);
-        
+
         textElements.forEach(el => {
           const styles = window.getComputedStyle(el);
           const fontSize = parseFloat(styles.fontSize);
@@ -144,7 +145,7 @@ test.describe('UI/UX Analysis Suite', () => {
           const color = styles.color;
           const backgroundColor = styles.backgroundColor;
           const rect = el.getBoundingClientRect();
-          
+
           // Check font size
           if (fontSize < 14) {
             issues.push({
@@ -154,7 +155,7 @@ test.describe('UI/UX Analysis Suite', () => {
               text: el.textContent?.substring(0, 50) + '...'
             });
           }
-          
+
           // Check line height for readability
           if (lineHeight < fontSize * 1.2) {
             issues.push({
@@ -165,7 +166,7 @@ test.describe('UI/UX Analysis Suite', () => {
               ratio: lineHeight / fontSize
             });
           }
-          
+
           // Check for text overlapping issues
           if (rect.width === 0 || rect.height === 0) {
             issues.push({
@@ -176,19 +177,19 @@ test.describe('UI/UX Analysis Suite', () => {
             });
           }
         });
-        
+
         // Check spacing between sections
         const sections = Array.from(document.querySelectorAll('section'));
         const spacingIssues = [];
-        
+
         for (let i = 0; i < sections.length - 1; i++) {
           const current = sections[i];
           const next = sections[i + 1];
-          
+
           const currentRect = current.getBoundingClientRect();
           const nextRect = next.getBoundingClientRect();
           const gap = nextRect.top - currentRect.bottom;
-          
+
           if (gap < 20) {
             spacingIssues.push({
               type: 'insufficient-spacing',
@@ -205,7 +206,7 @@ test.describe('UI/UX Analysis Suite', () => {
             });
           }
         }
-        
+
         // Check for overlapping elements
         const overlappingElements = [];
         const allVisibleElements = Array.from(document.querySelectorAll('*'))
@@ -214,24 +215,24 @@ test.describe('UI/UX Analysis Suite', () => {
             return rect.width > 0 && rect.height > 0;
           })
           .slice(0, 50); // Limit to prevent performance issues
-        
+
         for (let i = 0; i < allVisibleElements.length; i++) {
           for (let j = i + 1; j < allVisibleElements.length; j++) {
             const el1 = allVisibleElements[i];
             const el2 = allVisibleElements[j];
-            
+
             // Skip if one is a child of the other
             if (el1.contains(el2) || el2.contains(el1)) continue;
-            
+
             const rect1 = el1.getBoundingClientRect();
             const rect2 = el2.getBoundingClientRect();
-            
+
             // Check if rectangles overlap
-            const overlap = !(rect1.right < rect2.left || 
-                            rect2.right < rect1.left || 
-                            rect1.bottom < rect2.top || 
+            const overlap = !(rect1.right < rect2.left ||
+                            rect2.right < rect1.left ||
+                            rect1.bottom < rect2.top ||
                             rect2.bottom < rect1.top);
-            
+
             if (overlap) {
               overlappingElements.push({
                 element1: el1.tagName + (el1.className ? '.' + el1.className.split(' ')[0] : ''),
@@ -244,7 +245,7 @@ test.describe('UI/UX Analysis Suite', () => {
             }
           }
         }
-        
+
         return {
           textIssues: issues,
           spacingIssues,
@@ -256,34 +257,34 @@ test.describe('UI/UX Analysis Suite', () => {
       console.log('  Text Issues:', readabilityAnalysis.textIssues.length);
       console.log('  Spacing Issues:', readabilityAnalysis.spacingIssues.length);
       console.log('  Overlapping Elements:', readabilityAnalysis.overlappingElements.length);
-      
+
       if (readabilityAnalysis.textIssues.length > 0) {
         console.log('⚠️ TEXT ISSUES FOUND:');
         readabilityAnalysis.textIssues.slice(0, 5).forEach(issue => {
           console.log(`  - ${issue.type}: ${issue.element} - ${JSON.stringify(issue)}`);
         });
       }
-      
+
       if (readabilityAnalysis.spacingIssues.length > 0) {
         console.log('⚠️ SPACING ISSUES FOUND:');
         readabilityAnalysis.spacingIssues.slice(0, 5).forEach(issue => {
           console.log(`  - ${issue.type}: ${issue.gap}px between ${issue.section1} and ${issue.section2}`);
         });
       }
-      
+
       if (readabilityAnalysis.overlappingElements.length > 0) {
         console.log('⚠️ OVERLAPPING ELEMENTS FOUND:');
         readabilityAnalysis.overlappingElements.forEach(overlap => {
           console.log(`  - ${overlap.element1} overlaps with ${overlap.element2}`);
         });
       }
-      
+
       expect(readabilityAnalysis.textIssues.length).toBeLessThan(10);
     });
   });
 
   test.describe('Mobile-Specific UI Issues', () => {
-    
+
     PAGES_TO_ANALYZE.forEach(pageInfo => {
       test(`Mobile UI analysis for ${pageInfo.name}`, async ({ page }) => {
         await page.setViewportSize({ width: 375, height: 667 });
@@ -294,7 +295,7 @@ test.describe('UI/UX Analysis Suite', () => {
 
         const mobileUIAnalysis = await page.evaluate(() => {
           const issues = [];
-          
+
           // Check viewport fit
           const hasHorizontalScroll = document.documentElement.scrollWidth > document.documentElement.clientWidth + 5;
           if (hasHorizontalScroll) {
@@ -304,7 +305,7 @@ test.describe('UI/UX Analysis Suite', () => {
               clientWidth: document.documentElement.clientWidth
             });
           }
-          
+
           // Check for mobile-unfriendly elements
           const smallClickableElements = Array.from(document.querySelectorAll('a, button, input, [onclick]'))
             .filter(el => {
@@ -317,7 +318,7 @@ test.describe('UI/UX Analysis Suite', () => {
               height: el.getBoundingClientRect().height,
               text: el.textContent?.substring(0, 20) || 'No text'
             }));
-          
+
           // Check for images that are too large
           const oversizedImages = Array.from(document.querySelectorAll('img'))
             .filter(img => {
@@ -329,16 +330,16 @@ test.describe('UI/UX Analysis Suite', () => {
               width: img.getBoundingClientRect().width,
               viewportWidth: window.innerWidth
             }));
-          
+
           // Check content density
           const viewportHeight = window.innerHeight;
           const bodyHeight = document.body.scrollHeight;
           const contentDensity = bodyHeight / viewportHeight;
-          
+
           // Check for empty sections
           const emptySections = Array.from(document.querySelectorAll('section, div'))
             .filter(section => {
-              const hasVisibleContent = section.textContent?.trim().length > 0 || 
+              const hasVisibleContent = section.textContent?.trim().length > 0 ||
                                       section.querySelectorAll('img, video, canvas').length > 0;
               const rect = section.getBoundingClientRect();
               return !hasVisibleContent && rect.height > 100;
@@ -347,7 +348,7 @@ test.describe('UI/UX Analysis Suite', () => {
               element: section.tagName + (section.className ? '.' + section.className.split(' ')[0] : ''),
               height: section.getBoundingClientRect().height
             }));
-          
+
           return {
             issues,
             smallClickableElements,
@@ -368,32 +369,32 @@ test.describe('UI/UX Analysis Suite', () => {
         console.log(`   Oversized Images: ${mobileUIAnalysis.oversizedImages.length}`);
         console.log(`   Empty Sections: ${mobileUIAnalysis.emptySections.length}`);
         console.log(`   General Issues: ${mobileUIAnalysis.issues.length}`);
-        
+
         if (mobileUIAnalysis.smallClickableElements.length > 0) {
           console.log('👆 SMALL TOUCH TARGETS:');
           mobileUIAnalysis.smallClickableElements.slice(0, 3).forEach(target => {
             console.log(`   - ${target.element}: ${target.width}x${target.height}px - "${target.text}"`);
           });
         }
-        
+
         if (mobileUIAnalysis.emptySections.length > 0) {
           console.log('🕳️ EMPTY SECTIONS:');
           mobileUIAnalysis.emptySections.forEach(section => {
             console.log(`   - ${section.element}: ${section.height}px height`);
           });
         }
-        
+
         if (mobileUIAnalysis.contentDensity > 10) {
           console.log(`⚠️ VERY LONG PAGE: ${mobileUIAnalysis.contentDensity.toFixed(2)}x viewport height - may have white space issues`);
         }
-        
+
         expect(mobileUIAnalysis.pageMetrics.hasHorizontalScroll).toBe(false);
       });
     });
   });
 
   test.describe('Content Flow Analysis', () => {
-    
+
     test('Analyze content hierarchy and flow', async ({ page }) => {
       await page.setViewportSize({ width: 375, height: 667 });
       await page.goto('/about');
@@ -407,7 +408,7 @@ test.describe('UI/UX Analysis Suite', () => {
           const level = parseInt(heading.tagName.substring(1));
           const rect = heading.getBoundingClientRect();
           const styles = window.getComputedStyle(heading);
-          
+
           return {
             level,
             text: heading.textContent?.substring(0, 50) + '...',
@@ -416,13 +417,13 @@ test.describe('UI/UX Analysis Suite', () => {
             visible: rect.width > 0 && rect.height > 0
           };
         });
-        
+
         // Check heading hierarchy
         const hierarchyIssues = [];
         for (let i = 0; i < headingAnalysis.length - 1; i++) {
           const current = headingAnalysis[i];
           const next = headingAnalysis[i + 1];
-          
+
           // Check if heading levels skip (e.g., h1 to h3)
           if (next.level > current.level + 1) {
             hierarchyIssues.push({
@@ -433,7 +434,7 @@ test.describe('UI/UX Analysis Suite', () => {
             });
           }
         }
-        
+
         // Check visual hierarchy (font sizes should generally decrease with heading level)
         const visualHierarchyIssues: Array<{
           type: string,
@@ -446,20 +447,21 @@ test.describe('UI/UX Analysis Suite', () => {
         headingAnalysis.forEach((heading, index) => {
           const previousHeadings = headingAnalysis.slice(0, index);
           const lowerLevelHeadings = previousHeadings.filter(h => h.level < heading.level);
-          
+
           lowerLevelHeadings.forEach(lowerHeading => {
             if (heading.fontSize >= lowerHeading.fontSize) {
               visualHierarchyIssues.push({
                 type: 'inverted-visual-hierarchy',
                 heading: `h${heading.level}`,
                 fontSize: heading.fontSize,
+                issue: 'Inverted visual hierarchy',
                 shouldBeSmallerThan: `h${lowerHeading.level}`,
                 comparisonFontSize: lowerHeading.fontSize
               });
             }
           });
         });
-        
+
         return {
           totalHeadings: headingAnalysis.length,
           headingAnalysis,
@@ -472,21 +474,21 @@ test.describe('UI/UX Analysis Suite', () => {
       console.log(`   Total Headings: ${contentFlowAnalysis.totalHeadings}`);
       console.log(`   Hierarchy Issues: ${contentFlowAnalysis.hierarchyIssues.length}`);
       console.log(`   Visual Hierarchy Issues: ${contentFlowAnalysis.visualHierarchyIssues.length}`);
-      
+
       if (contentFlowAnalysis.hierarchyIssues.length > 0) {
         console.log('⚠️ HEADING HIERARCHY ISSUES:');
         contentFlowAnalysis.hierarchyIssues.forEach(issue => {
           console.log(`   - ${issue.type}: ${issue.from} → ${issue.to} at position ${issue.position}`);
         });
       }
-      
+
       if (contentFlowAnalysis.visualHierarchyIssues.length > 0) {
         console.log('⚠️ VISUAL HIERARCHY ISSUES:');
         contentFlowAnalysis.visualHierarchyIssues.slice(0, 3).forEach(issue => {
           console.log(`   - ${issue.heading} (${issue.fontSize}px) should be smaller than ${issue.shouldBeSmallerThan} (${issue.comparisonFontSize}px)`);
         });
       }
-      
+
       expect(contentFlowAnalysis.totalHeadings).toBeGreaterThan(0);
     });
   });
@@ -501,7 +503,7 @@ test.describe('UI/UX Analysis Suite', () => {
     console.log('- All pages: Mobile touch targets and responsiveness');
     console.log('- Content flow: Heading hierarchy and visual design');
     console.log('=' .repeat(60));
-    
+
     // This test always passes - it's for reporting
     expect(true).toBe(true);
   });

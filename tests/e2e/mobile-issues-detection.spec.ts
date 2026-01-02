@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
  */
 
 test.describe('Mobile Issues Detection', () => {
-  
+
   test.beforeEach(async ({ page }) => {
     // Set mobile viewport
     await page.setViewportSize({ width: 375, height: 667 });
@@ -16,11 +16,11 @@ test.describe('Mobile Issues Detection', () => {
   test.describe('Layout Issues', () => {
     test('Detects horizontal scrolling issues', async ({ page }) => {
       const pagesToCheck = ['/', '/about', '/training', '/blog'];
-      
+
       for (const pagePath of pagesToCheck) {
         await page.goto(pagePath);
         await page.waitForLoadState('networkidle');
-        
+
         const scrollInfo = await page.evaluate(() => ({
           scrollWidth: document.documentElement.scrollWidth,
           clientWidth: document.documentElement.clientWidth,
@@ -28,9 +28,9 @@ test.describe('Mobile Issues Detection', () => {
           bodyClientWidth: document.body.clientWidth,
           hasHorizontalScroll: document.documentElement.scrollWidth > document.documentElement.clientWidth + 5
         }));
-        
+
         console.log(`Page ${pagePath}:`, scrollInfo);
-        
+
         if (scrollInfo.hasHorizontalScroll) {
           // Find elements causing horizontal scroll
           const wideElements = await page.evaluate(() => {
@@ -49,10 +49,10 @@ test.describe('Mobile Issues Detection', () => {
               }))
               .slice(0, 5); // Limit to first 5 problematic elements
           });
-          
+
           console.log(`Wide elements on ${pagePath}:`, wideElements);
         }
-        
+
         expect(scrollInfo.hasHorizontalScroll).toBe(false);
       }
     });
@@ -60,7 +60,7 @@ test.describe('Mobile Issues Detection', () => {
     test('Detects elements extending beyond viewport', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       const problematicElements = await page.evaluate(() => {
         const elements = Array.from(document.querySelectorAll('*'));
         const issues: Array<{
@@ -73,11 +73,11 @@ test.describe('Mobile Issues Detection', () => {
           left?: number,
           right?: number
         }> = [];
-        
+
         elements.forEach(el => {
           const rect = el.getBoundingClientRect();
           const styles = window.getComputedStyle(el);
-          
+
           // Check for fixed widths that might be too wide
           if (styles.width && styles.width.includes('px')) {
             const width = parseFloat(styles.width);
@@ -91,7 +91,7 @@ test.describe('Mobile Issues Detection', () => {
               });
             }
           }
-          
+
           // Check for elements positioned outside viewport
           if (rect.left < -50 || rect.right > window.innerWidth + 50) {
             issues.push({
@@ -100,16 +100,17 @@ test.describe('Mobile Issues Detection', () => {
               issue: 'Element positioned outside viewport',
               left: rect.left,
               right: rect.right,
-              viewportWidth: window.innerWidth
+              viewportWidth: window.innerWidth,
+              width: 0
             });
           }
         });
-        
+
         return issues.slice(0, 10); // Limit output
       });
-      
+
       console.log('Problematic elements found:', problematicElements);
-      
+
       // This is more of a diagnostic test - we expect some issues to be found
       // but we want to log them for investigation
       expect(Array.isArray(problematicElements)).toBe(true);
@@ -118,7 +119,7 @@ test.describe('Mobile Issues Detection', () => {
     test('Checks text readability and font sizes', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       const textIssues = await page.evaluate(() => {
         const textElements = Array.from(document.querySelectorAll('p, span, div, li, a, button'));
         const issues: Array<{
@@ -129,12 +130,12 @@ test.describe('Mobile Issues Detection', () => {
           color?: string,
           backgroundColor?: string
         }> = [];
-        
+
         textElements.forEach(el => {
           const styles = window.getComputedStyle(el);
           const fontSize = parseFloat(styles.fontSize);
           const text = el.textContent?.trim();
-          
+
           if (text && text.length > 5) { // Only check elements with meaningful text
             // Font size should be at least 16px for mobile readability
             if (fontSize < 16) {
@@ -145,7 +146,7 @@ test.describe('Mobile Issues Detection', () => {
                 text: text.substring(0, 30) + (text.length > 30 ? '...' : '')
               });
             }
-            
+
             // Check for poor color contrast (basic check)
             const color = styles.color;
             const backgroundColor = styles.backgroundColor;
@@ -159,17 +160,17 @@ test.describe('Mobile Issues Detection', () => {
             }
           }
         });
-        
+
         return issues.slice(0, 10);
       });
-      
+
       console.log('Text readability issues:', textIssues);
-      
+
       // Count critical issues (font size less than 14px)
-      const criticalIssues = textIssues.filter(issue => 
-        issue.type === 'font-too-small' && issue.fontSize < 14
+      const criticalIssues = textIssues.filter(issue =>
+        issue.type === 'font-too-small' && (issue.fontSize || 0) < 14
       );
-      
+
       expect(criticalIssues.length).toBeLessThan(5); // Allow some tolerance
     });
   });
@@ -178,7 +179,7 @@ test.describe('Mobile Issues Detection', () => {
     test('Identifies touch targets that are too small', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       const touchTargetIssues = await page.evaluate(() => {
         const interactiveElements = Array.from(document.querySelectorAll('a, button, input, select, textarea, [onclick], [role="button"]'));
         const issues: Array<{
@@ -188,11 +189,11 @@ test.describe('Mobile Issues Detection', () => {
           height?: number,
           text?: string
         }> = [];
-        
+
         interactiveElements.forEach(el => {
           const rect = el.getBoundingClientRect();
           const minTouchSize = 44; // iOS recommendation
-          
+
           if (rect.width > 0 && rect.height > 0) { // Only check visible elements
             if (rect.width < minTouchSize || rect.height < minTouchSize) {
               issues.push({
@@ -205,40 +206,40 @@ test.describe('Mobile Issues Detection', () => {
             }
           }
         });
-        
+
         return issues.slice(0, 10);
       });
-      
+
       console.log('Touch target issues:', touchTargetIssues);
-      
+
       // Critical touch targets that are way too small
-      const criticalIssues = touchTargetIssues.filter(issue => 
-        issue.width < 30 || issue.height < 30
+      const criticalIssues = touchTargetIssues.filter(issue =>
+        (issue.width || 0) < 30 || (issue.height || 0) < 30
       );
-      
+
       expect(criticalIssues.length).toBeLessThan(3); // Allow some small icons
     });
 
     test('Checks for overlapping clickable elements', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       const overlappingElements = await page.evaluate(() => {
         const clickableElements = Array.from(document.querySelectorAll('a, button, [onclick], [role="button"]'));
         const overlaps = [];
-        
+
         for (let i = 0; i < clickableElements.length; i++) {
           const el1 = clickableElements[i];
           const rect1 = el1.getBoundingClientRect();
-          
+
           for (let j = i + 1; j < clickableElements.length; j++) {
             const el2 = clickableElements[j];
             const rect2 = el2.getBoundingClientRect();
-            
+
             // Check if rectangles overlap
-            if (!(rect1.right < rect2.left || 
-                  rect2.right < rect1.left || 
-                  rect1.bottom < rect2.top || 
+            if (!(rect1.right < rect2.left ||
+                  rect2.right < rect1.left ||
+                  rect1.bottom < rect2.top ||
                   rect2.bottom < rect1.top)) {
               overlaps.push({
                 element1: el1.tagName + (el1.className ? '.' + el1.className.split(' ')[0] : ''),
@@ -249,12 +250,12 @@ test.describe('Mobile Issues Detection', () => {
             }
           }
         }
-        
+
         return overlaps.slice(0, 5);
       });
-      
+
       console.log('Overlapping clickable elements:', overlappingElements);
-      
+
       // Some overlap might be acceptable (e.g., nested elements)
       expect(overlappingElements.length).toBeLessThan(10);
     });
@@ -264,33 +265,33 @@ test.describe('Mobile Issues Detection', () => {
     test('Tests mobile navigation accessibility', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       // Check for mobile menu
       const mobileMenuButton = page.getByRole('button', { name: /toggle mobile menu|menu|hamburger/i });
       const hasMobileMenu = await mobileMenuButton.count() > 0;
-      
+
       if (hasMobileMenu) {
         // Test mobile menu functionality
         await expect(mobileMenuButton).toBeVisible();
-        
+
         // Check if button has proper ARIA attributes
         const ariaLabel = await mobileMenuButton.getAttribute('aria-label');
         const ariaExpanded = await mobileMenuButton.getAttribute('aria-expanded');
-        
+
         expect(ariaLabel || ariaExpanded).toBeTruthy(); // Should have at least one
-        
+
         // Test menu open/close
         await mobileMenuButton.click();
         await page.waitForTimeout(500);
-        
+
         // Check if expanded state changed
         const expandedAfterClick = await mobileMenuButton.getAttribute('aria-expanded');
-        
+
         // Test navigation items are accessible
         const navItems = page.locator('nav a, [role="navigation"] a');
         const navCount = await navItems.count();
         expect(navCount).toBeGreaterThan(0);
-        
+
         // Close menu
         await mobileMenuButton.click();
         await page.waitForTimeout(500);
@@ -305,10 +306,10 @@ test.describe('Mobile Issues Detection', () => {
     test('Checks for keyboard navigation on mobile', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       // Test tab navigation
       await page.keyboard.press('Tab');
-      
+
       // Check if any element received focus
       const focusedElement = await page.evaluate(() => {
         const activeEl = document.activeElement;
@@ -319,21 +320,21 @@ test.describe('Mobile Issues Detection', () => {
           role: activeEl?.getAttribute('role')
         };
       });
-      
+
       expect(focusedElement.tagName).toBeTruthy();
-      
+
       // Continue tabbing through a few elements
       for (let i = 0; i < 5; i++) {
         await page.keyboard.press('Tab');
         await page.waitForTimeout(100);
       }
-      
+
       // Check that focus is still within the page
       const finalFocusedElement = await page.evaluate(() => {
         const activeEl = document.activeElement;
         return activeEl?.tagName !== 'BODY';
       });
-      
+
       expect(finalFocusedElement).toBe(true);
     });
   });
@@ -341,15 +342,15 @@ test.describe('Mobile Issues Detection', () => {
   test.describe('Performance Issues', () => {
     test('Detects slow-loading elements', async ({ page }) => {
       const startTime = Date.now();
-      
+
       await page.goto('/');
-      
+
       // Wait for network idle but with timeout
       await page.waitForLoadState('networkidle', { timeout: 10000 });
-      
+
       const loadTime = Date.now() - startTime;
       console.log(`Page load time: ${loadTime}ms`);
-      
+
       // Check for images that might be loading slowly
       const imageLoadStatus = await page.evaluate(() => {
         const images = Array.from(document.querySelectorAll('img'));
@@ -361,12 +362,12 @@ test.describe('Mobile Issues Detection', () => {
           error: !img.complete && img.naturalWidth === 0
         }));
       });
-      
+
       console.log('Image load status:', imageLoadStatus);
-      
+
       const failedImages = imageLoadStatus.filter(img => img.error);
       expect(failedImages.length).toBeLessThan(2); // Allow some tolerance
-      
+
       // Mobile load time should be reasonable
       expect(loadTime).toBeLessThan(8000); // 8 seconds max for mobile
     });
@@ -374,11 +375,11 @@ test.describe('Mobile Issues Detection', () => {
     test('Checks for excessive DOM size', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       const domStats = await page.evaluate(() => {
         const allElements = document.querySelectorAll('*');
         const depthMap = new Map();
-        
+
         // Calculate depth of each element
         allElements.forEach(el => {
           let depth = 0;
@@ -389,18 +390,18 @@ test.describe('Mobile Issues Detection', () => {
           }
           depthMap.set(el, depth);
         });
-        
+
         const maxDepth = Math.max(...Array.from(depthMap.values()));
-        
+
         return {
           totalElements: allElements.length,
           maxDepth: maxDepth,
           bodyChildren: document.body.children.length
         };
       });
-      
+
       console.log('DOM stats:', domStats);
-      
+
       // Mobile devices struggle with very large DOMs
       expect(domStats.totalElements).toBeLessThan(2000); // Reasonable limit for mobile
       expect(domStats.maxDepth).toBeLessThan(25); // Prevent overly nested structures
@@ -411,7 +412,7 @@ test.describe('Mobile Issues Detection', () => {
     test('Identifies content that may not fit mobile screens', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       const contentIssues = await page.evaluate(() => {
         const issues: Array<{
           type: string,
@@ -421,7 +422,7 @@ test.describe('Mobile Issues Detection', () => {
           maxWidth?: number,
           viewportWidth?: number
         }> = [];
-        
+
         // Check for very wide tables
         const tables = Array.from(document.querySelectorAll('table'));
         tables.forEach(table => {
@@ -429,12 +430,13 @@ test.describe('Mobile Issues Detection', () => {
           if (rect.width > window.innerWidth * 0.9) {
             issues.push({
               type: 'wide-table',
+              element: 'table',
               width: rect.width,
               viewportWidth: window.innerWidth
             });
           }
         });
-        
+
         // Check for very long lines of text
         const textElements = Array.from(document.querySelectorAll('p, div, span'));
         textElements.forEach(el => {
@@ -444,19 +446,19 @@ test.describe('Mobile Issues Detection', () => {
             if (rect.width > window.innerWidth * 0.95) {
               issues.push({
                 type: 'long-text-line',
+                element: el.tagName + (el.className ? '.' + el.className.split(' ')[0] : ''),
                 width: rect.width,
-                viewportWidth: window.innerWidth,
-                textLength: text.length
+                viewportWidth: window.innerWidth
               });
             }
           }
         });
-        
+
         return issues;
       });
-      
+
       console.log('Content issues:', contentIssues);
-      
+
       // Allow some content issues but flag excessive ones
       expect(contentIssues.length).toBeLessThan(5);
     });
@@ -466,7 +468,7 @@ test.describe('Mobile Issues Detection', () => {
     test('Checks mobile form usability', async ({ page }) => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
-      
+
       const formIssues = await page.evaluate(() => {
         const issues: Array<{
           type: string,
@@ -476,7 +478,7 @@ test.describe('Mobile Issues Detection', () => {
           marginBottom?: number
         }> = [];
         const inputs = Array.from(document.querySelectorAll('input, textarea, select'));
-        
+
         inputs.forEach(input => {
           const rect = input.getBoundingClientRect();
           const styles = window.getComputedStyle(input);
@@ -501,17 +503,17 @@ test.describe('Mobile Issues Detection', () => {
             });
           }
         });
-        
+
         return issues;
       });
-      
+
       console.log('Form issues:', formIssues);
-      
+
       // Critical form issues should be minimal
-      const criticalIssues = formIssues.filter(issue => 
-        issue.type === 'input-too-small' && issue.height < 35
+      const criticalIssues = formIssues.filter(issue =>
+        issue.type === 'input-too-small' && (issue.height || 0) < 35
       );
-      
+
       expect(criticalIssues.length).toBeLessThan(3);
     });
   });

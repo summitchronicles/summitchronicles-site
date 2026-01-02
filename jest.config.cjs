@@ -4,13 +4,15 @@ module.exports = {
   testEnvironment: 'jsdom',
 
   // Pick up TS/JS test files (adjust if you prefer another pattern)
-  testMatch: ['**/__tests__/**/*.(test|spec).(ts|tsx|js)'],
+  testMatch: [
+    "<rootDir>/tests/unit/**/*.test.ts",
+    "<rootDir>/tests/integration/**/*.test.ts",
+    "<rootDir>/tests/security/**/*.test.ts",
+    "<rootDir>/tests/accuracy/**/*.test.ts"
+  ],
 
   // Let ts-jest transpile TS on the fly
   preset: 'ts-jest',
-
-  // Point ts-jest at your TS config if you need a custom one
-  // globals: { 'ts-jest': { tsconfig: 'tsconfig.json' } },
 
   // Auto–add testing-library matchers, etc.
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
@@ -23,4 +25,22 @@ module.exports = {
 
   // Ignore build artifacts
   testPathIgnorePatterns: ['/node_modules/', '/.next/', '/dist/'],
+
+  // Coverage settings
+  collectCoverageFrom: [
+    "app/api/training/**/*.ts",
+    "app/components/training/**/*.tsx",
+    "lib/garmin-api.ts",
+    "lib/compliance-engine.ts",
+    "!**/*.d.ts",
+    "!**/node_modules/**"
+  ],
+  coverageThreshold: {
+    "global": {
+      "branches": 80,
+      "functions": 80,
+      "lines": 80,
+      "statements": 80
+    }
+  }
 };

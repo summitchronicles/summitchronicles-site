@@ -1,4 +1,4 @@
-import {withSentryConfig} from '@sentry/nextjs';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -15,11 +15,24 @@ const nextConfig = {
   httpAgentOptions: {
     keepAlive: true,
   },
+  // Disable source maps in production for security
+  productionBrowserSourceMaps: false,
+
+  // Bundle optimization
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error']
+    } : false,
+  },
+
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'unsplash.com' },
+      { protocol: 'https', hostname: 'plus.unsplash.com' },
       { protocol: 'https', hostname: '*.strava.com' },
       { protocol: 'https', hostname: 'summitchronicles.com' },
+      { protocol: 'https', hostname: 'summitchronicles.s3.amazonaws.com' },
       { protocol: 'https', hostname: '*.supabase.co' },
       { protocol: 'https', hostname: 'nvoljnojiondyjhxwkqq.supabase.co' }
     ],
@@ -27,6 +40,8 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   headers: async () => [
     {
@@ -39,6 +54,18 @@ const nextConfig = {
         {
           key: 'X-Content-Type-Options',
           value: 'nosniff'
+        },
+        {
+          key: 'X-Frame-Options',
+          value: 'DENY'
+        },
+        {
+          key: 'X-XSS-Protection',
+          value: '1; mode=block'
+        },
+        {
+          key: 'Referrer-Policy',
+          value: 'strict-origin-when-cross-origin'
         },
         {
           key: 'Permissions-Policy',
@@ -94,11 +121,11 @@ const nextConfig = {
         '@/components': '/app/components',
         '@/lib': '/lib',
       }
-      
+
       // Enable tree shaking for better bundle analysis only in production
       config.optimization.usedExports = true
     }
-    
+
     return config
   },
   experimental: {
@@ -111,7 +138,7 @@ const nextConfig = {
   },
   // Enable output file tracing for smaller deployments
   output: 'standalone',
-  
+
   // Optimize redirects and rewrites
   redirects: async () => [
     // Legacy redirects
@@ -168,39 +195,8 @@ const nextConfig = {
       permanent: true,
     }
   ],
-  
+
   // Add sitemap generation
   trailingSlash: false,
 };
-export default withSentryConfig(nextConfig, {
-  // For all available options, see:
-  // https://www.npmjs.com/package/@sentry/webpack-plugin#options
-
-  org: "summit-chronicles",
-
-  project: "javascript-nextjs",
-
-  // Only print logs for uploading source maps in CI
-  silent: !process.env.CI,
-
-  // For all available options, see:
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-  // Upload a larger set of source maps for prettier stack traces (increases build time)
-  widenClientFileUpload: true,
-
-  // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-  // This can increase your server load as well as your hosting bill.
-  // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-  // side errors will fail.
-  tunnelRoute: "/monitoring",
-
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  disableLogger: true,
-
-  // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-  // See the following for more information:
-  // https://docs.sentry.io/product/crons/
-  // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: true
-});
+export default nextConfig;
