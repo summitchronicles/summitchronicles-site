@@ -91,7 +91,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
       const style = post.metadata?.style || 'redbull';
 
       return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-black">
           {style === 'cinematic' ? (
             <CinematicBlogPost
               post={componentData}

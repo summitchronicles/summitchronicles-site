@@ -67,7 +67,7 @@ const Header: React.FC = () => {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-400',
         isScrolled || isMobileMenuOpen
-          ? 'bg-white/95 backdrop-blur-sm shadow-spa-soft border-b border-spa-cloud/50'
+          ? 'bg-black/90 backdrop-blur-md shadow-lg border-b border-white/10'
           : 'bg-transparent'
       )}
     >
@@ -76,10 +76,10 @@ const Header: React.FC = () => {
           {/* Logo / Brand - Left Corner */}
           <div className="flex justify-start">
             <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
-              <div className="flex items-center justify-center w-12 h-12 bg-alpine-blue rounded-md group-hover:bg-blue-800 transition-colors duration-300">
-                <Icon name="Mountain" className="text-white" size="md" />
+              <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-md group-hover:bg-summit-gold/20 transition-colors duration-300">
+                <Icon name="Mountain" className="text-white group-hover:text-summit-gold" size="md" />
               </div>
-              <H3 className="hidden sm:block text-spa-charcoal group-hover:text-alpine-blue transition-colors duration-300">
+              <H3 className="hidden sm:block text-white group-hover:text-summit-gold transition-colors duration-300">
                 Summit Chronicles
               </H3>
             </Link>
@@ -94,15 +94,15 @@ const Header: React.FC = () => {
                 className={cn(
                   'relative px-4 py-3 text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
                   isActivePath(item.href)
-                    ? 'text-alpine-blue'
-                    : 'text-spa-slate hover:text-alpine-blue'
+                    ? 'text-summit-gold'
+                    : 'text-gray-300 hover:text-white'
                 )}
               >
                 {item.label}
                 {isActivePath(item.href) && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-alpine-blue rounded-full" />
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-summit-gold rounded-full" />
                 )}
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-alpine-blue transition-all duration-300 group-hover:w-full" />
+                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-summit-gold transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
@@ -111,10 +111,10 @@ const Header: React.FC = () => {
           <div className="flex items-center justify-end space-x-2 md:space-x-4">
             {/* Support CTA - Desktop */}
             <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="ghost" size="sm" asChild className="text-white hover:text-summit-gold hover:bg-white/10">
                 <Link href="/newsletter">Newsletter</Link>
               </Button>
-              <Button variant="summit" size="sm" asChild>
+              <Button variant="summit" size="sm" asChild className="bg-summit-gold-600 hover:bg-summit-gold-500 text-black border-none">
                 <Link href="/support">
                   <Icon name="Heart" size="sm" />
                   Support Journey
@@ -125,7 +125,7 @@ const Header: React.FC = () => {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="md:hidden p-3 text-spa-slate hover:text-alpine-blue transition-colors duration-300 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-md hover:bg-spa-stone"
+              className="md:hidden p-3 text-white hover:text-summit-gold transition-colors duration-300 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-md hover:bg-white/10"
               aria-label="Toggle mobile menu"
               aria-expanded={isMobileMenuOpen}
             >
@@ -145,7 +145,7 @@ const Header: React.FC = () => {
             isMobileMenuOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
           )}
         >
-          <div className="py-6 border-t border-spa-cloud bg-white backdrop-blur-sm rounded-b-lg shadow-spa-medium mobile-nav">
+          <div className="py-6 border-t border-white/10 bg-black/95 backdrop-blur-xl rounded-b-lg shadow-2xl mobile-nav">
             <nav className="space-y-1">
               {primaryNavigation.map((item) => (
                 <Link
@@ -154,14 +154,14 @@ const Header: React.FC = () => {
                   className={cn(
                     'block px-6 py-4 text-base font-medium transition-all duration-300 min-h-[48px] flex items-center',
                     isActivePath(item.href)
-                      ? 'text-alpine-blue bg-spa-stone border-l-4 border-alpine-blue'
-                      : 'text-spa-charcoal hover:text-alpine-blue hover:bg-spa-stone'
+                      ? 'text-summit-gold bg-white/5 border-l-4 border-summit-gold'
+                      : 'text-gray-300 hover:text-white hover:bg-white/5'
                   )}
                 >
                   <div className="flex items-center justify-between w-full">
                     <span className="text-base">{item.label}</span>
                     {item.description && (
-                      <span className="text-sm text-spa-slate">
+                      <span className="text-sm text-gray-500">
                         {item.description}
                       </span>
                     )}
@@ -170,12 +170,12 @@ const Header: React.FC = () => {
               ))}
 
               {/* Secondary Navigation in Mobile */}
-              <div className="pt-4 mt-4 border-t border-spa-cloud">
+              <div className="pt-4 mt-4 border-t border-white/10">
                 {secondaryNavigation.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block px-6 py-3 text-base text-spa-charcoal hover:text-alpine-blue transition-colors duration-300 min-h-[44px] flex items-center"
+                    className="block px-6 py-3 text-base text-gray-400 hover:text-white transition-colors duration-300 min-h-[44px] flex items-center"
                   >
                     {item.label}
                   </Link>
@@ -187,7 +187,7 @@ const Header: React.FC = () => {
                 <Button
                   variant="secondary"
                   size="sm"
-                  className="w-full"
+                  className="w-full bg-white/10 text-white hover:bg-white/20 border-white/10"
                   asChild
                 >
                   <Link href="/newsletter">
@@ -195,7 +195,7 @@ const Header: React.FC = () => {
                     Newsletter Updates
                   </Link>
                 </Button>
-                <Button variant="summit" size="sm" className="w-full" asChild>
+                <Button variant="summit" size="sm" className="w-full bg-summit-gold-600 text-black hover:bg-summit-gold-500 border-none" asChild>
                   <Link href="/support">
                     <Icon name="Heart" size="sm" />
                     Support Journey

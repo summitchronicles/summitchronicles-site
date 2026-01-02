@@ -23,6 +23,11 @@ module.exports = {
           900: '#1e3a8a',
           950: '#172554'
         },
+        // Premium Dark Theme Colors
+        'obsidian': '#0a0a0a',
+        'charcoal-mist': '#1a1a1a',
+        'glass-panel': 'rgba(26, 26, 26, 0.6)',
+
         'summit-gold': {
           50: '#fffbeb',
           100: '#fef3c7',
@@ -53,7 +58,7 @@ module.exports = {
         'spa-cloud': '#cbd5e1',
         'spa-slate': '#64748b',
         'spa-charcoal': '#334155',
-        
+
         // Mountaineering contextual colors
         'glacier': {
           50: '#f0f9ff',

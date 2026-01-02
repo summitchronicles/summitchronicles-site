@@ -78,7 +78,7 @@ export default function RootLayout({
         <BreadcrumbStructuredData />
       </head>
       <body
-        className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-spa-charcoal bg-spa-stone mobile-safe`}
+        className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-white bg-black mobile-safe`}
       >
         {children}
         <FloatingAIButton />

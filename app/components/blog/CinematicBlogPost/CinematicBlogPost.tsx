@@ -74,7 +74,7 @@ export function CinematicBlogPost({
 
       <h2>The Psychology of Extreme Altitude</h2>
       <p>At 8,849 meters above sea level, Everest exists in what mountaineers call the "Death Zone" — altitudes where the human body literally begins to die. But before your body fails, your mind is tested in ways most people never experience.</p>
-      
+
       <blockquote>"The mountain doesn't care about your plan — but your preparation does. Mental preparation isn't just helpful; it's the difference between life and death."</blockquote>
 
       <p>During my preparation, I've discovered that mental training requires the same systematic approach I apply to physical conditioning. It's not enough to simply "think positive" — you need structured psychological preparation.</p>
@@ -86,7 +86,7 @@ export function CinematicBlogPost({
 
       <h2>Stress Inoculation Training</h2>
       <p>One of the most valuable aspects of my training has been deliberately exposing myself to controlled stress and discomfort. This includes:</p>
-      
+
       <ul>
         <li>Cold exposure training in near-freezing conditions</li>
         <li>Altitude simulation in hypoxic chambers</li>
@@ -98,7 +98,7 @@ export function CinematicBlogPost({
 
       <h2>The Power of Process Focus</h2>
       <p>Perhaps the most important mental skill I've developed is process focus. Instead of fixating on the summit (outcome), I've learned to concentrate on the immediate task at hand (process).</p>
-      
+
       <p>On Everest, this means focusing on the next breath, the next step, the next anchor point — not the 8,000 meters still to climb. This approach prevents the overwhelming feeling that can lead to panic or poor decisions.</p>
 
       <h2>Data-Driven Mental Training</h2>
@@ -152,18 +152,8 @@ export function CinematicBlogPost({
   };
 
   const getCategoryColor = (category: string) => {
-    switch (category.toLowerCase()) {
-      case 'mental preparation':
-      case 'mental':
-        return 'bg-purple-100 text-purple-800';
-      case 'expedition':
-      case 'adventure':
-        return 'bg-blue-100 text-blue-800';
-      case 'training':
-        return 'bg-green-100 text-green-800';
-      default:
-        return 'bg-slate-100 text-slate-800';
-    }
+    // Premium Gold Integration
+    return 'bg-summit-gold/10 text-summit-gold border border-summit-gold/20';
   };
 
   // Reading progress calculation
@@ -188,9 +178,9 @@ export function CinematicBlogPost({
   const CategoryIcon = getCategoryIcon(displayPost.category);
 
   return (
-    <article ref={containerRef} className={`min-h-screen ${className}`}>
+    <article ref={containerRef} className={`min-h-screen bg-black ${className}`}>
       {/* Reading Progress Bar */}
-      <div className="fixed top-0 left-0 w-full h-1 z-50 bg-slate-100">
+      <div className="fixed top-0 left-0 w-full h-1 z-50 bg-white/5">
         <div
           className="h-full bg-summit-gold transition-all duration-300"
           style={{ width: `${readingProgress * 100}%` }}
@@ -215,13 +205,13 @@ export function CinematicBlogPost({
         </div>
 
         {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
         {/* Navigation */}
         <div className="absolute top-8 left-8 z-20">
           <Link
             href="/blog"
-            className="flex items-center space-x-2 bg-black/40 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-black/60 transition-colors duration-300"
+            className="flex items-center space-x-2 bg-black/40 backdrop-blur-sm text-white px-4 py-2 rounded-full hover:bg-black/60 transition-colors duration-300 border border-white/10"
           >
             <ArrowLeft className="w-4 h-4" />
             <span className="text-sm font-medium">Back to Stories</span>
@@ -230,11 +220,11 @@ export function CinematicBlogPost({
 
         {/* Article Stats */}
         <div className="absolute top-8 right-8 flex space-x-3 z-20">
-          <div className="flex items-center space-x-1 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
+          <div className="flex items-center space-x-1 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm border border-white/10">
             <Eye className="w-4 h-4" />
             <span>{displayPost.views}</span>
           </div>
-          <button className="flex items-center space-x-1 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm hover:bg-black/60 transition-colors">
+          <button className="flex items-center space-x-1 bg-black/40 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm hover:bg-black/60 transition-colors border border-white/10">
             <Share2 className="w-4 h-4" />
             <span>Share</span>
           </button>
@@ -259,11 +249,11 @@ export function CinematicBlogPost({
               {displayPost.title}
             </h1>
 
-            <p className="text-xl md:text-2xl text-slate-200 leading-relaxed max-w-3xl">
+            <p className="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl">
               {displayPost.excerpt}
             </p>
 
-            <div className="flex flex-wrap items-center gap-6 text-slate-300 pt-4">
+            <div className="flex flex-wrap items-center gap-6 text-gray-400 pt-4">
               <div className="flex items-center space-x-2">
                 <User className="w-5 h-5" />
                 <span className="font-medium">{displayPost.author}</span>
@@ -288,14 +278,14 @@ export function CinematicBlogPost({
       </motion.section>
 
       {/* Article Content */}
-      <section className="relative bg-white">
+      <section className="relative bg-black">
         <div className="max-w-4xl mx-auto px-8 md:px-12 py-16">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="prose prose-lg md:prose-xl prose-slate max-w-none"
+            className="prose prose-lg md:prose-xl prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: displayPost.content }}
           />
 
@@ -305,17 +295,17 @@ export function CinematicBlogPost({
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="mt-16 p-8 bg-slate-50 rounded-2xl border border-slate-100"
+            className="mt-16 p-8 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm"
           >
             <div className="flex items-start space-x-4">
-              <div className="w-16 h-16 bg-slate-300 rounded-full flex items-center justify-center">
-                <User className="w-8 h-8 text-slate-600" />
+              <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center border border-white/5">
+                <User className="w-8 h-8 text-summit-gold" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-slate-900 mb-2">
+                <h3 className="text-xl font-bold text-white mb-2">
                   {displayPost.author}
                 </h3>
-                <p className="text-slate-600 leading-relaxed">
+                <p className="text-gray-400 leading-relaxed">
                   Mountaineer and systematic athlete pursuing the Seven Summits
                   challenge. Currently preparing for Mount Everest in Spring
                   2027 through data-driven training and methodical preparation
@@ -331,16 +321,16 @@ export function CinematicBlogPost({
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="mt-12 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-8 text-center text-white"
+            className="mt-12 bg-gradient-to-r from-white/10 to-white/5 rounded-2xl p-8 text-center text-white border border-white/10"
           >
             <h3 className="text-2xl font-bold mb-4">Enjoyed this story?</h3>
-            <p className="text-slate-300 mb-6 max-w-2xl mx-auto">
+            <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
               Get exclusive expedition updates and training insights delivered
               directly to your inbox every week.
             </p>
             <Link
               href="/newsletter"
-              className="inline-flex items-center gap-3 bg-summit-gold text-spa-charcoal px-6 py-3 rounded-xl font-medium hover:bg-yellow-500 transition-colors duration-300"
+              className="inline-flex items-center gap-3 bg-summit-gold text-black px-6 py-3 rounded-xl font-medium hover:bg-yellow-500 transition-colors duration-300"
             >
               <BookOpen className="w-5 h-5" />
               <span>Subscribe to Weekly Updates</span>
@@ -357,7 +347,7 @@ export function CinematicBlogPost({
           >
             <Link
               href="/blog"
-              className="inline-flex items-center space-x-2 text-slate-600 hover:text-slate-900 transition-colors duration-300"
+              className="inline-flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-300"
             >
               <ArrowLeft className="w-4 h-4" />
               <span className="font-medium">More Mountain Chronicles</span>
@@ -373,7 +363,7 @@ export function CinematicBlogPost({
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.8 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 bg-slate-900 text-white p-3 rounded-full shadow-lg hover:bg-slate-800 transition-colors duration-300 z-40"
+          className="fixed bottom-8 right-8 bg-obsidian text-summit-gold p-3 rounded-full shadow-lg hover:bg-black transition-colors duration-300 z-40 border border-summit-gold/20"
         >
           <ChevronUp className="w-6 h-6" />
         </motion.button>

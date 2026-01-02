@@ -154,26 +154,6 @@ const nextConfig = {
     },
     // Personal branding navigation redirects
     {
-      source: '/about',
-      destination: '/my-story',
-      permanent: true,
-    },
-    {
-      source: '/expeditions',
-      destination: '/the-journey',
-      permanent: true,
-    },
-    {
-      source: '/blog',
-      destination: '/blogs',
-      permanent: true,
-    },
-    {
-      source: '/insights',
-      destination: '/blogs',
-      permanent: true,
-    },
-    {
       source: '/contact',
       destination: '/connect',
       permanent: true,

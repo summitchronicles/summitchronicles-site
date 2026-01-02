@@ -133,20 +133,20 @@ export default function CMSBlogPage() {
         </section>
 
         {/* Blog Posts Grid */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-black">
           <div className="max-w-6xl mx-auto px-6">
             {posts.length === 0 ? (
               <div className="text-center py-12">
-                <h2 className="text-2xl font-light text-spa-charcoal mb-4">
+                <h2 className="text-2xl font-light text-white mb-4">
                   No Blog Posts Yet
                 </h2>
-                <p className="text-spa-charcoal/70 mb-6">
+                <p className="text-gray-400 mb-6">
                   Create your first blog post in the Sanity Studio to see it
                   appear here.
                 </p>
                 <Link
                   href="/studio"
-                  className="inline-flex items-center gap-2 bg-alpine-blue text-white px-6 py-3 rounded-lg hover:bg-alpine-blue/90 transition-colors"
+                  className="inline-flex items-center gap-2 bg-summit-gold text-black px-6 py-3 rounded-lg hover:bg-summit-gold/90 transition-colors"
                 >
                   <Edit3 className="w-4 h-4" />
                   Open Sanity Studio
@@ -157,15 +157,15 @@ export default function CMSBlogPage() {
                 {posts.map((post, index) => (
                   <motion.article
                     key={post._id}
-                    className="bg-white rounded-xl border border-spa-stone/10 overflow-hidden shadow-sm hover:shadow-lg transition-shadow"
+                    className="bg-obsidian/50 backdrop-blur-md rounded-xl border border-white/10 overflow-hidden shadow-lg hover:shadow-xl hover:border-summit-gold/30 transition-all duration-300"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.1 }}
                     whileHover={{ y: -4 }}
                   >
                     {post.featuredImage && (
-                      <div className="h-48 bg-spa-stone/10 flex items-center justify-center">
-                        <span className="text-spa-charcoal/40">
+                      <div className="h-48 bg-white/5 flex items-center justify-center">
+                        <span className="text-gray-500">
                           Featured Image
                         </span>
                       </div>
@@ -173,20 +173,20 @@ export default function CMSBlogPage() {
 
                     <div className="p-6">
                       {post.isFeatured && (
-                        <div className="inline-flex items-center gap-1 bg-summit-gold/10 text-summit-gold px-2 py-1 rounded-full text-xs font-medium mb-3">
+                        <div className="inline-flex items-center gap-1 bg-summit-gold/20 text-summit-gold px-2 py-1 rounded-full text-xs font-medium mb-3 border border-summit-gold/20">
                           ⭐ Featured
                         </div>
                       )}
 
-                      <h2 className="text-xl font-medium text-spa-charcoal mb-3 line-clamp-2">
+                      <h2 className="text-xl font-medium text-white mb-3 line-clamp-2">
                         {post.title}
                       </h2>
 
-                      <p className="text-spa-charcoal/70 text-sm leading-relaxed mb-4 line-clamp-3">
+                      <p className="text-gray-400 text-sm leading-relaxed mb-4 line-clamp-3">
                         {post.excerpt}
                       </p>
 
-                      <div className="flex items-center justify-between text-xs text-spa-charcoal/60 mb-4">
+                      <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
                         <div className="flex items-center gap-2">
                           <User className="w-3 h-3" />
                           <span>{post.author?.name || 'Unknown Author'}</span>
@@ -204,7 +204,7 @@ export default function CMSBlogPage() {
                           {post.categories.slice(0, 2).map((category) => (
                             <span
                               key={category.slug.current}
-                              className="px-2 py-1 bg-spa-stone/20 text-spa-charcoal/70 rounded text-xs"
+                              className="px-2 py-1 bg-white/10 text-gray-300 rounded text-xs"
                             >
                               {category.title}
                             </span>
@@ -217,7 +217,7 @@ export default function CMSBlogPage() {
                           {post.tags.slice(0, 3).map((tag) => (
                             <span
                               key={tag}
-                              className="px-2 py-1 bg-alpine-blue/10 text-alpine-blue rounded-full text-xs"
+                              className="px-2 py-1 bg-summit-gold/10 text-summit-gold rounded-full text-xs"
                             >
                               #{tag}
                             </span>
@@ -227,7 +227,7 @@ export default function CMSBlogPage() {
 
                       <Link
                         href={`/blog/${post.slug.current}`}
-                        className="inline-flex items-center gap-2 text-alpine-blue hover:text-alpine-blue/80 text-sm font-medium"
+                        className="inline-flex items-center gap-2 text-summit-gold hover:text-white text-sm font-medium transition-colors"
                       >
                         Read More
                         <Eye className="w-3 h-3" />
@@ -241,19 +241,19 @@ export default function CMSBlogPage() {
         </section>
 
         {/* CMS Info Section */}
-        <section className="py-16 bg-spa-cloud/20">
+        <section className="py-16 bg-obsidian">
           <div className="max-w-4xl mx-auto px-6 text-center">
             <motion.div
-              className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 border border-spa-stone/10 shadow-sm"
+              className="bg-black/40 backdrop-blur-xl rounded-2xl p-8 border border-white/10 shadow-sm"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <h2 className="text-3xl font-light text-spa-charcoal mb-6">
+              <h2 className="text-3xl font-light text-white mb-6">
                 Powered by Sanity CMS
               </h2>
-              <p className="text-spa-charcoal/80 leading-relaxed mb-8">
+              <p className="text-gray-400 leading-relaxed mb-8">
                 This page demonstrates dynamic content rendering using Sanity as
                 a headless CMS. Content is fetched in real-time and
                 automatically updates when changes are made in the studio.
@@ -261,25 +261,25 @@ export default function CMSBlogPage() {
 
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-alpine-blue/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Edit3 className="w-6 h-6 text-alpine-blue" />
+                  <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mx-auto mb-3">
+                    <Edit3 className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="font-medium text-spa-charcoal mb-2">
+                  <h3 className="font-medium text-white mb-2">
                     Real-time Editing
                   </h3>
-                  <p className="text-sm text-spa-charcoal/70">
+                  <p className="text-sm text-gray-500">
                     Content updates automatically
                   </p>
                 </div>
 
                 <div className="text-center">
                   <div className="w-12 h-12 bg-emerald-500/10 rounded-xl flex items-center justify-center mx-auto mb-3">
-                    <Eye className="w-6 h-6 text-emerald-600" />
+                    <Eye className="w-6 h-6 text-emerald-500" />
                   </div>
-                  <h3 className="font-medium text-spa-charcoal mb-2">
+                  <h3 className="font-medium text-white mb-2">
                     Live Preview
                   </h3>
-                  <p className="text-sm text-spa-charcoal/70">
+                  <p className="text-sm text-gray-500">
                     See changes instantly
                   </p>
                 </div>
@@ -288,10 +288,10 @@ export default function CMSBlogPage() {
                   <div className="w-12 h-12 bg-summit-gold/10 rounded-xl flex items-center justify-center mx-auto mb-3">
                     <Calendar className="w-6 h-6 text-summit-gold" />
                   </div>
-                  <h3 className="font-medium text-spa-charcoal mb-2">
+                  <h3 className="font-medium text-white mb-2">
                     Structured Data
                   </h3>
-                  <p className="text-sm text-spa-charcoal/70">
+                  <p className="text-sm text-gray-500">
                     Rich content management
                   </p>
                 </div>

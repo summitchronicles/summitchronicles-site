@@ -7,7 +7,7 @@ import { RedBullBlogGrid } from '../components/blog';
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-spa-stone flex flex-col">
+    <div className="min-h-screen bg-black flex flex-col">
       {/* Skip link for accessibility */}
       <a
         href="#main-content"
