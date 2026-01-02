@@ -27,7 +27,6 @@ import {
 import { getEverestCountdownText, getDaysToEverest } from '@/lib/everest-countdown';
 import { useTrainingMetrics } from '@/lib/hooks/useTrainingMetrics';
 import { TrainingNavigation, TrainingQuickActions } from '../components/training/TrainingNavigation';
-import { RecoveryProgress } from '../components/dashboard/RecoveryProgress';
 
 interface TrainingPhase {
   phase: string;
@@ -213,10 +212,10 @@ export default function TrainingPage() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'text-green-600';
-      case 'current': return 'text-summit-gold-600';
-      case 'upcoming': return 'text-alpine-blue-600';
-      default: return 'text-spa-slate';
+      case 'completed': return 'text-green-400';
+      case 'current': return 'text-yellow-400';
+      case 'upcoming': return 'text-blue-400';
+      default: return 'text-gray-400';
     }
   };
 
@@ -239,9 +238,9 @@ export default function TrainingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-spa-stone text-spa-charcoal">
+    <div className="min-h-screen bg-black text-white">
       <Header />
-
+      
       {/* Hero Section */}
       <section className="relative h-96 flex items-center justify-center">
         <div className="absolute inset-0">
@@ -254,7 +253,7 @@ export default function TrainingPage() {
           />
           <div className="absolute inset-0 bg-black/60"></div>
         </div>
-
+        
         <div className="relative z-10 text-center px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -272,7 +271,7 @@ export default function TrainingPage() {
       </section>
 
       {/* Current Performance Stats - Simplified */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gray-900">
         <div className="max-w-5xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -281,13 +280,11 @@ export default function TrainingPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-4 text-spa-charcoal">
+            <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-4">
               Current Status
             </h2>
-            <div className="h-px w-16 bg-alpine-blue-400 mx-auto"></div>
+            <div className="h-px w-16 bg-blue-400 mx-auto"></div>
           </motion.div>
-
-          <RecoveryProgress />
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {currentStats.map((stat, index) => {
@@ -301,13 +298,13 @@ export default function TrainingPage() {
                   viewport={{ once: true }}
                   className="text-center space-y-4"
                 >
-                  <div className="mx-auto w-16 h-16 bg-alpine-blue-50 rounded-full flex items-center justify-center border border-alpine-blue-100">
-                    <IconComponent className="w-8 h-8 text-alpine-blue-600" />
+                  <div className="mx-auto w-16 h-16 bg-white/10 rounded-full flex items-center justify-center">
+                    <IconComponent className="w-8 h-8 text-white" />
                   </div>
                   <div>
-                    <div className="text-3xl font-light mb-1 text-spa-charcoal">{stat.value}</div>
-                    <div className="text-sm font-medium tracking-wide mb-2 text-spa-charcoal">{stat.label}</div>
-                    <div className="text-xs text-spa-slate">{stat.description}</div>
+                    <div className="text-3xl font-light mb-1 text-white">{stat.value}</div>
+                    <div className="text-sm font-medium tracking-wide mb-2 text-white">{stat.label}</div>
+                    <div className="text-xs text-gray-400">{stat.description}</div>
                   </div>
                 </motion.div>
               );
@@ -317,12 +314,12 @@ export default function TrainingPage() {
           {/* Simple Data Indicator */}
           <div className="flex items-center justify-center mt-8 space-x-2">
             {wellnessLoading ? (
-              <RefreshCw className="w-4 h-4 animate-spin text-summit-gold-400" />
+              <RefreshCw className="w-4 h-4 animate-spin text-yellow-400" />
             ) : wellnessData ? (
               <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm text-green-600 font-medium">LIVE GARMIN WELLNESS DATA</span>
-                <div className="text-xs text-spa-slate">
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <span className="text-sm text-green-400 font-medium">LIVE GARMIN WELLNESS DATA</span>
+                <div className="text-xs text-gray-400">
                   Updated: {new Date(wellnessData.lastUpdated).toLocaleTimeString()}
                 </div>
               </div>
@@ -337,7 +334,7 @@ export default function TrainingPage() {
       </section>
 
       {/* Training Philosophy */}
-      <section className="py-20 bg-spa-stone">
+      <section className="py-20 bg-black">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -346,10 +343,10 @@ export default function TrainingPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-8 text-spa-charcoal">
+            <h2 className="text-3xl md:text-4xl font-light tracking-wide mb-8">
               THE SYSTEMATIC APPROACH
             </h2>
-            <div className="h-px w-24 bg-spa-charcoal/20 mx-auto"></div>
+            <div className="h-px w-24 bg-white/30 mx-auto"></div>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -360,19 +357,19 @@ export default function TrainingPage() {
               viewport={{ once: true }}
               className="space-y-6"
             >
-              <h3 className="text-2xl font-light tracking-wide text-spa-charcoal">From Tuberculosis to Everest Ready</h3>
-              <p className="text-spa-slate leading-relaxed">
+              <h3 className="text-2xl font-light tracking-wide">From Tuberculosis to Everest Ready</h3>
+              <p className="text-gray-300 leading-relaxed">
                 <strong>From disease to the death zone.</strong> In 2013, tuberculosis left me
                 bedridden and barely able to walk 50 meters. Today, I've completed four of the
                 Seven Summits through systematic preparation and data-driven training.
               </p>
-              <p className="text-spa-slate leading-relaxed">
+              <p className="text-gray-300 leading-relaxed">
                 <strong>Every expedition teaches the next.</strong> Kilimanjaro (2022) proved
                 systematic preparation works. Aconcagua (2023) taught extreme altitude endurance.
                 Elbrus (2023) mastered cold weather climbing. Denali (2024) perfected technical
                 glacier travel and expedition logistics.
               </p>
-              <p className="text-spa-slate leading-relaxed">
+              <p className="text-gray-300 leading-relaxed">
                 <strong>Now: {getDaysToEverest()} days to Everest.</strong>
                 Every training session builds specific adaptations needed for survival at 29,032 feet.
                 The mountain doesn't care about your feelings—it cares about your preparation.
@@ -398,7 +395,7 @@ export default function TrainingPage() {
       </section>
 
       {/* Training Phases - Collapsible */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-gray-900">
         <div className="max-w-5xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -407,11 +404,11 @@ export default function TrainingPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-4 text-spa-charcoal">
+            <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-4">
               Training Journey
             </h2>
-            <div className="h-px w-16 bg-alpine-blue-400 mx-auto mb-4"></div>
-            <p className="text-spa-slate max-w-2xl mx-auto">
+            <div className="h-px w-16 bg-blue-400 mx-auto mb-4"></div>
+            <p className="text-gray-300 max-w-2xl mx-auto">
               Four distinct phases from recovery to Everest readiness. Click to explore each phase.
             </p>
           </motion.div>
@@ -426,28 +423,28 @@ export default function TrainingPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="bg-white border border-gray-100 rounded-xl overflow-hidden shadow-spa-soft hover:shadow-spa-medium transition-shadow"
+                  className="border border-gray-800 rounded-xl overflow-hidden bg-gray-800/30"
                 >
                   {/* Phase Header - Always Visible */}
                   <button
                     onClick={() => setExpandedPhase(isExpanded ? null : phase.phase)}
-                    className="w-full p-6 text-left hover:bg-spa-stone/50 transition-colors"
+                    className="w-full p-6 text-left hover:bg-gray-800/50 transition-colors"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
-                        <div className={`px-3 py-1 text-xs font-medium tracking-wider uppercase rounded ${getStatusColor(phase.status)} bg-spa-stone`}>
+                        <div className={`px-3 py-1 text-xs font-medium tracking-wider uppercase rounded ${getStatusColor(phase.status)} bg-gray-800`}>
                           {getStatusLabel(phase.status)}
                         </div>
-                        <h3 className="text-xl font-light tracking-wide text-spa-charcoal">{phase.phase}</h3>
-                        <span className="text-sm text-spa-slate">{phase.duration}</span>
+                        <h3 className="text-xl font-light tracking-wide text-white">{phase.phase}</h3>
+                        <span className="text-sm text-gray-400">{phase.duration}</span>
                       </div>
                       {isExpanded ? (
-                        <ChevronUp className="w-5 h-5 text-spa-slate" />
+                        <ChevronUp className="w-5 h-5 text-gray-400" />
                       ) : (
-                        <ChevronDown className="w-5 h-5 text-spa-slate" />
+                        <ChevronDown className="w-5 h-5 text-gray-400" />
                       )}
                     </div>
-                    <div className="mt-2 text-sm text-spa-slate">{phase.focus}</div>
+                    <div className="mt-2 text-sm text-gray-300">{phase.focus}</div>
                   </button>
 
                   {/* Expanded Content */}
@@ -458,23 +455,23 @@ export default function TrainingPage() {
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="border-t border-gray-100"
+                        className="border-t border-gray-700"
                       >
-                        <div className="p-6 bg-spa-stone/30">
+                        <div className="p-6 bg-gray-800/20">
                           <div className="grid md:grid-cols-2 gap-8">
                             {/* Phase Details */}
                             <div>
-                              <h4 className="text-lg font-light text-spa-charcoal mb-3">Phase Overview</h4>
-                              <p className="text-spa-slate leading-relaxed mb-4">
+                              <h4 className="text-lg font-light text-white mb-3">Phase Overview</h4>
+                              <p className="text-gray-300 leading-relaxed mb-4">
                                 {phase.details}
                               </p>
-                              <div className="space-y-2 text-sm text-spa-slate">
+                              <div className="space-y-2 text-sm text-gray-400">
                                 <div className="flex items-center space-x-2">
-                                  <Calendar className="w-4 h-4 text-alpine-blue-500" />
+                                  <Calendar className="w-4 h-4" />
                                   <span>{phase.duration}</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                  <Target className="w-4 h-4 text-summit-gold-500" />
+                                  <Target className="w-4 h-4" />
                                   <span>{phase.focus}</span>
                                 </div>
                               </div>
@@ -482,34 +479,34 @@ export default function TrainingPage() {
 
                             {/* Metrics Grid */}
                             <div>
-                              <h4 className="text-lg font-light text-spa-charcoal mb-3">
+                              <h4 className="text-lg font-light text-white mb-3">
                                 {phase.phase === 'Base Training' ? 'Live Training Metrics' : 'Key Metrics'}
                               </h4>
                               <div className="grid grid-cols-1 gap-3">
                                 {(phase.phase === 'Base Training' ? getDynamicMetrics() : Array.isArray(phase.metrics) ? phase.metrics : []).map((metric, metricIndex) => (
-                                  <div key={metricIndex} className="bg-white rounded-lg p-4 border border-gray-100 shadow-sm">
+                                  <div key={metricIndex} className="bg-gray-800/50 rounded-lg p-4">
                                     <div className="flex items-center justify-between">
                                       <div>
-                                        <div className="text-lg font-light text-spa-charcoal">{metric.value}</div>
-                                        <div className="text-xs text-spa-slate uppercase tracking-wide">
+                                        <div className="text-lg font-light text-white">{metric.value}</div>
+                                        <div className="text-xs text-gray-400 uppercase tracking-wide">
                                           {metric.label}
                                         </div>
                                       </div>
-                                      <span className="text-lg text-spa-slate">{getTrendIcon(metric.trend)}</span>
+                                      <span className="text-lg text-gray-400">{getTrendIcon(metric.trend)}</span>
                                     </div>
                                   </div>
                                 ))}
                               </div>
                               {phase.phase === 'Base Training' && wellnessData && (
-                                <div className="mt-4 p-3 bg-alpine-blue-50 rounded-lg border border-alpine-blue-100">
-                                  <div className="flex items-center space-x-2 text-xs text-alpine-blue-600">
-                                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                <div className="mt-4 p-3 bg-blue-900/20 rounded-lg border border-blue-500/30">
+                                  <div className="flex items-center space-x-2 text-xs text-blue-300">
+                                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
                                     <span className="font-medium">LIVE GARMIN DATA</span>
                                   </div>
-                                  <div className="text-xs text-alpine-blue-700 mt-1">
+                                  <div className="text-xs text-blue-400 mt-1">
                                     Real training readiness • Recovery status • Sleep quality
                                   </div>
-                                  <div className="text-xs text-alpine-blue-500 mt-1">
+                                  <div className="text-xs text-gray-400 mt-1">
                                     Updated: {new Date(wellnessData.lastUpdated).toLocaleTimeString()}
                                   </div>
                                 </div>
@@ -529,7 +526,7 @@ export default function TrainingPage() {
 
 
       {/* Real-time Data Preview */}
-      <section className="py-20 bg-spa-stone">
+      <section className="py-20 bg-black">
         <div className="max-w-4xl mx-auto px-6 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -538,24 +535,24 @@ export default function TrainingPage() {
             viewport={{ once: true }}
             className="space-y-8"
           >
-            <h3 className="text-3xl md:text-4xl font-light tracking-wide text-spa-charcoal">
+            <h3 className="text-3xl md:text-4xl font-light tracking-wide">
               LIVE TRAINING DATA
             </h3>
-            <p className="text-xl text-spa-slate font-light leading-relaxed">
-              Real-time metrics from every training session. Heart rate, power output,
+            <p className="text-xl text-gray-300 font-light leading-relaxed">
+              Real-time metrics from every training session. Heart rate, power output, 
               elevation gain, and recovery data analyzed daily to optimize Everest preparation.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
                 href="/training/realtime"
-                className="inline-flex items-center space-x-2 border border-spa-charcoal text-spa-charcoal px-8 py-3 font-medium tracking-wide hover:bg-spa-charcoal hover:text-white transition-colors"
+                className="inline-flex items-center space-x-2 border border-white text-white px-8 py-3 font-medium tracking-wide hover:bg-white hover:text-black transition-colors"
               >
                 <Activity className="w-5 h-5" />
                 <span>View Live Data</span>
               </a>
               <a
                 href="/expeditions"
-                className="inline-flex items-center space-x-2 bg-spa-charcoal text-white px-8 py-3 font-medium tracking-wide hover:bg-spa-charcoal/90 transition-colors"
+                className="inline-flex items-center space-x-2 bg-white text-black px-8 py-3 font-medium tracking-wide hover:bg-gray-200 transition-colors"
               >
                 <Mountain className="w-5 h-5" />
                 <span>Expedition Timeline</span>

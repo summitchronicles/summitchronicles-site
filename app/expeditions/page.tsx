@@ -400,7 +400,7 @@ export default function ExpeditionsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-spa-stone text-spa-charcoal">
+    <div className="min-h-screen bg-black text-white">
       <Header />
 
       {/* Hero Section */}
@@ -458,7 +458,7 @@ export default function ExpeditionsPage() {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20 relative bg-spa-stone">
+      <section className="py-20 relative">
         <div className="max-w-6xl mx-auto px-6">
           {/* Section Header */}
           <motion.div
@@ -468,11 +468,11 @@ export default function ExpeditionsPage() {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-light tracking-wide mb-6 text-spa-charcoal">
+            <h2 className="text-4xl md:text-5xl font-light tracking-wide mb-6">
               THE JOURNEY
             </h2>
-            <div className="h-px w-32 bg-spa-charcoal/20 mx-auto mb-6"></div>
-            <p className="text-xl text-spa-slate max-w-3xl mx-auto">
+            <div className="h-px w-32 bg-white/30 mx-auto mb-6"></div>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Each expedition represents a milestone in systematic preparation,
               personal growth, and the pursuit of seemingly impossible goals.
             </p>
@@ -481,7 +481,7 @@ export default function ExpeditionsPage() {
           {/* Timeline */}
           <div className="relative">
             {/* Timeline Line - Hidden on mobile, visible on desktop */}
-            <div className="hidden md:block absolute left-12 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-500 via-summit-gold-500 to-alpine-blue-500/50"></div>
+            <div className="hidden md:block absolute left-12 top-0 bottom-0 w-0.5 bg-gradient-to-b from-green-500 via-yellow-500 to-blue-500/50"></div>
 
             <div className="space-y-8 md:space-y-16">
               {expeditions.map((expedition, index) => {
@@ -498,12 +498,12 @@ export default function ExpeditionsPage() {
                     className="relative"
                   >
                     {/* Timeline Node - Hidden on mobile */}
-                    <div className={`hidden md:block absolute left-10 top-8 w-4 h-4 rounded-full border-4 border-white shadow-sm ${getTimelineColor(expedition.status)} z-10`}>
+                    <div className={`hidden md:block absolute left-10 top-8 w-4 h-4 rounded-full border-4 border-black ${getTimelineColor(expedition.status)} z-10`}>
                     </div>
 
                     {/* Year Label - Better positioning to avoid conflicts */}
                     <div className="mb-6 md:absolute md:left-20 md:-top-8 md:mb-0 z-30">
-                      <div className="bg-gradient-to-r from-summit-gold-400 to-orange-400 text-white text-3xl md:text-4xl font-black px-4 py-2 rounded-lg shadow-lg border-2 border-white text-center md:text-left inline-block">
+                      <div className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-3xl md:text-4xl font-black px-4 py-2 rounded-lg shadow-xl border-2 border-black text-center md:text-left inline-block">
                         {expedition.year}
                       </div>
                     </div>
@@ -511,9 +511,9 @@ export default function ExpeditionsPage() {
                     {/* Card - Full width on mobile, offset on desktop */}
                     <div className="md:ml-32">
                       <div
-                        className={`group cursor-pointer border rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-spa-elevated ${getCardBorderColor(expedition.status).replace('border-gray-500/30', 'border-gray-100')} ${
-                          isExpanded ? 'shadow-spa-elevated scale-[1.02]' : 'shadow-spa-soft hover:scale-[1.01]'
-                        } bg-white`}
+                        className={`group cursor-pointer border rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-2xl ${getCardBorderColor(expedition.status)} ${
+                          isExpanded ? 'shadow-2xl scale-[1.02]' : 'hover:scale-[1.01]'
+                        }`}
                         onClick={() => toggleExpanded(expedition.id)}
                       >
                         {/* Main Card Content */}
@@ -527,20 +527,20 @@ export default function ExpeditionsPage() {
                               className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                               sizes="(max-width: 768px) 100vw, 40vw"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20"></div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
 
                             {/* Status Badge - Better positioning */}
                             <div className="absolute top-4 left-4">
-                              <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-full border border-white/20 backdrop-blur-md text-xs font-medium shadow-sm ${getStatusColor(expedition.status).replace('bg-', 'bg-black/40 text-white ')}`}>
-                                <StatusIcon className="w-3 h-3 text-white" />
-                                <span className="text-white drop-shadow-md">{getStatusLabel(expedition.status)}</span>
+                              <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-full border text-xs font-medium ${getStatusColor(expedition.status)}`}>
+                                <StatusIcon className="w-3 h-3" />
+                                <span>{getStatusLabel(expedition.status)}</span>
                               </div>
                             </div>
 
                             {/* Seven Summits Badge - Repositioned */}
                             {expedition.isSevenSummit && (
                               <div className="absolute top-16 left-4">
-                                <div className="bg-gradient-to-r from-summit-gold-500/90 to-orange-500/90 border border-summit-gold-600 text-white px-2 py-1 rounded-md text-xs font-bold shadow-sm">
+                                <div className="bg-gradient-to-r from-yellow-500/90 to-orange-500/90 border border-yellow-600 text-black px-2 py-1 rounded-md text-xs font-bold">
                                   SEVEN SUMMITS
                                 </div>
                               </div>
@@ -548,7 +548,7 @@ export default function ExpeditionsPage() {
 
                             {/* Elevation - Better spacing and positioning */}
                             <div className="absolute bottom-4 left-4">
-                              <div className="bg-black/60 backdrop-blur-md px-3 py-2 rounded-lg border border-white/20 shadow-lg">
+                              <div className="bg-black/80 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/30">
                                 <div className="text-white text-lg font-bold">
                                   {expedition.elevation}
                                 </div>
@@ -560,55 +560,55 @@ export default function ExpeditionsPage() {
                           </div>
 
                           {/* Content Section */}
-                          <div className="md:col-span-3 p-6 md:p-8 bg-white order-2 md:order-none flex flex-col justify-between">
+                          <div className="md:col-span-3 p-6 md:p-8 bg-gray-900/50 backdrop-blur-sm order-2 md:order-none flex flex-col justify-between">
                             <div className="space-y-4 md:space-y-6 flex-1">
                               {/* Header */}
                               <div>
-                                <h3 className="text-2xl md:text-4xl font-light tracking-wide text-spa-charcoal mb-3">
+                                <h3 className="text-2xl md:text-4xl font-light tracking-wide text-white mb-3">
                                   {expedition.mountain}
                                 </h3>
-                                <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-4 text-spa-slate">
+                                <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-4 text-gray-300">
                                   <div className="flex items-center space-x-2">
-                                    <MapPin className="w-4 h-4 md:w-5 md:h-5 text-alpine-blue-500" />
+                                    <MapPin className="w-4 h-4 md:w-5 md:h-5" />
                                     <span className="text-base md:text-lg">{expedition.location}</span>
                                   </div>
                                   <div className="flex items-center space-x-2">
-                                    <Calendar className="w-4 h-4 md:w-5 md:h-5 text-summit-gold-500" />
+                                    <Calendar className="w-4 h-4 md:w-5 md:h-5" />
                                     <span className="text-base md:text-lg">{expedition.date}</span>
                                   </div>
                                 </div>
                               </div>
 
                               {/* Story */}
-                              <p className="text-spa-slate text-base md:text-lg leading-relaxed">
+                              <p className="text-gray-200 text-base md:text-lg leading-relaxed">
                                 {expedition.story}
                               </p>
 
                               {/* Quick Stats */}
                               <div className="grid grid-cols-3 gap-2 md:gap-4">
-                                <div className="text-center p-2 md:p-3 bg-alpine-blue-50 rounded-lg border border-alpine-blue-100">
-                                  <Timer className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-alpine-blue-500" />
-                                  <div className="text-xs md:text-sm text-spa-slate">Duration</div>
-                                  <div className="text-sm md:text-base text-spa-charcoal font-medium">{expedition.stats.duration}</div>
+                                <div className="text-center p-2 md:p-3 bg-black/30 rounded-lg">
+                                  <Timer className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-blue-400" />
+                                  <div className="text-xs md:text-sm text-gray-400">Duration</div>
+                                  <div className="text-sm md:text-base text-white font-medium">{expedition.stats.duration}</div>
                                 </div>
-                                <div className="text-center p-2 md:p-3 bg-green-50 rounded-lg border border-green-100">
-                                  <Mountain className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-green-500" />
-                                  <div className="text-xs md:text-sm text-spa-slate">Difficulty</div>
-                                  <div className="text-sm md:text-base text-spa-charcoal font-medium">{expedition.stats.difficulty}</div>
+                                <div className="text-center p-2 md:p-3 bg-black/30 rounded-lg">
+                                  <Mountain className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-green-400" />
+                                  <div className="text-xs md:text-sm text-gray-400">Difficulty</div>
+                                  <div className="text-sm md:text-base text-white font-medium">{expedition.stats.difficulty}</div>
                                 </div>
-                                <div className="text-center p-2 md:p-3 bg-red-50 rounded-lg border border-red-100">
-                                  <Thermometer className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-red-500" />
-                                  <div className="text-xs md:text-sm text-spa-slate">Temperature</div>
-                                  <div className="text-sm md:text-base text-spa-charcoal font-medium">{expedition.stats.temperature}</div>
+                                <div className="text-center p-2 md:p-3 bg-black/30 rounded-lg">
+                                  <Thermometer className="w-4 h-4 md:w-5 md:h-5 mx-auto mb-1 md:mb-2 text-red-400" />
+                                  <div className="text-xs md:text-sm text-gray-400">Temperature</div>
+                                  <div className="text-sm md:text-base text-white font-medium">{expedition.stats.temperature}</div>
                                 </div>
                               </div>
 
                               {/* Expand Button */}
-                              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                                <div className="text-xs md:text-sm text-spa-slate">
+                              <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                                <div className="text-xs md:text-sm text-gray-400">
                                   Click to {isExpanded ? 'collapse' : 'expand'} details
                                 </div>
-                                <div className="flex items-center space-x-2 text-spa-slate">
+                                <div className="flex items-center space-x-2 text-gray-400">
                                   {isExpanded ? <ChevronUp className="w-4 h-4 md:w-5 md:h-5" /> : <ChevronDown className="w-4 h-4 md:w-5 md:h-5" />}
                                 </div>
                               </div>
@@ -623,15 +623,15 @@ export default function ExpeditionsPage() {
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="border-t border-gray-100 bg-spa-stone/30 p-4 md:p-8"
+                            className="border-t border-gray-700 bg-gray-800/50 p-4 md:p-8"
                           >
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                               <div>
-                                <h4 className="text-lg md:text-xl font-light text-spa-charcoal mb-3 md:mb-4 flex items-center space-x-2">
-                                  <Award className="w-4 h-4 md:w-5 md:h-5 text-summit-gold-500" />
+                                <h4 className="text-lg md:text-xl font-light text-white mb-3 md:mb-4 flex items-center space-x-2">
+                                  <Award className="w-4 h-4 md:w-5 md:h-5 text-yellow-400" />
                                   <span>Key Achievements</span>
                                 </h4>
-                                <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-spa-slate">
+                                <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-gray-300">
                                   <li>• Successfully reached summit</li>
                                   <li>• All safety protocols executed</li>
                                   <li>• Weather window optimized</li>
@@ -639,11 +639,11 @@ export default function ExpeditionsPage() {
                                 </ul>
                               </div>
                               <div>
-                                <h4 className="text-lg md:text-xl font-light text-spa-charcoal mb-3 md:mb-4 flex items-center space-x-2">
-                                  <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
+                                <h4 className="text-lg md:text-xl font-light text-white mb-3 md:mb-4 flex items-center space-x-2">
+                                  <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
                                   <span>Lessons Learned</span>
                                 </h4>
-                                <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-spa-slate">
+                                <ul className="space-y-1 md:space-y-2 text-sm md:text-base text-gray-300">
                                   <li>• High-altitude acclimatization</li>
                                   <li>• Equipment performance testing</li>
                                   <li>• Mental resilience building</li>
@@ -664,7 +664,7 @@ export default function ExpeditionsPage() {
       </section>
 
       {/* Summary Stats */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gray-900">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -673,21 +673,21 @@ export default function ExpeditionsPage() {
             viewport={{ once: true }}
             className="grid md:grid-cols-4 gap-8 text-center"
           >
-            <div className="bg-white rounded-2xl p-8 border border-green-200 shadow-spa-soft">
-              <div className="text-4xl font-light text-green-600 mb-2">14</div>
-              <div className="text-spa-slate">Expeditions Complete</div>
+            <div className="bg-black/50 rounded-2xl p-8 border border-green-500/30">
+              <div className="text-4xl font-light text-green-400 mb-2">14</div>
+              <div className="text-gray-300">Expeditions Complete</div>
             </div>
-            <div className="bg-white rounded-2xl p-8 border border-summit-gold-200 shadow-spa-soft">
-              <div className="text-4xl font-light text-summit-gold-500 mb-2">4/7</div>
-              <div className="text-spa-slate">Seven Summits</div>
+            <div className="bg-black/50 rounded-2xl p-8 border border-yellow-500/30">
+              <div className="text-4xl font-light text-yellow-400 mb-2">4/7</div>
+              <div className="text-gray-300">Seven Summits</div>
             </div>
-            <div className="bg-white rounded-2xl p-8 border border-alpine-blue-200 shadow-spa-soft">
-              <div className="text-4xl font-light text-alpine-blue-500 mb-2">11</div>
-              <div className="text-spa-slate">Years Journey</div>
+            <div className="bg-black/50 rounded-2xl p-8 border border-blue-500/30">
+              <div className="text-4xl font-light text-blue-400 mb-2">11</div>
+              <div className="text-gray-300">Years Journey</div>
             </div>
-            <div className="bg-white rounded-2xl p-8 border border-purple-200 shadow-spa-soft">
-              <div className="text-4xl font-light text-purple-600 mb-2">∞</div>
-              <div className="text-spa-slate">Lessons Learned</div>
+            <div className="bg-black/50 rounded-2xl p-8 border border-purple-500/30">
+              <div className="text-4xl font-light text-purple-400 mb-2">∞</div>
+              <div className="text-gray-300">Lessons Learned</div>
             </div>
           </motion.div>
         </div>
