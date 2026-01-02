@@ -248,7 +248,7 @@ export default function TrainingPage() {
             src="/images/sunith-grit-training.png"
             alt="Training for Everest Expedition"
             fill
-            className="object-cover opacity-100 scale-105"
+            className="object-cover object-top opacity-100 scale-105"
             sizes="100vw"
             priority
           />
