@@ -19,6 +19,7 @@ import {
   Download,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { OptimizedImage } from '../atoms/OptimizedImage';
 
 interface Achievement {
   id: string;
@@ -523,10 +524,11 @@ export const PersonalStoryGallery: React.FC<PersonalStoryGalleryProps> = ({
                   >
                     {/* Achievement Image */}
                     <div className="aspect-video bg-gradient-to-br from-spa-mist to-spa-cloud relative overflow-hidden">
-                      <img
+                      <OptimizedImage
                         src={achievement.photos[0]?.url}
                         alt={achievement.photos[0]?.caption}
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover transition-transform duration-500 hover:scale-105"
                       />
                       <div className="absolute top-4 left-4">
                         <div
@@ -690,10 +692,12 @@ export const PersonalStoryGallery: React.FC<PersonalStoryGalleryProps> = ({
             <div className="bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-y-auto">
               {/* Image Gallery */}
               <div className="relative aspect-video bg-gradient-to-br from-spa-mist to-spa-cloud">
-                <img
+                <OptimizedImage
                   src={selectedAchievement.photos[currentImageIndex]?.url}
                   alt={selectedAchievement.photos[currentImageIndex]?.caption}
-                  className="w-full h-full object-cover"
+                  fill
+                  className="object-cover"
+                  priority
                 />
 
                 {selectedAchievement.photos.length > 1 && (

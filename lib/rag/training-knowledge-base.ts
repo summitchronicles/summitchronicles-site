@@ -51,7 +51,7 @@ export async function initializeKnowledgeBase(): Promise<void> {
   >[] = [
     {
       title: 'High-Altitude Acclimatization Protocol',
-      content: `Proper acclimatization is crucial for high-altitude mountaineering success. The general rule is to gain no more than 300-500m of sleeping elevation per day above 3000m. 
+      content: `Proper acclimatization is crucial for high-altitude mountaineering success. The general rule is to gain no more than 300-500m of sleeping elevation per day above 3000m.
 
 Key principles:
 1. Climb high, sleep low - ascend during the day but descend to sleep at lower elevation
@@ -308,18 +308,34 @@ export async function searchKnowledgeBase(
       const similarity = cosineSimilarity(queryEmbedding, document.embedding);
 
       if (similarity >= threshold) {
-        // Calculate relevance score considering similarity and other factors
+        // Hybrid Search Scoring
+        // Base score is vector similarity
         let relevanceScore = similarity;
 
-        // Boost score for exact keyword matches
-        const queryWords = query.toLowerCase().split(' ');
-        const contentWords = document.content.toLowerCase();
-        const titleWords = document.title.toLowerCase();
+        // Keyword boosting (BMP25-lite)
+        const queryKeywords = extractKeywords(query);
+        const titleLower = document.title.toLowerCase();
+        const contentLower = document.content.toLowerCase();
+        const tagsLower = (document.metadata.tags || []).join(' ').toLowerCase();
 
-        for (const word of queryWords) {
-          if (titleWords.includes(word)) relevanceScore += 0.1;
-          if (contentWords.includes(word)) relevanceScore += 0.05;
+        let keywordMatches = 0;
+        for (const word of queryKeywords) {
+          if (titleLower.includes(word)) {
+            relevanceScore += 0.15; // Strong boost for title match
+            keywordMatches++;
+          }
+          if (tagsLower.includes(word)) {
+            relevanceScore += 0.1; // Medium boost for tag match
+            keywordMatches++;
+          }
+          if (contentLower.includes(word)) {
+            relevanceScore += 0.05; // Light boost for content match
+            keywordMatches++;
+          }
         }
+
+        // Boost if multiple keywords match (phrase matching proxy)
+        if (keywordMatches >= 2) relevanceScore += 0.1;
 
         results.push({
           document,
@@ -339,6 +355,14 @@ export async function searchKnowledgeBase(
   }
 }
 
+// Helper function to extract keywords (simplified)
+function extractKeywords(text: string): string[] {
+  return text.toLowerCase()
+    .replace(/[^\w\s]/g, '')
+    .split(/\s+/)
+    .filter(w => w.length > 3 && !['what', 'where', 'when', 'how', 'that', 'this', 'with', 'from'].includes(w));
+}
+
 // Generate answer using RAG (Retrieval-Augmented Generation)
 export async function generateRAGResponse(
   question: string,
@@ -348,23 +372,30 @@ export async function generateRAGResponse(
     // Search for relevant documents
     const searchResults = await searchKnowledgeBase(question, 5, 0.6);
 
-    if (searchResults.length === 0) {
+    if (searchResults.length === 0 || searchResults[0].similarity < 0.45) {
       return {
         answer:
-          "I don't have enough specific information to answer that question. Could you provide more context or try rephrasing your question?",
+          "Summit Chronicles database is still populating information and blogs, you can reach out directly to Sunith for more specific answers.",
         sources: [],
         context_used: [],
         confidence: 0.1,
       };
     }
 
-    // Build context from top results
+    // Build context with smart chunking (sliding window overlap)
     let context = '';
     const contextUsed: string[] = [];
     let currentLength = 0;
 
     for (const result of searchResults) {
-      const docContext = `${result.document.title}:\n${result.document.content}\n\n`;
+      // Prioritize the most relevant section of the document if it's long
+      // For now, we'll take the first 1000 characters as a "smart chunk" since our docs are concise
+      // In a production system, we'd use a sliding window over the full content
+      const contentChunk = result.document.content.length > 1500
+        ? result.document.content.substring(0, 1500) + '...'
+        : result.document.content;
+
+      const docContext = `SOURCE: ${result.document.title}\n${contentChunk}\n\n`;
 
       if (currentLength + docContext.length <= maxContextLength) {
         context += docContext;

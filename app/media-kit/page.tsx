@@ -2,13 +2,13 @@
 
 import { Header } from '../components/organisms/Header';
 import { motion } from 'framer-motion';
-import { Download, Image, FileText, Camera, Mail } from 'lucide-react';
+import { Download, Image as ImageIcon, FileText, Camera, Mail } from 'lucide-react';
 
 export default function MediaKitPage() {
   return (
     <div className="min-h-screen bg-spa-stone-50">
       <Header />
-      
+
       <div className="pt-20">
         {/* Hero Section */}
         <section className="py-16 bg-white">
@@ -22,7 +22,7 @@ export default function MediaKitPage() {
                 Media Kit
               </h1>
               <p className="text-xl text-spa-slate leading-relaxed max-w-2xl mx-auto">
-                High-resolution assets, biographical information, and expedition photography 
+                High-resolution assets, biographical information, and expedition photography
                 for media coverage and partnership opportunities.
               </p>
             </motion.div>
@@ -55,7 +55,7 @@ export default function MediaKitPage() {
             <h2 className="text-3xl font-light text-spa-charcoal mb-12 text-center">
               Press Assets
             </h2>
-            
+
             <div className="grid md:grid-cols-2 gap-8">
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
@@ -65,7 +65,7 @@ export default function MediaKitPage() {
                 className="border border-spa-cloud rounded-lg p-6 hover:shadow-spa-medium transition-shadow"
               >
                 <div className="flex items-center space-x-3 mb-4">
-                  <Image className="w-6 h-6 text-alpine-blue" />
+                  <ImageIcon className="w-6 h-6 text-alpine-blue" />
                   <h3 className="text-xl font-medium text-spa-charcoal">High-Res Photos</h3>
                 </div>
                 <p className="text-spa-slate mb-4">
@@ -108,15 +108,15 @@ export default function MediaKitPage() {
             </h2>
             <div className="prose prose-lg max-w-none text-spa-slate">
               <p>
-                <strong>Sunith Kumar</strong> is a systematic mountaineer and expedition photographer 
-                pursuing the Seven Summits through data-driven preparation and methodical training. 
-                Based in the Pacific Northwest, he combines engineering principles with extreme adventure 
+                <strong>Sunith Kumar</strong> is a systematic mountaineer and expedition photographer
+                pursuing the Seven Summits through data-driven preparation and methodical training.
+                Based in the Pacific Northwest, he combines engineering principles with extreme adventure
                 sports to document the intersection of systematic thinking and mountaineering excellence.
               </p>
               <p>
-                After a failed attempt on Mount Whitney in 2021, Sunith developed a comprehensive 
-                preparation methodology that has led to successful expeditions on Mount Kilimanjaro, 
-                Mount Whitney (redemption), and Mount Washington. His current focus is systematic 
+                After a failed attempt on Mount Whitney in 2021, Sunith developed a comprehensive
+                preparation methodology that has led to successful expeditions on Mount Kilimanjaro,
+                Mount Whitney (redemption), and Mount Washington. His current focus is systematic
                 preparation for Mount Everest in Spring 2025.
               </p>
             </div>

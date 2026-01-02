@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Header } from '../../components/organisms/Header';
 import { ArrowLeft, Save, Eye, Upload, X, Bold, Italic, Underline, List, Link2, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
+import NextImage from 'next/image';
 
 interface Section {
   title: string;
@@ -286,15 +287,17 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
                 </button>
               </div>
             </div>
-            {heroImage && (
-              <div className="mt-4">
-                <img
-                  src={`/content/posts/${params.slug}/images/${heroImage}`}
-                  alt="Hero preview"
-                  className="w-full max-w-md h-48 object-cover border rounded"
-                />
-              </div>
-            )}
+            {heroImage &&                <div className="mt-4">
+                  <NextImage
+                    src={`/content/posts/${params.slug}/images/${heroImage}`}
+                    alt="Hero preview"
+                    width={400}
+                    height={200}
+                    className="w-full max-w-md h-48 object-cover border rounded"
+                    unoptimized
+                  />
+                </div>
+            }
           </div>
 
           {/* Sections */}
@@ -423,10 +426,13 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
                   </div>
                   {section.image && (
                     <div className="mt-2">
-                      <img
+                      <NextImage
                         src={`/content/posts/${params.slug}/images/${section.image}`}
                         alt="Section preview"
+                        width={300}
+                        height={150}
                         className="w-full max-w-sm h-32 object-cover border rounded"
+                        unoptimized
                       />
                     </div>
                   )}

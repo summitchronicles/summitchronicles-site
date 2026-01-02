@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   TrendingUp,
   TrendingDown,
@@ -60,11 +60,7 @@ export function ComplianceDashboard({ className = '' }: ComplianceDashboardProps
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'quarter'>('month');
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    loadAnalytics();
-  }, [timeframe]);
-
-  const loadAnalytics = async () => {
+  const loadAnalytics = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -84,7 +80,11 @@ export function ComplianceDashboard({ className = '' }: ComplianceDashboardProps
     } finally {
       setLoading(false);
     }
-  };
+  }, [timeframe]);
+
+  useEffect(() => {
+    loadAnalytics();
+  }, [loadAnalytics]);
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

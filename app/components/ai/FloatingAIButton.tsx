@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { Command } from 'cmdk';
-import { Mountain, X, Sparkles, MessageCircle } from 'lucide-react';
+// import { Command } from 'cmdk'; // Removed as we are building custom chat UI
+import { Mountain, X, Sparkles, MessageCircle, ArrowUp, Send } from 'lucide-react';
 
 interface FloatingAIButtonProps {
   className?: string;
@@ -14,7 +14,59 @@ export function FloatingAIButton({ className = '' }: FloatingAIButtonProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [search, setSearch] = useState('');
+  const [messages, setMessages] = useState<{ role: 'user' | 'assistant'; content: string }[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isLoading]);
+
+  const handleSendMessage = async (text: string) => {
+    if (!text.trim()) return;
+
+    // Add user message
+    const userMessage = { role: 'user' as const, content: text };
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    setIsLoading(true);
+
+    try {
+      // Simulate API call to RAG endpoint
+      // In a real app, this would be: await fetch('/api/chat', { ... })
+      // For now, we'll use a simulated response or call the actual API if available
+
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(prev => [...prev, { role: 'assistant', content: data.answer }]);
+      } else {
+        // Fallback for demo if API isn't fully wired or errors
+         setMessages(prev => [...prev, {
+           role: 'assistant',
+           content: "Summit Chronicles database is still populating information and blogs, you can reach out directly to Sunith for more specific answers."
+         }]);
+      }
+    } catch (error) {
+       console.error('Chat error:', error);
+       setMessages(prev => [...prev, {
+         role: 'assistant',
+         content: "I'm having trouble connecting to the Summit Chronicles database right now. Please try again later."
+       }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Show button after page loads
   useEffect(() => {
@@ -188,64 +240,92 @@ export function FloatingAIButton({ className = '' }: FloatingAIButtonProps) {
                     </div>
                   </div>
 
-                  {/* cmdk Command Palette */}
-                  <Command className="max-h-[70vh] sm:max-h-[60vh]">
-                    <div className="p-4 sm:p-6 border-b border-glacier-100">
-                      <Command.Input
-                        value={search}
-                        onValueChange={setSearch}
-                        placeholder="Ask about mountaineering, training, expeditions..."
-                        className="w-full px-4 py-3 text-base bg-glacier-50 border border-glacier-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-glacier-500 focus:border-transparent placeholder:text-glacier-400"
-                      />
+                  {/* Chat Interface */}
+                  <div className="flex flex-col h-[60vh] sm:h-[70vh]">
+                    {/* Chat Messages Area */}
+                    <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-slate-50">
+                      {messages.length === 0 ? (
+                        <div className="h-full flex flex-col items-center justify-center text-center text-slate-500">
+                          <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center mb-4">
+                            <Sparkles className="w-8 h-8 text-summit-gold-400" />
+                          </div>
+                          <h3 className="text-lg font-medium text-slate-800 mb-2">How can I help you today?</h3>
+                          <p className="text-sm max-w-md mx-auto mb-8">
+                            Ask about training plans, acclimatization strategies, or gear recommendations.
+                          </p>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl w-full">
+                            {exampleQueries.map((query, idx) => (
+                              <button
+                                key={idx}
+                                onClick={() => handleSendMessage(query)}
+                                className="text-left p-3 text-sm bg-white border border-slate-200 rounded-xl hover:border-alpine-blue-300 hover:shadow-sm transition-all"
+                              >
+                                {query}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : (
+                        messages.map((msg, idx) => (
+                          <div
+                            key={idx}
+                            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                          >
+                            <div
+                              className={`
+                                max-w-[85%] p-4 rounded-2xl text-sm leading-relaxed
+                                ${msg.role === 'user'
+                                  ? 'bg-alpine-blue-600 text-white rounded-br-none'
+                                  : 'bg-white border border-slate-200 text-slate-700 rounded-bl-none shadow-sm'
+                                }
+                              `}
+                            >
+                              {msg.content}
+                            </div>
+                          </div>
+                        ))
+                      )}
+                      {isLoading && (
+                         <div className="flex justify-start">
+                            <div className="bg-white border border-slate-200 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm flex items-center space-x-2">
+                              <div className="w-2 h-2 bg-alpine-blue-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                              <div className="w-2 h-2 bg-alpine-blue-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                              <div className="w-2 h-2 bg-alpine-blue-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                            </div>
+                         </div>
+                      )}
+                      <div ref={messagesEndRef} />
                     </div>
 
-                    <Command.List className="max-h-[50vh] sm:max-h-[40vh] overflow-y-auto p-4 sm:p-6">
-                      <Command.Empty className="py-12 text-center text-spa-slate">
-                        <div className="mb-2 text-4xl">🤔</div>
-                        <p className="font-medium">No results found</p>
-                        <p className="text-sm mt-1">Try asking about training, expeditions, or gear</p>
-                      </Command.Empty>
-
-                      <Command.Group heading="Example Questions" className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-2 [&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-semibold [&_[cmdk-group-heading]]:text-glacier-600 [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-wide">
-                        {exampleQueries.map((query, idx) => (
-                          <Command.Item
-                            key={idx}
-                            value={query}
-                            onSelect={() => {
-                              setSearch(query);
-                              // Here you would trigger the AI search
-                              console.log('Selected:', query);
-                            }}
-                            className="px-4 py-3 rounded-lg cursor-pointer hover:bg-glacier-50 data-[selected=true]:bg-glacier-100 transition-colors mb-1 text-sm sm:text-base text-spa-charcoal"
-                          >
-                            <div className="flex items-start space-x-3">
-                              <MessageCircle className="w-4 h-4 text-glacier-500 mt-0.5 flex-shrink-0" />
-                              <span>{query}</span>
-                            </div>
-                          </Command.Item>
-                        ))}
-                      </Command.Group>
-                    </Command.List>
-                  </Command>
-
-                  {/* Footer Info */}
-                  <div className="bg-glacier-50 px-4 py-3 sm:px-6 sm:py-4 border-t border-glacier-200">
-                    <div className="flex items-center justify-between text-xs text-glacier-600">
-                      <div className="flex items-center space-x-4">
-                        <span className="flex items-center space-x-1">
-                          <kbd className="px-2 py-1 bg-white border border-glacier-200 rounded">↑↓</kbd>
-                          <span>navigate</span>
-                        </span>
-                        <span className="flex items-center space-x-1">
-                          <kbd className="px-2 py-1 bg-white border border-glacier-200 rounded">↵</kbd>
-                          <span>select</span>
-                        </span>
-                        <span className="flex items-center space-x-1">
-                          <kbd className="px-2 py-1 bg-white border border-glacier-200 rounded">esc</kbd>
-                          <span>close</span>
-                        </span>
-                      </div>
-                      <span className="hidden sm:inline text-glacier-500">Powered by AI</span>
+                    {/* Input Area */}
+                    <div className="p-4 bg-white border-t border-slate-200">
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          handleSendMessage(inputValue);
+                        }}
+                        className="relative flex items-center"
+                      >
+                        <input
+                          type="text"
+                          value={inputValue}
+                          onChange={(e) => setInputValue(e.target.value)}
+                          placeholder="Ask a specific question..."
+                          className="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-alpine-blue-500 focus:border-transparent transition-all"
+                        />
+                        <button
+                          type="submit"
+                          disabled={!inputValue.trim() || isLoading}
+                          className="absolute right-2 p-2 bg-alpine-blue-600 text-white rounded-lg hover:bg-alpine-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          aria-label="Send message"
+                        >
+                          <ArrowUp className="w-4 h-4" />
+                        </button>
+                      </form>
+                      <p className="text-center text-xs text-slate-400 mt-2">
+                        AI can make mistakes. Verify important safety information.
+                      </p>
                     </div>
                   </div>
                 </Dialog.Panel>

@@ -42,13 +42,15 @@ interface TrainingInsightsProps {
   className?: string;
 }
 
+const DEFAULT_GOALS = [
+  'Build endurance for high-altitude climbing',
+  'Improve technical skills',
+  'Increase carrying capacity',
+];
+
 export function TrainingInsights({
   activities = [],
-  goals = [
-    'Build endurance for high-altitude climbing',
-    'Improve technical skills',
-    'Increase carrying capacity',
-  ],
+  goals = DEFAULT_GOALS,
   className = '',
 }: TrainingInsightsProps) {
   const [insights, setInsights] = useState<TrainingInsights | null>(null);
@@ -95,7 +97,7 @@ export function TrainingInsights({
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [activities, goals]);
 
   // Auto-generate insights when activities change
   useEffect(() => {

@@ -11,6 +11,7 @@ import {
   CheckCircle,
   ArrowRight
 } from 'lucide-react';
+import Image from 'next/image';
 import { getDaysToEverest, getEverestCountdownText } from '@/lib/everest-countdown';
 
 export default function NewsletterPage() {
@@ -50,10 +51,12 @@ export default function NewsletterPage() {
       {/* Hero Section */}
       <section className="relative h-96 flex items-center justify-center">
         <div className="absolute inset-0">
-          <img
+          <Image
             src="/stories/data-training.jpg"
             alt="Summit Chronicles Newsletter"
-            className="w-full h-full object-cover opacity-50"
+            fill
+            className="object-cover opacity-50"
+            priority
           />
           <div className="absolute inset-0 bg-black/70"></div>
         </div>

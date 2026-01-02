@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   BarChart3,
@@ -72,11 +72,7 @@ export function AdvancedAnalytics({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    generateAnalytics();
-  }, [activities, timeframe]);
-
-  const generateAnalytics = async () => {
+  const generateAnalytics = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -110,7 +106,11 @@ export function AdvancedAnalytics({
     } finally {
       setLoading(false);
     }
-  };
+  }, [activities, timeframe]);
+
+  useEffect(() => {
+    generateAnalytics();
+  }, [generateAnalytics]);
 
   const generateSampleMetrics = (): PerformanceMetrics => ({
     totalDistance: 125.6,

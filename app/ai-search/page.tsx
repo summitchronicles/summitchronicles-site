@@ -1,6 +1,7 @@
 'use client';
 
 import { Brain, Search, BookOpen, Zap } from 'lucide-react';
+import Image from 'next/image';
 import { SmartSearch } from '../components/ai/SmartSearch';
 import { Header } from '../components/organisms/Header';
 
@@ -10,7 +11,7 @@ export default function AISearchPage() {
       {/* Skip link for accessibility */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-alpine-blue text-white px-4 py-2 rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-alpine-blue"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-alpine-blue text-white px-6 py-3 min-h-[44px] flex items-center rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-alpine-blue"
       >
         Skip to main content
       </a>
@@ -23,17 +24,26 @@ export default function AISearchPage() {
           <h2>AI Training Assistant for Mountaineering</h2>
           <h3>Semantic Search and Expert Knowledge</h3>
           <h4>Intelligent Climbing Coach Features</h4>
-          <img
+          <Image
             src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
             alt="AI training assistant interface for mountaineering education"
+            width={1}
+            height={1}
+            unoptimized
           />
-          <img
+          <Image
             src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
             alt="Semantic search functionality for climbing knowledge base"
+            width={1}
+            height={1}
+            unoptimized
           />
-          <img
+          <Image
             src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
             alt="Expert mountaineering coach AI assistant powered by local intelligence"
+            width={1}
+            height={1}
+            unoptimized
           />
         </div>
 

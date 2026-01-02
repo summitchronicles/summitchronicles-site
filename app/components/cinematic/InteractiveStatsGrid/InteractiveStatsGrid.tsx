@@ -12,6 +12,53 @@ import {
 } from 'lucide-react';
 import { getDaysToEverest } from '@/lib/everest-countdown';
 
+const STATS_DATA: StatItem[] = [
+  {
+    icon: Mountain,
+    label: 'Seven Summits Progress',
+    value: 4,
+    suffix: '/7',
+    description: "World's highest peaks conquered",
+    color: 'text-summit-gold',
+  },
+  {
+    icon: Calendar,
+    label: 'Days to Everest',
+    value: getDaysToEverest(),
+    description: 'Spring 2027 expedition countdown',
+    color: 'text-blue-400',
+  },
+  {
+    icon: MapPin,
+    label: 'Countries Explored',
+    value: 12,
+    description: 'Through mountaineering expeditions',
+    color: 'text-green-400',
+  },
+  {
+    icon: Trophy,
+    label: 'Completion Rate',
+    value: 57,
+    suffix: '%',
+    description: 'Seven Summits progress',
+    color: 'text-summit-gold',
+  },
+  {
+    icon: Clock,
+    label: 'Years Climbing',
+    value: 8,
+    description: 'From first summit to present',
+    color: 'text-purple-400',
+  },
+  {
+    icon: Target,
+    label: 'Next Summit',
+    value: 'Everest',
+    description: 'The ultimate challenge ahead',
+    color: 'text-red-400',
+  },
+];
+
 interface StatItem {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
@@ -34,78 +81,31 @@ export function InteractiveStatsGrid({
     {}
   );
 
-  const stats: StatItem[] = [
-    {
-      icon: Mountain,
-      label: 'Seven Summits Progress',
-      value: 4,
-      suffix: '/7',
-      description: "World's highest peaks conquered",
-      color: 'text-summit-gold',
-    },
-    {
-      icon: Calendar,
-      label: 'Days to Everest',
-      value: getDaysToEverest(),
-      description: 'Spring 2027 expedition countdown',
-      color: 'text-blue-400',
-    },
-    {
-      icon: MapPin,
-      label: 'Countries Explored',
-      value: 12,
-      description: 'Through mountaineering expeditions',
-      color: 'text-green-400',
-    },
-    {
-      icon: Trophy,
-      label: 'Completion Rate',
-      value: 57,
-      suffix: '%',
-      description: 'Seven Summits progress',
-      color: 'text-summit-gold',
-    },
-    {
-      icon: Clock,
-      label: 'Years Climbing',
-      value: 8,
-      description: 'From first summit to present',
-      color: 'text-purple-400',
-    },
-    {
-      icon: Target,
-      label: 'Next Summit',
-      value: 'Everest',
-      description: 'The ultimate challenge ahead',
-      color: 'text-red-400',
-    },
-  ];
-
-  const animateValue = (
-    start: number,
-    end: number,
-    duration: number,
-    key: string
-  ) => {
-    const startTime = Date.now();
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const easeOut = 1 - Math.pow(1 - progress, 3);
-      const currentValue = Math.floor(start + (end - start) * easeOut);
-
-      setAnimatedValues((prev) => ({ ...prev, [key]: currentValue }));
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-    animate();
-  };
-
   useEffect(() => {
     if (isInView) {
-      stats.forEach((stat, index) => {
+      const animateValue = (
+        start: number,
+        end: number,
+        duration: number,
+        key: string
+      ) => {
+        const startTime = Date.now();
+        const animate = () => {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const easeOut = 1 - Math.pow(1 - progress, 3);
+          const currentValue = Math.floor(start + (end - start) * easeOut);
+
+          setAnimatedValues((prev) => ({ ...prev, [key]: currentValue }));
+
+          if (progress < 1) {
+            requestAnimationFrame(animate);
+          }
+        };
+        animate();
+      };
+
+      STATS_DATA.forEach((stat, index) => {
         if (typeof stat.value === 'number') {
           setTimeout(() => {
             animateValue(0, Number(stat.value), 2000, `stat-${index}`);
@@ -169,7 +169,7 @@ export function InteractiveStatsGrid({
           animate={isInView ? 'visible' : 'hidden'}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {stats.map((stat, index) => {
+          {STATS_DATA.map((stat, index) => {
             const IconComponent = stat.icon;
             const isNumeric = typeof stat.value === 'number';
             const displayValue = isNumeric

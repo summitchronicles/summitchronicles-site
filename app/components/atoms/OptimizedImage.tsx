@@ -74,6 +74,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       <div className="relative overflow-hidden">
         <Image
           {...imageProps}
+          alt={alt}
           fill
           sizes={
             sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
@@ -95,6 +96,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       <div className="relative overflow-hidden">
         <Image
           {...imageProps}
+          alt={alt}
           fill
           sizes={
             sizes || '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
@@ -111,6 +113,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   return (
     <Image
       {...imageProps}
+      alt={alt}
       width={width}
       height={height}
       sizes={sizes}
