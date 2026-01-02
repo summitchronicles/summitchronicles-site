@@ -36,7 +36,7 @@ export default function Home() {
             />
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
-          
+
           {/* Minimal Text Overlay */}
           <div className="relative z-10 text-center text-white max-w-4xl px-6">
             <motion.div
@@ -133,10 +133,10 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-8 tracking-wide">
+              <h2 className="text-4xl md:text-5xl font-light text-spa-charcoal mb-8 tracking-wide">
                 The Seven Summits Project
               </h2>
-              <p className="text-xl text-gray-600 leading-relaxed mb-12 font-light">
+              <p className="text-xl text-spa-slate leading-relaxed mb-12 font-light">
                 Every great journey begins with a single step. Mine began in 2013, bedridden with tuberculosis,
                 barely able to walk 50 meters. A year later, I stood on a Himalayan glacier during my first
                 trek to Sar Pass. That moment sparked something that became a journey to conquer the
@@ -144,16 +144,16 @@ export default function Home() {
               </p>
               <div className="grid md:grid-cols-3 gap-8 text-center">
                 <div>
-                  <div className="text-3xl font-light text-gray-900 mb-2">4/7</div>
-                  <div className="text-sm tracking-wide text-gray-600 uppercase">Summits Completed</div>
+                  <div className="text-3xl font-light text-spa-charcoal mb-2">4/7</div>
+                  <div className="text-sm tracking-wide text-spa-slate uppercase">Summits Completed</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-light text-gray-900 mb-2">{getDaysToEverest()}</div>
-                  <div className="text-sm tracking-wide text-gray-600 uppercase">Days to Everest</div>
+                  <div className="text-3xl font-light text-spa-charcoal mb-2">{getDaysToEverest()}</div>
+                  <div className="text-sm tracking-wide text-spa-slate uppercase">Days to Everest</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-light text-gray-900 mb-2">∞</div>
-                  <div className="text-sm tracking-wide text-gray-600 uppercase">Lessons Learned</div>
+                  <div className="text-3xl font-light text-spa-charcoal mb-2">∞</div>
+                  <div className="text-sm tracking-wide text-spa-slate uppercase">Lessons Learned</div>
                 </div>
               </div>
             </motion.div>
