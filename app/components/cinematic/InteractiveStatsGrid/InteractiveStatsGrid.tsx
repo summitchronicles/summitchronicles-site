@@ -25,7 +25,7 @@ const STATS_DATA: StatItem[] = [
     icon: Calendar,
     label: 'Days to Everest',
     value: getDaysToEverest(),
-    description: 'Spring 2027 expedition countdown',
+    description: 'Spring 2028 expedition countdown',
     color: 'text-blue-400',
   },
   {

@@ -1,8 +1,8 @@
 // Dynamic countdown to Everest expedition
 export function getDaysToEverest(): number {
   // Set the target Everest expedition date
-  // Expedition is planned for March 15, 2027
-  const everestDate = new Date('2027-03-15');
+  // Expedition is planned for March 1, 2028
+  const everestDate = new Date('2028-03-01');
 
   const today = new Date();
   const diffTime = everestDate.getTime() - today.getTime();

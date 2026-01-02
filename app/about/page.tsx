@@ -63,7 +63,7 @@ export default function AboutPage() {
           />
           <div className="absolute inset-0 bg-black/60"></div>
         </div>
-        
+
         <div className="relative z-10 max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-8 md:gap-12 items-center mobile-padding">
           {/* Portrait */}
           <motion.div
@@ -105,7 +105,7 @@ export default function AboutPage() {
                 <span>Storyteller</span>
               </div>
             </div>
-            
+
             <div className="space-y-6 text-base md:text-lg font-light leading-relaxed">
               <p className="bg-black/30 p-4 rounded-lg backdrop-blur-sm">
                 <strong className="text-white">From bedridden to the Seven Summits.</strong>
@@ -147,6 +147,46 @@ export default function AboutPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="text-center mb-16"
+          >
+            <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-8">
+              RECOVERY & GOALS
+            </h2>
+            <div className="h-px w-24 bg-white/30 mx-auto mb-10"></div>
+
+            <div className="bg-white/5 border border-white/10 rounded-2xl p-8 max-w-3xl mx-auto">
+              <h3 className="text-xl font-light text-summit-gold mb-6">The Path Back (Current Focus)</h3>
+              <div className="grid gap-6 text-left">
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-summit-gold font-bold">1</div>
+                  <div>
+                    <h4 className="font-medium text-white mb-1">Walk After Recovery</h4>
+                    <p className="text-gray-400 text-sm">rehabilitating the Talus injury to regain full mobility.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-summit-gold font-bold">2</div>
+                  <div>
+                    <h4 className="font-medium text-white mb-1">Get Back to Full Fitness</h4>
+                    <p className="text-gray-400 text-sm">Rebuilding strength, endurance, and technical capacity.</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0 text-summit-gold font-bold">3</div>
+                  <div>
+                    <h4 className="font-medium text-white mb-1">Everest in 2028</h4>
+                    <p className="text-gray-400 text-sm">The ultimate return. Targeted for the Spring 2028 window.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16 mt-20"
           >
             <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-8">
               THE STORY
@@ -228,7 +268,7 @@ export default function AboutPage() {
                   <div className="text-3xl font-light">{achievement.year}</div>
                   <div className="text-sm text-gray-400 uppercase tracking-wide">Year</div>
                 </div>
-                
+
                 <div>
                   <h3 className="text-xl font-light tracking-wide mb-2">{achievement.mountain}</h3>
                   <div className="flex items-center space-x-4 text-sm text-gray-400">
@@ -242,7 +282,7 @@ export default function AboutPage() {
                     </span>
                   </div>
                 </div>
-                
+
                 <div className="md:col-span-2">
                   <p className="text-gray-300 leading-relaxed text-sm">
                     {achievement.significance}
@@ -283,7 +323,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-light tracking-wide">Systematic Preparation</h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Every expedition follows detailed preparation protocols. Data-driven training, 
+                Every expedition follows detailed preparation protocols. Data-driven training,
                 equipment testing, and risk assessment replace guesswork with measured progress.
               </p>
             </motion.div>
@@ -300,7 +340,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-light tracking-wide">Visual Documentation</h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Capturing both the triumph and struggle of extreme mountaineering. Every expedition 
+                Capturing both the triumph and struggle of extreme mountaineering. Every expedition
                 becomes a story that inspires others to pursue their own impossible goals.
               </p>
             </motion.div>
@@ -317,7 +357,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-light tracking-wide">Community Impact</h3>
               <p className="text-gray-300 text-sm leading-relaxed">
-                Sharing methodologies, failures, and insights that help other adventure athletes 
+                Sharing methodologies, failures, and insights that help other adventure athletes
                 achieve their goals through systematic training and preparation.
               </p>
             </motion.div>

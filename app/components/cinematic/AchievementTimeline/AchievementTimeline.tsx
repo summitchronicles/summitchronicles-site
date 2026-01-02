@@ -107,10 +107,10 @@ export function AchievementTimeline({
       location: 'Nepal/Tibet',
       continent: 'Asia',
       status: 'current',
-      date: 'Spring 2027',
+      date: 'Spring 2028',
       description: 'The ultimate mountaineering challenge',
       difficulty: 5,
-      lessons: 'Currently in intensive preparation phase',
+      lessons: 'Recovery and training phase for 2028',
     },
     {
       id: 'vinson',
@@ -204,8 +204,9 @@ export function AchievementTimeline({
             Seven Summits Journey
           </h2>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            From recovery after tuberculosis to the Seven Summits. Four summits conquered,
-            three more to go, with Everest as the ultimate goal in 2027.
+            From recovery after tuberculosis to the Seven Summits. Now facing a new challenge:
+            recovering from a broken Talus. The timeline has shifted, but the goal remains unchanged:
+            Everest in 2028.
           </p>
           <div className="flex items-center justify-center mt-6 space-x-8 text-sm">
             <div className="flex items-center space-x-2">
