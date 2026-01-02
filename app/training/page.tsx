@@ -248,11 +248,11 @@ export default function TrainingPage() {
             src="/images/sunith-grit-training.png"
             alt="Training for Everest Expedition"
             fill
-            className="object-cover opacity-80 scale-105"
+            className="object-cover opacity-100 scale-105"
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-obsidian"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/10 to-obsidian"></div>
         </div>
 
         <div className="relative z-10 text-center px-6">
@@ -261,9 +261,6 @@ export default function TrainingPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
           >
-             <div className="inline-block px-3 py-1 mb-4 text-xs font-mono text-summit-gold-400 border border-summit-gold-900/50 rounded-full bg-summit-gold-900/10 backdrop-blur-md">
-                Protocol: SEVEN_SUMMITS_PREP
-            </div>
             <h1 className="text-5xl md:text-7xl font-light tracking-tight mb-4 text-white">
               THE LAB
             </h1>
