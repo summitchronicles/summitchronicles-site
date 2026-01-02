@@ -97,17 +97,17 @@ async function testTrainingPage() {
     await page.waitForTimeout(1000);
 
     await page.screenshot({
-      path: 'training-phases-updated.png',
+      path: 'test-screenshots/training-phases-updated.png',
       fullPage: false
     });
-    console.log('✅ Training phases screenshot saved: training-phases-updated.png');
+    console.log('✅ Training phases screenshot saved: test-screenshots/training-phases-updated.png');
 
     // Take full page screenshot
     await page.screenshot({
-      path: 'training-page-corrected.png',
+      path: 'test-screenshots/training-page-corrected.png',
       fullPage: true
     });
-    console.log('✅ Full page screenshot saved: training-page-corrected.png');
+    console.log('✅ Full page screenshot saved: test-screenshots/training-page-corrected.png');
 
   } catch (error) {
     console.log(`❌ Error during testing: ${error.message}`);

@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
   console.log('🚀 COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline');
   console.log('Testing ALL pages as requested with NO EXCEPTIONS');
-  
+
   // Define all pages to test
   const pagesToTest = [
     { url: 'http://localhost:3000/', name: 'Homepage', epic: 'Epic 1' },
@@ -14,41 +14,41 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
     { url: 'http://localhost:3000/community', name: 'Community', epic: 'Epic 4' },
     { url: 'http://localhost:3000/support', name: 'Support/Funding', epic: 'Epic 5' }
   ];
-  
+
   let allPagesResults = [];
-  
+
   for (const pageTest of pagesToTest) {
     console.log(`\n🎯 TESTING ${pageTest.name.toUpperCase()} PAGE (${pageTest.epic})`);
-    
+
     try {
       // Navigate to page
       await page.goto(pageTest.url, { waitUntil: 'networkidle', timeout: 30000 });
-      
+
       // Take screenshot for each page
       const screenshotName = `all-pages-${pageTest.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.png`;
-      await page.screenshot({ 
-        path: screenshotName, 
-        fullPage: true 
+      await page.screenshot({
+        path: `test-screenshots/${screenshotName}`,
+        fullPage: true
       });
-      
+
       console.log(`📸 ${pageTest.name} page screenshot saved: ${screenshotName}`);
-      
+
       // Get page content for analysis
       const pageContent = await page.content();
-      
+
       // Universal checks for ALL pages
       const hasTitle = await page.title();
-      const hasSwissSpaStyling = pageContent.includes('spa-') || 
-                                pageContent.includes('alpine-') || 
+      const hasSwissSpaStyling = pageContent.includes('spa-') ||
+                                pageContent.includes('alpine-') ||
                                 pageContent.includes('summit-');
       const hasNavigation = await page.locator('nav, header').count() > 0;
       const hasFooter = await page.locator('footer').count() > 0;
       const hasContent = pageContent.length > 1000; // Basic content check
       const hasNoJSErrors = true; // Will be caught by try/catch if JS errors occur
-      
+
       // Page-specific feature checks
       let specificFeatures = {};
-      
+
       if (pageTest.name === 'Homepage') {
         specificFeatures = {
           hasHeroSection: pageContent.includes('Journey to the') || pageContent.includes('Summit'),
@@ -92,12 +92,12 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
           hasContent: pageContent.includes('training') || pageContent.includes('expedition')
         };
       }
-      
+
       // Page performance check
       const performanceEntries = await page.evaluate(() => {
         return JSON.stringify(performance.getEntriesByType('navigation'));
       });
-      
+
       // Compile results
       const pageResult = {
         page: pageTest.name,
@@ -112,27 +112,27 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
         specificFeatures: specificFeatures,
         errors: []
       };
-      
+
       allPagesResults.push(pageResult);
-      
+
       // Log results
       console.log(`✅ ${pageTest.name} - Title: "${hasTitle}"`);
       console.log(`🎨 ${pageTest.name} - Swiss Spa Styling: ${hasSwissSpaStyling}`);
       console.log(`🧭 ${pageTest.name} - Navigation: ${hasNavigation}`);
       console.log(`👢 ${pageTest.name} - Footer: ${hasFooter}`);
       console.log(`📝 ${pageTest.name} - Content: ${hasContent}`);
-      
+
       // Log specific features
       Object.entries(specificFeatures).forEach(([feature, present]) => {
         console.log(`🔍 ${pageTest.name} - ${feature}: ${present}`);
       });
-      
+
       console.log(`✅ ${pageTest.name.toUpperCase()} PAGE TEST COMPLETE`);
-      
+
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : String(error);
       console.log(`❌ ERROR testing ${pageTest.name}: ${errorMessage}`);
-      
+
       const pageResult = {
         page: pageTest.name,
         epic: pageTest.epic,
@@ -140,32 +140,32 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
         status: 'FAIL',
         errors: [errorMessage]
       };
-      
+
       allPagesResults.push(pageResult);
-      
+
       // Take error screenshot
-      await page.screenshot({ 
-        path: `error-${pageTest.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.png`, 
-        fullPage: true 
+      await page.screenshot({
+        path: `test-screenshots/error-${pageTest.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.png`,
+        fullPage: true
       });
     }
   }
-  
+
   // ===============================
   // COMPREHENSIVE RESULTS SUMMARY
   // ===============================
   console.log('\n🎯 COMPREHENSIVE ALL PAGES TEST RESULTS SUMMARY');
   console.log('='.repeat(60));
-  
+
   let totalPages = allPagesResults.length;
   let passedPages = allPagesResults.filter(r => r.status === 'PASS').length;
   let failedPages = allPagesResults.filter(r => r.status === 'FAIL').length;
-  
+
   console.log(`📊 TOTAL PAGES TESTED: ${totalPages}`);
   console.log(`✅ PASSED: ${passedPages}`);
   console.log(`❌ FAILED: ${failedPages}`);
   console.log(`🎯 SUCCESS RATE: ${Math.round((passedPages/totalPages)*100)}%`);
-  
+
   // Epic-by-epic breakdown
   console.log('\n📋 EPIC-BY-EPIC BREAKDOWN:');
   const epicGroups = allPagesResults.reduce((acc: Record<string, any[]>, result) => {
@@ -173,7 +173,7 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
     acc[result.epic].push(result);
     return acc;
   }, {});
-  
+
   Object.entries(epicGroups).forEach(([epic, pages]) => {
     const epicPassed = (pages as any[]).filter((p: any) => p.status === 'PASS').length;
     const epicTotal = (pages as any[]).length;
@@ -182,17 +182,17 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
       console.log(`  └─ ${page.page}: ${page.status}`);
     });
   });
-  
+
   // Swiss Spa Styling Analysis
   console.log('\n🎨 SWISS SPA STYLING ANALYSIS:');
   const styledPages = allPagesResults.filter((r: any) => r.swissSpaStyling).length;
   console.log(`Swiss Spa Styling Present: ${styledPages}/${totalPages} pages`);
-  
+
   // Navigation Analysis
   console.log('\n🧭 NAVIGATION ANALYSIS:');
   const navPages = allPagesResults.filter((r: any) => r.navigation).length;
   console.log(`Navigation Present: ${navPages}/${totalPages} pages`);
-  
+
   // Overall Assessment
   console.log('\n🎯 OVERALL ASSESSMENT:');
   if (passedPages === totalPages) {
@@ -210,8 +210,8 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
     console.log('⚠️ SOME PAGES NEED ATTENTION');
     console.log('Failed pages need investigation and fixes');
   }
-  
+
   console.log('\n🚀 COMPREHENSIVE ALL PAGES TEST COMPLETE');
   console.log('AI DevOps Pipeline requirement fulfilled - NO EXCEPTIONS');
-  
+
 });
