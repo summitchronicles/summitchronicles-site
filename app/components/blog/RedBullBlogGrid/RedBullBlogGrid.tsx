@@ -57,21 +57,23 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
   }, []);
 
   // Convert generated posts to component format
-  const convertedPosts: BlogPost[] = generatedPosts.map(post => ({
+  const convertedPosts: BlogPost[] = generatedPosts.map((post) => ({
     slug: post.slug,
     title: post.title || 'Untitled',
     subtitle: post.excerpt || '',
     category: (post.category || 'STORY').toUpperCase(),
     author: 'Sunith Kumar',
-    date: post.date ? new Date(post.date).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    }) : 'Recent',
+    date: post.date
+      ? new Date(post.date).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+      : 'Recent',
     readTime: `${post.readTime || 5} min read`,
     views: '2.1K', // You could track this in the future
     image: post.heroImage || '/stories/default.jpg',
-    featured: false // You could add featured flag to frontmatter
+    featured: false, // You could add featured flag to frontmatter
   }));
 
   // Empty array - no sample posts
@@ -119,7 +121,7 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/stories/data-training.jpg"
+            src="/stories/sunith-visionary-planning.jpg"
             alt="Field Stories from the Mountains"
             fill
             className="object-cover opacity-60 grayscale scale-105"
@@ -135,15 +137,15 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
             transition={{ duration: 0.8 }}
             className="text-center space-y-6"
           >
-             <div className="inline-block px-3 py-1 mb-4 text-xs font-mono text-summit-gold-400 border border-summit-gold-900/50 rounded-full bg-summit-gold-900/10 backdrop-blur-md">
-                MISSION REPORTS
+            <div className="inline-block px-3 py-1 mb-4 text-xs font-mono text-summit-gold-400 border border-summit-gold-900/50 rounded-full bg-summit-gold-900/10 backdrop-blur-md">
+              MISSION REPORTS
             </div>
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight text-white mb-6">
               FIELD STORIES
             </h1>
             <p className="text-xl md:text-2xl font-light max-w-3xl mx-auto leading-relaxed opacity-80 text-gray-300">
-              Raw stories from the mountains. Unfiltered insights from extreme preparation.
-              The human side of systematic mountaineering.
+              Raw stories from the mountains. Unfiltered insights from extreme
+              preparation. The human side of systematic mountaineering.
             </p>
             <div className="mt-8 flex justify-center">
               <Link
@@ -201,7 +203,9 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
                   <div className="flex items-center space-x-8 text-sm text-gray-400 font-mono tracking-wider">
                     <div className="flex items-center space-x-2">
                       <User className="w-4 h-4 text-summit-gold-400" />
-                      <span className="text-gray-300">{featuredPost.author}</span>
+                      <span className="text-gray-300">
+                        {featuredPost.author}
+                      </span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Calendar className="w-4 h-4 text-summit-gold-400" />
@@ -222,7 +226,9 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
       {/* Stories Grid */}
       <section className="max-w-7xl mx-auto px-6 py-24">
         <div className="mb-16 text-center">
-            <h2 className="text-sm font-mono tracking-[0.3em] uppercase text-summit-gold-400 mb-4">Archive</h2>
+          <h2 className="text-sm font-mono tracking-[0.3em] uppercase text-summit-gold-400 mb-4">
+            Archive
+          </h2>
           <h2 className="text-3xl md:text-4xl font-light text-white mb-6 tracking-wide">
             EXPEDITION REPORTS
           </h2>
@@ -238,7 +244,9 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
               className="max-w-2xl mx-auto"
             >
               <div className="animate-spin w-8 h-8 border border-white/20 border-t-summit-gold-400 rounded-full mx-auto mb-4"></div>
-              <p className="text-gray-400 font-mono text-sm tracking-widest">DECRYPTING ARCHIVES...</p>
+              <p className="text-gray-400 font-mono text-sm tracking-widest">
+                DECRYPTING ARCHIVES...
+              </p>
             </motion.div>
           </div>
         ) : posts.length === 0 ? (
@@ -257,8 +265,9 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
                 Stories Coming Soon
               </h3>
               <p className="text-gray-400 text-lg leading-relaxed mb-8 font-light">
-                Authentic expedition stories, training insights, and mountain wisdom are being prepared.
-                The first story from the Seven Summits journey will be published here soon.
+                Authentic expedition stories, training insights, and mountain
+                wisdom are being prepared. The first story from the Seven
+                Summits journey will be published here soon.
               </p>
               <div className="text-xs text-gray-500 font-mono tracking-widest uppercase">
                 Awaiting Transmission
@@ -268,86 +277,86 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {regularPosts.map((post, index) => {
-            const CategoryIcon = getCategoryIcon(post.category);
+              const CategoryIcon = getCategoryIcon(post.category);
 
-            return (
-              <motion.div
-                key={post.slug}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group h-full"
-                data-testid="post-card"
-              >
-                <Link href={`/blog/${post.slug}`} className="block h-full">
-                  <div className="bg-glass-panel border border-white/5 rounded-xl overflow-hidden hover:border-summit-gold/30 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 h-full flex flex-col">
-                    {/* Image */}
-                    <div className="relative aspect-[3/2] overflow-hidden">
-                      <Image
-                        src={post.image}
-                        alt={post.title}
-                        fill
-                        className="object-cover bg-gray-900 group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0 opacity-90 group-hover:opacity-100"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        quality={100}
-                        unoptimized={true}
-                      />
-                      <div className="absolute top-4 left-4">
-                        <div
-                          className="bg-black/60 backdrop-blur-md text-white border border-white/10 px-3 py-1 text-[10px] font-mono font-bold tracking-widest uppercase flex items-center space-x-2 rounded-sm"
-                        >
-                          <CategoryIcon className="w-3 h-3 text-summit-gold-400" />
-                          <span>{post.category}</span>
+              return (
+                <motion.div
+                  key={post.slug}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group h-full"
+                  data-testid="post-card"
+                >
+                  <Link href={`/blog/${post.slug}`} className="block h-full">
+                    <div className="bg-glass-panel border border-white/5 rounded-xl overflow-hidden hover:border-summit-gold/30 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 h-full flex flex-col">
+                      {/* Image */}
+                      <div className="relative aspect-[3/2] overflow-hidden">
+                        <Image
+                          src={post.image}
+                          alt={post.title}
+                          fill
+                          className="object-cover bg-gray-900 group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0 opacity-90 group-hover:opacity-100"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                          quality={100}
+                          unoptimized={true}
+                        />
+                        <div className="absolute top-4 left-4">
+                          <div className="bg-black/60 backdrop-blur-md text-white border border-white/10 px-3 py-1 text-[10px] font-mono font-bold tracking-widest uppercase flex items-center space-x-2 rounded-sm">
+                            <CategoryIcon className="w-3 h-3 text-summit-gold-400" />
+                            <span>{post.category}</span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Content */}
-                    <div className="p-8 flex flex-col flex-grow">
-                      <div className="flex items-center space-x-2 text-xs text-summit-gold-400 font-mono mb-4 tracking-wider uppercase">
+                      {/* Content */}
+                      <div className="p-8 flex flex-col flex-grow">
+                        <div className="flex items-center space-x-2 text-xs text-summit-gold-400 font-mono mb-4 tracking-wider uppercase">
                           <Calendar className="w-3 h-3" />
                           <span>{post.date}</span>
-                      </div>
-
-                      <h3 className="text-xl font-light text-white leading-tight mb-4 group-hover:text-summit-gold-100 transition-colors">
-                        {post.title}
-                      </h3>
-
-                      <p className="text-gray-400 leading-relaxed mb-6 text-sm font-light line-clamp-3 flex-grow">
-                        {post.subtitle}
-                      </p>
-
-                      <div className="pt-6 border-t border-white/5 flex items-center justify-between text-xs text-gray-500 font-mono tracking-wider mt-auto">
-                        <div className="flex items-center space-x-2">
-                           <Clock className="w-3 h-3" />
-                           <span className="whitespace-nowrap">{post.readTime}</span>
                         </div>
-                        <div className="flex items-center space-x-2 text-gray-400 group-hover:text-white transition-colors">
-                          <span>READ REPORT</span>
-                          <ChevronRight className="w-3 h-3" />
+
+                        <h3 className="text-xl font-light text-white leading-tight mb-4 group-hover:text-summit-gold-100 transition-colors">
+                          {post.title}
+                        </h3>
+
+                        <p className="text-gray-400 leading-relaxed mb-6 text-sm font-light line-clamp-3 flex-grow">
+                          {post.subtitle}
+                        </p>
+
+                        <div className="pt-6 border-t border-white/5 flex items-center justify-between text-xs text-gray-500 font-mono tracking-wider mt-auto">
+                          <div className="flex items-center space-x-2">
+                            <Clock className="w-3 h-3" />
+                            <span className="whitespace-nowrap">
+                              {post.readTime}
+                            </span>
+                          </div>
+                          <div className="flex items-center space-x-2 text-gray-400 group-hover:text-white transition-colors">
+                            <span>READ REPORT</span>
+                            <ChevronRight className="w-3 h-3" />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
+                  </Link>
+                </motion.div>
+              );
+            })}
           </div>
         )}
       </section>
 
       {/* Newsletter CTA */}
       <section className="bg-black border-t border-white/10 relative overflow-hidden">
-         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] opacity-20 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] opacity-20 pointer-events-none"></div>
         <div className="max-w-4xl mx-auto px-6 py-24 text-center relative z-10">
           <h3 className="text-3xl md:text-4xl font-light tracking-wide text-white mb-6">
             EXPEDITION UPDATES
           </h3>
           <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed font-light max-w-2xl mx-auto">
-            Field reports from the mountains. Training insights and preparation updates.
-            Raw stories from the systematic journey to Everest.
+            Field reports from the mountains. Training insights and preparation
+            updates. Raw stories from the systematic journey to Everest.
           </p>
           <Link
             href="/newsletter"

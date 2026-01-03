@@ -17,7 +17,7 @@ import {
   Timer,
   Award,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
 } from 'lucide-react';
 
 interface Expedition {
@@ -51,13 +51,14 @@ export default function ExpeditionsPage() {
       year: '2027',
       status: 'in-progress',
       image: '/images/sunith-everest-vision.png',
-      story: 'The ultimate challenge. Everything has led to this moment. Thirteen years of preparation, systematic training, and community support converge at the roof of the world.',
+      story:
+        'The ultimate challenge. Everything has led to this moment. Thirteen years of preparation, systematic training, and community support converge at the roof of the world.',
       stats: {
         duration: '60 days',
         difficulty: 'Extreme+',
-        temperature: '-60°C death zone'
+        temperature: '-60°C death zone',
       },
-      isSevenSummit: true
+      isSevenSummit: true,
     },
     {
       id: 'denali',
@@ -68,13 +69,14 @@ export default function ExpeditionsPage() {
       year: '2025',
       status: 'completed',
       image: '/images/sunith-ascent-hero.png',
-      story: 'Latest Seven Summits achievement. Technical glacier travel and extreme conditions. Three weeks testing every skill learned so far.',
+      story:
+        'Latest Seven Summits achievement. Technical glacier travel and extreme conditions. Three weeks testing every skill learned so far.',
       stats: {
         duration: '21 days',
         difficulty: 'Extreme',
-        temperature: '-40°C summit'
+        temperature: '-40°C summit',
       },
-      isSevenSummit: true
+      isSevenSummit: true,
     },
     {
       id: 'elbrus',
@@ -84,14 +86,15 @@ export default function ExpeditionsPage() {
       date: 'August 2024',
       year: '2024',
       status: 'completed',
-      image: '/images/sunith-aconcagua.jpg',
-      story: 'High altitude endurance test in the Andes. Battling 60mph winds and extreme dry cold to reach the roof of South America.',
+      image: '/images/sunith-home-hero.jpg',
+      story:
+        'High altitude endurance test in the Andes. Battling 60mph winds and extreme dry cold to reach the roof of South America.',
       stats: {
         duration: '7 days',
         difficulty: 'Winter',
-        temperature: '-25°C summit'
+        temperature: '-25°C summit',
       },
-      isSevenSummit: true
+      isSevenSummit: true,
     },
     {
       id: 'aconcagua',
@@ -101,14 +104,15 @@ export default function ExpeditionsPage() {
       date: 'December 2024',
       year: '2024',
       status: 'completed',
-      image: '/stories/kilimanjaro.jpg',
-      story: 'Highest peak outside of Asia. Technical high-altitude climbing in extreme conditions. A major step toward the ultimate goal.',
+      image: '/stories/sunith-aconcagua.jpg',
+      story:
+        'Highest peak outside of Asia. Technical high-altitude climbing in extreme conditions. A major step toward the ultimate goal.',
       stats: {
         duration: '18 days',
         difficulty: 'High Altitude',
-        temperature: '-30°C summit'
+        temperature: '-30°C summit',
       },
-      isSevenSummit: true
+      isSevenSummit: true,
     },
     {
       id: 'spangnak',
@@ -118,14 +122,15 @@ export default function ExpeditionsPage() {
       date: 'September 2024',
       year: '2024',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'Remote peak in the Ladakh region. Building technical climbing skills and testing gear in harsh mountain conditions.',
+      image: '/stories/Spangnak.jpg',
+      story:
+        'Remote peak in the Ladakh region. Building technical climbing skills and testing gear in harsh mountain conditions.',
       stats: {
         duration: '8 days',
         difficulty: 'Technical',
-        temperature: '-20°C summit'
+        temperature: '-20°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'mentok-kangri',
@@ -135,14 +140,15 @@ export default function ExpeditionsPage() {
       date: 'August 2024',
       year: '2024',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'Triple peak challenge in Ladakh. Technical climbing across three connected summits, testing endurance and multi-day high-altitude performance.',
+      image: '/stories/Mentok.jpg',
+      story:
+        'Triple peak challenge in Ladakh. Technical climbing across three connected summits, testing endurance and multi-day high-altitude performance.',
       stats: {
         duration: '12 days',
         difficulty: 'Technical',
-        temperature: '-25°C summit'
+        temperature: '-25°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'kilimanjaro',
@@ -153,13 +159,14 @@ export default function ExpeditionsPage() {
       year: '2023',
       status: 'completed',
       image: '/stories/kilimanjaro.jpg',
-      story: 'First Seven Summits achievement. Years of preparation in the Himalayas led to this moment. Standing on the roof of Africa at sunrise, proof that systematic preparation works.',
+      story:
+        'First Seven Summits achievement. Years of preparation in the Himalayas led to this moment. Standing on the roof of Africa at sunrise, proof that systematic preparation works.',
       stats: {
         duration: '7 days',
         difficulty: 'Technical',
-        temperature: '-15°C summit'
+        temperature: '-15°C summit',
       },
-      isSevenSummit: true
+      isSevenSummit: true,
     },
     {
       id: 'hampta-pass',
@@ -169,14 +176,15 @@ export default function ExpeditionsPage() {
       date: 'September 2021',
       year: '2021',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'A dramatic valley-to-valley crossing. This trek taught me about rapid elevation changes and diverse mountain ecosystems in a single journey.',
+      image: '/stories/Hampta.jpg',
+      story:
+        'A dramatic valley-to-valley crossing. This trek taught me about rapid elevation changes and diverse mountain ecosystems in a single journey.',
       stats: {
         duration: '5 days',
         difficulty: 'Intermediate',
-        temperature: '0°C summit'
+        temperature: '0°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'sandakhphu',
@@ -186,14 +194,15 @@ export default function ExpeditionsPage() {
       date: 'April 2021',
       year: '2021',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'The highest peak in West Bengal, offering spectacular views of four 8000m peaks including Everest. A reminder of the ultimate goal on the horizon.',
+      image: '/stories/Sandakhphu.jpg',
+      story:
+        'The highest peak in West Bengal, offering spectacular views of four 8000m peaks including Everest. A reminder of the ultimate goal on the horizon.',
       stats: {
         duration: '4 days',
         difficulty: 'Easy',
-        temperature: '5°C summit'
+        temperature: '5°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'brahmatal',
@@ -203,14 +212,15 @@ export default function ExpeditionsPage() {
       date: 'January 2020',
       year: '2020',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'Winter mountaineering experience. Learning to handle extreme cold and snow conditions - essential skills for the bigger mountains ahead.',
+      image: '/stories/Brahmatal.jpg',
+      story:
+        'Winter mountaineering experience. Learning to handle extreme cold and snow conditions - essential skills for the bigger mountains ahead.',
       stats: {
         duration: '6 days',
         difficulty: 'Winter',
-        temperature: '-15°C summit'
+        temperature: '-15°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'rupin-pass',
@@ -220,14 +230,15 @@ export default function ExpeditionsPage() {
       date: 'May 2019',
       year: '2019',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'One of the most beautiful and varied treks in the Himalayas. This journey took me through diverse landscapes and weather conditions, building versatility in mountain environments.',
+      image: '/stories/Rupin.jpg',
+      story:
+        'One of the most beautiful and varied treks in the Himalayas. This journey took me through diverse landscapes and weather conditions, building versatility in mountain environments.',
       stats: {
         duration: '7 days',
         difficulty: 'Intermediate',
-        temperature: '-5°C summit'
+        temperature: '-5°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'stok-kangri',
@@ -237,14 +248,15 @@ export default function ExpeditionsPage() {
       date: 'September 2018',
       year: '2018',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'My first 6000m+ peak. Crossing the 20,000 ft threshold was a major milestone, proving I could handle serious altitude and technical climbing.',
+      image: '/stories/StokKangri.jpg',
+      story:
+        'My first 6000m+ peak. Crossing the 20,000 ft threshold was a major milestone, proving I could handle serious altitude and technical climbing.',
       stats: {
         duration: '8 days',
         difficulty: 'High Altitude',
-        temperature: '-20°C summit'
+        temperature: '-20°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'everest-base-camp',
@@ -254,14 +266,15 @@ export default function ExpeditionsPage() {
       date: 'October 2017',
       year: '2017',
       status: 'completed',
-      image: '/stories/everest-prep.jpeg',
-      story: 'First encounter with the world\'s highest mountain. Standing at base camp, the dream of summiting Everest was born. This trek was a pilgrimage and a reconnaissance mission.',
+      image: '/stories/EBC.jpg',
+      story:
+        "First encounter with the world's highest mountain. Standing at base camp, the dream of summiting Everest was born. This trek was a pilgrimage and a reconnaissance mission.",
       stats: {
         duration: '14 days',
         difficulty: 'Technical',
-        temperature: '-15°C base camp'
+        temperature: '-15°C base camp',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'goecha-la',
@@ -271,14 +284,15 @@ export default function ExpeditionsPage() {
       date: 'May 2016',
       year: '2016',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'Close encounter with Kanchenjunga. This trek offered incredible views of the third highest peak in the world and deepened my connection with high-altitude environments.',
+      image: '/stories/GoeChela.JPG',
+      story:
+        'Close encounter with Kanchenjunga. This trek offered incredible views of the third highest peak in the world and deepened my connection with high-altitude environments.',
       stats: {
         duration: '8 days',
         difficulty: 'Intermediate',
-        temperature: '-8°C summit'
+        temperature: '-8°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'rookund',
@@ -288,14 +302,15 @@ export default function ExpeditionsPage() {
       date: 'October 2015',
       year: '2015',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'Building on the foundation from Sar Pass. Pushing higher into the Himalayas and testing my resilience at greater altitudes.',
+      image: '/stories/Roopkund.jpg',
+      story:
+        'Building on the foundation from Sar Pass. Pushing higher into the Himalayas and testing my resilience at greater altitudes.',
       stats: {
         duration: '6 days',
         difficulty: 'Intermediate',
-        temperature: '-10°C summit'
+        temperature: '-10°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
     {
       id: 'sar-pass',
@@ -305,93 +320,80 @@ export default function ExpeditionsPage() {
       date: 'May 2014',
       year: '2014',
       status: 'completed',
-      image: '/stories/data-training.jpg',
-      story: 'The spark that started everything. One year after being bedridden with tuberculosis, I stood on a Himalayan glacier. This moment changed my life forever.',
+      image: '/stories/SarPass.jpg',
+      story:
+        'The spark that started everything. One year after being bedridden with tuberculosis, I stood on a Himalayan glacier. This moment changed my life forever.',
       stats: {
         duration: '5 days',
         difficulty: 'Beginner',
-        temperature: '-5°C summit'
+        temperature: '-5°C summit',
       },
-      isSevenSummit: false
+      isSevenSummit: false,
     },
-    {
-      id: 'vinson',
-      mountain: 'Mount Vinson',
-      elevation: '16,050 ft',
-      location: 'Antarctica',
-      date: 'December 2027',
-      year: '2027',
-      status: 'planned',
-      image: '/stories/everest-prep.jpeg',
-      story: 'The most remote and logistically challenging summit. Continuing the Seven Summits challenge in the most isolated continent.',
-      stats: {
-        duration: '14 days',
-        difficulty: 'Extreme',
-        temperature: '-50°C summit'
-      },
-      isSevenSummit: true
-    },
-    {
-      id: 'carstensz',
-      mountain: 'Carstensz Pyramid',
-      elevation: '16,024 ft',
-      location: 'Indonesia, Oceania',
-      date: 'June 2028',
-      year: '2028',
-      status: 'planned',
-      image: '/stories/data-training.jpg',
-      story: 'The technical rock climbing challenge at altitude. Completing the Seven Summits with the most technically demanding peak.',
-      stats: {
-        duration: '10 days',
-        difficulty: 'Technical Rock',
-        temperature: '+5°C summit'
-      },
-      isSevenSummit: true
-    }
   ];
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'completed': return CheckCircle;
-      case 'in-progress': return Target;
-      case 'planned': return Clock;
-      default: return Clock;
+      case 'completed':
+        return CheckCircle;
+      case 'in-progress':
+        return Target;
+      case 'planned':
+        return Clock;
+      default:
+        return Clock;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-summit-gold-900/10 text-summit-gold-400 border-summit-gold-500/20';
-      case 'in-progress': return 'bg-white/10 text-white border-white/20';
-      case 'planned': return 'bg-blue-900/10 text-blue-400 border-blue-500/20';
-      default: return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
+      case 'completed':
+        return 'bg-summit-gold-900/10 text-summit-gold-400 border-summit-gold-500/20';
+      case 'in-progress':
+        return 'bg-white/10 text-white border-white/20';
+      case 'planned':
+        return 'bg-blue-900/10 text-blue-400 border-blue-500/20';
+      default:
+        return 'bg-gray-500/10 text-gray-400 border-gray-500/20';
     }
   };
 
   const getCardBorderColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'border-summit-gold/30 hover:border-summit-gold/50';
-      case 'in-progress': return 'border-white/30 hover:border-white/50 shadow-white/5';
-      case 'planned': return 'border-blue-500/30 hover:border-blue-500/50';
-      default: return 'border-gray-500/30';
+      case 'completed':
+        return 'border-summit-gold/30 hover:border-summit-gold/50';
+      case 'in-progress':
+        return 'border-white/30 hover:border-white/50 shadow-white/5';
+      case 'planned':
+        return 'border-blue-500/30 hover:border-blue-500/50';
+      default:
+        return 'border-gray-500/30';
     }
   };
 
   const getTimelineColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-summit-gold-500 shadow-[0_0_15px_rgba(251,191,36,0.5)]';
-      case 'in-progress': return 'bg-white animate-pulse shadow-[0_0_15px_rgba(255,255,255,0.8)]';
-      case 'planned': return 'bg-gray-700';
-      default: return 'bg-gray-800';
+      case 'completed':
+        return 'bg-summit-gold-500 shadow-[0_0_15px_rgba(251,191,36,0.5)]';
+      case 'in-progress':
+        return 'bg-white animate-pulse shadow-[0_0_15px_rgba(255,255,255,0.8)]';
+      case 'planned':
+        return 'bg-gray-700';
+      default:
+        return 'bg-gray-800';
     }
   };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed': return 'SUMMIT ACHIEVED';
-      case 'in-progress': return 'IN PREPARATION';
-      case 'planned': return 'UPCOMING';
-      default: return 'UNKNOWN';
+      case 'completed':
+        return 'SUMMIT ACHIEVED';
+      case 'in-progress':
+        return 'IN PREPARATION';
+      case 'planned':
+        return 'UPCOMING';
+      default:
+        return 'UNKNOWN';
     }
   };
 
@@ -452,7 +454,9 @@ export default function ExpeditionsPage() {
             transition={{ duration: 2, repeat: Infinity }}
             className="flex flex-col items-center gap-4"
           >
-            <span className="text-[10px] tracking-[0.4em] uppercase">Timeline</span>
+            <span className="text-[10px] tracking-[0.4em] uppercase">
+              Timeline
+            </span>
             <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent"></div>
           </motion.div>
         </div>
@@ -460,8 +464,8 @@ export default function ExpeditionsPage() {
 
       {/* Timeline Section */}
       <section className="py-24 relative bg-obsidian">
-         {/* Background Grid */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] opacity-20 pointer-events-none"></div>
+        {/* Background Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] opacity-20 pointer-events-none"></div>
 
         <div className="max-w-6xl mx-auto px-6 relative z-10">
           {/* Section Header */}
@@ -502,8 +506,12 @@ export default function ExpeditionsPage() {
                     className="relative"
                   >
                     {/* Timeline Node - Premium Design */}
-                    <div className={`hidden md:flex absolute left-[42px] top-8 w-3 h-3 rounded-full z-10 items-center justify-center`}>
-                        <div className={`w-3 h-3 rounded-full ${getTimelineColor(expedition.status)}`}></div>
+                    <div
+                      className={`hidden md:flex absolute left-[42px] top-8 w-3 h-3 rounded-full z-10 items-center justify-center`}
+                    >
+                      <div
+                        className={`w-3 h-3 rounded-full ${getTimelineColor(expedition.status)}`}
+                      ></div>
                     </div>
 
                     {/* Year Label */}
@@ -517,7 +525,9 @@ export default function ExpeditionsPage() {
                     <div className="md:ml-32">
                       <div
                         className={`group cursor-pointer border rounded-2xl overflow-hidden transition-all duration-500 ${getCardBorderColor(expedition.status)} ${
-                          isExpanded ? 'bg-glass-panel shadow-2xl scale-[1.01]' : 'bg-white/5 hover:bg-glass-panel hover:scale-[1.005]'
+                          isExpanded
+                            ? 'bg-glass-panel shadow-2xl scale-[1.01]'
+                            : 'bg-white/5 hover:bg-glass-panel hover:scale-[1.005]'
                         }`}
                         onClick={() => toggleExpanded(expedition.id)}
                       >
@@ -536,7 +546,9 @@ export default function ExpeditionsPage() {
 
                             {/* Status Badge */}
                             <div className="absolute top-6 left-6">
-                              <div className={`flex items-center space-x-2 px-3 py-1.5 rounded-full border text-[10px] font-mono tracking-widest uppercase ${getStatusColor(expedition.status)} backdrop-blur-md`}>
+                              <div
+                                className={`flex items-center space-x-2 px-3 py-1.5 rounded-full border text-[10px] font-mono tracking-widest uppercase ${getStatusColor(expedition.status)} backdrop-blur-md`}
+                              >
                                 <StatusIcon className="w-3 h-3" />
                                 <span>{getStatusLabel(expedition.status)}</span>
                               </div>
@@ -592,27 +604,47 @@ export default function ExpeditionsPage() {
                               {/* Quick Stats */}
                               <div className="grid grid-cols-3 gap-4 border-t border-white/5 pt-6">
                                 <div className="text-center">
-                                  <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">Duration</div>
-                                  <div className="text-white font-light">{expedition.stats.duration}</div>
+                                  <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">
+                                    Duration
+                                  </div>
+                                  <div className="text-white font-light">
+                                    {expedition.stats.duration}
+                                  </div>
                                 </div>
                                 <div className="text-center border-l border-white/5">
-                                  <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">Difficulty</div>
-                                  <div className="text-white font-light">{expedition.stats.difficulty}</div>
+                                  <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">
+                                    Difficulty
+                                  </div>
+                                  <div className="text-white font-light">
+                                    {expedition.stats.difficulty}
+                                  </div>
                                 </div>
                                 <div className="text-center border-l border-white/5">
-                                  <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">Temp</div>
-                                  <div className="text-white font-light">{expedition.stats.temperature}</div>
+                                  <div className="text-xs text-gray-500 uppercase tracking-widest mb-1">
+                                    Temp
+                                  </div>
+                                  <div className="text-white font-light">
+                                    {expedition.stats.temperature}
+                                  </div>
                                 </div>
                               </div>
                             </div>
 
-                             {/* Footer / Expand */}
-                             <div className="flex items-center justify-end pt-6 mt-4">
-                                <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-widest text-gray-500 group-hover:text-summit-gold-400 transition-colors">
-                                    <span>{isExpanded ? 'Close Details' : 'Mission Report'}</span>
-                                    {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-                                </div>
-                             </div>
+                            {/* Footer / Expand */}
+                            <div className="flex items-center justify-end pt-6 mt-4">
+                              <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-widest text-gray-500 group-hover:text-summit-gold-400 transition-colors">
+                                <span>
+                                  {isExpanded
+                                    ? 'Close Details'
+                                    : 'Mission Report'}
+                                </span>
+                                {isExpanded ? (
+                                  <ChevronUp className="w-3 h-3" />
+                                ) : (
+                                  <ChevronDown className="w-3 h-3" />
+                                )}
+                              </div>
+                            </div>
                           </div>
                         </div>
 
@@ -633,10 +665,30 @@ export default function ExpeditionsPage() {
                                     <span>Key Achievements</span>
                                   </h4>
                                   <ul className="space-y-3 text-sm text-gray-300 font-light">
-                                    <li className="flex items-start gap-3"><span className="text-summit-gold-500/50">01</span> Successfully reached summit</li>
-                                    <li className="flex items-start gap-3"><span className="text-summit-gold-500/50">02</span> All safety protocols executed</li>
-                                    <li className="flex items-start gap-3"><span className="text-summit-gold-500/50">03</span> Weather window optimized</li>
-                                    <li className="flex items-start gap-3"><span className="text-summit-gold-500/50">04</span> Team coordination excellent</li>
+                                    <li className="flex items-start gap-3">
+                                      <span className="text-summit-gold-500/50">
+                                        01
+                                      </span>{' '}
+                                      Successfully reached summit
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                      <span className="text-summit-gold-500/50">
+                                        02
+                                      </span>{' '}
+                                      All safety protocols executed
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                      <span className="text-summit-gold-500/50">
+                                        03
+                                      </span>{' '}
+                                      Weather window optimized
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                      <span className="text-summit-gold-500/50">
+                                        04
+                                      </span>{' '}
+                                      Team coordination excellent
+                                    </li>
                                   </ul>
                                 </div>
                                 <div>
@@ -645,10 +697,30 @@ export default function ExpeditionsPage() {
                                     <span>Lessons Learned</span>
                                   </h4>
                                   <ul className="space-y-3 text-sm text-gray-300 font-light">
-                                    <li className="flex items-start gap-3"><span className="text-summit-gold-500/50">01</span> High-altitude acclimatization</li>
-                                    <li className="flex items-start gap-3"><span className="text-summit-gold-500/50">02</span> Equipment performance testing</li>
-                                    <li className="flex items-start gap-3"><span className="text-summit-gold-500/50">03</span> Mental resilience building</li>
-                                    <li className="flex items-start gap-3"><span className="text-summit-gold-500/50">04</span> Emergency protocol mastery</li>
+                                    <li className="flex items-start gap-3">
+                                      <span className="text-summit-gold-500/50">
+                                        01
+                                      </span>{' '}
+                                      High-altitude acclimatization
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                      <span className="text-summit-gold-500/50">
+                                        02
+                                      </span>{' '}
+                                      Equipment performance testing
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                      <span className="text-summit-gold-500/50">
+                                        03
+                                      </span>{' '}
+                                      Mental resilience building
+                                    </li>
+                                    <li className="flex items-start gap-3">
+                                      <span className="text-summit-gold-500/50">
+                                        04
+                                      </span>{' '}
+                                      Emergency protocol mastery
+                                    </li>
                                   </ul>
                                 </div>
                               </div>
@@ -677,19 +749,29 @@ export default function ExpeditionsPage() {
           >
             <div className="p-6">
               <div className="text-5xl font-light text-white mb-2">14</div>
-              <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">Expeditions</div>
+              <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">
+                Expeditions
+              </div>
             </div>
             <div className="p-6 border-l border-white/10">
-              <div className="text-5xl font-light text-summit-gold-400 mb-2">4/7</div>
-              <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">Seven Summits</div>
+              <div className="text-5xl font-light text-summit-gold-400 mb-2">
+                4/7
+              </div>
+              <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">
+                Seven Summits
+              </div>
             </div>
             <div className="p-6 border-l border-white/10">
               <div className="text-5xl font-light text-white mb-2">11</div>
-              <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">Years Journey</div>
+              <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">
+                Years Journey
+              </div>
             </div>
             <div className="p-6 border-l border-white/10">
               <div className="text-5xl font-light text-white mb-2">∞</div>
-              <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">Lessons</div>
+              <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">
+                Lessons
+              </div>
             </div>
           </motion.div>
         </div>
