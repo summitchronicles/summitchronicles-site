@@ -73,9 +73,10 @@ const Header: React.FC = () => {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
-        <div className="flex items-center justify-between min-h-[80px] h-20 w-full gap-4">
+
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center min-h-[80px] h-20 w-full gap-4">
           {/* Logo / Brand - Left */}
-          <div className="flex-shrink-0">
+          <div className="flex justify-start items-center">
             <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
               <div className="relative w-10 h-10 transition-transform duration-300 group-hover:scale-105">
                 <Image
@@ -92,7 +93,7 @@ const Header: React.FC = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation - Center (Optically Centered) */}
+          {/* Desktop Navigation - Center (Strictly Centered) */}
           <nav className="hidden md:flex items-center justify-center space-x-1 lg:space-x-6">
             {primaryNavigation.map((item) => (
               <Link
@@ -115,7 +116,7 @@ const Header: React.FC = () => {
           </nav>
 
           {/* CTA & Mobile Menu - Right */}
-          <div className="flex items-center justify-end space-x-3 md:space-x-4 flex-shrink-0">
+          <div className="flex items-center justify-end space-x-3 md:space-x-4">
             {/* Support CTA - Desktop */}
             <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               <Button variant="ghost" size="sm" asChild className="text-white hover:text-summit-gold hover:bg-white/10">
