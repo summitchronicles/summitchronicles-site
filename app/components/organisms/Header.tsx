@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
 import { H3 } from '../atoms/Typography';
@@ -68,16 +69,22 @@ const Header: React.FC = () => {
         'fixed top-0 left-0 right-0 z-50 transition-all duration-400',
         isScrolled || isMobileMenuOpen
           ? 'bg-black/90 backdrop-blur-md shadow-lg border-b border-white/10'
-          : 'bg-transparent'
+          : 'bg-gradient-to-b from-black/80 to-transparent'
       )}
     >
-      <div className="max-w-7xl mx-auto px-2 sm:px-3">
-        <div className="grid grid-cols-3 items-center min-h-[64px] h-16 w-full">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        <div className="grid grid-cols-3 items-center min-h-[80px] h-20 w-full">
           {/* Logo / Brand - Left Corner */}
           <div className="flex justify-start">
             <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
-              <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-md group-hover:bg-summit-gold/20 transition-colors duration-300">
-                <Icon name="Mountain" className="text-white group-hover:text-summit-gold" size="md" />
+              <div className="relative w-10 h-10 transition-transform duration-300 group-hover:scale-105">
+                <Image
+                  src="/images/logo.png"
+                  alt="Summit Chronicles Logo"
+                  fill
+                  className="object-contain"
+                  priority
+                />
               </div>
               <H3 className="hidden sm:block text-white group-hover:text-summit-gold transition-colors duration-300">
                 Summit Chronicles
