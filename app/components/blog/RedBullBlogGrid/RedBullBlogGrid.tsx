@@ -121,7 +121,7 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
       <section className="relative py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/stories/sunith-visionary-planning.jpg"
+            src="/images/sunith-visionary-planning.png"
             alt="Field Stories from the Mountains"
             fill
             className="object-cover opacity-60 grayscale scale-105"

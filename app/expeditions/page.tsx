@@ -104,7 +104,7 @@ export default function ExpeditionsPage() {
       date: 'December 2024',
       year: '2024',
       status: 'completed',
-      image: '/stories/sunith-aconcagua.jpg',
+      image: '/images/sunith-aconcagua.jpg',
       story:
         'Highest peak outside of Asia. Technical high-altitude climbing in extreme conditions. A major step toward the ultimate goal.',
       stats: {
@@ -122,7 +122,7 @@ export default function ExpeditionsPage() {
       date: 'September 2024',
       year: '2024',
       status: 'completed',
-      image: '/stories/Spangnak.jpg',
+      image: '/images/Spangnak.jpg',
       story:
         'Remote peak in the Ladakh region. Building technical climbing skills and testing gear in harsh mountain conditions.',
       stats: {
@@ -140,7 +140,7 @@ export default function ExpeditionsPage() {
       date: 'August 2024',
       year: '2024',
       status: 'completed',
-      image: '/stories/Mentok.jpg',
+      image: '/images/Mentok.jpg',
       story:
         'Triple peak challenge in Ladakh. Technical climbing across three connected summits, testing endurance and multi-day high-altitude performance.',
       stats: {
@@ -176,7 +176,7 @@ export default function ExpeditionsPage() {
       date: 'September 2021',
       year: '2021',
       status: 'completed',
-      image: '/stories/Hampta.jpg',
+      image: '/images/Hampta.jpg',
       story:
         'A dramatic valley-to-valley crossing. This trek taught me about rapid elevation changes and diverse mountain ecosystems in a single journey.',
       stats: {
@@ -194,7 +194,7 @@ export default function ExpeditionsPage() {
       date: 'April 2021',
       year: '2021',
       status: 'completed',
-      image: '/stories/Sandakhphu.jpg',
+      image: '/images/Sandakphu.jpg',
       story:
         'The highest peak in West Bengal, offering spectacular views of four 8000m peaks including Everest. A reminder of the ultimate goal on the horizon.',
       stats: {
@@ -212,7 +212,7 @@ export default function ExpeditionsPage() {
       date: 'January 2020',
       year: '2020',
       status: 'completed',
-      image: '/stories/Brahmatal.jpg',
+      image: '/images/Brahmatal.jpg',
       story:
         'Winter mountaineering experience. Learning to handle extreme cold and snow conditions - essential skills for the bigger mountains ahead.',
       stats: {
@@ -230,7 +230,7 @@ export default function ExpeditionsPage() {
       date: 'May 2019',
       year: '2019',
       status: 'completed',
-      image: '/stories/Rupin.jpg',
+      image: '/images/Rupin.jpg',
       story:
         'One of the most beautiful and varied treks in the Himalayas. This journey took me through diverse landscapes and weather conditions, building versatility in mountain environments.',
       stats: {
@@ -248,7 +248,7 @@ export default function ExpeditionsPage() {
       date: 'September 2018',
       year: '2018',
       status: 'completed',
-      image: '/stories/StokKangri.jpg',
+      image: '/images/sunith-grit-training.png',
       story:
         'My first 6000m+ peak. Crossing the 20,000 ft threshold was a major milestone, proving I could handle serious altitude and technical climbing.',
       stats: {
@@ -266,7 +266,7 @@ export default function ExpeditionsPage() {
       date: 'October 2017',
       year: '2017',
       status: 'completed',
-      image: '/stories/EBC.jpg',
+      image: '/images/EBC.jpg',
       story:
         "First encounter with the world's highest mountain. Standing at base camp, the dream of summiting Everest was born. This trek was a pilgrimage and a reconnaissance mission.",
       stats: {
@@ -284,7 +284,7 @@ export default function ExpeditionsPage() {
       date: 'May 2016',
       year: '2016',
       status: 'completed',
-      image: '/stories/GoeChela.JPG',
+      image: '/images/GoeChela.JPG',
       story:
         'Close encounter with Kanchenjunga. This trek offered incredible views of the third highest peak in the world and deepened my connection with high-altitude environments.',
       stats: {
@@ -302,7 +302,7 @@ export default function ExpeditionsPage() {
       date: 'October 2015',
       year: '2015',
       status: 'completed',
-      image: '/stories/Roopkund.jpg',
+      image: '/images/Roopkund.jpg',
       story:
         'Building on the foundation from Sar Pass. Pushing higher into the Himalayas and testing my resilience at greater altitudes.',
       stats: {
@@ -320,7 +320,7 @@ export default function ExpeditionsPage() {
       date: 'May 2014',
       year: '2014',
       status: 'completed',
-      image: '/stories/SarPass.jpg',
+      image: '/images/SarPass.jpg',
       story:
         'The spark that started everything. One year after being bedridden with tuberculosis, I stood on a Himalayan glacier. This moment changed my life forever.',
       stats: {
