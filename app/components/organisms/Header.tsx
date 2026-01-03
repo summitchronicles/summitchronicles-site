@@ -73,13 +73,13 @@ const Header: React.FC = () => {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
-        <div className="grid grid-cols-3 items-center min-h-[80px] h-20 w-full">
-          {/* Logo / Brand - Left Corner */}
-          <div className="flex justify-start">
+        <div className="flex items-center justify-between min-h-[80px] h-20 w-full gap-4">
+          {/* Logo / Brand - Left */}
+          <div className="flex-shrink-0">
             <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
               <div className="relative w-10 h-10 transition-transform duration-300 group-hover:scale-105">
                 <Image
-                  src="/images/logo.png"
+                  src="/images/logo-v2.png"
                   alt="Summit Chronicles Logo"
                   fill
                   className="object-contain"
@@ -92,14 +92,14 @@ const Header: React.FC = () => {
             </Link>
           </div>
 
-          {/* Desktop Navigation - Center */}
-          <nav className="hidden md:flex items-center justify-center space-x-4 lg:space-x-8">
+          {/* Desktop Navigation - Center (Optically Centered) */}
+          <nav className="hidden md:flex items-center justify-center space-x-1 lg:space-x-6">
             {primaryNavigation.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'relative px-4 py-3 text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
+                  'relative px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
                   isActivePath(item.href)
                     ? 'text-summit-gold'
                     : 'text-gray-300 hover:text-white'
@@ -114,8 +114,8 @@ const Header: React.FC = () => {
             ))}
           </nav>
 
-          {/* CTA & Mobile Menu - Right Corner */}
-          <div className="flex items-center justify-end space-x-2 md:space-x-4">
+          {/* CTA & Mobile Menu - Right */}
+          <div className="flex items-center justify-end space-x-3 md:space-x-4 flex-shrink-0">
             {/* Support CTA - Desktop */}
             <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
               <Button variant="ghost" size="sm" asChild className="text-white hover:text-summit-gold hover:bg-white/10">
