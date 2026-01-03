@@ -80,7 +80,7 @@ const Header: React.FC = () => {
             <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
               <div className="relative w-10 h-10 transition-transform duration-300 group-hover:scale-105">
                 <Image
-                  src="/images/logo-v2.png"
+                  src="/images/logo-transparent.png"
                   alt="Summit Chronicles Logo"
                   fill
                   className="object-contain"

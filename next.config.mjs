@@ -1,5 +1,6 @@
 
 /** @type {import('next').NextConfig} */
+// Forcing server restart to clear cache
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,

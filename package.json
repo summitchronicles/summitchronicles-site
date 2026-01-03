@@ -82,6 +82,7 @@
     "react-use": "^17.6.0",
     "sanity": "^3.99.0",
     "sentiment": "^5.0.2",
+    "sharp": "^0.34.5",
     "styled-components": "^6.1.19",
     "swr": "^2.3.6",
     "tailwind-merge": "^3.3.1",
