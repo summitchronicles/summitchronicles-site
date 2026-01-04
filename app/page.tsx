@@ -2,9 +2,13 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Header } from './components/organisms/Header';
-import { getEverestCountdownText, getDaysToEverest } from '@/lib/everest-countdown';
+import {
+  getEverestCountdownText,
+  getDaysToEverest,
+} from '@/lib/everest-countdown';
 import { ArrowRight, Mountain, Wind, Map } from 'lucide-react';
 
 export default function Home() {
@@ -22,7 +26,7 @@ export default function Home() {
       {/* Main content - Full screen immersive design */}
       <main id="main-content" className="flex-1">
         {/* Hero: Full-screen dramatic mountain photography */}
-        <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        <section className="relative h-screen flex flex-col items-center justify-between overflow-hidden">
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
@@ -37,8 +41,8 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-obsidian"></div>
           </div>
 
-          {/* Minimal Text Overlay */}
-          <div className="relative z-10 text-center text-white max-w-4xl px-6">
+          {/* Minimal Text Overlay - Centered */}
+          <div className="relative z-10 text-center text-white max-w-4xl px-6 flex-1 flex items-center justify-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -48,8 +52,12 @@ export default function Home() {
                 SUMMIT CHRONICLES
               </h1>
               <p className="text-xl md:text-2xl font-light tracking-wider opacity-90 mb-8 max-w-2xl mx-auto">
-                Seven Summits • One Journey • <span className="text-summit-gold-400">{getEverestCountdownText()}</span>
+                Seven Summits • One Journey •{' '}
+                <span className="text-summit-gold-400">
+                  {getEverestCountdownText()}
+                </span>
               </p>
+
               <div className="flex items-center justify-center space-x-2 md:space-x-3 text-xs md:text-sm tracking-[0.3em] uppercase opacity-70">
                 <span>Mountaineer</span>
                 <span>•</span>
@@ -60,6 +68,31 @@ export default function Home() {
             </motion.div>
           </div>
 
+          {/* CTA Buttons - Bottom */}
+          <div className="relative z-10 pb-24 px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            >
+              <Link
+                href="/support"
+                className="inline-flex items-center space-x-2 bg-summit-gold-600 hover:bg-summit-gold-500 text-black px-8 py-4 rounded-sm font-bold tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.3)] hover:shadow-[0_0_30px_rgba(212,175,55,0.5)]"
+              >
+                <span>Support Journey</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+              <Link
+                href="/expeditions"
+                className="inline-flex items-center space-x-2 border-2 border-white/30 hover:border-white text-white px-8 py-4 rounded-sm font-medium tracking-widest uppercase transition-all duration-300 hover:bg-white/10"
+              >
+                <span>View Expeditions</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+            </motion.div>
+          </div>
+
           {/* Scroll Indicator */}
           <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-white/50">
             <motion.div
@@ -67,7 +100,9 @@ export default function Home() {
               transition={{ duration: 2, repeat: Infinity }}
               className="flex flex-col items-center gap-4"
             >
-              <span className="text-[10px] tracking-[0.4em] uppercase">Explore</span>
+              <span className="text-[10px] tracking-[0.4em] uppercase">
+                Explore
+              </span>
               <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent"></div>
             </motion.div>
           </div>
@@ -86,9 +121,15 @@ export default function Home() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity">
                 <div className="absolute bottom-8 left-8 text-white">
-                  <span className="text-xs font-mono text-summit-gold-400 mb-2 block tracking-widest">01 / AFRICA</span>
-                  <h3 className="text-2xl font-oswald font-light tracking-wide mb-1">KILIMANJARO</h3>
-                  <p className="text-sm text-gray-400 font-light">19,341 ft • Completed 2023</p>
+                  <span className="text-xs font-mono text-summit-gold-400 mb-2 block tracking-widest">
+                    01 / AFRICA
+                  </span>
+                  <h3 className="text-2xl font-oswald font-light tracking-wide mb-1">
+                    KILIMANJARO
+                  </h3>
+                  <p className="text-sm text-gray-400 font-light">
+                    19,341 ft • Completed 2023
+                  </p>
                 </div>
               </div>
             </div>
@@ -102,9 +143,15 @@ export default function Home() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity">
                 <div className="absolute bottom-8 left-8 text-white">
-                  <span className="text-xs font-mono text-summit-gold-400 mb-2 block tracking-widest">04 / NORTH AMERICA</span>
-                  <h3 className="text-2xl font-oswald font-light tracking-wide mb-1">DENALI</h3>
-                  <p className="text-sm text-gray-400 font-light">20,310 ft • Completed 2025</p>
+                  <span className="text-xs font-mono text-summit-gold-400 mb-2 block tracking-widest">
+                    04 / NORTH AMERICA
+                  </span>
+                  <h3 className="text-2xl font-oswald font-light tracking-wide mb-1">
+                    DENALI
+                  </h3>
+                  <p className="text-sm text-gray-400 font-light">
+                    20,310 ft • Completed 2025
+                  </p>
                 </div>
               </div>
             </div>
@@ -118,9 +165,15 @@ export default function Home() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity">
                 <div className="absolute bottom-8 left-8 text-white">
-                  <span className="text-xs font-mono text-summit-gold-400 mb-2 block tracking-widest">07 / ASIA</span>
-                  <h3 className="text-2xl font-oswald font-light tracking-wide mb-1">EVEREST</h3>
-                  <p className="text-sm text-gray-400 font-light">29,032 ft • Targeted 2028</p>
+                  <span className="text-xs font-mono text-summit-gold-400 mb-2 block tracking-widest">
+                    07 / ASIA
+                  </span>
+                  <h3 className="text-2xl font-oswald font-light tracking-wide mb-1">
+                    EVEREST
+                  </h3>
+                  <p className="text-sm text-gray-400 font-light">
+                    29,032 ft • Targeted 2028
+                  </p>
                 </div>
               </div>
             </div>
@@ -129,8 +182,8 @@ export default function Home() {
 
         {/* Current Mission Statement - Inverted to Dark Glass */}
         <section className="py-24 bg-obsidian relative">
-           {/* Background Grid Texture */}
-           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]"></div>
+          {/* Background Grid Texture */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]"></div>
 
           <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
             <motion.div
@@ -140,37 +193,48 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <h2 className="text-4xl md:text-5xl font-light text-white mb-8 tracking-wide">
-                The Seven Summits Project
+                Conquering the Seven Summits
               </h2>
-              <p className="text-xl text-gray-400 leading-relaxed mb-16 font-light max-w-3xl mx-auto">
-                Every great journey begins with a single step. Mine began in 2013, bedridden with tuberculosis,
-                barely able to walk 50 meters. A year later, I stood on a Himalayan glacier. That moment
-                sparked a journey to conquer the Seven Summits, one mountain at a time.
+
+              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-16">
+                Every great journey begins with a single step. Mine began in
+                2013, bedridden with tuberculosis, barely able to walk 50
+                meters. A year later, I stood on a Himalayan glacier. That
+                moment sparked a journey to conquer the Seven Summits, one
+                mountain at a time.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl hover:border-summit-gold/30 transition-colors group">
                   <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
-                      <Mountain className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
+                    <Mountain className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
                   </div>
                   <div className="text-4xl font-light text-white mb-2">4/7</div>
-                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">Summits Done</div>
-                </div>
-
-                <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl hover:border-summit-gold/30 transition-colors group">
-                   <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
-                      <Wind className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
+                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">
+                    Summits Done
                   </div>
-                  <div className="text-4xl font-light text-white mb-2">{getDaysToEverest()}</div>
-                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">Days to Everest</div>
                 </div>
 
                 <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl hover:border-summit-gold/30 transition-colors group">
-                   <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
-                      <Map className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
+                  <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
+                    <Wind className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
+                  </div>
+                  <div className="text-4xl font-light text-white mb-2">
+                    {getDaysToEverest()}
+                  </div>
+                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">
+                    Days to Everest
+                  </div>
+                </div>
+
+                <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl hover:border-summit-gold/30 transition-colors group">
+                  <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
+                    <Map className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
                   </div>
                   <div className="text-4xl font-light text-white mb-2">∞</div>
-                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">Validations</div>
+                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">
+                    Validations
+                  </div>
                 </div>
               </div>
             </motion.div>

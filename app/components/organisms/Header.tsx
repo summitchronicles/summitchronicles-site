@@ -73,56 +73,63 @@ const Header: React.FC = () => {
       )}
     >
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        <div className="flex items-center justify-between min-h-[80px] h-20 w-full">
+          {/* Logo - Left */}
+          <Link href="/" className="group flex items-center gap-3">
+            <div className="relative w-16 h-16 transition-transform duration-300 group-hover:scale-105">
+              <Image
+                src="/images/logo-transparent.png"
+                alt="Summit Chronicles Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+            <H3 className="hidden lg:block text-white group-hover:text-summit-gold transition-colors duration-300">
+              Summit Chronicles
+            </H3>
+          </Link>
 
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center min-h-[80px] h-20 w-full gap-4">
-          {/* Logo / Brand - Left */}
-          <div className="flex justify-start items-center">
-            <Link href="/" className="flex items-center space-x-3 group brand min-h-[44px] py-2">
-              <div className="relative w-10 h-10 transition-transform duration-300 group-hover:scale-105">
-                <Image
-                  src="/images/logo-transparent.png"
-                  alt="Summit Chronicles Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <H3 className="hidden sm:block text-white group-hover:text-summit-gold transition-colors duration-300">
-                Summit Chronicles
-              </H3>
-            </Link>
-          </div>
+          {/* Navigation + CTA Buttons - Right */}
+          <div className="flex items-center gap-3 md:gap-6">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-4 lg:gap-8">
+              {primaryNavigation.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'relative px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
+                    isActivePath(item.href)
+                      ? 'text-summit-gold'
+                      : 'text-gray-300 hover:text-white'
+                  )}
+                >
+                  {item.label}
+                  {isActivePath(item.href) && (
+                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-summit-gold rounded-full" />
+                  )}
+                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-summit-gold transition-all duration-300 group-hover:w-full" />
+                </Link>
+              ))}
+            </nav>
 
-          {/* Desktop Navigation - Center (Strictly Centered) */}
-          <nav className="hidden md:flex items-center justify-center space-x-1 lg:space-x-6">
-            {primaryNavigation.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  'relative px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
-                  isActivePath(item.href)
-                    ? 'text-summit-gold'
-                    : 'text-gray-300 hover:text-white'
-                )}
+            {/* CTA Buttons - Desktop */}
+            <div className="hidden lg:flex items-center gap-4">
+              <Button
+                variant="ghost"
+                size="sm"
+                asChild
+                className="text-white hover:text-summit-gold hover:bg-white/10"
               >
-                {item.label}
-                {isActivePath(item.href) && (
-                  <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-summit-gold rounded-full" />
-                )}
-                <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-summit-gold transition-all duration-300 group-hover:w-full" />
-              </Link>
-            ))}
-          </nav>
-
-          {/* CTA & Mobile Menu - Right */}
-          <div className="flex items-center justify-end space-x-3 md:space-x-4">
-            {/* Support CTA - Desktop */}
-            <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
-              <Button variant="ghost" size="sm" asChild className="text-white hover:text-summit-gold hover:bg-white/10">
                 <Link href="/newsletter">Newsletter</Link>
               </Button>
-              <Button variant="summit" size="sm" asChild className="bg-summit-gold-600 hover:bg-summit-gold-500 text-black border-none">
+              <Button
+                variant="summit"
+                size="sm"
+                asChild
+                className="bg-summit-gold-600 hover:bg-summit-gold-500 text-black border-none"
+              >
                 <Link href="/support">
                   <Icon name="Heart" size="sm" />
                   Support Journey
@@ -160,7 +167,7 @@ const Header: React.FC = () => {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'block px-6 py-4 text-base font-medium transition-all duration-300 min-h-[48px] flex items-center',
+                    'px-6 py-4 text-base font-medium transition-all duration-300 min-h-[48px] flex items-center',
                     isActivePath(item.href)
                       ? 'text-summit-gold bg-white/5 border-l-4 border-summit-gold'
                       : 'text-gray-300 hover:text-white hover:bg-white/5'
@@ -183,7 +190,7 @@ const Header: React.FC = () => {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="block px-6 py-3 text-base text-gray-400 hover:text-white transition-colors duration-300 min-h-[44px] flex items-center"
+                    className="px-6 py-3 text-base text-gray-400 hover:text-white transition-colors duration-300 min-h-[44px] flex items-center"
                   >
                     {item.label}
                   </Link>
@@ -203,7 +210,12 @@ const Header: React.FC = () => {
                     Newsletter Updates
                   </Link>
                 </Button>
-                <Button variant="summit" size="sm" className="w-full bg-summit-gold-600 text-black hover:bg-summit-gold-500 border-none" asChild>
+                <Button
+                  variant="summit"
+                  size="sm"
+                  className="w-full bg-summit-gold-600 text-black hover:bg-summit-gold-500 border-none"
+                  asChild
+                >
                   <Link href="/support">
                     <Icon name="Heart" size="sm" />
                     Support Journey
