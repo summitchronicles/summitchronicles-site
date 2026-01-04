@@ -31,6 +31,17 @@ interface TrainingMetrics {
     upcoming: string[];
     progressPercentage: number;
   };
+  recoveryPhase?: {
+    surgeryDate: string;
+    currentStage: string;
+    nextMilestone: string;
+    daysToMilestone: number;
+    metrics: {
+      mobility: number;
+      painLevel: number; // 0-10
+      ptSessions: number;
+    };
+  };
 }
 
 interface UseTrainingMetricsResult {
@@ -76,7 +87,7 @@ export function useTrainingMetrics(): UseTrainingMetricsResult {
         console.log('Training metrics loaded:', {
           source: data.source,
           isRealData: data.source === 'strava' || data.source === 'garmin',
-          totalActivities: data.totalActivities
+          totalActivities: data.totalActivities,
         });
       } else {
         setError(data.error || 'Failed to load training metrics');
@@ -119,23 +130,23 @@ function getFallbackMetrics(): TrainingMetrics {
       sevenSummitsCompleted: {
         value: '4/7',
         description: 'Kilimanjaro, Aconcagua, Elbrus, Denali completed',
-        trend: 'up'
+        trend: 'up',
       },
       trainingYears: {
         value: '11',
         description: 'Since Sar Pass 2014',
-        trend: 'up'
+        trend: 'up',
       },
       totalElevationThisYear: {
         value: '356K m',
         description: 'Estimated total vertical gain',
-        trend: 'up'
+        trend: 'up',
       },
       currentRestingHR: {
         value: '42 bpm',
         description: 'Estimated resting heart rate',
-        trend: 'down'
-      }
+        trend: 'down',
+      },
     },
     trainingPhases: [
       {
@@ -146,8 +157,8 @@ function getFallbackMetrics(): TrainingMetrics {
         metrics: [
           { label: 'Weekly Volume', value: '8 hrs', trend: 'up' },
           { label: 'Walking Distance', value: '5 km', trend: 'up' },
-          { label: 'Recovery Rate', value: '90%', trend: 'up' }
-        ]
+          { label: 'Recovery Rate', value: '90%', trend: 'up' },
+        ],
       },
       {
         phase: 'Kilimanjaro Prep',
@@ -157,8 +168,8 @@ function getFallbackMetrics(): TrainingMetrics {
         metrics: [
           { label: 'Weekly Volume', value: '15 hrs', trend: 'up' },
           { label: 'Max Altitude', value: '19,341 ft', trend: 'up' },
-          { label: 'Pack Weight', value: '45 lbs', trend: 'up' }
-        ]
+          { label: 'Pack Weight', value: '45 lbs', trend: 'up' },
+        ],
       },
       {
         phase: 'Technical Mountains',
@@ -168,8 +179,8 @@ function getFallbackMetrics(): TrainingMetrics {
         metrics: [
           { label: 'Summit Success', value: '3/3', trend: 'up' },
           { label: 'Max Altitude', value: '22,837 ft', trend: 'up' },
-          { label: 'Cold Exposure', value: '-40°C', trend: 'down' }
-        ]
+          { label: 'Cold Exposure', value: '-40°C', trend: 'down' },
+        ],
       },
       {
         phase: 'Base Training',
@@ -177,36 +188,56 @@ function getFallbackMetrics(): TrainingMetrics {
         focus: 'Foundation Building',
         status: 'current',
         metrics: [
-          { label: 'Training Load', value: 'Dynamic', trend: 'stable' as const }
-        ] // Will be replaced with real Garmin data
-      }
+          {
+            label: 'Training Load',
+            value: 'Dynamic',
+            trend: 'stable' as const,
+          },
+        ], // Will be replaced with real Garmin data
+      },
     ],
     recentTrends: {
       weeklyVolume: {
         value: '15 hrs',
         description: 'Estimated weekly training',
-        trend: 'up'
+        trend: 'up',
       },
       monthlyActivities: {
         value: '12',
         description: 'Estimated monthly activities',
-        trend: 'up'
+        trend: 'up',
       },
       elevationThisWeek: {
         value: '2.5K m',
         description: 'Estimated vertical gain this week',
-        trend: 'up'
+        trend: 'up',
       },
       currentFitness: {
         value: '85/100',
         description: 'Estimated fitness level',
-        trend: 'up'
-      }
+        trend: 'up',
+      },
     },
     expeditionProgress: {
-      completed: ['Kilimanjaro (2022)', 'Aconcagua (2023)', 'Elbrus (2023)', 'Denali (2024)'],
+      completed: [
+        'Kilimanjaro (2022)',
+        'Aconcagua (2023)',
+        'Elbrus (2023)',
+        'Denali (2024)',
+      ],
       upcoming: ['Everest (2027)', 'Vinson (TBD)', 'Carstensz Pyramid (TBD)'],
-      progressPercentage: 57
-    }
+      progressPercentage: 57,
+    },
+    recoveryPhase: {
+      surgeryDate: '2025-11-10',
+      currentStage: '8 Weeks Post-Op',
+      nextMilestone: 'Walking with Boot',
+      daysToMilestone: 5,
+      metrics: {
+        mobility: 60,
+        painLevel: 2,
+        ptSessions: 12,
+      },
+    },
   };
 }
