@@ -122,7 +122,7 @@ export default function ExpeditionsPage() {
       date: 'September 2024',
       year: '2024',
       status: 'completed',
-      image: '/images/spangnak.jpg',
+      image: '/images/Spangnak.jpg',
       story:
         'Remote peak in the Ladakh region. Building technical climbing skills and testing gear in harsh mountain conditions.',
       stats: {
@@ -194,7 +194,7 @@ export default function ExpeditionsPage() {
       date: 'April 2021',
       year: '2021',
       status: 'completed',
-      image: '/images/sandakphu.jpg',
+      image: '/images/Sandakphu.jpg',
       story:
         'The highest peak in West Bengal, offering spectacular views of four 8000m peaks including Everest. A reminder of the ultimate goal on the horizon.',
       stats: {
@@ -212,7 +212,7 @@ export default function ExpeditionsPage() {
       date: 'January 2020',
       year: '2020',
       status: 'completed',
-      image: '/images/brahmatal.jpg',
+      image: '/images/Brahmatal.jpg',
       story:
         'Winter mountaineering experience. Learning to handle extreme cold and snow conditions - essential skills for the bigger mountains ahead.',
       stats: {
@@ -302,7 +302,7 @@ export default function ExpeditionsPage() {
       date: 'October 2015',
       year: '2015',
       status: 'completed',
-      image: '/images/roopkund.jpg',
+      image: '/images/Roopkund.jpg',
       story:
         'Building on the foundation from Sar Pass. Pushing higher into the Himalayas and testing my resilience at greater altitudes.',
       stats: {
