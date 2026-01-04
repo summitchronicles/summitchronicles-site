@@ -13,7 +13,7 @@ export const BentoGrid: React.FC<BentoGridProps> = ({
   return (
     <div
       className={cn(
-        'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 auto-rows-[minmax(180px,auto)] gap-4',
+        'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid-auto-rows-[minmax(240px,auto)] gap-4',
         className
       )}
     >
@@ -38,7 +38,7 @@ export const BentoItem: React.FC<BentoItemProps> = ({
   return (
     <div
       className={cn(
-        'relative h-full',
+        'relative',
         {
           'col-span-1': span === '1',
           'md:col-span-2': span === '2',

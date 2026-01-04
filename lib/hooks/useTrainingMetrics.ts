@@ -36,6 +36,7 @@ interface TrainingMetrics {
     currentStage: string;
     nextMilestone: string;
     daysToMilestone: number;
+    daysSinceSurgery: number;
     metrics: {
       mobility: number;
       painLevel: number; // 0-10
@@ -233,8 +234,12 @@ function getFallbackMetrics(): TrainingMetrics {
       currentStage: '8 Weeks Post-Op',
       nextMilestone: 'Walking with Boot',
       daysToMilestone: 5,
+      daysSinceSurgery: Math.floor(
+        (new Date('2026-01-04').getTime() - new Date('2025-11-10').getTime()) /
+          (1000 * 60 * 60 * 24)
+      ),
       metrics: {
-        mobility: 60,
+        mobility: 10,
         painLevel: 2,
         ptSessions: 12,
       },
