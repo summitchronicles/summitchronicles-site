@@ -21,22 +21,51 @@ import { BentoGrid, BentoItem } from '../components/training/BentoGrid';
 import { MetricCard } from '../components/training/MetricCard';
 import { RecoveryTimeline } from '../components/training/RecoveryTimeline';
 import { SummitProgress } from '../components/training/SummitProgress';
+import { MissionLog } from '../components/training/MissionLog';
+import { TrainingRoadmap } from '../components/training/TrainingRoadmap';
+import { JoinTheMission } from '../components/training/JoinTheMission';
 
 export default function TrainingPage() {
   const { metrics, loading } = useTrainingMetrics();
 
   // Default values if loading or no data
   const readiness = parseInt(
-    metrics?.currentStats?.currentFitness?.value || '85'
+    metrics?.currentStats?.currentFitness?.value || '30'
   );
   const daysToEverest = getDaysToEverest();
+
+  // Surgery date: November 10, 2025
+  const surgeryDate = new Date('2025-11-10T00:00:00');
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset to start of day
+  const msPerDay = 1000 * 60 * 60 * 24;
+  const daysSinceSurgery = Math.floor(
+    (today.getTime() - surgeryDate.getTime()) / msPerDay
+  );
 
   const recoveryData = metrics?.recoveryPhase || {
     daysToMilestone: 5,
     nextMilestone: 'Walking',
-    daysSinceSurgery: 55,
+    daysSinceSurgery: daysSinceSurgery,
     metrics: { mobility: 10, painLevel: 0, ptSessions: 0 },
   };
+
+  // Walking milestone date: January 9, 2026
+  const walkingStartDate = new Date('2026-01-09T00:00:00');
+
+  const isWalkingStarted = today >= walkingStartDate;
+
+  // Calculate days: countdown before, count up after
+  const walkingDays = isWalkingStarted
+    ? Math.floor((today.getTime() - walkingStartDate.getTime()) / msPerDay)
+    : Math.ceil((walkingStartDate.getTime() - today.getTime()) / msPerDay);
+
+  const walkingCardTitle = isWalkingStarted
+    ? 'Days with Protective Boot'
+    : 'Days to Walking';
+  const walkingCardSubtitle = isWalkingStarted
+    ? 'Since Walking Start'
+    : 'With Boot Support';
 
   return (
     <div className="min-h-screen bg-obsidian text-white selection:bg-summit-gold-900 selection:text-summit-gold-100">
@@ -71,7 +100,7 @@ export default function TrainingPage() {
             <BentoItem span="full" className="md:col-span-4">
               <MetricCard
                 title="Current Protocol: Rehabilitation"
-                value={`Day ${recoveryData.daysSinceSurgery || 55}`}
+                value={`Day ${daysSinceSurgery}`}
                 subtitle={`Since Surgery (Nov 10, 2025) • Next: ${recoveryData.nextMilestone}`}
                 variant="glass"
                 className="h-full bg-black/60 backdrop-blur-xl border-summit-gold/20"
@@ -111,9 +140,9 @@ export default function TrainingPage() {
 
             <BentoItem span="1">
               <MetricCard
-                title="Days to Walking"
-                value={recoveryData.daysToMilestone}
-                subtitle="With Boot Support"
+                title={walkingCardTitle}
+                value={walkingDays}
+                subtitle={walkingCardSubtitle}
                 icon={Calendar}
                 variant="highlight"
                 className=""
@@ -198,130 +227,31 @@ export default function TrainingPage() {
         </div>
       </section>
 
-      {/* 3. PHILOSOPHY SECTION */}
-      <section className="py-24 bg-black border-t border-white/5">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            {/* Left: Text Content */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="space-y-8"
+      {/* 3. MISSION CONTROL BOTTOM */}
+      <section className="pb-24 pt-0 bg-obsidian px-4 md:px-6">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Mission Log - Left Column */}
+            <div
+              className="min-h-[500px] lg:min-h-[600px]"
+              data-testid="mission-log-container"
             >
-              <div>
-                <span className="text-summit-gold-400 font-mono text-xs tracking-widest uppercase mb-4 block">
-                  The Algorithm
-                </span>
-                <h2 className="text-4xl md:text-5xl font-light text-white mb-6 leading-tight">
-                  From Broken to{' '}
-                  <span className="text-summit-gold-500">Base Camp.</span>
-                </h2>
-              </div>
+              <MissionLog />
+            </div>
 
-              <div className="space-y-6 text-gray-400 font-light leading-relaxed">
-                <p>
-                  In 2013, tuberculosis took my breath away. In 2025, a broken
-                  Talus took my footing. The mountain doesn't care about
-                  setbacks. It only respects preparation.
-                </p>
-                <p>
-                  Current Phase:{' '}
-                  <strong className="text-white">
-                    Radical Rehabilitation.
-                  </strong>{' '}
-                  Every PT session, every hour of sleep, every controlled
-                  movement is a step towards the Khumbu Icefall.
-                </p>
-                <p className="text-summit-gold-400">
-                  <strong>{daysToEverest} days to Everest.</strong>
-                  <br />
-                  The mountain doesn't care. Only the preparation matters.
-                </p>
-              </div>
-            </motion.div>
-
-            {/* Right: Training Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="relative"
+            {/* Roadmap - Right Column */}
+            <div
+              className="min-h-[500px] lg:min-h-[600px]"
+              data-testid="roadmap-container"
             >
-              <div className="absolute inset-0 bg-summit-gold-500/10 blur-3xl rounded-full"></div>
-              <Image
-                src="/stories/kilimanjaro.jpg"
-                alt="Systematic training approach"
-                width={600}
-                height={800}
-                className="relative z-10 w-full rounded-2xl shadow-2xl border border-white/10 grayscale hover:grayscale-0 transition-all duration-700"
-              />
-            </motion.div>
+              <TrainingRoadmap />
+            </div>
           </div>
-        </div>
-      </section>
 
-      {/* 4. HIGHLIGHTED EVEREST COUNTDOWN */}
-      <section className="py-24 bg-gradient-to-b from-black to-obsidian border-t border-summit-gold-500/20">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="space-y-6"
-          >
-            <div className="inline-block px-4 py-2 rounded-full bg-summit-gold-500/10 border border-summit-gold-500/30 mb-4">
-              <span className="text-xs font-mono text-summit-gold-400 uppercase tracking-widest">
-                Mission Timeline
-              </span>
-            </div>
-
-            <h2 className="text-6xl md:text-8xl font-oswald font-bold text-white tracking-tight">
-              {daysToEverest}
-            </h2>
-
-            <p className="text-2xl md:text-3xl font-light text-summit-gold-400 tracking-wide">
-              Days to Everest
-            </p>
-
-            <div className="pt-6 border-t border-white/10 max-w-2xl mx-auto">
-              <p className="text-gray-400 font-light leading-relaxed">
-                From a broken Talus to the roof of the world. Every day of
-                rehabilitation, every controlled movement, every hour of sleep
-                brings us closer to standing at 29,032 feet.
-              </p>
-            </div>
-
-            <div className="flex items-center justify-center gap-8 pt-8 text-sm text-gray-500">
-              <div className="text-center">
-                <div className="text-2xl font-oswald text-white mb-1">
-                  {recoveryData.daysSinceSurgery}
-                </div>
-                <div className="text-xs uppercase tracking-wider">
-                  Days Since Surgery
-                </div>
-              </div>
-              <div className="w-px h-12 bg-white/10" />
-              <div className="text-center">
-                <div className="text-2xl font-oswald text-white mb-1">4/7</div>
-                <div className="text-xs uppercase tracking-wider">
-                  Summits Completed
-                </div>
-              </div>
-              <div className="w-px h-12 bg-white/10" />
-              <div className="text-center">
-                <div className="text-2xl font-oswald text-summit-gold-400 mb-1">
-                  2028
-                </div>
-                <div className="text-xs uppercase tracking-wider">
-                  Target Year
-                </div>
-              </div>
-            </div>
-          </motion.div>
+          {/* CTA Section - Full Width */}
+          <div data-testid="join-mission-container">
+            <JoinTheMission />
+          </div>
         </div>
       </section>
     </div>
