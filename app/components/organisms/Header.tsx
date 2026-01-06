@@ -85,7 +85,7 @@ const Header: React.FC = () => {
                 priority
               />
             </div>
-            <H3 className="hidden lg:block text-white group-hover:text-summit-gold transition-colors duration-300">
+            <H3 className="hidden xl:block text-white group-hover:text-summit-gold transition-colors duration-300">
               Summit Chronicles
             </H3>
           </Link>
@@ -183,19 +183,6 @@ const Header: React.FC = () => {
                   </div>
                 </Link>
               ))}
-
-              {/* Secondary Navigation in Mobile */}
-              <div className="pt-4 mt-4 border-t border-white/10">
-                {secondaryNavigation.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="px-6 py-3 text-base text-gray-400 hover:text-white transition-colors duration-300 min-h-[44px] flex items-center"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
 
               {/* Mobile CTA - Right aligned for consistency */}
               <div className="px-4 pt-4 space-y-3">

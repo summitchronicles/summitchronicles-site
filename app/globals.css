@@ -2,6 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent double scrollbars */
+html {
+  overflow-x: hidden;
+}
+
+html, body {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+body {
+  /* Ensure only body scrolls, not nested elements */
+  min-height: 100vh;
+}
+
 @layer base {
   :root {
     /* Brand Colors */

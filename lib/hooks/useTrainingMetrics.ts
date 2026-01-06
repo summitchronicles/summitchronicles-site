@@ -241,7 +241,7 @@ function getFallbackMetrics(): TrainingMetrics {
       metrics: {
         mobility: 10,
         painLevel: 2,
-        ptSessions: 12,
+        ptSessions: 0,
       },
     },
   };

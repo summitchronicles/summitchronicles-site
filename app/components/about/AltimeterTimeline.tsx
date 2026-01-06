@@ -144,6 +144,15 @@ export const AltimeterTimeline = () => {
 
                 {/* Center Node */}
                 <div className="absolute left-[11px] md:left-1/2 transform md:-translate-x-1/2 flex items-center justify-center">
+                  {/* Horizontal Connector Line */}
+                  <div
+                    className={`absolute w-8 md:w-12 h-px bg-gradient-to-r ${
+                      isLeft
+                        ? 'md:from-summit-gold-500/50 md:to-transparent left-full md:left-auto md:right-full'
+                        : 'from-transparent to-summit-gold-500/50 md:from-summit-gold-500/50 md:to-transparent right-full md:right-auto md:left-full'
+                    } transition-opacity duration-500 ${isInView ? 'opacity-100' : 'opacity-30'}`}
+                  ></div>
+
                   <div
                     className={`w-5 h-5 rounded-full border-2 z-10 transition-all duration-500 ${
                       isInView

@@ -168,6 +168,15 @@ module.exports = {
         'amatic': ['var(--font-amatic)', 'cursive'],
         'oswald': ['var(--font-oswald)', 'sans-serif'],
       },
+      keyframes: {
+        scan: {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(100%)' },
+        },
+      },
+      animation: {
+        'scan-fast': 'scan 2s linear infinite',
+      },
     },
   },
   plugins: [

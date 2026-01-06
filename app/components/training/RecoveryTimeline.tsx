@@ -57,14 +57,23 @@ const milestones: TimelineNode[] = [
 ];
 
 export const RecoveryTimeline = () => {
+  // Calculate icon position for timeline bar (date height + gap + half icon = ~32px from top of container)
+  const iconCenterOffset = 'calc(1.25rem + 0.75rem + 1.25rem)'; // text-xs height + mb-3 + half of w-10
+
   return (
     <div className="w-full py-8">
       <div className="relative">
-        {/* Background Track */}
-        <div className="absolute top-1/2 left-0 w-full h-1 bg-white/10 -translate-y-1/2 rounded-full" />
+        {/* Background Track - positioned at icon center level */}
+        <div
+          className="absolute left-0 w-full h-1 bg-white/10 rounded-full"
+          style={{ top: iconCenterOffset }}
+        />
 
-        {/* Active Progress Track (Approximate for visual) */}
-        <div className="absolute top-1/2 left-0 w-[28%] h-1 bg-gradient-to-r from-summit-gold-600 to-summit-gold-400 -translate-y-1/2 rounded-full shadow-[0_0_10px_rgba(251,191,36,0.3)]" />
+        {/* Active Progress Track */}
+        <div
+          className="absolute left-0 w-[28%] h-1 bg-gradient-to-r from-summit-gold-600 to-summit-gold-400 rounded-full shadow-[0_0_10px_rgba(251,191,36,0.3)]"
+          style={{ top: iconCenterOffset }}
+        />
 
         <div className="relative flex justify-between items-start">
           {milestones.map((node, index) => {
@@ -80,7 +89,7 @@ export const RecoveryTimeline = () => {
                 {/* Date Label (Top) */}
                 <div
                   className={cn(
-                    'mb-3 text-xs font-mono transition-colors duration-300',
+                    'mb-3 text-xs font-mono transition-colors duration-300 h-5',
                     isActive
                       ? 'text-summit-gold-400 font-bold'
                       : 'text-gray-500'
