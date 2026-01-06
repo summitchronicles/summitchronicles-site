@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
+import { FundingVisualizer } from '../components/support/FundingVisualizer';
 import {
   Shield,
   DollarSign,
@@ -130,14 +131,14 @@ export default function SupportPage() {
         {/* Background Hero Image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/sunith-support-hero.png"
+            src="/images/sunith-support-hero-landscape.png"
             alt="Summit Vision"
             fill
-            className="object-cover opacity-40"
+            className="object-cover opacity-70"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/80 to-obsidian/40"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-black/60"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/70 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-black/40"></div>
         </div>
 
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
@@ -224,6 +225,8 @@ export default function SupportPage() {
           </motion.div>
         </div>
       </section>
+
+      <FundingVisualizer />
 
       {/* 2. TRANSPARENCY - THE BUDGET */}
       <section

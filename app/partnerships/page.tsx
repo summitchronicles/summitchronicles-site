@@ -54,13 +54,13 @@ export default function PartnershipsPage() {
       <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/images/sunith-summit-hero.png"
-            alt="Speaking at Summit"
+            src="/images/sunith-partnerships-hero.jpg"
+            alt="Expedition Leadership"
             fill
-            className="object-cover opacity-30"
+            className="object-cover opacity-50"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/20" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">

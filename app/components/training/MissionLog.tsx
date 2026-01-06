@@ -17,6 +17,19 @@ interface LogEntry {
 
 const MISSION_LOGS: LogEntry[] = [
   {
+    id: 'l0',
+    date: 'Jan 6, 2026',
+    day: 57,
+    title: 'Strength Maintenance',
+    category: 'Training',
+    description:
+      'Low on energy, but still powered through some strength maintenance exercises like banded rows, face pulls and bicep curls with bands.',
+    metrics: [
+      { label: 'Load', value: 'Moderate' },
+      { label: 'Duration', value: '25m' },
+    ],
+  },
+  {
     id: 'l1',
     date: 'Jan 5, 2026',
     day: 56,
