@@ -112,18 +112,22 @@ const Header: React.FC = () => {
                   <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-summit-gold transition-all duration-300 group-hover:w-full" />
                 </Link>
               ))}
+              {/* Partnerships Link - High Value */}
+              <Link
+                href="/partnerships"
+                className={cn(
+                  'relative px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
+                  isActivePath('/partnerships')
+                    ? 'text-summit-gold'
+                    : 'text-gray-300 hover:text-summit-gold'
+                )}
+              >
+                Partnerships
+              </Link>
             </nav>
 
             {/* CTA Buttons - Desktop */}
             <div className="hidden lg:flex items-center gap-4">
-              <Button
-                variant="ghost"
-                size="sm"
-                asChild
-                className="text-white hover:text-summit-gold hover:bg-white/10"
-              >
-                <Link href="/newsletter">Newsletter</Link>
-              </Button>
               <Button
                 variant="summit"
                 size="sm"
@@ -132,7 +136,7 @@ const Header: React.FC = () => {
               >
                 <Link href="/support">
                   <Icon name="Heart" size="sm" />
-                  Support Journey
+                  Fuel the Journey
                 </Link>
               </Button>
             </div>
@@ -184,19 +188,24 @@ const Header: React.FC = () => {
                 </Link>
               ))}
 
+              {/* Mobile Partnerships */}
+              <Link
+                href="/partnerships"
+                className={cn(
+                  'px-6 py-4 text-base font-medium transition-all duration-300 min-h-[48px] flex items-center',
+                  isActivePath('/partnerships')
+                    ? 'text-summit-gold bg-white/5 border-l-4 border-summit-gold'
+                    : 'text-gray-300 hover:text-summit-gold hover:bg-white/5'
+                )}
+              >
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-base">Partnerships</span>
+                  <span className="text-sm text-gray-500">Work with me</span>
+                </div>
+              </Link>
+
               {/* Mobile CTA - Right aligned for consistency */}
               <div className="px-4 pt-4 space-y-3">
-                <Button
-                  variant="secondary"
-                  size="sm"
-                  className="w-full bg-white/10 text-white hover:bg-white/20 border-white/10"
-                  asChild
-                >
-                  <Link href="/newsletter">
-                    <Icon name="Mail" size="sm" />
-                    Newsletter Updates
-                  </Link>
-                </Button>
                 <Button
                   variant="summit"
                   size="sm"
@@ -205,7 +214,7 @@ const Header: React.FC = () => {
                 >
                   <Link href="/support">
                     <Icon name="Heart" size="sm" />
-                    Support Journey
+                    Fuel the Journey
                   </Link>
                 </Button>
               </div>
