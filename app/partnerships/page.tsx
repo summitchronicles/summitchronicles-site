@@ -14,12 +14,14 @@ import {
   Globe,
   Camera,
   ArrowRight,
+  Mountain,
+  Activity,
 } from 'lucide-react';
 
 const stats = [
-  { label: 'Total Reach', value: '25K+', icon: Users },
-  { label: 'Engagement Rate', value: '4.8%', icon: TrendingUp },
-  { label: 'Summit Goal', value: '2028', icon: Target },
+  { label: 'Summit Target', value: '2028', icon: Target },
+  { label: 'Training Hours', value: '450+', icon: Activity },
+  { label: 'Vertical Gain', value: '45km', icon: Mountain },
 ];
 
 const speakingTopics = [

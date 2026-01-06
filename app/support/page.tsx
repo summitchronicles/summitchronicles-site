@@ -126,8 +126,21 @@ export default function SupportPage() {
       <Header />
 
       {/* 1. HERO - FUEL THE ASCENT */}
-      <section className="relative pt-32 pb-16 md:pt-48 md:pb-32 px-6">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+      <section className="relative pt-32 pb-16 md:pt-48 md:pb-32 px-6 overflow-hidden">
+        {/* Background Hero Image */}
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/sunith-support-hero.png"
+            alt="Summit Vision"
+            fill
+            className="object-cover opacity-40"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-obsidian via-obsidian/80 to-obsidian/40"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-black/60"></div>
+        </div>
+
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center relative z-10">
           {/* Left: Context */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
