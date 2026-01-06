@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Header } from './components/organisms/Header';
+import { VisualTransmissions } from './components/home/VisualTransmissions';
 import {
   getEverestCountdownText,
   getDaysToEverest,
@@ -69,7 +70,7 @@ export default function Home() {
           </div>
 
           {/* CTA Buttons - Bottom */}
-          <div className="relative z-10 pb-24 px-6">
+          <div className="relative z-10 pb-32 md:pb-28 px-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -98,15 +99,15 @@ export default function Home() {
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="flex flex-col items-center gap-4"
+              className="flex flex-col items-center"
             >
-              <span className="text-[10px] tracking-[0.4em] uppercase">
-                Explore
-              </span>
               <div className="w-px h-12 bg-gradient-to-b from-white/50 to-transparent"></div>
             </motion.div>
           </div>
         </section>
+
+        {/* Visual Transmissions - Live Feed */}
+        <VisualTransmissions />
 
         {/* Expedition Gallery Preview - Dark & Immersive */}
         <section className="py-0 bg-black relative z-10">
