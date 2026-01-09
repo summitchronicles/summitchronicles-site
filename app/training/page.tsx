@@ -53,11 +53,11 @@ export default function TrainingPage() {
             src="/images/sunith-grit-training.png"
             alt="Training"
             fill
-            className="object-cover object-top opacity-[0.08]"
+            className="object-cover object-top opacity-40"
             sizes="100vw"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] via-transparent to-[#0a0a0a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/80 via-transparent to-[#0a0a0a]" />
         </div>
 
         {/* Hero Content - Pure Typography */}

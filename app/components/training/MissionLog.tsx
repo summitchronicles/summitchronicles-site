@@ -18,6 +18,48 @@ interface LogEntry {
 const MISSION_LOGS: LogEntry[] = [
   {
     id: 'l0',
+    date: 'Jan 9, 2026',
+    day: 60,
+    title: 'Doctor Visit & X Ray',
+    category: 'Rehab',
+    description:
+      'Got my X Ray done and met with Dr. Kamalakar, all clear to continue with the rehabilitation and start with weight bearing on the ankle supported by the Air Boot.',
+    metrics: [
+      { label: 'Load', value: 'Easy' },
+      { label: 'Duration', value: '300m' },
+    ],
+  },
+
+  {
+    id: 'l1',
+    date: 'Jan 8, 2026',
+    day: 59,
+    title: 'Strength Session',
+    category: 'Training',
+    description:
+      'Focus on upper body strength. Pushed hard on chest, shoulders and core',
+    metrics: [
+      { label: 'Load', value: 'Moderate' },
+      { label: 'Duration', value: '25m' },
+    ],
+  },
+
+  {
+    id: 'l2',
+    date: 'Jan 8, 2026',
+    day: 59,
+    title: 'Mobility Session',
+    category: 'Training',
+    description:
+      'Focus on lower body mobility and core strength. 20 mins of dynamic stretching and 3 mins of planks.',
+    metrics: [
+      { label: 'Load', value: 'Easy' },
+      { label: 'Duration', value: '25m' },
+    ],
+  },
+
+  {
+    id: 'l3',
     date: 'Jan 6, 2026',
     day: 57,
     title: 'Strength Maintenance',
@@ -30,7 +72,7 @@ const MISSION_LOGS: LogEntry[] = [
     ],
   },
   {
-    id: 'l1',
+    id: 'l4',
     date: 'Jan 5, 2026',
     day: 56,
     title: 'PT Session: Mobility Breakthrough',
@@ -43,7 +85,7 @@ const MISSION_LOGS: LogEntry[] = [
     ],
   },
   {
-    id: 'l2',
+    id: 'l5',
     date: 'Jan 4, 2026',
     day: 55,
     title: 'Active Recovery Sunday',
@@ -56,7 +98,7 @@ const MISSION_LOGS: LogEntry[] = [
     ],
   },
   {
-    id: 'l3',
+    id: 'l6',
     date: 'Jan 3, 2026',
     day: 54,
     title: 'Strength Maintenance',
@@ -69,7 +111,7 @@ const MISSION_LOGS: LogEntry[] = [
     ],
   },
   {
-    id: 'l4',
+    id: 'l7',
     date: 'Jan 1, 2026',
     day: 52,
     title: 'New Year, New Protocol',
