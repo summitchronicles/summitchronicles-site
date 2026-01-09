@@ -77,7 +77,7 @@ export function TrainingRoadmap() {
         </p>
       </div>
 
-      <div className="relative flex-grow flex flex-col justify-between py-4">
+      <div className="relative flex flex-col py-4">
         {/* Vertical Line */}
         <div className="absolute left-[19px] top-4 bottom-4 w-px bg-white/10 z-0" />
 

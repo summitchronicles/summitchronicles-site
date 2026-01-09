@@ -140,72 +140,149 @@ export function AdvancedTrainingDashboard() {
     setGoals((prev) => prev.filter((goal) => goal.id !== id));
   };
 
-  const performanceMetrics: PerformanceMetric[] = [
-    {
-      id: '1',
-      name: 'VO2 Max',
-      value: 58.2,
-      change: 2.1,
-      unit: 'ml/kg/min',
-      trend: 'up',
-      category: 'Cardiovascular',
-      icon: Heart,
-    },
-    {
-      id: '2',
-      name: 'Power Output',
-      value: 285,
-      change: 12,
-      unit: 'watts',
-      trend: 'up',
-      category: 'Strength',
-      icon: Zap,
-    },
-    {
-      id: '3',
-      name: 'Lactate Threshold',
-      value: 168,
-      change: -3,
-      unit: 'bpm',
-      trend: 'down',
-      category: 'Endurance',
-      icon: Activity,
-    },
-    {
-      id: '4',
-      name: 'Recovery Rate',
-      value: 92,
-      change: 0,
-      unit: '%',
-      trend: 'stable',
-      category: 'Recovery',
-      icon: Timer,
-    },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [metrics, setMetrics] = useState<PerformanceMetric[]>([]);
+  const [predictions, setPredictions] = useState<PredictionData[]>([]);
 
-  const predictions: PredictionData[] = [
-    {
-      metric: 'Everest Readiness Score',
-      current: 72,
-      predicted: 87,
-      confidence: 0.85,
-      timeframe: '6 months',
-    },
-    {
-      metric: 'Max Altitude Capability',
-      current: 5500,
-      predicted: 6800,
-      confidence: 0.78,
-      timeframe: '4 months',
-    },
-    {
-      metric: 'Endurance Index',
-      current: 8.2,
-      predicted: 9.1,
-      confidence: 0.92,
-      timeframe: '3 months',
-    },
-  ];
+  useEffect(() => {
+    async function fetchMetrics() {
+      try {
+        const response = await fetch('/api/training/metrics');
+        const data = await response.json();
+
+        if (data.success && data.metrics) {
+          const { advancedPerformance, predictions } = data.metrics;
+
+          // Map API response to component state
+          const performanceData: PerformanceMetric[] = [
+            {
+              id: '1',
+              name: 'VO2 Max',
+              value: advancedPerformance.vo2Max.value,
+              change: advancedPerformance.vo2Max.change,
+              unit: advancedPerformance.vo2Max.unit,
+              trend: advancedPerformance.vo2Max.trend,
+              category: 'Cardiovascular',
+              icon: Heart,
+            },
+            {
+              id: '2',
+              name: 'Power Output',
+              value: advancedPerformance.powerOutput.value,
+              change: advancedPerformance.powerOutput.change,
+              unit: advancedPerformance.powerOutput.unit,
+              trend: advancedPerformance.powerOutput.trend,
+              category: 'Strength',
+              icon: Zap,
+            },
+            {
+              id: '3',
+              name: 'Lactate Threshold',
+              value: advancedPerformance.lactateThreshold.value,
+              change: advancedPerformance.lactateThreshold.change,
+              unit: advancedPerformance.lactateThreshold.unit,
+              trend: advancedPerformance.lactateThreshold.trend,
+              category: 'Endurance',
+              icon: Activity,
+            },
+            {
+              id: '4',
+              name: 'Recovery Rate',
+              value: advancedPerformance.recoveryRate.value,
+              change: advancedPerformance.recoveryRate.change,
+              unit: advancedPerformance.recoveryRate.unit,
+              trend: advancedPerformance.recoveryRate.trend,
+              category: 'Recovery',
+              icon: Timer,
+            },
+          ];
+
+          setMetrics(performanceData);
+          setPredictions(predictions);
+        }
+      } catch (error) {
+        console.error('Failed to fetch training metrics:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchMetrics();
+  }, []);
+
+  // Use state metrics if available, otherwise fallback to empty (or could keep initial mock)
+  const performanceMetrics =
+    metrics.length > 0
+      ? metrics
+      : [
+          {
+            id: '1',
+            name: 'VO2 Max',
+            value: 58.2,
+            change: 2.1,
+            unit: 'ml/kg/min',
+            trend: 'up' as const,
+            category: 'Cardiovascular',
+            icon: Heart,
+          },
+          {
+            id: '2',
+            name: 'Power Output',
+            value: 285,
+            change: 12,
+            unit: 'watts',
+            trend: 'up' as const,
+            category: 'Strength',
+            icon: Zap,
+          },
+          {
+            id: '3',
+            name: 'Lactate Threshold',
+            value: 168,
+            change: -3,
+            unit: 'bpm',
+            trend: 'down' as const,
+            category: 'Endurance',
+            icon: Activity,
+          },
+          {
+            id: '4',
+            name: 'Recovery Rate',
+            value: 92,
+            change: 0,
+            unit: '%',
+            trend: 'stable' as const,
+            category: 'Recovery',
+            icon: Timer,
+          },
+        ];
+
+  const predictionsData =
+    predictions.length > 0
+      ? predictions
+      : [
+          {
+            metric: 'Everest Readiness Score',
+            current: 72,
+            predicted: 87,
+            confidence: 0.85,
+            timeframe: '6 months',
+          },
+          {
+            metric: 'Max Altitude Capability',
+            current: 5500,
+            predicted: 6800,
+            confidence: 0.78,
+            timeframe: '4 months',
+          },
+          {
+            metric: 'Endurance Index',
+            current: 8.2,
+            predicted: 9.1,
+            confidence: 0.92,
+            timeframe: '3 months',
+          },
+        ];
 
   const getGoalStatusColor = (status: Goal['status']) => {
     switch (status) {
@@ -503,7 +580,7 @@ export function AdvancedTrainingDashboard() {
           </div>
 
           <div className="space-y-6">
-            {predictions.map((prediction, index) => (
+            {predictionsData.map((prediction, index) => (
               <motion.div
                 key={prediction.metric}
                 className="space-y-3"
