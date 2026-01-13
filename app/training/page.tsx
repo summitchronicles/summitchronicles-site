@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import type { Metadata } from 'next'; // Added this import
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
 import { Activity, Footprints, Gauge } from 'lucide-react';
