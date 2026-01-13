@@ -3,8 +3,8 @@ import axios from 'axios';
 // Ollama API configuration
 export const ollamaConfig = {
   baseUrl: 'http://localhost:11434',
-  languageModel: 'llama3.1:8b',
-  embeddingModel: 'nomic-embed-text:latest',
+  languageModel: 'llama3',
+  embeddingModel: 'nomic-embed-text',
 };
 
 // Chat completion interface
@@ -142,7 +142,7 @@ export async function askTrainingQuestion(
   question: string,
   context?: string
 ): Promise<string> {
-  const systemPrompt = `You are an expert mountaineering and alpine climbing coach with extensive experience in high-altitude training, expedition preparation, and technical climbing skills. 
+  const systemPrompt = `You are an expert mountaineering and alpine climbing coach with extensive experience in high-altitude training, expedition preparation, and technical climbing skills.
 
 Your expertise includes:
 - High-altitude physiology and acclimatization

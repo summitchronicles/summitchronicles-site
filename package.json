@@ -53,6 +53,7 @@
     "audit:all": "run-p audit:security audit:deps"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@headlessui/react": "^2.2.9",
     "@portabletext/react": "^4.0.3",
     "@portabletext/types": "^2.0.15",
@@ -67,6 +68,7 @@
     "cmdk": "^1.1.1",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.2.3",
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
     "isomorphic-dompurify": "^2.35.0",
@@ -82,6 +84,7 @@
     "react-intersection-observer": "^9.16.0",
     "react-spinners": "^0.17.0",
     "react-use": "^17.6.0",
+    "resend": "^6.7.0",
     "sanity": "^3.99.0",
     "sentiment": "^5.0.2",
     "sharp": "^0.34.5",

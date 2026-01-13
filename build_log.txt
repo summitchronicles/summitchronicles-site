@@ -1,0 +1,87 @@
+
+> summit-chronicles@1.0.0 build
+> npm run build-posts && next build
+
+
+> summit-chronicles@1.0.0 build-posts
+> node scripts/process-posts.js
+
+Found 3 post(s) to process...
+No index.md found in /Users/sunith/Documents/summit-chronicles-starter/content/posts/.npm-cache
+Processing post: My First Climb The Spark I Didn’t See Coming
+✅ Processed: My First Climb The Spark I Didn’t See Coming -> /Users/sunith/Documents/summit-chronicles-starter/generated/My First Climb The Spark I Didn’t See Coming.json
+Processing post: Not-Yet-A-Journey-From-Illness-to-the-Mountains
+✅ Processed: Not-Yet-A-Journey-From-Illness-to-the-Mountains -> /Users/sunith/Documents/summit-chronicles-starter/generated/Not-Yet-A-Journey-From-Illness-to-the-Mountains.json
+
+🎉 Successfully processed 2 post(s)
+📝 Index file created: /Users/sunith/Documents/summit-chronicles-starter/generated/index.json
+  ▲ Next.js 14.2.32
+  - Environments: .env.local, .env.production
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+
+./app/components/analytics/AdvancedAnalytics.tsx
+109:6  Warning: React Hook useCallback has a missing dependency: 'generateSampleComparison'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/components/organisms/ContentEditor.tsx
+74:6  Warning: React Hook useEffect has a missing dependency: 'content.date'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/components/organisms/MagazineBlogEditor.tsx
+108:6  Warning: React Hook useEffect has a missing dependency: 'content.date'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./app/components/personalization/PersonalizedDashboard.tsx
+108:6  Warning: React Hook useEffect has a missing dependency: 'generatePersonalizedContent'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./lib/monitoring/error-monitoring.ts
+479:8  Warning: React Hook React.useMemo has a missing dependency: 'ref'. Either include it or remove the dependency array.  react-hooks/exhaustive-deps
+
+./lib/utils/caching.ts
+332:9  Warning: The 'cacheConfig' logical expression could make the dependencies of useCallback Hook (at line 348) change on every render. Move it inside the useCallback callback. Alternatively, wrap the initialization of 'cacheConfig' in its own useMemo() Hook.  react-hooks/exhaustive-deps
+
+./lib/utils/performance.ts
+78:10  Warning: React Hook useMemo received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+86:10  Warning: React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead.  react-hooks/exhaustive-deps
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/basic-features/eslint#disabling-rules
+   Collecting page data ...
+   Generating static pages (0/43) ...
+   Generating static pages (10/43) 
+   Generating static pages (21/43) 
+   Generating static pages (32/43) 
+Error: ENOENT: no such file or directory, open '/Users/sunith/Documents/summit-chronicles-starter/.next/browser/default-stylesheet.css'
+    at Object.readFileSync (node:fs:440:20)
+    at 42752 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:24:29907)
+    at t (/Users/sunith/Documents/summit-chronicles-starter/.next/server/webpack-runtime.js:1:143)
+    at 55575 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:24:164129)
+    at t (/Users/sunith/Documents/summit-chronicles-starter/.next/server/webpack-runtime.js:1:143)
+    at 36158 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:13:1028596)
+    at t (/Users/sunith/Documents/summit-chronicles-starter/.next/server/webpack-runtime.js:1:143)
+    at 33723 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:13:111647)
+    at t (/Users/sunith/Documents/summit-chronicles-starter/.next/server/webpack-runtime.js:1:143)
+    at 25768 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:13:1000658) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/sunith/Documents/summit-chronicles-starter/.next/browser/default-stylesheet.css',
+  digest: '890911077'
+}
+
+Error occurred prerendering page "/blog". Read more: https://nextjs.org/docs/messages/prerender-error
+
+Error: ENOENT: no such file or directory, open '/Users/sunith/Documents/summit-chronicles-starter/.next/browser/default-stylesheet.css'
+    at Object.readFileSync (node:fs:440:20)
+    at 42752 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:24:29907)
+    at t (/Users/sunith/Documents/summit-chronicles-starter/.next/server/webpack-runtime.js:1:143)
+    at 55575 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:24:164129)
+    at t (/Users/sunith/Documents/summit-chronicles-starter/.next/server/webpack-runtime.js:1:143)
+    at 36158 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:13:1028596)
+    at t (/Users/sunith/Documents/summit-chronicles-starter/.next/server/webpack-runtime.js:1:143)
+    at 33723 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:13:111647)
+    at t (/Users/sunith/Documents/summit-chronicles-starter/.next/server/webpack-runtime.js:1:143)
+    at 25768 (/Users/sunith/Documents/summit-chronicles-starter/.next/server/chunks/4420.js:13:1000658)
+ ✓ Generating static pages (43/43)
+
+> Export encountered errors on following paths:
+	/blog/page: /blog

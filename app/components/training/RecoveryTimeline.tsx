@@ -12,7 +12,7 @@ interface TimelineNode {
 
 const milestones: TimelineNode[] = [
   { date: 'Nov 10', isoDate: '2025-11-10', label: 'Surgery' },
-  { date: 'Jan 9', isoDate: '2026-01-09', label: 'Walking' },
+  { date: 'Feb 3', isoDate: '2026-02-03', label: 'Walking' },
   { date: "Apr '26", isoDate: '2026-04-01', label: 'Gym Return' },
   { date: "July '26", isoDate: '2026-07-01', label: 'Hiking' },
   { date: "Nov '26", isoDate: '2026-11-01', label: 'Full Training' },
