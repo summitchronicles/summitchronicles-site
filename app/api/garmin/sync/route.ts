@@ -1,14 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchGarminActivities, transformGarminActivity } from '@/lib/integrations/garmin-api';
 import { isGarminConnected } from '@/lib/integrations/garmin-oauth-1.0a';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface SyncResponse {
   success: boolean;
@@ -64,7 +60,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<SyncRespo
         const workoutData = transformGarminActivity(activity);
 
         // Check if already exists
-        const { data: existing } = await supabase
+        const { data: existing } = await getSupabaseClient()
           .from('garmin_workouts')
           .select('id')
           .eq('garmin_activity_id', workoutData.garmin_activity_id)
@@ -76,7 +72,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<SyncRespo
         }
 
         // Insert into database
-        const { error } = await supabase
+        const { error } = await getSupabaseClient()
           .from('garmin_workouts')
           .insert(workoutData);
 
@@ -127,11 +123,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   try {
     // Get sync status
-    const { count: totalActivities } = await supabase
+    const { count: totalActivities } = await getSupabaseClient()
       .from('garmin_workouts')
       .select('*', { count: 'exact', head: true });
 
-    const { data: latestActivity } = await supabase
+    const { data: latestActivity } = await getSupabaseClient()
       .from('garmin_workouts')
       .select('date, activity_name, created_at')
       .order('date', { ascending: false })

@@ -6,11 +6,24 @@
 import OAuth from 'oauth-1.0a';
 import crypto from 'crypto-js';
 import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy initialization to avoid build-time errors
+let supabaseClient: SupabaseClient | null = null;
+
+function getSupabase(): SupabaseClient {
+  if (!supabaseClient) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Supabase configuration missing for Garmin OAuth 1.0a');
+    }
+
+    supabaseClient = createClient(supabaseUrl, supabaseKey);
+  }
+  return supabaseClient;
+}
 
 // Garmin OAuth 1.0a endpoints
 const GARMIN_REQUEST_TOKEN_URL = 'https://connectapi.garmin.com/oauth-service/oauth/request_token';
@@ -156,7 +169,7 @@ export async function storeGarminTokens(
   userId: string,
   tokens: GarminTokens
 ): Promise<void> {
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('garmin_tokens')
     .upsert({
       user_id: userId,
@@ -178,7 +191,7 @@ export async function storeGarminTokens(
  * Get stored OAuth 1.0a tokens from Supabase
  */
 export async function getGarminTokens(userId: string): Promise<GarminTokens | null> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('garmin_tokens')
     .select('*')
     .eq('user_id', userId)
@@ -243,7 +256,7 @@ export async function isGarminConnected(userId: string): Promise<boolean> {
  * Revoke Garmin access (disconnect)
  */
 export async function revokeGarminAccess(userId: string): Promise<void> {
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('garmin_tokens')
     .delete()
     .eq('user_id', userId);

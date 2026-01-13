@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase';
 import { parseTrainingPlanExcel } from '@/lib/excel/training-plan-parser';
 import * as fs from 'fs';
 import * as path from 'path';
 
 export const dynamic = 'force-dynamic';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 // Local fallback directory for storing training plans when Supabase is unavailable
 const LOCAL_UPLOAD_DIR = path.join(process.cwd(), 'public', 'uploads', 'training-plans');
@@ -95,7 +91,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
     let localFilePath: string | null = null;
 
     // Try Supabase first
-    const { error: uploadError } = await supabase.storage
+    const { error: uploadError } = await getSupabaseClient().storage
       .from('workout-files')
       .upload(filePath, fileBuffer, {
         contentType: file.type,
@@ -131,7 +127,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
       is_active: setAsActive,
       uploaded_at: new Date().toISOString(),
       workout_count: Object.values(weeklySchedule.workouts).flat().length,
-      storage_location: uploadedToCloud ? 'supabase' : 'local'
+      storage_location: uploadedToCloud ? 'getSupabaseClient()' : 'local'
     };
 
     // Try to save metadata to database, with fallback to local JSON if Supabase is unavailable
@@ -141,13 +137,13 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
     try {
       // If setting as active, deactivate all other plans
       if (setAsActive) {
-        await supabase
+        await getSupabaseClient()
           .from('training_plans')
           .update({ is_active: false })
           .eq('is_active', true);
       }
 
-      const { data, error: insertError } = await supabase
+      const { data, error: insertError } = await getSupabaseClient()
         .from('training_plans')
         .insert(planMetadata)
         .select()
@@ -225,7 +221,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     // Get all training plans, ordered by upload date
-    const { data: plans, error } = await supabase
+    const { data: plans, error } = await getSupabaseClient()
       .from('training_plans')
       .select('*')
       .order('uploaded_at', { ascending: false });
@@ -262,7 +258,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
     }
 
     // Get plan metadata
-    const { data: plan, error: fetchError } = await supabase
+    const { data: plan, error: fetchError } = await getSupabaseClient()
       .from('training_plans')
       .select('*')
       .eq('id', planId)
@@ -276,7 +272,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
     }
 
     // Delete from storage
-    const { error: storageError } = await supabase.storage
+    const { error: storageError } = await getSupabaseClient().storage
       .from('workout-files')
       .remove([plan.storage_path]);
 
@@ -285,7 +281,7 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
     }
 
     // Delete from database
-    const { error: deleteError } = await supabase
+    const { error: deleteError } = await getSupabaseClient()
       .from('training_plans')
       .delete()
       .eq('id', planId);

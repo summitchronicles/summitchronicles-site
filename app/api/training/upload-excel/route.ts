@@ -1,15 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { parseWorkoutExcel, validateWorkoutData, type WorkoutRow } from '@/lib/excel/workout-parser';
 import { generateChatCompletion } from '@/lib/integrations/ollama';
-import { createClient } from '@supabase/supabase-js';
+import { getSupabaseClient } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
 
 // Initialize Supabase client
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 interface UploadResponse {
   success: boolean;
@@ -96,7 +92,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
     const newWorkouts = validation.valid;
 
     // Check for existing workouts to avoid duplicates
-    const { data: existingWorkouts, error: fetchError } = await supabase
+    const { data: existingWorkouts, error: fetchError } = await getSupabaseClient()
       .from('historical_workouts')
       .select('date, exercise_type')
       .in('date', newWorkouts.map(w => w.date));
@@ -115,7 +111,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
 
     // Insert new workouts into Supabase
     if (uniqueNewWorkouts.length > 0) {
-      const { error: insertError } = await supabase
+      const { error: insertError } = await getSupabaseClient()
         .from('historical_workouts')
         .insert(uniqueNewWorkouts);
 
@@ -137,7 +133,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
     if (generateInsights && uniqueNewWorkouts.length > 0) {
       try {
         // Fetch recent workouts for context
-        const { data: recentWorkouts } = await supabase
+        const { data: recentWorkouts } = await getSupabaseClient()
           .from('historical_workouts')
           .select('*')
           .order('date', { ascending: false })
@@ -182,7 +178,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const exerciseType = url.searchParams.get('exercise_type');
 
     // Build Supabase query with filters
-    let query = supabase
+    let query = getSupabaseClient()
       .from('historical_workouts')
       .select('*')
       .order('date', { ascending: false });

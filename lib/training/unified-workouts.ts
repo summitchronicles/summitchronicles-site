@@ -4,11 +4,24 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Lazy initialization to avoid build-time errors
+let supabaseClient: SupabaseClient | null = null;
+
+function getSupabase(): SupabaseClient {
+  if (!supabaseClient) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error('Supabase configuration missing. Please set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY');
+    }
+
+    supabaseClient = createClient(supabaseUrl, supabaseKey);
+  }
+  return supabaseClient;
+}
 
 export interface UnifiedWorkout {
   id: string;
@@ -38,7 +51,7 @@ export async function getUnifiedWorkouts(options: {
   const { limit = 50, startDate, endDate, exerciseType } = options;
 
   // Fetch historical workouts
-  let historicalQuery = supabase
+  let historicalQuery = getSupabase()
     .from('historical_workouts')
     .select('*')
     .order('date', { ascending: false });
@@ -54,7 +67,7 @@ export async function getUnifiedWorkouts(options: {
   }
 
   // Fetch Garmin workouts
-  let garminQuery = supabase
+  let garminQuery = getSupabase()
     .from('garmin_workouts')
     .select('*')
     .order('date', { ascending: false });
