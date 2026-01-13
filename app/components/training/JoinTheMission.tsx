@@ -39,7 +39,7 @@ export function JoinTheMission() {
               className="block"
             >
               <Button
-                variant="outline"
+                variant="ghost"
                 className="w-full flex items-center justify-between group hover:border-summit-gold-400/50 hover:bg-summit-gold-400/5"
               >
                 <div className="flex items-center gap-3">

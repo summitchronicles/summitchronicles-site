@@ -87,7 +87,7 @@ export default function PartnershipsPage() {
               </Button>
               <Button
                 size="lg"
-                variant="outline"
+                variant="ghost"
                 className="border-white/20 text-white hover:bg-white/10 hover:border-white/40"
               >
                 Book for Speaking

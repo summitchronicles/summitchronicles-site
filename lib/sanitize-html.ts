@@ -16,7 +16,7 @@ export function sanitizeHTML(
   if (!html) return '';
 
   // Default configuration
-  const config: DOMPurify.Config = {
+  const config: any = {
     // Allow common HTML tags for blog posts
     ALLOWED_TAGS: options?.allowedTags || [
       'p',
@@ -74,7 +74,7 @@ export function sanitizeHTML(
   };
 
   // Sanitize and return
-  return DOMPurify.sanitize(html, config);
+  return DOMPurify.sanitize(html, config) as unknown as string;
 }
 
 /**
@@ -85,7 +85,7 @@ export function sanitizeHTML(
 export function sanitizeBlogContent(html: string): string {
   if (!html) return '';
 
-  const config: DOMPurify.Config = {
+  const config: any = {
     // More permissive for blog content from trusted CMS
     ALLOWED_TAGS: [
       'p',
@@ -152,7 +152,7 @@ export function sanitizeBlogContent(html: string): string {
     ALLOW_DATA_ATTR: false,
   };
 
-  return DOMPurify.sanitize(html, config);
+  return DOMPurify.sanitize(html, config) as unknown as string;
 }
 
 /**
@@ -166,5 +166,5 @@ export function stripHTML(html: string): string {
   return DOMPurify.sanitize(html, {
     ALLOWED_TAGS: [],
     ALLOWED_ATTR: [],
-  });
+  }) as unknown as string;
 }
