@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -19,6 +19,7 @@ import {
   ChevronUp,
 } from 'lucide-react';
 import { getDaysToEverest } from '@/lib/everest-countdown';
+import { sanitizeBlogContent } from '@/lib/sanitize-html';
 // import type { Post } from '../../../lib/sanity/types'
 
 interface BlogPostData {
@@ -135,6 +136,12 @@ export function CinematicBlogPost({
         content: samplePost.content, // TODO: Convert portable text to HTML
       }
     : samplePost;
+
+  // Sanitize HTML content to prevent XSS attacks
+  const sanitizedContent = useMemo(
+    () => sanitizeBlogContent(displayPost.content),
+    [displayPost.content]
+  );
 
   const getCategoryIcon = (category: string) => {
     switch (category.toLowerCase()) {
@@ -286,7 +293,7 @@ export function CinematicBlogPost({
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="prose prose-lg md:prose-xl prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: displayPost.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
           />
 
           {/* Author Bio */}

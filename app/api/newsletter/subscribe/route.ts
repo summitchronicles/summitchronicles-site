@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit, getClientIp, createRateLimitResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting (generous for newsletter signups)
+  const clientIp = getClientIp(request);
+  const isAllowed = await checkRateLimit(clientIp, 'generous');
+
+  if (!isAllowed) {
+    return createRateLimitResponse();
+  }
+
   try {
     const { email, referrer } = await request.json();
 

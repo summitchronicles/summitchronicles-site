@@ -3,10 +3,19 @@ import {
   searchKnowledgeBase,
   generateRAGResponse,
 } from '@/lib/rag/training-knowledge-base';
+import { checkRateLimit, getClientIp, createRateLimitResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting
+  const clientIp = getClientIp(request);
+  const isAllowed = await checkRateLimit(clientIp, 'standard');
+
+  if (!isAllowed) {
+    return createRateLimitResponse();
+  }
+
   try {
     const { query, limit = 5, threshold = 0.7 } = await request.json();
 

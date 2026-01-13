@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateRAGResponse } from '@/lib/rag/training-knowledge-base';
 import { askTrainingQuestion } from '@/lib/integrations/ollama';
+import { checkRateLimit, getClientIp, createRateLimitResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting (standard for AI queries)
+  const clientIp = getClientIp(request);
+  const isAllowed = await checkRateLimit(clientIp, 'standard');
+
+  if (!isAllowed) {
+    return createRateLimitResponse();
+  }
+
   try {
     const { question, useRAG = true, context } = await request.json();
 

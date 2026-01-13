@@ -3,6 +3,8 @@ import { spawn } from 'child_process';
 import { promises as fs } from 'fs';
 import path from 'path';
 import * as XLSX from 'xlsx';
+import { config } from '@/lib/config';
+import { checkRateLimit, getClientIp, createRateLimitResponse } from '@/lib/rate-limiter';
 
 interface SyncRequest {
   excelFile?: File;
@@ -22,6 +24,14 @@ interface SyncResult {
 }
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting
+  const clientIp = getClientIp(request);
+  const isAllowed = await checkRateLimit(clientIp, 'strict');
+
+  if (!isAllowed) {
+    return createRateLimitResponse();
+  }
+
   try {
     const formData = await request.formData();
     const excelFile = formData.get('file') as File;
@@ -153,8 +163,8 @@ async function uploadToGarmin(csvPath: string, startDate?: string): Promise<{
       shell: true,
       env: {
         ...process.env,
-        GARMIN_USERNAME: 'sunith07@gmail.com',
-        GARMIN_PASSWORD: 'M@ver1cks'
+        GARMIN_USERNAME: config.GARMIN_USERNAME,
+        GARMIN_PASSWORD: config.GARMIN_PASSWORD
       }
     });
 

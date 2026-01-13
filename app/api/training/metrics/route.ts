@@ -1,10 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { spawn } from 'child_process';
 import path from 'path';
+import { config } from '@/lib/config';
+import { checkRateLimit, getClientIp, createRateLimitResponse } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  // Apply rate limiting
+  const clientIp = getClientIp(request);
+  const isAllowed = await checkRateLimit(clientIp, 'strict');
+
+  if (!isAllowed) {
+    return createRateLimitResponse();
+  }
+
   try {
     // Execute python script to fetch data
     const data = await fetchGarminDataDirectly();
@@ -46,10 +56,9 @@ async function fetchGarminDataDirectly(): Promise<any> {
     'garmin-workouts/garminworkouts/scripts/fetch_training_data.py'
   );
 
-  // Use hardcoded credentials from the sync route for consistency with user's specific setup
-  // In production these should be env vars
-  const username = process.env.GARMIN_USERNAME || 'sunith07@gmail.com';
-  const password = process.env.GARMIN_PASSWORD || 'M@ver1cks';
+  // Use validated credentials from centralized config
+  const username = config.GARMIN_USERNAME;
+  const password = config.GARMIN_PASSWORD;
 
   return new Promise((resolve, reject) => {
     const python = spawn(

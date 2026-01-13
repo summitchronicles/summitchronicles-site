@@ -4,12 +4,8 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  // Removed eslint and typescript error suppressions for better code quality
+  // If build fails, fix the errors instead of ignoring them
   compress: true,
   poweredByHeader: false,
   generateEtags: false,
@@ -31,7 +27,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'unsplash.com' },
       { protocol: 'https', hostname: 'plus.unsplash.com' },
-      { protocol: 'https', hostname: '*.strava.com' },
       { protocol: 'https', hostname: 'summitchronicles.com' },
       { protocol: 'https', hostname: 'summitchronicles.s3.amazonaws.com' },
       { protocol: 'https', hostname: '*.supabase.co' },

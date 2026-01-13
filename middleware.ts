@@ -101,12 +101,32 @@ export function middleware(request: NextRequest) {
     // Additional security for admin routes
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
 
-    // Basic authentication check (you would implement proper auth here)
-    const authHeader = request.headers.get('authorization');
-    // Temporarily disabled for testing - TODO: implement proper auth
-    // if (!authHeader && process.env.NODE_ENV === 'production') {
-    //   return NextResponse.redirect(new URL('/auth/login', request.url));
-    // }
+    // Simple authentication check using API key or session cookie
+    const authCookie = request.cookies.get('admin_session');
+    const apiKey = request.headers.get('x-admin-key');
+    const adminKey = process.env.INTERNAL_API_KEY;
+
+    // Check if user is authenticated via cookie or API key
+    const isAuthenticated =
+      (authCookie && authCookie.value === adminKey) ||
+      (apiKey && apiKey === adminKey);
+
+    // Protect admin routes in production
+    if (!isAuthenticated && process.env.NODE_ENV === 'production') {
+      console.warn('Unauthorized admin access attempt:', {
+        ip,
+        path: request.nextUrl.pathname,
+        timestamp: new Date().toISOString(),
+      });
+
+      // Return 401 Unauthorized
+      return new NextResponse('Unauthorized', {
+        status: 401,
+        headers: {
+          'WWW-Authenticate': 'Bearer realm="Admin Area"',
+        },
+      });
+    }
   }
 
   // Bot protection

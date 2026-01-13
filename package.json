@@ -69,6 +69,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
+    "isomorphic-dompurify": "^2.35.0",
     "lucide-react": "^0.544.0",
     "multer": "^2.0.2",
     "next": "14.2.32",
