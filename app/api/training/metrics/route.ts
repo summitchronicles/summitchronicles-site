@@ -25,12 +25,12 @@ export async function GET(request: NextRequest) {
     // 1. Fetch fast activities from Intervals.icu
     const activitiesPromise = IntervalsService.getActivities(30);
 
-    // 2. Fetch specific health metrics (Body Battery) from Garmin via Python
-    const bodyBatteryPromise = fetchBodyBatteryFromPython();
+    // 2. Fetch specific health metrics from Garmin Health Service
+    const garminHealthPromise = fetchGarminHealthMetrics();
 
     const [activitiesData, garminHealth] = await Promise.all([
       activitiesPromise,
-      bodyBatteryPromise,
+      garminHealthPromise,
     ]);
 
     // 3. Use Raw VO2 Max from Garmin (fallback to manual if missing)
@@ -632,129 +632,42 @@ function getEnhancedFallbackMetrics() {
   };
 }
 
-async function fetchBodyBatteryFromPython(): Promise<any> {
-  // 1. Check if running on Vercel (Production/Preview)
-  if (process.env.VERCEL) {
-    console.log(
-      'Running on Vercel, skipping Python script (unavailable runtime).'
-    );
+async function fetchGarminHealthMetrics(): Promise<any> {
+  const GARMIN_SERVICE_URL = process.env.GARMIN_SERVICE_URL;
+
+  // If service URL not configured, skip (production will use fallback)
+  if (!GARMIN_SERVICE_URL) {
+    console.warn('GARMIN_SERVICE_URL not configured, skipping health metrics');
     return {};
   }
 
-  const pythonScriptPath = path.join(
-    process.cwd(),
-    'garmin-workouts/garminworkouts/scripts/fetch_training_data.py'
-  );
-
-  // Use validated credentials from centralized config (or skip if missing)
-  let username, password;
   try {
-    username = config.GARMIN_USERNAME;
-    password = config.GARMIN_PASSWORD;
-  } catch (e) {
-    console.warn(
-      'Garmin credentials missing or invalid, skipping Python script.'
-    );
-    return {};
-  }
+    const response = await fetch(`${GARMIN_SERVICE_URL}/health`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      next: { revalidate: 300 }, // Cache for 5 minutes
+    });
 
-  // Use the venv python where garminconnect is installed
-  const venvPython = path.join(
-    process.cwd(),
-    'garmin-workouts',
-    'venv',
-    'bin',
-    'python'
-  );
-
-  return new Promise((resolve) => {
-    // If credentials missing, return empty fallback immediately
-    if (!username || !password) {
-      console.warn('Garmin credentials missing, skipping Python script.');
-      resolve({});
-      return;
+    if (!response.ok) {
+      throw new Error(`Garmin service error: ${response.status}`);
     }
 
-    const python = spawn(
-      venvPython,
-      [pythonScriptPath, '--username', username, '--password', password],
-      {
-        cwd: path.join(process.cwd(), 'garmin-workouts'),
-        env: {
-          ...process.env,
-          PYTHONPATH: path.join(process.cwd(), 'garmin-workouts'),
-        },
-      }
-    );
+    const data = await response.json();
 
-    let output = '';
-    let error = '';
+    if (!data.success) {
+      console.error('Garmin service returned error:', data.error);
+      return {};
+    }
 
-    python.stdout.on('data', (data) => {
-      output += data.toString();
-    });
-
-    python.stderr.on('data', (data) => {
-      error += data.toString();
-    });
-
-    // CRITICAL: Handle spawn errors (e.g., python not found)
-    python.on('error', (err) => {
-      console.error('Failed to start Python process:', err);
-      resolve({});
-    });
-
-    python.on('close', (code) => {
-      if (code === 0) {
-        try {
-          const json = JSON.parse(output);
-          // Parse the specific fields we need
-          const { user_summary, stress_data, hrv_data, body_battery } = json;
-
-          let bodyBatteryValue =
-            user_summary?.bodyBatteryMostRecentValue ||
-            user_summary?.bodyBattery;
-
-          // Fallback to array last value
-          if (
-            !bodyBatteryValue &&
-            Array.isArray(body_battery) &&
-            body_battery.length > 0
-          ) {
-            bodyBatteryValue =
-              body_battery[body_battery.length - 1]?.bodyBatteryLevel;
-          }
-
-          let stressValue = null;
-          if (stress_data) {
-            stressValue =
-              stress_data.overallStressLevel || stress_data.avgStressLevel;
-          }
-          if (stressValue === null) {
-            stressValue = user_summary?.averageStressLevel;
-          }
-
-          const hrvStatus = hrv_data?.hrvSummary?.status || 'Balanced';
-
-          // Extract VO2 Max from user_summary or stats
-          const vo2MaxValue =
-            user_summary?.vo2MaxValue || user_summary?.vo2Max || null;
-
-          resolve({
-            bodyBattery: bodyBatteryValue,
-            bodyBatteryTimeline: body_battery || [],
-            stressScore: stressValue,
-            hrvStatus: hrvStatus,
-            vo2Max: vo2MaxValue,
-          });
-        } catch (e) {
-          console.error(`Failed to parse Python output: ${e}`);
-          resolve({});
-        }
-      } else {
-        console.error(`Python script failed (code ${code}): ${error}`);
-        resolve({});
-      }
-    });
-  });
+    return {
+      bodyBattery: data.metrics?.bodyBattery,
+      bodyBatteryTimeline: data.metrics?.bodyBatteryTimeline || [],
+      stressScore: data.metrics?.stressScore,
+      hrvStatus: data.metrics?.hrvStatus,
+      vo2Max: data.metrics?.vo2Max,
+    };
+  } catch (error) {
+    console.error('Error fetching Garmin health metrics:', error);
+    return {};
+  }
 }
