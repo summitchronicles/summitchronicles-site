@@ -10,7 +10,7 @@ import { useTrainingMetrics } from '@/lib/hooks/useTrainingMetrics';
 import { JoinTheMission } from '../components/training/JoinTheMission';
 import { TrainingRoadmap } from '../components/training/TrainingRoadmap';
 import { AscentVisualization } from '../components/training/AscentVisualization';
-import { DailyProtocolLog } from '../components/training/DailyProtocolLog';
+import { MissionLog } from '../components/training/MissionLog';
 
 export default function TrainingPage() {
   const { metrics } = useTrainingMetrics();
@@ -184,7 +184,7 @@ export default function TrainingPage() {
                   DAILY PROTOCOL FEED
                 </div>
               </div>
-              <DailyProtocolLog />
+              <MissionLog />
             </div>
 
             {/* Training Roadmap */}
