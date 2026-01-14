@@ -29,9 +29,16 @@ export async function GET(request: NextRequest) {
     }
 
     // Parallel fetch: Health Metrics + Activities
+    // Cache for 5 hours (18000 seconds) as requested
+    const CACHE_DURATION = 18000;
+
     const [healthRes, activitiesRes] = await Promise.all([
-      fetch(`${garminServiceUrl}/health`, { next: { revalidate: 0 } }),
-      fetch(`${garminServiceUrl}/activities`, { next: { revalidate: 0 } }),
+      fetch(`${garminServiceUrl}/health`, {
+        next: { revalidate: CACHE_DURATION },
+      }),
+      fetch(`${garminServiceUrl}/activities`, {
+        next: { revalidate: CACHE_DURATION },
+      }),
     ]);
 
     let garminHealth: any = {};

@@ -149,14 +149,6 @@ export function useTrainingMetrics(): UseTrainingMetricsResult {
 
   useEffect(() => {
     fetchMetrics(); // Initial fetch on mount
-
-    // Auto-refresh every 30 seconds for live data
-    const interval = setInterval(() => {
-      fetchMetrics();
-    }, 30000); // 30 seconds
-
-    // Cleanup: Clear interval when component unmounts
-    return () => clearInterval(interval);
   }, []);
 
   const refresh = () => {
