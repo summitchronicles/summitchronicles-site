@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summit Chronicles - Remastered (World Class)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --obsidian: #080808;
+            --gold-gradient: linear-gradient(135deg, #FEE1B5 0%, #D4AF37 50%, #996515 100%);
+            --glass-border: 1px solid rgba(255,255,255,0.08);
+            --glass-bg: rgba(20,20,20, 0.6);
+        }
+
+        body {
+            background-color: var(--obsidian);
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* PREMIUM FINISHES */
+        .gold-text {
+            background: var(--gold-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .premium-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: var(--glass-border);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        /* HEADER */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 24px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+        .logo { font-family: 'Oswald', sans-serif; font-weight: 700; letter-spacing: 2px; font-size: 20px; }
+
+        /* HERO - CINEMATIC */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background:
+                radial-gradient(circle at bottom, rgba(212, 175, 55, 0.15) 0%, transparent 40%),
+                url('https://images.unsplash.com/photo-1520625981448-6a56c4296657?q=80&w=2500&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, #080808 100%);
+        }
+        .hero-content { position: relative; z-index: 10; transform: translateY(-30px); }
+
+        h1 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 8vw;
+            line-height: 0.9;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin: 0;
+            text-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .sub-hero {
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 14px;
+            color: #ccc;
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        /* SOCIALS - MASONRY GRID (The "Remaster") */
+        .section-title {
+            text-align: center;
+            font-family: 'Oswald', sans-serif;
+            font-size: 40px;
+            margin: 80px 0 40px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .masonry-grid {
+            column-count: 4;
+            column-gap: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .social-card {
+            break-inside: avoid;
+            margin-bottom: 24px;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease;
+        }
+
+        .social-card:hover { transform: translateY(-10px); z-index: 10; box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2); }
+        .social-card img { width: 100%; display: block; opacity: 0.8; transition: opacity 0.4s; }
+        .social-card:hover img { opacity: 1; }
+
+        .card-icon {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: var(--gold-gradient);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        /* WIREFRAME ANNOTATIONS */
+        .annotation {
+            position: absolute;
+            background: blue;
+            color: white;
+            font-size: 10px;
+            padding: 4px;
+            top: 0; left: 0;
+            z-index: 100;
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">SUMMIT CHRONICLES</div>
+        <div style="font-size: 12px; letter-spacing: 2px; opacity: 0.7;">MENU ///</div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="sub-hero">Est. 2013 • Seven Summits Campaign</span>
+            <h1>
+                Visual<br>
+                <span class="gold-text">Transmissions</span>
+            </h1>
+            <div style="margin-top: 40px;">
+               <div style="display:inline-block; padding: 12px 30px; border: 1px solid rgba(255,255,255,0.3); letter-spacing: 2px; font-size: 12px; text-transform: uppercase;">
+                   Support the Journey
+               </div>
+            </div>
+        </div>
+        <div class="annotation">UPGRADE: 'Oswald' Font + Metallic Gradient Text</div>
+    </header>
+
+    <!-- UNIFIED SOCIAL STREAM (The "Fix" for Visual Transmissions) -->
+    <section>
+        <h2 class="section-title"><span style="color:#555">LiveData ///</span> Transmission Feed</h2>
+
+        <div class="masonry-grid">
+
+            <!-- Item 1: Instagram Large -->
+            <div class="social-card premium-glass">
+                <div class="card-icon">INSTAGRAM</div>
+                <img src="https://images.unsplash.com/photo-1522093537031-62899313cc73?q=80&w=600&auto=format&fit=crop" style="height: 400px; object-fit: cover;">
+                <div style="padding: 15px;">
+                    <p style="font-size: 12px; color: #aaa;">Summit push day. The air is thin but spirits are high. #SevenSummits</p>
+                </div>
+            </div>
+
+            <!-- Item 2: Strava Map -->
+            <div class="social-card premium-glass">
+                <div class="card-icon" style="color: #fc4c02">STRAVA</div>
+                <div style="background: #222; height: 200px; display: flex; align-items:center; justify-content:center;">
+                    [ MAP VISUALIZATION ]
+                </div>
+                <div style="padding: 15px; border-top: 1px solid rgba(255,255,255,0.05)">
+                    <h4 style="margin:0; text-transform:uppercase;">Morning Run</h4>
+                    <span style="font-size:30px; font-family:'Oswald'; color:white;">15.2 <span style="font-size:12px; color:#888;">KM</span></span>
+                </div>
+            </div>
+
+            <!-- Item 3: Blog Snippet -->
+            <div class="social-card premium-glass" style="background: linear-gradient(to bottom, #1a1a1a, #080808);">
+                <div class="card-icon">JOURNAL</div>
+                <div style="padding: 30px;">
+                    <span style="color: #D4AF37; font-size: 10px; letter-spacing: 2px;">LATEST ENTRY</span>
+                    <h3 style="font-family:'Oswald'; font-size: 24px; margin: 10px 0;">WHY WE CLIMB</h3>
+                    <p style="font-size: 12px; color: #888; line-height: 1.6;">It's not about the summit. It's about who you become on the way up...</p>
+                    <div style="margin-top: 20px; font-size: 10px; text-decoration: underline;">READ MORE</div>
+                </div>
+            </div>
+
+            <!-- Item 4: Instagram -->
+            <div class="social-card premium-glass">
+                <div class="card-icon">INSTAGRAM</div>
+                <img src="https://images.unsplash.com/photo-1549488355-6b2ad18eddd0?q=80&w=600&auto=format&fit=crop">
+            </div>
+
+            <!-- Item 5: Stat -->
+            <div class="social-card premium-glass">
+                 <div class="card-icon">TELEMETRY</div>
+                 <div style="padding: 20px; text-align: center;">
+                     <div style="font-size: 12px; color: #666; letter-spacing: 2px;">SUFFER SCORE</div>
+                     <div style="font-size: 48px; font-weight: bold; color: #d63031;">94%</div>
+                 </div>
+            </div>
+
+             <!-- Item 6: Video -->
+             <div class="social-card premium-glass">
+                <div class="card-icon">YOUTUBE</div>
+                <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=600&auto=format&fit=crop" style="height: 250px; object-fit: cover;">
+                <div style="position: absolute; inset:0; display:flex; align-items:center; justify-content:center;">▶</div>
+            </div>
+
+        </div>
+        <div class="annotation" style="top: auto; bottom: 0;">UPGRADE: Masonry 'Pinterest' Layout vs Static Grid</div>
+    </section>
+
+</body>
+</html>

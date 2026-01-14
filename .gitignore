@@ -36,3 +36,8 @@ pnpm-debug.log*
 # TypeScript build cache
 *.tsbuildinfo
 tsconfig.tsbuildinfo
+
+# Python
+venv/
+__pycache__/
+*.pyc

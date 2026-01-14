@@ -24,21 +24,22 @@ module.exports = {
           950: '#172554'
         },
         // Premium Dark Theme Colors
-        'obsidian': '#0a0a0a',
+        'obsidian': '#050505',
         'charcoal-mist': '#1a1a1a',
         'glass-panel': 'rgba(26, 26, 26, 0.6)',
 
         'summit-gold': {
-          50: '#fffbeb',
-          100: '#fef3c7',
-          200: '#fde68a',
-          300: '#fcd34d',
-          400: '#fbbf24',
-          500: '#f59e0b',
-          600: '#d97706',
-          700: '#b45309',
-          800: '#92400e',
-          900: '#78350f',
+          DEFAULT: '#D4AF37',
+          50: '#FDFCF6',
+          100: '#FAF8ED',
+          200: '#F4EFDB',
+          300: '#EEE6C9',
+          400: '#E8DDB7',
+          500: '#E2D4A5', // Base Gold
+          600: '#D4AF37', // True Metallic Gold
+          700: '#AA8C2C',
+          800: '#806921',
+          900: '#554616',
           950: '#451a03'
         },
         // Swiss spa neutrals with variations

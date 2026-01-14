@@ -88,7 +88,7 @@ function getFallbackDynamicPosts(): InstagramPost[] {
       caption:
         '[TRANS_LOG 409.3] - Coordinates: 27.9881° N, 86.9250° E. Acclimatization rotation complete. Oxygen levels stable at 65%. #Everest2026 #MissionControl',
       media_url: '/stories/everest-prep.jpeg',
-      permalink: 'https://instagram.com',
+      permalink: 'https://www.instagram.com/summitchronicles/',
       timestamp: new Date().toISOString(), // Simulating "Now"
       media_type: 'IMAGE',
     },
@@ -97,7 +97,7 @@ function getFallbackDynamicPosts(): InstagramPost[] {
       caption:
         '[TRANS_LOG 409.4] - Gear Check: Secure. Icefall conditions monitoring active. Proceeding to Camp 1 at 0400 hours. #Alpinism #TechnicalClimbing',
       media_url: '/stories/denali.jpg',
-      permalink: 'https://instagram.com',
+      permalink: 'https://www.instagram.com/summitchronicles/',
       timestamp: new Date(Date.now() - 86400000).toISOString(), // Simulating "Yesterday"
       media_type: 'IMAGE',
     },
@@ -112,7 +112,7 @@ function getPinnedPosts(): InstagramPost[] {
       caption:
         '[ARCHIVE_LOG 001.A] - The Beginning. Kilimanjaro Summit, 2023. Where the Seven Summits dream first took flight. 19,341 ft of pure realization. #SevenSummits #Kilimanjaro',
       media_url: '/stories/kilimanjaro.jpg',
-      permalink: 'https://instagram.com',
+      permalink: 'https://www.instagram.com/summitchronicles/',
       timestamp: '2023-10-15T09:15:00Z',
       media_type: 'IMAGE',
       isPinned: true,
@@ -122,7 +122,7 @@ function getPinnedPosts(): InstagramPost[] {
       caption:
         "[ARCHIVE_LOG 004.B] - Denali Expedition. Nothing prepares you for the cold of North America's highest peak. A pivotal test of endurance. #Denali #Alpinism",
       media_url: '/stories/denali.jpg', // Reusing asset for now, typically would be distinct
-      permalink: 'https://instagram.com',
+      permalink: 'https://www.instagram.com/summitchronicles/',
       timestamp: '2025-06-20T14:30:00Z',
       media_type: 'IMAGE',
       isPinned: true,

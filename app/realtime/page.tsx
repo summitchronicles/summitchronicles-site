@@ -6,31 +6,14 @@ import { SyncManager } from '../components/realtime/SyncManager';
 import { TrainingInsights } from '../components/ai/TrainingInsights';
 import { motion } from 'framer-motion';
 import {
-  Activity,
   Mountain,
   Thermometer,
   Wind,
   Eye,
   Clock,
-  TrendingUp,
   AlertTriangle,
   RefreshCw,
-  Wifi,
-  WifiOff,
-  Calendar,
-  MapPin,
 } from 'lucide-react';
-
-interface StravaData {
-  activities: any[];
-  stats: any;
-  profile: any;
-  meta: {
-    timestamp: string;
-    usedMockData: boolean;
-    count: number;
-  };
-}
 
 interface WeatherData {
   weather: {
@@ -61,7 +44,6 @@ interface WeatherData {
 }
 
 export default function RealtimePage() {
-  const [stravaData, setStravaData] = useState<StravaData | null>(null);
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -72,19 +54,11 @@ export default function RealtimePage() {
     try {
       setIsRefreshing(true);
 
-      // Fetch Strava data
-      const stravaResponse = await fetch('/api/strava/sync?mock=true&limit=5');
-      const stravaResult = await stravaResponse.json();
-
       // Fetch Weather data
       const weatherResponse = await fetch(
         '/api/weather?location=everest&mock=true'
       );
       const weatherResult = await weatherResponse.json();
-
-      if (stravaResult.success) {
-        setStravaData(stravaResult.data);
-      }
 
       if (weatherResult.success) {
         setWeatherData(weatherResult.data);
@@ -185,22 +159,10 @@ export default function RealtimePage() {
                 Real-time Dashboard
               </h1>
               <p className="text-xl text-spa-charcoal/80 max-w-3xl mx-auto leading-relaxed mb-6">
-                Live training data from Strava and real-time mountain conditions
-                for expedition planning.
+                Real-time mountain conditions for expedition planning.
               </p>
 
               <div className="flex items-center justify-center gap-4">
-                <div className="flex items-center gap-2 bg-white/80 px-4 py-2 rounded-lg">
-                  {stravaData?.meta.usedMockData ? (
-                    <WifiOff className="w-4 h-4 text-orange-500" />
-                  ) : (
-                    <Wifi className="w-4 h-4 text-green-500" />
-                  )}
-                  <span className="text-sm font-medium">
-                    {stravaData?.meta.usedMockData ? 'Demo Data' : 'Live Data'}
-                  </span>
-                </div>
-
                 {lastUpdate && (
                   <div className="flex items-center gap-2 bg-white/80 px-4 py-2 rounded-lg">
                     <Clock className="w-4 h-4 text-alpine-blue" />
@@ -228,69 +190,7 @@ export default function RealtimePage() {
         {/* Real-time Data Grid */}
         <section className="py-16 bg-white">
           <div className="max-w-6xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Strava Data Section */}
-              <motion.div
-                className="bg-white rounded-xl border border-spa-stone/10 shadow-sm overflow-hidden"
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6 }}
-              >
-                <div className="bg-gradient-to-r from-orange-500 to-red-500 p-6 text-white">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <Activity className="w-8 h-8" />
-                      <h2 className="text-2xl font-light">Training Activity</h2>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-light">
-                        {stravaData?.activities.length || 0}
-                      </div>
-                      <div className="text-sm opacity-90">
-                        Recent Activities
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6 space-y-4">
-                  {stravaData?.activities.slice(0, 3).map((activity, index) => (
-                    <div
-                      key={activity.id}
-                      className="flex items-center justify-between p-4 bg-spa-cloud/10 rounded-lg"
-                    >
-                      <div>
-                        <h3 className="font-medium text-spa-charcoal mb-1">
-                          {activity.name}
-                        </h3>
-                        <div className="flex items-center gap-4 text-sm text-spa-charcoal/60">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {new Date(activity.start_date).toLocaleDateString()}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {Math.round(activity.moving_time / 60)}min
-                          </span>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-lg font-light text-spa-charcoal">
-                          {(activity.distance / 1000).toFixed(1)}km
-                        </div>
-                        <div className="text-sm text-spa-charcoal/60">
-                          {activity.total_elevation_gain}m ↗
-                        </div>
-                      </div>
-                    </div>
-                  )) || (
-                    <div className="text-center py-8 text-spa-charcoal/60">
-                      No recent activities available
-                    </div>
-                  )}
-                </div>
-              </motion.div>
-
+            <div className="grid grid-cols-1 gap-8">
               {/* Weather Data Section */}
               <motion.div
                 className="bg-white rounded-xl border border-spa-stone/10 shadow-sm overflow-hidden"
@@ -432,10 +332,10 @@ export default function RealtimePage() {
               <SyncManager />
             </div>
 
-            {/* AI Training Insights */}
+            {/* AI Training Insights - Pass empty activities since Strava is gone */}
             <div className="mt-8">
               <TrainingInsights
-                activities={stravaData?.activities || []}
+                activities={[]}
                 goals={[
                   'High-altitude expedition training',
                   'Build endurance for Everest',
@@ -454,19 +354,7 @@ export default function RealtimePage() {
               <h3 className="text-lg font-medium text-spa-charcoal mb-4">
                 Real-time Data Sources
               </h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <h4 className="font-medium text-spa-charcoal mb-2 flex items-center gap-2">
-                    <Activity className="w-4 h-4" />
-                    Training Data
-                  </h4>
-                  <p className="text-sm text-spa-charcoal/70 leading-relaxed">
-                    Activity data synced from Strava API includes distance,
-                    elevation, heart rate, and performance metrics automatically
-                    updated with each workout.
-                  </p>
-                </div>
-
+              <div className="grid md:grid-cols-1 gap-6">
                 <div>
                   <h4 className="font-medium text-spa-charcoal mb-2 flex items-center gap-2">
                     <Mountain className="w-4 h-4" />
@@ -483,7 +371,6 @@ export default function RealtimePage() {
           </div>
         </section>
       </main>
-
     </div>
   );
 }

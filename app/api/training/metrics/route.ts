@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { IntervalsService } from '@/lib/services/intervals';
 import { spawn } from 'child_process';
 import path from 'path';
 import { config } from '@/lib/config';
-import { checkRateLimit, getClientIp, createRateLimitResponse } from '@/lib/rate-limiter';
+import {
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,89 +21,65 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Execute python script to fetch data
-    const data = await fetchGarminDataDirectly();
+    // --- HYBRID IMPLEMENTATION ---
+    // 1. Fetch fast activities from Intervals.icu
+    const activitiesPromise = IntervalsService.getActivities(30);
 
-    // Calculate metrics from the raw python output
+    // 2. Fetch specific health metrics (Body Battery) from Garmin via Python
+    const bodyBatteryPromise = fetchBodyBatteryFromPython();
+
+    const [activitiesData, garminHealth] = await Promise.all([
+      activitiesPromise,
+      bodyBatteryPromise,
+    ]);
+
+    // 3. Get Manual Override for VO2 Max
+    const manualVo2 = process.env.VO2_MAX_MANUAL
+      ? parseFloat(process.env.VO2_MAX_MANUAL)
+      : 45.0;
+
+    const garminMetrics = {
+      bodyBattery: garminHealth.bodyBattery ?? 0,
+      stressScore: garminHealth.stressScore ?? 0,
+      vo2Max: manualVo2,
+      hrvStatus: garminHealth.hrvStatus ?? 'N/A',
+    };
+
+    // Calculate metrics
     const metrics = calculateTrainingMetrics(
-      data.activities || [],
-      data.metrics || {}
+      activitiesData.map((a) => ({
+        activityId: a.id,
+        activityName: a.name,
+        startTimeLocal: a.start_date_local,
+        distance: a.distance,
+        duration: a.moving_time,
+        elevationGain: a.total_elevation_gain,
+        averageHR: a.average_heartrate,
+        activityType: { typeKey: a.type.toLowerCase() },
+      })),
+      garminMetrics
     );
 
     return NextResponse.json({
       success: true,
-      metrics: metrics,
+      metrics,
       lastUpdated: new Date().toISOString(),
-      source: 'garmin_direct',
-      debug: {
-        using_python_script: true,
-        activity_count: data.activities?.length || 0,
-      },
+      source: 'intervals.icu',
     });
   } catch (error) {
-    console.error('Error fetching Garmin training metrics:', error);
+    console.error('Error fetching Intervals metrics:', error);
 
-    // Return enhanced fallback metrics if Garmin API fails
     return NextResponse.json({
       success: false,
       metrics: getEnhancedFallbackMetrics(),
       lastUpdated: new Date().toISOString(),
       source: 'fallback',
-      error: 'Garmin Direct Connection Unavailable',
+      error: 'Data Provider Unavailable',
       details: error instanceof Error ? error.message : String(error),
     });
   }
 }
-
-async function fetchGarminDataDirectly(): Promise<any> {
-  const pythonScriptPath = path.join(
-    process.cwd(),
-    'garmin-workouts/garminworkouts/scripts/fetch_training_data.py'
-  );
-
-  // Use validated credentials from centralized config
-  const username = config.GARMIN_USERNAME;
-  const password = config.GARMIN_PASSWORD;
-
-  return new Promise((resolve, reject) => {
-    const python = spawn(
-      'python3',
-      [pythonScriptPath, '--username', username, '--password', password],
-      {
-        // Set cwd to the python package root so imports work
-        cwd: path.join(process.cwd(), 'garmin-workouts'),
-        env: {
-          ...process.env,
-          PYTHONPATH: path.join(process.cwd(), 'garmin-workouts'),
-        },
-      }
-    );
-
-    let output = '';
-    let error = '';
-
-    python.stdout.on('data', (data) => {
-      output += data.toString();
-    });
-
-    python.stderr.on('data', (data) => {
-      error += data.toString();
-    });
-
-    python.on('close', (code) => {
-      if (code === 0) {
-        try {
-          const json = JSON.parse(output);
-          resolve(json);
-        } catch (e) {
-          reject(new Error(`Failed to parse Python output: ${e}`));
-        }
-      } else {
-        reject(new Error(`Python script failed (code ${code}): ${error}`));
-      }
-    });
-  });
-}
+// fetchGarminDataDirectly removed
 
 function calculateTrainingMetrics(activities: any[], garminMetrics: any) {
   const now = new Date();
@@ -164,6 +145,19 @@ function calculateTrainingMetrics(activities: any[], garminMetrics: any) {
       garminMetrics
     ),
     predictions: calculatePredictions(activities),
+    // Pass through wellness metrics from Garmin
+    bodyBattery: garminMetrics.bodyBattery,
+    stressScore: garminMetrics.stressScore,
+    hrvStatus: garminMetrics.hrvStatus,
+    vo2Max: garminMetrics.vo2Max, // Add VO2 Max to root level for easy access
+    // Add Recent Activities (Top 5 sorted by date)
+    recentActivities: [...activities]
+      .sort(
+        (a, b) =>
+          new Date(b.startTimeLocal || b.start_date).getTime() -
+          new Date(a.startTimeLocal || a.start_date).getTime()
+      )
+      .slice(0, 5),
   };
 }
 
@@ -609,4 +603,103 @@ function getEnhancedFallbackMetrics() {
       },
     ],
   };
+}
+
+async function fetchBodyBatteryFromPython(): Promise<any> {
+  const pythonScriptPath = path.join(
+    process.cwd(),
+    'garmin-workouts/garminworkouts/scripts/fetch_training_data.py'
+  );
+
+  // Use validated credentials from centralized config
+  const username = config.GARMIN_USERNAME;
+  const password = config.GARMIN_PASSWORD;
+
+  // Use the venv python where garminconnect is installed
+  const venvPython = path.join(
+    process.cwd(),
+    'garmin-workouts',
+    'venv',
+    'bin',
+    'python'
+  );
+
+  return new Promise((resolve) => {
+    // If credentials missing, return empty fallback immediately
+    if (!username || !password) {
+      console.warn('Garmin credentials missing, skipping Python script.');
+      resolve({});
+      return;
+    }
+
+    const python = spawn(
+      venvPython,
+      [pythonScriptPath, '--username', username, '--password', password],
+      {
+        cwd: path.join(process.cwd(), 'garmin-workouts'),
+        env: {
+          ...process.env,
+          PYTHONPATH: path.join(process.cwd(), 'garmin-workouts'),
+        },
+      }
+    );
+
+    let output = '';
+    let error = '';
+
+    python.stdout.on('data', (data) => {
+      output += data.toString();
+    });
+
+    python.stderr.on('data', (data) => {
+      error += data.toString();
+    });
+
+    python.on('close', (code) => {
+      if (code === 0) {
+        try {
+          const json = JSON.parse(output);
+          // Parse the specific fields we need
+          const { user_summary, stress_data, hrv_data, body_battery } = json;
+
+          let bodyBatteryValue =
+            user_summary?.bodyBatteryMostRecentValue ||
+            user_summary?.bodyBattery;
+
+          // Fallback to array last value
+          if (
+            !bodyBatteryValue &&
+            Array.isArray(body_battery) &&
+            body_battery.length > 0
+          ) {
+            bodyBatteryValue =
+              body_battery[body_battery.length - 1]?.bodyBatteryLevel;
+          }
+
+          let stressValue = null;
+          if (stress_data) {
+            stressValue =
+              stress_data.overallStressLevel || stress_data.avgStressLevel;
+          }
+          if (stressValue === null) {
+            stressValue = user_summary?.averageStressLevel;
+          }
+
+          const hrvStatus = hrv_data?.hrvSummary?.status || 'Balanced';
+
+          resolve({
+            bodyBattery: bodyBatteryValue,
+            stressScore: stressValue,
+            hrvStatus: hrvStatus,
+          });
+        } catch (e) {
+          console.error(`Failed to parse Python output: ${e}`);
+          resolve({});
+        }
+      } else {
+        console.error(`Python script failed (code ${code}): ${error}`);
+        resolve({});
+      }
+    });
+  });
 }

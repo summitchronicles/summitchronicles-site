@@ -160,12 +160,7 @@ export const trainingEntry = defineType({
         },
       ],
     }),
-    defineField({
-      name: 'stravaId',
-      title: 'Strava Activity ID',
-      type: 'string',
-      description: 'Link to Strava activity for automatic data sync',
-    }),
+
     defineField({
       name: 'isPublic',
       title: 'Public',

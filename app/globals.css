@@ -7,7 +7,8 @@ html {
   overflow-x: hidden;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
@@ -20,24 +21,62 @@ body {
 
 @layer base {
   :root {
-    /* Brand Colors */
-    --color-alpine-blue: #1e3a8a;
-    --color-summit-gold: #fbbf24;
-    --color-charcoal: #1f2937;
+    /* Brand Colors - Remastered */
+    --color-obsidian: #050505; /* Deepest Black */
+    --color-charcoal: #111111; /* Off-Black for cards */
+
+    /* The "True" Gold - Base hex for fallbacks */
+    --color-summit-gold: #d4af37;
 
     /* Gradients */
-    --gradient-peak: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-    --gradient-summit: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-    --gradient-elevation: linear-gradient(
-      180deg,
-      #0f172a 0%,
-      #1e293b 50%,
-      #334155 100%
+    --gradient-gold-metallic: linear-gradient(
+      135deg,
+      #fee1b5 0%,
+      #d4af37 50%,
+      #996515 100%
     );
-    --gradient-accent: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-    --shadow-elevation:
-      0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    --shadow-peak: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    --gradient-obsidian: radial-gradient(
+      circle at center,
+      #1a1a1a 0%,
+      #050505 70%
+    );
+  }
+}
+
+@layer utilities {
+  /* Typography */
+  .font-oswald {
+    font-family: var(--font-oswald), sans-serif;
+  }
+
+  /* Text Effects */
+  .text-gold-metallic {
+    background: var(--gradient-gold-metallic);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Backgrounds */
+  .bg-obsidian {
+    background-color: var(--color-obsidian);
+  }
+
+  /* Glassmorphism - Premium */
+  .bg-premium-glass {
+    background: rgba(20, 20, 20, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  }
+
+  /* Utilities */
+  .center-abs {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -76,6 +115,28 @@ body {
     -webkit-background-clip: text;
     color: transparent;
     background-image: var(--gradient-accent);
+  }
+
+  /* V3: Ghost Typography */
+  .text-ghost {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 255, 255, 0.3); /* Thin, subtle outline */
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .text-ghost:hover {
+    -webkit-text-stroke: 1px rgba(212, 175, 55, 0.8); /* Gold outline on hover */
+    color: transparent; /* Keep transparent fill, or fill with gold? User wanted "boldened or much more visible" */
+  }
+
+  .text-ghost-filled {
+    color: white; /* Or gold gradient */
+    -webkit-text-stroke: 0px;
+  }
+
+  .text-outline-2 {
+    -webkit-text-stroke: 2px rgba(255, 255, 255, 0.8);
+    color: transparent;
   }
 
   .btn-summit {

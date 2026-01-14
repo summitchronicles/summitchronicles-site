@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { checkRateLimit } from './lib/rate-limiter';
 
 // Security middleware for Peak Performance Summit Chronicles
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+  const ip = request.ip ?? '127.0.0.1';
   const response = NextResponse.next();
 
   // Security Headers
@@ -59,10 +61,8 @@ export function middleware(request: NextRequest) {
   });
 
   // Rate limiting headers (basic implementation)
-  const ip =
-    request.headers.get('x-forwarded-for') ||
-    request.headers.get('x-real-ip') ||
-    'unknown';
+  // const ip is already defined at top scope
+  const userIp = ip; // Alias if needed, or just use ip
 
   // Add rate limiting info to headers (for monitoring)
   response.headers.set('X-Client-IP', ip);
@@ -70,6 +70,24 @@ export function middleware(request: NextRequest) {
 
   // API route specific security
   if (request.nextUrl.pathname.startsWith('/api/')) {
+    // Rate Limiting
+    try {
+      const rateLimitResult = await checkRateLimit(ip);
+
+      if (!rateLimitResult.allowed) {
+        return new NextResponse('Too Many Requests', {
+          status: 429,
+          headers: {
+            'Retry-After': '60',
+            'Content-Type': 'text/plain',
+          },
+        });
+      }
+    } catch (error) {
+      // Fail open if rate limiter errors (e.g. import issues in edge)
+      console.error('Rate limit check failed:', error);
+    }
+
     // Additional API security headers
     response.headers.set('X-API-Version', '1.0');
     response.headers.set('Cache-Control', 'no-store, must-revalidate');

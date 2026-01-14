@@ -19,6 +19,19 @@ interface TrainingMetrics {
       trend: 'up' | 'down' | 'stable';
     }[];
   }[];
+  recentActivities?: {
+    activityId: number;
+    activityName: string;
+    startTimeLocal: string;
+    distance: number;
+    duration: number;
+    elevationGain: number;
+    averageHR: number;
+    description?: string;
+    activityType: {
+      typeKey: string;
+    };
+  }[];
   recentTrends: {
     [key: string]: {
       value: string;
@@ -79,15 +92,21 @@ export function useTrainingMetrics(): UseTrainingMetricsResult {
 
       const data = await response.json();
 
+      // DEBUG: Log the full response
+      console.log('Training Metrics API Response:', data);
+      console.log('Data.success:', data.success);
+      console.log('Data.source:', data.source);
+      console.log('Data.metrics:', data.metrics);
+
       if (data.success) {
         setMetrics(data.metrics);
-        setIsRealData(data.source === 'strava' || data.source === 'garmin');
+        setIsRealData(data.source === 'garmin');
         setLastUpdated(data.lastUpdated);
 
         // Debug logging to verify data source
         console.log('Training metrics loaded:', {
           source: data.source,
-          isRealData: data.source === 'strava' || data.source === 'garmin',
+          isRealData: data.source === 'garmin',
           totalActivities: data.totalActivities,
         });
       } else {
@@ -108,7 +127,15 @@ export function useTrainingMetrics(): UseTrainingMetricsResult {
   };
 
   useEffect(() => {
-    fetchMetrics();
+    fetchMetrics(); // Initial fetch on mount
+
+    // Auto-refresh every 30 seconds for live data
+    const interval = setInterval(() => {
+      fetchMetrics();
+    }, 30000); // 30 seconds
+
+    // Cleanup: Clear interval when component unmounts
+    return () => clearInterval(interval);
   }, []);
 
   const refresh = () => {

@@ -1,14 +1,21 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, CheckCircle, Loader2, Mountain, Gift } from 'lucide-react';
+import {
+  Mail,
+  CheckCircle,
+  Loader2,
+  Mountain,
+  Gift,
+  ArrowRight,
+} from 'lucide-react';
 import { Button } from '../atoms/Button';
 import { Input } from '../atoms/Input';
 import { cn } from '@/lib/utils';
 
 interface NewsletterSubscriptionFormProps {
   variant?: 'hero' | 'cta' | 'inline' | 'sidebar';
-  className?: string;
+  className?: string; // Additional classes
 }
 
 interface SubscriptionBenefit {
@@ -57,56 +64,44 @@ export function NewsletterSubscriptionForm({
       setMessage(
         error instanceof Error
           ? error.message
-          : 'Something went wrong. Please try again.'
+          : 'Transmission failed. Please retry.'
       );
     }
   };
 
+  // Modernized benefits
   const benefits: SubscriptionBenefit[] = [
-    { icon: Mountain, text: 'Weekly training updates' },
-    { icon: Gift, text: 'Exclusive behind-the-scenes content' },
-    { icon: CheckCircle, text: 'Community milestone celebrations' },
+    { icon: Mountain, text: 'Expedition Dispatches' },
+    { icon: Gift, text: 'Gear Drop Alerts' },
+    { icon: checkGold, text: 'Training Protocols' },
   ];
 
   if (status === 'success') {
     return (
       <div
         className={cn(
-          'text-center space-y-4',
-          variant === 'hero' && 'py-8',
-          variant === 'cta' && 'py-6',
+          'text-center space-y-4 border border-summit-gold/30 bg-summit-gold/5 p-8 rounded-lg backdrop-blur-sm',
           className
         )}
       >
-        <div className="flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-full mx-auto">
-          <CheckCircle className="w-8 h-8 text-emerald-600" />
+        <div className="flex items-center justify-center w-12 h-12 bg-summit-gold/10 rounded-full mx-auto border border-summit-gold/20">
+          <CheckCircle className="w-6 h-6 text-summit-gold" />
         </div>
         <div>
-          <h3
-            className={cn(
-              'font-medium text-spa-charcoal mb-2',
-              variant === 'hero' && 'text-xl',
-              variant === 'cta' && 'text-lg text-white'
-            )}
-          >
-            Welcome to the Journey!
+          <h3 className="font-oswald text-xl text-white mb-2 uppercase tracking-wide">
+            Welcome to the Mission
           </h3>
-          <p
-            className={cn(
-              'text-sm',
-              variant === 'cta' ? 'text-white/80' : 'text-spa-charcoal/70'
-            )}
-          >
-            {message} Check your inbox for a welcome message.
+          <p className="text-sm text-gray-400 font-light">
+            {message} Stand by for your first briefing.
           </p>
         </div>
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setStatus('idle')}
-          className={cn(variant === 'cta' && 'text-white hover:text-white/80')}
+          className="text-summit-gold hover:text-summit-gold-300 font-mono text-xs uppercase tracking-widest"
         >
-          Subscribe another email
+          Reset Comms
         </Button>
       </div>
     );
@@ -114,27 +109,15 @@ export function NewsletterSubscriptionForm({
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Benefits (shown for hero and cta variants) */}
+      {/* Benefits (Optimized for modern layout) */}
       {(variant === 'hero' || variant === 'cta') && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="flex flex-wrap gap-4 mb-6">
           {benefits.map(({ icon: Icon, text }) => (
-            <div key={text} className="flex items-center gap-3">
-              <div
-                className={cn(
-                  'w-8 h-8 rounded-lg flex items-center justify-center',
-                  variant === 'cta'
-                    ? 'bg-white/20 text-white'
-                    : 'bg-alpine-blue/10 text-alpine-blue'
-                )}
-              >
-                <Icon className="w-4 h-4" />
+            <div key={text} className="flex items-center gap-2 group">
+              <div className="w-6 h-6 rounded flex items-center justify-center bg-white/5 border border-white/10 group-hover:border-summit-gold/30 transition-colors">
+                <Icon className="w-3 h-3 text-gray-400 group-hover:text-summit-gold transition-colors" />
               </div>
-              <span
-                className={cn(
-                  'text-sm',
-                  variant === 'cta' ? 'text-white/90' : 'text-spa-charcoal/80'
-                )}
-              >
+              <span className="text-xs font-mono uppercase tracking-wider text-gray-500 group-hover:text-gray-300 transition-colors">
                 {text}
               </span>
             </div>
@@ -146,90 +129,57 @@ export function NewsletterSubscriptionForm({
       <form onSubmit={handleSubmit} className="space-y-4">
         <div
           className={cn(
-            'flex gap-3',
+            'flex gap-0 relative group',
             (variant === 'hero' || variant === 'cta') && 'flex-col sm:flex-row'
           )}
         >
-          <div className="flex-1">
+          <div className="flex-1 relative">
             <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address"
+              placeholder="ENTER EMAIL COORDINATES"
               required
               disabled={status === 'loading'}
-              className={cn(
-                'w-full',
-                variant === 'cta' &&
-                  'bg-white/10 border-white/30 text-white placeholder:text-white/60'
-              )}
+              className="w-full bg-black/20 border-white/10 text-white placeholder:text-gray-600 focus:border-summit-gold/50 focus:ring-summit-gold/20 font-mono text-sm tracking-wide h-12"
             />
           </div>
 
           <Button
             type="submit"
             disabled={status === 'loading' || !email}
-            variant={variant === 'cta' ? 'secondary' : 'summit'}
-            size={variant === 'sidebar' ? 'sm' : 'md'}
-            className={cn(
-              'flex items-center gap-2',
-              variant === 'cta' &&
-                'bg-white text-spa-charcoal hover:bg-white/90'
-            )}
+            className="h-12 px-8 bg-summit-gold hover:bg-summit-gold-600 text-black font-oswald font-bold uppercase tracking-widest transition-all duration-300 hover:scale-105"
           >
             {status === 'loading' ? (
               <Loader2 className="w-4 h-4 animate-spin" />
             ) : (
-              <Mail className="w-4 h-4" />
+              <span className="flex items-center gap-2">
+                JOIN <ArrowRight className="w-4 h-4" />
+              </span>
             )}
-            {status === 'loading' ? 'Subscribing...' : 'Join the Journey'}
           </Button>
         </div>
 
         {/* Error message */}
         {status === 'error' && (
-          <p
-            className={cn(
-              'text-sm text-red-600',
-              variant === 'cta' && 'text-red-200'
-            )}
-          >
-            {message}
-          </p>
+          <p className="text-xs text-red-500 font-mono mt-2">⚠ {message}</p>
         )}
 
         {/* Privacy note */}
-        <p
-          className={cn(
-            'text-xs leading-relaxed',
-            variant === 'cta' ? 'text-white/60' : 'text-spa-charcoal/60'
-          )}
-        >
-          By subscribing, you agree to receive weekly expedition updates and
-          training insights. Unsubscribe anytime. We respect your privacy and
-          never share your email.
+        <p className="text-[10px] text-gray-600 font-sans leading-relaxed max-w-md">
+          Join 2,000+ climbers. Weekly dispatches only. No spam, just altitude.
         </p>
       </form>
-
-      {/* Additional benefits for sidebar variant */}
-      {variant === 'sidebar' && (
-        <div className="pt-4 border-t border-spa-stone/20">
-          <h4 className="text-sm font-medium text-spa-charcoal mb-3">
-            What you'll get:
-          </h4>
-          <ul className="space-y-2">
-            {benefits.map(({ text }) => (
-              <li
-                key={text}
-                className="flex items-start gap-2 text-xs text-spa-charcoal/70"
-              >
-                <CheckCircle className="w-3 h-3 text-emerald-600 mt-0.5 flex-shrink-0" />
-                {text}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
+  );
+}
+
+// Small helper for the custom check icon
+function checkGold(props: { className?: string }) {
+  return (
+    <CheckCircle
+      {...props}
+      className={cn('text-summit-gold', props.className)}
+    />
   );
 }

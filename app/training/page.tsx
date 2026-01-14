@@ -7,10 +7,10 @@ import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
 import { Activity, Footprints, Gauge } from 'lucide-react';
 import { useTrainingMetrics } from '@/lib/hooks/useTrainingMetrics';
-import { RecoveryTimeline } from '../components/training/RecoveryTimeline';
-import { MissionLog } from '../components/training/MissionLog';
-import { TrainingRoadmap } from '../components/training/TrainingRoadmap';
 import { JoinTheMission } from '../components/training/JoinTheMission';
+import { TrainingRoadmap } from '../components/training/TrainingRoadmap';
+import { AscentVisualization } from '../components/training/AscentVisualization';
+import { DailyProtocolLog } from '../components/training/DailyProtocolLog';
 
 export default function TrainingPage() {
   const { metrics } = useTrainingMetrics();
@@ -61,27 +61,68 @@ export default function TrainingPage() {
           <div className="absolute inset-0 bg-gradient-to-b from-[#0a0a0a]/80 via-transparent to-[#0a0a0a]" />
         </div>
 
-        {/* Hero Content - Pure Typography */}
+        {/* Hero Content - Status HUD Style */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="relative z-10 flex flex-col items-center text-center px-6"
+          className="relative z-10 flex flex-col items-center text-center px-6 pt-24 md:pt-0"
         >
-          {/* Label */}
-          <span className="text-summit-gold-500 text-xs font-medium tracking-[0.3em] uppercase mb-6">
-            Rehabilitation Protocol
+          {/* Top Label - Mono */}
+          <span className="text-gray-400 text-xs font-mono tracking-[0.3em] uppercase mb-4">
+            GARMIN CONNECT™ LIVE FEED
           </span>
 
-          {/* Main Title - Thin, Massive */}
-          <h1 className="text-[clamp(4rem,15vw,12rem)] font-thin tracking-tight text-white leading-none mb-4">
-            THE LAB
-          </h1>
+          {/* Main Status Display - Massive Oswald with Ghost Effect */}
+          <motion.h1
+            className="flex flex-col items-center group cursor-default"
+            initial="initial"
+            whileHover="hover"
+          >
+            <span className="text-xl md:text-3xl font-oswald text-white/50 tracking-widest mb-2">
+              CURRENT STATUS
+            </span>
+            <motion.span
+              className="text-[8.5vw] md:text-[9rem] font-oswald font-bold tracking-tighter leading-none text-white/20 hover:text-summit-gold transition-colors duration-500"
+              style={
+                {
+                  // Maintained responsive consistency with Home page (uses vw units)
+                }
+              }
+              whileHover={{
+                color: '#C5A059',
+                scale: 1.02,
+              }}
+              transition={{ duration: 0.4 }}
+            >
+              {/* Force 'REHAB' if injury is active (daysSinceSurgery < 180?), else use Garmin status */}
+              {/* User explicitly requested 'REHAB' override for now */}
+              REHABILITATION
+            </motion.span>
+          </motion.h1>
 
-          {/* Subtitle */}
-          <p className="text-zinc-500 text-sm md:text-base tracking-widest uppercase">
-            Day {daysSinceSurgery} of Recovery
-          </p>
+          {/* Live Data Row - Minimalist */}
+          <div className="mt-8 flex items-center gap-8 md:gap-16">
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-oswald text-summit-gold">
+                {(metrics as any)?.bodyBattery || 53}
+              </div>
+              <div className="text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-wider mt-1">
+                Body Battery
+              </div>
+            </div>
+
+            <div className="w-px h-12 bg-white/10"></div>
+
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-oswald text-white">
+                {(metrics as any)?.stressScore || 16}
+              </div>
+              <div className="text-[10px] md:text-xs font-mono text-gray-400 uppercase tracking-wider mt-1">
+                Stress Load
+              </div>
+            </div>
+          </div>
         </motion.div>
 
         {/* Scroll Indicator */}
@@ -108,96 +149,53 @@ export default function TrainingPage() {
       {/* ═══════════════════════════════════════════════════════════════════
           SECTION 2: RECOVERY METRICS - 3-Column Grid
       ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 px-6 bg-[#0a0a0a]">
-        <div className="max-w-5xl mx-auto">
+      {/* ═══════════════════════════════════════════════════════════════════
+          SECTION 2: ACT 2 - THE ASCENT (Transformation)
+      ═══════════════════════════════════════════════════════════════════ */}
+      <section className="py-24 px-6 bg-[#0a0a0a] scroll-mt-24">
+        <div className="max-w-6xl mx-auto pt-16 md:pt-0">
           {/* Section Header */}
           <div className="mb-12">
-            <h2 className="text-xl font-medium text-white mb-2">
-              Recovery Metrics
+            <h2 className="text-4xl font-oswald font-bold text-white mb-2">
+              THE ASCENT
             </h2>
-            <div className="h-px bg-zinc-800 w-full" />
-          </div>
-
-          {/* Metric Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Card 1: Mobility */}
-            <div className="bg-[#1a1a1a] rounded-2xl border border-zinc-800 p-6 flex flex-col items-center">
-              <Activity className="w-6 h-6 text-zinc-500 mb-4" />
-              <span className="text-4xl font-bold text-white mb-1">
-                {recoveryData.metrics.mobility}%
-              </span>
-              <span className="text-xs text-zinc-500 uppercase tracking-wider">
-                Mobility
-              </span>
+            <div className="text-xs font-mono text-summit-gold tracking-widest mb-8">
+              PHYSIOLOGICAL CAPACITY TIMELINE
             </div>
-
-            {/* Card 2: Days to Walking */}
-            <div className="bg-[#1a1a1a] rounded-2xl border border-zinc-800 p-6 flex flex-col items-center">
-              <Footprints className="w-6 h-6 text-zinc-500 mb-4" />
-              <span className="text-4xl font-bold text-white mb-1">
-                {daysToWalking}
-              </span>
-              <span className="text-xs text-zinc-500 uppercase tracking-wider">
-                Days to Walking
-              </span>
-            </div>
-
-            {/* Card 3: Readiness */}
-            <div className="bg-[#1a1a1a] rounded-2xl border border-zinc-800 p-6 flex flex-col items-center">
-              <Gauge className="w-6 h-6 text-zinc-500 mb-4" />
-              <span className="text-4xl font-bold text-white mb-1">
-                {readiness}%
-              </span>
-              <span className="text-xs text-zinc-500 uppercase tracking-wider">
-                Readiness
-              </span>
-            </div>
+            {/* The Visualization */}
+            <AscentVisualization vo2Max={metrics?.metrics?.vo2Max} />
           </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════
-          SECTION 3: RECOVERY TIMELINE
+          SECTION 3: ACT 3 - THE WORK (Mission Log)
       ═══════════════════════════════════════════════════════════════════ */}
       <section className="py-24 px-6 bg-[#0a0a0a]">
-        <div className="max-w-5xl mx-auto">
-          {/* Section Header */}
-          <div className="mb-12">
-            <h2 className="text-xl font-medium text-white mb-2">
-              Recovery Timeline
-            </h2>
-            <div className="h-px bg-zinc-800 w-full" />
-          </div>
-
-          {/* Timeline Component */}
-          <RecoveryTimeline />
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════════════════
-          SECTION 4: ACTIVITY FEED - Two Column Layout
-      ═══════════════════════════════════════════════════════════════════ */}
-      <section className="py-24 px-6 bg-[#0a0a0a]">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Mission Log */}
+            {/* Mission Log (Daily Protocol) */}
             <div>
               <div className="mb-8">
-                <h2 className="text-xl font-medium text-white mb-2">
-                  Mission Log
+                <h2 className="text-4xl font-oswald font-bold text-white mb-2">
+                  MISSION LOG
                 </h2>
-                <div className="h-px bg-zinc-800 w-full" />
+                <div className="text-xs font-mono text-gray-500 tracking-widest mb-8">
+                  DAILY PROTOCOL FEED
+                </div>
               </div>
-              <MissionLog />
+              <DailyProtocolLog />
             </div>
 
             {/* Training Roadmap */}
             <div>
               <div className="mb-8">
-                <h2 className="text-xl font-medium text-white mb-2">
-                  Training Roadmap
+                <h2 className="text-4xl font-oswald font-bold text-white mb-2">
+                  THE ROADMAP
                 </h2>
-                <div className="h-px bg-zinc-800 w-full" />
+                <div className="text-xs font-mono text-gray-500 tracking-widest mb-8">
+                  EXPEDITION COUNTDOWN
+                </div>
               </div>
               <TrainingRoadmap />
             </div>

@@ -37,7 +37,6 @@ interface TrainingEntry {
   };
   photos: any[];
   tags: string[];
-  stravaId?: string;
 }
 
 const typeIcons: Record<string, string> = {
@@ -333,15 +332,6 @@ export default function CMSTrainingPage() {
                         ))}
                       </div>
                     )}
-
-                    {entry.stravaId && (
-                      <div className="mt-4 pt-4 border-t border-spa-stone/10">
-                        <div className="flex items-center gap-2 text-sm text-spa-charcoal/60">
-                          <TrendingUp className="w-4 h-4" />
-                          <span>Synced with Strava</span>
-                        </div>
-                      </div>
-                    )}
                   </motion.article>
                 ))}
               </div>
@@ -349,7 +339,6 @@ export default function CMSTrainingPage() {
           </div>
         </section>
       </main>
-
     </div>
   );
 }

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wireframe V2 - Summit Chronicles (Mission Control)</title>
+    <style>
+        :root {
+            --obsidian: #050505;
+            --charcoal: #111111;
+            --gold: #D4AF37;
+            --white: #ffffff;
+            --text-muted: #888888;
+        }
+        body {
+            background-color: var(--obsidian);
+            color: var(--white);
+            font-family: 'Helvetica Neue', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* NOISE TEXTURE - The "Grit" */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .wireframe-label {
+            position: absolute;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px dashed var(--gold);
+            color: var(--gold);
+            padding: 4px 8px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 100;
+        }
+
+        /* HEADER */
+        header {
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .logo { font-weight: bold; letter-spacing: 2px; }
+
+        /* HERO SECTION */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: radial-gradient(circle at center, #1a1a1a 0%, #050505 70%);
+        }
+        .hero-title {
+            font-size: 12vw;
+            line-height: 0.8;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-align: center;
+            mix-blend-mode: overlay;
+            opacity: 0.8;
+            /* Parallax hint */
+            transform: translateY(-20px);
+        }
+        .hero-image-placeholder {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60%;
+            background: linear-gradient(to top, var(--obsidian), transparent),
+                        url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2000&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+            z-index: 10;
+        }
+
+        /* BENTO GRID - MISSION CONTROL */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .section-title {
+            font-size: 40px;
+            margin-bottom: 40px;
+            font-weight: 300;
+            border-left: 4px solid var(--gold);
+            padding-left: 20px;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 320px);
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--charcoal);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 4px; /* Sharper corners for "Technical" feel */
+            padding: 24px;
+            position: relative;
+            transition: transform 0.3s;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .card:hover { border-color: var(--gold); }
+
+        .card-large { grid-column: span 2; grid-row: span 2; }
+        .card-wide { grid-column: span 2; }
+
+        .stat-value { font-size: 60px; font-weight: bold; color: var(--gold); }
+        .stat-label { color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: auto;}
+
+        /* PULSE ANIMATION */
+        .pulse-dot {
+            width: 10px; height: 10px; background: red; border-radius: 50%;
+            display: inline-block; margin-right: 10px;
+            box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="noise-overlay"></div>
+
+    <header>
+        <div class="logo">SUMMIT CHRONICLES</div>
+        <div style="color: var(--gold)">/// MENU</div>
+    </header>
+
+    <section class="hero">
+        <div class="wireframe-label" style="top:20px; left:50%; transform:translateX(-50%)">Hero: Dynamic Depth (Text moves slower than mtn)</div>
+        <div class="hero-title">
+            THE SEVEN<br>SUMMITS
+        </div>
+        <div class="hero-image-placeholder"></div>
+        <div style="position: absolute; bottom: 40px; left: 40px; max-width: 400px; z-index: 20;">
+            <p style="color: var(--gold); letter-spacing: 2px; font-size: 14px; margin-bottom: 10px;">THE MISSION</p>
+            <h2 style="font-size: 32px; margin: 0;">FROM TUBERCULOSIS TO EVEREST</h2>
+        </div>
+    </section>
+
+    <div class="container">
+        <h2 class="section-title">MISSION CONTROL</h2>
+
+        <div class="bento-grid">
+
+            <!-- 1. THE MANIFESTO (Visual Story) -->
+            <div class="card card-wide">
+                <div class="wireframe-label">Manifesto: User Hook (Video loop bg)</div>
+                <h3 style="font-family: Georgia, serif; font-style: italic; color: #aaa; margin-top: 40px; font-size: 24px;">"In 2013, I couldn't walk 50 meters. Today, I climb for the world's highest peaks."</h3>
+                <div style="margin-top: auto;">
+                    <a href="#" style="color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold);">READ THE STORY -></a>
+                </div>
+            </div>
+
+            <!-- 2. LIVE PULSE (The "Alive" Factor) -->
+            <div class="card">
+                <div class="wireframe-label">Live Telemetry</div>
+                <div style="margin-top: 20px;">
+                    <div style="display: flex; align-items: center; color: red; font-weight: bold; letter-spacing: 1px;">
+                        <span class="pulse-dot"></span> LIVE HEART RATE
+                    </div>
+                </div>
+                <div style="font-size: 80px; font-weight: 200; font-family: monospace;">145</div>
+                <div class="stat-label">Zone 3 • Training</div>
+            </div>
+
+            <!-- 3. COUNTDOWN -->
+            <div class="card">
+                <div class="wireframe-label">Countdown</div>
+                <div style="display: flex; flex-direction: column; height: 100%; justify-content: center;">
+                    <div class="stat-value">842</div>
+                    <div class="stat-label">Days to Everest</div>
+                </div>
+            </div>
+
+            <!-- 4. LATEST VISUAL (Grid Filler) -->
+            <div class="card card-large">
+                <div class="wireframe-label">Latest Visual Log</div>
+                <div style="height: 100%; background: #222; display: flex; align-items: center; justify-content: center; color: #555;">
+                   [ IMAGE: CLIMBING IN SNOW ]
+                </div>
+                <div style="position: absolute; bottom: 24px; left: 24px;">
+                    <h3>DENALI PREP</h3>
+                </div>
+            </div>
+
+             <!-- 5. SOCIAL -->
+             <div class="card card-wide">
+                <div class="wireframe-label">Social / Updates</div>
+                <p style="color: #ccc; margin-top: 20px;">@sunith: Training block 4 complete. Legs are feeling the altitude simulation layout.</p>
+                <div class="stat-label">INSTAGRAM • 2H AGO</div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

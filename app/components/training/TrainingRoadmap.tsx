@@ -9,7 +9,7 @@ const PHASES = [
   {
     id: 'p1',
     title: 'Broken Talus',
-    date: 'Nov 2025',
+    date: 'NOV 2025',
     status: 'complete',
     icon: Anchor,
     desc: 'Surgery & non-weight bearing.',
@@ -17,7 +17,7 @@ const PHASES = [
   {
     id: 'p2',
     title: 'Rehabilitation',
-    date: 'Jan 2026',
+    date: 'JAN 2026',
     status: 'current',
     icon: TrendingUp,
     desc: 'Mobility & strength rebuild.',
@@ -26,7 +26,7 @@ const PHASES = [
   {
     id: 'p3',
     title: 'Base Building',
-    date: 'Mar 2026',
+    date: 'MAR 2026',
     status: 'upcoming',
     icon: Mountain,
     desc: 'Aerobic capacity & hiking.',
@@ -34,7 +34,7 @@ const PHASES = [
   {
     id: 'p4',
     title: 'Technical Prep',
-    date: '2027',
+    date: 'EARLY 2027',
     status: 'upcoming',
     icon: ActivityIcon,
     desc: 'Glacier travel & altitude.',
@@ -42,7 +42,7 @@ const PHASES = [
   {
     id: 'p5',
     title: 'Everest Expedition',
-    date: '2028',
+    date: 'MAY 2027',
     status: 'upcoming',
     icon: Flag,
     desc: 'The summit push.',
@@ -67,19 +67,12 @@ function ActivityIcon(props: React.SVGProps<SVGSVGElement>) {
 
 export function TrainingRoadmap() {
   return (
-    <div className="bg-glass-panel border border-white/5 rounded-2xl overflow-hidden p-8 h-full ring-1 ring-white/10 flex flex-col">
-      <div className="mb-8">
-        <h3 className="text-lg font-medium text-white tracking-wide mb-2">
-          THE ROADMAP
-        </h3>
-        <p className="text-sm text-gray-400">
-          Strategic phases from recovery to summit.
-        </p>
-      </div>
+    <div className="flex flex-col gap-6">
+      {/* Narrative Header (Hidden mostly as main section handles it, but good for context) */}
 
-      <div className="relative flex flex-col py-4">
+      <div className="relative flex flex-col pl-4">
         {/* Vertical Line */}
-        <div className="absolute left-[19px] top-4 bottom-4 w-px bg-white/10 z-0" />
+        <div className="absolute left-[27px] top-4 bottom-4 w-px border-l border-dashed border-white/20 z-0" />
 
         {PHASES.map((phase, index) => {
           const isComplete = phase.status === 'complete';
@@ -94,50 +87,66 @@ export function TrainingRoadmap() {
               transition={{ delay: index * 0.1 }}
               viewport={{ once: true }}
               className={cn(
-                'relative z-10 flex gap-6 group',
+                'relative z-10 flex gap-6 group mb-8 last:mb-0',
                 !isComplete &&
                   !isCurrent &&
-                  'opacity-50 hover:opacity-100 transition-opacity'
+                  'opacity-60 hover:opacity-100 transition-opacity'
               )}
             >
               {/* Icon Bubble */}
               <div
                 className={cn(
-                  'w-10 h-10 rounded-full flex items-center justify-center border transition-all duration-300',
+                  'w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-300 bg-[#0a0a0a]',
                   isComplete
-                    ? 'bg-summit-gold-500 text-black border-summit-gold-500'
+                    ? 'border-summit-gold text-summit-gold'
                     : isCurrent
-                      ? 'bg-black text-summit-gold-400 border-summit-gold-400 shadow-[0_0_15px_rgba(234,179,8,0.3)]'
-                      : 'bg-black text-gray-600 border-gray-800'
+                      ? 'border-white text-white shadow-[0_0_15px_rgba(255,255,255,0.2)]'
+                      : 'border-white/10 text-gray-600 group-hover:border-white/30'
                 )}
               >
-                <Icon className="w-5 h-5" />
+                <Icon className="w-6 h-6" />
               </div>
 
               {/* Content */}
-              <div className="flex-1 pt-1 pb-8">
-                <div className="flex justify-between items-center mb-1">
-                  <h4
-                    className={cn(
-                      'text-base font-medium transition-colors',
-                      isCurrent ? 'text-white' : 'text-gray-300'
-                    )}
-                  >
-                    {phase.title}
-                  </h4>
-                  <span className="text-xs font-mono text-gray-500 uppercase">
-                    {phase.date}
-                  </span>
+              <div className="flex-1 pt-2">
+                <div className="flex justify-between items-start mb-1">
+                  <div>
+                    <h4
+                      className={cn(
+                        'text-xl font-oswald uppercase tracking-wide transition-colors',
+                        isCurrent
+                          ? 'text-white'
+                          : isComplete
+                            ? 'text-summit-gold'
+                            : 'text-gray-400'
+                      )}
+                    >
+                      {phase.title}
+                    </h4>
+                    <span className="text-xs font-mono text-gray-500 tracking-widest">
+                      {phase.date}
+                    </span>
+                  </div>
+
+                  {isCurrent && (
+                    <div className="px-2 py-1 bg-white/10 border border-white/20 text-[10px] font-mono text-white animate-pulse">
+                      ACTIVE
+                    </div>
+                  )}
                 </div>
 
-                <p className="text-sm text-gray-500 mb-3">{phase.desc}</p>
+                <p className="text-sm text-gray-500 mt-2 font-light leading-relaxed max-w-xs">
+                  {phase.desc}
+                </p>
 
                 {/* Progress Bar for Current Phase */}
                 {isCurrent && phase.progress && (
-                  <div className="h-1 bg-gray-800 rounded-full overflow-hidden w-full max-w-[200px]">
-                    <div
-                      className="h-full bg-summit-gold-400 rounded-full"
-                      style={{ width: `${phase.progress}%` }}
+                  <div className="mt-4 h-1 bg-white/10 rounded-full overflow-hidden w-full max-w-[200px]">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${phase.progress}%` }}
+                      transition={{ duration: 1.5, ease: 'easeOut' }}
+                      className="h-full bg-summit-gold rounded-full"
                     />
                   </div>
                 )}
@@ -145,6 +154,11 @@ export function TrainingRoadmap() {
             </motion.div>
           );
         })}
+      </div>
+
+      {/* Final target decoration */}
+      <div className="mt-4 pl-[74px] italic text-xs text-gray-600 font-mono">
+        ...THE HORIZON AWAITS
       </div>
     </div>
   );

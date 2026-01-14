@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
 import { H3, Body } from '../atoms/Typography';
+import { NewsletterSubscriptionForm } from './NewsletterSubscriptionForm';
 
 interface FooterSection {
   title: string;
@@ -37,10 +38,26 @@ const footerSections: FooterSection[] = [
   {
     title: 'Follow',
     links: [
-      { label: 'Instagram', href: 'https://instagram.com/summitchronicles', external: true },
-      { label: 'YouTube', href: 'https://youtube.com/@summitchronicles', external: true },
-      { label: 'Strava', href: 'https://strava.com/athletes/summitchronicles', external: true },
-      { label: 'LinkedIn', href: 'https://linkedin.com/in/summitchronicles', external: true },
+      {
+        label: 'Instagram',
+        href: 'https://instagram.com/summitchronicles',
+        external: true,
+      },
+      {
+        label: 'YouTube',
+        href: 'https://youtube.com/@summitchronicles',
+        external: true,
+      },
+      {
+        label: 'Strava',
+        href: 'https://strava.com/athletes/summitchronicles',
+        external: true,
+      },
+      {
+        label: 'LinkedIn',
+        href: 'https://linkedin.com/in/summitchronicles',
+        external: true,
+      },
     ],
   },
 ];
@@ -62,8 +79,9 @@ const Footer: React.FC = () => {
               <H3 className="text-white">Summit Chronicles</H3>
             </div>
             <Body className="text-gray-300 mb-6 leading-relaxed">
-              Following the systematic journey to conquer the Seven Summits, one mountain at a time.
-              Join me as I document the preparation, challenges, and triumphs of high-altitude mountaineering.
+              Following the systematic journey to conquer the Seven Summits, one
+              mountain at a time. Join me as I document the preparation,
+              challenges, and triumphs of high-altitude mountaineering.
             </Body>
             <div className="flex space-x-4">
               <a
@@ -129,23 +147,13 @@ const Footer: React.FC = () => {
           ))}
         </div>
 
-        {/* Newsletter Signup */}
-        <div className="border-t border-gray-700 pt-12 mb-12">
-          <div className="max-w-md">
-            <h4 className="font-semibold text-white mb-2">Stay Updated</h4>
-            <p className="text-gray-300 text-sm mb-4">
-              Get weekly updates on training, expeditions, and mountain stories.
-            </p>
-            <div className="flex gap-2">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-alpine-blue focus:border-transparent"
-              />
-              <Button variant="summit" size="sm">
-                Subscribe
-              </Button>
-            </div>
+        {/* Newsletter Signup - Standardized Component */}
+        <div className="border-t border-white/10 pt-12 mb-12">
+          <div className="max-w-xl">
+            <NewsletterSubscriptionForm
+              variant="inline"
+              className="bg-transparent border-0 p-0"
+            />
           </div>
         </div>
 
@@ -155,13 +163,22 @@ const Footer: React.FC = () => {
             <p>&copy; {currentYear} Summit Chronicles. All rights reserved.</p>
           </div>
           <div className="flex space-x-6">
-            <Link href="/privacy" className="hover:text-white transition-colors duration-300">
+            <Link
+              href="/privacy"
+              className="hover:text-white transition-colors duration-300"
+            >
               Privacy Policy
             </Link>
-            <Link href="/terms" className="hover:text-white transition-colors duration-300">
+            <Link
+              href="/terms"
+              className="hover:text-white transition-colors duration-300"
+            >
               Terms of Service
             </Link>
-            <Link href="/contact" className="hover:text-white transition-colors duration-300">
+            <Link
+              href="/contact"
+              className="hover:text-white transition-colors duration-300"
+            >
               Contact
             </Link>
           </div>
