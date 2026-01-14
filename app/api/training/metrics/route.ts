@@ -602,6 +602,30 @@ function getEnhancedFallbackMetrics() {
         timeframe: '3 months',
       },
     ],
+    recentActivities: [
+      {
+        activityId: 101,
+        activityName: 'Base Training Run',
+        startTimeLocal: new Date().toISOString(),
+        distance: 5000,
+        duration: 1800,
+        elevationGain: 150,
+        averageHR: 145,
+        activityType: { typeKey: 'running' },
+        description: 'Fallback: Simulating steady state cardio.',
+      },
+      {
+        activityId: 102,
+        activityName: 'Strength & Conditioning',
+        startTimeLocal: new Date(Date.now() - 86400000).toISOString(),
+        distance: 0,
+        duration: 2700,
+        elevationGain: 0,
+        averageHR: 120,
+        activityType: { typeKey: 'fitness_equipment' },
+        description: 'Fallback: Upper body focus.',
+      },
+    ],
   };
 }
 
