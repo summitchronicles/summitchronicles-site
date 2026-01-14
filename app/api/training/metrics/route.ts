@@ -21,19 +21,32 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // --- HYBRID IMPLEMENTATION ---
-    // 1. Fetch fast activities from Intervals.icu
-    const activitiesPromise = IntervalsService.getActivities(30);
+    // 1. Fetch data from Garmin Health Service (which now handles both health & activities)
+    const garminServiceUrl = process.env.GARMIN_SERVICE_URL;
 
-    // 2. Fetch specific health metrics from Garmin Health Service
-    const garminHealthPromise = fetchGarminHealthMetrics();
+    if (!garminServiceUrl) {
+      throw new Error('GARMIN_SERVICE_URL is not configured');
+    }
 
-    const [activitiesData, garminHealth] = await Promise.all([
-      activitiesPromise,
-      garminHealthPromise,
+    // Parallel fetch: Health Metrics + Activities
+    const [healthRes, activitiesRes] = await Promise.all([
+      fetch(`${garminServiceUrl}/health`, { next: { revalidate: 0 } }),
+      fetch(`${garminServiceUrl}/activities`, { next: { revalidate: 0 } }),
     ]);
 
-    // 3. Use Raw VO2 Max from Garmin (fallback to manual if missing)
+    let garminHealth: any = {};
+    if (healthRes.ok) {
+      const healthData = await healthRes.json();
+      if (healthData.success) garminHealth = healthData.metrics;
+    }
+
+    let activitiesData: any[] = [];
+    if (activitiesRes.ok) {
+      const actData = await activitiesRes.json();
+      if (actData.success) activitiesData = actData.activities;
+    }
+
+    // 3. Use Raw VO2 Max from Garmin
     const rawVo2 = garminHealth.vo2Max;
     const manualVo2 = process.env.VO2_MAX_MANUAL
       ? parseFloat(process.env.VO2_MAX_MANUAL)
@@ -50,14 +63,15 @@ export async function GET(request: NextRequest) {
     // Calculate metrics
     const metrics = calculateTrainingMetrics(
       activitiesData.map((a) => ({
-        activityId: a.id,
-        activityName: a.name,
-        startTimeLocal: a.start_date_local,
+        activityId: a.activityId,
+        activityName: a.activityName,
+        startTimeLocal: a.startTimeLocal,
         distance: a.distance,
-        duration: a.moving_time,
-        elevationGain: a.total_elevation_gain,
-        averageHR: a.average_heartrate,
-        activityType: { typeKey: a.type.toLowerCase() },
+        duration: a.duration,
+        elevationGain: a.elevationGain,
+        averageHR: a.averageHR,
+        activityType: { typeKey: (a.activityType || 'unknown').toLowerCase() },
+        description: a.description,
       })),
       garminMetrics
     );
