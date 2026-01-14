@@ -83,7 +83,7 @@ export class IntervalsService {
 
       const response = await fetch(url, {
         headers: getHeaders(),
-        next: { revalidate: 300 }, // Cache for 5 mins
+        next: { revalidate: 0 }, // No cache for debugging
       });
 
       if (!response.ok) {
@@ -92,8 +92,8 @@ export class IntervalsService {
 
       const activities: IntervalsActivity[] = await response.json();
 
-      // Sort specific logic if needed, API returns chronologically usually
-      return activities.reverse().slice(0, limit);
+      // API usually returns Newest -> Oldest. Keep as is.
+      return activities.slice(0, limit);
     } catch (error) {
       console.error('Error fetching activities:', error);
       return [];
