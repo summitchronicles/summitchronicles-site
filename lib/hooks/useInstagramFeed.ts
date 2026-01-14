@@ -6,7 +6,7 @@ export interface InstagramPost {
   media_url: string;
   permalink: string;
   timestamp: string;
-  media_type: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM';
+  media_type: 'IMAGE' | 'VIDEO' | 'CAROUSEL_ALBUM' | 'REEL';
   thumbnail_url?: string;
   isPinned?: boolean;
 }
