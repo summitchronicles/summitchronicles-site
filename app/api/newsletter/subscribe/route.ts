@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
   // Apply rate limiting (generous for newsletter signups)
   const clientIp = getClientIp(request);
-  const isAllowed = await checkRateLimit(clientIp, 'generous');
+  const isAllowed = await checkRateLimit(clientIp);
 
   if (!isAllowed) {
     return createRateLimitResponse();

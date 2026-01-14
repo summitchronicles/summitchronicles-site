@@ -10,7 +10,7 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: NextRequest) {
   // Apply rate limiting
   const clientIp = getClientIp(request);
-  const isAllowed = await checkRateLimit(clientIp, 'standard');
+  const isAllowed = await checkRateLimit(clientIp);
 
   if (!isAllowed) {
     return createRateLimitResponse();

@@ -26,7 +26,7 @@ interface SyncResult {
 export async function POST(request: NextRequest) {
   // Apply rate limiting
   const clientIp = getClientIp(request);
-  const isAllowed = await checkRateLimit(clientIp, 'strict');
+  const isAllowed = await checkRateLimit(clientIp);
 
   if (!isAllowed) {
     return createRateLimitResponse();

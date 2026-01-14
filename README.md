@@ -2,7 +2,7 @@
 
 [![CI/CD Pipeline](https://github.com/summitchronicles/summitchronicles-site/actions/workflows/ci.yml/badge.svg)](https://github.com/summitchronicles/summitchronicles-site/actions/workflows/ci.yml)
 
-🌐 **Production**: [summitchronicles.com](https://summitchronicles.com)  
+🌐 **Production**: [summitchronicles.com](https://summitchronicles.com)
 🌐 **Staging**: [staging.summit-chronicles.vercel.app](https://staging.summit-chronicles.vercel.app)
 
 A modern Next.js application documenting the Seven Summits journey, featuring real-time Strava integration, AI-powered search, and comprehensive expedition tracking.
@@ -11,7 +11,7 @@ A modern Next.js application documenting the Seven Summits journey, featuring re
 
 Summit Chronicles is a full-stack mountaineering blog that combines:
 - **Personal expedition stories** and training logs
-- **Real-time Strava activity tracking** with automatic sync
+- **Hybrid Data Pipeline** (Intervals.icu + Garmin Python Script)
 - **AI-powered site search** using RAG (Retrieval Augmented Generation)
 - **Newsletter subscription** with Buttondown integration
 - **Modern, responsive design** with mountain-themed branding
@@ -30,7 +30,7 @@ Summit Chronicles is a full-stack mountaineering blog that combines:
 
 **Backend & APIs:**
 - **Supabase** (PostgreSQL with vector extensions)
-- **Strava API** for fitness data integration
+- **Intervals.icu API** for fitness data integration
 - **Cohere AI** for embeddings and text generation
 - **Next.js API Routes** for server-side logic
 
@@ -45,10 +45,7 @@ Summit Chronicles is a full-stack mountaineering blog that combines:
 summit-chronicles/
 ├── app/                          # Next.js App Router
 │   ├── api/                     # API routes
-│   │   ├── strava/             # Strava integration endpoints
-│   │   │   ├── callback/       # OAuth callback handler
-│   │   │   ├── recent/         # Recent activities sync
-│   │   │   └── stats/          # Aggregated statistics
+│   │   ├── training/           # Training metrics endpoints
 │   │   ├── ask/                # AI-powered search endpoint
 │   │   └── db/                 # Database operations
 │   ├── components/             # React components
@@ -57,7 +54,7 @@ summit-chronicles/
 │   ├── gear/                   # Gear reviews and guides
 │   └── ask/                    # AI search interface
 ├── lib/                        # Utility libraries
-│   ├── strava.ts              # Strava API integration
+│   ├── services/intervals.ts   # Intervals.icu integration
 │   ├── embeddings.ts          # AI/vector operations
 │   ├── supabaseServer.ts      # Server-side DB client
 │   └── supabaseBrowser.ts     # Client-side DB client
@@ -73,7 +70,8 @@ summit-chronicles/
 - Node.js 20+
 - npm or yarn
 - Supabase account
-- Strava Developer account
+- Intervals.icu API Key (Pro or Free)
+- Garmin Connect credentials (for Python script)
 - Cohere API account
 - Vercel account (for deployment)
 
@@ -87,11 +85,13 @@ SUPABASE_URL=your_supabase_project_url
 SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
-# Strava API
-STRAVA_CLIENT_ID=your_strava_client_id
-STRAVA_CLIENT_SECRET=your_strava_client_secret
-STRAVA_ACCESS_TOKEN=your_initial_access_token
-STRAVA_REFRESH_TOKEN=your_initial_refresh_token
+# Intervals.icu
+INTERVALS_ICU_API_KEY=your_api_key
+INTERVALS_ICU_ATHLETE_ID=your_athlete_id
+
+# Garmin (For Python Script)
+GARMIN_USERNAME=your_garmin_email
+GARMIN_PASSWORD=your_garmin_password
 
 # AI Services
 COHERE_API_KEY=your_cohere_api_key
@@ -130,25 +130,10 @@ The application will be available at `http://localhost:3000`.
 The project uses Supabase with the following key tables:
 
 ```sql
--- Strava activities storage
-CREATE TABLE strava_activities (
-  id BIGINT PRIMARY KEY,
-  name TEXT NOT NULL,
-  type TEXT NOT NULL,
-  distance DOUBLE PRECISION DEFAULT 0,
-  moving_time INTEGER DEFAULT 0,
-  total_elevation_gain INTEGER DEFAULT 0,
-  start_date TIMESTAMPTZ,
-  average_speed DOUBLE PRECISION
-);
+-- Intervals.icu activities (Optional, primarily fetched live)
+-- Table definitions if needed for caching
 
--- OAuth token management
-CREATE TABLE strava_tokens (
-  id INTEGER PRIMARY KEY,
-  access_token TEXT NOT NULL,
-  refresh_token TEXT NOT NULL,
-  expires_at INTEGER NOT NULL
-);
+-- Token management (Optional, mostly stateless now)
 
 -- Content chunks for AI search (with pgvector extension)
 CREATE TABLE chunks (
@@ -164,19 +149,13 @@ CREATE TABLE chunks (
 
 ## 🔌 Integrations
 
-### Strava API Integration
-
-The Strava integration (`lib/strava.ts`) handles:
-
-- **OAuth 2.0 flow** with automatic token refresh
-- **Activity synchronization** with incremental updates
-- **Data persistence** in Supabase database
-- **Statistics aggregation** for runs, hikes, and rides
+### Hybrid Data Pipeline
+The site uses a dual-source approach for training data:
+1. **Intervals.icu**: Fast retrieval of recent activities and wellness data.
+2. **Garmin Connect (Python)**: Deep analysis of health metrics (Body Battery, Sleep) via a background script.
 
 **Key endpoints:**
-- `GET /api/strava/recent` - Syncs and returns recent activities
-- `GET /api/strava/stats` - Aggregated statistics across all activities
-- `GET /api/strava/callback` - OAuth callback handler
+- `GET /api/training/metrics` - Aggregated training and health metrics.
 
 ### AI-Powered Search
 
@@ -239,7 +218,7 @@ npm run release:preflight # Pre-deployment checks
 
 **CI/CD Pipeline:**
 - Automated testing on PR and push to main
-- Staging deployment for pull requests  
+- Staging deployment for pull requests
 - Production deployment on main branch merge
 
 ## 🚢 Deployment
