@@ -74,7 +74,7 @@ export class IntervalsService {
     try {
       const today = format(new Date(), 'yyyy-MM-dd');
       const monthAgo = format(
-        new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
+        new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
         'yyyy-MM-dd'
       );
 
