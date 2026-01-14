@@ -33,15 +33,17 @@ export async function GET(request: NextRequest) {
       bodyBatteryPromise,
     ]);
 
-    // 3. Get Manual Override for VO2 Max
+    // 3. Use Raw VO2 Max from Garmin (fallback to manual if missing)
+    const rawVo2 = garminHealth.vo2Max;
     const manualVo2 = process.env.VO2_MAX_MANUAL
       ? parseFloat(process.env.VO2_MAX_MANUAL)
       : 45.0;
 
     const garminMetrics = {
       bodyBattery: garminHealth.bodyBattery ?? 0,
+      bodyBatteryTimeline: garminHealth.bodyBatteryTimeline || [],
       stressScore: garminHealth.stressScore ?? 0,
-      vo2Max: manualVo2,
+      vo2Max: rawVo2 || manualVo2,
       hrvStatus: garminHealth.hrvStatus ?? 'N/A',
     };
 
@@ -147,9 +149,10 @@ function calculateTrainingMetrics(activities: any[], garminMetrics: any) {
     predictions: calculatePredictions(activities),
     // Pass through wellness metrics from Garmin
     bodyBattery: garminMetrics.bodyBattery,
+    bodyBatteryTimeline: garminMetrics.bodyBatteryTimeline,
     stressScore: garminMetrics.stressScore,
     hrvStatus: garminMetrics.hrvStatus,
-    vo2Max: garminMetrics.vo2Max, // Add VO2 Max to root level for easy access
+    vo2Max: garminMetrics.vo2Max, // Raw VO2 Max from Garmin (or manual fallback)
     // Add Recent Activities (Top 5 sorted by date)
     recentActivities: [...activities]
       .sort(
@@ -733,10 +736,16 @@ async function fetchBodyBatteryFromPython(): Promise<any> {
 
           const hrvStatus = hrv_data?.hrvSummary?.status || 'Balanced';
 
+          // Extract VO2 Max from user_summary or stats
+          const vo2MaxValue =
+            user_summary?.vo2MaxValue || user_summary?.vo2Max || null;
+
           resolve({
             bodyBattery: bodyBatteryValue,
+            bodyBatteryTimeline: body_battery || [],
             stressScore: stressValue,
             hrvStatus: hrvStatus,
+            vo2Max: vo2MaxValue,
           });
         } catch (e) {
           console.error(`Failed to parse Python output: ${e}`);

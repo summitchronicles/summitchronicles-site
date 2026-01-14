@@ -9,10 +9,14 @@ if (!API_KEY || !ATHLETE_ID) {
   console.warn('Intervals.icu API key or Athlete ID missing!');
 }
 
-// Basic Auth Header: "Basic " + base64("API_KEY:any_string")
-// Intervals.icu uses "API_KEY" as username
+// Basic Auth Header: base64("API_KEY_VALUE:")
+// Intervals.icu uses the API key itself as the username, with empty password
 const getHeaders = () => {
-  const authString = Buffer.from(`API_KEY:${API_KEY}`).toString('base64');
+  if (!API_KEY) {
+    throw new Error('INTERVALS_ICU_API_KEY is not configured');
+  }
+  // Correct format: base64(api_key_value:)
+  const authString = Buffer.from(`${API_KEY}:`).toString('base64');
   return {
     Authorization: `Basic ${authString}`,
     'Content-Type': 'application/json',
