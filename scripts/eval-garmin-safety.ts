@@ -40,7 +40,7 @@ async function checkGarminHealth() {
     console.error(
       '   ❌ Connection failed. Ensure server is running on port 3000.'
     );
-    console.error('   Error:', e.message);
+    console.error('   Error:', (e as any).message);
     process.exit(1);
   }
 

@@ -163,7 +163,7 @@ export default function TrainingPage() {
               PHYSIOLOGICAL CAPACITY TIMELINE
             </div>
             {/* The Visualization */}
-            <AscentVisualization vo2Max={metrics?.metrics?.vo2Max} />
+            <AscentVisualization vo2Max={metrics?.vo2Max} />
           </div>
         </div>
       </section>

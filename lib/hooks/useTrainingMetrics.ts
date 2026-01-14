@@ -56,6 +56,27 @@ interface TrainingMetrics {
       ptSessions: number;
     };
   };
+
+  bodyBattery?: number;
+  stressScore?: number;
+  vo2Max?: number;
+  hrvStatus?: string;
+  advancedPerformance?: {
+    vo2Max: { value: number; trend: string; change: number; unit: string };
+    powerOutput: { value: number; trend: string; change: number; unit: string };
+    lactateThreshold: {
+      value: number;
+      trend: string;
+      change: number;
+      unit: string;
+    };
+    recoveryRate: {
+      value: number;
+      trend: string;
+      change: number;
+      unit: string;
+    };
+  };
 }
 
 interface UseTrainingMetricsResult {
