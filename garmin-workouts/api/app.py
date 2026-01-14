@@ -104,6 +104,48 @@ def health():
         print(f"Error: {str(e)}", file=sys.stderr)
         return jsonify({'error': str(e)}), 500
 
+@app.route('/activities', methods=['GET'])
+def activities():
+    """Fetch recent activities from Garmin"""
+    username = os.getenv('GARMIN_USERNAME')
+    password = os.getenv('GARMIN_PASSWORD')
+
+    if not username or not password:
+        return jsonify({'error': 'GARMIN_USERNAME and GARMIN_PASSWORD must be set'}), 500
+
+    try:
+        # Initialize and login
+        garmin = Garmin(username, password)
+        garmin.login()
+
+        # Get activities (limit to 10)
+        # 0 is the start index, 10 is the limit
+        activities = garmin.get_activities(0, 10)
+
+        # Simplify the response structure
+        simple_activities = []
+        for a in activities:
+            simple_activities.append({
+                'activityId': a.get('activityId'),
+                'activityName': a.get('activityName'),
+                'startTimeLocal': a.get('startTimeLocal'),
+                'distance': a.get('distance'),
+                'duration': a.get('duration'),
+                'elevationGain': a.get('elevationGain'),
+                'averageHR': a.get('averageHR'),
+                'activityType': a.get('activityType', {}).get('typeKey'),
+                'description': a.get('description'),
+            })
+
+        return jsonify({
+            'success': True,
+            'activities': simple_activities
+        })
+
+    except Exception as e:
+        print(f"Error fetching activities: {str(e)}", file=sys.stderr)
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/ping', methods=['GET'])
 def ping():
     """Health check endpoint"""
