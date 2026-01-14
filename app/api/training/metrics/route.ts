@@ -630,14 +630,30 @@ function getEnhancedFallbackMetrics() {
 }
 
 async function fetchBodyBatteryFromPython(): Promise<any> {
+  // 1. Check if running on Vercel (Production/Preview)
+  if (process.env.VERCEL) {
+    console.log(
+      'Running on Vercel, skipping Python script (unavailable runtime).'
+    );
+    return {};
+  }
+
   const pythonScriptPath = path.join(
     process.cwd(),
     'garmin-workouts/garminworkouts/scripts/fetch_training_data.py'
   );
 
-  // Use validated credentials from centralized config
-  const username = config.GARMIN_USERNAME;
-  const password = config.GARMIN_PASSWORD;
+  // Use validated credentials from centralized config (or skip if missing)
+  let username, password;
+  try {
+    username = config.GARMIN_USERNAME;
+    password = config.GARMIN_PASSWORD;
+  } catch (e) {
+    console.warn(
+      'Garmin credentials missing or invalid, skipping Python script.'
+    );
+    return {};
+  }
 
   // Use the venv python where garminconnect is installed
   const venvPython = path.join(
@@ -677,6 +693,12 @@ async function fetchBodyBatteryFromPython(): Promise<any> {
 
     python.stderr.on('data', (data) => {
       error += data.toString();
+    });
+
+    // CRITICAL: Handle spawn errors (e.g., python not found)
+    python.on('error', (err) => {
+      console.error('Failed to start Python process:', err);
+      resolve({});
     });
 
     python.on('close', (code) => {
