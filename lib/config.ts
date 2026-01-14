@@ -6,7 +6,9 @@ import { z } from 'zod';
  */
 const garminSchema = z.object({
   GARMIN_USERNAME: z.string().email('Invalid Garmin email address'),
-  GARMIN_PASSWORD: z.string().min(6, 'Garmin password must be at least 6 characters'),
+  GARMIN_PASSWORD: z
+    .string()
+    .min(6, 'Garmin password must be at least 6 characters'),
 });
 
 /**
@@ -43,13 +45,13 @@ class Config {
       parsed.error.errors.forEach((err) => {
         console.error(`  ⚠️  ${err.path.join('.')}: ${err.message}`);
       });
+      throw new Error(
         'Garmin credentials are required. Please set GARMIN_USERNAME and GARMIN_PASSWORD environment variables.'
       );
       // Fallback for build time / restricted envs if we don't want to crash:
       // this._garminUsername = '';
       // this._garminPassword = '';
       // return;
-    }
     }
 
     this._garminUsername = parsed.data.GARMIN_USERNAME;
