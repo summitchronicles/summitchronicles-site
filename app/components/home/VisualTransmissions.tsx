@@ -36,8 +36,8 @@ export const VisualTransmissions = () => {
 
   const displayData = {
     // The API now returns bodyBattery and stressScore at the root level of metrics
-    bodyBattery: apiMetrics?.bodyBattery ?? 53, // Fallback to 53 if undefined/null
-    stressScore: apiMetrics?.stressScore ?? 24, // Fallback
+    bodyBattery: apiMetrics?.bodyBattery || 53, // Handle 0/null/undefined
+    stressScore: apiMetrics?.stressScore || 24, // Handle 0/null/undefined
     trainingStatus:
       metrics?.trainingPhases?.find((p) => p.status === 'current')?.focus ||
       'Recovery',
