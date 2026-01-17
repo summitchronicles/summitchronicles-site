@@ -1,113 +1,126 @@
-import Image from 'next/image';
-import { getPostBySlugServer, hasGeneratedPostsServer } from '@/lib/posts-server';
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 import { notFound } from 'next/navigation';
-import { RedBullBlogPost, CinematicBlogPost } from '../../components/blog';
+import { RedBullBlogPost } from '../../components/blog';
 
-// Convert generated post to component format
-function convertToComponentFormat(post: any) {
-  // Extract title from the content
-  const titleMatch = post.content.raw.match(/🔹 Blog Title:\s*(.*?)(?=\n|$)/);
-  const title = titleMatch ? titleMatch[1].trim() : post.slug.replace(/-/g, ' ');
+// Force dynamic rendering since we are reading files changed at runtime
+// Force dynamic rendering since we are reading files changed at runtime
+export const dynamic = 'force-dynamic';
 
-  // Extract subtitle
-  const subtitleMatch = post.content.raw.match(/🔹 Subtitle:\s*(.*?)(?=🔹|$)/s);
-  const subtitle = subtitleMatch ? subtitleMatch[1].trim() : '';
+function parseMarkdownToRedBull(mdContent: string, slug: string) {
+  // Normalize newlines
+  const text = mdContent.replace(/\r\n/g, '\n');
 
-  // Extract location
-  const locationMatch = post.content.raw.match(/🔹 Location:\s*(.*?)(?=🔹|$)/s);
-  const location = locationMatch ? locationMatch[1].trim() : 'Training Grounds, California';
+  // Split into lines to process line-by-line
+  const lines = text.split('\n');
 
-  // Extract intro
-  const introMatch = post.content.raw.match(/🔹 Introduction[^:]*:\s*(.*?)(?=⸻|🔹|$)/s);
-  const intro = introMatch ? introMatch[1].trim() : '';
+  const sections: any[] = [];
+  let currentSection = { title: '', content: '', image: null as string | null };
+  let intro = '';
+  let isIntro = true;
+  let firstImage = null;
 
-  // Parse sections from the raw content and extract hero image
-  const sections: Array<{
-    title: string;
-    content: string;
-    pullQuote: string | null;
-    image: string | null;
-  }> = [];
-  let heroImage = '/stories/default.jpg';
-  const sectionMatches = post.content.raw.match(/🔹 Section \d+[\s\S]*?(?=🔹 Section \d+|🏷️|$)/g);
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
 
-  if (sectionMatches) {
-    sectionMatches.forEach((sectionText: string, index: number) => {
-      // Extract section title
-      const titleMatch = sectionText.match(/Section Title:\s*(.*?)(?=\n|$)/);
-      const sectionTitle = titleMatch ? titleMatch[1].trim() : `Section ${index + 1}`;
+    // Check for Image: ![alt](url)
+    const imgMatch = line.match(/!\[.*?\]\((.*?)\)/);
+    if (imgMatch) {
+      const imgUrl = imgMatch[1];
+      if (!firstImage) firstImage = imgUrl; // Capture first image for Hero
 
-      // Extract content - everything between "Content:" and next bullet point or section break
-      const contentMatch = sectionText.match(/Content:\s*([\s\S]*?)(?=\t•\t(?:Image|Pull Quote)|⸻|$)/);
-      const sectionContent = contentMatch ? contentMatch[1].trim() : '';
+      if (isIntro) {
+        // allow image in intro for hero extraction but don't add to text
+      } else {
+        currentSection.image = imgUrl;
+      }
+      continue; // Skip adding image line to text
+    }
 
-      // Extract pull quote if exists
-      const pullQuoteMatch = sectionText.match(/Pull Quote:\s*"([^"]*?)"/);
-      const pullQuote = pullQuoteMatch ? pullQuoteMatch[1] : null;
+    // Check for Headers: ## Title OR **Title**
+    // Detect bold headers that are stand-alone lines (likely headers)
+    const isHeader =
+      line.startsWith('## ') ||
+      (line.startsWith('**') && line.endsWith('**') && line.length < 100);
 
-      // Extract image if exists
-      const imageMatch = sectionText.match(/Image:\s*([^\n\t]+)/);
-      const image = imageMatch ? `/content/posts/${post.slug}/images/${imageMatch[1].trim()}` : null;
-
-      // Use first section image as hero image if not set
-      if (image && heroImage === '/stories/default.jpg') {
-        heroImage = image;
+    if (isHeader) {
+      // Save previous section if it has content
+      if (!isIntro) {
+        if (currentSection.content) sections.push({ ...currentSection });
+        currentSection = { title: '', content: '', image: null };
       }
 
-      if (sectionTitle && sectionContent) {
-        sections.push({
-          title: sectionTitle,
-          content: sectionContent,
-          pullQuote: pullQuote,
-          image: image
-        });
+      isIntro = false;
+      // Clean title
+      currentSection.title = line.replace(/^##\s+/, '').replace(/\*\*/g, '');
+    } else {
+      // Content
+      if (isIntro) {
+        // Skip metadata lines/dates if they look like metadata
+        if (!line.startsWith('---') && !line.match(/^\w+ \d+, \d{4}$/)) {
+          intro += line + '\n\n';
+        }
+      } else {
+        currentSection.content += line + '\n\n';
       }
-    });
+    }
   }
 
-  return {
-    title: title,
-    excerpt: subtitle,
-    location: location,
-    author: { name: 'Sunith Kumar' },
-    publishedAt: new Date().toISOString(),
-    readTime: post.metadata?.readTime || 5,
-    categories: [{ title: 'STORIES' }],
-    mainImage: heroImage,
-    content: {
-      intro: intro,
-      sections: sections
-    }
-  };
+  // Push last section
+  if (!isIntro && currentSection.content) {
+    sections.push({ ...currentSection });
+  }
+
+  // Fallback: If no sections found (everything was intro?), create one section from intro content split?
+  // Current logic: Just return intro. The component renders intro.
+  // Optimization: If intro is HUGE and no sections, maybe split it?
+  // But safest is to leave as is.
+
+  return { intro: intro.trim(), sections, introImage: firstImage };
 }
 
 export default function BlogPost({ params }: { params: { slug: string } }) {
-  // Try to get generated post first
-  if (hasGeneratedPostsServer()) {
-    const post = getPostBySlugServer(params.slug);
+  const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
+  const filepath = path.join(BLOG_DIR, `${params.slug}.md`);
 
-    if (post) {
-      const componentData = convertToComponentFormat(post);
-      const style = post.metadata?.style || 'redbull';
-
-      return (
-        <div className="min-h-screen bg-black">
-          {style === 'cinematic' ? (
-            <CinematicBlogPost
-              post={componentData}
-              slug={params.slug}
-            />
-          ) : (
-            <RedBullBlogPost
-              post={componentData}
-              slug={params.slug}
-            />
-          )}
-        </div>
-      );
-    }
+  if (!fs.existsSync(filepath)) {
+    return notFound();
   }
 
-  // Post not found - return 404
-  notFound();
+  const fileContent = fs.readFileSync(filepath, 'utf-8');
+  const { data, content } = matter(fileContent);
+
+  const parsed = parseMarkdownToRedBull(content, params.slug);
+
+  // Calculate read time
+  const wordCount = content.split(/\s+/).length;
+  const readTime = Math.ceil(wordCount / 200);
+
+  // Use image from frontmatter, or intro image, or default
+  const heroImage = data.image || parsed.introImage || '/stories/default.jpg';
+
+  const componentData = {
+    title: data.title || params.slug,
+    subtitle: data.description || parsed.intro.substring(0, 150) + '...',
+    author: data.author || 'Summit Explorer',
+    date: data.date || new Date().toISOString(),
+    readTime: `${readTime} min read`,
+    category: (data.tags?.[0] || 'STORY').toUpperCase(),
+    location: 'Himalayas', // Could be added to frontmatter
+    heroImage: heroImage,
+    views: '1.2K',
+    tags: data.tags || ['Mountaineering'],
+    content: {
+      intro: parsed.intro,
+      sections: parsed.sections,
+    },
+  };
+
+  return (
+    <div className="min-h-screen bg-black">
+      <RedBullBlogPost post={componentData} slug={params.slug} />
+    </div>
+  );
 }

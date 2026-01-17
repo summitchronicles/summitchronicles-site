@@ -99,7 +99,7 @@ export const VisualTransmissions = () => {
               className="h-full bg-premium-glass p-8 md:p-12 rounded-sm border-t border-white/10 relative overflow-hidden flex flex-col justify-between transition-colors hover:bg-white/5"
             >
               {/* Background Texture */}
-              <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10 mix-blend-overlay"></div>
+              <div className="absolute inset-0 opacity-10 mix-blend-overlay"></div>
               <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-100 transition-opacity duration-500">
                 <span className="text-[100px] leading-none font-oswald font-bold text-white/5">
                   07

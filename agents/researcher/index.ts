@@ -1,17 +1,70 @@
 require('dotenv').config({ path: '.env.local' });
 
-// Imports
 import { generateChatCompletion } from '../../lib/integrations/ollama';
-import { generateGeminiImage } from '../../lib/integrations/gemini';
+import { generateHuggingFaceImage } from '../../lib/integrations/huggingface';
 import { createClient } from '@supabase/supabase-js';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Guardrails } from '../../lib/guardrails';
+import { updateAgentStatus } from '../../lib/agent-status';
 
 // Supabase Setup
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = (supabaseUrl && supabaseKey) ? createClient(supabaseUrl, supabaseKey) : null;
+
+// Load Visual Knowledge
+function loadVisualKnowledge(): string {
+  try {
+    const knowledgePath = path.join(process.cwd(), 'agents', 'researcher', 'visual_knowledge.md');
+    if (fs.existsSync(knowledgePath)) {
+        return fs.readFileSync(knowledgePath, 'utf8');
+    }
+  } catch(e) { console.warn("Could not load visual knowledge"); }
+  return "";
+}
+
+const VISUAL_KNOWLEDGE = loadVisualKnowledge();
+
+function getEnrichedPrompt(baseDescription: string): string {
+    // 1. Check for specific keywords in the VISUAL KNOWLEDGE
+    const knowledgeLines = VISUAL_KNOWLEDGE.split('\n');
+    let additionalDetails = "";
+
+    // Simple scan: If the description contains a keyword like "Mani stone", look for the "Prompt Modifiers" block below it.
+    // A smarter regex approach:
+    const sections = VISUAL_KNOWLEDGE.split('## ');
+
+    for (const section of sections) {
+        if (!section.trim()) continue;
+        const lines = section.split('\n');
+        const title = lines[0].toLowerCase(); // e.g. "mani stones"
+
+        // Check if our image description mentions this section topic OR any of its keywords
+        // We find the "Keywords:" line
+        const keywordLine = lines.find(l => l.startsWith('**Keywords:**'));
+        const keywords = keywordLine ? keywordLine.replace('**Keywords:**', '').split(',').map(s => s.trim().toLowerCase()) : [title];
+
+        const matches = keywords.some(k => baseDescription.toLowerCase().includes(k));
+
+        if (matches) {
+            // Found a match! Extract "Prompt Modifiers"
+            const modifierLine = lines.find(l => l.startsWith('**Prompt Modifiers:**'));
+            if (modifierLine) {
+                additionalDetails += " " + modifierLine.replace('**Prompt Modifiers:**', '').trim();
+            }
+             // Also add the "Visual Description" for good measure if needed, but Prompt Modifiers is usually cleaner for SDXL
+        }
+    }
+
+    if (additionalDetails) {
+        console.log(`✨ Enriched Prompt for "${baseDescription}": ${additionalDetails}`);
+        return `cinematic photo, ${baseDescription}, ${additionalDetails}, 8k, photorealistic, national geographic style`.substring(0, 500); // Limit length
+    }
+
+    // Default Fallback
+    return `cinematic photo, detailed faces, 8k, photorealistic, ${baseDescription}, national geographic style, dramatic lighting`;
+}
 
 // New Logic: Brainstorming topics from Internal Knowledge (Llama 3)
 const SEARCH_KEYWORDS = [
@@ -26,6 +79,7 @@ export async function runResearcher() {
   if (!await Guardrails.checkWait('researcher')) return;
 
   console.log('🧗 Starting Mountain Researcher Agent (Hybrid Mode: Ollama + Gemini Images)...');
+  updateAgentStatus('researcher', 'Brainstorming topics...', 'brainstorm', 10);
 
   const keyword = SEARCH_KEYWORDS[Math.floor(Math.random() * SEARCH_KEYWORDS.length)];
   console.log(`🧠 Brainstorming topics related to: "${keyword}" using Local Llama 3...`);
@@ -82,6 +136,7 @@ export async function runResearcher() {
 
 async function draftBlogPost(topic: any) {
     console.log('📝 Drafting blog post using Local Llama 3...');
+    updateAgentStatus('researcher', `Drafting blog about "${topic.topic.substring(0, 30)}..."`, 'draft', 30);
 
     // Style Reference
     const styleGuide = `
@@ -116,65 +171,60 @@ async function draftBlogPost(topic: any) {
              { role: 'user', content: draftPrompt }
         ]);
 
-        // Image Generation with Strict Retry Logic
-        const imageMatch = content.match(/\[IMAGE: (.+)\]/);
-        let imageDesc = topic.topic;
-        if (imageMatch) {
-            imageDesc = imageMatch[1];
+        // Multi-Image Generation Loop
+        // Find all [IMAGE: description] tags
+        const imageRegex = /\[IMAGE: (.*?)\]/g;
+        let match;
+        const matches = [];
+
+        // Collect all matches first so we don't mess up indices while replacing
+        while ((match = imageRegex.exec(content)) !== null) {
+            matches.push({ full: match[0], desc: match[1] });
         }
 
-        console.log(`🎨 Generating image for: "${imageDesc}"...`);
-        let imageUrl: string | null = null;
-        let retries = 0;
-        const MAX_RETRIES = 5;
+        console.log(`🎨 Found ${matches.length} image requests.`);
 
-        while (!imageUrl && retries < MAX_RETRIES) {
-            imageUrl = await generateGeminiImage(imageDesc);
+        let firstImageUrl = null;
 
-            // Check if we got a fallback mock URL (from gemini.ts) or null
-            // We need to modify gemini.ts to return NULL on 429 instead of mock if we want strict control here,
-            // OR we check if the returned URL is the placeholder.
-            // Current gemini.ts returns a placeholder on ANY error.
-            // I will update this file first, but I really should update gemini.ts to throw 429s so I can catch them.
-            // For now, I'll rely on the logged error in gemini.ts and the fact that it returns the placeholder.
-            // Wait, if gemini.ts returns a placeholder, I can't distinguish 429 from other errors easily without parsing.
-            // I should PROBABLY update gemini.ts first to be "strict".
+        for (const m of matches) {
+             const enhancedPrompt = getEnrichedPrompt(m.desc);
+             console.log(`🎨 Generating: "${m.desc}"...`);
+             updateAgentStatus('researcher', `Generating image: ${m.desc.substring(0,20)}...`, 'image', 50);
 
-            // Actually, for this specific request, the user wants "If we hit rate limits... wait".
-            // My previous gemini.ts change swallowed the error.
-            // I will assume for this step I am implementing the loop, but I need to detect the failure.
+             let imageUrl = await generateHuggingFaceImage(enhancedPrompt);
 
-            if (imageUrl && imageUrl.includes('placehold.co')) {
-                // This means it failed (fallback logic in gemini.ts).
-                console.warn(`⚠️ Rate Limit or Error detected (got placeholder). Waiting 60s to cool down... (Attempt ${retries + 1}/${MAX_RETRIES})`);
-                await new Promise(resolve => setTimeout(resolve, 60000)); // Wait 60s
-                imageUrl = null; // Reset to force retry
-                retries++;
-            } else if (!imageUrl) {
-                 // Null return
-                 console.warn(`⚠️ Image generation failed. Waiting 60s... (Attempt ${retries + 1}/${MAX_RETRIES})`);
-                 await new Promise(resolve => setTimeout(resolve, 60000));
-                 retries++;
+             if (!imageUrl) {
+                 console.warn(`⚠️ Generation failed for: ${m.desc}`);
+                 imageUrl = `![Placeholder](/images/placeholder.jpg)`; // Or a valid fallback
+             } else {
+                 // Extract URL from markdown string ![alt](url)
+                 const urlMatch = imageUrl.match(/\((.*?)\)/);
+                 if (urlMatch) {
+                     const url = urlMatch[1];
+                     if (!firstImageUrl) firstImageUrl = url;
+                 }
+             }
+
+             content = content.replace(m.full, imageUrl);
+        }
+
+        // Ensure Main Image in Frontmatter
+        if (firstImageUrl) {
+            // Check if frontmatter has image:
+            if (!content.includes('image: ')) {
+                content = content.replace('---', `---\nimage: "${firstImageUrl}"`);
             } else {
-                console.log('✨ Real Image Generated!');
-                break; // We got a real image
+                content = content.replace(/image: .*/, `image: "${firstImageUrl}"`);
             }
         }
 
-        if (!imageUrl || imageUrl.includes('placehold.co')) {
-             throw new Error("Failed to generate a REAL image after multiple retries. Aborting save to preventing incomplete blog.");
-        }
-
-        if (imageMatch) {
-             content = content.replace(imageMatch[0], imageUrl);
-        } else {
-             content = content.replace('---', '---\n\n' + imageUrl + '\n');
-        }
 
         saveBlog(content, topic.topic);
+        updateAgentStatus('researcher', 'Completed!', 'done', 100, false);
 
     } catch (e: any) {
         console.error('Drafting failed:', e.message);
+        updateAgentStatus('researcher', `Failed: ${e.message}`, 'error', 0, false);
     }
 }
 
