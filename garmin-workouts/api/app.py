@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 import os
 import sys
 import json
-from datetime import date
+from datetime import date, timedelta
 
 # Add parent directory to path to import garminworkouts
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -35,11 +35,30 @@ def health():
         stress_data = {}
         body_battery = []
 
+        # Try to fetch today's data first
         try:
             user_summary = garmin.get_user_summary(today)
         except Exception as e:
-            print(f"Warning: Could not fetch user summary: {e}", file=sys.stderr)
+            print(f"Warning: Could not fetch user summary for {today}: {e}", file=sys.stderr)
 
+        # Check if we have valid data. If not, fallback to yesterday.
+        # We check bodyBattery specifically as a signal for "valid sync"
+        has_valid_data = False
+        if user_summary:
+             if user_summary.get("bodyBatteryMostRecentValue") or user_summary.get("bodyBattery"):
+                 has_valid_data = True
+
+        if not has_valid_data:
+            print(f"No valid data for {today}, fallback to yesterday...", file=sys.stderr)
+            today = (date.today() - timedelta(days=1)).isoformat()
+
+            # Retry user_summary with yesterday
+            try:
+                user_summary = garmin.get_user_summary(today)
+            except Exception as e:
+                print(f"Warning: Could not fetch user summary for {today}: {e}", file=sys.stderr)
+
+        # Now fetch the rest of the metrics using the valid date (today or yesterday)
         try:
             stats = garmin.get_stats(today)
         except Exception as e:
