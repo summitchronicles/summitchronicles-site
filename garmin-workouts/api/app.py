@@ -35,28 +35,30 @@ def health():
         stress_data = {}
         body_battery = []
 
-        # Try to fetch today's data first
-        try:
-            user_summary = garmin.get_user_summary(today)
-        except Exception as e:
-            print(f"Warning: Could not fetch user summary for {today}: {e}", file=sys.stderr)
+        # Try to find valid data, checking today first, then up to 7 days back
+        target_date = date.today()
+        max_days_back = 7
 
-        # Check if we have valid data. If not, fallback to yesterday.
-        # We check bodyBattery specifically as a signal for "valid sync"
-        has_valid_data = False
-        if user_summary:
-             if user_summary.get("bodyBatteryMostRecentValue") or user_summary.get("bodyBattery"):
-                 has_valid_data = True
+        for days_back in range(max_days_back + 1):
+            check_date = (target_date - timedelta(days=days_back)).isoformat()
+            print(f"Checking data for {check_date}...", file=sys.stderr)
 
-        if not has_valid_data:
-            print(f"No valid data for {today}, fallback to yesterday...", file=sys.stderr)
-            today = (date.today() - timedelta(days=1)).isoformat()
-
-            # Retry user_summary with yesterday
             try:
-                user_summary = garmin.get_user_summary(today)
+                user_summary = garmin.get_user_summary(check_date)
             except Exception as e:
-                print(f"Warning: Could not fetch user summary for {today}: {e}", file=sys.stderr)
+                print(f"Warning: Could not fetch user summary for {check_date}: {e}", file=sys.stderr)
+                continue
+
+            # Check if we have valid body battery data
+            if user_summary:
+                bb_value = user_summary.get("bodyBatteryMostRecentValue") or user_summary.get("bodyBattery")
+                if bb_value is not None:
+                    print(f"Found valid data for {check_date} (Body Battery: {bb_value})", file=sys.stderr)
+                    today = check_date  # Use this date for all subsequent fetches
+                    break
+        else:
+            print(f"Warning: No valid data found in the last {max_days_back} days", file=sys.stderr)
+            today = date.today().isoformat()  # Fallback to today anyway
 
         # Now fetch the rest of the metrics using the valid date (today or yesterday)
         try:
