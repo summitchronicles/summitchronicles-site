@@ -84,8 +84,8 @@ class Config {
     return process.env.SANITY_API_TOKEN;
   }
 
-  get COHERE_API_KEY() {
-    return process.env.COHERE_API_KEY;
+  get REPLICATE_API_TOKEN() {
+    return process.env.REPLICATE_API_TOKEN;
   }
 
   get BUTTONDOWN_API_KEY() {
