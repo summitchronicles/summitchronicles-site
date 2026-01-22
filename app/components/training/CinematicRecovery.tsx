@@ -202,7 +202,7 @@ const Chapter = ({
       {/* The Narrative Content */}
       <div className={`flex-1 ${index % 2 === 0 ? 'text-left' : 'text-right'}`}>
         <span className="font-mono text-xs text-zinc-500 block mb-2">
-          {format(data.date, 'MMMM d, yyyy')} /// {data.type.toUpperCase()}
+          {format(data.date, 'MMMM d, yyyy')} {'///'} {data.type.toUpperCase()}
         </span>
 
         {isCrash ? (

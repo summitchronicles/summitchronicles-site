@@ -1,3 +1,4 @@
+import {
   generateEmbedding,
   generateEmbeddings,
   cosineSimilarity,
@@ -9,26 +10,6 @@ import matter from 'gray-matter'; // Assuming gray-matter is available, or simpl
 
 // Knowledge base document interface
 export interface KnowledgeDocument {
-// ... existing interface ...
-}
-
-// ... existing interfaces ...
-
-// In-memory knowledge base
-const knowledgeBase: KnowledgeDocument[] = [];
-
-// Initialize with mountaineering training content AND Blog Posts
-export async function initializeKnowledgeBase(): Promise<void> {
-  // 1. Load Hardcoded Training Data
-  const trainingContent: Omit<
-    KnowledgeDocument,
-    'id' | 'embedding' | 'created_at' | 'updated_at'
-  >[] = [
-    // ... existing items ...
-    {
-      title: 'High-Altitude Acclimatization Protocol',
-// ... (I will keep the existing items in the file, just injecting logic before/after loop) ...
-
   id: string;
   title: string;
   content: string;
@@ -62,11 +43,12 @@ export interface RAGResponse {
   confidence: number;
 }
 
-// In-memory knowledge base (in production, this would be a proper vector database)
+// In-memory knowledge base
 const knowledgeBase: KnowledgeDocument[] = [];
 
-// Initialize with mountaineering training content
+// Initialize with mountaineering training content AND Blog Posts
 export async function initializeKnowledgeBase(): Promise<void> {
+  // 1. Load Hardcoded Training Data
   const trainingContent: Omit<
     KnowledgeDocument,
     'id' | 'embedding' | 'created_at' | 'updated_at'
@@ -265,7 +247,7 @@ Practical strategies:
       };
       knowledgeBase.push(document);
     } catch (error) {
-       // Ignore dupes or errors
+      // Ignore dupes or errors
     }
   }
 
@@ -273,34 +255,34 @@ Practical strategies:
   try {
     const blogsDir = path.join(process.cwd(), 'content', 'blog');
     if (fs.existsSync(blogsDir)) {
-        const files = fs.readdirSync(blogsDir).filter(f => f.endsWith('.md'));
+      const files = fs.readdirSync(blogsDir).filter((f) => f.endsWith('.md'));
 
-        for (const file of files) {
-            const filePath = path.join(blogsDir, file);
-            const fileContent = fs.readFileSync(filePath, 'utf8');
-            const { data, content } = matter(fileContent);
+      for (const file of files) {
+        const filePath = path.join(blogsDir, file);
+        const fileContent = fs.readFileSync(filePath, 'utf8');
+        const { data, content } = matter(fileContent);
 
-            console.log(`Embedding blog: ${data.title || file}`);
-            const embedding = await generateEmbedding(content);
+        console.log(`Embedding blog: ${data.title || file}`);
+        const embedding = await generateEmbedding(content);
 
-            knowledgeBase.push({
-                id: generateDocumentId(data.title || file),
-                title: data.title || file.replace('.md', ''),
-                content: content,
-                category: data.category || 'Blog',
-                source: 'Summit Chronicles Blog',
-                metadata: {
-                    tags: data.tags || [],
-                    difficulty_level: 'beginner' // default
-                },
-                embedding,
-                created_at: data.date || new Date().toISOString(),
-                updated_at: new Date().toISOString()
-            });
-        }
+        knowledgeBase.push({
+          id: generateDocumentId(data.title || file),
+          title: data.title || file.replace('.md', ''),
+          content: content,
+          category: data.category || 'Blog',
+          source: 'Summit Chronicles Blog',
+          metadata: {
+            tags: data.tags || [],
+            difficulty_level: 'beginner', // default
+          },
+          embedding,
+          created_at: data.date || new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        });
+      }
     }
   } catch (err) {
-      console.error("Failed to load blog posts:", err);
+    console.error('Failed to load blog posts:', err);
   }
 
   console.log(
@@ -372,7 +354,9 @@ export async function searchKnowledgeBase(
         const queryKeywords = extractKeywords(query);
         const titleLower = document.title.toLowerCase();
         const contentLower = document.content.toLowerCase();
-        const tagsLower = (document.metadata.tags || []).join(' ').toLowerCase();
+        const tagsLower = (document.metadata.tags || [])
+          .join(' ')
+          .toLowerCase();
 
         let keywordMatches = 0;
         for (const word of queryKeywords) {
@@ -413,10 +397,24 @@ export async function searchKnowledgeBase(
 
 // Helper function to extract keywords (simplified)
 function extractKeywords(text: string): string[] {
-  return text.toLowerCase()
+  return text
+    .toLowerCase()
     .replace(/[^\w\s]/g, '')
     .split(/\s+/)
-    .filter(w => w.length > 3 && !['what', 'where', 'when', 'how', 'that', 'this', 'with', 'from'].includes(w));
+    .filter(
+      (w) =>
+        w.length > 3 &&
+        ![
+          'what',
+          'where',
+          'when',
+          'how',
+          'that',
+          'this',
+          'with',
+          'from',
+        ].includes(w)
+    );
 }
 
 // Generate answer using RAG (Retrieval-Augmented Generation)
@@ -431,7 +429,7 @@ export async function generateRAGResponse(
     if (searchResults.length === 0 || searchResults[0].similarity < 0.45) {
       return {
         answer:
-          "Summit Chronicles database is still populating information and blogs, you can reach out directly to Sunith for more specific answers.",
+          'Summit Chronicles database is still populating information and blogs, you can reach out directly to Sunith for more specific answers.',
         sources: [],
         context_used: [],
         confidence: 0.1,
@@ -447,9 +445,10 @@ export async function generateRAGResponse(
       // Prioritize the most relevant section of the document if it's long
       // For now, we'll take the first 1000 characters as a "smart chunk" since our docs are concise
       // In a production system, we'd use a sliding window over the full content
-      const contentChunk = result.document.content.length > 1500
-        ? result.document.content.substring(0, 1500) + '...'
-        : result.document.content;
+      const contentChunk =
+        result.document.content.length > 1500
+          ? result.document.content.substring(0, 1500) + '...'
+          : result.document.content;
 
       const docContext = `SOURCE: ${result.document.title}\n${contentChunk}\n\n`;
 

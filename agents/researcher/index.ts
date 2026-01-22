@@ -3,12 +3,11 @@ import { fileURLToPath } from 'url';
 dotenv.config({ path: '.env.local' });
 
 import { generateChatCompletion } from '../../lib/integrations/cohere';
-import { generateHuggingFaceImage } from '../../lib/integrations/huggingface.ts';
-import { createClient } from '@supabase/supabase-js';
+import { generateHuggingFaceImage } from '../../lib/integrations/huggingface';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Guardrails } from '../../lib/guardrails.ts';
-import { updateAgentStatus } from '../../lib/agent-status.ts';
+import { Guardrails } from '../../lib/guardrails';
+import { updateAgentStatus } from '../../lib/agent-status';
 
 // ... (rest of imports/setup remains compatible)
 
@@ -19,10 +18,7 @@ import { updateAgentStatus } from '../../lib/agent-status.ts';
 const LOCAL_API = 'http://localhost:3000/api/training/metrics';
 const PROD_API = 'https://www.summitchronicles.com/api/training/metrics';
 
-// Supabase Setup
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = (supabaseUrl && supabaseKey) ? createClient(supabaseUrl, supabaseKey) : null;
+// Load Visual Knowledge
 
 // Load Visual Knowledge
 function loadVisualKnowledge(): string {
