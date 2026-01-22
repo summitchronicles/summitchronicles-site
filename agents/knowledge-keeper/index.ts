@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { generateEmbedding } from '../../lib/integrations/cohere';
+import { generateEmbedding } from '../../lib/integrations/replicate';
 
 const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
 const RESEARCH_FILE = path.join(process.cwd(), 'agents', 'researcher', 'latest_topics.json');

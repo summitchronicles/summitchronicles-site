@@ -171,3 +171,18 @@ export async function askTrainingQuestion(
 
   return generateChatCompletion(messages);
 }
+
+/**
+ * Test connection to Replicate API
+ * @returns true if connection is successful
+ */
+export async function testConnection(): Promise<boolean> {
+  try {
+    // Simple embedding test
+    await generateEmbedding('test');
+    return true;
+  } catch (error) {
+    console.error('Replicate connection test failed:', error);
+    return false;
+  }
+}

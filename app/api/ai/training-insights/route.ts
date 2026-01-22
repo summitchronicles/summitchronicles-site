@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateTrainingInsights } from '../../../../lib/integrations/cohere';
+import { generateChatCompletion } from '@/lib/integrations/replicate';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,6 +26,28 @@ interface TrainingInsights {
   analysisDate: string;
 }
 
+// Helper function to generate insights prompt
+async function generateTrainingInsights(activities: any[], goals: string[]) {
+  const prompt = `
+    Analyze the following recent training activities for a mountaineer:
+    ${JSON.stringify(activities.slice(0, 10))}
+
+    Goals: ${goals.length ? goals.join(', ') : 'General mountaineering fitness'}
+
+    Provide a structured analysis with the following sections:
+    1. Progress Assessment
+    2. Areas for Improvement
+    3. Specific Recommendations
+    4. Risk Factors
+    5. Next Week Plan
+  `;
+
+  return generateChatCompletion([
+    { role: 'system', content: 'You are an expert mountaineering coach.' },
+    { role: 'user', content: prompt },
+  ]);
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -38,7 +60,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate AI insights using Ollama
+    // Generate AI insights using Replicate
     const rawInsights = await generateTrainingInsights(activities, goals || []);
 
     // Parse the AI response into structured insights

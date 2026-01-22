@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateChatCompletion } from '../../../../lib/integrations/cohere';
+import { generateChatCompletion } from '../../../../lib/integrations/replicate';
 
 export const dynamic = 'force-dynamic';
 

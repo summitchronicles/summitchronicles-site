@@ -3,7 +3,7 @@ import {
   getKnowledgeBaseStats,
   initializeKnowledgeBase,
 } from '@/lib/rag/training-knowledge-base';
-import { testConnection } from '@/lib/integrations/cohere';
+import { testConnection } from '@/lib/integrations/replicate';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 
     const result = {
       status: 'operational',
-      provider: 'cohere',
+      provider: 'replicate',
       ai: {
         connected: aiConnected,
         model: 'command-r',

@@ -3,7 +3,7 @@ import {
   initializeKnowledgeBase,
   getKnowledgeBaseStats,
 } from '@/lib/rag/training-knowledge-base';
-import { testConnection } from '@/lib/integrations/cohere';
+import { testConnection } from '@/lib/integrations/replicate';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +13,7 @@ export async function POST() {
     const isAiAvailable = await testConnection();
     if (!isAiAvailable) {
       return NextResponse.json(
-        { error: 'Cohere AI is not available. Please check API key.' },
+        { error: 'Replicate AI is not available. Please check API key.' },
         { status: 503 }
       );
     }
