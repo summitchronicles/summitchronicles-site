@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
         ? 100 - latestWellness.restingHR
         : 50, // Mock stress inverse to RHR
       vo2Max:
-        latestWellness.vo2max || parseFloat(process.env.VO2_MAX_MANUAL || '54'), // Use Intervals calculated VO2 or manual fallback
+        latestWellness.vo2max || parseFloat(process.env.VO2_MAX_MANUAL || '45'), // Use Intervals calculated VO2 or manual fallback
       hrvStatus: latestWellness.hrv
         ? `${Math.round(latestWellness.hrv)} ms`
         : 'N/A',
@@ -193,7 +193,7 @@ function calculateAdvancedPerformance(activities: any[], garminMetrics: any) {
   const currentVo2 =
     garminMetrics.vo2Max ||
     getAvg(recentActivities, 'vo2MaxValue') ||
-    parseFloat(process.env.VO2_MAX_MANUAL || '54');
+    parseFloat(process.env.VO2_MAX_MANUAL || '45');
   const prevVo2 = getAvg(previousActivities, 'vo2MaxValue') || 56.1;
 
   // Power (watts)
