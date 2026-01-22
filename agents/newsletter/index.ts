@@ -2,7 +2,7 @@ require('dotenv').config({ path: '.env.local' });
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { generateChatCompletion } from '../../lib/integrations/ollama';
+import { generateChatCompletion } from '../../lib/integrations/cohere';
 import { sendEmail } from '../../lib/integrations/resend';
 import { Guardrails } from '../../lib/guardrails';
 

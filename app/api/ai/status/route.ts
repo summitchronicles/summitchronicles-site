@@ -3,10 +3,7 @@ import {
   getKnowledgeBaseStats,
   initializeKnowledgeBase,
 } from '@/lib/rag/training-knowledge-base';
-import {
-  testOllamaConnection,
-  getAvailableModels,
-} from '@/lib/integrations/ollama';
+import { testConnection } from '@/lib/integrations/cohere';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,29 +21,24 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(statusCache);
     }
 
-    // Test Ollama connection
-    const ollamaConnected = await testOllamaConnection();
-
-    // Get available models if connected
-    let availableModels: string[] = [];
-    if (ollamaConnected) {
-      availableModels = await getAvailableModels();
-    }
+    // Test Cohere connection
+    const aiConnected = await testConnection();
 
     // Get knowledge base statistics
     const kbStats = getKnowledgeBaseStats();
 
     const result = {
       status: 'operational',
-      ollama: {
-        connected: ollamaConnected,
-        availableModels,
+      provider: 'cohere',
+      ai: {
+        connected: aiConnected,
+        model: 'command-r',
       },
       knowledgeBase: kbStats,
       capabilities: {
-        semanticSearch: ollamaConnected,
-        ragResponses: ollamaConnected && kbStats.totalDocuments > 0,
-        directAI: ollamaConnected,
+        semanticSearch: aiConnected,
+        ragResponses: aiConnected && kbStats.totalDocuments > 0,
+        directAI: aiConnected,
       },
       timestamp: new Date().toISOString(),
     };

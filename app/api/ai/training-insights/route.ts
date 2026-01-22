@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generateTrainingInsights } from '../../../../lib/integrations/ollama';
+import { generateTrainingInsights } from '../../../../lib/integrations/cohere';
 
 export const dynamic = 'force-dynamic';
 

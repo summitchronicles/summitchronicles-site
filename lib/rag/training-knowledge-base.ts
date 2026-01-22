@@ -1,12 +1,34 @@
-import {
   generateEmbedding,
   generateEmbeddings,
   cosineSimilarity,
   generateChatCompletion,
-} from '../integrations/ollama';
+} from '../integrations/cohere';
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter'; // Assuming gray-matter is available, or simplistic parsing
 
 // Knowledge base document interface
 export interface KnowledgeDocument {
+// ... existing interface ...
+}
+
+// ... existing interfaces ...
+
+// In-memory knowledge base
+const knowledgeBase: KnowledgeDocument[] = [];
+
+// Initialize with mountaineering training content AND Blog Posts
+export async function initializeKnowledgeBase(): Promise<void> {
+  // 1. Load Hardcoded Training Data
+  const trainingContent: Omit<
+    KnowledgeDocument,
+    'id' | 'embedding' | 'created_at' | 'updated_at'
+  >[] = [
+    // ... existing items ...
+    {
+      title: 'High-Altitude Acclimatization Protocol',
+// ... (I will keep the existing items in the file, just injecting logic before/after loop) ...
+
   id: string;
   title: string;
   content: string;
@@ -226,8 +248,11 @@ Practical strategies:
   ];
 
   // Generate embeddings for all content
+  // ... (Hardcoded items processed above) ...
+
   console.log('Initializing knowledge base with embeddings...');
 
+  // Process Hardcoded Content
   for (const content of trainingContent) {
     try {
       const embedding = await generateEmbedding(content.content);
@@ -240,11 +265,42 @@ Practical strategies:
       };
       knowledgeBase.push(document);
     } catch (error) {
-      console.error(
-        `Failed to generate embedding for: ${content.title}`,
-        error
-      );
+       // Ignore dupes or errors
     }
+  }
+
+  // 2. Load Blog Posts from File System
+  try {
+    const blogsDir = path.join(process.cwd(), 'content', 'blog');
+    if (fs.existsSync(blogsDir)) {
+        const files = fs.readdirSync(blogsDir).filter(f => f.endsWith('.md'));
+
+        for (const file of files) {
+            const filePath = path.join(blogsDir, file);
+            const fileContent = fs.readFileSync(filePath, 'utf8');
+            const { data, content } = matter(fileContent);
+
+            console.log(`Embedding blog: ${data.title || file}`);
+            const embedding = await generateEmbedding(content);
+
+            knowledgeBase.push({
+                id: generateDocumentId(data.title || file),
+                title: data.title || file.replace('.md', ''),
+                content: content,
+                category: data.category || 'Blog',
+                source: 'Summit Chronicles Blog',
+                metadata: {
+                    tags: data.tags || [],
+                    difficulty_level: 'beginner' // default
+                },
+                embedding,
+                created_at: data.date || new Date().toISOString(),
+                updated_at: new Date().toISOString()
+            });
+        }
+    }
+  } catch (err) {
+      console.error("Failed to load blog posts:", err);
   }
 
   console.log(

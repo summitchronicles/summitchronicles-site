@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { parseWorkoutExcel, validateWorkoutData, type WorkoutRow } from '@/lib/excel/workout-parser';
-import { generateChatCompletion } from '@/lib/integrations/ollama';
+import {
+  parseWorkoutExcel,
+  validateWorkoutData,
+  type WorkoutRow,
+} from '@/lib/excel/workout-parser';
+import { generateChatCompletion } from '@/lib/integrations/cohere';
 import { getSupabaseClient } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
@@ -23,7 +27,9 @@ interface UploadResponse {
   errors?: string[];
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse<UploadResponse>> {
+export async function POST(
+  request: NextRequest
+): Promise<NextResponse<UploadResponse>> {
   try {
     // Parse form data
     const formData = await request.formData();
@@ -41,12 +47,16 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
     const allowedTypes = [
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
       'application/vnd.ms-excel', // .xls
-      'text/csv' // .csv
+      'text/csv', // .csv
     ];
 
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { success: false, error: 'Invalid file type. Please upload Excel (.xlsx, .xls) or CSV files.' },
+        {
+          success: false,
+          error:
+            'Invalid file type. Please upload Excel (.xlsx, .xls) or CSV files.',
+        },
         { status: 400 }
       );
     }
@@ -56,7 +66,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
 
     // Parse Excel file
     const parseResult = await parseWorkoutExcel(fileBuffer, {
-      useAI: false // Disable AI for faster parsing (column names already match)
+      useAI: false, // Disable AI for faster parsing (column names already match)
     });
 
     if (parseResult.workouts.length === 0) {
@@ -64,7 +74,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
         {
           success: false,
           error: 'No valid workout data found in file',
-          errors: parseResult.errors
+          errors: parseResult.errors,
         },
         { status: 400 }
       );
@@ -82,7 +92,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
         {
           success: false,
           error: 'Some workout data is invalid',
-          errors: [...parseResult.errors, ...invalidErrors]
+          errors: [...parseResult.errors, ...invalidErrors],
         },
         { status: 400 }
       );
@@ -92,21 +102,25 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
     const newWorkouts = validation.valid;
 
     // Check for existing workouts to avoid duplicates
-    const { data: existingWorkouts, error: fetchError } = await getSupabaseClient()
-      .from('historical_workouts')
-      .select('date, exercise_type')
-      .in('date', newWorkouts.map(w => w.date));
+    const { data: existingWorkouts, error: fetchError } =
+      await getSupabaseClient()
+        .from('historical_workouts')
+        .select('date, exercise_type')
+        .in(
+          'date',
+          newWorkouts.map((w) => w.date)
+        );
 
     if (fetchError) {
       console.error('Error fetching existing workouts:', fetchError);
     }
 
     const existingKeys = new Set(
-      (existingWorkouts || []).map(w => `${w.date}-${w.exercise_type}`)
+      (existingWorkouts || []).map((w) => `${w.date}-${w.exercise_type}`)
     );
 
     const uniqueNewWorkouts = newWorkouts.filter(
-      workout => !existingKeys.has(`${workout.date}-${workout.exercise_type}`)
+      (workout) => !existingKeys.has(`${workout.date}-${workout.exercise_type}`)
     );
 
     // Insert new workouts into Supabase
@@ -120,7 +134,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
         return NextResponse.json(
           {
             success: false,
-            error: `Failed to save workouts to database: ${insertError.message}`
+            error: `Failed to save workouts to database: ${insertError.message}`,
           },
           { status: 500 }
         );
@@ -139,7 +153,10 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
           .order('date', { ascending: false })
           .limit(20);
 
-        insights = await generateWorkoutInsights(uniqueNewWorkouts, recentWorkouts || []);
+        insights = await generateWorkoutInsights(
+          uniqueNewWorkouts,
+          recentWorkouts || []
+        );
       } catch (error) {
         console.error('Failed to generate insights:', error);
         // Don't fail the entire upload if insights fail
@@ -151,19 +168,21 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
       data: {
         summary: {
           ...parseResult.summary,
-          validRows: uniqueNewWorkouts.length
+          validRows: uniqueNewWorkouts.length,
         },
         workouts: uniqueNewWorkouts,
-        insights
-      }
+        insights,
+      },
     });
-
   } catch (error) {
     console.error('Excel upload error:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to process Excel file'
+        error:
+          error instanceof Error
+            ? error.message
+            : 'Failed to process Excel file',
       },
       { status: 500 }
     );
@@ -210,10 +229,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       data: {
         workouts: filteredWorkouts,
         summary,
-        totalCount: filteredWorkouts.length
-      }
+        totalCount: filteredWorkouts.length,
+      },
     });
-
   } catch (error) {
     console.error('Get workouts error:', error);
     return NextResponse.json(
@@ -231,7 +249,7 @@ async function generateWorkoutInsights(
   allWorkouts: WorkoutRow[]
 ): Promise<string> {
   const recentWorkouts = allWorkouts
-    .filter(w => {
+    .filter((w) => {
       const workoutDate = new Date(w.date);
       const fourWeeksAgo = new Date();
       fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
@@ -240,15 +258,17 @@ async function generateWorkoutInsights(
     .slice(-20); // Last 20 workouts
 
   const workoutSummary = recentWorkouts
-    .map(w =>
-      `${w.date}: ${w.exercise_type} - ${w.actual_duration || w.planned_duration || 'N/A'}min, ` +
-      `intensity ${w.intensity || 'N/A'}, completion ${w.completion_rate || 'N/A'}%`
+    .map(
+      (w) =>
+        `${w.date}: ${w.exercise_type} - ${w.actual_duration || w.planned_duration || 'N/A'}min, ` +
+        `intensity ${w.intensity || 'N/A'}, completion ${w.completion_rate || 'N/A'}%`
     )
     .join('\n');
 
   const newWorkoutSummary = newWorkouts
-    .map(w =>
-      `${w.date}: ${w.exercise_type} - ${w.actual_duration || w.planned_duration || 'N/A'}min`
+    .map(
+      (w) =>
+        `${w.date}: ${w.exercise_type} - ${w.actual_duration || w.planned_duration || 'N/A'}min`
     )
     .join('\n');
 
@@ -271,12 +291,13 @@ Keep response under 300 words, focus on actionable insights, and maintain an enc
   return await generateChatCompletion([
     {
       role: 'system',
-      content: 'You are an expert mountaineering coach analyzing training data for Everest preparation. Be specific and actionable.'
+      content:
+        'You are an expert mountaineering coach analyzing training data for Everest preparation. Be specific and actionable.',
     },
     {
       role: 'user',
-      content: prompt
-    }
+      content: prompt,
+    },
   ]);
 }
 
@@ -292,34 +313,64 @@ function calculateWorkoutSummary(workouts: WorkoutRow[]) {
       avgCompletionRate: 0,
       totalElevation: 0,
       totalDistance: 0,
-      exerciseTypes: {}
+      exerciseTypes: {},
     };
   }
 
-  const withDuration = workouts.filter(w => w.actual_duration || w.planned_duration);
-  const withIntensity = workouts.filter(w => w.intensity);
-  const withCompletion = workouts.filter(w => w.completion_rate);
-  const withElevation = workouts.filter(w => w.elevation_gain);
-  const withDistance = workouts.filter(w => w.distance);
+  const withDuration = workouts.filter(
+    (w) => w.actual_duration || w.planned_duration
+  );
+  const withIntensity = workouts.filter((w) => w.intensity);
+  const withCompletion = workouts.filter((w) => w.completion_rate);
+  const withElevation = workouts.filter((w) => w.elevation_gain);
+  const withDistance = workouts.filter((w) => w.distance);
 
-  const exerciseTypes = workouts.reduce((acc, w) => {
-    acc[w.exercise_type] = (acc[w.exercise_type] || 0) + 1;
-    return acc;
-  }, {} as Record<string, number>);
+  const exerciseTypes = workouts.reduce(
+    (acc, w) => {
+      acc[w.exercise_type] = (acc[w.exercise_type] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 
   return {
     totalWorkouts: workouts.length,
-    avgDuration: withDuration.length > 0
-      ? Math.round(withDuration.reduce((sum, w) => sum + (w.actual_duration || w.planned_duration || 0), 0) / withDuration.length)
-      : 0,
-    avgIntensity: withIntensity.length > 0
-      ? Math.round((withIntensity.reduce((sum, w) => sum + (w.intensity || 0), 0) / withIntensity.length) * 10) / 10
-      : 0,
-    avgCompletionRate: withCompletion.length > 0
-      ? Math.round((withCompletion.reduce((sum, w) => sum + (w.completion_rate || 0), 0) / withCompletion.length) * 10) / 10
-      : 0,
-    totalElevation: withElevation.reduce((sum, w) => sum + (w.elevation_gain || 0), 0),
-    totalDistance: Math.round(withDistance.reduce((sum, w) => sum + (w.distance || 0), 0) * 10) / 10,
-    exerciseTypes
+    avgDuration:
+      withDuration.length > 0
+        ? Math.round(
+            withDuration.reduce(
+              (sum, w) => sum + (w.actual_duration || w.planned_duration || 0),
+              0
+            ) / withDuration.length
+          )
+        : 0,
+    avgIntensity:
+      withIntensity.length > 0
+        ? Math.round(
+            (withIntensity.reduce((sum, w) => sum + (w.intensity || 0), 0) /
+              withIntensity.length) *
+              10
+          ) / 10
+        : 0,
+    avgCompletionRate:
+      withCompletion.length > 0
+        ? Math.round(
+            (withCompletion.reduce(
+              (sum, w) => sum + (w.completion_rate || 0),
+              0
+            ) /
+              withCompletion.length) *
+              10
+          ) / 10
+        : 0,
+    totalElevation: withElevation.reduce(
+      (sum, w) => sum + (w.elevation_gain || 0),
+      0
+    ),
+    totalDistance:
+      Math.round(
+        withDistance.reduce((sum, w) => sum + (w.distance || 0), 0) * 10
+      ) / 10,
+    exerciseTypes,
   };
 }

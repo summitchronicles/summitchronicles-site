@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 dotenv.config({ path: '.env.local' });
 
-import { generateChatCompletion } from '../../lib/integrations/ollama.ts';
+import { generateChatCompletion } from '../../lib/integrations/cohere';
 import { generateHuggingFaceImage } from '../../lib/integrations/huggingface.ts';
 import { createClient } from '@supabase/supabase-js';
 import * as fs from 'fs';

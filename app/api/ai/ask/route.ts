@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateRAGResponse } from '@/lib/rag/training-knowledge-base';
-import { askTrainingQuestion } from '@/lib/integrations/ollama';
-import { checkRateLimit, getClientIp, createRateLimitResponse } from '@/lib/rate-limiter';
+import { askTrainingQuestion } from '@/lib/integrations/cohere';
+import {
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 

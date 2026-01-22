@@ -1,6 +1,0 @@
-.pytest_cache
-__pycache__
-venv
-.coverage
-.garmin-cookies.txt
-coverage.xml

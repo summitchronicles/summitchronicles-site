@@ -1,8 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateRAGResponse } from '@/lib/rag/training-knowledge-base';
-import { askTrainingQuestion, generateChatCompletion } from '@/lib/integrations/ollama';
+import {
+  askTrainingQuestion,
+  generateChatCompletion,
+} from '@/lib/integrations/cohere';
 import { checkAIAbuse, withAbuseProtection } from '@/lib/ai/abuse-prevention';
-import { getUnifiedWorkouts, getWorkoutStats, getRecentWorkoutsForAI } from '@/lib/training/unified-workouts';
+import {
+  getUnifiedWorkouts,
+  getWorkoutStats,
+  getRecentWorkoutsForAI,
+} from '@/lib/training/unified-workouts';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +22,7 @@ const mockTrainingData = [
     actual_duration: 60,
     intensity: 7,
     completion_rate: 95,
-    notes: 'Morning run, felt strong'
+    notes: 'Morning run, felt strong',
   },
   {
     date: '2024-09-16',
@@ -23,7 +30,7 @@ const mockTrainingData = [
     actual_duration: 120,
     intensity: 8,
     completion_rate: 85,
-    notes: 'Boulder training, worked on overhangs'
+    notes: 'Boulder training, worked on overhangs',
   },
   {
     date: '2024-09-17',
@@ -31,24 +38,27 @@ const mockTrainingData = [
     actual_duration: 45,
     intensity: 6,
     completion_rate: 100,
-    notes: 'Upper body focus'
-  }
+    notes: 'Upper body focus',
+  },
 ];
 
 // Mock blog content (will integrate with actual blog system)
 const mockBlogContent = [
   {
-    title: "My Journey to Everest: Preparation Phase",
-    excerpt: "Training for Everest requires systematic approach to high-altitude preparation...",
-    content: "The path to Everest is not just about physical fitness, but mental preparation, equipment familiarity, and understanding your body's response to altitude...",
-    category: "expedition-preparation"
+    title: 'My Journey to Everest: Preparation Phase',
+    excerpt:
+      'Training for Everest requires systematic approach to high-altitude preparation...',
+    content:
+      "The path to Everest is not just about physical fitness, but mental preparation, equipment familiarity, and understanding your body's response to altitude...",
+    category: 'expedition-preparation',
   },
   {
-    title: "High Altitude Training Secrets",
-    excerpt: "How I build endurance for climbing at extreme altitude...",
-    content: "Altitude training involves progressive exposure, cardiovascular conditioning, and specific breathing techniques that I've learned through years of mountaineering...",
-    category: "training-techniques"
-  }
+    title: 'High Altitude Training Secrets',
+    excerpt: 'How I build endurance for climbing at extreme altitude...',
+    content:
+      "Altitude training involves progressive exposure, cardiovascular conditioning, and specific breathing techniques that I've learned through years of mountaineering...",
+    category: 'training-techniques',
+  },
 ];
 
 interface EnhancedAIRequest {
@@ -81,10 +91,19 @@ async function getRelevantTrainingData(question: string): Promise<{
   summary: string;
 }> {
   // Simple keyword matching for now (would use semantic search in production)
-  const trainingKeywords = ['training', 'workout', 'exercise', 'progress', 'performance', 'improvement', 'garmin', 'activity'];
+  const trainingKeywords = [
+    'training',
+    'workout',
+    'exercise',
+    'progress',
+    'performance',
+    'improvement',
+    'garmin',
+    'activity',
+  ];
   const questionLower = question.toLowerCase();
 
-  const isTrainingRelated = trainingKeywords.some(keyword =>
+  const isTrainingRelated = trainingKeywords.some((keyword) =>
     questionLower.includes(keyword)
   );
 
@@ -98,7 +117,9 @@ async function getRelevantTrainingData(question: string): Promise<{
 
     // Get stats
     const stats = await getWorkoutStats({
-      startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split('T')[0],
     });
 
     const summary = `Recent training summary (last 30 days):
@@ -110,10 +131,10 @@ async function getRelevantTrainingData(question: string): Promise<{
 - Average intensity: ${stats.avg_intensity}/10
 - Data sources: ${stats.by_source.historical} from Excel, ${stats.by_source.garmin} from Garmin
 - Top activities: ${Object.entries(stats.by_type)
-  .sort((a, b) => b[1] - a[1])
-  .slice(0, 3)
-  .map(([type, count]) => `${type} (${count})`)
-  .join(', ')}`;
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 3)
+      .map(([type, count]) => `${type} (${count})`)
+      .join(', ')}`;
 
     return { data: workouts, summary };
   } catch (error) {
@@ -123,7 +144,7 @@ async function getRelevantTrainingData(question: string): Promise<{
     const summary = `Recent training summary: ${recentData.length} workouts over the past weeks.
 Average intensity: ${(recentData.reduce((sum, w) => sum + (w.intensity || 0), 0) / recentData.length).toFixed(1)}/10.
 Average completion rate: ${(recentData.reduce((sum, w) => sum + (w.completion_rate || 0), 0) / recentData.length).toFixed(1)}%.
-Exercise types: ${[...new Set(recentData.map(w => w.exercise_type))].join(', ')}.`;
+Exercise types: ${[...new Set(recentData.map((w) => w.exercise_type))].join(', ')}.`;
     return { data: recentData, summary };
   }
 }
@@ -135,15 +156,17 @@ async function getRelevantBlogContent(question: string): Promise<{
   // Simple relevance matching
   const questionLower = question.toLowerCase();
 
-  const relevantBlogs = mockBlogContent.filter(blog =>
-    blog.title.toLowerCase().includes(questionLower.substring(0, 20)) ||
-    blog.excerpt.toLowerCase().includes(questionLower.substring(0, 20)) ||
-    questionLower.includes(blog.category.replace('-', ' '))
+  const relevantBlogs = mockBlogContent.filter(
+    (blog) =>
+      blog.title.toLowerCase().includes(questionLower.substring(0, 20)) ||
+      blog.excerpt.toLowerCase().includes(questionLower.substring(0, 20)) ||
+      questionLower.includes(blog.category.replace('-', ' '))
   );
 
-  const summary = relevantBlogs.length > 0
-    ? `Relevant blog posts: ${relevantBlogs.map(b => b.title).join(', ')}`
-    : '';
+  const summary =
+    relevantBlogs.length > 0
+      ? `Relevant blog posts: ${relevantBlogs.map((b) => b.title).join(', ')}`
+      : '';
 
   return { content: relevantBlogs, summary };
 }
@@ -168,13 +191,15 @@ async function generateEnhancedResponse(
     try {
       ragResponse = await generateRAGResponse(question);
       contextParts.push('Knowledge base documents');
-      sources.push(...ragResponse.sources.map((s: any) => ({
-        title: s.document.title,
-        category: s.document.category,
-        similarity: s.similarity,
-        relevanceScore: s.relevanceScore,
-        type: 'rag' as const
-      })));
+      sources.push(
+        ...ragResponse.sources.map((s: any) => ({
+          title: s.document.title,
+          category: s.document.category,
+          similarity: s.similarity,
+          relevanceScore: s.relevanceScore,
+          type: 'rag' as const,
+        }))
+      );
     } catch (error) {
       console.warn('RAG failed, continuing without:', error);
     }
@@ -188,7 +213,7 @@ async function generateEnhancedResponse(
       sources.push({
         title: 'Personal Training History',
         category: 'training-data',
-        type: 'training' as const
+        type: 'training' as const,
       });
     }
   }
@@ -198,11 +223,13 @@ async function generateEnhancedResponse(
     blogContent = await getRelevantBlogContent(question);
     if (blogContent.content.length > 0) {
       contextParts.push('Blog content');
-      sources.push(...blogContent.content.map(blog => ({
-        title: blog.title,
-        category: blog.category,
-        type: 'blog' as const
-      })));
+      sources.push(
+        ...blogContent.content.map((blog) => ({
+          title: blog.title,
+          category: blog.category,
+          type: 'blog' as const,
+        }))
+      );
     }
   }
 
@@ -249,12 +276,12 @@ If the question is general, still relate it to Sunith's mountaineering context.`
 
   const messages = [
     { role: 'system' as const, content: systemPrompt },
-    { role: 'user' as const, content: question }
+    { role: 'user' as const, content: question },
   ];
 
   const answer = await generateChatCompletion(messages, undefined, {
     temperature: 0.7,
-    max_tokens: 500
+    max_tokens: 500,
   });
 
   // Calculate confidence based on available context
@@ -267,8 +294,10 @@ If the question is general, still relate it to Sunith's mountaineering context.`
     ragResponse ? 'RAG' : null,
     trainingData?.data.length ? 'Training Data' : null,
     blogContent?.content.length ? 'Blog Context' : null,
-    'Enhanced AI'
-  ].filter(Boolean).join(' + ');
+    'Enhanced AI',
+  ]
+    .filter(Boolean)
+    .join(' + ');
 
   return {
     question,
@@ -278,16 +307,21 @@ If the question is general, still relate it to Sunith's mountaineering context.`
     confidence: Math.min(1, confidence),
     method,
     trainingInsights: trainingData?.summary,
-    personalContext: enhancedContext
+    personalContext: enhancedContext,
   };
 }
 
-export async function POST(request: NextRequest): Promise<NextResponse<EnhancedAIResponse | { error: string; retryAfter?: Date }>> {
+export async function POST(
+  request: NextRequest
+): Promise<
+  NextResponse<EnhancedAIResponse | { error: string; retryAfter?: Date }>
+> {
   try {
     // Get client IP for abuse prevention
-    const ip = request.headers.get('x-forwarded-for') ||
-               request.headers.get('x-real-ip') ||
-               '127.0.0.1';
+    const ip =
+      request.headers.get('x-forwarded-for') ||
+      request.headers.get('x-real-ip') ||
+      '127.0.0.1';
 
     const body: EnhancedAIRequest = await request.json();
     const {
@@ -295,7 +329,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<EnhancedA
       useRAG = true,
       includeTrainingData = true,
       includeBlogContext = true,
-      context
+      context,
     } = body;
 
     if (!question || typeof question !== 'string') {
@@ -312,7 +346,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<EnhancedA
       return NextResponse.json(
         {
           error: abuseCheck.reason || 'Request blocked',
-          retryAfter: abuseCheck.rateLimit?.resetTime
+          retryAfter: abuseCheck.rateLimit?.resetTime,
         },
         { status: 429 }
       );
@@ -329,14 +363,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<EnhancedA
       useRAG,
       includeTrainingData,
       includeBlogContext,
-      context
+      context,
     });
 
     // Log for monitoring
-    console.log(`Enhanced AI request: IP=${ip}, Question="${question.substring(0, 50)}...", Method=${response.method}`);
+    console.log(
+      `Enhanced AI request: IP=${ip}, Question="${question.substring(0, 50)}...", Method=${response.method}`
+    );
 
     return NextResponse.json(response);
-
   } catch (error) {
     console.error('Enhanced Ask AI error:', error);
     return NextResponse.json(
@@ -363,9 +398,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     // Get client IP for abuse prevention
-    const ip = request.headers.get('x-forwarded-for') ||
-               request.headers.get('x-real-ip') ||
-               '127.0.0.1';
+    const ip =
+      request.headers.get('x-forwarded-for') ||
+      request.headers.get('x-real-ip') ||
+      '127.0.0.1';
 
     // Check for abuse
     const abuseCheck = await checkAIAbuse(ip, question, 'askAI');
@@ -374,7 +410,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         {
           error: abuseCheck.reason || 'Request blocked',
-          retryAfter: abuseCheck.rateLimit?.resetTime
+          retryAfter: abuseCheck.rateLimit?.resetTime,
         },
         { status: 429 }
       );
@@ -385,11 +421,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       useRAG,
       includeTrainingData,
       includeBlogContext,
-      context: context || undefined
+      context: context || undefined,
     });
 
     return NextResponse.json(response);
-
   } catch (error) {
     console.error('Enhanced Ask AI GET error:', error);
     return NextResponse.json(

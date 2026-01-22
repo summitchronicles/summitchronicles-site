@@ -3,17 +3,17 @@ import {
   initializeKnowledgeBase,
   getKnowledgeBaseStats,
 } from '@/lib/rag/training-knowledge-base';
-import { testOllamaConnection } from '@/lib/integrations/ollama';
+import { testConnection } from '@/lib/integrations/cohere';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST() {
   try {
-    // Test Ollama connection first
-    const isOllamaAvailable = await testOllamaConnection();
-    if (!isOllamaAvailable) {
+    // Test Cohere connection first
+    const isAiAvailable = await testConnection();
+    if (!isAiAvailable) {
       return NextResponse.json(
-        { error: 'Ollama is not available. Please ensure Ollama is running.' },
+        { error: 'Cohere AI is not available. Please check API key.' },
         { status: 503 }
       );
     }
@@ -26,7 +26,7 @@ export async function POST() {
       status: 'initialized',
       message: 'Knowledge base initialized successfully',
       stats,
-      ollamaStatus: 'connected',
+      aiStatus: 'connected',
     });
   } catch (error) {
     console.error('Initialization error:', error);
@@ -40,12 +40,12 @@ export async function POST() {
 export async function GET() {
   try {
     const stats = getKnowledgeBaseStats();
-    const isOllamaAvailable = await testOllamaConnection();
+    const isAiAvailable = await testConnection();
 
     return NextResponse.json({
       status: stats.totalDocuments > 0 ? 'ready' : 'not_initialized',
       stats,
-      ollamaStatus: isOllamaAvailable ? 'connected' : 'disconnected',
+      aiStatus: isAiAvailable ? 'connected' : 'disconnected',
     });
   } catch (error) {
     console.error('Status check error:', error);

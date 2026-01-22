@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { generateChatCompletion } from '../../lib/integrations/ollama';
+import { generateChatCompletion } from '../../lib/integrations/cohere';
 import { Guardrails } from '../../lib/guardrails';
 
 const INCOMING_DIR = path.join(process.cwd(), 'content', 'incoming-notes');
