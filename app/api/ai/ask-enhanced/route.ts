@@ -3,7 +3,7 @@ import { generateRAGResponse } from '@/lib/rag/training-knowledge-base';
 import {
   askTrainingQuestion,
   generateChatCompletion,
-} from '@/lib/integrations/cohere';
+} from '@/lib/integrations/replicate';
 import { checkAIAbuse, withAbuseProtection } from '@/lib/ai/abuse-prevention';
 import {
   getUnifiedWorkouts,
@@ -279,7 +279,7 @@ If the question is general, still relate it to Sunith's mountaineering context.`
     { role: 'user' as const, content: question },
   ];
 
-  const answer = await generateChatCompletion(messages, undefined, {
+  const answer = await generateChatCompletion(messages, {
     temperature: 0.7,
     max_tokens: 500,
   });

@@ -3,7 +3,7 @@ import {
   generateEmbeddings,
   cosineSimilarity,
   generateChatCompletion,
-} from '../integrations/cohere';
+} from '../integrations/replicate';
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter'; // Assuming gray-matter is available, or simplistic parsing

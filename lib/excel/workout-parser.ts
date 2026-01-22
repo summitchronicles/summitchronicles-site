@@ -1,5 +1,5 @@
 import * as XLSX from 'xlsx';
-import { generateChatCompletion } from '../integrations/cohere';
+import { generateChatCompletion } from '../integrations/replicate';
 
 export interface WorkoutRow {
   date: string;

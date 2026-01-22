@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateRAGResponse } from '@/lib/rag/training-knowledge-base';
-import { askTrainingQuestion } from '@/lib/integrations/cohere';
+import { askTrainingQuestion } from '@/lib/integrations/replicate';
 import {
   checkRateLimit,
   getClientIp,

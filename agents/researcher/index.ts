@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
 dotenv.config({ path: '.env.local' });
 
-import { generateChatCompletion } from '../../lib/integrations/cohere';
+import { generateChatCompletion } from '../../lib/integrations/replicate';
 import { generateHuggingFaceImage } from '../../lib/integrations/huggingface';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -155,7 +155,7 @@ export async function generateWeeklyInsight() {
         const result = await generateChatCompletion([
             { role: 'system', content: 'You are a JSON generator coach.' },
             { role: 'user', content: prompt }
-        ]);
+        ], { model: 'blog' });
 
         const cleanJson = result.replace(/```json/g, '').replace(/```/g, '').trim();
         const insight = JSON.parse(cleanJson);
@@ -245,7 +245,7 @@ export async function runResearcher() {
     const resultText = await generateChatCompletion([
         { role: 'system', content: 'You are a JSON generator. Output only valid JSON.' },
         { role: 'user', content: prompt }
-    ]);
+    ], { model: 'blog' });
 
     // Clean Markdown code blocks (Ollama loves adding them)
     const cleanJson = resultText.replace(/```json/g, '').replace(/```/g, '').trim();
@@ -312,7 +312,7 @@ async function draftBlogPost(topic: any) {
         let content = await generateChatCompletion([
              { role: 'system', content: 'You are a professional mountaineering blog writer.' },
              { role: 'user', content: draftPrompt }
-        ]);
+        ], { model: 'blog' });
 
         // Multi-Image Generation Loop
         // Find all [IMAGE: description] tags

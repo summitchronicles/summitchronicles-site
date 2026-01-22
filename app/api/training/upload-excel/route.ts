@@ -4,7 +4,7 @@ import {
   validateWorkoutData,
   type WorkoutRow,
 } from '@/lib/excel/workout-parser';
-import { generateChatCompletion } from '@/lib/integrations/cohere';
+import { generateChatCompletion } from '@/lib/integrations/replicate';
 import { getSupabaseClient } from '@/lib/supabase';
 
 export const dynamic = 'force-dynamic';
