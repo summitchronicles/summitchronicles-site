@@ -1,12 +1,23 @@
-require('dotenv').config({ path: '.env.local' });
+import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+dotenv.config({ path: '.env.local' });
 
-import { generateChatCompletion } from '../../lib/integrations/ollama';
-import { generateHuggingFaceImage } from '../../lib/integrations/huggingface';
+import { generateChatCompletion } from '../../lib/integrations/ollama.ts';
+import { generateHuggingFaceImage } from '../../lib/integrations/huggingface.ts';
 import { createClient } from '@supabase/supabase-js';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Guardrails } from '../../lib/guardrails';
-import { updateAgentStatus } from '../../lib/agent-status';
+import { Guardrails } from '../../lib/guardrails.ts';
+import { updateAgentStatus } from '../../lib/agent-status.ts';
+
+// ... (rest of imports/setup remains compatible)
+
+// ...
+
+// ...
+// API Constants
+const LOCAL_API = 'http://localhost:3000/api/training/metrics';
+const PROD_API = 'https://www.summitchronicles.com/api/training/metrics';
 
 // Supabase Setup
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -66,7 +77,7 @@ function getEnrichedPrompt(baseDescription: string): string {
     return `cinematic photo, detailed faces, 8k, photorealistic, ${baseDescription}, national geographic style, dramatic lighting`;
 }
 
-// New Logic: Brainstorming topics from Internal Knowledge (Llama 3)
+// Brainstorming topics from Internal Knowledge (Llama 3)
 const SEARCH_KEYWORDS = [
   'Mount Everest Season 2026',
   'Winter Alpinism Trends',
@@ -75,18 +86,154 @@ const SEARCH_KEYWORDS = [
   'Sherpa Culture and History'
 ];
 
+// API Constants moved to top
+
+async function fetchTrainingData() {
+    try {
+        const apiUrl = process.env.NODE_ENV === 'development' ? LOCAL_API : PROD_API;
+        console.log(`📊 Fetching latest training data from ${apiUrl}...`);
+
+        const res = await fetch(apiUrl);
+        if (!res.ok) throw new Error(`API Error: ${res.status}`);
+        const data = await res.json();
+
+        if (data.metrics) {
+            if (!data.success) {
+                console.log('⚠️ API returned fallback data (using for development context).');
+            }
+            return data.metrics;
+        }
+    } catch (e: any) {
+        console.warn(`⚠️ Failed to fetch training data: ${e.message}`);
+    }
+    return null;
+}
+
+export async function generateWeeklyInsight() {
+    console.log('🧠 Generating Weekly AI Training Insight...');
+    updateAgentStatus('researcher', 'Analysing weekly protocol...', 'insight', 20);
+
+    const data = await fetchTrainingData();
+    if (!data) {
+        console.log('❌ No data available for insight.');
+        return;
+    }
+
+    const { recentActivities, currentStats, advancedPerformance } = data;
+
+    // Extract recent comments for context
+    const activityComments = recentActivities
+        ? recentActivities
+            .slice(0, 10) // Look at last 10 activities
+            .map((a: any) => a.description ? `- [${a.activityName}]: "${a.description}"` : null)
+            .filter(Boolean)
+            .join('\n')
+        : "No recent comments.";
+
+    // Create broad context
+    const context = `
+        Last 7 Days Activity Count: ${data.recentTrends?.monthlyActivities?.value || 0} (approx)
+        VO2 Max: ${data.vo2Max} (${advancedPerformance?.vo2Max?.trend})
+        Recovery Rate: ${advancedPerformance?.recoveryRate?.value}%
+        Timeline: Day ${currentStats?.trainingYears?.value} of the journey.
+        Phase: ${data.trainingPhases?.find((p:any) => p.status === 'current')?.focus || 'Base'}
+
+        RECENT WORKOUT NOTES (User Comments):
+        ${activityComments}
+    `;
+
+    const prompt = `
+        You are an elite high-altitude performance coach.
+        Analyze this athlete's status:
+        ${context}
+
+        Generate a JSON object with:
+        - "weekSummary": A 1-sentence punchy summary of the week's vibe (e.g. "Volume is high, but recovery is lagging.").
+        - "focus": Main focus for next week (1-2 words, e.g. "Aerobic Base").
+        - "tip": A specific, actionable tip based on the data.
+
+        JSON ONLY.
+    `;
+
+    try {
+        const result = await generateChatCompletion([
+            { role: 'system', content: 'You are a JSON generator coach.' },
+            { role: 'user', content: prompt }
+        ]);
+
+        const cleanJson = result.replace(/```json/g, '').replace(/```/g, '').trim();
+        const insight = JSON.parse(cleanJson);
+
+        // Save
+        const outPath = path.join(process.cwd(), 'content', 'training-insights.json');
+
+        let existingInsights: any[] = [];
+        if (fs.existsSync(outPath)) {
+            try {
+                const fileContent = fs.readFileSync(outPath, 'utf8');
+                const parsed = JSON.parse(fileContent);
+                existingInsights = Array.isArray(parsed) ? parsed : [parsed]; // Handle legacy single object
+            } catch (e) {
+                console.warn('Could not parse existing insights, starting fresh.');
+            }
+        }
+
+        // Add start of current week date to the insight
+        // (Assuming "current" means "this week", so Monday of this week)
+        const today = new Date();
+        const monday = new Date(today.setDate(today.getDate() - today.getDay() + 1)).toISOString().split('T')[0];
+
+        const newInsight = {
+            ...insight,
+            weekStart: monday,
+            updatedAt: new Date().toISOString()
+        };
+
+        // Remove any existing entry for this week (idempotency)
+        const filtered = existingInsights.filter(i => i.weekStart !== monday);
+        const updatedInsights = [newInsight, ...filtered]; // Prepend new insight
+
+        fs.writeFileSync(outPath, JSON.stringify(updatedInsights, null, 2));
+        console.log('✅ Saved Weekly Insight (History Updated).');
+        updateAgentStatus('researcher', 'Insight generated!', 'done', 100, false);
+
+    } catch (e: any) {
+        console.error('Failed to generate insight:', e.message);
+    }
+}
+
 export async function runResearcher() {
   if (!await Guardrails.checkWait('researcher')) return;
 
-  console.log('🧗 Starting Mountain Researcher Agent (Hybrid Mode: Ollama + Gemini Images)...');
-  updateAgentStatus('researcher', 'Brainstorming topics...', 'brainstorm', 10);
+  console.log('🧗 Starting Mountain Researcher Agent (Hybrid Mode: Ollama + Real Data)...');
+  updateAgentStatus('researcher', 'Analysing training data...', 'brainstorm', 10);
+
+  // 1. Fetch Real Data
+  const trainingData = await fetchTrainingData();
+  let dataContext = "";
+
+  if (trainingData) {
+      console.log('✅ Found live training data!');
+      const trends = trainingData.recentTrends || {};
+      dataContext = `
+        CURRENT TRAINING CONTEXT (Use this to ground the blog in reality):
+        - Weekly Volume: ${trends.weeklyVolume?.value || 'N/A'}
+        - Weekly Elevation: ${trends.elevationThisWeek?.value || 'N/A'}
+        - Current Phase: ${trainingData.trainingPhases?.find((p:any) => p.status === 'current')?.focus || 'Unknown'}
+        - Body Status: VO2 Max ${trainingData.advancedPerformance?.vo2Max?.value || 'N/A'}, Recovery ${trainingData.advancedPerformance?.recoveryRate?.value || 'N/A'}%
+      `;
+  }
 
   const keyword = SEARCH_KEYWORDS[Math.floor(Math.random() * SEARCH_KEYWORDS.length)];
-  console.log(`🧠 Brainstorming topics related to: "${keyword}" using Local Llama 3...`);
+  console.log(`🧠 Brainstorming topics related to: "${keyword}" (with real context)...`);
 
   const prompt = `
-    You are an expert mountaineering journalist with deep knowledge of the climbing world.
+    You are an expert mountaineering journalist ghostwriting for Sunith.
+
+    ${dataContext}
+
     Brainstorm 3 cutting-edge, interesting blog post ideas related to: "${keyword}".
+    If "CURRENT TRAINING CONTEXT" is provided, ensure at least one topic connects the global trend to Sunith's personal training progress.
 
     Format the output as a JSON array of objects with the following keys:
     - topic: Title of the topic
@@ -244,6 +391,11 @@ function saveToFile(topics: any[]) {
 }
 
 // Allow running directly
-if (require.main === module) {
-    runResearcher();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+    const args = process.argv.slice(2);
+    if (args.includes('--insight')) {
+        generateWeeklyInsight();
+    } else {
+        runResearcher();
+    }
 }

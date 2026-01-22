@@ -34,6 +34,25 @@ export default function AgentDashboard() {
     fetchDrafts();
   }, []);
 
+  const [insights, setInsights] = useState<any>(null);
+
+  useEffect(() => {
+    fetchDrafts();
+    fetchInsights();
+  }, []);
+
+  const fetchInsights = async () => {
+    try {
+      const res = await fetch('/api/insights');
+      const data = await res.json();
+      if (data.success) {
+        setInsights(data.insights);
+      }
+    } catch (e) {
+      console.error('Failed to fetch insights');
+    }
+  };
+
   const fetchDrafts = async () => {
     try {
       const response = await fetch('/api/drafts');
@@ -192,6 +211,53 @@ export default function AgentDashboard() {
     <div className="min-h-screen bg-black text-white p-8">
       <div className="max-w-7xl mx-auto">
         {/* ... (Keep Header and Quick Actions same) ... */}
+
+        {/* AI Training Insight Card */}
+        {insights && (
+          <div className="bg-gradient-to-r from-zinc-900 to-black border border-summit-gold/20 p-6 rounded-lg mb-8 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-4 opacity-10">
+              <svg
+                width="100"
+                height="100"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M12 2L2 22h20L12 2zm0 3.5L18.5 20h-13L12 5.5z" />
+              </svg>
+            </div>
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-xs font-mono text-summit-gold uppercase tracking-widest border border-summit-gold/30 px-2 py-0.5 rounded">
+                  AI Coach
+                </span>
+                <span className="text-xs text-zinc-500">
+                  Updated: {new Date(insights.updatedAt).toLocaleDateString()}
+                </span>
+              </div>
+              <h2 className="text-2xl font-oswald font-bold text-white mb-2">
+                {insights.weekSummary}
+              </h2>
+              <div className="flex gap-8 mt-4">
+                <div>
+                  <div className="text-[10px] uppercase text-zinc-500 font-mono">
+                    Focus
+                  </div>
+                  <div className="text-lg text-emerald-400 font-bold">
+                    {insights.focus}
+                  </div>
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase text-zinc-500 font-mono">
+                    Tip
+                  </div>
+                  <div className="text-sm text-zinc-300 max-w-md italic">
+                    "{insights.tip}"
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Draft List */}
         <div className="bg-gray-900 rounded-lg p-6">

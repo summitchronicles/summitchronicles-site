@@ -1,0 +1,16 @@
+{
+  "phase": "Non-Weight Bearing",
+  "since": "2026-01-05",
+  "status": "active",
+  "milestone": {
+    "title": "Walk without Crutches",
+    "targetDate": "2026-02-15",
+    "confidence": "High"
+  },
+  "metrics": [
+    { "label": "Mobility", "value": "Limited", "trend": "stable" },
+    { "label": "Upper Body", "value": "Maintenance", "trend": "up" },
+    { "label": "VO2 Max", "value": "54", "trend": "steady" }
+  ],
+  "latestUpdate": "Travel week. Resting but maintaining protocol mental focus."
+}

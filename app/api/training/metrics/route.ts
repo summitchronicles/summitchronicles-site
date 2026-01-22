@@ -21,71 +21,51 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // 1. Fetch data from Garmin Health Service (which now handles both health & activities)
-    const garminServiceUrl = process.env.GARMIN_SERVICE_URL;
-
-    if (!garminServiceUrl) {
-      throw new Error('GARMIN_SERVICE_URL is not configured');
-    }
-
-    // Parallel fetch: Health Metrics + Activities
-    // Cache for 5 hours (18000 seconds) as requested
-    const CACHE_DURATION = 18000;
-
-    const [healthRes, activitiesRes] = await Promise.all([
-      fetch(`${garminServiceUrl}/health`, {
-        next: { revalidate: CACHE_DURATION },
-      }),
-      fetch(`${garminServiceUrl}/activities`, {
-        next: { revalidate: CACHE_DURATION },
-      }),
+    // 1. Fetch data from Intervals.icu (Source of Truth)
+    // Parallel fetch: Wellness + Activities
+    const [wellnessData, activitiesRaw] = await Promise.all([
+      IntervalsService.getWellness(),
+      IntervalsService.getActivities(100), // Fetch last 100 activities
     ]);
 
-    let garminHealth: any = {};
-    if (healthRes.ok) {
-      const healthData = await healthRes.json();
-      if (healthData.success) garminHealth = healthData.metrics;
-    }
+    // 2. Extract Latest Wellness Metrics
+    const latestWellness = wellnessData[0] || {}; // Intervals returns array, [0] is usually newest
 
-    let activitiesData: any[] = [];
-    if (activitiesRes.ok) {
-      const actData = await activitiesRes.json();
-      if (actData.success) activitiesData = actData.activities;
-    }
-
-    // 3. Use Raw VO2 Max from Garmin
-    const rawVo2 = garminHealth.vo2Max;
-    const manualVo2 = process.env.VO2_MAX_MANUAL
-      ? parseFloat(process.env.VO2_MAX_MANUAL)
-      : 45.0;
-
+    // Map Intervals Wellness to Garmin-like structure for the frontend
     const garminMetrics = {
-      bodyBattery: garminHealth.bodyBattery ?? 0,
-      bodyBatteryTimeline: garminHealth.bodyBatteryTimeline || [],
-      stressScore: garminHealth.stressScore ?? 0,
-      vo2Max: rawVo2 || manualVo2,
-      hrvStatus: garminHealth.hrvStatus ?? 'N/A',
+      bodyBattery: 0, // Intervals doesn't support Body Battery natively without custom fields
+      bodyBatteryTimeline: [],
+      stressScore: latestWellness.restingHR
+        ? 100 - latestWellness.restingHR
+        : 50, // Mock stress inverse to RHR
+      vo2Max:
+        latestWellness.vo2max || parseFloat(process.env.VO2_MAX_MANUAL || '54'), // Use Intervals calculated VO2 or manual fallback
+      hrvStatus: latestWellness.hrv
+        ? `${Math.round(latestWellness.hrv)} ms`
+        : 'N/A',
+      restingHR: latestWellness.restingHR,
     };
 
-    // Calculate metrics
-    const metrics = calculateTrainingMetrics(
-      activitiesData.map((a) => ({
-        activityId: a.activityId,
-        activityName: a.activityName,
-        startTimeLocal: a.startTimeLocal,
-        distance: a.distance,
-        duration: a.duration,
-        elevationGain: a.elevationGain,
-        averageHR: a.averageHR,
-        activityType: { typeKey: (a.activityType || 'unknown').toLowerCase() },
-        description: a.description,
-      })),
-      garminMetrics
-    );
+    // 3. Map Activities (Snake Case -> Camel Case)
+    // Crucially mapping 'description' -> 'description' for comments
+    const activitiesMapped = activitiesRaw.map((a: any) => ({
+      activityId: a.id,
+      activityName: a.name,
+      startTimeLocal: a.start_date_local,
+      distance: a.distance, // meters
+      duration: a.moving_time, // seconds
+      elevationGain: a.total_elevation_gain,
+      averageHR: a.average_heartrate,
+      activityType: { typeKey: (a.type || 'unknown').toLowerCase() },
+      description: a.description || '', // Comments!
+    }));
+
+    // 4. Calculate Training Metrics using the shared logic
+    const metrics = calculateTrainingMetrics(activitiesMapped, garminMetrics);
 
     return NextResponse.json({
       success: true,
-      metrics,
+      metrics: metrics,
       lastUpdated: new Date().toISOString(),
       source: 'intervals.icu',
     });
@@ -181,7 +161,7 @@ function calculateTrainingMetrics(activities: any[], garminMetrics: any) {
           new Date(b.startTimeLocal || b.start_date).getTime() -
           new Date(a.startTimeLocal || a.start_date).getTime()
       )
-      .slice(0, 5),
+      .slice(0, 100),
   };
 }
 
@@ -211,7 +191,9 @@ function calculateAdvancedPerformance(activities: any[], garminMetrics: any) {
   // VO2 Max: Use explicit metric from User Summary if available, otherwise fallback to activity average
   // key: 'vo2MaxValue' is standard in Garmin activity JSON
   const currentVo2 =
-    garminMetrics.vo2Max || getAvg(recentActivities, 'vo2MaxValue') || 58.2;
+    garminMetrics.vo2Max ||
+    getAvg(recentActivities, 'vo2MaxValue') ||
+    parseFloat(process.env.VO2_MAX_MANUAL || '54');
   const prevVo2 = getAvg(previousActivities, 'vo2MaxValue') || 56.1;
 
   // Power (watts)
@@ -627,28 +609,8 @@ function getEnhancedFallbackMetrics() {
       },
     ],
     recentActivities: [
-      {
-        activityId: 101,
-        activityName: 'Base Training Run',
-        startTimeLocal: new Date().toISOString(),
-        distance: 5000,
-        duration: 1800,
-        elevationGain: 150,
-        averageHR: 145,
-        activityType: { typeKey: 'running' },
-        description: 'Fallback: Simulating steady state cardio.',
-      },
-      {
-        activityId: 102,
-        activityName: 'Strength & Conditioning',
-        startTimeLocal: new Date(Date.now() - 86400000).toISOString(),
-        distance: 0,
-        duration: 2700,
-        elevationGain: 0,
-        averageHR: 120,
-        activityType: { typeKey: 'fitness_equipment' },
-        description: 'Fallback: Upper body focus.',
-      },
+      // Fallback: No recent activities found (or provider error)
+      // Leaving empty to reflect truthful state (Injury/Recovery) rather than mocking fake runs.
     ],
   };
 }

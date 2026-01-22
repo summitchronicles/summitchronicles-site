@@ -1,0 +1,30 @@
+[
+  {
+    "weekStart": "2026-01-19",
+    "weekSummary": "Consistency is key, with a strong foundation being built.",
+    "focus": "Strength Endurance",
+    "tip": "Prioritize gentle stretching and foam rolling after high-intensity sessions to maintain recovery rate.",
+    "updatedAt": "2026-01-20T14:13:11.591Z"
+  },
+  {
+    "weekStart": "2026-01-12",
+    "weekSummary": "Focused on active recovery and maintaining mobility. No high impact.",
+    "focus": "Deep Recovery",
+    "tip": "Ice and elevation after physical therapy sessions.",
+    "updatedAt": "2026-01-12T10:00:00.000Z"
+  },
+  {
+    "weekStart": "2026-01-05",
+    "weekSummary": "Transitioning from complete rest to light mobility work.",
+    "focus": "Mobility",
+    "tip": "Listen to pain signals. Do not push through sharp pain.",
+    "updatedAt": "2026-01-05T10:00:00.000Z"
+  },
+  {
+    "weekStart": "2025-12-29",
+    "weekSummary": "Complete rest protocol initiated. Monitoring inflammation levels.",
+    "focus": "Rest",
+    "tip": "Sleep is the primary recovery tool this week.",
+    "updatedAt": "2025-12-29T10:00:00.000Z"
+  }
+]

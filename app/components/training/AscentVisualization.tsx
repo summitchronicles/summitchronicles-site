@@ -222,58 +222,104 @@ export const AscentVisualization = ({
             TARGET: VO2 60+
           </text>
 
-          {/* Current Position Marker (Dynamic) */}
+          {/* Current Position Marker (Climber) */}
           <motion.g
-            animate={{ opacity: 1 }} // ensure visible
+            animate={{ opacity: 1 }}
             initial={{ opacity: 0 }}
-            transition={{ delay: 2, duration: 0.5 }}
+            transition={{ delay: 1, duration: 0.5 }}
           >
-            {/* Vertical Laser Line */}
-            <line
-              x1={markerPos.x}
-              y1={0}
-              x2={markerPos.x}
-              y2={400}
-              stroke="#C5A059"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-              className="opacity-50"
-            />
-            {/* Pulse Dot */}
-            <circle
-              cx={markerPos.x}
-              cy={markerPos.y}
-              r="6"
-              fill="#C5A059"
-              filter="url(#glow)"
-            >
-              <animate
-                attributeName="r"
-                values="6;8;6"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-              <animate
-                attributeName="opacity"
-                values="1;0.5;1"
-                dur="2s"
-                repeatCount="indefinite"
-              />
-            </circle>
+            {/* The Climber Group - Positioned at markerPos */}
+            <g transform={`translate(${markerPos.x}, ${markerPos.y})`}>
+              {/* Walking Stick Figure (SVG) */}
+              {/* Scale down and center on the path */}
+              <g transform="translate(-15, -45) scale(0.8)">
+                {/* Head */}
+                <circle cx="20" cy="10" r="6" fill="#fff" />
 
-            {/* "You Are Here" Label Tag */}
-            <foreignObject
-              x={markerPos.x + 10}
-              y={markerPos.y - 30}
-              width="150"
-              height="50"
-            >
-              <div className="bg-black/80 border border-summit-gold/30 px-2 py-1 text-[10px] font-mono text-summit-gold inline-block backdrop-blur-sm">
-                DAY {daysSinceInjury} OF RECOVERY
-                <br />
-                <span className="text-white">YOU ARE HERE</span>
-              </div>
-            </foreignObject>
+                {/* Body */}
+                <line
+                  x1="20"
+                  y1="16"
+                  x2="20"
+                  y2="35"
+                  stroke="#fff"
+                  strokeWidth="3"
+                />
+
+                {/* Arms - Animated Swings */}
+                <motion.line
+                  x1="20"
+                  y1="20"
+                  x2="30"
+                  y2="30"
+                  stroke="#fff"
+                  strokeWidth="2.5"
+                  animate={{ x2: [30, 10, 30], y2: [30, 25, 30] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                />
+                <motion.line
+                  x1="20"
+                  y1="20"
+                  x2="10"
+                  y2="30"
+                  stroke="#fff"
+                  strokeWidth="2.5"
+                  animate={{ x2: [10, 30, 10], y2: [30, 25, 30] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                />
+
+                {/* Legs - Walking Animation */}
+                <motion.line
+                  x1="20"
+                  y1="35"
+                  x2="25"
+                  y2="55"
+                  stroke="#fff"
+                  strokeWidth="3"
+                  animate={{ x2: [25, 15, 25], y2: [55, 50, 55] }}
+                  transition={{
+                    duration: 0.8,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
+                />
+                <motion.line
+                  x1="20"
+                  y1="35"
+                  x2="15"
+                  y2="55"
+                  stroke="#fff"
+                  strokeWidth="3"
+                  animate={{ x2: [15, 25, 15], y2: [55, 50, 55] }}
+                  transition={{
+                    duration: 0.8,
+                    repeat: Infinity,
+                    delay: 0.4,
+                    ease: 'linear',
+                  }}
+                />
+
+                {/* Backpack / Gear */}
+                <rect
+                  x="14"
+                  y="18"
+                  width="12"
+                  height="15"
+                  rx="3"
+                  fill="#C5A059"
+                />
+              </g>
+
+              {/* "You Are Here" Label - Floating above */}
+              <foreignObject x="-60" y="-80" width="120" height="40">
+                <div className="text-center">
+                  <span className="bg-summit-gold text-black text-[9px] font-bold px-1.5 py-0.5 rounded shadow-lg uppercase tracking-wider">
+                    Day {daysSinceInjury}
+                  </span>
+                  <div className="w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[4px] border-t-summit-gold mx-auto"></div>
+                </div>
+              </foreignObject>
+            </g>
           </motion.g>
         </svg>
       </div>

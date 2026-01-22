@@ -9,14 +9,14 @@ if (!API_KEY || !ATHLETE_ID) {
   console.warn('Intervals.icu API key or Athlete ID missing!');
 }
 
-// Basic Auth Header: base64("API_KEY_VALUE:")
-// Intervals.icu uses the API key itself as the username, with empty password
+// Basic Auth Header: base64("API_KEY:api_key_value")
+// Intervals.icu requires the literal string "API_KEY" as username and the key as password
 const getHeaders = () => {
   if (!API_KEY) {
     throw new Error('INTERVALS_ICU_API_KEY is not configured');
   }
-  // Correct format: base64(api_key_value:)
-  const authString = Buffer.from(`${API_KEY}:`).toString('base64');
+  // Correct format: base64(API_KEY:api_key_value) - "API_KEY" is LITERAL
+  const authString = Buffer.from(`API_KEY:${API_KEY}`).toString('base64');
   return {
     Authorization: `Basic ${authString}`,
     'Content-Type': 'application/json',
@@ -73,17 +73,17 @@ export class IntervalsService {
   static async getActivities(limit = 10): Promise<IntervalsActivity[]> {
     try {
       const today = format(new Date(), 'yyyy-MM-dd');
-      const monthAgo = format(
-        new Date(Date.now() - 90 * 24 * 60 * 60 * 1000),
+      const start = format(
+        new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months history
         'yyyy-MM-dd'
       );
 
-      const url = `${BASE_URL}/athlete/${ATHLETE_ID}/activities?oldest=${monthAgo}&newest=${today}`;
+      const url = `${BASE_URL}/athlete/${ATHLETE_ID}/activities?oldest=${start}&newest=${today}`;
       console.log('Fetching Intervals Activities:', url);
 
       const response = await fetch(url, {
         headers: getHeaders(),
-        next: { revalidate: 0 }, // No cache for debugging
+        next: { revalidate: 3600 }, // Cache for 1 hour
       });
 
       if (!response.ok) {

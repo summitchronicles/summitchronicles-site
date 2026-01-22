@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "next dev",
+    "dev:all": "run-p dev api:garmin",
+    "api:garmin": "cd garmin-workouts && source venv/bin/activate && export PORT=5001 && python api/app.py",
     "build": "npm run build-posts && next build",
     "build:analyze": "ANALYZE=true npm run build",
     "start": "next start",

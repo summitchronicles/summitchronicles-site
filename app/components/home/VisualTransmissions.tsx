@@ -17,6 +17,7 @@ import { useTrainingMetrics } from '@/lib/hooks/useTrainingMetrics';
 import { useInstagramFeed } from '@/lib/hooks/useInstagramFeed';
 import { cn } from '@/lib/utils';
 import { Button } from '../atoms/Button';
+import { RecoveryStatus } from './RecoveryStatus';
 
 export const VisualTransmissions = () => {
   const { posts, loading: instaLoading } = useInstagramFeed();
@@ -133,127 +134,18 @@ export const VisualTransmissions = () => {
             </motion.div>
           </Link>
 
-          {/* 2. BODY BATTERY (Garmin) */}
-          <Link
-            href="/training"
-            className="group relative group-hover/grid:opacity-50 hover:!opacity-100 transition-opacity duration-500"
-          >
+          {/* 2. RECOVERY MISSION STATUS (Replaces Body Battery & Injury) */}
+          <div className="md:col-span-2 group relative hover:!opacity-100 transition-opacity duration-500">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="h-full bg-black border border-white/10 p-8 rounded-sm relative flex flex-col items-center justify-center group-hover:border-blue-500/50 transition-colors"
+              className="h-full"
             >
-              <div className="absolute top-4 left-4 text-xs font-mono text-gray-500">
-                BODY BATTERY
-              </div>
-              <div className="relative w-32 h-32 flex items-center justify-center">
-                {/* Circular Chart Placeholder */}
-                <svg className="w-full h-full transform -rotate-90">
-                  <circle
-                    cx="64"
-                    cy="64"
-                    r="60"
-                    stroke="#1f2937"
-                    strokeWidth="8"
-                    fill="transparent"
-                  />
-                  <circle
-                    cx="64"
-                    cy="64"
-                    r="60"
-                    stroke="#3b82f6"
-                    strokeWidth="8"
-                    fill="transparent"
-                    strokeDasharray="377"
-                    strokeDashoffset={
-                      377 - (377 * displayData.bodyBattery) / 100
-                    }
-                    className="transition-all duration-1000 ease-out"
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <Zap className="w-6 h-6 text-blue-500 mb-1" />
-                  <span className="text-3xl font-oswald text-white">
-                    {displayData.bodyBattery}
-                  </span>
-                </div>
-              </div>
-              <p className="mt-4 text-xs text-blue-400 font-mono text-center">
-                {displayData.bodyBattery > 80
-                  ? 'HIGH ENERGY / READY'
-                  : 'RECOVERY REQUIRED'}
-              </p>
+              <RecoveryStatus vo2Max={apiMetrics?.vo2Max} />
             </motion.div>
-          </Link>
-
-          {/* 3. PHYSICAL STATUS (Injury) */}
-          <Link
-            href="/training"
-            className="group relative group-hover/grid:opacity-50 hover:!opacity-100 transition-opacity duration-500"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="h-full bg-zinc-900/50 border border-white/10 p-8 rounded-sm relative group-hover:border-red-500/50 transition-colors"
-            >
-              <div className="absolute top-4 left-4 flex items-center gap-2">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                <span className="text-xs font-mono text-red-500 tracking-wider">
-                  INJURY REPORT
-                </span>
-              </div>
-
-              <div className="mt-8">
-                <h4 className="text-4xl font-oswald text-white mb-1">
-                  Day {daysSinceSurgery}
-                </h4>
-                <p className="text-sm text-gray-400 font-mono mb-6">
-                  Of Recovery Protocol
-                </p>
-
-                <div className="w-full bg-gray-800 h-10 rounded-sm relative overflow-hidden">
-                  <div className="absolute inset-0 flex items-center justify-center text-[10px] font-mono font-bold z-10 mix-blend-difference text-white">
-                    REHAB IN PROGRESS
-                  </div>
-                  <div className="h-full bg-red-900/50 w-[65%] border-r border-red-500"></div>
-                </div>
-              </div>
-            </motion.div>
-          </Link>
-
-          {/* 4. TRAINING STATUS */}
-          <Link
-            href="/training"
-            className="group relative group-hover/grid:opacity-50 hover:!opacity-100 transition-opacity duration-500"
-          >
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="h-full bg-gradient-to-br from-green-900/20 to-black border border-white/10 p-8 rounded-sm relative group-hover:border-green-500/50 transition-colors"
-            >
-              <div className="absolute top-4 right-4">
-                <Activity className="w-5 h-5 text-green-500" />
-              </div>
-              <div className="text-xs font-mono text-gray-500 mb-8">
-                TRAINING LOAD
-              </div>
-              <h4 className="text-4xl font-oswald text-white mb-2">
-                REHABILITATION
-              </h4>
-              <p className="text-xs text-green-400 font-mono uppercase tracking-widest">
-                VO2 Max:{' '}
-                <span className="text-white">
-                  {apiMetrics?.advancedPerformance?.vo2Max?.value || 'N/A'}
-                </span>
-              </p>
-            </motion.div>
-          </Link>
+          </div>
 
           {/* 5. LATEST VISUAL (Instagram) - Large */}
           {posts[0] && (
