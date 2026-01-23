@@ -1,6 +1,6 @@
 ---
 title: Uncovering the Mystique of Sherpa Buddhism
-date: '2026-01-15'
+date: 2026-01-15T00:00:00.000Z
 author: Summit Explorer
 tags:
   - Sherpa Buddhism
@@ -9,11 +9,6 @@ tags:
 status: published
 image: /uploads/image.jpg
 ---
-
-**Uncovering the Mystique of Sherpa Buddhism**
-
-January 15, 2026
-Summit Chronicles
 
 As I stood at the crux of the climb, the sun dipping below the horizon, casting a golden glow on the Himalayan peaks of Ladakh, I couldn't help but feel a sense of awe and reverence for the people who call this range home. The Sherpas, with their deep connection to the mountains and their unique spiritual practices, are a mystery waiting to be unraveled.
 
