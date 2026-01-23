@@ -6,7 +6,13 @@ import {
 } from '../integrations/replicate';
 import fs from 'fs';
 import path from 'path';
-import matter from 'gray-matter'; // Assuming gray-matter is available, or simplistic parsing
+import matter from 'gray-matter';
+import {
+  loadCache,
+  getCachedEmbedding,
+  updateCache,
+  saveCache,
+} from './embedding-cache';
 
 // Knowledge base document interface
 export interface KnowledgeDocument {
@@ -48,6 +54,10 @@ const knowledgeBase: KnowledgeDocument[] = [];
 
 // Initialize with mountaineering training content AND Blog Posts
 export async function initializeKnowledgeBase(): Promise<void> {
+  // Load cache at start
+  const cache = loadCache();
+  let cacheUpdated = false;
+
   // 1. Load Hardcoded Training Data
   const trainingContent: Omit<
     KnowledgeDocument,
@@ -237,17 +247,30 @@ Practical strategies:
   // Process Hardcoded Content
   for (const content of trainingContent) {
     try {
-      const embedding = await generateEmbedding(content.content);
+      const documentId = generateDocumentId(content.title);
+      let embedding = getCachedEmbedding(cache, documentId, content.content);
+
+      if (!embedding) {
+        console.log(`Generating embedding for: ${content.title}`);
+        embedding = await generateEmbedding(content.content);
+        updateCache(cache, documentId, content.content, embedding);
+        cacheUpdated = true;
+        // Success! Wait 20s to be safe
+        await new Promise((resolve) => setTimeout(resolve, 20000));
+      }
+
       const document: KnowledgeDocument = {
         ...content,
-        id: generateDocumentId(content.title),
+        id: documentId,
         embedding,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       };
       knowledgeBase.push(document);
     } catch (error) {
-      // Ignore dupes or errors
+      console.error(`Failed to process ${content.title}:`, error);
+      // Wait 20s on error too to let limits reset
+      await new Promise((resolve) => setTimeout(resolve, 20000));
     }
   }
 
@@ -261,13 +284,25 @@ Practical strategies:
         const filePath = path.join(blogsDir, file);
         const fileContent = fs.readFileSync(filePath, 'utf8');
         const { data, content } = matter(fileContent);
+        const title = data.title || file.replace('.md', '');
+        const documentId = generateDocumentId(title);
 
-        console.log(`Embedding blog: ${data.title || file}`);
-        const embedding = await generateEmbedding(content);
+        console.log(`Processing blog: ${title}`);
+
+        // Check cache first
+        let embedding = getCachedEmbedding(cache, documentId, content);
+
+        if (!embedding) {
+          embedding = await generateEmbedding(content);
+          updateCache(cache, documentId, content, embedding);
+          cacheUpdated = true;
+          // Wait 20s
+          await new Promise((resolve) => setTimeout(resolve, 20000));
+        }
 
         knowledgeBase.push({
-          id: generateDocumentId(data.title || file),
-          title: data.title || file.replace('.md', ''),
+          id: documentId,
+          title: title,
           content: content,
           category: data.category || 'Blog',
           source: 'Summit Chronicles Blog',
@@ -283,6 +318,14 @@ Practical strategies:
     }
   } catch (err) {
     console.error('Failed to load blog posts:', err);
+    // Wait on error
+    await new Promise((resolve) => setTimeout(resolve, 20000));
+  }
+
+  // Save cache if updated
+  if (cacheUpdated) {
+    console.log('Updating embedding cache...');
+    saveCache(cache);
   }
 
   console.log(

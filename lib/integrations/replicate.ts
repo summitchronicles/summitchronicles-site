@@ -1,29 +1,39 @@
 import Replicate from 'replicate';
 
-// Initialize Replicate client
-const replicate = new Replicate({
-  auth: process.env.REPLICATE_API_TOKEN,
-});
+// Lazy initialization of Replicate client
+let replicateInstance: Replicate | null = null;
 
-// Model configurations for Option 3 (Dynamic)
-const CHAT_MODEL = 'meta/meta-llama-3.1-8b-instruct'; // Fast, cheap for queries
-const BLOG_MODEL = 'meta/meta-llama-3.1-70b-instruct'; // High quality for content
-const EMBEDDING_MODEL = 'nateraw/bge-large-en-v1.5'; // 1024-dim embeddings
+function getClient(): Replicate {
+  if (!replicateInstance) {
+    if (!process.env.REPLICATE_API_TOKEN) {
+      console.warn('⚠️ REPLICATE_API_TOKEN is not set. AI features will fail.');
+    }
+    replicateInstance = new Replicate({
+      auth: process.env.REPLICATE_API_TOKEN || '',
+    });
+  }
+  return replicateInstance;
+}
 
-// Message format conversion: OpenAI-style → Llama prompt format
+// Model configurations
+// Llama 3 8B is verified working and sufficient for both Chat and Blog (cost-efficient)
+const CHAT_MODEL = 'meta/meta-llama-3-8b-instruct';
+const BLOG_MODEL = 'meta/meta-llama-3-8b-instruct'; // Shared model to avoid rate limits
+
+// Verified BGE-Large version hash (1024 dimensions) - More powerful than MPNET
+const EMBEDDING_MODEL =
+  'nateraw/bge-large-en-v1.5:9cf9f015a9cb9c61d1a2610659cdac4a4ca222f2d3707a68517b18c198a9add1';
+
+// Message format conversion: Simple chat format (safer for Replicate API)
 function formatMessagesToLlamaPrompt(
   messages: Array<{ role: string; content: string }>
 ): string {
-  let prompt = '<|begin_of_text|>';
-
-  for (const msg of messages) {
-    prompt += `<|start_header_id|>${msg.role}<|end_header_id|>\n\n${msg.content}<|eot_id|>`;
-  }
-
-  // Add assistant header to trigger response
-  prompt += '<|start_header_id|>assistant<|end_header_id|>\n\n';
-
-  return prompt;
+  // Simple format that works reliably
+  return (
+    messages
+      .map((m) => `${m.role === 'user' ? 'User' : 'Assistant'}: ${m.content}`)
+      .join('\n') + '\nAssistant:'
+  );
 }
 
 /**
@@ -54,7 +64,7 @@ export async function generateChatCompletion(
   const prompt = formatMessagesToLlamaPrompt(messages);
 
   try {
-    const output = await replicate.run(selectedModel as any, {
+    const output = await getClient().run(selectedModel as any, {
       input: {
         prompt,
         temperature,
@@ -80,19 +90,20 @@ export async function generateChatCompletion(
 /**
  * Generate single text embedding using Replicate
  * @param text - Text to embed
- * @returns 1024-dimensional embedding vector
+ * @returns 1024-dimensional embedding vector (BGE-Large)
  */
 export async function generateEmbedding(text: string): Promise<number[]> {
   try {
-    const output = await replicate.run(EMBEDDING_MODEL as any, {
+    // BGE-Large expects "texts" as a JSON-stringified array (per official Replicate docs)
+    const output = await getClient().run(EMBEDDING_MODEL as any, {
       input: {
-        text_input: text,
+        texts: JSON.stringify([text]),
       },
     });
 
-    // Replicate embeddings return array of numbers
-    if (Array.isArray(output)) {
-      return output as number[];
+    // Output is array of embeddings, we want the first one
+    if (Array.isArray(output) && output.length > 0) {
+      return output[0] as number[];
     }
 
     throw new Error('Unexpected embedding format from Replicate');
@@ -107,7 +118,7 @@ export async function generateEmbedding(text: string): Promise<number[]> {
 /**
  * Generate multiple embeddings in batch
  * @param texts - Array of texts to embed
- * @returns Array of 1024-dimensional embedding vectors
+ * @returns Array of embedding vectors
  */
 export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
   // Replicate doesn't have native batch support, so we'll run in parallel
