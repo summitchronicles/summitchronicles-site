@@ -1,5 +1,5 @@
 ---
-title: My First Climb: The Spark I Didn’t See Coming
+title: "My First Climb: The Spark I Didn't See Coming"
 date: '2025-09-17'
 author: Summit Chronicles
 tags:
