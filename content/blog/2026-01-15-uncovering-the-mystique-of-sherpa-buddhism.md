@@ -7,7 +7,7 @@ tags:
   - Mysticism
   - Climbing Culture
 status: published
-image: /images/hero-1768538025675.png
+image: /uploads/image.jpg
 ---
 
 **Uncovering the Mystique of Sherpa Buddhism**
@@ -21,13 +21,13 @@ As I stood at the crux of the climb, the sun dipping below the horizon, casting 
 
 I spent several days hiking around the mounatins of Ladakh and staying with several local Sherpa families in small villages nestled at the foot of the Ladakh mountains. Their daily routine was a testament to their resilience and faith. From dawn till dusk, they tended to their yaks, cultivated their land, and offered prayers to their deities. I witnessed firsthand how their spiritual practices wove itself into every aspect of their lives.
 
-![Sherpa family with yaks](/images/hero-1768538036989.png)
+![Sherpa family with yaks](/uploads/sherpa_daily_life_1769137889765.png)
 
 **The Power of Mani Stones**
 
 One afternoon, while exploring the village, I stumbled upon a series of colorful stones scattered along the path. These were Mani stones, adorned with prayers and mantras, believed to have the power to purify the mind and bring good fortune. The Sherpas would carry these stones with them on their climbs, using them as talismans against bad omens and negative energies.
 
-![Mani Stones](/images/hero-1768538049008.png)
+![Mani Stones](/uploads/mani_stones_1769137905030.png)
 
 **The Quest for Enlightenment**
 
@@ -37,7 +37,7 @@ Sherpa Buddhism is an unique blend of Tibetan Buddhism and indigenous practices.
 
 As I watched the Sherpas prepare to guide me on an expedition, their eyes fixed on the summit, I realized that their spiritual practices were deeply intertwined with their climbing culture. The risks they take, the challenges they face, are all part of their journey towards enlightenment. The mountains become a metaphor for the human experience – a reminder of our own mortality and the importance of living in harmony with nature.
 
-![Sunith on Summit](/images/hero-1768538060465.png)
+![Sunith on Summit](/uploads/climber_perspective_1769137922664.png)
 
 **Unraveling the Mystique**
 
