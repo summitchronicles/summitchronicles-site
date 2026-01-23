@@ -191,7 +191,7 @@ export async function generateWeeklyInsight() {
 
         fs.writeFileSync(outPath, JSON.stringify(updatedInsights, null, 2));
         console.log('✅ Saved Weekly Insight (History Updated).');
-        updateAgentStatus('researcher', 'Insight generated!', 'done', 100, false);
+        updateAgentStatus('researcher', 'Insight generated!', 'done', 100, false, 'Weekly insight generated');
 
     } catch (e: any) {
         console.error('Failed to generate insight:', e.message);
@@ -363,7 +363,7 @@ async function draftBlogPost(topic: any) {
 
 
         saveBlog(content, topic.topic);
-        updateAgentStatus('researcher', 'Completed!', 'done', 100, false);
+        updateAgentStatus('researcher', 'Completed!', 'done', 100, false, `Draft created: ${topic.topic}`);
 
     } catch (e: any) {
         console.error('Drafting failed:', e.message);

@@ -1,45 +1,140 @@
+require('dotenv').config({ path: '.env.local' });
+
 import * as fs from 'fs';
 import * as path from 'path';
+import { generateChatCompletion } from '../../lib/integrations/replicate';
+import { updateAgentStatus } from '../../lib/agent-status';
+import { Guardrails } from '../../lib/guardrails';
 
-// Mock Data (since we might not have live DB data yet)
-const MOCK_ANALYTICS = [
-  { page: '/', views: 1200, bounceRate: 0.45, avgTime: 120 },
-  { page: '/training', views: 800, bounceRate: 0.30, avgTime: 300 },
-  { page: '/blog/everest-2025', views: 500, bounceRate: 0.85, avgTime: 45 }, // Problematic
-  { page: '/gear-guide', views: 300, bounceRate: 0.60, avgTime: 180 },
+const FILES_TO_ANALYZE = [
+    'app/page.tsx',
+    'app/layout.tsx',
+    'app/dashboard/page.tsx',
+    'app/training/page.tsx',
+    'app/blog/page.tsx'
 ];
 
+interface OptimizationResult {
+    file: string;
+    score: number; // 1-10
+    issues: string[];
+    recommendations: string[];
+}
+
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
 export async function runOptimizer() {
-  console.log('🎨 Starting UI/UX Optimizer Agent...');
+  if (!await Guardrails.checkWait('optimizer')) return;
 
-  // 1. Analyze Data
-  console.log('📊 Analyzing session data...');
-  const problematicPages = MOCK_ANALYTICS.filter(p => p.bounceRate > 0.70 || p.avgTime < 60);
+  console.log('🎨 Starting UI/UX Optimizer Agent (Static Analysis Mode)...');
+  updateAgentStatus('optimizer', 'Starting analysis...', 'init', 0);
 
-  // 2. Generate Report
-  let report = `# UI/UX Optimization Report - ${new Date().toISOString().split('T')[0]}\n\n`;
-  report += `## Executive Summary\nAnalyzed ${MOCK_ANALYTICS.length} pages. Found ${problematicPages.length} pages requiring attention.\n\n`;
+  const results: OptimizationResult[] = [];
+  const projectRoot = process.cwd();
 
-  report += `## high Priority Improvements\n`;
+  for (let i = 0; i < FILES_TO_ANALYZE.length; i++) {
+      // Rate Limit Handling: Wait 12s between requests (5 per minute limit)
+      if (i > 0) {
+          console.log('⏳ Waiting 12s to respect Replicate rate limits...');
+          await sleep(12000);
+      }
 
-  for (const page of problematicPages) {
-    report += `### Page: \`${page.page}\`\n`;
-    report += `- **Metrics**: Bounce Rate ${(page.bounceRate * 100).toFixed(0)}%, Avg Time ${page.avgTime}s\n`;
-    report += `- **Analysis**: High bounce rate suggests users aren't finding what they expect or the load time is too slow.\n`;
-    report += `- **Recommendation**: \n`;
-    report += `  - [ ] Check "Above the Fold" content.\n`;
-    report += `  - [ ] Verify page load speed (LCP).\n`;
-    report += `  - [ ] Add clearer Call-to-Action (CTA).\n\n`;
+      const relativePath = FILES_TO_ANALYZE[i];
+      const fullPath = path.join(projectRoot, relativePath);
+
+      if (!fs.existsSync(fullPath)) {
+          console.warn(`⚠️ Skipped missing file: ${relativePath}`);
+          continue;
+      }
+
+      console.log(`🔍 Analyzing ${relativePath}...`);
+      updateAgentStatus('optimizer', `Analyzing ${relativePath}...`, 'analyze', Math.round(((i) / FILES_TO_ANALYZE.length) * 100));
+
+      const code = fs.readFileSync(fullPath, 'utf-8');
+
+      // Prompt for Replicate
+      const prompt = `
+        You are a Senior React/Next.js Engineer and SEO Expert.
+        Analyze the following code file: "${relativePath}".
+
+        Code:
+        \`\`\`tsx
+        ${code.substring(0, 6000)}
+        \`\`\`
+        (Code truncated if too long)
+
+        Identify specific improvements for:
+        1. SEO (Meta tags, multiple h1s, semantic HTML)
+        2. Performance (Image optimization, heavy imports)
+        3. Accessibility (aria-labels, alt text, contrast)
+        4. UI/UX (Hardcoded values, responsive design misses)
+
+        Output JSON ONLY with this structure:
+        {
+            "score": number (1-10),
+            "issues": ["list", "of", "issues"],
+            "recommendations": ["list", "of", "fixes"]
+        }
+      `;
+
+      try {
+          const response = await generateChatCompletion([
+              { role: 'system', content: 'You are a code analysis tool. Output valid JSON only.' },
+              { role: 'user', content: prompt }
+          ], { model: 'blog' }); // Using 'blog' model (Llama 3 8B) as it is good for reasoning
+
+          const cleanJson = response.replace(/```json/g, '').replace(/```/g, '').trim();
+          const analysis = JSON.parse(cleanJson);
+
+          results.push({
+              file: relativePath,
+              score: analysis.score || 5,
+              issues: analysis.issues || [],
+              recommendations: analysis.recommendations || []
+          });
+
+      } catch (error) {
+          console.error(`❌ Analysis failed for ${relativePath}:`, error);
+          results.push({
+              file: relativePath,
+              score: 0,
+              issues: ['Analysis failed'],
+              recommendations: ['Check logs']
+          });
+      }
   }
 
-  report += `## Global Recommendations\n`;
-  report += `- **Navigation**: Ensure the "Training" page (Best performer) is easily accessible.\n`;
-  report += `- **A/B Testing**: Suggest testing new Hero image on Homepage to reduce 45% bounce rate.\n`;
+  // Generate Report
+  updateAgentStatus('optimizer', 'Generating report...', 'report', 90);
 
-  // 3. Save Report
+  let report = `# 🎨 UI/UX & Code Optimization Report\n`;
+  report += `**Date:** ${new Date().toISOString().split('T')[0]}\n`;
+  report += `**Files Analyzed:** ${results.length}\n\n`;
+
+  report += `## Summary\n`;
+  const avgScore = results.reduce((acc, curr) => acc + curr.score, 0) / (results.length || 1);
+  report += `**Overall Health Score:** ${avgScore.toFixed(1)}/10\n\n`;
+
+  for (const res of results) {
+      report += `### 📄 \`${res.file}\` (Score: ${res.score}/10)\n`;
+
+      if (res.issues.length > 0) {
+          report += `**⚠️ Issues:**\n`;
+          res.issues.forEach(issue => report += `- ${issue}\n`);
+      }
+
+      if (res.recommendations.length > 0) {
+          report += `\n**✅ Recommendations:**\n`;
+          res.recommendations.forEach(rec => report += `- ${rec}\n`);
+      }
+      report += `\n---\n`;
+  }
+
   const reportPath = path.join(process.cwd(), 'OPTIMIZATION_REPORT.md');
   fs.writeFileSync(reportPath, report);
-  console.log(`✅ Optimization report generated at: ${reportPath}`);
+
+  console.log(`✅ Report generated: ${reportPath}`);
+  updateAgentStatus('optimizer', 'Analysis complete!', 'done', 100, false);
 }
 
 // Allow running directly

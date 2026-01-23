@@ -81,6 +81,12 @@ export async function PUT(
   }
 }
 // POST: Publish the draft (status: published)
+// POST: Publish the draft (status: published)
+import { exec } from 'child_process';
+import { promisify } from 'util';
+
+const execAsync = promisify(exec);
+
 export async function POST(
   request: Request,
   { params }: { params: { filename: string } }
@@ -104,9 +110,47 @@ export async function POST(
     const newContent = matter.stringify(content, data);
     fs.writeFileSync(filepath, newContent);
 
+    // Git Automation
+    const gitLogs: string[] = [];
+    try {
+      const projectRoot = process.cwd();
+      const relativePath = path.relative(projectRoot, filepath);
+
+      // Add ALL changes (system updates + content) as requested by user
+      const addAllMsg = `[Git] Adding all changes (system updates & content)...`;
+      console.log(addAllMsg);
+      gitLogs.push(addAllMsg);
+      await execAsync(`git add .`, { cwd: projectRoot });
+
+      const commitMsg = `[Git] Committing...`;
+      console.log(commitMsg);
+      gitLogs.push(commitMsg);
+      // Update commit message to indicate potential system updates
+      await execAsync(
+        `git commit -m "Publish: ${filename} + System Updates" --no-verify`,
+        {
+          cwd: projectRoot,
+        }
+      );
+
+      const pushMsg = `[Git] Pushing...`;
+      console.log(pushMsg);
+      gitLogs.push(pushMsg);
+      await execAsync(`git push origin main`, { cwd: projectRoot });
+
+      const successMsg = '[Git] Push successful';
+      console.log(successMsg);
+      gitLogs.push(successMsg);
+    } catch (gitError: any) {
+      console.error('Git automation failed:', gitError.message);
+      gitLogs.push(`[Error] ${gitError.message}`);
+      // We don't fail the request, just log it, as the file IS updated locally.
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Published successfully',
+      gitLogs,
     });
   } catch (error: any) {
     console.error('Error publishing draft:', error);

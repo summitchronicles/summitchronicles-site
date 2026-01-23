@@ -28,40 +28,46 @@ const oswald = Oswald({
 });
 
 export const metadata: Metadata = {
-  title: 'Summit Chronicles - Journey to the Summit',
+  metadataBase: new URL('https://summitchronicles.com'),
+  title: {
+    default: 'Summit Chronicles - Journey to the Summit',
+    template: '%s | Summit Chronicles',
+  },
   description:
-    'Follow the systematic training, preparation, and expedition journey toward mountaineering excellence. Premium adventure preparation with Swiss spa aesthetics.',
+    "Follow Sunith Kumar's systematic training, preparation, and expedition journey toward conquering the Seven Summits. Expert insights on high-altitude mountaineering, fitness, and gear.",
   keywords:
-    'mountaineering, training, expedition, summit, adventure, preparation, community support',
-  authors: [{ name: 'Summit Chronicles' }],
-  creator: 'Summit Chronicles',
+    'mountaineering, training, expedition, Everest, Seven Summits, adventure, high altitude, climbing, Sherpa culture',
+  authors: [{ name: 'Sunith Kumar' }],
+  creator: 'Sunith Kumar',
   publisher: 'Summit Chronicles',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://summitchronicles.com',
     siteName: 'Summit Chronicles',
-    title: 'Summit Chronicles - Journey to the Summit',
+    title: 'Summit Chronicles - Journey to the Seven Summits',
     description:
       'Follow the systematic training, preparation, and expedition journey toward mountaineering excellence.',
+    images: [
+      {
+        url: '/images/og-image.jpg', // Ensure this exists or use a valid path
+        width: 1200,
+        height: 630,
+        alt: 'Summit Chronicles',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Summit Chronicles - Journey to the Summit',
+    title: 'Summit Chronicles - Journey to the Seven Summits',
     description:
       'Follow the systematic training, preparation, and expedition journey toward mountaineering excellence.',
     creator: '@summitchronicles',
+    images: ['/images/og-image.jpg'],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
   },
 };
 

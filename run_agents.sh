@@ -7,12 +7,11 @@ echo "1. Content Updater (Draft Blogs from Notes)"
 echo "2. Mountain Researcher (Find Trends)"
 echo "3. UI/UX Optimizer (Analyze Site)"
 echo "4. Newsletter Manager (Send Weekly Email)"
-echo "5. Knowledge Keeper (Update AI Brain)"
-echo "6. Run All (Sequential)"
+echo "5. Run All (Sequential)"
 echo "q. Quit"
 echo "--------------------------------"
 
-read -p "Enter choice [1-6]: " choice
+read -p "Enter choice [1-5]: " choice
 
 case $choice in
     1)
@@ -32,15 +31,10 @@ case $choice in
         npx ts-node -O '{"module":"commonjs"}' agents/newsletter/index.ts
         ;;
     5)
-        echo "Running Knowledge Keeper..."
-        npx ts-node -O '{"module":"commonjs"}' agents/knowledge-keeper/index.ts
-        ;;
-    6)
         echo "Running ALL Agents..."
         npx ts-node -O '{"module":"commonjs"}' agents/content-updater/index.ts
         npx ts-node -O '{"module":"commonjs"}' agents/researcher/index.ts
         npx ts-node -O '{"module":"commonjs"}' agents/optimizer/index.ts
-        npx ts-node -O '{"module":"commonjs"}' agents/knowledge-keeper/index.ts
         # Newsletter usually manual/weekly, but included for completeness:
         # npx ts-node -O '{"module":"commonjs"}' agents/newsletter/index.ts
         echo "Done!"

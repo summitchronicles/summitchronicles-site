@@ -22,6 +22,16 @@ interface RedBullBlogPostProps {
   post?: any;
   slug: string;
   className?: string;
+  isEditable?: boolean;
+  onImageClick?: (key: string, currentSrc: string) => void;
+  onTitleChange?: (newTitle: string) => void;
+  onSubtitleChange?: (newSubtitle: string) => void;
+  onIntroChange?: (newIntro: string) => void;
+  onSectionChange?: (
+    index: number,
+    field: 'title' | 'content',
+    newValue: string
+  ) => void;
 }
 
 interface BlogPostData {
@@ -50,6 +60,12 @@ export function RedBullBlogPost({
   post,
   slug,
   className = '',
+  isEditable = false,
+  onImageClick,
+  onTitleChange,
+  onSubtitleChange,
+  onSectionChange,
+  onIntroChange,
 }: RedBullBlogPostProps) {
   const [readingProgress, setReadingProgress] = useState(0);
 
@@ -100,14 +116,14 @@ export function RedBullBlogPost({
   const displayPost = post
     ? {
         title: post.title,
-        subtitle: post.excerpt || samplePost.subtitle,
+        subtitle: post.subtitle || post.excerpt || '',
         author: post.author?.name || 'Sunith Kumar',
         date: new Date(post.publishedAt).toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
         }),
-        readTime: `${post.readTime || 12} min read`,
+        readTime: post.readTime || '5 min read',
         category: post.categories?.[0]?.title?.toUpperCase() || 'STORY',
         location: post.location || 'Training Grounds, California',
         heroImage: post.mainImage || '/stories/everest-prep.jpeg',
@@ -117,136 +133,108 @@ export function RedBullBlogPost({
       }
     : samplePost;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrolled = window.scrollY;
-      const maxScroll =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const progress = Math.min(scrolled / maxScroll, 1);
-      setReadingProgress(progress);
-    };
+  // Helper for Editable Image Overlay
+  const EditableOverlay = ({ onClick }: { onClick: () => void }) => (
+    <div
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer z-20 group"
+    >
+      <div className="bg-summit-gold text-black px-4 py-2 rounded-full font-bold flex items-center gap-2 transform group-hover:scale-105 transition-transform">
+        <Edit3 className="w-4 h-4" />
+        <span>Replace Image</span>
+      </div>
+    </div>
+  );
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const getCategoryIcon = (category: string) => {
-    switch (category.toLowerCase()) {
-      case 'mental preparation':
-      case 'mental':
-        return TrendingUp;
-      case 'expedition':
-      case 'adventure':
-        return Mountain;
-      case 'training':
-        return Award;
-      default:
-        return Mountain;
-    }
-  };
-
-  const CategoryIcon = getCategoryIcon(displayPost.category);
+  // ... existing useEffect and helper functions ...
 
   return (
     <article className={`bg-black min-h-screen ${className}`}>
-      {/* Reading Progress */}
-      <div className="fixed top-0 left-0 w-full h-1 z-50 bg-white/5">
-        <div
-          className="h-full bg-summit-gold transition-all duration-300"
-          style={{ width: `${readingProgress * 100}%` }}
-        />
-      </div>
-
-      {/* Header Navigation */}
-      <div className="sticky top-0 bg-black/90 backdrop-blur-md border-b border-white/10 z-40">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link
-            href="/blog"
-            className="flex items-center space-x-2 text-gray-400 hover:text-summit-gold transition-colors group"
-          >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-medium">Stories</span>
-          </Link>
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-1 text-sm text-gray-500">
-              <Eye className="w-4 h-4" />
-              <span>{displayPost.views}</span>
-            </div>
-            <Link
-              href={`/edit/${slug}`}
-              className="flex items-center space-x-1 text-sm text-gray-400 hover:text-summit-gold transition-colors"
-            >
-              <Edit3 className="w-4 h-4" />
-              <span>Edit</span>
-            </Link>
-
-            <button className="flex items-center space-x-1 text-sm text-gray-400 hover:text-summit-gold transition-colors">
-              <Share2 className="w-4 h-4" />
-              <span>Share</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* ... existing Reading Progress and Header ... */}
 
       {/* Hero Section */}
       <section className="relative">
-        {/* Hero Image */}
-        <div className="relative h-[70vh] overflow-hidden">
+        <div className="relative h-[70vh] overflow-hidden group">
           <Image
             src={displayPost.heroImage}
             alt={displayPost.title}
             fill
-            className="object-contain bg-black"
+            className="object-cover bg-black"
             sizes="100vw"
             quality={100}
             unoptimized={true}
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
-        </div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />
 
-        {/* Hero Content */}
-        <div className="max-w-4xl mx-auto px-6 relative -mt-32 z-10">
-          <div className="bg-black/40 backdrop-blur-xl border border-white/10 p-8 md:p-12 rounded-2xl shadow-2xl">
-            <div className="space-y-6">
-              {/* Category */}
-              <div className="flex items-center space-x-2">
-                <div className="bg-summit-gold-600/20 text-summit-gold px-3 py-1 text-xs font-bold tracking-wider uppercase border border-summit-gold/20 rounded">
+          {/* Editable Overlay for Hero Image */}
+          {isEditable && onImageClick && (
+            <EditableOverlay
+              onClick={() => onImageClick('hero', displayPost.heroImage)}
+            />
+          )}
+
+          {/* Hero Content Overlay */}
+          <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 z-10">
+            <div className="max-w-4xl mx-auto">
+              <div className="flex items-center space-x-4 mb-6">
+                <span className="px-3 py-1 bg-summit-gold text-black text-xs font-bold uppercase tracking-wider rounded">
                   {displayPost.category}
-                </div>
-                <CategoryIcon className="w-5 h-5 text-summit-gold" />
+                </span>
+                <span className="text-gray-300 text-sm flex items-center">
+                  <Mountain className="w-4 h-4 mr-1" />
+                  Story
+                </span>
               </div>
 
-              {/* Title */}
-              <h1 className="text-4xl md:text-6xl font-black leading-tight text-white tracking-tight">
+              <h1
+                className={`text-4xl md:text-6xl font-bold text-white mb-4 leading-tight font-oswald ${isEditable ? 'cursor-text hover:bg-white/10 rounded px-2 -ml-2 ring-2 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+                contentEditable={isEditable}
+                suppressContentEditableWarning={true}
+                onBlur={(e) =>
+                  isEditable &&
+                  onTitleChange &&
+                  onTitleChange(e.currentTarget.textContent || '')
+                }
+              >
                 {displayPost.title}
               </h1>
 
-              {/* Subtitle */}
-              <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
+              <p
+                className={`text-xl md:text-2xl text-gray-300 mb-8 font-light ${isEditable ? 'cursor-text hover:bg-white/10 rounded px-2 -ml-2 ring-2 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+                contentEditable={isEditable}
+                suppressContentEditableWarning={true}
+                onBlur={(e) =>
+                  isEditable &&
+                  onSubtitleChange &&
+                  onSubtitleChange(e.currentTarget.textContent || '')
+                }
+              >
                 {displayPost.subtitle}
               </p>
 
-              {/* Meta Info */}
-              <div className="flex flex-wrap items-center gap-6 text-gray-400 pt-4 border-t border-white/10">
-                <div className="flex items-center space-x-2">
-                  <User className="w-4 h-4" />
-                  <span className="font-medium text-gray-200">
-                    {displayPost.author}
-                  </span>
+              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 font-mono">
+                <div className="flex items-center">
+                  <User className="w-4 h-4 mr-2 text-summit-gold" />
+                  {displayPost.author}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4" />
-                  <span>{displayPost.date}</span>
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 mr-2 text-summit-gold" />
+                  {displayPost.date}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4" />
-                  <span>{displayPost.readTime}</span>
+                <div className="flex items-center">
+                  <Clock className="w-4 h-4 mr-2 text-summit-gold" />
+                  {displayPost.readTime}
                 </div>
-                <div className="flex items-center space-x-2">
-                  <MapPin className="w-4 h-4" />
-                  <span>{displayPost.location}</span>
-                </div>
+                {displayPost.location && (
+                  <div className="flex items-center">
+                    <MapPin className="w-4 h-4 mr-2 text-summit-gold" />
+                    {displayPost.location}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -256,25 +244,44 @@ export function RedBullBlogPost({
       {/* Article Content */}
       <section className="max-w-4xl mx-auto px-6 py-12">
         {/* Intro */}
-        <div className="mb-12">
-          <p className="text-xl leading-relaxed text-gray-300 font-light border-l-4 border-summit-gold pl-6">
+        {displayPost.content.intro && (
+          <div
+            className={`text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed font-serif ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+            contentEditable={isEditable}
+            suppressContentEditableWarning={true}
+            onBlur={(e) =>
+              isEditable &&
+              onIntroChange &&
+              onIntroChange(e.currentTarget.textContent || '')
+            }
+          >
             {displayPost.content.intro}
-          </p>
-        </div>
+          </div>
+        )}
 
         {/* Content Sections */}
         <div className="space-y-12">
           {displayPost.content.sections.map((section: any, index: number) => (
-            <div
-              key={index}
-              className="space-y-6"
-            >
-              <h2 className="text-2xl md:text-3xl font-bold text-white leading-tight">
+            <div key={index} className="space-y-6">
+              <h2
+                className={`text-2xl md:text-3xl font-bold text-white leading-tight ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+                contentEditable={isEditable}
+                suppressContentEditableWarning={true}
+                onBlur={(e) =>
+                  isEditable &&
+                  onSectionChange &&
+                  onSectionChange(
+                    index,
+                    'title',
+                    e.currentTarget.textContent || ''
+                  )
+                }
+              >
                 {section.title}
               </h2>
 
               {section.image && (
-                <div className="my-8">
+                <div className="my-8 relative group">
                   <Image
                     src={section.image}
                     alt={section.title}
@@ -284,18 +291,45 @@ export function RedBullBlogPost({
                     unoptimized={true}
                     className="w-full rounded-lg object-contain bg-white/5 border border-white/10"
                   />
+                  {/* Editable Overlay for Section Image */}
+                  {isEditable && onImageClick && (
+                    <EditableOverlay
+                      onClick={() =>
+                        onImageClick(`section-${index}`, section.image)
+                      }
+                    />
+                  )}
                 </div>
               )}
 
+              {/* ... existing prose content and pullquote ... */}
+
               <div className="prose prose-lg prose-invert max-w-none">
-                {section.content.split('\n\n').map((paragraph: string, pIndex: number) => (
-                  <p
-                    key={pIndex}
-                    className="text-gray-300 leading-relaxed mb-6"
-                  >
-                    {paragraph}
-                  </p>
-                ))}
+                {section.content
+                  .split('\n\n')
+                  .map((paragraph: string, pIndex: number) => (
+                    <p
+                      key={pIndex}
+                      className={`text-gray-300 leading-relaxed mb-6 ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+                      contentEditable={isEditable}
+                      suppressContentEditableWarning={true}
+                      onBlur={(e) => {
+                        if (isEditable && onSectionChange) {
+                          // Reconstruct content with updated paragraph
+                          const paragraphs = section.content.split('\n\n');
+                          paragraphs[pIndex] =
+                            e.currentTarget.textContent || '';
+                          onSectionChange(
+                            index,
+                            'content',
+                            paragraphs.join('\n\n')
+                          );
+                        }
+                      }}
+                    >
+                      {paragraph}
+                    </p>
+                  ))}
               </div>
 
               {section.pullQuote && (

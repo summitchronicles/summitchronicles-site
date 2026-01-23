@@ -255,13 +255,18 @@ function ParallaxHeroContent() {
         className="relative group cursor-default"
       >
         {/* "SUMMIT" - Outline Only */}
-        <h1 className="text-[12vw] md:text-[160px] leading-[0.8] font-oswald font-bold uppercase tracking-tighter text-ghost group-hover:text-white/10 transition-colors duration-700 mb-4">
+        <div className="text-[12vw] md:text-[160px] leading-[0.8] font-oswald font-bold uppercase tracking-tighter text-ghost group-hover:text-white/10 transition-colors duration-700 mb-4 select-none">
           Summit
-        </h1>
+        </div>
 
         {/* "CHRONICLES" - Outline with Gold Hover Fill */}
-        <h1 className="text-[12vw] md:text-[160px] leading-[0.8] font-oswald font-bold uppercase tracking-tighter text-ghost group-hover:text-gold-metallic group-hover:!text-stroke-0 transition-all duration-500">
+        <div className="text-[12vw] md:text-[160px] leading-[0.8] font-oswald font-bold uppercase tracking-tighter text-ghost group-hover:text-gold-metallic group-hover:!text-stroke-0 transition-all duration-500 select-none">
           Chronicles
+        </div>
+
+        {/* Semantic H1 for SEO */}
+        <h1 className="sr-only">
+          Summit Chronicles - The Seven Summits Journey
         </h1>
 
         {/* Hover Hint */}

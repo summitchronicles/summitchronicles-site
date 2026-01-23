@@ -21,9 +21,10 @@ export async function GET() {
           title: data.title || 'Untitled',
           date: data.date || 'No date',
           author: data.author || 'Unknown',
-          status: 'draft', // You can enhance this with a status field in frontmatter
+          status: data.status || 'draft',
           hasImage: body.includes('![') || body.includes('<img'),
           wordCount: body.split(/\s+/).length,
+          slug: file.replace(/\.md$/, ''),
         };
       })
       .sort((a, b) => {

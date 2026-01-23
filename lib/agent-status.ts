@@ -10,6 +10,7 @@ export interface AgentStatus {
   progress: number; // 0-100
   isRunning: boolean;
   lastUpdated: string;
+  result?: string;
 }
 
 export function updateAgentStatus(
@@ -17,7 +18,8 @@ export function updateAgentStatus(
   status: string,
   step: string = '',
   progress: number = 0,
-  isRunning: boolean = true
+  isRunning: boolean = true,
+  result?: string
 ) {
   const data: AgentStatus = {
     agent,
@@ -26,6 +28,7 @@ export function updateAgentStatus(
     progress,
     isRunning,
     lastUpdated: new Date().toISOString(),
+    result,
   };
 
   try {
