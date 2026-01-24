@@ -2,10 +2,9 @@
 title: Why I Climb?
 date: '2025-07-17'
 author: Summit Chronicles
-tags:
-
-status: draft
-image:
+tags: null
+status: published
+image: null
 ---
 
 🔹 Blog Title:

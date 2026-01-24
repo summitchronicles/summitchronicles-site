@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { VisualEditorLogic } from '../components/VisualEditorLogic';
+import { CleanVisualEditor } from '../components/CleanVisualEditor';
 
 export default function EditBlogPage({
   params,
@@ -62,7 +62,7 @@ export default function EditBlogPage({
     );
 
   return (
-    <VisualEditorLogic
+    <CleanVisualEditor
       initialContent={content}
       filename={filename}
       onSave={handleSave}
