@@ -118,11 +118,17 @@ export function RedBullBlogPost({
         title: post.title,
         subtitle: post.subtitle || post.excerpt || '',
         author: post.author?.name || 'Sunith Kumar',
-        date: new Date(post.publishedAt).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        }),
+        date: post.date
+          ? new Date(post.date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })
+          : new Date().toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }),
         readTime: post.readTime || '5 min read',
         category: post.categories?.[0]?.title?.toUpperCase() || 'STORY',
         location: post.location || 'Training Grounds, California',
@@ -204,7 +210,7 @@ export function RedBullBlogPost({
               </h1>
 
               <p
-                className={`text-xl md:text-2xl text-gray-300 mb-8 font-light ${isEditable ? 'cursor-text hover:bg-white/10 rounded px-2 -ml-2 ring-2 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+                className={`text-xl md:text-2xl text-gray-200 mb-8 font-light ${isEditable ? 'cursor-text hover:bg-white/10 rounded px-2 -ml-2 ring-2 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
                 contentEditable={isEditable}
                 suppressContentEditableWarning={true}
                 onBlur={(e) =>
@@ -216,7 +222,7 @@ export function RedBullBlogPost({
                 {displayPost.subtitle}
               </p>
 
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 font-mono">
+              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-200 font-mono font-medium">
                 <div className="flex items-center">
                   <User className="w-4 h-4 mr-2 text-summit-gold" />
                   {displayPost.author}
@@ -245,17 +251,49 @@ export function RedBullBlogPost({
       <section className="max-w-4xl mx-auto px-6 py-12">
         {/* Intro */}
         {displayPost.content.intro && (
-          <div
-            className={`text-xl md:text-2xl text-gray-300 mb-12 leading-relaxed font-serif ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
-            contentEditable={isEditable}
-            suppressContentEditableWarning={true}
-            onBlur={(e) =>
-              isEditable &&
-              onIntroChange &&
-              onIntroChange(e.currentTarget.textContent || '')
-            }
-          >
-            {displayPost.content.intro}
+          <div className="mb-12">
+            {displayPost.content.intro
+              .split('\n\n')
+              .map((paragraph: string, index: number) => {
+                const isQuote = paragraph.trim().startsWith('>');
+                const cleanContent = isQuote
+                  ? paragraph.replace(/^>\s?/, '').trim()
+                  : paragraph;
+
+                if (isQuote) {
+                  return (
+                    <div
+                      key={index}
+                      className="my-8 flex flex-col md:flex-row gap-6 items-start"
+                    >
+                      <div className="text-5xl md:text-6xl text-summit-gold leading-none font-serif select-none">
+                        "
+                      </div>
+                      <blockquote className="flex-1">
+                        <p className="text-2xl md:text-3xl lg:text-4xl font-extrabold italic text-white leading-tight">
+                          {cleanContent}
+                        </p>
+                      </blockquote>
+                    </div>
+                  );
+                }
+
+                return (
+                  <p
+                    key={index}
+                    className={`text-xl md:text-2xl text-gray-300 mb-6 leading-relaxed font-serif ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+                    contentEditable={isEditable}
+                    suppressContentEditableWarning={true}
+                    onBlur={(e) =>
+                      isEditable &&
+                      onIntroChange &&
+                      onIntroChange(e.currentTarget.textContent || '')
+                    }
+                  >
+                    {paragraph}
+                  </p>
+                );
+              })}
           </div>
         )}
 
@@ -307,35 +345,72 @@ export function RedBullBlogPost({
               <div className="prose prose-lg prose-invert max-w-none">
                 {section.content
                   .split('\n\n')
-                  .map((paragraph: string, pIndex: number) => (
-                    <p
-                      key={pIndex}
-                      className={`text-gray-300 leading-relaxed mb-6 ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
-                      contentEditable={isEditable}
-                      suppressContentEditableWarning={true}
-                      onBlur={(e) => {
-                        if (isEditable && onSectionChange) {
-                          // Reconstruct content with updated paragraph
-                          const paragraphs = section.content.split('\n\n');
-                          paragraphs[pIndex] =
-                            e.currentTarget.textContent || '';
-                          onSectionChange(
-                            index,
-                            'content',
-                            paragraphs.join('\n\n')
-                          );
-                        }
-                      }}
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
+                  .map((paragraph: string, pIndex: number) => {
+                    // Check if this paragraph is a blockquote (starts with >)
+                    const isQuote = paragraph.trim().startsWith('>');
+                    const cleanContent = isQuote
+                      ? paragraph.replace(/^>\s?/, '').trim()
+                      : paragraph;
+
+                    if (isQuote) {
+                      return (
+                        <div
+                          key={pIndex}
+                          className="my-12 flex flex-col md:flex-row gap-8 items-start"
+                        >
+                          {/* Decorative Quote Mark */}
+                          <div className="text-6xl md:text-8xl text-summit-gold leading-none font-serif select-none">
+                            "
+                          </div>
+                          {/* Quote Content */}
+                          <blockquote className="flex-1">
+                            <p className="text-2xl md:text-3xl lg:text-4xl font-extrabold italic text-white leading-tight mb-4">
+                              {cleanContent}
+                            </p>
+                          </blockquote>
+                        </div>
+                      );
+                    }
+
+                    return (
+                      <p
+                        key={pIndex}
+                        className={`text-gray-300 leading-relaxed mb-6 ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+                        contentEditable={isEditable}
+                        suppressContentEditableWarning={true}
+                        onBlur={(e) => {
+                          if (isEditable && onSectionChange) {
+                            // Reconstruct content with updated paragraph
+                            const paragraphs = section.content.split('\n\n');
+                            paragraphs[pIndex] =
+                              e.currentTarget.textContent || '';
+                            onSectionChange(
+                              index,
+                              'content',
+                              paragraphs.join('\n\n')
+                            );
+                          }
+                        }}
+                      >
+                        {paragraph}
+                      </p>
+                    );
+                  })}
               </div>
 
               {section.pullQuote && (
-                <blockquote className="my-8 text-2xl font-light text-summit-gold border-l-4 border-summit-gold pl-6 italic bg-summit-gold/5 py-6 pr-6 rounded-r-lg">
-                  "{section.pullQuote}"
-                </blockquote>
+                <div className="my-12 flex flex-col md:flex-row gap-8 items-start">
+                  {/* Decorative Quote Mark */}
+                  <div className="text-6xl md:text-8xl text-summit-gold leading-none font-serif select-none">
+                    "
+                  </div>
+                  {/* Quote Content */}
+                  <blockquote className="flex-1">
+                    <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4">
+                      {section.pullQuote}
+                    </p>
+                  </blockquote>
+                </div>
               )}
             </div>
           ))}

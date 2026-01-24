@@ -55,6 +55,11 @@ const ImageCropper = ({
     }
   };
 
+  console.log(
+    'ImageCropper rendered with imageSrc:',
+    imageSrc.substring(0, 50) + '...'
+  );
+
   return (
     <div className="fixed inset-0 z-[150] bg-black/90 flex flex-col items-center justify-center p-4">
       <div className="relative w-full max-w-4xl h-[60vh] bg-gray-900 rounded-lg overflow-hidden border border-gray-800">

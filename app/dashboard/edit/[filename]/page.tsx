@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { CleanVisualEditor } from '../components/CleanVisualEditor';
+import { NotionEditor } from '../components/BlockNoteEditor';
 
 export default function EditBlogPage({
   params,
@@ -62,7 +62,7 @@ export default function EditBlogPage({
     );
 
   return (
-    <CleanVisualEditor
+    <NotionEditor
       initialContent={content}
       filename={filename}
       onSave={handleSave}
