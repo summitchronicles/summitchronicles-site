@@ -13,9 +13,10 @@ import { cn } from '@/lib/utils';
 
 interface RecoveryStatusProps {
   vo2Max?: number | null; // Live VO2 Max from API
+  latestLog?: string; // Live training log
 }
 
-export const RecoveryStatus = ({ vo2Max }: RecoveryStatusProps) => {
+export const RecoveryStatus = ({ vo2Max, latestLog }: RecoveryStatusProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const startDate = new Date(recoveryData.since);
@@ -183,7 +184,7 @@ export const RecoveryStatus = ({ vo2Max }: RecoveryStatusProps) => {
             <div className="w-1.5 h-1.5 rounded-full bg-zinc-700"></div>
           </div>
           <p className="text-xs text-zinc-400 leading-relaxed font-mono opacity-60 group-hover:opacity-100 transition-opacity">
-            latest_log: "{recoveryData.latestUpdate}"
+            latest_log: "{latestLog || recoveryData.latestUpdate}"
           </p>
         </div>
       </div>

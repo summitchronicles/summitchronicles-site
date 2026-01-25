@@ -107,30 +107,15 @@ LOG_WEBHOOK_URL=your_logging_webhook_url
 
 # Deployment
 NEXT_PUBLIC_VERCEL_URL=your_vercel_deployment_url
-```
+**⚠️ NOTE:** This repository has been reorganized.
 
-### Installation
+For the current technical specification, architecture, and "How-To" guides, please refer to:
+👉 **[CURRENT_SYSTEM_SPEC_2026-01-24.md](.gemini/antigravity/brain/7420a0cd-a1a3-4665-9c24-113acab50500/CURRENT_SYSTEM_SPEC_2026-01-24.md)**
 
-```bash
-# Clone the repository
-git clone https://github.com/summitchronicles/summitchronicles-site.git
-cd summit-chronicles
+For archived documentation, see the `archive/` directory.
 
-# Install dependencies
-npm install
-
-# Run development server
-npm run dev
-```
-
-The application will be available at `http://localhost:3000`.
-
-### Database Setup
-
-The project uses Supabase with the following key tables:
-
-```sql
--- Intervals.icu activities (Optional, primarily fetched live)
+---
+ched live)
 -- Table definitions if needed for caching
 
 -- Token management (Optional, mostly stateless now)

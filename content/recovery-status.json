@@ -1,10 +1,10 @@
 {
   "phase": "Non-Weight Bearing",
-  "since": "2026-01-05",
+  "since": "2025-11-10",
   "status": "active",
   "milestone": {
     "title": "Walk without Crutches",
-    "targetDate": "2026-02-15",
+    "targetDate": "2026-04-01",
     "confidence": "High"
   },
   "metrics": [

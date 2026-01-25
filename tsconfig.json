@@ -38,12 +38,14 @@
   ],
   "exclude": [
     "node_modules",
+    "archive",
     "agents-disabled",
-    "components-disabled", 
+    "components-disabled",
     "scripts-disabled",
     "lib-disabled",
     "app-complex",
     "instrumentation-disabled",
-    "sentry-disabled"
+    "sentry-disabled",
+    "scripts"
   ]
 }

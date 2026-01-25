@@ -45,6 +45,12 @@ export const VisualTransmissions = () => {
     hrvStatus: apiMetrics?.hrvStatus || 'Balanced', // Default/Fallback
   };
 
+  // Get latest log from recent activities (description or name)
+  const latestActivity = metrics?.recentActivities?.[0];
+  const latestLog = latestActivity
+    ? latestActivity.description || latestActivity.activityName
+    : undefined;
+
   // DEBUG: Log final display values
   console.log('VisualTransmissions - displayData:', displayData);
   // For 'trainingStatus', we already tried to grab the focus.
@@ -143,10 +149,12 @@ export const VisualTransmissions = () => {
               transition={{ delay: 0.1 }}
               className="h-full"
             >
-              <RecoveryStatus vo2Max={apiMetrics?.vo2Max} />
+              <RecoveryStatus
+                vo2Max={apiMetrics?.vo2Max}
+                latestLog={latestLog}
+              />
             </motion.div>
           </div>
-
           {/* 5. LATEST VISUAL (Instagram) - Large */}
           {posts[0] && (
             <Link
@@ -215,7 +223,6 @@ export const VisualTransmissions = () => {
               </motion.div>
             </Link>
           )}
-
           {/* 6. EXPEDITION LINK */}
           <Link
             href="/expeditions"
