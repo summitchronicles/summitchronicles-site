@@ -1,7 +1,12 @@
 ---
 image: /uploads/hero-1769515199307.jpg
 title: The Impact of Microplastics in Mountains
-description: 
+description: null
+date: 2026-01-27T00:00:00.000Z
+author: Summit Chronicles
+tags:
+  - null
+status: published
 ---
 
 ## An Alarming Trend in Mountain Ecosystems
