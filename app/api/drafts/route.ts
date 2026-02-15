@@ -12,23 +12,28 @@ export async function GET() {
     const drafts = files
       .filter((file) => file.endsWith('.md'))
       .map((file) => {
-        const filepath = path.join(BLOG_DIR, file);
-        const content = fs.readFileSync(filepath, 'utf-8');
-        const { data, content: body } = matter(content);
+        try {
+          const filepath = path.join(BLOG_DIR, file);
+          const content = fs.readFileSync(filepath, 'utf-8');
+          const { data, content: body } = matter(content);
 
-        return {
-          filename: file,
-          title: data.title || 'Untitled',
-          date: data.date || 'No date',
-          author: data.author || 'Unknown',
-          status: data.status || 'draft',
-          hasImage: body.includes('![') || body.includes('<img'),
-          wordCount: body.split(/\s+/).length,
-          slug: file.replace(/\.md$/, ''),
-        };
+          return {
+            filename: file,
+            title: data.title || 'Untitled',
+            date: data.date || 'No date',
+            author: data.author || 'Unknown',
+            status: data.status || 'draft',
+            hasImage: body.includes('![') || body.includes('<img'),
+            wordCount: body.split(/\s+/).length,
+            slug: file.replace(/\.md$/, ''),
+          };
+        } catch (e) {
+          console.warn(`Skipping ${file}: invalid frontmatter`);
+          return null;
+        }
       })
-      .sort((a, b) => {
-        // Sort by date descending
+      .filter(Boolean)
+      .sort((a: any, b: any) => {
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       });
 

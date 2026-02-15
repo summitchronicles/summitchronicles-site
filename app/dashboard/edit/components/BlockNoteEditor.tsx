@@ -281,6 +281,48 @@ export function NotionEditor({
         </div>
       </div>
 
+      {/* Metadata Fields */}
+      <div className="max-w-4xl mx-auto px-6 py-4 flex flex-wrap gap-4 border-b border-white/10">
+        <div className="flex items-center gap-2">
+          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Date</label>
+          <input
+            type="date"
+            value={frontmatter.date ? String(frontmatter.date).split('T')[0] : ''}
+            onChange={(e) =>
+              setFrontmatter((prev) => ({ ...prev, date: e.target.value }))
+            }
+            className="bg-gray-900 border border-gray-700 rounded px-2 py-1 text-sm text-white focus:border-summit-gold outline-none"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Author</label>
+          <input
+            type="text"
+            value={frontmatter.author || ''}
+            onChange={(e) =>
+              setFrontmatter((prev) => ({ ...prev, author: e.target.value }))
+            }
+            placeholder="Author name"
+            className="bg-gray-900 border border-gray-700 rounded px-2 py-1 text-sm text-white placeholder-gray-600 focus:border-summit-gold outline-none w-40"
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Tags</label>
+          <input
+            type="text"
+            value={Array.isArray(frontmatter.tags) ? frontmatter.tags.join(', ') : (frontmatter.tags || '')}
+            onChange={(e) =>
+              setFrontmatter((prev) => ({
+                ...prev,
+                tags: e.target.value.split(',').map((t: string) => t.trim()).filter(Boolean),
+              }))
+            }
+            placeholder="tag1, tag2, tag3"
+            className="bg-gray-900 border border-gray-700 rounded px-2 py-1 text-sm text-white placeholder-gray-600 focus:border-summit-gold outline-none w-64"
+          />
+        </div>
+      </div>
+
       {/* BlockNote Editor */}
       <div className="max-w-4xl mx-auto px-6 py-12 pb-32">
         <div className="prose prose-invert prose-lg max-w-none blocknote-dark">

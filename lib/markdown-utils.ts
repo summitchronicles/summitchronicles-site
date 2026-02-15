@@ -1,6 +1,13 @@
 export function parseMarkdownToRedBull(mdContent: string, slug: string) {
   // Normalize newlines
-  const text = mdContent.replace(/\r\n/g, '\n');
+  let text = mdContent.replace(/\r\n/g, '\n');
+
+  // Remove potential markdown code blocks wrapping the frontmatter (common in LLM output)
+  if (text.startsWith('```yml') || text.startsWith('```yaml')) {
+    text = text.replace(/^```(yml|yaml)\n/, '').replace(/---\n```\n?/, '---\n');
+  } else if (text.startsWith('```')) {
+    text = text.replace(/^```\n/, '').replace(/---\n```\n?/, '---\n');
+  }
 
   // Split into lines to process line-by-line
   const lines = text.split('\n');
@@ -16,7 +23,8 @@ export function parseMarkdownToRedBull(mdContent: string, slug: string) {
 
   // Pre-parse frontmatter to get values for comparison
   const metadata: any = {};
-  const frontmatterMatch = mdContent.match(/^---\n([\s\S]*?)\n---/);
+  // Use 'text' which might have been cleaned of ``` wrappers
+  const frontmatterMatch = text.match(/^---\n([\s\S]*?)\n---/);
   if (frontmatterMatch) {
     const frontmatterLines = frontmatterMatch[1].split('\n');
     frontmatterLines.forEach((line) => {
@@ -52,29 +60,35 @@ export function parseMarkdownToRedBull(mdContent: string, slug: string) {
     if (inFrontmatter) continue;
     if (!line) continue;
 
-    // Check for Image: ![alt](url)
-    const imgMatch = line.match(/!\[.*?\]\((.*?)\)/);
+    // Check for Image: ![alt](url) OR [IMAGE: description]
+    const imgMatch =
+      line.match(/!\[.*?\]\((.*?)\)/) || line.match(/^\[IMAGE:\s*(.*?)\]/i);
     if (imgMatch) {
-      const imgUrl = imgMatch[1];
-      if (!firstImage) firstImage = imgUrl; // Capture first image for Hero
+      // If it's a standard markdown image, match[1] is the URL.
+      // If it's a placeholder [IMAGE: ...], match[1] is the description.
+      const isStandard = line.includes('](');
+      // Use "placeholder:" prefix so the UI can render a text box instead of a broken image
+      const imgUrl = isStandard ? imgMatch[1] : `placeholder:${imgMatch[1]}`;
+
+      if (!firstImage) firstImage = imgUrl;
 
       if (isIntro) {
-        // allow image in intro for hero extraction but don't add to text
+        // allow image in intro
       } else {
         currentSection.image = imgUrl;
       }
-      continue; // Skip adding image line to text
+      continue;
     }
 
-    // Check for Headers: ## Title OR **Title**
-    // Detect bold headers that are stand-alone lines (likely headers)
+    // Check for Headers: ## Title, ### Title, or **Title**
     const isHeader =
       line.startsWith('## ') ||
+      line.startsWith('### ') ||
       (line.startsWith('**') && line.endsWith('**') && line.length < 100);
 
     if (isHeader) {
       // Check if this header is just the redundant Main Title
-      const cleanHeader = line.replace(/^##\s+/, '').replace(/\*\*/g, '');
+      const cleanHeader = line.replace(/^(##|###)\s+/, '').replace(/\*\*/g, '');
       if (
         isIntro &&
         metadata.title &&
@@ -116,4 +130,67 @@ export function parseMarkdownToRedBull(mdContent: string, slug: string) {
   }
 
   return { intro: intro.trim(), sections, introImage: firstImage, metadata };
+}
+
+export function convertRedBullToMarkdown(
+  postData: any,
+  originalMetadata: any = {}
+) {
+  // 1. Reconstruct Frontmatter
+  const metadata = { ...originalMetadata }; // Start with existing
+  metadata.title = postData.title;
+  metadata.author = postData.author; // Ensure author is saved
+  metadata.date = postData.date;
+  metadata.heroImage = postData.heroImage;
+  metadata.subtitle = postData.subtitle;
+  // Handle Tags
+  if (Array.isArray(postData.tags)) {
+    metadata.tags = postData.tags; // YAML stringify handles array
+  }
+
+  // Simple YAML stringify
+  let yamlString = '---\n';
+  for (const [key, value] of Object.entries(metadata)) {
+    if (key === 'content') continue; // Don't save content in frontmatter
+    let valStr = value;
+    if (Array.isArray(value)) {
+      valStr = `[${value.map((v) => `"${v}"`).join(', ')}]`;
+    } else if (typeof value === 'string') {
+      // Always quote strings to be safe and consistent
+      valStr = `"${value.replace(/"/g, '\\"')}"`;
+    }
+    yamlString += `${key}: ${valStr}\n`;
+  }
+  yamlString += '---\n\n';
+
+  // 2. Reconstruct Body
+  let body = '';
+
+  // Intro
+  if (postData.content.intro) {
+    body += postData.content.intro + '\n\n';
+  }
+
+  // Sections
+  postData.content.sections.forEach((section: any) => {
+    body += `### ${section.title}\n\n`;
+
+    if (section.image) {
+      if (section.image.startsWith('placeholder:')) {
+        body += `[IMAGE: ${section.image.replace('placeholder:', '')}]\n\n`;
+      } else {
+        body += `![Image](${section.image})\n\n`;
+      }
+    }
+
+    if (section.content) {
+      body += section.content + '\n\n';
+    }
+
+    if (section.pullQuote) {
+      body += `> ${section.pullQuote}\n\n`;
+    }
+  });
+
+  return yamlString + body;
 }

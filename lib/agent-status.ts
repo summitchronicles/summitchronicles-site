@@ -13,6 +13,35 @@ export interface AgentStatus {
   result?: string;
 }
 
+export interface MultiAgentStatus {
+  [agentName: string]: AgentStatus;
+}
+
+function loadStatusFile(): MultiAgentStatus {
+  try {
+    if (fs.existsSync(STATUS_FILE)) {
+      const content = fs.readFileSync(STATUS_FILE, 'utf-8');
+      const parsed = JSON.parse(content);
+      // Handle legacy single-agent format
+      if (parsed.agent && typeof parsed.agent === 'string') {
+        return { [parsed.agent]: parsed };
+      }
+      return parsed;
+    }
+  } catch {
+    // ignore
+  }
+  return {};
+}
+
+function saveStatusFile(data: MultiAgentStatus) {
+  try {
+    fs.writeFileSync(STATUS_FILE, JSON.stringify(data, null, 2));
+  } catch (error) {
+    console.error('Failed to update agent status file', error);
+  }
+}
+
 export function updateAgentStatus(
   agent: string,
   status: string,
@@ -21,7 +50,9 @@ export function updateAgentStatus(
   isRunning: boolean = true,
   result?: string
 ) {
-  const data: AgentStatus = {
+  const all = loadStatusFile();
+
+  all[agent] = {
     agent,
     status,
     step,
@@ -31,21 +62,17 @@ export function updateAgentStatus(
     result,
   };
 
-  try {
-    fs.writeFileSync(STATUS_FILE, JSON.stringify(data, null, 2));
-  } catch (error) {
-    console.error('Failed to update agent status file', error);
-  }
+  saveStatusFile(all);
 }
 
-export function getAgentStatus(): AgentStatus | null {
-  try {
-    if (fs.existsSync(STATUS_FILE)) {
-      const content = fs.readFileSync(STATUS_FILE, 'utf-8');
-      return JSON.parse(content);
-    }
-  } catch (error) {
-    // ignore
+export function getAgentStatus(agent?: string): AgentStatus | MultiAgentStatus | null {
+  const all = loadStatusFile();
+  if (agent) {
+    return all[agent] || null;
   }
-  return null;
+  return all;
+}
+
+export function getAllAgentStatuses(): MultiAgentStatus {
+  return loadStatusFile();
 }

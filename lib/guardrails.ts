@@ -9,10 +9,9 @@ interface DailyUsage {
 }
 
 const LIMITS: { [key: string]: number } = {
-  researcher: 20, // Max 20 external searches per day
+  researcher: 50, // Max 50 runs per day (handles notes + research + insight)
   newsletter: 1, // Max 1 newsletter run per day (prevent spam)
   optimizer: 10, // Max 10 runs
-  'content-updater': 50, // Higher limit for local tasks
   'knowledge-keeper': 50,
 };
 

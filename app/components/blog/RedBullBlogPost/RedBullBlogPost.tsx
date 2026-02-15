@@ -320,22 +320,46 @@ export function RedBullBlogPost({
 
               {section.image && (
                 <div className="my-8 relative group">
-                  <Image
-                    src={section.image}
-                    alt={section.title}
-                    width={1200}
-                    height={600}
-                    quality={100}
-                    unoptimized={true}
-                    className="w-full rounded-lg object-contain bg-white/5 border border-white/10"
-                  />
-                  {/* Editable Overlay for Section Image */}
-                  {isEditable && onImageClick && (
-                    <EditableOverlay
-                      onClick={() =>
-                        onImageClick(`section-${index}`, section.image)
-                      }
-                    />
+                  {section.image.startsWith('placeholder:') ? (
+                    <div className="w-full h-[400px] bg-gray-900 border-2 border-dashed border-gray-700 rounded-lg flex flex-col items-center justify-center p-8 text-center">
+                      <p className="text-gray-500 font-mono text-sm uppercase tracking-wider mb-2">
+                        Image Placeholder
+                      </p>
+                      <p className="text-gray-300 font-bold text-lg max-w-lg">
+                        &quot;{section.image.replace('placeholder:', '')}&quot;
+                      </p>
+                      {isEditable && (
+                        <button
+                          onClick={() =>
+                            onImageClick &&
+                            onImageClick(`section-${index}`, section.image)
+                          }
+                          className="mt-6 px-6 py-2 bg-summit-gold/10 text-summit-gold border border-summit-gold rounded hover:bg-summit-gold hover:text-black transition-colors font-bold uppercase text-xs tracking-widest"
+                        >
+                          Upload Image
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <>
+                      <Image
+                        src={section.image}
+                        alt={section.title}
+                        width={1200}
+                        height={600}
+                        quality={100}
+                        unoptimized={true}
+                        className="w-full rounded-lg object-contain bg-white/5 border border-white/10"
+                      />
+                      {/* Editable Overlay for Section Image */}
+                      {isEditable && onImageClick && (
+                        <EditableOverlay
+                          onClick={() =>
+                            onImageClick(`section-${index}`, section.image)
+                          }
+                        />
+                      )}
+                    </>
                   )}
                 </div>
               )}

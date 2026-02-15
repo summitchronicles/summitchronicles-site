@@ -3,40 +3,34 @@
 echo "🏔️  Summit Chronicles Agent System"
 echo "--------------------------------"
 echo "Select an agent to run:"
-echo "1. Content Updater (Draft Blogs from Notes)"
-echo "2. Mountain Researcher (Find Trends)"
-echo "3. UI/UX Optimizer (Analyze Site)"
-echo "4. Newsletter Manager (Send Weekly Email)"
-echo "5. Run All (Sequential)"
+echo "1. Mountain Researcher (Research + Draft + Process Notes)"
+echo "2. UI/UX Optimizer (Analyze Site)"
+echo "3. Newsletter Manager (Send Weekly Email)"
+echo "4. Run All (Sequential)"
 echo "q. Quit"
 echo "--------------------------------"
 
-read -p "Enter choice [1-5]: " choice
+read -p "Enter choice [1-4]: " choice
 
 case $choice in
     1)
-        echo "Running Content Updater..."
-        npx ts-node -O '{"module":"commonjs"}' agents/content-updater/index.ts
+        echo "Running Mountain Researcher..."
+        npx ts-node -O '{"module":"commonjs"}' scripts/legacy/researcher/index.ts
         ;;
     2)
-        echo "Running Mountain Researcher..."
-        npx ts-node -O '{"module":"commonjs"}' agents/researcher/index.ts
+        echo "Running UI/UX Optimizer..."
+        npx ts-node -O '{"module":"commonjs"}' scripts/legacy/optimizer/index.ts
         ;;
     3)
-        echo "Running UI/UX Optimizer..."
-        npx ts-node -O '{"module":"commonjs"}' agents/optimizer/index.ts
+        echo "Running Newsletter Manager..."
+        npx ts-node -O '{"module":"commonjs"}' scripts/legacy/newsletter/index.ts
         ;;
     4)
-        echo "Running Newsletter Manager..."
-        npx ts-node -O '{"module":"commonjs"}' agents/newsletter/index.ts
-        ;;
-    5)
         echo "Running ALL Agents..."
-        npx ts-node -O '{"module":"commonjs"}' agents/content-updater/index.ts
-        npx ts-node -O '{"module":"commonjs"}' agents/researcher/index.ts
-        npx ts-node -O '{"module":"commonjs"}' agents/optimizer/index.ts
+        npx ts-node -O '{"module":"commonjs"}' scripts/legacy/researcher/index.ts
+        npx ts-node -O '{"module":"commonjs"}' scripts/legacy/optimizer/index.ts
         # Newsletter usually manual/weekly, but included for completeness:
-        # npx ts-node -O '{"module":"commonjs"}' agents/newsletter/index.ts
+        # npx ts-node -O '{"module":"commonjs"}' scripts/legacy/newsletter/index.ts
         echo "Done!"
         ;;
     q)

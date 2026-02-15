@@ -1,8 +1,19 @@
 {
-  "agent": "optimizer",
-  "status": "Analysis complete!",
-  "step": "done",
-  "progress": 100,
-  "isRunning": false,
-  "lastUpdated": "2026-01-23T00:58:46.192Z"
+  "optimizer": {
+    "agent": "optimizer",
+    "status": "Analysis complete!",
+    "step": "done",
+    "progress": 100,
+    "isRunning": false,
+    "lastUpdated": "2026-01-23T00:58:46.192Z"
+  },
+  "researcher": {
+    "agent": "researcher",
+    "status": "Completed!",
+    "step": "done",
+    "progress": 100,
+    "isRunning": false,
+    "lastUpdated": "2026-02-14T12:46:44.993Z",
+    "result": "Draft created: Everest's Changing Climate: Navigating Unpredictable Weather Patterns"
+  }
 }

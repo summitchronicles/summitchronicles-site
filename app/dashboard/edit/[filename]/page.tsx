@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { NotionEditor } from '../components/BlockNoteEditor';
+import { VisualEditorLogic } from '../components/VisualEditorLogic';
 
 export default function EditBlogPage({
   params,
@@ -43,7 +43,6 @@ export default function EditBlogPage({
 
       if (res.ok) {
         alert('Saved successfully!');
-        // Reload the page to fetch fresh content
         window.location.reload();
       } else {
         alert('Failed to save');
@@ -62,7 +61,7 @@ export default function EditBlogPage({
     );
 
   return (
-    <NotionEditor
+    <VisualEditorLogic
       initialContent={content}
       filename={filename}
       onSave={handleSave}

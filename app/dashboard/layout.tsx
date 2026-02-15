@@ -1,12 +1,10 @@
 import type { Metadata } from 'next';
+import DashboardShell from './components/DashboardShell';
 
 export const metadata: Metadata = {
-  title: 'Agent Dashboard',
+  title: 'Mission Control - Summit Chronicles',
   description: 'Manage your AI agents, blog drafts, and training insights.',
-  robots: {
-    index: false, // Dashboard should probably not be indexed
-    follow: false,
-  },
+  robots: { index: false, follow: false },
 };
 
 export default function DashboardLayout({
@@ -14,5 +12,5 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <DashboardShell>{children}</DashboardShell>;
 }

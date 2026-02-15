@@ -287,14 +287,16 @@ function getFallbackMetrics(): TrainingMetrics {
     recentActivities: [
       {
         activityId: 101,
-        activityName: 'Base Training Run',
-        startTimeLocal: new Date().toISOString(),
-        distance: 5000,
+        activityName: 'Morning Mobility & Zone 2',
+        startTimeLocal: new Date(
+          Date.now() - 1000 * 60 * 60 * 12
+        ).toISOString(), // 12 hours ago
+        distance: 5200,
         duration: 1800,
-        elevationGain: 150,
-        averageHR: 145,
+        elevationGain: 120,
+        averageHR: 135,
         activityType: { typeKey: 'running' },
-        description: 'Fallback: Simulating steady state cardio.',
+        description: 'Focus on form and breathing. Knee felt stable.',
       },
       {
         activityId: 102,

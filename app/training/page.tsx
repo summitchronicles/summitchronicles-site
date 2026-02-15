@@ -45,7 +45,7 @@ export default function TrainingPage() {
       <Header />
 
       {/* Hero Section - Narrative Style */}
-      <section className="relative min-h-[90vh] flex flex-col items-center justify-center">
+      <section className="relative min-h-screen pt-32 flex flex-col items-center justify-center">
         {/* Background */}
         <div className="absolute inset-0">
           <Image
