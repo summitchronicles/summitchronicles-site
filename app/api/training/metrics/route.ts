@@ -158,8 +158,8 @@ function calculateTrainingMetrics(activities: any[], garminMetrics: any) {
     recentActivities: [...activities]
       .sort(
         (a, b) =>
-          new Date(b.startTimeLocal || b.start_date).getTime() -
-          new Date(a.startTimeLocal || a.start_date).getTime()
+          new Date(b.startTimeLocal).getTime() -
+          new Date(a.startTimeLocal).getTime()
       )
       .slice(0, 100),
   };
@@ -306,13 +306,13 @@ function calculatePredictions(activities: any[]) {
   // Simple predictive logic based on recent volume
   const sortedActivities = [...activities].sort(
     (a, b) =>
-      new Date(b.start_date).getTime() - new Date(a.start_date).getTime()
+      new Date(b.startTimeLocal).getTime() - new Date(a.startTimeLocal).getTime()
   );
   const last30Days = sortedActivities.slice(0, 30);
 
   const volume = last30Days.reduce((sum, a) => sum + (a.distance || 0), 0);
   const elevation = last30Days.reduce(
-    (sum, a) => sum + (a.total_elevation_gain || 0),
+    (sum, a) => sum + (a.elevationGain || 0),
     0
   );
 
@@ -356,7 +356,7 @@ function calculatePhaseMetrics(
   endDate: string
 ) {
   const phaseActivities = activities.filter((activity) => {
-    const activityDate = new Date(activity.start_date);
+    const activityDate = new Date(activity.startTimeLocal);
     return (
       activityDate >= new Date(startDate) && activityDate <= new Date(endDate)
     );
@@ -368,12 +368,12 @@ function calculatePhaseMetrics(
   );
 
   const totalElevation = phaseActivities.reduce(
-    (total, activity) => total + (activity.total_elevation_gain || 0),
+    (total, activity) => total + (activity.elevationGain || 0),
     0
   );
 
   const totalTime = phaseActivities.reduce(
-    (total, activity) => total + (activity.moving_time || 0),
+    (total, activity) => total + (activity.duration || 0),
     0
   );
 
@@ -381,11 +381,11 @@ function calculatePhaseMetrics(
     phaseActivities.length > 0
       ? Math.round(
           phaseActivities
-            .filter((a) => a.average_heartrate)
+            .filter((a) => a.averageHR)
             .reduce(
-              (total, activity) => total + (activity.average_heartrate || 0),
+              (total, activity) => total + (activity.averageHR || 0),
               0
-            ) / phaseActivities.filter((a) => a.average_heartrate).length
+            ) / phaseActivities.filter((a) => a.averageHR).length
         )
       : null;
 
@@ -415,13 +415,13 @@ function calculatePhaseMetrics(
 
 function calculateRecentTrends(activities: any[]) {
   const last30Days = activities.filter((activity) => {
-    const activityDate = new Date(activity.start_date);
+    const activityDate = new Date(activity.startTimeLocal);
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     return activityDate >= thirtyDaysAgo;
   });
 
   const last7Days = activities.filter((activity) => {
-    const activityDate = new Date(activity.start_date);
+    const activityDate = new Date(activity.startTimeLocal);
     const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
     return activityDate >= sevenDaysAgo;
   });
@@ -430,7 +430,7 @@ function calculateRecentTrends(activities: any[]) {
     weeklyVolume: {
       value: `${Math.round(
         last7Days.reduce(
-          (total, activity) => total + (activity.moving_time || 0),
+          (total, activity) => total + (activity.duration || 0),
           0
         ) / 3600
       )} hrs`,
@@ -445,7 +445,7 @@ function calculateRecentTrends(activities: any[]) {
     elevationThisWeek: {
       value: formatElevation(
         last7Days.reduce(
-          (total, activity) => total + (activity.total_elevation_gain || 0),
+          (total, activity) => total + (activity.elevationGain || 0),
           0
         )
       ),
@@ -477,11 +477,11 @@ function calculateAverageRestingHR(activities: any[]): string {
   if (recentActivities.length > 0) {
     const avgActiveHR =
       recentActivities
-        .filter((a) => a.average_heartrate)
+        .filter((a) => a.averageHR)
         .reduce(
-          (total, activity) => total + (activity.average_heartrate || 0),
+          (total, activity) => total + (activity.averageHR || 0),
           0
-        ) / recentActivities.filter((a) => a.average_heartrate).length;
+        ) / recentActivities.filter((a) => a.averageHR).length;
 
     // Log for debugging/validation (actual RHR should be much lower than active HR)
     console.log(
@@ -495,18 +495,18 @@ function calculateAverageRestingHR(activities: any[]): string {
 function calculateFitnessScore(activities: any[]): string {
   // Simple fitness score based on recent training load
   const last30Days = activities.filter((activity) => {
-    const activityDate = new Date(activity.start_date);
+    const activityDate = new Date(activity.startTimeLocal);
     const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     return activityDate >= thirtyDaysAgo;
   });
 
   const totalTime = last30Days.reduce(
-    (total, activity) => total + (activity.moving_time || 0),
+    (total, activity) => total + (activity.duration || 0),
     0
   );
 
   const totalElevation = last30Days.reduce(
-    (total, activity) => total + (activity.total_elevation_gain || 0),
+    (total, activity) => total + (activity.elevationGain || 0),
     0
   );
 

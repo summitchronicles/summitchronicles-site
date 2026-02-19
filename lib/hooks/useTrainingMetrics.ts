@@ -121,13 +121,13 @@ export function useTrainingMetrics(): UseTrainingMetricsResult {
 
       if (data.success) {
         setMetrics(data.metrics);
-        setIsRealData(data.source === 'garmin');
+        setIsRealData(data.source === 'intervals.icu');
         setLastUpdated(data.lastUpdated);
 
         // Debug logging to verify data source
         console.log('Training metrics loaded:', {
           source: data.source,
-          isRealData: data.source === 'garmin',
+          isRealData: data.source === 'intervals.icu',
           totalActivities: data.totalActivities,
         });
       } else {

@@ -1,5 +1,33 @@
 [
   {
+    "weekStart": "2026-02-16",
+    "weekSummary": "Transitioning to structured Zone 2 cardio. Lower body rehab progressing well with increased range of motion.",
+    "focus": "Zone 2 Cardio & Rehab",
+    "tip": "Keep heart rate below 145 bpm during cardio sessions. Monitor knee response after each session.",
+    "updatedAt": "2026-02-17T10:00:00.000Z"
+  },
+  {
+    "weekStart": "2026-02-09",
+    "weekSummary": "First week back on the bike trainer. Strength sessions increasing in intensity. Recovery metrics trending positive.",
+    "focus": "Return to Cycling",
+    "tip": "Start with 20-minute sessions on the trainer and increase by 5 minutes each session if pain-free.",
+    "updatedAt": "2026-02-10T10:00:00.000Z"
+  },
+  {
+    "weekStart": "2026-02-02",
+    "weekSummary": "Upper body strength maintained. Introducing bodyweight squats and lunges with physical therapist supervision.",
+    "focus": "Lower Body Reintroduction",
+    "tip": "Perform exercises in front of a mirror to ensure proper form and alignment.",
+    "updatedAt": "2026-02-03T10:00:00.000Z"
+  },
+  {
+    "weekStart": "2026-01-26",
+    "weekSummary": "Cleared for weight-bearing exercises. Starting with resistance bands and progressing to light weights.",
+    "focus": "Weight-Bearing Progression",
+    "tip": "Increase resistance gradually. Stop immediately if sharp pain returns.",
+    "updatedAt": "2026-01-27T10:00:00.000Z"
+  },
+  {
     "weekStart": "2026-01-19",
     "weekSummary": "Consistency is key, with a strong foundation being built.",
     "focus": "Strength Endurance",
