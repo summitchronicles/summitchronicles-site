@@ -53,7 +53,7 @@ export default function LiveCinematicEditor() {
     subtitle: 'Click here to add your compelling subtitle...',
     category: 'Mental Preparation',
     author: 'Sunith Kumar',
-    heroImage: '/stories/everest-prep.jpeg', // Default placeholder
+    heroImage: '',
     sections: [
       {
         id: '1',
@@ -252,29 +252,53 @@ export default function LiveCinematicEditor() {
       <div className="relative h-screen w-full flex items-end">
         {/* Hero Background */}
         <div className="absolute inset-0 z-0">
-          <Image
-            src={formData.heroImage}
-            alt="Hero Background"
-            fill
-            className="object-cover opacity-60"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-
-          {/* Image Upload Overlay */}
-          <div className="absolute top-6 left-6 z-20 opacity-0 hover:opacity-100 transition-opacity">
-            <button
-              onClick={triggerHeroImageUpload}
-              disabled={isUploading}
-              className="flex items-center space-x-2 bg-black/60 backdrop-blur text-white px-4 py-2 rounded-lg border border-white/10 text-sm hover:bg-black/80 transition-colors"
-            >
-              {isUploading ? (
-                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              ) : (
-                <ImageIcon className="w-4 h-4" />
-              )}
-              <span>{isUploading ? 'Uploading...' : 'Change Cover Image'}</span>
-            </button>
-          </div>
+          {formData.heroImage ? (
+            <>
+              <Image
+                src={formData.heroImage}
+                alt="Hero Background"
+                fill
+                className="object-cover opacity-60"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+              {/* Change image overlay (shown on hover) */}
+              <div className="absolute top-6 left-6 z-20 opacity-0 hover:opacity-100 transition-opacity">
+                <button
+                  onClick={triggerHeroImageUpload}
+                  disabled={isUploading}
+                  className="flex items-center space-x-2 bg-black/60 backdrop-blur text-white px-4 py-2 rounded-lg border border-white/10 text-sm hover:bg-black/80 transition-colors"
+                >
+                  {isUploading ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <ImageIcon className="w-4 h-4" />
+                  )}
+                  <span>{isUploading ? 'Uploading...' : 'Change Cover Image'}</span>
+                </button>
+              </div>
+            </>
+          ) : (
+            /* No image yet — show upload CTA */
+            <div className="absolute inset-0 bg-zinc-950 flex flex-col items-center justify-center gap-4 border-b border-white/5">
+              <button
+                onClick={triggerHeroImageUpload}
+                disabled={isUploading}
+                className="flex flex-col items-center gap-3 text-zinc-500 hover:text-white transition-colors group"
+              >
+                <div className="w-16 h-16 rounded-full border-2 border-dashed border-zinc-700 group-hover:border-summit-gold flex items-center justify-center transition-colors">
+                  {isUploading ? (
+                    <div className="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <ImageIcon className="w-7 h-7" />
+                  )}
+                </div>
+                <span className="text-sm font-mono uppercase tracking-widest">
+                  {isUploading ? 'Uploading...' : 'Add Cover Image'}
+                </span>
+              </button>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent pointer-events-none" />
+            </div>
+          )}
         </div>
 
         {/* Hero Content Editable */}

@@ -49,26 +49,45 @@ export async function runNewsletter() {
   }
 
   const files = fs.readdirSync(BLOG_DIR).filter(file => file.endsWith('.md'));
-  const recentPosts: string[] = [];
+
+  // Use frontmatter date field (not mtime) to detect recent posts
+  interface PostSummary { title: string; description: string; excerpt: string; date: string; }
+  const recentPostSummaries: PostSummary[] = [];
 
   for (const file of files) {
     const filePath = path.join(BLOG_DIR, file);
-    const stats = fs.statSync(filePath);
-    if (stats.mtime > oneWeekAgo) {
-      const content = fs.readFileSync(filePath, 'utf-8');
-      recentPosts.push(content);
-    }
+    const content = fs.readFileSync(filePath, 'utf-8');
+
+    const dateMatch = content.match(/^date:\s*["']?(\d{4}-\d{2}-\d{2})["']?/m);
+    if (!dateMatch) continue;
+
+    const postDate = new Date(dateMatch[1]);
+    if (postDate < oneWeekAgo) continue;
+
+    // Extract just title, description, and first 300 chars of body — not the full post
+    const titleMatch = content.match(/^title:\s*["']?(.+?)["']?$/m);
+    const descMatch = content.match(/^description:\s*["']?(.+?)["']?$/m);
+    const bodyExcerpt = content.replace(/^---[\s\S]*?---\n?/, '').slice(0, 300).trim();
+
+    recentPostSummaries.push({
+      title: titleMatch?.[1] || file,
+      description: descMatch?.[1] || '',
+      excerpt: bodyExcerpt,
+      date: dateMatch[1],
+    });
   }
 
-  if (recentPosts.length === 0) {
+  if (recentPostSummaries.length === 0) {
     console.log('No new posts in the last week. Skipping newsletter.');
     return;
   }
 
-  console.log(`Found ${recentPosts.length} new posts. Generating newsletter...`);
+  console.log(`Found ${recentPostSummaries.length} new posts. Generating newsletter...`);
 
-  // 2. Generate Newsletter Content
-  const postsContext = recentPosts.join('\n\n---\n\n');
+  // 2. Generate Newsletter Content — pass summaries only (not full markdown)
+  const postsContext = recentPostSummaries
+    .map(p => `Title: ${p.title}\nDate: ${p.date}\nSummary: ${p.description}\nExcerpt: ${p.excerpt}`)
+    .join('\n\n---\n\n');
   const prompt = `
     You are the editor of "Summit Chronicles". Write a weekly newsletter summarizing the following recent blog posts.
 

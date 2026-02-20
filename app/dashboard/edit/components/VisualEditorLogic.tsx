@@ -33,7 +33,7 @@ export function VisualEditorLogic({
     heroImage:
       initialParsed.metadata.heroImage ||
       initialParsed.introImage ||
-      '/stories/default.jpg',
+      '',
     views: '0',
     tags: initialParsed.metadata.tags
       ? Array.isArray(initialParsed.metadata.tags)

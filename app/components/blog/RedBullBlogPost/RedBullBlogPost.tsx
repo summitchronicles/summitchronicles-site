@@ -164,16 +164,22 @@ export function RedBullBlogPost({
       {/* Hero Section */}
       <section className="relative">
         <div className="relative h-[70vh] overflow-hidden group">
-          <Image
-            src={displayPost.heroImage}
-            alt={displayPost.title}
-            fill
-            className="object-cover bg-black"
-            sizes="100vw"
-            quality={100}
-            unoptimized={true}
-            priority
-          />
+          {displayPost.heroImage ? (
+            <Image
+              src={displayPost.heroImage}
+              alt={displayPost.title}
+              fill
+              className="object-cover bg-black"
+              sizes="100vw"
+              quality={100}
+              unoptimized={true}
+              priority
+            />
+          ) : (
+            <div className="absolute inset-0 bg-zinc-950 flex items-center justify-center">
+              <span className="text-zinc-700 text-sm font-mono uppercase tracking-widest">No Cover Image</span>
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />
 
           {/* Editable Overlay for Hero Image */}

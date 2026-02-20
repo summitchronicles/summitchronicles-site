@@ -20,8 +20,15 @@ const AGENTS = [
 ];
 
 export default function AgentsPage() {
-  const { data: statusData } = useSWR('/api/agents/status', fetcher, { refreshInterval: 2000 });
+  const [pollInterval, setPollInterval] = useState(10000); // Start slow (10s) when idle
+  const { data: statusData } = useSWR('/api/agents/status', fetcher, { refreshInterval: pollInterval });
   const [runState, setRunState] = useState<Record<string, { lastRun?: string }>>({});
+
+  // Speed up polling when any agent is running, slow down when idle
+  useEffect(() => {
+    const isAnyRunning = statusData?.researcher?.isRunning || statusData?.newsletter?.isRunning;
+    setPollInterval(isAnyRunning ? 2000 : 10000);
+  }, [statusData?.researcher?.isRunning, statusData?.newsletter?.isRunning]);
 
   const ollamaAvailable = statusData?.ollamaAvailable === true;
 
@@ -37,6 +44,7 @@ export default function AgentsPage() {
 
   const runAgent = async (agentKey: string) => {
     try {
+      setPollInterval(2000); // Switch to fast polling immediately on trigger
       await fetch('/api/agents/run', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

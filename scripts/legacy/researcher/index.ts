@@ -14,34 +14,92 @@ const INCOMING_DIR = path.join(process.cwd(), 'content', 'incoming-notes');
 const PROCESSED_DIR = path.join(INCOMING_DIR, 'processed');
 const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
 const MISSION_LOG_FILE = path.join(process.cwd(), 'content', 'mission-logs.json');
+const STATE_FILE = path.join(process.cwd(), 'scripts', 'legacy', 'researcher', 'researcher-state.json');
 
-// Diverse topic keywords with date-based rotation
+// Diverse topic keywords — grouped by theme, rotated per-run (not per-day)
 const SEARCH_KEYWORDS = [
-  'Mount Everest Season 2026',
-  'Winter Alpinism Trends',
+  // Training Science
   'High Altitude Training Science',
-  'Sustainable Climbing Gear',
-  'Sherpa Culture and History',
-  'Ice Climbing Techniques',
-  'Alpine Style vs Expedition Style',
-  'Altitude Acclimatization Protocols',
-  'Mountain Weather Forecasting',
-  'Climbing Nutrition and Hydration',
-  'Bouldering Movement Patterns',
-  'Himalayan Glacier Retreat',
-  'Mountaineering Ethics and Leave No Trace',
-  'Crevasse Rescue Techniques',
+  'Zone 2 Cardio for Mountaineers',
+  'Strength Training for Climbers',
+  'Recovery Protocols for High Altitude Athletes',
+  'VO2 Max and Altitude Performance',
+  // Gear & Tech
+  'Sustainable Climbing Gear 2026',
+  'Best Boots for High Altitude',
+  'Layering Systems for Extreme Cold',
+  'GPS and Navigation Tech on Expeditions',
+  // Mental Game
   'Mental Training for High Altitude',
+  'Fear Management in Climbing',
+  'Mindfulness and Mountain Focus',
+  'Dealing with Failure on the Mountain',
+  // Expeditions & Culture
+  'Mount Everest Season 2026',
+  'Sherpa Culture and History',
+  'Alpine Style vs Expedition Style',
+  'Women in High Altitude Climbing',
+  'Solo vs Team Expeditions',
+  // Techniques
+  'Ice Climbing Techniques',
+  'Crevasse Rescue Techniques',
+  'Bouldering Movement Patterns',
+  'Mixed Climbing Progression',
+  // Environment & Science
+  'Himalayan Glacier Retreat',
+  'Mountain Weather Forecasting',
+  'Altitude Sickness Prevention',
+  'Altitude Acclimatization Protocols',
+  // Nutrition & Health
+  'Climbing Nutrition and Hydration',
+  'Sleep at High Altitude',
+  'Cold Exposure Training for Climbers',
+  // Ethics & Philosophy
+  'Mountaineering Ethics and Leave No Trace',
+  'Winter Alpinism Trends',
 ];
 
-function getRotatedKeyword(): string {
-  const dayOfYear = Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000
-  );
-  return SEARCH_KEYWORDS[dayOfYear % SEARCH_KEYWORDS.length];
+// State helpers — track run count for keyword rotation
+function getRunCount(): number {
+  try {
+    if (fs.existsSync(STATE_FILE)) {
+      return JSON.parse(fs.readFileSync(STATE_FILE, 'utf-8')).runCount || 0;
+    }
+  } catch {}
+  return 0;
 }
 
-// --- Incoming Notes Processing (merged from content-updater) ---
+function incrementRunCount(): number {
+  const count = getRunCount() + 1;
+  fs.writeFileSync(STATE_FILE, JSON.stringify({ runCount: count }, null, 2));
+  return count;
+}
+
+function getRotatedKeyword(): string {
+  const runCount = getRunCount();
+  return SEARCH_KEYWORDS[runCount % SEARCH_KEYWORDS.length];
+}
+
+// Get titles of recent blog posts to avoid generating duplicate topics
+function getRecentBlogTitles(limit = 5): string[] {
+  try {
+    if (!fs.existsSync(BLOG_DIR)) return [];
+    return fs.readdirSync(BLOG_DIR)
+      .filter(f => f.endsWith('.md'))
+      .sort()
+      .reverse()
+      .slice(0, limit)
+      .map(f => {
+        const content = fs.readFileSync(path.join(BLOG_DIR, f), 'utf-8');
+        const match = content.match(/title:\s*["']?(.+?)["']?\n/);
+        return match?.[1] || f;
+      });
+  } catch {
+    return [];
+  }
+}
+
+// --- Incoming Notes Processing ---
 
 function ensureDirs() {
   [INCOMING_DIR, PROCESSED_DIR, BLOG_DIR].forEach(dir => {
@@ -131,7 +189,7 @@ async function processNote(filename: string) {
     Structure:
     - Title: Catchy and relevant.
     - Introduction: Hook the reader.
-    - Body: Organized with proper headings.
+    - Body: Organized with ## headings.
     - Conclusion: Wrap up with a thought.
 
     Include 2-3 [IMAGE: description] markers where images would enhance the post.
@@ -207,9 +265,13 @@ async function processIncomingNotes() {
   console.log(`Found ${files.length} incoming note(s) to process.`);
   updateAgentStatus('researcher', `Processing ${files.length} incoming note(s)...`, 'notes', 5);
 
-  for (const file of files) {
-    await processNote(file);
-  }
+  // Process all notes in parallel
+  await Promise.all(
+    files.map((file, i) => {
+      updateAgentStatus('researcher', `Processing note ${i + 1}/${files.length}: ${file}`, 'notes', 5 + Math.round((i / files.length) * 15));
+      return processNote(file);
+    })
+  );
 
   console.log('Incoming notes processing complete.');
 }
@@ -237,11 +299,11 @@ async function fetchTrainingData() {
   return null;
 }
 
-export async function generateWeeklyInsight() {
+export async function generateWeeklyInsight(preloadedData?: any) {
   console.log('Generating Weekly AI Training Insight...');
   updateAgentStatus('researcher', 'Analysing weekly protocol...', 'insight', 20);
 
-  const data = await fetchTrainingData();
+  const data = preloadedData || await fetchTrainingData();
   if (!data) {
     console.log('No data available for insight.');
     return;
@@ -329,15 +391,14 @@ export async function runResearcher() {
   console.log('Starting Mountain Researcher Agent...');
   updateAgentStatus('researcher', 'Starting...', 'init', 0);
 
-  // 1. Process incoming notes first (merged from content-updater)
+  // 1. Process incoming notes first (in parallel)
   await processIncomingNotes();
 
-  // 2. Brainstorm + draft topics
-  updateAgentStatus('researcher', 'Analysing training data...', 'brainstorm', 10);
-
+  // 2. Fetch training data once — reuse for both brainstorm and insight
+  updateAgentStatus('researcher', 'Analysing training data...', 'brainstorm', 20);
   const trainingData = await fetchTrainingData();
-  let dataContext = "";
 
+  let dataContext = "";
   if (trainingData) {
     console.log('Found live training data!');
     const trends = trainingData.recentTrends || {};
@@ -350,16 +411,25 @@ export async function runResearcher() {
     `;
   }
 
+  // 3. Get keyword for this run (rotates per run, not per day)
   const keyword = getRotatedKeyword();
-  console.log(`Brainstorming topics related to: "${keyword}"...`);
+  console.log(`Brainstorming topics related to: "${keyword}" (run #${getRunCount()})...`);
+
+  // 4. Get recently published titles to avoid duplicate topics
+  const recentTitles = getRecentBlogTitles(5);
+  const avoidContext = recentTitles.length > 0
+    ? `\nAVOID topics similar to these recently published posts:\n${recentTitles.map(t => `- "${t}"`).join('\n')}\n`
+    : '';
 
   const prompt = `
     You are an expert mountaineering journalist ghostwriting for Sunith.
 
     ${dataContext}
+    ${avoidContext}
 
     Brainstorm 3 cutting-edge, interesting blog post ideas related to: "${keyword}".
     If "CURRENT TRAINING CONTEXT" is provided, ensure at least one topic connects the global trend to Sunith's personal training progress.
+    Make sure each topic is genuinely different from the others and from any topics to avoid listed above.
 
     Format the output as a JSON array of objects with the following keys:
     - topic: Title of the topic
@@ -400,20 +470,23 @@ export async function runResearcher() {
   }
 
   saveToFile(topics);
+
+  // 5. Increment run count after successful run (so next run gets next keyword)
+  incrementRunCount();
 }
 
 async function draftBlogPost(topic: any) {
   console.log('Drafting blog post...');
-  updateAgentStatus('researcher', `Drafting: "${topic.topic.substring(0, 30)}..."`, 'draft', 30);
+  updateAgentStatus('researcher', `Drafting: "${topic.topic.substring(0, 30)}..."`, 'draft', 60);
 
   const styleGuide = `
     Style: Personal, authoritative, mountaineering journalist.
     Structure:
-    - Title: Bold, H1.
-    - Date/Tags/Author: YAML Frontmatter.
+    - YAML Frontmatter with title, date, description, author, tags.
     - Intro: Personal reflection or hook using "I".
-    - Subheadings: H2/H3 for sections.
+    - Subheadings: Use ## for main sections, ### for sub-sections.
     - Tone: Professional but gritty. Uses terms like "Crag", "Send", "Beta".
+    - Do NOT include a bare H1 title in the body — it is already in the frontmatter.
   `;
 
   const draftPrompt = `

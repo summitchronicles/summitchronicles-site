@@ -80,15 +80,14 @@ export function parseMarkdownToRedBull(mdContent: string, slug: string) {
       continue;
     }
 
-    // Check for Headers: ## Title, ### Title, or **Title**
+    // Check for Headers: any # level heading, or **Bold Title**
     const isHeader =
-      line.startsWith('## ') ||
-      line.startsWith('### ') ||
+      /^#{1,6}\s/.test(line) ||
       (line.startsWith('**') && line.endsWith('**') && line.length < 100);
 
     if (isHeader) {
       // Check if this header is just the redundant Main Title
-      const cleanHeader = line.replace(/^(##|###)\s+/, '').replace(/\*\*/g, '');
+      const cleanHeader = line.replace(/^#{1,6}\s+/, '').replace(/\*\*/g, '');
       if (
         isIntro &&
         metadata.title &&
