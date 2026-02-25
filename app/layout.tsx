@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import './globals-mobile.css';
 import { Montserrat, Amatic_SC, Oswald } from 'next/font/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import {
   OrganizationStructuredData,
   BreadcrumbStructuredData,
@@ -91,6 +92,7 @@ export default function RootLayout({
       >
         {children}
         <FloatingAIButton />
+        <SpeedInsights />
       </body>
     </html>
   );
