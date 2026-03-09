@@ -1,34 +1,15 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import './globals-mobile.css';
-import { Montserrat, Amatic_SC, Oswald } from 'next/font/google';
 import {
   OrganizationStructuredData,
   BreadcrumbStructuredData,
 } from './components/seo/StructuredData';
 import { FloatingAIButton } from './components/ai/FloatingAIButton';
 
-const montserrat = Montserrat({
-  subsets: ['latin'],
-  variable: '--font-montserrat',
-  display: 'swap',
-});
-
-const amaticSC = Amatic_SC({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-amatic',
-  display: 'swap',
-});
-
-const oswald = Oswald({
-  subsets: ['latin'],
-  variable: '--font-oswald',
-  display: 'swap',
-});
-
 export const metadata: Metadata = {
   metadataBase: new URL('https://summitchronicles.com'),
+  manifest: '/manifest.webmanifest',
   title: {
     default: 'Summit Chronicles - Journey to the Summit',
     template: '%s | Summit Chronicles',
@@ -40,6 +21,10 @@ export const metadata: Metadata = {
   authors: [{ name: 'Sunith Kumar' }],
   creator: 'Sunith Kumar',
   publisher: 'Summit Chronicles',
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon.png',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -50,7 +35,7 @@ export const metadata: Metadata = {
       'Follow the systematic training, preparation, and expedition journey toward mountaineering excellence.',
     images: [
       {
-        url: '/images/og-image.jpg', // Ensure this exists or use a valid path
+        url: '/images/sunith-home-hero.jpg',
         width: 1200,
         height: 630,
         alt: 'Summit Chronicles',
@@ -63,7 +48,7 @@ export const metadata: Metadata = {
     description:
       'Follow the systematic training, preparation, and expedition journey toward mountaineering excellence.',
     creator: '@summitchronicles',
-    images: ['/images/og-image.jpg'],
+    images: ['/images/sunith-home-hero.jpg'],
   },
   robots: {
     index: true,
@@ -79,15 +64,11 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
         <OrganizationStructuredData />
         <BreadcrumbStructuredData />
       </head>
       <body
-        className={`${montserrat.variable} ${amaticSC.variable} ${oswald.variable} font-sans antialiased text-white bg-black mobile-safe`}
+        className="font-sans antialiased text-white bg-black mobile-safe"
       >
         {children}
         <FloatingAIButton />

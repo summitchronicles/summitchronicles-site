@@ -374,7 +374,7 @@ export function AdvancedTrainingDashboard() {
             Advanced Training Analytics
           </h1>
           <p className="text-gray-600">
-            AI-powered insights and predictive analytics for Everest 2027
+            AI-powered insights and predictive analytics for Everest 2028
             preparation
           </p>
         </div>

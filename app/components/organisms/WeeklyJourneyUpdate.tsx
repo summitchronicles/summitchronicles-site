@@ -503,9 +503,9 @@ export const sampleWeeklyData: WeeklyUpdateData = {
       'Share your own altitude training experiences or ask questions about high-altitude preparation techniques.',
   },
   callToAction: {
-    title: 'Join the Training Community',
+    title: 'Stay Close to the Mission',
     description:
-      'Connect with other adventurers following systematic training approaches. Share your progress, ask questions, and celebrate achievements together.',
-    link: '/community',
+      'Reach out, follow the training journey, and stay connected to the expedition as it evolves.',
+    link: '/connect',
   },
 };

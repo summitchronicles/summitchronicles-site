@@ -19,9 +19,9 @@ interface SyncStatus {
   isRunning: boolean;
   config: {
     intervalMinutes: number;
-    enableStrava: boolean;
     enableWeather: boolean;
     enableCache: boolean;
+    enableAI: boolean;
   };
   cacheSize: number;
   lastSync: string | null;
@@ -201,12 +201,12 @@ export function SyncManager() {
             <Activity className="w-6 h-6 mx-auto mb-2 text-alpine-blue" />
             <div
               className={`text-lg font-light ${
-                status?.config.enableStrava ? 'text-green-600' : 'text-gray-400'
+                status?.config.enableAI ? 'text-green-600' : 'text-gray-400'
               }`}
             >
-              {status?.config.enableStrava ? 'ON' : 'OFF'}
+              {status?.config.enableAI ? 'ON' : 'OFF'}
             </div>
-            <div className="text-xs text-spa-charcoal/60">Strava Sync</div>
+            <div className="text-xs text-spa-charcoal/60">AI Sync</div>
           </div>
 
           <div className="text-center p-3 bg-spa-cloud/10 rounded-lg">
@@ -286,8 +286,8 @@ export function SyncManager() {
               {status?.config.enableCache ? 'Enabled' : 'Disabled'}
             </div>
             <div>
-              <strong>Strava Integration:</strong>{' '}
-              {status?.config.enableStrava ? 'Active' : 'Inactive'}
+              <strong>AI Knowledge Sync:</strong>{' '}
+              {status?.config.enableAI ? 'Active' : 'Inactive'}
             </div>
             <div>
               <strong>Weather Integration:</strong>{' '}

@@ -45,9 +45,9 @@ export default function SponsorshipPage() {
 
   const opportunities = [
     {
-      title: "Mount Everest 2025",
+      title: "Mount Everest 2028",
       description: "The ultimate test of systematic preparation. 60+ days of content from base camp to summit.",
-      timeline: "March - May 2025",
+      timeline: "March - May 2028",
       reach: "Expected 100K+ impressions"
     },
     {
@@ -59,7 +59,7 @@ export default function SponsorshipPage() {
     {
       title: "Seven Summits Journey",
       description: "Multi-year expedition series covering all seven continental high points.",
-      timeline: "2024 - 2027",
+      timeline: "2024 - 2028",
       reach: "Long-term brand association"
     }
   ];

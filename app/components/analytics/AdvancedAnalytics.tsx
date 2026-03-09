@@ -3,6 +3,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
+  generateLevelComparison,
+  getSamplePerformanceMetrics,
+  getSampleTrendData,
+  type ComparisonData,
+  type PerformanceMetrics,
+  type TrendData,
+} from '@/modules/analytics/domain/comprehensive-analytics';
+import {
   BarChart3,
   TrendingUp,
   Target,
@@ -21,39 +29,6 @@ import {
   Users,
   Globe,
 } from 'lucide-react';
-
-interface PerformanceMetrics {
-  totalDistance: number;
-  totalElevation: number;
-  totalTime: number;
-  averageHeartRate: number;
-  averagePace: number;
-  workoutFrequency: number;
-  intensityDistribution: {
-    low: number;
-    moderate: number;
-    high: number;
-    maximum: number;
-  };
-}
-
-interface TrendData {
-  metric: string;
-  current: number;
-  previous: number;
-  trend: 'up' | 'down' | 'stable';
-  changePercent: number;
-  unit: string;
-}
-
-interface ComparisonData {
-  userLevel: 'beginner' | 'intermediate' | 'advanced' | 'expert';
-  userMetrics: PerformanceMetrics;
-  benchmarks: {
-    level: PerformanceMetrics;
-    nextLevel: PerformanceMetrics;
-  };
-}
 
 interface AdvancedAnalyticsProps {
   activities?: any[];
@@ -100,9 +75,10 @@ export function AdvancedAnalytics({
     } catch (error) {
       console.error('Error generating analytics:', error);
       // Generate sample data for demo
-      setMetrics(generateSampleMetrics());
-      setTrends(generateSampleTrends());
-      setComparison(generateSampleComparison());
+      const sampleMetrics = getSamplePerformanceMetrics();
+      setMetrics(sampleMetrics);
+      setTrends(getSampleTrendData());
+      setComparison(generateLevelComparison(sampleMetrics));
     } finally {
       setLoading(false);
     }
@@ -111,89 +87,6 @@ export function AdvancedAnalytics({
   useEffect(() => {
     generateAnalytics();
   }, [generateAnalytics]);
-
-  const generateSampleMetrics = (): PerformanceMetrics => ({
-    totalDistance: 125.6,
-    totalElevation: 8450,
-    totalTime: 45.2,
-    averageHeartRate: 142,
-    averagePace: 6.8,
-    workoutFrequency: 4.2,
-    intensityDistribution: {
-      low: 45,
-      moderate: 30,
-      high: 20,
-      maximum: 5,
-    },
-  });
-
-  const generateSampleTrends = (): TrendData[] => [
-    {
-      metric: 'Weekly Distance',
-      current: 31.4,
-      previous: 28.2,
-      trend: 'up',
-      changePercent: 11.3,
-      unit: 'km',
-    },
-    {
-      metric: 'Elevation Gain',
-      current: 2115,
-      previous: 1890,
-      trend: 'up',
-      changePercent: 11.9,
-      unit: 'm',
-    },
-    {
-      metric: 'Training Time',
-      current: 11.3,
-      previous: 12.1,
-      trend: 'down',
-      changePercent: -6.6,
-      unit: 'hrs',
-    },
-    {
-      metric: 'Average Heart Rate',
-      current: 142,
-      previous: 145,
-      trend: 'down',
-      changePercent: -2.1,
-      unit: 'bpm',
-    },
-    {
-      metric: 'Workout Frequency',
-      current: 4.2,
-      previous: 3.8,
-      trend: 'up',
-      changePercent: 10.5,
-      unit: '/week',
-    },
-  ];
-
-  const generateSampleComparison = (): ComparisonData => ({
-    userLevel: 'intermediate',
-    userMetrics: generateSampleMetrics(),
-    benchmarks: {
-      level: {
-        totalDistance: 120,
-        totalElevation: 8000,
-        totalTime: 40,
-        averageHeartRate: 145,
-        averagePace: 7.0,
-        workoutFrequency: 4.0,
-        intensityDistribution: { low: 50, moderate: 30, high: 15, maximum: 5 },
-      },
-      nextLevel: {
-        totalDistance: 180,
-        totalElevation: 12000,
-        totalTime: 60,
-        averageHeartRate: 140,
-        averagePace: 6.2,
-        workoutFrequency: 5.0,
-        intensityDistribution: { low: 40, moderate: 35, high: 20, maximum: 5 },
-      },
-    },
-  });
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {

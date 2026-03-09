@@ -17,24 +17,24 @@ const PHASES = [
   {
     id: 'p2',
     title: 'Rehabilitation',
-    date: 'JAN 2026',
+    date: 'JAN-MAY 2026',
     status: 'current',
     icon: TrendingUp,
-    desc: 'Mobility & strength rebuild.',
+    desc: 'Physiotherapy, gait work, and strength rebuild.',
     progress: 45, // Percentage complete of this phase
   },
   {
     id: 'p3',
     title: 'Base Building',
-    date: 'MAR 2026',
+    date: 'JUN 2026',
     status: 'upcoming',
     icon: Mountain,
-    desc: 'Aerobic capacity & hiking.',
+    desc: 'Return to running, aerobic capacity, and hiking.',
   },
   {
     id: 'p4',
     title: 'Technical Prep',
-    date: 'EARLY 2027',
+    date: 'EARLY 2028',
     status: 'upcoming',
     icon: ActivityIcon,
     desc: 'Glacier travel & altitude.',
@@ -42,7 +42,7 @@ const PHASES = [
   {
     id: 'p5',
     title: 'Everest Expedition',
-    date: 'MAY 2027',
+    date: 'SPRING 2028',
     status: 'upcoming',
     icon: Flag,
     desc: 'The summit push.',

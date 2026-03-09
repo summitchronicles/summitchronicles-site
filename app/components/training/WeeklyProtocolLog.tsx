@@ -9,85 +9,82 @@ import {
   ChevronUp,
   Quote,
   TrendingUp,
-  AlertCircle,
   CheckCircle2,
-  FileText,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { format, startOfWeek, endOfWeek, parseISO, isSameDay } from 'date-fns';
+import { format, endOfWeek, parseISO } from 'date-fns';
+import type { TrainingInsight } from '@/modules/training/domain/training-dashboard';
 
-interface Activity {
-  activityId: number;
-  activityName: string;
-  startTimeLocal: string;
-  distance: number;
-  duration: number; // seconds
-  elevationGain: number;
-  activityType: { typeKey: string };
+interface TrainingActivity {
+  activityId?: number | string;
+  activityName?: string;
+  startTimeLocal?: string;
+  distance?: number;
+  duration?: number; // seconds
+  elevationGain?: number;
+  activityType?: { typeKey?: string };
   description?: string;
 }
 
 interface WeeklyProtocolLogProps {
-  activities: Activity[];
-  latestInsight?: any[] | any | null; // Supports array or single object (legacy)
+  activities: TrainingActivity[];
+  missionLogs?: TrainingInsight[] | TrainingInsight | null;
 }
 
 export const WeeklyProtocolLog = ({
   activities,
-  latestInsight, // This is now an array of insights
+  missionLogs,
 }: WeeklyProtocolLogProps) => {
-  // 1. Map Activities to Weeks and Identify Unique Weeks
   const activitiesByWeek = activities.reduce(
     (acc, activity) => {
+      if (!activity.startTimeLocal) {
+        return acc;
+      }
       const date = parseISO(activity.startTimeLocal);
-      const weekKey = format(
-        startOfWeek(date, { weekStartsOn: 1 }),
-        'yyyy-MM-dd'
-      );
+      const day = date.getUTCDay();
+      const offset = day === 0 ? -6 : 1 - day;
+      date.setUTCDate(date.getUTCDate() + offset);
+      const weekKey = format(date, 'yyyy-MM-dd');
       if (!acc[weekKey]) acc[weekKey] = [];
       acc[weekKey].push(activity);
       return acc;
     },
-    {} as Record<string, Activity[]>
+    {} as Record<string, TrainingActivity[]>
   );
 
-  // 2. Determine Week List
-  // Always include the Current Week (for AI Coach status)
-  const currentWeekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
-  const currentWeekKey = format(currentWeekStart, 'yyyy-MM-dd');
-
-  // Get all unique weeks from activities
   const activityWeeks = Object.keys(activitiesByWeek);
 
-  // Combine unique weeks (Set removes duplicates)
-  const uniqueWeekKeys = Array.from(
-    new Set([currentWeekKey, ...activityWeeks])
+  const missionLogsByWeek = Array.isArray(missionLogs)
+    ? missionLogs.reduce(
+        (acc: Record<string, TrainingInsight>, missionLog: TrainingInsight) => {
+          acc[missionLog.weekStart] = missionLog;
+          return acc;
+        },
+        {}
+      )
+    : {};
+
+  if (missionLogs && !Array.isArray(missionLogs) && activityWeeks[0]) {
+    missionLogsByWeek[activityWeeks[0]] = missionLogs;
+  }
+
+  const renderedWeekKeys = [...activityWeeks].sort(
+    (a, b) => new Date(b).getTime() - new Date(a).getTime()
   );
 
-  // Sort weeks descending (Newest first)
-  uniqueWeekKeys.sort((a, b) => new Date(b).getTime() - new Date(a).getTime());
-
-  // Generate Week Objects
-  const weeks = uniqueWeekKeys.map((weekKey) => {
-    const startDate = parseISO(weekKey);
-    return {
-      startDate,
-      endDate: endOfWeek(startDate, { weekStartsOn: 1 }),
-      weekKey,
-    };
-  });
-
-  // 3. Map Insights to Weeks (Assuming new array structure or backwards compatibility)
-  const insightsByWeek = Array.isArray(latestInsight)
-    ? latestInsight.reduce((acc: any, insight: any) => {
-        // Normalize insight weekStart to our key format if needed (assuming "yyyy-MM-dd")
-        acc[insight.weekStart] = insight;
-        return acc;
-      }, {})
-    : {};
-  // If latestInsight is still a single object (legacy/transition), assign it to current week
-  if (latestInsight && !Array.isArray(latestInsight)) {
-    insightsByWeek[format(currentWeekStart, 'yyyy-MM-dd')] = latestInsight;
+  if (renderedWeekKeys.length === 0) {
+    return (
+      <div className="space-y-12 relative">
+        <div className="border border-white/10 bg-black/40 p-8 text-center">
+          <div className="text-white font-oswald text-2xl uppercase">
+            Mission Logs Pending
+          </div>
+          <div className="mt-3 text-sm text-zinc-500 font-mono uppercase tracking-[0.2em]">
+            No processed Intervals mission logs are available yet.
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -95,36 +92,35 @@ export const WeeklyProtocolLog = ({
       {/* Timeline Line */}
       <div className="absolute left-6 top-6 bottom-0 w-px bg-white/10 hidden md:block"></div>
 
-      {weeks.map((week, index) => {
-        const weekActivities = activitiesByWeek[week.weekKey] || [];
+      {renderedWeekKeys.map((weekKey, index) => {
+        const startDate = parseISO(weekKey);
+        const weekActivities = activitiesByWeek[weekKey] || [];
+        const matchingMissionLog = missionLogsByWeek[weekKey];
 
-        // Calculate totals for the week
         const totalDuration = weekActivities.reduce(
-          (sum, act) => sum + act.duration,
+          (sum, act) => sum + (act.duration || 0),
           0
         );
         const totalElevation = weekActivities.reduce(
-          (sum, act) => sum + act.elevationGain,
+          (sum, act) => sum + (act.elevationGain || 0),
           0
         );
 
-        // Prepare data object for NarrativeBlock
         const weekData = {
-          ...week,
+          startDate,
+          endDate: endOfWeek(startDate, { weekStartsOn: 1 }),
+          weekKey,
           activities: weekActivities,
           totalDuration,
           totalElevation,
-          mood: 'neutral', // Default
         };
-
-        const matchingInsight = insightsByWeek[week.weekKey];
 
         return (
           <NarrativeWeekBlock
-            key={index}
+            key={weekKey}
             week={weekData}
             index={index}
-            latestInsight={matchingInsight} // Pass specific insight for this week
+            missionLog={matchingMissionLog}
           />
         );
       })}
@@ -132,61 +128,27 @@ export const WeeklyProtocolLog = ({
   );
 };
 
-// --- Mock AI Logic for Narrative Generation ---
-const deriveNarrative = (week: any) => {
-  const durationHours = week.totalDuration / 3600;
-  const activityCount = week.activities.length;
-
-  // Simple heuristic for "Theme"
-  let title = 'Maintenance Phase';
-  let summary = 'Steady work. Keeping the baseline engaged.';
-  let sentiment: 'positive' | 'caution' | 'neutral' = 'neutral';
-
-  if (activityCount > 8) {
-    title = 'Building Momentum';
-    summary =
-      'High frequency week. The volume is increasing, and consistency is locked in. Key focus on upper body strength while the lower body recovers.';
-    sentiment = 'positive';
-  } else if (activityCount < 3) {
-    title = 'Strategic Rest / Travel';
-    summary =
-      'Low volume week. Prioritizing recovery and inflammation management over output. Mental reset.';
-    sentiment = 'caution';
-  } else if (week.totalElevation > 100) {
-    title = 'Elevation Focus';
-    summary =
-      'Introducing vertical gain back into the protocol. Testing stability under load.';
-    sentiment = 'positive';
-  }
-
-  return { title, summary, sentiment };
-};
-
 const NarrativeWeekBlock = ({
   week,
   index,
-  latestInsight,
+  missionLog,
 }: {
   week: any;
   index: number;
-  latestInsight: any;
+  missionLog?: TrainingInsight | null;
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
-  // Default heuristic narrative
-  let narrative = deriveNarrative(week);
-
-  // Override with AI Insight if available
-  if (latestInsight) {
-    narrative = {
-      title: latestInsight.focus || 'Protocol Update',
-      summary: latestInsight.weekSummary || narrative.summary,
-      sentiment: 'positive', // Can be refined later based on insight content
-    };
-    if (latestInsight.tip) {
-      narrative.summary += ` Note: ${latestInsight.tip}`;
-    }
-  }
+  const durationHours = week.totalDuration / 3600;
+  const narrative = {
+    title:
+      missionLog?.focus ||
+      `${week.activities.length} session${week.activities.length === 1 ? '' : 's'} logged`,
+    summary:
+      missionLog?.weekSummary ||
+      `${week.activities.length} logged session${week.activities.length === 1 ? '' : 's'} totaling ${durationHours.toFixed(1)} hrs${week.totalElevation > 0 ? ` and ${Math.round(week.totalElevation)} m of gain` : ''}.`,
+    sentiment: missionLog ? 'positive' : 'neutral',
+  } as const;
+  const tip = missionLog?.tip ? `Note: ${missionLog.tip}` : null;
 
   const isLatest = index === 0;
 
@@ -232,9 +194,6 @@ const NarrativeWeekBlock = ({
           {narrative.sentiment === 'positive' && (
             <TrendingUp className="text-emerald-500 w-5 h-5 opacity-50" />
           )}
-          {narrative.sentiment === 'caution' && (
-            <AlertCircle className="text-amber-500 w-5 h-5 opacity-50" />
-          )}
           {narrative.sentiment === 'neutral' && (
             <CheckCircle2 className="text-blue-500 w-5 h-5 opacity-50" />
           )}
@@ -256,21 +215,24 @@ const NarrativeWeekBlock = ({
           <p className="text-zinc-300 font-serif leading-relaxed text-lg italic opacity-90">
             "{narrative.summary}"
           </p>
+          {tip ? (
+            <p className="mt-3 text-sm text-zinc-500 not-italic">{tip}</p>
+          ) : null}
         </div>
 
         {/* Stats Row */}
         <div className="flex items-center gap-6 text-xs font-mono text-zinc-500 uppercase tracking-wider mb-6">
           <span className="flex items-center gap-1.5">
             <Activity className="w-3 h-3" />
-            {week.activities.length} Projects
+            {week.activities.length} Sessions
           </span>
           <span className="flex items-center gap-1.5">
             <Calendar className="w-3 h-3" />
             {(week.totalDuration / 3600).toFixed(1)} hrs
           </span>
-          {isLatest && (
+          {week.totalElevation > 0 && (
             <span className="text-amber-500 flex items-center gap-1.5">
-              Live Phase
+              {Math.round(week.totalElevation)} m gain
             </span>
           )}
         </div>
@@ -293,7 +255,10 @@ const NarrativeWeekBlock = ({
               <div className="pt-6 grid gap-2">
                 {week.activities.map((activity: any) => (
                   <div
-                    key={activity.activityId}
+                    key={
+                      activity.activityId ??
+                      `${activity.startTimeLocal ?? 'unknown'}-${activity.activityName ?? 'session'}`
+                    }
                     className="flex items-start gap-4 p-3 hover:bg-white/5 rounded transition-colors group/log"
                   >
                     <span className="text-xs font-mono text-zinc-500 w-12 pt-1">
@@ -309,9 +274,11 @@ const NarrativeWeekBlock = ({
                         </div>
                       )}
                     </div>
-                    <span className="text-[10px] uppercase font-mono text-zinc-600 bg-zinc-900 px-2 py-0.5 rounded">
-                      {activity.activityType.typeKey.replace('_', ' ')}
-                    </span>
+                    {activity.activityType?.typeKey ? (
+                      <span className="text-[10px] uppercase font-mono text-zinc-600 bg-zinc-900 px-2 py-0.5 rounded">
+                        {activity.activityType.typeKey.replace('_', ' ')}
+                      </span>
+                    ) : null}
                   </div>
                 ))}
               </div>

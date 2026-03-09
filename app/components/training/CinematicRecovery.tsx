@@ -76,8 +76,8 @@ export const CinematicRecovery = ({
         <div
           className="absolute inset-0 opacity-20"
           style={{
-            backgroundImage: 'url("/images/noise.png")',
-            backgroundRepeat: 'repeat',
+            backgroundImage:
+              'radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0, transparent 40%), radial-gradient(circle at 80% 30%, rgba(197,160,89,0.08) 0, transparent 35%)',
           }}
         ></div>
       </div>

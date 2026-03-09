@@ -75,7 +75,12 @@ export const useExpensiveCalculation = <T>(
   calculation: () => T,
   dependencies: React.DependencyList
 ): T => {
-  return useMemo(calculation, dependencies);
+  const calculationRef = useRef(calculation);
+  calculationRef.current = calculation;
+
+  // This wrapper intentionally accepts a caller-provided dependency list.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  return useMemo(() => calculationRef.current(), dependencies);
 };
 
 // Hook for stable callbacks
@@ -83,7 +88,15 @@ export const useStableCallback = <T extends (...args: any[]) => any>(
   callback: T,
   dependencies: React.DependencyList
 ): T => {
-  return useCallback(callback, dependencies);
+  const callbackRef = useRef(callback);
+  callbackRef.current = callback;
+
+  return useCallback(
+    ((...args: Parameters<T>) => callbackRef.current(...args)) as T,
+    // This wrapper intentionally accepts a caller-provided dependency list.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    dependencies
+  );
 };
 
 // Hook for performance monitoring

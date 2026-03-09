@@ -1,15 +1,15 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Training & Rehabilitation - Summit Chronicles',
+  title: 'Training - Summit Chronicles',
   description:
-    "Track Sunith's systematic rehabilitation progress, VO2 Max metrics, and training roadmap for the Seven Summits expedition.",
+    "Live training telemetry, weekly mission logs, and long-view performance tracking for Summit Chronicles.",
   keywords:
-    'training, rehabilitation, mountaineering fitness, VO2 max, recovery, ACL recovery, expedition training',
+    'training, intervals.icu, mission logs, mountaineering fitness, VO2 max, recovery, expedition training',
   openGraph: {
-    title: 'Training & Rehabilitation | Summit Chronicles',
+    title: 'Training | Summit Chronicles',
     description:
-      'Detailed training logs and recovery metrics for high-altitude mountaineering.',
+      'Live training telemetry and weekly mission logs for high-altitude mountaineering.',
     type: 'website',
   },
 };

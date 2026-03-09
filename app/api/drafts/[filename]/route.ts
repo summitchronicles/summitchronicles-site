@@ -1,162 +1,119 @@
 import { NextResponse } from 'next/server';
-import * as fs from 'fs';
-import * as path from 'path';
+import { MarkdownContentRepository } from '@/modules/content/infrastructure/markdown-content-repository';
+import { requireInternalApiAccess } from '@/shared/security/internal-api';
 
-const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
+const repository = new MarkdownContentRepository();
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
-    const filename = decodeURIComponent(params.filename);
-    const filepath = path.join(BLOG_DIR, filename);
-
-    if (!fs.existsSync(filepath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 });
-    }
-
-    fs.unlinkSync(filepath);
-
+    const { filename } = await params;
+    await repository.deleteDraft(decodeURIComponent(filename));
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error('Error deleting draft:', error);
+    const status =
+      error instanceof Error && error.message === 'Invalid draft filename'
+        ? 400
+        : 500;
+
     return NextResponse.json(
-      { error: 'Failed to delete draft' },
-      { status: 500 }
+      { error: status === 400 ? error.message : 'Failed to delete draft' },
+      { status }
     );
   }
 }
-// GET: Read raw content for editing
+
 export async function GET(
   request: Request,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
-    const filename = decodeURIComponent(params.filename);
-    const filepath = path.join(BLOG_DIR, filename);
-
-    if (!fs.existsSync(filepath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 });
-    }
-
-    const content = fs.readFileSync(filepath, 'utf-8');
+    const { filename } = await params;
+    const content = await repository.readDraft(decodeURIComponent(filename));
     return NextResponse.json({ content });
   } catch (error: any) {
-    console.error('Error reading draft:', error);
+    const status =
+      error instanceof Error && error.message === 'Invalid draft filename'
+        ? 400
+        : 500;
+
     return NextResponse.json(
-      { error: 'Failed to read draft' },
-      { status: 500 }
+      { error: status === 400 ? error.message : 'Failed to read draft' },
+      { status }
     );
   }
 }
 
-// PUT: Update content
 export async function PUT(
   request: Request,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
-  try {
-    const filename = decodeURIComponent(params.filename);
-    const filepath = path.join(BLOG_DIR, filename);
-    const body = await request.json();
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
 
-    if (!fs.existsSync(filepath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 });
-    }
+  try {
+    const { filename } = await params;
+    const body = await request.json();
 
     if (!body.content) {
       return NextResponse.json({ error: 'Content required' }, { status: 400 });
     }
 
-    fs.writeFileSync(filepath, body.content);
-
+    await repository.saveDraft(decodeURIComponent(filename), body.content);
     return NextResponse.json({ success: true });
   } catch (error: any) {
-    console.error('Error updating draft:', error);
+    const status =
+      error instanceof Error && error.message === 'Invalid draft filename'
+        ? 400
+        : 500;
+
     return NextResponse.json(
-      { error: 'Failed to update draft' },
-      { status: 500 }
+      { error: status === 400 ? error.message : 'Failed to update draft' },
+      { status }
     );
   }
 }
-// POST: Publish the draft (status: published)
-// POST: Publish the draft (status: published)
-import { exec } from 'child_process';
-import { promisify } from 'util';
-
-const execAsync = promisify(exec);
 
 export async function POST(
   request: Request,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
-    const filename = decodeURIComponent(params.filename);
-    const filepath = path.join(BLOG_DIR, filename);
-
-    if (!fs.existsSync(filepath)) {
-      return NextResponse.json({ error: 'File not found' }, { status: 404 });
-    }
-
-    const fileContent = fs.readFileSync(filepath, 'utf-8');
-    const matter = require('gray-matter');
-    const { data, content } = matter(fileContent);
-
-    // update status
-    data.status = 'published';
-
-    // reconstruct file
-    const newContent = matter.stringify(content, data);
-    fs.writeFileSync(filepath, newContent);
-
-    // Git Automation
-    const gitLogs: string[] = [];
-    try {
-      const projectRoot = process.cwd();
-      const relativePath = path.relative(projectRoot, filepath);
-
-      // Add ALL changes (system updates + content) as requested by user
-      const addAllMsg = `[Git] Adding all changes (system updates & content)...`;
-      console.log(addAllMsg);
-      gitLogs.push(addAllMsg);
-      await execAsync(`git add .`, { cwd: projectRoot });
-
-      const commitMsg = `[Git] Committing...`;
-      console.log(commitMsg);
-      gitLogs.push(commitMsg);
-      // Update commit message to indicate potential system updates
-      await execAsync(
-        `git commit -m "Publish: ${filename} + System Updates" --no-verify`,
-        {
-          cwd: projectRoot,
-        }
-      );
-
-      const pushMsg = `[Git] Pushing...`;
-      console.log(pushMsg);
-      gitLogs.push(pushMsg);
-      await execAsync(`git push origin main`, { cwd: projectRoot });
-
-      const successMsg = '[Git] Push successful';
-      console.log(successMsg);
-      gitLogs.push(successMsg);
-    } catch (gitError: any) {
-      console.error('Git automation failed:', gitError.message);
-      gitLogs.push(`[Error] ${gitError.message}`);
-      // We don't fail the request, just log it, as the file IS updated locally.
-    }
+    const { filename } = await params;
+    await repository.publishDraft(decodeURIComponent(filename));
 
     return NextResponse.json({
       success: true,
-      message: 'Published successfully',
-      gitLogs,
+      message: 'Draft marked as published. Commit and deployment are now manual operations.',
     });
   } catch (error: any) {
-    console.error('Error publishing draft:', error);
+    const status =
+      error instanceof Error && error.message === 'Invalid draft filename'
+        ? 400
+        : 500;
+
     return NextResponse.json(
-      { error: 'Failed to publish draft' },
-      { status: 500 }
+      { error: status === 400 ? error.message : 'Failed to publish draft' },
+      { status }
     );
   }
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   User,
@@ -73,6 +73,116 @@ interface PersonalizedDashboardProps {
   className?: string;
 }
 
+const DEFAULT_PROFILE: UserProfile = {
+  name: 'Sunith Kumar',
+  level: 'intermediate',
+  primaryGoals: [
+    'Mount Everest expedition preparation',
+    'High-altitude endurance',
+    'Technical climbing skills',
+  ],
+  preferredActivities: ['hiking', 'climbing', 'cardio', 'strength'],
+  currentPhase: 'base-building',
+  nextExpedition: {
+    name: 'Mount Everest',
+    date: '2025-04-15',
+    difficulty: 'Expert',
+  },
+};
+
+function createSamplePersonalizedContent(
+  profile: UserProfile,
+  activities: any[]
+): PersonalizedContent {
+  const daysToExpedition = profile.nextExpedition
+    ? Math.ceil(
+        (new Date(profile.nextExpedition.date).getTime() - Date.now()) /
+          (1000 * 60 * 60 * 24)
+      )
+    : null;
+
+  return {
+    welcomeMessage: `Welcome back, ${profile.name}! ${daysToExpedition ? `${daysToExpedition} days until ${profile.nextExpedition?.name}.` : ''} You're in the ${profile.currentPhase.replace('-', ' ')} phase.`,
+    priorityActions: [
+      {
+        type: 'training',
+        title: 'Complete Weekly Long Endurance Session',
+        description:
+          'Aim for 6-8 hours with 1200m+ elevation gain to build your aerobic base',
+        urgency: 'high',
+      },
+      {
+        type: 'planning',
+        title: 'Update Expedition Gear List',
+        description:
+          'Review and finalize equipment list for your upcoming expedition',
+        urgency: 'medium',
+      },
+      {
+        type: 'safety',
+        title: 'Practice Avalanche Rescue Scenarios',
+        description:
+          'Maintain proficiency with beacon, probe, and shovel techniques',
+        urgency: 'medium',
+      },
+    ],
+    recommendedContent: [
+      {
+        type: 'training',
+        title: 'High-Altitude Acclimatization Protocol',
+        category: 'Training',
+        difficulty: 'Intermediate',
+        estimatedTime: '15 min read',
+        relevanceScore: 0.95,
+      },
+      {
+        type: 'article',
+        title: 'Nutrition Strategies for Expedition Climbing',
+        category: 'Nutrition',
+        difficulty: 'Beginner',
+        estimatedTime: '10 min read',
+        relevanceScore: 0.88,
+      },
+      {
+        type: 'training',
+        title: 'Technical Ice Climbing Progression',
+        category: 'Technical Skills',
+        difficulty: 'Advanced',
+        estimatedTime: '20 min read',
+        relevanceScore: 0.82,
+      },
+    ],
+    weeklyFocus: {
+      title: 'Aerobic Base Building',
+      description:
+        'Focus on building your cardiovascular foundation with longer, moderate-intensity sessions',
+      goals: [
+        'Complete 2-3 zone 2 endurance sessions',
+        'One long session (6+ hours) with elevation',
+        'Maintain technical skill practice',
+        'Include recovery and mobility work',
+      ],
+    },
+    progressMetrics: {
+      currentWeek: {
+        activitiesCompleted: activities.length,
+        totalHours:
+          activities.reduce((sum, act) => sum + (act.moving_time || 0), 0) /
+          3600,
+        elevationGained: activities.reduce(
+          (sum, act) => sum + (act.total_elevation_gain || 0),
+          0
+        ),
+      },
+      trends: {
+        endurance: 'improving',
+        strength: 'stable',
+        consistency: 'improving',
+      },
+    },
+  };
+}
+
 export function PersonalizedDashboard({
   userProfile,
   activities = [],
@@ -83,31 +193,9 @@ export function PersonalizedDashboard({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Default user profile for demo
-  const defaultProfile: UserProfile = {
-    name: 'Sunith Kumar',
-    level: 'intermediate',
-    primaryGoals: [
-      'Mount Everest expedition preparation',
-      'High-altitude endurance',
-      'Technical climbing skills',
-    ],
-    preferredActivities: ['hiking', 'climbing', 'cardio', 'strength'],
-    currentPhase: 'base-building',
-    nextExpedition: {
-      name: 'Mount Everest',
-      date: '2025-04-15',
-      difficulty: 'Expert',
-    },
-  };
+  const profile = userProfile || DEFAULT_PROFILE;
 
-  const profile = userProfile || defaultProfile;
-
-  useEffect(() => {
-    generatePersonalizedContent();
-  }, [profile, activities]);
-
-  const generatePersonalizedContent = async () => {
+  const generatePersonalizedContent = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -132,101 +220,15 @@ export function PersonalizedDashboard({
     } catch (error) {
       console.error('Error generating personalized content:', error);
       // Fallback to sample content
-      setPersonalizedContent(generateSampleContent());
+      setPersonalizedContent(createSamplePersonalizedContent(profile, activities));
     } finally {
       setLoading(false);
     }
-  };
+  }, [activities, profile]);
 
-  const generateSampleContent = (): PersonalizedContent => {
-    const daysToExpedition = profile.nextExpedition
-      ? Math.ceil(
-          (new Date(profile.nextExpedition.date).getTime() - Date.now()) /
-            (1000 * 60 * 60 * 24)
-        )
-      : null;
-
-    return {
-      welcomeMessage: `Welcome back, ${profile.name}! ${daysToExpedition ? `${daysToExpedition} days until ${profile.nextExpedition?.name}.` : ''} You're in the ${profile.currentPhase.replace('-', ' ')} phase.`,
-      priorityActions: [
-        {
-          type: 'training',
-          title: 'Complete Weekly Long Endurance Session',
-          description:
-            'Aim for 6-8 hours with 1200m+ elevation gain to build your aerobic base',
-          urgency: 'high',
-        },
-        {
-          type: 'planning',
-          title: 'Update Expedition Gear List',
-          description:
-            'Review and finalize equipment list for your upcoming expedition',
-          urgency: 'medium',
-        },
-        {
-          type: 'safety',
-          title: 'Practice Avalanche Rescue Scenarios',
-          description:
-            'Maintain proficiency with beacon, probe, and shovel techniques',
-          urgency: 'medium',
-        },
-      ],
-      recommendedContent: [
-        {
-          type: 'training',
-          title: 'High-Altitude Acclimatization Protocol',
-          category: 'Training',
-          difficulty: 'Intermediate',
-          estimatedTime: '15 min read',
-          relevanceScore: 0.95,
-        },
-        {
-          type: 'article',
-          title: 'Nutrition Strategies for Expedition Climbing',
-          category: 'Nutrition',
-          difficulty: 'Beginner',
-          estimatedTime: '10 min read',
-          relevanceScore: 0.88,
-        },
-        {
-          type: 'training',
-          title: 'Technical Ice Climbing Progression',
-          category: 'Technical Skills',
-          difficulty: 'Advanced',
-          estimatedTime: '20 min read',
-          relevanceScore: 0.82,
-        },
-      ],
-      weeklyFocus: {
-        title: 'Aerobic Base Building',
-        description:
-          'Focus on building your cardiovascular foundation with longer, moderate-intensity sessions',
-        goals: [
-          'Complete 2-3 zone 2 endurance sessions',
-          'One long session (6+ hours) with elevation',
-          'Maintain technical skill practice',
-          'Include recovery and mobility work',
-        ],
-      },
-      progressMetrics: {
-        currentWeek: {
-          activitiesCompleted: activities.length,
-          totalHours:
-            activities.reduce((sum, act) => sum + (act.moving_time || 0), 0) /
-            3600,
-          elevationGained: activities.reduce(
-            (sum, act) => sum + (act.total_elevation_gain || 0),
-            0
-          ),
-        },
-        trends: {
-          endurance: 'improving',
-          strength: 'stable',
-          consistency: 'improving',
-        },
-      },
-    };
-  };
+  useEffect(() => {
+    generatePersonalizedContent();
+  }, [generatePersonalizedContent]);
 
   const getUrgencyColor = (urgency: string) => {
     switch (urgency) {

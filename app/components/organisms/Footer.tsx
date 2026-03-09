@@ -66,7 +66,7 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-spa-charcoal text-white">
+    <footer className="bg-obsidian text-white border-t border-white/5">
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
@@ -176,7 +176,7 @@ const Footer: React.FC = () => {
               Terms of Service
             </Link>
             <Link
-              href="/contact"
+              href="/connect"
               className="hover:text-white transition-colors duration-300"
             >
               Contact

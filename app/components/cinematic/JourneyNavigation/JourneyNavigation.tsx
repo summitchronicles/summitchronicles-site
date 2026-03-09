@@ -42,7 +42,7 @@ export function JourneyNavigation({ className = '' }: JourneyNavigationProps) {
       title: 'The Journey',
       subtitle: 'Seven Summits Timeline',
       description:
-        'Explore my complete mountaineering timeline, from first training climbs to the ultimate Everest expedition in 2027.',
+        'Explore my complete mountaineering timeline, from first training climbs to the Everest objective in 2028.',
       icon: Mountain,
       href: '/journey',
       color: 'text-blue-600',

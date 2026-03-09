@@ -15,9 +15,10 @@ test.describe('Basic Navigation - Story 1.1', () => {
     await page.goto('/');
     
     // Test navigation links
-    const aboutLink = page.locator('a[href="/about"]');
-    const blogLink = page.locator('a[href="/blog"]');
-    const trainingLink = page.locator('a[href="/training"]');
+    const primaryNav = page.locator('header nav').first();
+    const aboutLink = primaryNav.locator('a[href="/about"]').first();
+    const blogLink = primaryNav.locator('a[href="/blog"]').first();
+    const trainingLink = primaryNav.locator('a[href="/training"]').first();
     
     if (await aboutLink.count() > 0) {
       await aboutLink.click();
@@ -73,11 +74,9 @@ test.describe('Basic Navigation - Story 1.1', () => {
     const bodyElement = page.locator('body');
     await expect(bodyElement).toBeVisible();
     
-    // Test that CSS is properly loaded (no unstyled content flash)
-    await page.waitForLoadState('networkidle');
-    
     // Check for presence of styled elements
     const styledElements = page.locator('[class*="text-"], [class*="bg-"], [class*="p-"], [class*="m-"]');
+    await expect(styledElements.first()).toBeVisible();
     const count = await styledElements.count();
     expect(count).toBeGreaterThan(0);
   });

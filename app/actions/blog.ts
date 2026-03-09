@@ -114,8 +114,7 @@ export async function publishPost(data: PublishPostData) {
       }
     });
 
-    // 5. Construct Document
-    // eslint-disable-next-line
+    // 5. Construct document payload for Sanity
     const doc: any = {
       _type: 'blogPost',
       title: data.title,

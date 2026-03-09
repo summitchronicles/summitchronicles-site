@@ -8,7 +8,7 @@
     ],
     "module": "esnext",
     "moduleResolution": "bundler",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
@@ -32,20 +32,36 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "lib/**/*.ts",
+    "lib/**/*.tsx",
+    "modules/**/*.ts",
+    "modules/**/*.tsx",
+    "shared/**/*.ts",
+    "shared/**/*.tsx",
+    "pages/**/*.ts",
+    "pages/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
+    ".next/standalone",
+    "bmad-method",
     "archive",
     "agents-disabled",
+    "e2e",
     "components-disabled",
     "scripts-disabled",
     "lib-disabled",
     "app-complex",
     "instrumentation-disabled",
     "sentry-disabled",
-    "scripts"
+    "scripts",
+    "playwright-report",
+    "test-results"
   ]
 }

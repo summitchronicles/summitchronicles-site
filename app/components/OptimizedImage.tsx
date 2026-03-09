@@ -10,7 +10,8 @@ import {
 } from '../../lib/utils/image-optimization';
 import { useIntersectionObserver } from '../../lib/utils/performance';
 
-interface OptimizedImageProps extends Omit<ImageProps, 'src' | 'alt'> {
+interface OptimizedImageProps
+  extends Omit<ImageProps, 'src' | 'alt' | 'onError' | 'onLoad'> {
   src: string;
   alt: string;
   preset?: keyof typeof IMAGE_CONFIGS;

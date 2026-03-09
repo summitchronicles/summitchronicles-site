@@ -30,6 +30,14 @@ interface ContentData {
   date?: string;
 }
 
+function getDefaultContentDate(): string {
+  return new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 const ContentEditor: React.FC<ContentEditorProps> = ({
   className,
   onSave,
@@ -61,16 +69,14 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
   // Handle client-side mounting to prevent hydration errors
   useEffect(() => {
     setMounted(true);
-    if (!content.date) {
-      setContent(prev => ({
-        ...prev,
-        date: new Date().toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        }),
-      }));
-    }
+    setContent((prev) =>
+      prev.date
+        ? prev
+        : {
+            ...prev,
+            date: getDefaultContentDate(),
+          }
+    );
   }, []);
 
   const handleSave = async () => {
@@ -81,11 +87,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
     const finalContent = {
       ...content,
       readTime,
-      date: content.date || new Date().toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
+      date: content.date || getDefaultContentDate(),
     };
 
     if (onSave) {

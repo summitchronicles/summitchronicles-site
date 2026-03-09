@@ -55,19 +55,18 @@ export default function RealtimePage() {
       setIsRefreshing(true);
 
       // Fetch Weather data
-      const weatherResponse = await fetch(
-        '/api/weather?location=everest&mock=true'
-      );
+      const weatherResponse = await fetch('/api/weather?location=everest');
       const weatherResult = await weatherResponse.json();
 
-      if (weatherResult.success) {
-        setWeatherData(weatherResult.data);
+      if (!weatherResponse.ok || !weatherResult.success) {
+        throw new Error(weatherResult.error || 'Failed to fetch live weather data');
       }
 
+      setWeatherData(weatherResult.data);
       setLastUpdate(new Date());
       setError(null);
     } catch (err) {
-      setError('Failed to fetch real-time data');
+      setError(err instanceof Error ? err.message : 'Failed to fetch real-time data');
       console.error('Error fetching data:', err);
     } finally {
       setLoading(false);
@@ -332,7 +331,7 @@ export default function RealtimePage() {
               <SyncManager />
             </div>
 
-            {/* AI Training Insights - Pass empty activities since Strava is gone */}
+            {/* AI Training Insights - fall back to the live training summary when activities are omitted */}
             <div className="mt-8">
               <TrainingInsights
                 activities={[]}

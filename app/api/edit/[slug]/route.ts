@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { spawn } from 'child_process';
+import { requireInternalApiAccess } from '@/shared/security/internal-api';
+import { assertSafeSlug } from '@/shared/security/upload';
 
 const CONTENT_DIR = path.join(process.cwd(), 'content', 'posts');
 
@@ -102,9 +105,19 @@ function generateMarkdownContent(title: string, subtitle: string, heroImage: str
   return markdown;
 }
 
-export async function GET(request: Request, { params }: { params: { slug: string } }) {
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params;
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
-    const postDir = path.join(CONTENT_DIR, params.slug);
+    assertSafeSlug(slug);
+    const postDir = path.join(CONTENT_DIR, slug);
     const markdownPath = path.join(postDir, 'index.md');
     const imagesDir = path.join(postDir, 'images');
 
@@ -133,11 +146,21 @@ export async function GET(request: Request, { params }: { params: { slug: string
   }
 }
 
-export async function POST(request: Request, { params }: { params: { slug: string } }) {
+export async function POST(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params;
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
+    assertSafeSlug(slug);
     const { title, subtitle, heroImage, location, sections } = await request.json();
 
-    const postDir = path.join(CONTENT_DIR, params.slug);
+    const postDir = path.join(CONTENT_DIR, slug);
     const markdownPath = path.join(postDir, 'index.md');
 
     if (!fs.existsSync(postDir)) {
@@ -147,13 +170,12 @@ export async function POST(request: Request, { params }: { params: { slug: strin
     const markdownContent = generateMarkdownContent(title, subtitle, heroImage, location, sections);
     fs.writeFileSync(markdownPath, markdownContent, 'utf8');
 
-    // Regenerate the processed content
-    const { exec } = require('child_process');
-    exec('npm run build-posts', { cwd: process.cwd() }, (error: any) => {
-      if (error) {
-        console.error('Error rebuilding posts:', error);
-      }
+    const rebuild = spawn('npm', ['run', 'build-posts'], {
+      cwd: process.cwd(),
+      detached: true,
+      stdio: 'ignore',
     });
+    rebuild.unref();
 
     return NextResponse.json({ success: true });
   } catch (error) {

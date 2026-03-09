@@ -10,9 +10,14 @@ export const dynamic = 'force-dynamic';
 
 import { parseMarkdownToRedBull } from '@/lib/markdown-utils';
 
-export default function BlogPost({ params }: { params: { slug: string } }) {
+export default async function BlogPost({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
   const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
-  const filepath = path.join(BLOG_DIR, `${params.slug}.md`);
+  const filepath = path.join(BLOG_DIR, `${slug}.md`);
 
   if (!fs.existsSync(filepath)) {
     return notFound();
@@ -21,7 +26,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
   const fileContent = fs.readFileSync(filepath, 'utf-8');
   const { data, content } = matter(fileContent);
 
-  const parsed = parseMarkdownToRedBull(content, params.slug);
+  const parsed = parseMarkdownToRedBull(content, slug);
 
   // Calculate read time
   const wordCount = content.split(/\s+/).length;
@@ -31,7 +36,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
   const heroImage = data.image || parsed.introImage || '/stories/default.jpg';
 
   const componentData = {
-    title: data.title || params.slug,
+    title: data.title || slug,
     subtitle: data.description || parsed.intro.substring(0, 150) + '...',
     author: data.author || 'Summit Explorer',
     date: data.date || new Date().toISOString(),
@@ -49,7 +54,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 
   return (
     <div className="min-h-screen bg-black">
-      <RedBullBlogPost post={componentData} slug={params.slug} />
+      <RedBullBlogPost post={componentData} slug={slug} />
     </div>
   );
 }

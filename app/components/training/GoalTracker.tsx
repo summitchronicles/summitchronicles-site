@@ -165,7 +165,7 @@ export function GoalTracker({
             Training Goals
           </h3>
           <p className="text-gray-600 mt-1">
-            Track your progress towards Everest 2027
+            Track your progress towards Everest 2028
           </p>
         </div>
         <motion.button

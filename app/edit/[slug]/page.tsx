@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Header } from '../../components/organisms/Header';
 import { ArrowLeft, Save, Eye, Upload, X, Bold, Italic, Underline, List, Link2, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -22,8 +22,10 @@ interface BlogPost {
   sections: Section[];
 }
 
-export default function EditBlogPost({ params }: { params: { slug: string } }) {
+export default function EditBlogPost() {
+  const params = useParams<{ slug: string }>();
   const router = useRouter();
+  const slug = decodeURIComponent(params?.slug ?? '');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [title, setTitle] = useState('');
@@ -37,8 +39,13 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
   // Load blog post content
   useEffect(() => {
     const loadPost = async () => {
+      if (!slug) {
+        setLoading(false);
+        return;
+      }
+
       try {
-        const response = await fetch(`/api/edit/${params.slug}`);
+        const response = await fetch(`/api/edit/${slug}`);
         const data = await response.json();
 
         if (data.success) {
@@ -57,7 +64,7 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
     };
 
     loadPost();
-  }, [params.slug]);
+  }, [slug]);
 
   const addSection = () => {
     setSections([...sections, { title: '', content: '', image: '', pullQuote: '' }]);
@@ -76,7 +83,7 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
   const uploadImage = async (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('slug', params.slug);
+    formData.append('slug', slug);
 
     try {
       const response = await fetch('/api/upload-image', {
@@ -150,7 +157,7 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
   const savePost = async () => {
     setSaving(true);
     try {
-      const response = await fetch(`/api/edit/${params.slug}`, {
+      const response = await fetch(`/api/edit/${slug}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -201,7 +208,7 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
 
             <div className="flex items-center space-x-4">
               <Link
-                href={`/blog/${params.slug}`}
+                href={`/blog/${slug}`}
                 className="flex items-center space-x-2 px-4 py-2 border border-spa-charcoal text-spa-charcoal hover:bg-spa-charcoal hover:text-white transition-colors"
               >
                 <Eye className="w-4 h-4" />
@@ -289,7 +296,7 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
             </div>
             {heroImage &&                <div className="mt-4">
                   <NextImage
-                    src={`/content/posts/${params.slug}/images/${heroImage}`}
+                    src={`/content/posts/${slug}/images/${heroImage}`}
                     alt="Hero preview"
                     width={400}
                     height={200}
@@ -427,7 +434,7 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
                   {section.image && (
                     <div className="mt-2">
                       <NextImage
-                        src={`/content/posts/${params.slug}/images/${section.image}`}
+                        src={`/content/posts/${slug}/images/${section.image}`}
                         alt="Section preview"
                         width={300}
                         height={150}
@@ -460,8 +467,8 @@ export default function EditBlogPost({ params }: { params: { slug: string } }) {
                 {uploading ? 'Uploading image...' : saving ? 'Saving changes...' : 'All changes saved locally'}
               </div>
               <div className="flex space-x-4">
-                <Link
-                  href={`/blog/${params.slug}`}
+                  <Link
+                    href={`/blog/${slug}`}
                   className="flex items-center space-x-2 px-6 py-3 border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   <Eye className="w-4 h-4" />

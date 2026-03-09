@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
 import { AltimeterTimeline } from '../components/about/AltimeterTimeline';
@@ -14,19 +15,14 @@ import {
   Heart,
   TrendingUp,
 } from 'lucide-react';
-import { getDaysToEverest } from '@/lib/everest-countdown';
+import {
+  getDaysSinceSurgery,
+  getDaysToEverest,
+} from '@/lib/everest-countdown';
 
 export default function AboutPage() {
   const daysToEverest = getDaysToEverest();
-
-  // Surgery date: November 10, 2025
-  const surgeryDate = new Date('2025-11-10T00:00:00');
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Reset to start of day
-  const msPerDay = 1000 * 60 * 60 * 24;
-  const daysSinceSurgery = Math.floor(
-    (today.getTime() - surgeryDate.getTime()) / msPerDay
-  );
+  const daysSinceSurgery = getDaysSinceSurgery();
 
   return (
     <div className="min-h-screen bg-obsidian text-white overflow-x-hidden selection:bg-summit-gold-900 selection:text-summit-gold-100">
@@ -64,7 +60,9 @@ export default function AboutPage() {
             className="max-w-2xl mx-auto"
           >
             <p className="text-xl md:text-2xl font-light text-gray-300 leading-relaxed mb-8">
-              A journey from tuberculosis to the Seven Summits.
+              A journey from tuberculosis to the Seven Summits. The current
+              chapter is physiotherapy, strength work, and a disciplined return
+              to full mountain training.
               <span className="text-summit-gold-400">
                 {' '}
                 {daysToEverest} days to Everest.
@@ -119,7 +117,7 @@ export default function AboutPage() {
             </h3>
           </motion.div>
 
-          {/* Timeline: TB → Mountaineering → Broken Talus → Comeback */}
+          {/* Timeline: TB → Mountaineering → Broken Talus → Rebuild */}
           <div className="space-y-24">
             {/* 2013: Tuberculosis */}
             <motion.div
@@ -221,7 +219,8 @@ export default function AboutPage() {
                   Broken Talus. Surgery. The mountain doesn't care about your
                   plans. But setbacks are just data points.{' '}
                   <span className="text-white">
-                    Every injury is a lesson. Every recovery is training.
+                    Every injury is a lesson. Every careful rebuild is part of
+                    the climb.
                   </span>
                 </p>
               </div>
@@ -236,7 +235,7 @@ export default function AboutPage() {
               </div>
             </motion.div>
 
-            {/* 2026-2028: The Comeback */}
+            {/* 2026-2028: The Rebuild */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -247,22 +246,25 @@ export default function AboutPage() {
                 2026-2028
               </div>
               <h4 className="text-4xl font-light text-white mb-6">
-                The Comeback
+                The Rebuild
               </h4>
               <p className="text-xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto">
-                From broken Talus to the roof of the world.{' '}
+                The Everest objective remains, but the current work is
+                physiotherapy, gait correction, and supplemental strength while
+                I rebuild toward full mountain training.{' '}
                 <span className="text-summit-gold-400">
                   {daysToEverest} days
                 </span>{' '}
-                of rehabilitation, training, and preparation. The algorithm is
-                simple:
+                until Everest. The next immediate milestone is simple:
                 <span className="text-white">
                   {' '}
-                  measure everything, optimize relentlessly, never quit.
+                  jog and run again by the end of May 2026, then build
+                  deliberately from there.
                 </span>
               </p>
               <div className="mt-8 text-sm text-gray-500 uppercase tracking-widest">
-                Target: Everest Base Camp → Summit → 2028
+                Current chapter: rehab now • running by end of May 2026 •
+                Everest 2028
               </div>
             </motion.div>
           </div>
@@ -349,29 +351,30 @@ export default function AboutPage() {
             </span>
           </h2>
           <p className="text-xl text-gray-400 mb-12 font-light max-w-2xl mx-auto">
-            The countdown to Everest is running. Follow the journey from
-            recovery to the roof of the world.
+            The Everest objective is still intact. Right now the work is
+            physiotherapy, strength support, gait correction, and a deliberate
+            return to running before full mountain training resumes.
           </p>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-6 w-full max-w-4xl mx-auto">
-            <a
+            <Link
               href="/training"
               className="group flex items-center justify-center gap-2 px-8 py-4 bg-summit-gold-500 text-black font-medium tracking-widest hover:bg-summit-gold-400 transition-colors text-center"
             >
               VIEW TRAINING DATA{' '}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </a>
-            <a
-              href="/stories"
+            </Link>
+            <Link
+              href="/blog"
               className="flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium tracking-widest hover:border-summit-gold hover:text-summit-gold transition-colors text-center"
             >
               READ EXPEDITION STORIES
-            </a>
-            <a
+            </Link>
+            <Link
               href="/newsletter"
               className="flex items-center justify-center px-8 py-4 border border-white/20 text-white font-medium tracking-widest hover:border-summit-gold hover:text-summit-gold transition-colors text-center"
             >
               SUBSCRIBE TO UPDATES
-            </a>
+            </Link>
           </div>
         </div>
       </section>

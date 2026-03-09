@@ -1,4 +1,4 @@
-import { TrainingActivity } from '../app/api/training/upload/route';
+import type { TrainingActivity } from '@/modules/training/domain/training-plan';
 
 export interface ComplianceMetrics {
   durationMatch: number;

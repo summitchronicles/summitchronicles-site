@@ -329,10 +329,14 @@ export const useCachedSWR = <T>(
   const [error, setError] = React.useState<Error | null>(null);
 
   const queryCache = useQueryCache();
-  const cacheConfig = options.cacheConfig || {
-    ttl: 5 * 60 * 1000,
-    staleWhileRevalidate: 2 * 60 * 1000,
-  };
+  const cacheConfig = React.useMemo(
+    () =>
+      options.cacheConfig || {
+        ttl: 5 * 60 * 1000,
+        staleWhileRevalidate: 2 * 60 * 1000,
+      },
+    [options.cacheConfig]
+  );
 
   const fetchData = React.useCallback(async () => {
     try {

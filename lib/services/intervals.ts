@@ -1,113 +1,32 @@
-import { format } from 'date-fns';
 import { IntervalsActivity, IntervalsWellness } from '@/types/intervals';
-
-const API_KEY = process.env.INTERVALS_ICU_API_KEY;
-const ATHLETE_ID = process.env.INTERVALS_ICU_ATHLETE_ID;
-const BASE_URL = 'https://intervals.icu/api/v1';
-
-if (!API_KEY || !ATHLETE_ID) {
-  console.warn('Intervals.icu API key or Athlete ID missing!');
-}
-
-// Basic Auth Header: base64("API_KEY:api_key_value")
-// Intervals.icu requires the literal string "API_KEY" as username and the key as password
-const getHeaders = () => {
-  if (!API_KEY) {
-    throw new Error('INTERVALS_ICU_API_KEY is not configured');
-  }
-  // Correct format: base64(API_KEY:api_key_value) - "API_KEY" is LITERAL
-  const authString = Buffer.from(`API_KEY:${API_KEY}`).toString('base64');
-  return {
-    Authorization: `Basic ${authString}`,
-    'Content-Type': 'application/json',
-  };
-};
+import { intervalsClient } from '@/modules/training/infrastructure/intervals-client';
 
 export class IntervalsService {
-  /**
-   * Fetch wellness data for a date range (defaults to today/yesterday)
-   */
   static async getWellness(
     startDate?: string,
     endDate?: string
   ): Promise<IntervalsWellness[]> {
     try {
-      // Default to last 7 days if not specified
-      const end = endDate || format(new Date(), 'yyyy-MM-dd');
-      const start =
-        startDate ||
-        format(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), 'yyyy-MM-dd');
-
-      const url = `${BASE_URL}/athlete/${ATHLETE_ID}/wellness?oldest=${start}&newest=${end}`;
-      console.log('Fetching Intervals Wellness:', url);
-
-      const response = await fetch(url, {
-        headers: getHeaders(),
-        next: { revalidate: 60 }, // Cache for 60s
-      });
-
-      if (!response.ok) {
-        console.error(
-          'Intervals API Error:',
-          response.status,
-          response.statusText
-        );
-        throw new Error(`Intervals API Error: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      console.log(
-        'Intervals Wellness Data (first item):',
-        data[0] ? JSON.stringify(data[0]) : 'Empty Array'
-      );
-      return data;
+      return await intervalsClient.getWellness(startDate, endDate);
     } catch (error) {
       console.error('Error fetching wellness:', error);
       return [];
     }
   }
 
-  /**
-   * Fetch recent activities
-   */
   static async getActivities(limit = 10): Promise<IntervalsActivity[]> {
     try {
-      const today = format(new Date(), 'yyyy-MM-dd');
-      const start = format(
-        new Date(Date.now() - 180 * 24 * 60 * 60 * 1000), // 6 months history
-        'yyyy-MM-dd'
-      );
-
-      const url = `${BASE_URL}/athlete/${ATHLETE_ID}/activities?oldest=${start}&newest=${today}`;
-      console.log('Fetching Intervals Activities:', url);
-
-      const response = await fetch(url, {
-        headers: getHeaders(),
-        next: { revalidate: 3600 }, // Cache for 1 hour
-      });
-
-      if (!response.ok) {
-        throw new Error(`Intervals API Error: ${response.statusText}`);
-      }
-
-      const activities: IntervalsActivity[] = await response.json();
-
-      // API usually returns Newest -> Oldest. Keep as is.
-      return activities.slice(0, limit);
+      return await intervalsClient.getActivities(limit);
     } catch (error) {
       console.error('Error fetching activities:', error);
       return [];
     }
   }
 
-  /**
-   * Get the most recent valid metric from a list of wellness days
-   */
   static getLatestMetric(
     wellnessData: IntervalsWellness[],
     key: keyof IntervalsWellness
   ): number | null {
-    // Sort desc by date just in case
     const sorted = [...wellnessData].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     );
@@ -117,6 +36,7 @@ export class IntervalsService {
         return day[key] as number;
       }
     }
+
     return null;
   }
 }

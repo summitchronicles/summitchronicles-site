@@ -1,15 +1,25 @@
-// Dynamic countdown to Everest expedition
-export function getDaysToEverest(): number {
-  // Set the target Everest expedition date
-  // Expedition is planned for March 1, 2028
-  const everestDate = new Date('2028-03-01');
+const MS_PER_DAY = 1000 * 60 * 60 * 24;
+const EVEREST_DATE = '2028-03-01T00:00:00Z';
+const SURGERY_DATE = '2025-11-10T00:00:00Z';
 
-  const today = new Date();
-  const diffTime = everestDate.getTime() - today.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+function getUtcDayNumber(date: Date): number {
+  return Math.floor(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()) /
+      MS_PER_DAY
+  );
+}
 
-  // Return the number of days, ensuring it's not negative
-  return Math.max(0, diffDays);
+function diffUtcDays(targetDate: string, now: Date = new Date()): number {
+  const target = new Date(targetDate);
+  return getUtcDayNumber(target) - getUtcDayNumber(now);
+}
+
+export function getDaysToEverest(now: Date = new Date()): number {
+  return Math.max(0, diffUtcDays(EVEREST_DATE, now));
+}
+
+export function getDaysSinceSurgery(now: Date = new Date()): number {
+  return Math.max(0, -diffUtcDays(SURGERY_DATE, now));
 }
 
 // Format the countdown text

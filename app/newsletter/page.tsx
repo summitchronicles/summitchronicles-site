@@ -18,11 +18,25 @@ export default function NewsletterPage() {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      // Here you would integrate with your newsletter service
-      setIsSubmitted(true);
+    if (!email || isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/newsletter/subscribers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (res.ok) {
+        setIsSubmitted(true);
+      }
+    } catch (err) {
+      console.error('Subscribe failed:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -97,9 +111,9 @@ export default function NewsletterPage() {
             <div className="h-px w-32 bg-gradient-to-r from-transparent via-summit-gold-500 to-transparent mx-auto"></div>
 
             <p className="text-xl md:text-2xl text-gray-300 leading-relaxed font-light">
-              From bedridden with tuberculosis in 2013 to preparing for Everest in 2027.
-              This is the story of systematic preparation, failure, learning, and the pursuit
-              of something bigger than ourselves.
+              From bedridden with tuberculosis in 2013 to rebuilding toward
+              Everest in 2028. The current chapter is physiotherapy, strength
+              work, and a measured return to full mountain training.
             </p>
 
             <div className="grid md:grid-cols-3 gap-8">
@@ -195,9 +209,10 @@ export default function NewsletterPage() {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="text-center space-y-4">
                   <p className="text-gray-300 leading-relaxed font-light">
-                    Get updates on the preparation for Everest 2027. Real training data,
-                    honest reflections on the highs and lows, and insights from the journey
-                    to the world's highest peak.
+                    Get updates on the road to Everest 2028. Real training
+                    data, honest notes from physiotherapy and strength work,
+                    and the deliberate return to running before mountain
+                    training ramps again.
                   </p>
 
                   <div className="flex items-center justify-center space-x-3 py-4">
@@ -219,10 +234,11 @@ export default function NewsletterPage() {
                   />
                   <button
                     type="submit"
-                    className="w-full bg-white text-black py-4 font-bold tracking-widest hover:bg-summit-gold hover:text-black transition-all duration-300 flex items-center justify-center space-x-3 uppercase text-sm"
+                    disabled={isSubmitting}
+                    className="w-full bg-white text-black py-4 font-bold tracking-widest hover:bg-summit-gold hover:text-black transition-all duration-300 flex items-center justify-center space-x-3 uppercase text-sm disabled:opacity-50"
                   >
                     <Mail className="w-4 h-4" />
-                    <span>Initialize Subscription</span>
+                    <span>{isSubmitting ? 'Establishing Uplink...' : 'Initialize Subscription'}</span>
                   </button>
                 </div>
 
@@ -259,8 +275,9 @@ export default function NewsletterPage() {
               TRACK THE FULL MISSION
             </h3>
             <p className="text-xl text-gray-400 font-light leading-relaxed max-w-2xl mx-auto">
-              Explore the full journey from tuberculosis recovery to Seven Summits preparation,
-              documented with honesty and systematic detail.
+              Explore the full journey from illness to expedition preparation,
+              including the current rehabilitation block and return-to-run
+              phase.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-8">
               <a

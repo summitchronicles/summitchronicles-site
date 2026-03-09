@@ -47,12 +47,12 @@ export default function ExpeditionsPage() {
       mountain: 'Mount Everest',
       elevation: '29,032 ft',
       location: 'Nepal/Tibet',
-      date: 'March 2027',
-      year: '2027',
+      date: 'Spring 2028',
+      year: '2028',
       status: 'in-progress',
       image: '/images/sunith-everest-vision.png',
       story:
-        'The ultimate challenge. Everything has led to this moment. Thirteen years of preparation, systematic training, and community support converge at the roof of the world.',
+        'The long objective remains the same, but the route now runs through physiotherapy, gait rebuild, and a careful return to full mountain training before Everest.',
       stats: {
         duration: '60 days',
         difficulty: 'Extreme+',

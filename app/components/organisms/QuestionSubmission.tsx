@@ -117,7 +117,7 @@ export function QuestionSubmission() {
             </Button>
 
             <Button variant="ghost" asChild>
-              <a href="/community">View Community</a>
+              <a href="/connect">Get in Touch</a>
             </Button>
           </div>
         </div>

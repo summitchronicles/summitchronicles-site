@@ -7,10 +7,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react'; // Added ArrowUpRight for the CTA
 import { Header } from './components/organisms/Header';
 import { VisualTransmissions } from './components/home/VisualTransmissions';
-import {
-  getEverestCountdownText,
-  getDaysToEverest,
-} from '@/lib/everest-countdown';
+import { getDaysToEverest } from '@/lib/everest-countdown';
 import { ArrowRight, Mountain, Wind, Map } from 'lucide-react';
 
 export default function Home() {

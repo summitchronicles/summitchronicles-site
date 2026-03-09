@@ -11,10 +11,6 @@ import {
   X,
   Brain,
   Mountain,
-  Users,
-  Bot,
-  Calendar,
-  Zap,
 } from 'lucide-react';
 import { AnimatedLogo } from './icons/AnimatedLogo';
 
@@ -28,7 +24,6 @@ export default function Navigation() {
     { href: '/blog', label: 'Blog', icon: BookOpen },
     { href: '/training', label: 'Training', icon: Target },
     { href: '/ai-search', label: 'AI Coach', icon: Brain },
-    { href: '/automation', label: 'Automation', icon: Bot },
   ];
 
   return (

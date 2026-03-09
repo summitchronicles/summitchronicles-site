@@ -1,33 +1,21 @@
 import { NextResponse } from 'next/server';
 import {
-  initializeKnowledgeBase,
-  getKnowledgeBaseStats,
-} from '@/lib/rag/training-knowledge-base';
-import { testConnection } from '@/lib/integrations/replicate';
+  getAiInitializationStatusResponse,
+  initializeAiSystemResponse,
+} from '@/modules/ai/application/ai-operations-controller';
+import { requireInternalApiAccess } from '@/shared/security/internal-api';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST() {
+export async function POST(request: Request) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
-    // Test Cohere connection first
-    const isAiAvailable = await testConnection();
-    if (!isAiAvailable) {
-      return NextResponse.json(
-        { error: 'Replicate AI is not available. Please check API key.' },
-        { status: 503 }
-      );
-    }
-
-    // Initialize knowledge base
-    await initializeKnowledgeBase();
-    const stats = getKnowledgeBaseStats();
-
-    return NextResponse.json({
-      status: 'initialized',
-      message: 'Knowledge base initialized successfully',
-      stats,
-      aiStatus: 'connected',
-    });
+    const response = await initializeAiSystemResponse();
+    return NextResponse.json(response.body, { status: response.status });
   } catch (error) {
     console.error('Initialization error:', error);
     return NextResponse.json(
@@ -37,16 +25,15 @@ export async function POST() {
   }
 }
 
-export async function GET() {
-  try {
-    const stats = getKnowledgeBaseStats();
-    const isAiAvailable = await testConnection();
+export async function GET(request: Request) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
 
-    return NextResponse.json({
-      status: stats.totalDocuments > 0 ? 'ready' : 'not_initialized',
-      stats,
-      aiStatus: isAiAvailable ? 'connected' : 'disconnected',
-    });
+  try {
+    const response = await getAiInitializationStatusResponse();
+    return NextResponse.json(response.body, { status: response.status });
   } catch (error) {
     console.error('Status check error:', error);
     return NextResponse.json(

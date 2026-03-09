@@ -60,7 +60,7 @@ export function CinematicBlogPost({
 
   // Sample blog post data
   const samplePost: BlogPostData = {
-    title: 'The Mental Game: Preparing Mind and Body for Everest 2027',
+    title: 'The Mental Game: Preparing Mind and Body for Everest 2028',
     excerpt:
       "Every summit begins in the mind. Discover the psychological preparation behind the world's ultimate mountaineering challenge, where mental fortitude matters as much as physical strength.",
     author: 'Sunith Kumar',
@@ -71,7 +71,7 @@ export function CinematicBlogPost({
     views: '2.1K',
     location: 'Training Grounds, California',
     content: `
-      <p>The statistics are sobering: only 29% of climbers who attempt Mount Everest actually reach the summit. Of those who turn back or fail, the majority cite mental challenges rather than physical limitations. This realization fundamentally changed how I approach my preparation for the 2027 expedition.</p>
+      <p>The statistics are sobering: only 29% of climbers who attempt Mount Everest actually reach the summit. Of those who turn back or fail, the majority cite mental challenges rather than physical limitations. This realization fundamentally changed how I approach my preparation for the 2028 objective.</p>
 
       <h2>The Psychology of Extreme Altitude</h2>
       <p>At 8,849 meters above sea level, Everest exists in what mountaineers call the "Death Zone" — altitudes where the human body literally begins to die. But before your body fails, your mind is tested in ways most people never experience.</p>
@@ -314,9 +314,9 @@ export function CinematicBlogPost({
                 </h3>
                 <p className="text-gray-400 leading-relaxed">
                   Mountaineer and systematic athlete pursuing the Seven Summits
-                  challenge. Currently preparing for Mount Everest in Spring
-                  2027 through data-driven training and methodical preparation
-                  approaches.
+                  challenge. Currently rebuilding toward Mount Everest in 2028
+                  through physiotherapy, strength work, and data-driven
+                  preparation.
                 </p>
               </div>
             </div>

@@ -273,10 +273,10 @@ export function SupporterRecognition() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button variant="summit" asChild>
-                <a href="/community">Join Discussions</a>
+                <a href="/connect">Start a Conversation</a>
               </Button>
               <Button variant="secondary" asChild>
-                <a href="/community#challenges">Join a Challenge</a>
+                <a href="/connect">Get in Touch</a>
               </Button>
             </div>
           </div>

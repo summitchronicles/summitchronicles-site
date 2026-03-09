@@ -2,7 +2,7 @@ import dynamic from 'next/dynamic';
 import React from 'react';
 
 // Loading component for dynamic imports
-const LoadingSpinner: React.FC = () => (
+const LoadingSpinner = (): React.ReactElement => (
   <div className="flex items-center justify-center p-8">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-alpine-blue"></div>
   </div>
@@ -31,7 +31,7 @@ export const DynamicSmartSearch = dynamic(
   () =>
     import('../ai/SmartSearch').then((mod) => ({ default: mod.SmartSearch })),
   {
-    loading: LoadingSpinner,
+    loading: () => <LoadingSpinner />,
     ssr: false, // Client-side only for AI features
   }
 );
@@ -42,7 +42,7 @@ export const DynamicTrainingInsights = dynamic(
       default: mod.TrainingInsights,
     })),
   {
-    loading: LoadingSpinner,
+    loading: () => <LoadingSpinner />,
     ssr: false,
   }
 );
@@ -54,19 +54,8 @@ export const DynamicAdvancedAnalytics = dynamic(
       default: mod.AdvancedAnalytics,
     })),
   {
-    loading: LoadingSpinner,
+    loading: () => <LoadingSpinner />,
     ssr: false,
-  }
-);
-
-export const DynamicTrainingCharts = dynamic(
-  () =>
-    import('../TrainingCharts').then((mod) => ({
-      default: mod.TrainingCharts,
-    })),
-  {
-    loading: LoadingSpinner,
-    ssr: true, // Keep SSR for SEO
   }
 );
 
@@ -77,7 +66,7 @@ export const DynamicSyncManager = dynamic(
       default: mod.SyncManager,
     })),
   {
-    loading: LoadingSpinner,
+    loading: () => <LoadingSpinner />,
     ssr: false,
   }
 );
@@ -89,7 +78,7 @@ export const DynamicPersonalizedDashboard = dynamic(
       default: mod.PersonalizedDashboard,
     })),
   {
-    loading: LoadingSpinner,
+    loading: () => <LoadingSpinner />,
     ssr: false,
   }
 );
@@ -198,7 +187,6 @@ export const DynamicComponents = {
   SmartSearch: DynamicSmartSearch,
   TrainingInsights: DynamicTrainingInsights,
   AdvancedAnalytics: DynamicAdvancedAnalytics,
-  TrainingCharts: DynamicTrainingCharts,
   SyncManager: DynamicSyncManager,
   PersonalizedDashboard: DynamicPersonalizedDashboard,
   SanityStudio: DynamicSanityStudio,
@@ -239,7 +227,6 @@ export const preloadCriticalComponents = () => {
   if (typeof window !== 'undefined') {
     // Preload components that might be needed soon
     // Note: preload() is not available in this version of Next.js dynamic imports
-    // DynamicTrainingCharts.preload?.()
     // DynamicSmartSearch.preload?.()
   }
 };

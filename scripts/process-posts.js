@@ -144,7 +144,15 @@ class PostProcessor {
     const postDirs = fs.readdirSync(this.postsDir)
       .filter(item => {
         const itemPath = path.join(this.postsDir, item);
-        return fs.statSync(itemPath).isDirectory();
+        if (item.startsWith('.')) {
+          return false;
+        }
+
+        if (!fs.statSync(itemPath).isDirectory()) {
+          return false;
+        }
+
+        return fs.existsSync(path.join(itemPath, 'index.md'));
       });
 
     if (postDirs.length === 0) {

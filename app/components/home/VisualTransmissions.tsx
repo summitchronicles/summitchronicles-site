@@ -28,13 +28,6 @@ export const VisualTransmissions = () => {
   // but maybe not the TS interface yet, we cast to any or check safely.
   const apiMetrics = metrics as any;
 
-  // DEBUG: Log what we're receiving
-  console.log('VisualTransmissions - apiMetrics:', apiMetrics);
-  console.log(
-    'VisualTransmissions - bodyBattery value:',
-    apiMetrics?.bodyBattery
-  );
-
   const displayData = {
     // The API now returns bodyBattery and stressScore at the root level of metrics
     bodyBattery: apiMetrics?.bodyBattery || 53, // Handle 0/null/undefined
@@ -50,19 +43,6 @@ export const VisualTransmissions = () => {
   const latestLog = latestActivity
     ? latestActivity.description || latestActivity.activityName
     : undefined;
-
-  // DEBUG: Log final display values
-  console.log('VisualTransmissions - displayData:', displayData);
-  // For 'trainingStatus', we already tried to grab the focus.
-
-  // Real Injury Logic (From Training Page)
-  // Surgery date: November 10, 2025
-  const surgeryDate = new Date('2025-11-10T00:00:00');
-  const today = new Date();
-  const msPerDay = 1000 * 60 * 60 * 24;
-  const daysSinceSurgery = Math.floor(
-    (today.getTime() - surgeryDate.getTime()) / msPerDay
-  );
 
   if (instaLoading) return null;
 
@@ -130,8 +110,9 @@ export const VisualTransmissions = () => {
               <div className="space-y-6 max-w-lg relative z-10">
                 <p className="text-lg text-gray-300 font-light leading-relaxed">
                   In 2013, I was fighting tuberculosis, struggling to walk 50
-                  meters. By 2028, I will stand on top of the world. This isn't
-                  just a climb; it's a testament to human resilience.
+                  meters. The current chapter is quieter: physiotherapy, gait
+                  rebuild, supplemental strength work, and a deliberate return
+                  to running before full mountain training resumes.
                 </p>
                 <div className="text-xs tracking-widest uppercase text-summit-gold group-hover:underline decoration-summit-gold underline-offset-4">
                   Read The Full Manifesto

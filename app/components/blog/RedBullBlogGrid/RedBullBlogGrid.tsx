@@ -60,7 +60,7 @@ export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
   const convertedPosts: BlogPost[] = generatedPosts.map((post) => ({
     slug: post.slug,
     title: post.title || 'Untitled',
-    subtitle: post.excerpt || '',
+    subtitle: post.subtitle || post.excerpt || '',
     category: (post.category || 'STORY').toUpperCase(),
     author: 'Sunith Kumar',
     date: post.date

@@ -1,53 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {
-  getKnowledgeBaseStats,
-  initializeKnowledgeBase,
-} from '@/lib/rag/training-knowledge-base';
-import { testConnection } from '@/lib/integrations/replicate';
+  getAiSystemStatusResponse,
+  handleAiStatusActionResponse,
+} from '@/modules/ai/application/ai-operations-controller';
+import { requireInternalApiAccess } from '@/shared/security/internal-api';
 
 export const dynamic = 'force-dynamic';
 
-// Cache for 30 seconds to improve performance
-let statusCache: any = null;
-let lastCacheTime = 0;
-const CACHE_DURATION = 30000; // 30 seconds
-
 export async function GET(request: NextRequest) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
-    const now = Date.now();
-
-    // Return cached result if still valid
-    if (statusCache && now - lastCacheTime < CACHE_DURATION) {
-      return NextResponse.json(statusCache);
-    }
-
-    // Test Cohere connection
-    const aiConnected = await testConnection();
-
-    // Get knowledge base statistics
-    const kbStats = getKnowledgeBaseStats();
-
-    const result = {
-      status: 'operational',
-      provider: 'replicate',
-      ai: {
-        connected: aiConnected,
-        model: 'command-r',
-      },
-      knowledgeBase: kbStats,
-      capabilities: {
-        semanticSearch: aiConnected,
-        ragResponses: aiConnected && kbStats.totalDocuments > 0,
-        directAI: aiConnected,
-      },
-      timestamp: new Date().toISOString(),
-    };
-
-    // Cache the result
-    statusCache = result;
-    lastCacheTime = now;
-
-    return NextResponse.json(result);
+    const response = await getAiSystemStatusResponse();
+    return NextResponse.json(response.body, { status: response.status });
   } catch (error) {
     console.error('AI Status API error:', error);
     return NextResponse.json(
@@ -62,26 +30,15 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
-    const { action } = await request.json();
-
-    if (action === 'initialize') {
-      // Initialize the knowledge base
-      await initializeKnowledgeBase();
-
-      const kbStats = getKnowledgeBaseStats();
-
-      return NextResponse.json({
-        message: 'Knowledge base initialized successfully',
-        stats: kbStats,
-        timestamp: new Date().toISOString(),
-      });
-    } else {
-      return NextResponse.json(
-        { error: 'Invalid action. Supported actions: initialize' },
-        { status: 400 }
-      );
-    }
+    const payload = await request.json();
+    const response = await handleAiStatusActionResponse(payload);
+    return NextResponse.json(response.body, { status: response.status });
   } catch (error) {
     console.error('AI Status API error:', error);
     return NextResponse.json(

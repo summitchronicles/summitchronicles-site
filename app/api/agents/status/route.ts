@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
-import { getAllAgentStatuses } from '@/lib/agent-status';
-import { isOllamaAvailable } from '@/lib/integrations/ollama';
+import { getAgentStatusResponse } from '@/modules/agents/application/agent-controller';
+import { requireInternalApiAccess } from '@/shared/security/internal-api';
 
-export async function GET() {
-  const statuses = getAllAgentStatuses();
-  const ollamaAvailable = await isOllamaAvailable();
+export async function GET(request: Request) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
 
-  return NextResponse.json({ ...statuses, ollamaAvailable });
+  const response = await getAgentStatusResponse();
+  return NextResponse.json(response.body, { status: response.status });
 }

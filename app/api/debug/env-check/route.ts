@@ -1,39 +1,26 @@
 import { NextResponse } from 'next/server';
+import { getServerEnv } from '@/shared/env/server';
+import { requireInternalApiAccess } from '@/shared/security/internal-api';
 
 export const dynamic = 'force-dynamic';
 
-/**
- * Debug endpoint to verify environment variables are set (without exposing values)
- * Access: /api/debug/env-check
- */
-export async function GET() {
-  const envCheck = {
-    timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV,
-    checks: {
-      intervals_api_key: {
-        exists: !!process.env.INTERVALS_ICU_API_KEY,
-        length: process.env.INTERVALS_ICU_API_KEY?.length || 0,
-        preview:
-          process.env.INTERVALS_ICU_API_KEY?.substring(0, 4) + '...' ||
-          'NOT_SET',
-      },
-      intervals_athlete_id: {
-        exists: !!process.env.INTERVALS_ICU_ATHLETE_ID,
-        value: process.env.INTERVALS_ICU_ATHLETE_ID || 'NOT_SET',
-      },
-      cohere_api_key: {
-        exists: !!process.env.COHERE_API_KEY,
-        length: process.env.COHERE_API_KEY?.length || 0,
-        preview:
-          process.env.COHERE_API_KEY?.substring(0, 4) + '...' || 'NOT_SET',
-      },
-      vo2_manual: {
-        exists: !!process.env.VO2_MAX_MANUAL,
-        value: process.env.VO2_MAX_MANUAL || 'NOT_SET',
-      },
-    },
-  };
+export async function GET(request: Request) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
 
-  return NextResponse.json(envCheck);
+  const env = getServerEnv();
+
+  return NextResponse.json({
+    timestamp: new Date().toISOString(),
+    environment: env.NODE_ENV,
+    checks: {
+      intervals_api_key: { configured: Boolean(env.INTERVALS_ICU_API_KEY) },
+      intervals_athlete_id: { configured: Boolean(env.INTERVALS_ICU_ATHLETE_ID) },
+      buttondown_api_key: { configured: Boolean(env.BUTTONDOWN_API_KEY) },
+      internal_api_key: { configured: Boolean(env.INTERNAL_API_KEY) },
+      sanity_project: { configured: Boolean(env.NEXT_PUBLIC_SANITY_PROJECT_ID) },
+    },
+  });
 }

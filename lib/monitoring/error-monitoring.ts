@@ -476,7 +476,7 @@ export const withErrorMonitoring = <P extends object>(
       (MonitoredErrorBoundary as any).displayName =
         `ErrorBoundary(${Component.displayName || Component.name})`;
       return MonitoredErrorBoundary;
-    }, [captureError]);
+    }, [captureError, ref]);
 
     return React.createElement(ErrorBoundary, props as any);
   });

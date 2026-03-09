@@ -1,16 +1,16 @@
 {
-  "phase": "Non-Weight Bearing",
+  "phase": "Rehabilitation Block",
   "since": "2025-11-10",
   "status": "active",
   "milestone": {
-    "title": "Walk without Crutches",
-    "targetDate": "2026-04-01",
+    "title": "Jog with a clean gait",
+    "targetDate": "2026-05-31",
     "confidence": "High"
   },
   "metrics": [
-    { "label": "Mobility", "value": "Limited", "trend": "stable" },
-    { "label": "Upper Body", "value": "Maintenance", "trend": "up" },
+    { "label": "Mobility", "value": "Rebuilding", "trend": "up" },
+    { "label": "Upper Body", "value": "Supplemental", "trend": "steady" },
     { "label": "VO2 Max", "value": "54", "trend": "steady" }
   ],
-  "latestUpdate": "Travel week. Resting but maintaining protocol mental focus."
+  "latestUpdate": "Physiotherapy remains the priority. Strength sessions support the rebuild while gait quality is still under active work."
 }

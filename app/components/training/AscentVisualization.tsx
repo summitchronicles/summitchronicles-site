@@ -8,14 +8,14 @@ import { motion } from 'framer-motion';
 // P1: Peak (2024 Denali) - Fixed High
 // P2: Injury (2025) - Fixed Low (Dip)
 // P3: Current (Dynamic based on VO2)
-// P4: Goal (2027) - Fixed Peak
+// P4: Goal (2028) - Fixed Peak
 const generatePath = (currentVo2: number) => {
   // normalize VO2 (30-65 range) to Y-axis (350-50 range)
   // Higher VO2 = Lower Y (higher on graph)
   const constrainedVo2 = Math.min(Math.max(currentVo2, 35), 65);
   const normalizedY = 350 - ((constrainedVo2 - 35) / (65 - 35)) * 300;
 
-  // X-Coords roughly mapped to: 2014(0), 2024(400), Nov2025(600), Now/2026(750), 2027(1000)
+  // X-Coords roughly mapped to: 2014(0), 2024(400), Nov2025(600), Now/2026(750), 2028(1000)
 
   return `M0,350 C150,350 250,100 400,120 C500,140 580,320 600,320 C650,320 700,${normalizedY} 1000,20`;
 };
@@ -35,7 +35,7 @@ export const AscentVisualization = ({
   React.useEffect(() => {
     // 1. Calculate Day Count
     const injuryDate = new Date('2025-11-10T00:00:00'); // Fixed Injury Date
-    const everestDate = new Date('2027-05-01T00:00:00'); // Target
+    const everestDate = new Date('2028-05-01T00:00:00'); // Target
     const today = new Date();
 
     // Ensure we don't go back in time for the 'current' marker logic (clamp to injury start minimum)
@@ -48,7 +48,7 @@ export const AscentVisualization = ({
     setDaysSinceInjury(Math.max(0, daysDiff));
 
     // 2. Calculate X Position on Graph
-    // Map time range (Nov 2025 -> May 2027) to SVG X coords (600 -> 980)
+    // Map time range (Nov 2025 -> May 2028) to SVG X coords (600 -> 980)
     const totalDuration = everestDate.getTime() - injuryDate.getTime();
     const elapsedDuration = safeCurrentDate.getTime() - injuryDate.getTime();
     let progress = elapsedDuration / totalDuration;
@@ -84,7 +84,7 @@ export const AscentVisualization = ({
 
   // Timeline Config
   const startYear = 2014;
-  const endYear = 2027;
+  const endYear = 2028;
   const totalYears = endYear - startYear;
 
   // Calculate relative position of "Now" (Jan 2026)
@@ -92,7 +92,7 @@ export const AscentVisualization = ({
   // 12 / 13 = ~92% (Wait, that puts us too close to the end)
   // Let's adjust the narrative window to focus on the COMEBACK,
   // but keep 2014 as the "Ghost" origin.
-  // Visual mapping: 0% = 2014, 100% = 2027 (Everest).
+  // Visual mapping: 0% = 2014, 100% = 2028 (Everest).
 
   // Actually, for better visual balance:
   // Let's make the graph focus on the current Campaign (The 7 Summits Project).
@@ -104,12 +104,12 @@ export const AscentVisualization = ({
   // P1: 2024 (Denali) - High
   // P2: Nov 2025 (Injury) - Crash Low
   // P3: Jan 2026 (Now) - Recovery Start
-  // P4: 2027 (Everest) - Peak High
+  // P4: 2028 (Everest) - Peak High
 
   // First Peak (Denali 2024?): around x=400
   // Crash (Injury 2025): x=600, y=320 (dip)
   // Recovery (Now): x=650, y=300 (rising)
-  // Peak (Everest 2027): x=1000, y=20 (high)
+  // Peak (Everest 2028): x=1000, y=20 (high)
 
   return (
     <div className="w-full relative py-12 border-l border-b border-white/10 bg-[#0a0a0a]">
@@ -203,7 +203,7 @@ export const AscentVisualization = ({
             INJURY (NOV 2025)
           </text>
 
-          {/* Everest (2027) - End x=1000, y=20 */}
+          {/* Everest (2028) - End x=1000, y=20 */}
           {/* Moved x to 900 to ensure full visibility on mobile screens */}
           <text
             x="900"
@@ -211,7 +211,7 @@ export const AscentVisualization = ({
             className="text-xl md:text-2xl font-oswald fill-white"
             textAnchor="end"
           >
-            EVEREST (2027)
+            EVEREST (2028)
           </text>
           <text
             x="900"

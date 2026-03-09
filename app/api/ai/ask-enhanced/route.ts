@@ -1,65 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateRAGResponse } from '@/lib/rag/training-knowledge-base';
-import {
-  askTrainingQuestion,
-  generateChatCompletion,
-} from '@/lib/integrations/replicate';
-import { checkAIAbuse, withAbuseProtection } from '@/lib/ai/abuse-prevention';
+import { generateChatCompletion } from '@/lib/integrations/replicate';
+import { checkAIAbuse } from '@/lib/ai/abuse-prevention';
+import { getAllPostsServer } from '@/lib/posts-server';
 import {
   getUnifiedWorkouts,
   getWorkoutStats,
-  getRecentWorkoutsForAI,
-} from '@/lib/training/unified-workouts';
+} from '@/modules/training/application/unified-workout-service';
 
 export const dynamic = 'force-dynamic';
-
-// Mock training data access (will replace with actual database calls)
-// This simulates the workoutDatabase from the Excel upload system
-const mockTrainingData = [
-  {
-    date: '2024-09-15',
-    exercise_type: 'cardio',
-    actual_duration: 60,
-    intensity: 7,
-    completion_rate: 95,
-    notes: 'Morning run, felt strong',
-  },
-  {
-    date: '2024-09-16',
-    exercise_type: 'climbing',
-    actual_duration: 120,
-    intensity: 8,
-    completion_rate: 85,
-    notes: 'Boulder training, worked on overhangs',
-  },
-  {
-    date: '2024-09-17',
-    exercise_type: 'strength',
-    actual_duration: 45,
-    intensity: 6,
-    completion_rate: 100,
-    notes: 'Upper body focus',
-  },
-];
-
-// Mock blog content (will integrate with actual blog system)
-const mockBlogContent = [
-  {
-    title: 'My Journey to Everest: Preparation Phase',
-    excerpt:
-      'Training for Everest requires systematic approach to high-altitude preparation...',
-    content:
-      "The path to Everest is not just about physical fitness, but mental preparation, equipment familiarity, and understanding your body's response to altitude...",
-    category: 'expedition-preparation',
-  },
-  {
-    title: 'High Altitude Training Secrets',
-    excerpt: 'How I build endurance for climbing at extreme altitude...',
-    content:
-      "Altitude training involves progressive exposure, cardiovascular conditioning, and specific breathing techniques that I've learned through years of mountaineering...",
-    category: 'training-techniques',
-  },
-];
 
 interface EnhancedAIRequest {
   question: string;
@@ -112,15 +61,32 @@ async function getRelevantTrainingData(question: string): Promise<{
   }
 
   try {
-    // Get unified workouts from both historical + Garmin
     const workouts = await getUnifiedWorkouts({ limit: 30 });
+    if (workouts.length === 0) {
+      return { data: [], summary: '' };
+    }
 
-    // Get stats
     const stats = await getWorkoutStats({
       startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
         .toISOString()
         .split('T')[0],
     });
+
+    if (stats.total_workouts === 0) {
+      return { data: [], summary: '' };
+    }
+
+    const dataSourceSummary = [
+      stats.by_source.intervals
+        ? `${stats.by_source.intervals} from Intervals.icu`
+        : null,
+      stats.by_source.historical
+        ? `${stats.by_source.historical} historical`
+        : null,
+      stats.by_source.garmin ? `${stats.by_source.garmin} Garmin` : null,
+    ]
+      .filter(Boolean)
+      .join(', ');
 
     const summary = `Recent training summary (last 30 days):
 - Total workouts: ${stats.total_workouts}
@@ -129,7 +95,7 @@ async function getRelevantTrainingData(question: string): Promise<{
 - Total elevation: ${stats.total_elevation_m.toFixed(0)} m
 - Average HR: ${stats.avg_heart_rate} bpm
 - Average intensity: ${stats.avg_intensity}/10
-- Data sources: ${stats.by_source.historical} from Excel, ${stats.by_source.garmin} from Garmin
+- Data sources: ${dataSourceSummary || 'Unavailable'}
 - Top activities: ${Object.entries(stats.by_type)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3)
@@ -139,13 +105,7 @@ async function getRelevantTrainingData(question: string): Promise<{
     return { data: workouts, summary };
   } catch (error) {
     console.error('Error fetching unified training data:', error);
-    // Fallback to mock data if database fails
-    const recentData = mockTrainingData.slice(-10);
-    const summary = `Recent training summary: ${recentData.length} workouts over the past weeks.
-Average intensity: ${(recentData.reduce((sum, w) => sum + (w.intensity || 0), 0) / recentData.length).toFixed(1)}/10.
-Average completion rate: ${(recentData.reduce((sum, w) => sum + (w.completion_rate || 0), 0) / recentData.length).toFixed(1)}%.
-Exercise types: ${[...new Set(recentData.map((w) => w.exercise_type))].join(', ')}.`;
-    return { data: recentData, summary };
+    return { data: [], summary: '' };
   }
 }
 
@@ -153,15 +113,34 @@ async function getRelevantBlogContent(question: string): Promise<{
   content: any[];
   summary: string;
 }> {
-  // Simple relevance matching
-  const questionLower = question.toLowerCase();
+  const posts = getAllPostsServer();
+  if (posts.length === 0) {
+    return { content: [], summary: '' };
+  }
 
-  const relevantBlogs = mockBlogContent.filter(
-    (blog) =>
-      blog.title.toLowerCase().includes(questionLower.substring(0, 20)) ||
-      blog.excerpt.toLowerCase().includes(questionLower.substring(0, 20)) ||
-      questionLower.includes(blog.category.replace('-', ' '))
-  );
+  const keywords = question
+    .toLowerCase()
+    .split(/[^a-z0-9]+/)
+    .filter((word) => word.length > 3);
+
+  const relevantBlogs = posts
+    .map((post) => {
+      const haystack = `${post.title} ${post.excerpt} ${post.category}`.toLowerCase();
+      const score = keywords.reduce(
+        (total, keyword) => total + (haystack.includes(keyword) ? 1 : 0),
+        0
+      );
+
+      return {
+        title: post.title,
+        excerpt: post.excerpt,
+        category: post.category,
+        score,
+      };
+    })
+    .filter((post) => post.score > 0)
+    .sort((left, right) => right.score - left.score)
+    .slice(0, 3);
 
   const summary =
     relevantBlogs.length > 0
@@ -256,7 +235,7 @@ async function generateEnhancedResponse(
   const systemPrompt = `You are Sunith Kumar's personal AI assistant. You help people understand Sunith's mountaineering journey, training methods, and expedition experiences.
 
 ABOUT SUNITH:
-- Mountaineer preparing for Everest 2025
+- Mountaineer preparing for Everest
 - Systematic approach to high-altitude training
 - Focus on progression, safety, and mental preparation
 - Experience with multiple peaks and expedition planning

@@ -4,6 +4,7 @@ import {
   calculateHighAltitudeConditions,
   getMockWeatherData,
   mountainLocations,
+  weatherConfig,
 } from '../../../lib/integrations/weather';
 
 export const dynamic = 'force-dynamic';
@@ -18,19 +19,26 @@ export async function GET(request: NextRequest) {
 
     let weatherData;
 
-    if (useMockData || !process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY) {
-      // Use mock data for development
+    if (useMockData) {
       weatherData = getMockWeatherData();
+    } else if (!weatherConfig.apiKey) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Weather integration is not configured',
+        },
+        { status: 503 }
+      );
     } else {
-      // Fetch real weather data
-      try {
-        weatherData = await getWeatherData(location);
-        if (!weatherData) {
-          throw new Error('Failed to fetch weather data');
-        }
-      } catch (error) {
-        console.error('Weather API error, falling back to mock data:', error);
-        weatherData = getMockWeatherData();
+      weatherData = await getWeatherData(location);
+      if (!weatherData) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: 'Failed to fetch live weather data',
+          },
+          { status: 502 }
+        );
       }
     }
 
@@ -44,8 +52,7 @@ export async function GET(request: NextRequest) {
         conditions: altitudeConditions,
         meta: {
           timestamp: new Date().toISOString(),
-          usedMockData:
-            useMockData || !process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY,
+          usedMockData: useMockData,
           location: location,
         },
       },
@@ -65,6 +72,16 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!weatherConfig.apiKey) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'Weather integration is not configured',
+        },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const { locations } = body;
 

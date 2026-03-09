@@ -63,13 +63,23 @@ export function TrainingInsights({
     setError(null);
 
     try {
-      // If no activities provided, fetch from Strava sync
+      // If no activities are passed in, fall back to the training summary feed.
       let trainingData = activities;
       if (trainingData.length === 0) {
-        const response = await fetch('/api/strava/sync?limit=10');
+        const response = await fetch('/api/training/summary');
         const data = await response.json();
-        if (data.success && data.data.activities) {
-          trainingData = data.data.activities;
+        if (response.ok && data.success && data.summary?.metrics?.recentActivities) {
+          trainingData = data.summary.metrics.recentActivities
+            .slice(0, 10)
+            .map((activity: any) => ({
+              name: activity.activityName || 'Recorded Session',
+              type: activity.activityType?.typeKey || 'training',
+              distance: activity.distance || 0,
+              moving_time: activity.duration || 0,
+              total_elevation_gain: activity.elevationGain || 0,
+              start_date: activity.startTimeLocal || '',
+              average_heartrate: activity.averageHR,
+            }));
         }
       }
 

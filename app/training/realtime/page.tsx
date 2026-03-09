@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Header } from '../../components/organisms/Header';
-import { TrainingNavigation } from '../../components/training/TrainingNavigation';
-import { TimelineCalendar } from '../../components/training/TimelineCalendar';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Activity,
@@ -21,7 +19,6 @@ import {
   AlertCircle,
   ChevronDown,
   ChevronUp,
-  Calendar,
   Droplets,
   Battery
 } from 'lucide-react';
@@ -82,12 +79,51 @@ interface WellnessData {
   dataQuality: string;
 }
 
+function normalizeWellnessResponse(payload: any): WellnessData {
+  return {
+    heart_rate: {
+      resting_hr: payload.heart_rate?.resting_hr ?? 0,
+      max_hr: payload.heart_rate?.max_hr ?? 0,
+      average_active_hr: payload.trends?.resting_hr_7_day_avg ?? 0,
+    },
+    stress: {
+      current_level: payload.stress?.current_level ?? 0,
+      daily_average: payload.trends?.stress_7_day_avg ?? 0,
+      trend: payload.stress?.trend_7_days ?? 'unknown',
+    },
+    sleep: {
+      total_sleep_hours: payload.sleep?.total_sleep_hours ?? 0,
+      deep_sleep_hours: payload.sleep?.deep_sleep_hours ?? 0,
+      rem_sleep_hours: payload.sleep?.rem_sleep_hours ?? 0,
+      sleep_quality_score: payload.sleep?.sleep_score ?? 0,
+    },
+    recovery: {
+      readiness_score: payload.recovery?.readiness_score ?? 0,
+      recovery_status: payload.recovery?.training_load ?? 'unknown',
+      recovery_time_estimate: payload.recovery?.recovery_time ?? 0,
+    },
+    body_battery: {
+      current_level: payload.body_battery?.current_level ?? 0,
+      daily_high: payload.body_battery?.daily_high ?? 0,
+      daily_low: payload.body_battery?.daily_low ?? 0,
+    },
+    hydration: {
+      daily_intake: payload.hydration?.daily_intake ?? 0,
+      target: payload.hydration?.target ?? 0,
+      percentage: payload.hydration?.percentage ?? 0,
+    },
+    lastUpdated: payload.last_updated ?? new Date().toISOString(),
+    source: payload.source ?? 'unknown',
+    dataQuality: payload.data_quality ?? 'unknown',
+  };
+}
+
 export default function OptimizedRealtimePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [expandedSections, setExpandedSections] = useState<Set<string>>(
-    new Set(['wellness', 'training', 'calendar'])
+    new Set(['wellness', 'training'])
   );
   const [wellnessData, setWellnessData] = useState<WellnessData | null>(null);
   const [trainingData, setTrainingData] = useState<any>(null);
@@ -193,7 +229,7 @@ export default function OptimizedRealtimePage() {
           },
           {
             id: 'countdown',
-            title: 'Everest 2027',
+            title: 'Everest 2028',
             value: getEverestCountdownText().split(' ')[0],
             unit: 'days',
             icon: Target,
@@ -219,9 +255,8 @@ export default function OptimizedRealtimePage() {
       setError(null);
       setLoading(true);
 
-      // Fetch wellness data from Garmin
       const [wellnessResponse, trainingResponse] = await Promise.all([
-        fetch('/api/garmin/wellness', {
+        fetch('/api/garmin-wellness', {
           cache: 'no-store',
           headers: { 'Cache-Control': 'no-cache' }
         }),
@@ -232,8 +267,8 @@ export default function OptimizedRealtimePage() {
       ]);
 
       if (wellnessResponse.ok) {
-        const wellnessData = await wellnessResponse.json();
-        setWellnessData(wellnessData);
+        const wellnessPayload = await wellnessResponse.json();
+        setWellnessData(normalizeWellnessResponse(wellnessPayload));
       }
 
       if (trainingResponse.ok) {
@@ -380,50 +415,6 @@ export default function OptimizedRealtimePage() {
             );
           })}
 
-          {/* Training Calendar Section */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.3 }}
-            className="bg-gray-900/50 border border-gray-800 rounded-xl overflow-hidden"
-          >
-            {/* Section Header */}
-            <button
-              onClick={() => toggleSection('calendar')}
-              className="w-full p-6 text-left hover:bg-gray-800/30 transition-all duration-200 group"
-            >
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-medium text-white group-hover:text-blue-300 transition-colors">Training Calendar</h2>
-                <div className="flex items-center space-x-2">
-                  <span className="text-xs text-gray-500 opacity-0 group-hover:opacity-100 transition-opacity">
-                    {expandedSections.has('calendar') ? 'Click to collapse' : 'Click to expand'}
-                  </span>
-                  {expandedSections.has('calendar') ? (
-                    <ChevronUp className="w-5 h-5 text-gray-400 group-hover:text-blue-300 transition-colors" />
-                  ) : (
-                    <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-blue-300 transition-colors" />
-                  )}
-                </div>
-              </div>
-            </button>
-
-            {/* Calendar Content */}
-            <AnimatePresence>
-              {expandedSections.has('calendar') && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="border-t border-gray-700"
-                >
-                  <div className="p-6 pt-8">
-                    <TimelineCalendar className="bg-transparent border-0" />
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </motion.div>
         </div>
 
         {/* Connection Status */}

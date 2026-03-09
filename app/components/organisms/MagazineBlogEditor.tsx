@@ -53,6 +53,14 @@ interface MagazineBlogData {
   status: 'draft' | 'published' | 'archived';
 }
 
+function getDefaultMagazineDate(): string {
+  return new Date().toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+}
+
 export function MagazineBlogEditor({
   className,
   onSave,
@@ -95,16 +103,14 @@ export function MagazineBlogEditor({
   // Handle client-side mounting to prevent hydration errors
   useEffect(() => {
     setMounted(true);
-    if (!content.date) {
-      setContent(prev => ({
-        ...prev,
-        date: new Date().toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        }),
-      }));
-    }
+    setContent((prev) =>
+      prev.date
+        ? prev
+        : {
+            ...prev,
+            date: getDefaultMagazineDate(),
+          }
+    );
   }, []);
 
   const generateSlug = (title: string) => {
@@ -134,11 +140,7 @@ export function MagazineBlogEditor({
     const finalContent = {
       ...content,
       readTime,
-      date: content.date || new Date().toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
+      date: content.date || getDefaultMagazineDate(),
     };
 
     if (onSave) {

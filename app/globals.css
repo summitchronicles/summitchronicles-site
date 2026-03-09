@@ -24,6 +24,11 @@ body {
     /* Brand Colors - Remastered */
     --color-obsidian: #050505; /* Deepest Black */
     --color-charcoal: #111111; /* Off-Black for cards */
+    --font-montserrat:
+      'Avenir Next', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font-amatic: 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive;
+    --font-oswald:
+      Impact, Haettenschweiler, 'Arial Narrow Bold', 'Arial Black', sans-serif;
 
     /* The "True" Gold - Base hex for fallbacks */
     --color-summit-gold: #d4af37;

@@ -1,12 +1,17 @@
 import { NextResponse } from 'next/server';
 import path from 'path';
 import fs from 'fs';
-import { pipeline } from 'stream';
-import { promisify } from 'util';
+import { requireInternalApiAccess } from '@/shared/security/internal-api';
+import { assertMaxFileSize, sanitizeFilename } from '@/shared/security/upload';
 
-const pump = promisify(pipeline);
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
 
 export async function POST(req: Request) {
+  const unauthorized = requireInternalApiAccess(req);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File;
@@ -15,26 +20,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
     }
 
+    assertMaxFileSize(file, MAX_UPLOAD_BYTES);
+
     const buffer = Buffer.from(await file.arrayBuffer());
-    const filename = file.name.replace(/\s/g, '-'); // Sanitize filename
+    const filename = sanitizeFilename(file.name);
     const uploadDir = path.join(process.cwd(), 'public', 'uploads');
 
-    // Ensure upload directory exists
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
 
     const filePath = path.join(uploadDir, filename);
-
-    // Write file to disk
     fs.writeFileSync(filePath, buffer);
 
-    // Return the public URL
-    const publicUrl = `/uploads/${filename}`;
-
-    return NextResponse.json({ url: publicUrl });
+    return NextResponse.json({ url: `/uploads/${filename}` });
   } catch (error) {
     console.error('Upload error:', error);
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: error instanceof Error ? error.message : 'Upload failed',
+      },
+      { status: 500 }
+    );
   }
 }

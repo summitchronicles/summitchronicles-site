@@ -1,12 +1,10 @@
 import { sanityWriteClient } from '../sanity/client';
 import { scheduleContentIngestion } from '../rag/content-ingestion';
-
-interface SyncConfig {
-  intervalMinutes: number;
-  enableWeather: boolean;
-  enableCache: boolean;
-  enableAI: boolean;
-}
+import type {
+  SyncExecutionResult,
+  SyncRuntimeConfig,
+  SyncStatusSnapshot,
+} from '@/modules/sync/domain/sync';
 
 interface CacheEntry<T> {
   data: T;
@@ -15,12 +13,13 @@ interface CacheEntry<T> {
 }
 
 class DataSyncService {
-  private config: SyncConfig;
+  private config: SyncRuntimeConfig;
   private cache: Map<string, CacheEntry<any>> = new Map();
   private syncInterval: NodeJS.Timeout | null = null;
+  private lastSyncAt: string | null = null;
 
   constructor(
-    config: SyncConfig = {
+    config: SyncRuntimeConfig = {
       intervalMinutes: 60,
       enableWeather: true,
       enableCache: true,
@@ -37,12 +36,14 @@ class DataSyncService {
     }
 
     this.syncInterval = setInterval(
-      () => this.performSync(),
+      () => {
+        void this.performSync();
+      },
       this.config.intervalMinutes * 60 * 1000
     );
 
     // Initial sync
-    this.performSync();
+    void this.performSync();
     console.log(
       `Data sync service started with ${this.config.intervalMinutes}min intervals`
     );
@@ -58,15 +59,12 @@ class DataSyncService {
   }
 
   // Manual sync trigger
-  async performSync(): Promise<{
-    success: boolean;
-    synced: string[];
-    errors: string[];
-  }> {
+  async performSync(): Promise<SyncExecutionResult> {
     const results = {
       success: true,
       synced: [] as string[],
       errors: [] as string[],
+      completedAt: '',
     };
 
     try {
@@ -98,14 +96,18 @@ class DataSyncService {
         results.synced.push('cache-cleanup');
       }
 
+      results.completedAt = new Date().toISOString();
+      this.lastSyncAt = results.completedAt;
       console.log('Sync completed:', results);
       return results;
     } catch (error) {
       console.error('Sync service error:', error);
+      this.lastSyncAt = new Date().toISOString();
       return {
         success: false,
         synced: [],
         errors: [`Sync service error: ${error}`],
+        completedAt: this.lastSyncAt ?? new Date().toISOString(),
       };
     }
   }
@@ -129,9 +131,10 @@ class DataSyncService {
         'whitney',
       ];
       const baseUrl =
-        process.env.NEXT_PUBLIC_BASE_URL || process.env.VERCEL_URL
+        process.env.NEXT_PUBLIC_BASE_URL ||
+        (process.env.VERCEL_URL
           ? `https://${process.env.VERCEL_URL}`
-          : 'http://localhost:3000';
+          : 'http://localhost:3000');
 
       const weatherPromises = locations.map(async (location) => {
         const response = await fetch(
@@ -224,13 +227,26 @@ class DataSyncService {
     }
   }
 
+  updateConfig(configPatch: Partial<SyncRuntimeConfig>): SyncRuntimeConfig {
+    this.config = {
+      ...this.config,
+      ...configPatch,
+    };
+
+    if (this.syncInterval) {
+      this.start();
+    }
+
+    return this.config;
+  }
+
   // Status and metrics
-  getStatus() {
+  getStatus(): SyncStatusSnapshot {
     return {
       isRunning: this.syncInterval !== null,
       config: this.config,
       cacheSize: this.cache.size,
-      lastSync: this.getCache('last-sync-time'),
+      lastSync: this.lastSyncAt,
     };
   }
 }

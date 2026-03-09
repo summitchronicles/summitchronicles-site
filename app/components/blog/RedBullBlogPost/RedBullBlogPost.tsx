@@ -73,7 +73,7 @@ export function RedBullBlogPost({
   const samplePost: BlogPostData = {
     title: 'The Mental Game',
     subtitle:
-      'Preparing Mind and Body for Everest 2027: A Systematic Approach to Peak Performance',
+      'Preparing Mind and Body for Everest 2028: A Systematic Approach to Peak Performance',
     author: 'Sunith Kumar',
     date: 'December 15, 2024',
     readTime: '12 min read',
@@ -84,7 +84,7 @@ export function RedBullBlogPost({
     tags: ['Mental Training', 'Everest', 'Peak Performance', 'Mountaineering'],
     content: {
       intro:
-        'Every summit begins in the mind. The statistics are sobering: only 29% of climbers who attempt Mount Everest actually reach the summit. Of those who turn back or fail, the majority cite mental challenges rather than physical limitations. This realization fundamentally changed how I approach my preparation for the 2027 expedition.',
+        'Every summit begins in the mind. The statistics are sobering: only 29% of climbers who attempt Mount Everest actually reach the summit. Of those who turn back or fail, the majority cite mental challenges rather than physical limitations. This realization fundamentally changed how I approach my preparation for the 2028 objective.',
       sections: [
         {
           title: 'The Psychology of Extreme Altitude',
@@ -478,9 +478,9 @@ export function RedBullBlogPost({
               </h3>
               <p className="text-gray-400 leading-relaxed">
                 Mountaineer and systematic athlete pursuing the Seven Summits
-                challenge. Currently preparing for Mount Everest in Spring 2027
-                through data-driven training and methodical preparation
-                approaches.
+                challenge. Currently rebuilding toward Mount Everest in 2028
+                through physiotherapy, strength work, and data-driven
+                preparation.
               </p>
             </div>
           </div>

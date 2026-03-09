@@ -1,28 +1,22 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { getTrainingDashboardResponse } from '@/modules/training/application/get-training-dashboard';
 
 export async function GET() {
   try {
-    const filePath = path.join(
-      process.cwd(),
-      'content',
-      'training-insights.json'
-    );
+    const summary = await getTrainingDashboardResponse();
+    const insights = summary.summary.missionLogs;
 
-    if (!fs.existsSync(filePath)) {
+    if (insights.length === 0) {
       return NextResponse.json({
         success: false,
         error: 'No insights generated yet',
       });
     }
 
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    const insights = JSON.parse(fileContent);
-
     return NextResponse.json({
       success: true,
       insights,
+      missionLogs: insights,
     });
   } catch (error) {
     return NextResponse.json(

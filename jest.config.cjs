@@ -19,12 +19,21 @@ module.exports = {
 
   // Module resolution similar to Next.js/TS defaults
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/$1',
+  },
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
   },
 
   // Ignore build artifacts
   testPathIgnorePatterns: ['/node_modules/', '/.next/', '/dist/'],
+  modulePathIgnorePatterns: [
+    '<rootDir>/.next/',
+    '<rootDir>/bmad-method/',
+    '<rootDir>/playwright-report/',
+    '<rootDir>/test-results/',
+  ],
 
   // Coverage settings
   collectCoverageFrom: [

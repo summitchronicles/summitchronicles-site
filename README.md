@@ -112,6 +112,10 @@ NEXT_PUBLIC_VERCEL_URL=your_vercel_deployment_url
 For the current technical specification, architecture, and "How-To" guides, please refer to:
 👉 **[CURRENT_SYSTEM_SPEC_2026-01-24.md](.gemini/antigravity/brain/7420a0cd-a1a3-4665-9c24-113acab50500/CURRENT_SYSTEM_SPEC_2026-01-24.md)**
 
+For the March 8, 2026 modular-monolith upgrade, security hardening changes, and eval commands, see:
+👉 **[docs/architecture-upgrade-2026-03-08.md](docs/architecture-upgrade-2026-03-08.md)**
+👉 **[docs/security-hardening-2026-03-08.md](docs/security-hardening-2026-03-08.md)**
+
 For archived documentation, see the `archive/` directory.
 
 ---

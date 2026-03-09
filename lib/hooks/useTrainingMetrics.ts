@@ -113,23 +113,10 @@ export function useTrainingMetrics(): UseTrainingMetricsResult {
 
       const data = await response.json();
 
-      // DEBUG: Log the full response
-      console.log('Training Metrics API Response:', data);
-      console.log('Data.success:', data.success);
-      console.log('Data.source:', data.source);
-      console.log('Data.metrics:', data.metrics);
-
       if (data.success) {
         setMetrics(data.metrics);
         setIsRealData(data.source === 'intervals.icu');
         setLastUpdated(data.lastUpdated);
-
-        // Debug logging to verify data source
-        console.log('Training metrics loaded:', {
-          source: data.source,
-          isRealData: data.source === 'intervals.icu',
-          totalActivities: data.totalActivities,
-        });
       } else {
         setError(data.error || 'Failed to load training metrics');
         setMetrics(data.metrics); // Fallback metrics

@@ -12,9 +12,11 @@ export interface EmailOptions {
 
 export async function sendEmail({ to, subject, html, from }: EmailOptions) {
   if (!resend) {
-    console.warn('RESEND_API_KEY not found. Logging email instead.');
-    console.log(`[Email Mock] To: ${to}, Subject: ${subject}`);
-    return { success: true, id: 'mock-id' };
+    console.warn('RESEND_API_KEY not found. Email send aborted.');
+    return {
+      success: false,
+      error: 'RESEND_API_KEY not configured',
+    };
   }
 
   try {

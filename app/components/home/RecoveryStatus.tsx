@@ -43,7 +43,7 @@ export const RecoveryStatus = ({ vo2Max, latestLog }: RecoveryStatusProps) => {
       className="relative h-full overflow-hidden rounded-2xl bg-black border border-white/10 group"
     >
       {/* Background Ambience - Living Pulse */}
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-20 mix-blend-overlay"></div>
+      <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20 mix-blend-overlay"></div>
       <motion.div
         animate={{
           opacity: [0.3, 0.5, 0.3],
@@ -86,7 +86,7 @@ export const RecoveryStatus = ({ vo2Max, latestLog }: RecoveryStatusProps) => {
               {recoveryData.phase}
             </h3>
             <p className="text-zinc-500 font-mono text-xs uppercase tracking-wider">
-              T+{daysInPhase} Days Since Incident
+              T+{daysInPhase} Days Since Surgery
             </p>
           </div>
 

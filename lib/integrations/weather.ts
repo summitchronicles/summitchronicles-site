@@ -2,7 +2,10 @@ import axios from 'axios';
 
 // Weather API configuration
 export const weatherConfig = {
-  apiKey: process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY || '',
+  apiKey:
+    process.env.OPENWEATHER_API_KEY ||
+    process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY ||
+    '',
   baseUrl: 'https://api.openweathermap.org/data/2.5',
   oneCallUrl: 'https://api.openweathermap.org/data/3.0/onecall',
 };

@@ -6,10 +6,11 @@ const BLOG_DIR = path.join(process.cwd(), 'content', 'blog');
 
 export async function GET(
   request: Request,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
   try {
-    const filename = decodeURIComponent(params.filename);
+    const { filename: rawFilename } = await params;
+    const filename = decodeURIComponent(rawFilename);
     const filepath = path.join(BLOG_DIR, filename);
 
     if (!fs.existsSync(filepath)) {

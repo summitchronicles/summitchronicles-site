@@ -204,9 +204,10 @@ export function AchievementTimeline({
             Seven Summits Journey
           </h2>
           <p className="text-xl text-slate-300 max-w-3xl mx-auto">
-            From recovery after tuberculosis to the Seven Summits. Now facing a new challenge:
-            recovering from a broken Talus. The timeline has shifted, but the goal remains unchanged:
-            Everest in 2028.
+            From recovery after tuberculosis to the Seven Summits. The current
+            chapter is physiotherapy, strength work, and restoring a clean gait
+            after a broken Talus. The timeline has shifted, but the goal
+            remains Everest in 2028.
           </p>
           <div className="flex items-center justify-center mt-6 space-x-8 text-sm">
             <div className="flex items-center space-x-2">

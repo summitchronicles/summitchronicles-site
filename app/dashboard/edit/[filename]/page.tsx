@@ -1,21 +1,23 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { VisualEditorLogic } from '../components/VisualEditorLogic';
 
-export default function EditBlogPage({
-  params,
-}: {
-  params: { filename: string };
-}) {
+export default function EditBlogPage() {
+  const params = useParams<{ filename: string }>();
   const router = useRouter();
   const [content, setContent] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const filename = decodeURIComponent(params.filename);
+  const filename = decodeURIComponent(params?.filename ?? '');
 
   useEffect(() => {
+    if (!filename) {
+      setLoading(false);
+      return;
+    }
+
     fetch(`/api/drafts/${filename}`)
       .then((res) => res.json())
       .then((data) => {

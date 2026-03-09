@@ -174,9 +174,14 @@ module.exports = {
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(100%)' },
         },
+        shimmer: {
+          '0%': { transform: 'translateX(-100%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
       },
       animation: {
         'scan-fast': 'scan 2s linear infinite',
+        'shimmer': 'shimmer 1.5s ease-in-out',
       },
     },
   },

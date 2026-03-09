@@ -1,6 +1,10 @@
 # Training System Development Log
 ## Summit Chronicles - Manual Training Data System
 
+> Legacy note: the XLSX/manual training-plan branch described below was retired on March 8, 2026. The live training runtime is now intervals-only for mission-log generation.
+
+> Current runtime note: as of March 8, 2026, training mission logs are generated from persisted `intervals.icu` snapshots in `data/training/intervals-snapshot.json`, and the internal refresh path is `/api/training/ingest`.
+
 > **Project Overview**: Development of a comprehensive manual training data system for Summit Chronicles, enabling detailed workout tracking, progress analysis, and integration with existing Strava data for Seven Summits preparation.
 
 ---

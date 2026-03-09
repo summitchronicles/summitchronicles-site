@@ -1,26 +1,15 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
-
 interface StructuredDataProps {
   type?: 'Organization' | 'Person' | 'Article' | 'Event' | 'BreadcrumbList';
   data?: Record<string, any>;
 }
 
+const BASE_URL = 'https://summitchronicles.com';
+
 export function StructuredData({
   type = 'Organization',
   data,
 }: StructuredDataProps) {
-  const pathname = usePathname();
-
-  const getBaseUrl = () => {
-    if (typeof window !== 'undefined') {
-      return window.location.origin;
-    }
-    return 'https://summitchronicles.com';
-  };
-
-  const baseUrl = getBaseUrl();
+  const pathname = data?.pathname || '/';
 
   const getStructuredData = () => {
     switch (type) {
@@ -31,8 +20,8 @@ export function StructuredData({
           name: 'Summit Chronicles',
           description:
             "Follow Sunith Kumar's journey to Mount Everest through systematic training, preparation, and authentic storytelling.",
-          url: baseUrl,
-          logo: `${baseUrl}/images/logo.png`,
+          url: BASE_URL,
+          logo: `${BASE_URL}/images/logo.png`,
           foundingDate: '2024',
           founder: {
             '@type': 'Person',
@@ -69,8 +58,8 @@ export function StructuredData({
           jobTitle: 'Mountaineer & Entrepreneur',
           description:
             'Aspiring Mount Everest climber documenting the complete journey from training to summit.',
-          url: `${baseUrl}/about`,
-          image: `${baseUrl}/images/sunith-profile.jpg`,
+          url: `${BASE_URL}/about`,
+          image: `${BASE_URL}/images/sunith-profile.jpg`,
           birthPlace: 'India',
           nationality: 'Indian',
           knowsAbout: [
@@ -107,13 +96,13 @@ export function StructuredData({
             name: 'Summit Chronicles',
             logo: {
               '@type': 'ImageObject',
-              url: `${baseUrl}/images/logo.png`,
+              url: `${BASE_URL}/images/logo.png`,
             },
           },
           datePublished: data?.publishedDate || '2024-01-01',
           dateModified: data?.modifiedDate || new Date().toISOString(),
-          url: `${baseUrl}${pathname}`,
-          image: data?.image || `${baseUrl}/images/everest-hero.jpg`,
+          url: `${BASE_URL}${pathname}`,
+          image: data?.image || `${BASE_URL}/images/everest-hero.jpg`,
           articleSection: data?.category || 'Training',
           keywords: data?.keywords || [
             'Mount Everest',
@@ -149,7 +138,7 @@ export function StructuredData({
           },
           offers: {
             '@type': 'Offer',
-            url: `${baseUrl}/support`,
+            url: `${BASE_URL}/support`,
             price: '0',
             priceCurrency: 'USD',
             availability: 'https://schema.org/InStock',
@@ -158,16 +147,16 @@ export function StructuredData({
 
       case 'BreadcrumbList':
         const pathSegments = (pathname || '').split('/').filter(Boolean);
-        const breadcrumbs = [{ name: 'Home', url: baseUrl }];
+        const breadcrumbs = [{ name: 'Home', url: BASE_URL }];
 
         let currentPath = '';
-        pathSegments.forEach((segment, index) => {
+        pathSegments.forEach((segment: string) => {
           currentPath += `/${segment}`;
           breadcrumbs.push({
             name:
               segment.charAt(0).toUpperCase() +
               segment.slice(1).replace('-', ' '),
-            url: `${baseUrl}${currentPath}`,
+            url: `${BASE_URL}${currentPath}`,
           });
         });
 

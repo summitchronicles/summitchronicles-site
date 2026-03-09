@@ -194,7 +194,7 @@ export function EnhancedTrainingDashboard({
       },
       {
         id: 'everest-countdown',
-        label: 'Everest 2027',
+        label: 'Everest 2028',
         value: '834',
         suffix: 'days',
         icon: Target,
@@ -209,7 +209,7 @@ export function EnhancedTrainingDashboard({
         detailData: {
           history: generateHistoricalData(850, 30),
           insights: [
-            'Training timeline on track for 2027 attempt',
+            'Training timeline aligned with the 2028 objective',
             'Current fitness trajectory supports goal',
             'Seasonal training periodization aligned'
           ],
@@ -403,7 +403,7 @@ export function EnhancedTrainingDashboard({
                   Training Performance
                 </h2>
                 <p className="text-gray-400">
-                  Interactive metrics showing your progress toward Everest 2027
+                  Interactive metrics showing your progress toward Everest 2028
                 </p>
               </motion.div>
 

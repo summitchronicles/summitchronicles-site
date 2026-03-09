@@ -48,7 +48,7 @@ export function FeaturedStoryCards({
     {
       id: 'everest-prep',
       title: 'The Mental Game',
-      subtitle: 'Preparing Mind and Body for Everest 2027',
+      subtitle: 'Preparing Mind and Body for Everest 2028',
       excerpt:
         "Every summit begins in the mind. Discover the psychological preparation behind the world's ultimate mountaineering challenge, where mental fortitude matters as much as physical strength.",
       location: 'Training Grounds, California',

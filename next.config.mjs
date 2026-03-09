@@ -3,7 +3,6 @@
 // Forcing server restart to clear cache
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   // Removed eslint and typescript error suppressions for better code quality
   // If build fails, fix the errors instead of ignoring them
   compress: true,
@@ -29,7 +28,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'plus.unsplash.com' },
       { protocol: 'https', hostname: 'summitchronicles.com' },
       { protocol: 'https', hostname: 'summitchronicles.s3.amazonaws.com' },
-      { protocol: 'https', hostname: '*.supabase.co' },
       { protocol: 'https', hostname: 'nvoljnojiondyjhxwkqq.supabase.co' },
       { protocol: 'https', hostname: 'placehold.co' }
     ],
@@ -37,7 +35,8 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    dangerouslyAllowSVG: true,
+    dangerouslyAllowSVG: false,
+    contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   headers: async () => [
@@ -127,11 +126,6 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['framer-motion', '@heroicons/react', 'lucide-react'],
-    optimizeServerReact: true,
-    serverMinification: true,
-    serverSourceMaps: false,
-    // Enable static generation optimizations
-    gzipSize: true,
   },
   // Enable output file tracing for smaller deployments
   output: 'standalone',

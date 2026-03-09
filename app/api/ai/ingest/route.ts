@@ -1,46 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ingestContentToKnowledgeBase } from '../../../../lib/rag/content-ingestion';
-import { getKnowledgeBaseStats } from '../../../../lib/rag/training-knowledge-base';
+import {
+  getAiIngestOverviewResponse,
+  handleAiIngestResponse,
+} from '@/modules/ai/application/ai-operations-controller';
+import { requireInternalApiAccess } from '@/shared/security/internal-api';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
+
   try {
     const { searchParams } = new URL(request.url);
-    const action = searchParams.get('action') || 'ingest';
-
-    switch (action) {
-      case 'ingest':
-        console.log('Starting content ingestion to knowledge base...');
-        const result = await ingestContentToKnowledgeBase();
-
-        return NextResponse.json({
-          success: result.success,
-          data: {
-            documentsProcessed: result.documentsProcessed,
-            documentsAdded: result.documentsAdded,
-            categories: result.categories,
-            errors: result.errors,
-          },
-          message: result.success
-            ? `Successfully ingested ${result.documentsAdded} documents`
-            : `Ingestion completed with ${result.errors.length} errors`,
-        });
-
-      case 'stats':
-        const stats = getKnowledgeBaseStats();
-        return NextResponse.json({
-          success: true,
-          data: stats,
-          message: 'Knowledge base statistics retrieved',
-        });
-
-      default:
-        return NextResponse.json(
-          { success: false, error: 'Invalid action specified' },
-          { status: 400 }
-        );
-    }
+    const response = await handleAiIngestResponse(searchParams.get('action'));
+    return NextResponse.json(response.body, { status: response.status });
   } catch (error) {
     console.error('Content ingestion API error:', error);
     return NextResponse.json(
@@ -55,23 +31,14 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET(request: NextRequest) {
-  try {
-    const stats = getKnowledgeBaseStats();
+  const unauthorized = requireInternalApiAccess(request);
+  if (unauthorized) {
+    return unauthorized;
+  }
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        knowledgeBase: stats,
-        capabilities: {
-          contentIngestion: true,
-          semanticSearch: true,
-          ragResponses: true,
-          trainingInsights: true,
-        },
-        status: 'ready',
-      },
-      message: 'AI system status and knowledge base stats',
-    });
+  try {
+    const response = getAiIngestOverviewResponse();
+    return NextResponse.json(response.body, { status: response.status });
   } catch (error) {
     console.error('AI system status error:', error);
     return NextResponse.json(
