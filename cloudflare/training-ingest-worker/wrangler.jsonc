@@ -1,0 +1,14 @@
+{
+  "name": "summit-chronicles-training-ingest",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-03-09",
+  "triggers": {
+    "crons": ["*/30 * * * *"]
+  },
+  "vars": {
+    "TRAINING_INGEST_URL": "https://summitchronicles.com/api/training/ingest"
+  },
+  "observability": {
+    "enabled": true
+  }
+}

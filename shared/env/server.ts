@@ -15,11 +15,18 @@ const optionalString = z.preprocess(
 const serverEnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   INTERNAL_API_KEY: optionalString,
+  TRAINING_INGEST_SECRET: optionalString,
   ALLOWED_ORIGINS: optionalString,
+  TRAINING_STORAGE_BACKEND: z.enum(['local', 'r2']).optional(),
   GARMIN_USERNAME: optionalString,
   GARMIN_PASSWORD: optionalString,
   INTERVALS_ICU_API_KEY: optionalString,
   INTERVALS_ICU_ATHLETE_ID: optionalString,
+  CLOUDFLARE_R2_ACCOUNT_ID: optionalString,
+  CLOUDFLARE_R2_ACCESS_KEY_ID: optionalString,
+  CLOUDFLARE_R2_SECRET_ACCESS_KEY: optionalString,
+  CLOUDFLARE_R2_BUCKET: optionalString,
+  CLOUDFLARE_R2_TRAINING_PREFIX: optionalString,
   NEXT_PUBLIC_SUPABASE_URL: optionalString,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: optionalString,
   SUPABASE_SERVICE_ROLE_KEY: optionalString,
@@ -93,5 +100,48 @@ export function requireIntervalsCredentials(env: ServerEnv = getServerEnv()) {
   return schema.parse({
     INTERVALS_ICU_API_KEY: env.INTERVALS_ICU_API_KEY,
     INTERVALS_ICU_ATHLETE_ID: env.INTERVALS_ICU_ATHLETE_ID,
+  });
+}
+
+export function hasTrainingR2Config(env: ServerEnv = getServerEnv()) {
+  return Boolean(
+    env.CLOUDFLARE_R2_ACCOUNT_ID &&
+      env.CLOUDFLARE_R2_ACCESS_KEY_ID &&
+      env.CLOUDFLARE_R2_SECRET_ACCESS_KEY &&
+      env.CLOUDFLARE_R2_BUCKET
+  );
+}
+
+export function getTrainingStorageBackend(
+  env: ServerEnv = getServerEnv()
+): 'local' | 'r2' {
+  if (env.TRAINING_STORAGE_BACKEND) {
+    return env.TRAINING_STORAGE_BACKEND;
+  }
+
+  return hasTrainingR2Config(env) ? 'r2' : 'local';
+}
+
+export function requireTrainingR2Config(env: ServerEnv = getServerEnv()) {
+  const schema = z.object({
+    CLOUDFLARE_R2_ACCOUNT_ID: z
+      .string()
+      .min(1, 'CLOUDFLARE_R2_ACCOUNT_ID is required'),
+    CLOUDFLARE_R2_ACCESS_KEY_ID: z
+      .string()
+      .min(1, 'CLOUDFLARE_R2_ACCESS_KEY_ID is required'),
+    CLOUDFLARE_R2_SECRET_ACCESS_KEY: z
+      .string()
+      .min(1, 'CLOUDFLARE_R2_SECRET_ACCESS_KEY is required'),
+    CLOUDFLARE_R2_BUCKET: z.string().min(1, 'CLOUDFLARE_R2_BUCKET is required'),
+    CLOUDFLARE_R2_TRAINING_PREFIX: z.string().min(1).default('training'),
+  });
+
+  return schema.parse({
+    CLOUDFLARE_R2_ACCOUNT_ID: env.CLOUDFLARE_R2_ACCOUNT_ID,
+    CLOUDFLARE_R2_ACCESS_KEY_ID: env.CLOUDFLARE_R2_ACCESS_KEY_ID,
+    CLOUDFLARE_R2_SECRET_ACCESS_KEY: env.CLOUDFLARE_R2_SECRET_ACCESS_KEY,
+    CLOUDFLARE_R2_BUCKET: env.CLOUDFLARE_R2_BUCKET,
+    CLOUDFLARE_R2_TRAINING_PREFIX: env.CLOUDFLARE_R2_TRAINING_PREFIX,
   });
 }

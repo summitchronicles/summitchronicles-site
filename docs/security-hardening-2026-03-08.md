@@ -9,6 +9,7 @@ Accepted credentials:
 1. `Authorization: Bearer <INTERNAL_API_KEY>`
 2. `x-internal-api-key: <INTERNAL_API_KEY>`
 3. `admin_session=<INTERNAL_API_KEY>` cookie
+4. `x-training-ingest-secret: <TRAINING_INGEST_SECRET>` for `/api/training/ingest`
 
 Development behavior:
 
@@ -17,6 +18,7 @@ Development behavior:
 Production behavior:
 
 - Sensitive routes require a valid internal credential.
+- `/api/training/ingest` may alternatively use the dedicated training ingest secret so an external scheduler does not need the full internal API key.
 
 ## Routes Treated as Internal
 
@@ -45,6 +47,7 @@ Production behavior:
 - reports telemetry as `live`, `cached`, or `degraded`
 - serves processed weekly mission logs from a persisted Intervals snapshot instead of seeded content files
 - keeps public consumers away from direct provider payloads and force-refresh operations
+- reads the latest persisted training artifact instead of calling Intervals directly in production
 
 ## Removed Unsafe HTTP Behavior
 
@@ -123,6 +126,12 @@ Set:
 
 - `INTERNAL_API_KEY`
 - `ALLOWED_ORIGINS`
+- `TRAINING_INGEST_SECRET`
+- `TRAINING_STORAGE_BACKEND=r2`
+- `CLOUDFLARE_R2_ACCOUNT_ID`
+- `CLOUDFLARE_R2_ACCESS_KEY_ID`
+- `CLOUDFLARE_R2_SECRET_ACCESS_KEY`
+- `CLOUDFLARE_R2_BUCKET`
 
 Recommended `ALLOWED_ORIGINS` format:
 
@@ -139,6 +148,14 @@ curl -H "Authorization: Bearer $INTERNAL_API_KEY" \
   https://summitchronicles.com/api/debug/env-check
 ```
 
+Cloudflare Worker example:
+
+```bash
+curl -X POST \
+  -H "x-training-ingest-secret: $TRAINING_INGEST_SECRET" \
+  https://summitchronicles.com/api/training/ingest
+```
+
 ## Residual Risk
 
-This hardening pass removed the highest-risk XLSX training ingestion branch and added a durable Intervals snapshot store. The main remaining training risk is operational and architectural: the system still needs richer reconciliation, freshness diagnostics, and admin-visible ingest health so stale or partial telemetry is obvious without inspecting raw files.
+This hardening pass removed the highest-risk XLSX training ingestion branch and moved the training summary path toward a durable artifact model. The main remaining training risk is now operational: production still depends on valid Intervals credentials and a scheduler being configured correctly, and the app still needs richer freshness diagnostics so stale telemetry is obvious without inspecting raw status artifacts.

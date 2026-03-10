@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTrainingMetricsResponse } from '@/modules/training/application/get-training-metrics';
+import { getPersistedTrainingMetricsResponse } from '@/modules/training/application/training-artifact-service';
 import { getFallbackTrainingMetrics } from '@/modules/training/domain/training-metrics';
 import {
   checkRateLimit,
@@ -8,6 +8,7 @@ import {
 } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   const clientIp = getClientIp(request);
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await getTrainingMetricsResponse();
+    const response = await getPersistedTrainingMetricsResponse();
     return NextResponse.json(response);
   } catch (error) {
     console.error('Error fetching Intervals metrics:', error);

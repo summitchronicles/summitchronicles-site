@@ -4,7 +4,7 @@ import {
 } from '@/modules/training/domain/training-dashboard';
 import { normalizeTrainingActivities } from '@/modules/training/domain/training-metrics';
 import {
-  FileTrainingSnapshotStore,
+  getTrainingArtifactStore,
   type PersistedTrainingSnapshot,
   type TrainingSnapshotStore,
 } from '@/modules/training/infrastructure/training-snapshot-store';
@@ -39,7 +39,7 @@ export async function loadTrainingSourceSnapshot(
 ): Promise<TrainingSourceSnapshot> {
   const now = options.now ?? new Date();
   const nowIso = now.toISOString();
-  const store = options.store ?? new FileTrainingSnapshotStore();
+  const store = options.store ?? getTrainingArtifactStore();
   const cachedSnapshot = await store.readSnapshot();
   const maxAgeMs = options.maxAgeMs ?? DEFAULT_SNAPSHOT_MAX_AGE_MS;
 

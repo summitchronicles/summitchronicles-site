@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getTrainingDashboardResponse } from '@/modules/training/application/get-training-dashboard';
+import { getPersistedTrainingDashboardResponse } from '@/modules/training/application/training-artifact-service';
 import {
   checkRateLimit,
   createRateLimitResponse,
@@ -7,6 +7,7 @@ import {
 } from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   const clientIp = getClientIp(request);
@@ -17,7 +18,7 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const response = await getTrainingDashboardResponse();
+    const response = await getPersistedTrainingDashboardResponse();
     return NextResponse.json(response);
   } catch (error) {
     console.error('Training summary error:', error);
@@ -32,4 +33,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

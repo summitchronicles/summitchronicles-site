@@ -18,7 +18,7 @@
     "// --- TESTS: LAYERS ---": "",
     "test": "playwright test",
     "test:unit": "jest tests/unit",
-    "eval:core": "jest tests/unit/internal-api-auth.test.ts tests/unit/content-repository.test.ts tests/unit/training-snapshot-service.test.ts tests/unit/training-metrics.test.ts tests/unit/training-dashboard.test.ts tests/unit/sync-controller.test.ts tests/unit/monitoring-controller.test.ts tests/unit/analytics-controller.test.ts",
+    "eval:core": "jest tests/unit/internal-api-auth.test.ts tests/unit/training-ingest-auth.test.ts tests/unit/content-repository.test.ts tests/unit/training-snapshot-service.test.ts tests/unit/training-metrics.test.ts tests/unit/training-dashboard.test.ts tests/unit/training-artifact-service.test.ts tests/unit/sync-controller.test.ts tests/unit/monitoring-controller.test.ts tests/unit/analytics-controller.test.ts",
     "test:integration": "playwright test tests/integration",
     "test:e2e": "playwright test tests/e2e",
     "test:security": "jest tests/security",
@@ -51,6 +51,7 @@
     "audit:all": "run-p audit:security audit:deps"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1004.0",
     "@blocknote/core": "^0.46.1",
     "@blocknote/mantine": "^0.46.1",
     "@blocknote/react": "^0.46.1",

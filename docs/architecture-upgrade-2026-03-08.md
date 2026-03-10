@@ -66,7 +66,11 @@ The primary goals were:
 - `modules/training/application/training-snapshot-service.ts`
   - Owns durable Intervals ingestion, TTL-based refresh, processed mission-log generation, and `live` / `cached` / `degraded` snapshot states.
 - `modules/training/infrastructure/training-snapshot-store.ts`
-  - Owns persisted file-backed Intervals snapshots at `data/training/intervals-snapshot.json`.
+  - Owns persisted training artifacts for both local development and Cloudflare R2.
+  - Stores raw snapshots, the latest derived summary, and the latest ingest status separately so production can serve the last known good summary without a live provider fetch.
+- `modules/training/application/training-artifact-service.ts`
+  - Owns the production-safe training ingest flow.
+  - Forces Intervals refreshes only on the ingest path, writes status on every attempt, and preserves the last good summary on auth failures or stale fallbacks.
 - `modules/training/infrastructure/training-insights-repository.ts`
   - Now reads processed mission logs from the persisted Intervals snapshot rather than static content files.
 - `modules/sync/domain/sync.ts`
@@ -120,10 +124,12 @@ The primary goals were:
   - New canonical training-page read model.
   - Consolidates telemetry status, processed mission logs, and workout stats.
   - No longer includes XLSX plan-upload or workout-calendar state.
+  - Now reads only the persisted summary artifact in production instead of fetching Intervals at request time.
 - `/api/insights`
   - Now returns processed mission logs from the persisted Intervals-backed dashboard summary.
 - `/api/training/ingest`
-  - New internal-only operational route for forcing an Intervals refresh.
+  - New operational route for forcing an Intervals refresh.
+  - Accepts either the shared internal API credential or a dedicated `TRAINING_INGEST_SECRET` header for external schedulers.
   - Intended for cron/admin automation so ingestion does not depend only on user page views.
 
 ### Operational and admin routes
@@ -194,6 +200,21 @@ These routes are now internal-only because they expose operational status or mut
 - Publishing content through HTTP no longer performs `git add`, `git commit`, or `git push`.
 - Sensitive maintenance and upload routes now require an internal API credential in production.
 - Internal status endpoints no longer reveal partial secret values.
+- Training summary and metrics reads no longer depend on live Intervals requests in production.
+
+## Free-Tier Training Ingest Architecture
+
+To keep the stack near zero cost without Vercel Pro cron:
+
+- Vercel Hobby serves the site and ingest route
+- Cloudflare R2 stores training artifacts durably
+- Cloudflare Worker Cron triggers `/api/training/ingest` every 30 minutes
+- `/api/training/summary` and `/api/training/metrics` read the last persisted derived summary
+
+Reference setup:
+
+- `docs/guides/TRAINING_INGEST_FREE_TIER_SETUP.md`
+- `cloudflare/training-ingest-worker/`
 
 ## Content Fixes
 
