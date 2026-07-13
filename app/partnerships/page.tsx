@@ -2,17 +2,14 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Header } from '../components/organisms/Header';
 import { Button } from '../components/atoms/Button';
-import { Icon } from '../components/atoms/Icon';
 import {
-  Users,
   TrendingUp,
   Target,
-  Mic,
   Globe,
-  Camera,
   ArrowRight,
   Mountain,
   Activity,
@@ -80,17 +77,21 @@ export default function PartnershipsPage() {
               <Button
                 size="lg"
                 variant="summit"
+                asChild
                 className="bg-summit-gold-600 text-black border-none hover:bg-summit-gold-500"
               >
-                Inquire for Sponsorship
-                <ArrowRight className="ml-2 w-4 h-4" />
+                <a href="mailto:contact@summitchronicles.com?subject=Summit%20Chronicles%20Partnership%20Inquiry">
+                  Inquire for Sponsorship
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </a>
               </Button>
               <Button
                 size="lg"
                 variant="ghost"
+                asChild
                 className="border-white/20 text-white hover:bg-white/10 hover:border-white/40"
               >
-                Book for Speaking
+                <Link href="/speaking">Book for Speaking</Link>
               </Button>
             </div>
           </motion.div>

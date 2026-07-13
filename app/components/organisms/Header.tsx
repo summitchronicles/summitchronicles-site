@@ -30,11 +30,6 @@ const primaryNavigation: NavigationItem[] = [
 const secondaryNavigation: NavigationItem[] = [
   { href: '/media-kit', label: 'Media Kit', description: 'Press resources' },
   { href: '/speaking', label: 'Speaking', description: 'Event bookings' },
-  {
-    href: '/sponsorship',
-    label: 'Partnership',
-    description: 'Sponsor opportunities',
-  },
 ];
 
 const Header: React.FC = () => {

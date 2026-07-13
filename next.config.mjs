@@ -75,15 +75,6 @@ const nextConfig = {
     },
     // Cache optimization for static assets
     {
-      source: '/sw.js',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=0, must-revalidate'
-        }
-      ]
-    },
-    {
       source: '/(.*\\.(?:ico|png|jpg|jpeg|gif|webp|svg|woff|woff2)$)',
       headers: [
         {
@@ -192,6 +183,16 @@ const nextConfig = {
     {
       source: '/training/realtime',
       destination: '/training',
+      permanent: true,
+    },
+    {
+      source: '/my-story',
+      destination: '/about',
+      permanent: true,
+    },
+    {
+      source: '/sponsorship',
+      destination: '/partnerships',
       permanent: true,
     },
     // Legacy redirects

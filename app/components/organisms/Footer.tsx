@@ -31,7 +31,7 @@ const footerSections: FooterSection[] = [
     links: [
       { label: 'Media Kit', href: '/media-kit' },
       { label: 'Speaking', href: '/speaking' },
-      { label: 'Partnership', href: '/sponsorship' },
+      { label: 'Partnerships', href: '/partnerships' },
       { label: 'Newsletter', href: '/newsletter' },
     ],
   },
