@@ -25,12 +25,11 @@ const PAGES_TO_TEST = [
   { path: '/', name: 'Homepage' },
   { path: '/about', name: 'About Page' },
   { path: '/training', name: 'Training Page' },
-  { path: '/blog', name: 'Blog Page' },
-  { path: '/design-system', name: 'Design System' }
+  { path: '/blog', name: 'Blog Page' }
 ];
 
 test.describe('Comprehensive Mobile Testing Suite', () => {
-  
+
   // Test mobile navigation functionality
   test.describe('Mobile Navigation', () => {
     CUSTOM_MOBILE_VIEWPORTS.slice(0, 3).forEach(viewport => {
@@ -46,7 +45,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
         // Menu should be closed initially
         const mobileMenuItems = page.locator('[class*="mobile"], [data-mobile="true"]').locator('a, button').first();
         const isMenuOpen = await mobileMenuItems.isVisible().catch(() => false);
-        
+
         if (isMenuOpen) {
           // If menu is visible, close it first
           await menuButton.click();
@@ -70,7 +69,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
         // Test menu close functionality
         await menuButton.click();
         await page.waitForTimeout(500);
-        
+
         // Take screenshot for visual regression
         await expect(page).toHaveScreenshot(`mobile-nav-${viewport.name.replace(' ', '-').toLowerCase()}.png`);
       });
@@ -89,7 +88,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
       if (await menuButton.isVisible()) {
         await menuButton.tap();
         await page.waitForTimeout(300);
-        
+
         // Verify menu opened
         const mobileMenu = page.locator('[class*="mobile"], [data-mobile="true"]');
         const menuVisible = await mobileMenu.isVisible().catch(() => false);
@@ -105,7 +104,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
         const firstLink = primaryLinks.first();
         await firstLink.tap();
         await page.waitForTimeout(1000);
-        
+
         // Verify navigation occurred
         expect(page.url()).toMatch(/localhost:3000/);
       }
@@ -118,11 +117,11 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
 
       // Test vertical scroll
       const initialScrollY = await page.evaluate(() => window.scrollY);
-      
+
       // Scroll down
       await page.evaluate(() => window.scrollTo(0, 500));
       await page.waitForTimeout(500);
-      
+
       const newScrollY = await page.evaluate(() => window.scrollY);
       expect(newScrollY).toBeGreaterThan(initialScrollY);
 
@@ -143,20 +142,20 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
       // Look for forms (newsletter signup, etc.)
       const emailInputs = page.locator('input[type="email"], input[placeholder*="email"]');
       const emailInputCount = await emailInputs.count();
-      
+
       if (emailInputCount > 0) {
         const emailInput = emailInputs.first();
         await emailInput.tap();
         await page.waitForTimeout(300);
-        
+
         // Check if virtual keyboard appears (viewport changes)
         const viewportAfterFocus = await page.viewportSize();
         expect(viewportAfterFocus).toBeTruthy();
-        
+
         // Test typing
         await emailInput.fill('test@example.com');
         await expect(emailInput).toHaveValue('test@example.com');
-        
+
         // Test submit button
         const submitButton = page.locator('button[type="submit"], button').filter({ hasText: /subscribe|submit|send/i });
         const submitCount = await submitButton.count();
@@ -176,7 +175,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
           ...device
         });
         const page = await context.newPage();
-        
+
         try {
           await page.goto('/');
           await page.waitForLoadState('networkidle');
@@ -224,7 +223,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
       });
 
       await page.setViewportSize({ width: 375, height: 667 });
-      
+
       const startTime = Date.now();
       await page.goto('/');
       await page.waitForLoadState('networkidle');
@@ -251,7 +250,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
         for (let i = 0; i < Math.min(3, imageCount); i++) {
           const img = images.nth(i);
           const src = await img.getAttribute('src');
-          
+
           if (src && !src.startsWith('data:')) {
             // Check if image loaded
             const naturalWidth = await img.evaluate((el: HTMLImageElement) => el.naturalWidth);
@@ -306,7 +305,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
               const styles = window.getComputedStyle(el);
               return parseFloat(styles.fontSize);
             });
-            
+
             // Font size should be at least 16px for good mobile readability
             expect(fontSize).toBeGreaterThanOrEqual(14); // Allow some tolerance
           }
@@ -319,10 +318,10 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
   test.describe('Mobile-Specific Features', () => {
     test('Mobile viewport meta tag is present', async ({ page }) => {
       await page.goto('/');
-      
+
       const viewportMeta = page.locator('meta[name="viewport"]');
       await expect(viewportMeta).toHaveCount(1);
-      
+
       const content = await viewportMeta.getAttribute('content');
       expect(content).toMatch(/width=device-width/);
       expect(content).toMatch(/initial-scale=1/);
@@ -336,7 +335,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
       // Test long press (if applicable)
       const buttons = page.locator('button');
       const buttonCount = await buttons.count();
-      
+
       if (buttonCount > 0) {
         const firstButton = buttons.first();
         if (await firstButton.isVisible()) {
@@ -367,7 +366,7 @@ test.describe('Comprehensive Mobile Testing Suite', () => {
         // Check mobile navigation is available
         const menuButton = page.getByRole('button', { name: /toggle mobile menu|menu|hamburger/i });
         const menuButtonVisible = await menuButton.isVisible().catch(() => false);
-        
+
         if (menuButtonVisible) {
           await expect(menuButton).toBeVisible();
         }

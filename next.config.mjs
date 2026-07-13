@@ -158,6 +158,32 @@ const nextConfig = {
       destination: '/blog',
       permanent: true,
     },
+    // Retired public prototypes and duplicate training views
+    {
+      source: '/training-advanced',
+      destination: '/training',
+      permanent: true,
+    },
+    {
+      source: '/training/cms',
+      destination: '/training',
+      permanent: true,
+    },
+    {
+      source: '/training/wireframe',
+      destination: '/training',
+      permanent: true,
+    },
+    {
+      source: '/design-system',
+      destination: '/',
+      permanent: true,
+    },
+    {
+      source: '/wireframes/:path*',
+      destination: '/',
+      permanent: true,
+    },
     // Legacy redirects
     {
       source: '/home',

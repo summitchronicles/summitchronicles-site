@@ -105,41 +105,6 @@ export const queries = {
     correctionNote
   }`,
 
-  // Training entries
-  allTrainingEntries: `*[_type == "trainingEntry" && isPublic == true] | order(date desc) {
-    _id,
-    title,
-    date,
-    type,
-    duration,
-    intensity,
-    description,
-    metrics,
-    location,
-    photos[],
-    tags,
-    stravaId
-  }`,
-
-  trainingByDate: (
-    date: string
-  ) => `*[_type == "trainingEntry" && date == "${date}" && isPublic == true][0] {
-    _id,
-    title,
-    date,
-    type,
-    duration,
-    intensity,
-    description,
-    metrics,
-    location,
-    goals,
-    reflections,
-    photos[],
-    tags,
-    stravaId
-  }`,
-
   // Training content
   allTrainingPosts: `*[_type == "training"] | order(publishedAt desc) {
     _id,
