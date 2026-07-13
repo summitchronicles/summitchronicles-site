@@ -1,8 +1,13 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const projectRoot = dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 // Forcing server restart to clear cache
 const nextConfig = {
   reactStrictMode: true,
+  outputFileTracingRoot: projectRoot,
   // Removed eslint and typescript error suppressions for better code quality
   // If build fails, fix the errors instead of ignoring them
   compress: true,
@@ -96,15 +101,6 @@ const nextConfig = {
           value: 'public, max-age=60, s-maxage=60'
         }
       ]
-    },
-    {
-      source: '/api/analytics/dashboard',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'public, max-age=300, s-maxage=300'
-        }
-      ]
     }
   ],
   // Enable compression and other optimizations
@@ -131,6 +127,37 @@ const nextConfig = {
 
   // Optimize redirects and rewrites
   redirects: async () => [
+    // Canonical authoring workflow
+    {
+      source: '/admin/:path*',
+      destination: '/studio',
+      permanent: false,
+    },
+    {
+      source: '/dashboard/:path*',
+      destination: '/studio',
+      permanent: false,
+    },
+    {
+      source: '/blog/create',
+      destination: '/studio',
+      permanent: false,
+    },
+    {
+      source: '/edit/:path*',
+      destination: '/studio',
+      permanent: false,
+    },
+    {
+      source: '/blog/cms',
+      destination: '/blog',
+      permanent: true,
+    },
+    {
+      source: '/blog/dynamic',
+      destination: '/blog',
+      permanent: true,
+    },
     // Legacy redirects
     {
       source: '/home',

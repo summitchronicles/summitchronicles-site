@@ -9,32 +9,40 @@ import {
   Calendar,
   Target,
   CheckCircle,
-  ArrowRight
+  ArrowRight,
 } from 'lucide-react';
 import Image from 'next/image';
-import { getDaysToEverest, getEverestCountdownText } from '@/lib/everest-countdown';
+import {
+  getDaysToEverest,
+  getEverestCountdownText,
+} from '@/lib/everest-countdown';
 
 export default function NewsletterPage() {
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || isSubmitting) return;
     setIsSubmitting(true);
+    setSubmitError(null);
     try {
-      const res = await fetch('/api/newsletter/subscribers', {
+      const res = await fetch('/api/newsletter/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, referrer: 'newsletter-page' }),
       });
       if (res.ok) {
         setIsSubmitted(true);
+      } else {
+        const payload = await res.json().catch(() => null);
+        setSubmitError(payload?.error || 'Subscription failed. Try again.');
       }
     } catch (err) {
       console.error('Subscribe failed:', err);
+      setSubmitError('Subscription service is unavailable. Try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -44,18 +52,21 @@ export default function NewsletterPage() {
     {
       icon: Mountain,
       title: 'Expedition Updates',
-      description: 'Real training progress, preparation milestones, and expedition planning insights.'
+      description:
+        'Real training progress, preparation milestones, and expedition planning insights.',
     },
     {
       icon: Target,
       title: 'Training Insights',
-      description: 'Behind-the-scenes look at systematic preparation for the world\'s highest peak.'
+      description:
+        "Behind-the-scenes look at systematic preparation for the world's highest peak.",
     },
     {
       icon: Calendar,
       title: 'Timeline Updates',
-      description: 'Stay informed about key dates, training phases, and expedition timeline.'
-    }
+      description:
+        'Stay informed about key dates, training phases, and expedition timeline.',
+    },
   ];
 
   return (
@@ -96,7 +107,7 @@ export default function NewsletterPage() {
 
       {/* Mission Statement */}
       <section className="py-24 bg-obsidian relative">
-         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] opacity-20 pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] opacity-20 pointer-events-none"></div>
         <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -119,15 +130,23 @@ export default function NewsletterPage() {
             <div className="grid md:grid-cols-3 gap-8">
               <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl backdrop-blur-sm">
                 <div className="text-5xl font-light text-white mb-2">4/7</div>
-                <div className="text-xs font-mono uppercase tracking-widest text-gray-500">Summits Secured</div>
+                <div className="text-xs font-mono uppercase tracking-widest text-gray-500">
+                  Summits Secured
+                </div>
               </div>
               <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl backdrop-blur-sm">
-                <div className="text-5xl font-light text-summit-gold-400 mb-2">{getDaysToEverest()}</div>
-                <div className="text-xs font-mono uppercase tracking-widest text-summit-gold-900/80">Mission Countdown</div>
+                <div className="text-5xl font-light text-summit-gold-400 mb-2">
+                  {getDaysToEverest()}
+                </div>
+                <div className="text-xs font-mono uppercase tracking-widest text-summit-gold-900/80">
+                  Mission Countdown
+                </div>
               </div>
               <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl backdrop-blur-sm">
                 <div className="text-5xl font-light text-white mb-2">11</div>
-                <div className="text-xs font-mono uppercase tracking-widest text-gray-500">Years Active</div>
+                <div className="text-xs font-mono uppercase tracking-widest text-gray-500">
+                  Years Active
+                </div>
               </div>
             </div>
           </motion.div>
@@ -165,7 +184,9 @@ export default function NewsletterPage() {
                   <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 group-hover:bg-summit-gold/10 transition-colors">
                     <IconComponent className="w-6 h-6 text-gray-400 group-hover:text-summit-gold transition-colors" />
                   </div>
-                  <h3 className="text-xl font-light tracking-wide text-white mb-4">{benefit.title}</h3>
+                  <h3 className="text-xl font-light tracking-wide text-white mb-4">
+                    {benefit.title}
+                  </h3>
                   <p className="text-gray-400 leading-relaxed font-light text-sm">
                     {benefit.description}
                   </p>
@@ -199,7 +220,7 @@ export default function NewsletterPage() {
             viewport={{ once: true }}
             className="bg-glass-panel border border-white/10 p-10 backdrop-blur-xl relative"
           >
-             {/* Decorative corners */}
+            {/* Decorative corners */}
             <div className="absolute top-0 left-0 w-3 h-3 border-l border-t border-summit-gold/50"></div>
             <div className="absolute top-0 right-0 w-3 h-3 border-r border-t border-summit-gold/50"></div>
             <div className="absolute bottom-0 left-0 w-3 h-3 border-l border-b border-summit-gold/50"></div>
@@ -209,10 +230,10 @@ export default function NewsletterPage() {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="text-center space-y-4">
                   <p className="text-gray-300 leading-relaxed font-light">
-                    Get updates on the road to Everest 2028. Real training
-                    data, honest notes from physiotherapy and strength work,
-                    and the deliberate return to running before mountain
-                    training ramps again.
+                    Get updates on the road to Everest 2028. Real training data,
+                    honest notes from physiotherapy and strength work, and the
+                    deliberate return to running before mountain training ramps
+                    again.
                   </p>
 
                   <div className="flex items-center justify-center space-x-3 py-4">
@@ -238,8 +259,17 @@ export default function NewsletterPage() {
                     className="w-full bg-white text-black py-4 font-bold tracking-widest hover:bg-summit-gold hover:text-black transition-all duration-300 flex items-center justify-center space-x-3 uppercase text-sm disabled:opacity-50"
                   >
                     <Mail className="w-4 h-4" />
-                    <span>{isSubmitting ? 'Establishing Uplink...' : 'Initialize Subscription'}</span>
+                    <span>
+                      {isSubmitting
+                        ? 'Establishing Uplink...'
+                        : 'Initialize Subscription'}
+                    </span>
                   </button>
+                  {submitError ? (
+                    <p className="text-sm text-red-300" role="alert">
+                      {submitError}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="text-xs text-gray-500 text-center font-mono tracking-wider uppercase">
@@ -249,11 +279,14 @@ export default function NewsletterPage() {
             ) : (
               <div className="text-center space-y-6 py-8">
                 <div className="w-20 h-20 bg-green-900/20 border border-green-500/30 rounded-full flex items-center justify-center mx-auto">
-                    <CheckCircle className="w-10 h-10 text-green-400" />
+                  <CheckCircle className="w-10 h-10 text-green-400" />
                 </div>
-                <h3 className="text-3xl font-light text-white">Uplink Established</h3>
+                <h3 className="text-3xl font-light text-white">
+                  Uplink Established
+                </h3>
                 <p className="text-gray-400 font-light">
-                  You are now connected to the expedition stream. Stand by for updates.
+                  You are now connected to the expedition stream. Stand by for
+                  updates.
                 </p>
               </div>
             )}
@@ -298,7 +331,6 @@ export default function NewsletterPage() {
           </motion.div>
         </div>
       </section>
-
     </div>
   );
 }

@@ -36,7 +36,7 @@ export default function LoginPage() {
         requestedPath.startsWith('/') &&
         !requestedPath.startsWith('//')
           ? requestedPath
-          : '/dashboard/content';
+          : '/studio';
       if (destination.startsWith('/api/')) {
         window.location.assign(destination);
         return;
@@ -73,8 +73,8 @@ export default function LoginPage() {
             Author access
           </h1>
           <p className="mt-4 leading-7 text-zinc-400">
-            Sign in to write, upload, publish, and index Summit Chronicles
-            stories.
+            Sign in to write and publish Summit Chronicles stories, expedition
+            updates, and training notes.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-5">

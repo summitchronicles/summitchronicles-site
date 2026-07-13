@@ -109,13 +109,8 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Admin route protection
-  if (
-    request.nextUrl.pathname.startsWith('/admin') ||
-    request.nextUrl.pathname.startsWith('/studio') ||
-    request.nextUrl.pathname.startsWith('/blog/create') ||
-    request.nextUrl.pathname.startsWith('/dashboard')
-  ) {
+  // Authoring route protection
+  if (request.nextUrl.pathname.startsWith('/studio')) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
 
     if (!hasInternalApiAccess(request, env) && env.NODE_ENV === 'production') {

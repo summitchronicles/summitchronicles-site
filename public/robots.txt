@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
+Disallow: /studio/
 Disallow: /api/
 Disallow: /_next/
 Disallow: /private/
@@ -15,7 +15,7 @@ User-agent: Claude-Web
 Disallow: /api/ask
 Disallow: /api/db/search
 Disallow: /api/analytics/
-Disallow: /admin/
+Disallow: /studio/
 
 Sitemap: https://summitchronicles.com/sitemap.xml
 Host: https://summitchronicles.com

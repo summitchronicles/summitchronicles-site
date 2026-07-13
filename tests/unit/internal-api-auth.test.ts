@@ -7,7 +7,7 @@ import { hasInternalApiAccess } from '@/shared/security/internal-api';
 
 describe('hasInternalApiAccess', () => {
   it('allows local development when no internal key is configured', () => {
-    const request = new Request('http://localhost/api/publish', {
+    const request = new Request('http://localhost/api/training/ingest', {
       method: 'POST',
     });
 
@@ -20,7 +20,7 @@ describe('hasInternalApiAccess', () => {
   });
 
   it('denies production requests without a valid internal key', () => {
-    const request = new Request('https://example.com/api/publish', {
+    const request = new Request('https://example.com/api/training/ingest', {
       method: 'POST',
     });
 
@@ -33,7 +33,7 @@ describe('hasInternalApiAccess', () => {
   });
 
   it('accepts bearer token authentication', () => {
-    const request = new Request('https://example.com/api/publish', {
+    const request = new Request('https://example.com/api/training/ingest', {
       method: 'POST',
       headers: {
         Authorization: 'Bearer super-secret-key',
@@ -49,7 +49,7 @@ describe('hasInternalApiAccess', () => {
   });
 
   it('accepts x-internal-api-key authentication', () => {
-    const request = new Request('https://example.com/api/publish', {
+    const request = new Request('https://example.com/api/training/ingest', {
       method: 'POST',
       headers: {
         'x-internal-api-key': 'super-secret-key',

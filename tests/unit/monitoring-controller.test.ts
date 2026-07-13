@@ -27,7 +27,7 @@ describe('handleMonitoringIngestion', () => {
             fingerprint: 'fp_1',
             context: {
               sessionId: 'session_1',
-              url: 'https://summitchronicles.com/dashboard',
+              url: 'https://summitchronicles.com/studio',
               userAgent: 'jest',
               timestamp: '2026-03-08T12:00:00.000Z',
               environment: 'production',
@@ -43,7 +43,7 @@ describe('handleMonitoringIngestion', () => {
             threshold: 2500,
             context: {
               sessionId: 'session_1',
-              url: 'https://summitchronicles.com/dashboard',
+              url: 'https://summitchronicles.com/studio',
               userAgent: 'jest',
               timestamp: '2026-03-08T12:00:00.000Z',
               environment: 'production',

@@ -13,10 +13,6 @@ class Config {
     return getServerEnv().SANITY_API_TOKEN;
   }
 
-  get REPLICATE_API_TOKEN() {
-    return getServerEnv().REPLICATE_API_TOKEN;
-  }
-
   get BUTTONDOWN_API_KEY() {
     return getServerEnv().BUTTONDOWN_API_KEY;
   }

@@ -32,7 +32,6 @@ const serverEnvSchema = z.object({
   NEXT_PUBLIC_SANITY_PROJECT_ID: optionalString,
   NEXT_PUBLIC_SANITY_DATASET: optionalString,
   SANITY_API_TOKEN: optionalString,
-  REPLICATE_API_TOKEN: optionalString,
   BUTTONDOWN_API_KEY: optionalString,
   SENTRY_DSN: optionalString,
   VO2_MAX_MANUAL: optionalString,

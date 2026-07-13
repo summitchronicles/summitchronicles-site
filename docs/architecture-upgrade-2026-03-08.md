@@ -1,5 +1,7 @@
 # Architecture Upgrade - 2026-03-08
 
+> Historical implementation record. As of July 13, 2026, the filesystem draft editors, agent dashboard, upload APIs, and duplicate admin routes described below have been retired. Sanity Studio at `/studio` is the only authoring workflow. See `README.md` and `docs/guides/AUTH_SETUP.md` for the current architecture.
+
 ## Overview
 
 This upgrade converts the repo from a loose collection of routes and helpers into a more explicit modular monolith.

@@ -1,5 +1,7 @@
 # Security Hardening - 2026-03-08
 
+> Historical implementation record. As of July 13, 2026, the duplicate draft, agent, upload, and newsletter-management endpoints listed below have been removed. Sanity Studio at `/studio` is the only authoring workflow and remains protected by the internal access session plus Sanity authentication.
+
 ## Internal Route Authentication
 
 Sensitive routes now use a shared internal access gate.
