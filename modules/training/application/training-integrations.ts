@@ -11,9 +11,6 @@ export function getTrainingIntegrationStatuses(
   const intervalsConfigured = Boolean(
     env.INTERVALS_ICU_API_KEY && env.INTERVALS_ICU_ATHLETE_ID
   );
-  const stravaConfigured = Boolean(
-    env.STRAVA_CLIENT_ID && env.STRAVA_CLIENT_SECRET
-  );
   const whoopConfigured = Boolean(
     env.WHOOP_CLIENT_ID && env.WHOOP_CLIENT_SECRET
   );
@@ -36,18 +33,6 @@ export function getTrainingIntegrationStatuses(
       label: 'WHOOP',
       role: 'Recovery, sleep, HRV and strain',
       state: whoopConfigured ? 'setup-required' : 'not-configured',
-    },
-    {
-      id: 'strava',
-      label: 'Strava',
-      role: 'Activities, distance, elevation and routes',
-      state: stravaConfigured ? 'setup-required' : 'not-configured',
-    },
-    {
-      id: 'garmin',
-      label: 'Garmin',
-      role: 'Device source paused',
-      state: 'paused',
     },
   ];
 }

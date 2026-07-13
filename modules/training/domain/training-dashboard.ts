@@ -14,7 +14,7 @@ export interface TrainingInsight {
   totalDistanceKm: number;
   totalElevationGain: number;
   dominantActivityType: string;
-  source: 'intervals.icu' | 'whoop' | 'strava' | 'mixed';
+  source: 'intervals.icu' | 'whoop' | 'mixed';
 }
 
 export interface TrainingWorkoutStats {
@@ -27,17 +27,15 @@ export interface TrainingWorkoutStats {
   by_type: Record<string, number>;
   by_source: {
     historical: number;
-    garmin: number;
     intervals: number;
     whoop: number;
-    strava: number;
   };
 }
 
 export type TrainingTelemetryState = 'live' | 'cached' | 'degraded';
 
 export interface TrainingIntegrationStatus {
-  id: 'intervals.icu' | 'whoop' | 'strava' | 'garmin';
+  id: 'intervals.icu' | 'whoop';
   label: string;
   role: string;
   state:
@@ -229,10 +227,8 @@ export function calculateTrainingWorkoutStats(
     by_type: {},
     by_source: {
       historical: 0,
-      garmin: 0,
       intervals: 0,
       whoop: 0,
-      strava: 0,
     },
   };
 
@@ -247,8 +243,6 @@ export function calculateTrainingWorkoutStats(
     stats.by_type[typeKey] = (stats.by_type[typeKey] || 0) + 1;
     if (activity.source === 'whoop') {
       stats.by_source.whoop += 1;
-    } else if (activity.source === 'strava') {
-      stats.by_source.strava += 1;
     } else {
       stats.by_source.intervals += 1;
     }
@@ -278,7 +272,6 @@ function getMissionLogSource(
   );
   if (sources.size > 1) return 'mixed';
   if (sources.has('whoop')) return 'whoop';
-  if (sources.has('strava')) return 'strava';
   return 'intervals.icu';
 }
 

@@ -221,7 +221,7 @@ function getFallbackMetrics(): TrainingMetrics {
             value: 'Dynamic',
             trend: 'stable' as const,
           },
-        ], // Will be replaced with real Garmin data
+        ], // Replaced when observed training data is available.
       },
     ],
     recentTrends: {

@@ -63,7 +63,7 @@ export interface NormalizedTrainingActivity {
     typeKey?: string;
   };
   description?: string;
-  source?: 'intervals.icu' | 'whoop' | 'strava';
+  source?: 'intervals.icu' | 'whoop';
 }
 
 export interface WhoopRecoveryMetrics {
@@ -143,7 +143,7 @@ export function normalizeTrainingActivities(
       typeKey: (activity.type || 'unknown').toLowerCase(),
     },
     description: activity.description || '',
-    source: activity._source ?? activity.source ?? 'intervals.icu',
+    source: 'intervals.icu',
   }));
 }
 

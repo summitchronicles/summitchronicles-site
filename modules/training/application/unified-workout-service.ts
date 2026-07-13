@@ -72,10 +72,8 @@ export async function getWorkoutStats(
     by_type: {},
     by_source: {
       historical: 0,
-      garmin: 0,
       intervals: 0,
       whoop: 0,
-      strava: 0,
     },
   };
 

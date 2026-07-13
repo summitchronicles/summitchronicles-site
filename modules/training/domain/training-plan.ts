@@ -23,9 +23,7 @@ export interface TrainingActivity {
     heartRate?: { avg: number; max: number };
     calories?: number;
     completedAt?: string;
-    garminActivityId?: string;
   };
-  garminWorkoutId?: string;
   status: 'planned' | 'synced' | 'completed' | 'skipped';
   compliance?: {
     durationMatch: number;

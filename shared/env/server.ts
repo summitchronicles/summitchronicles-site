@@ -17,14 +17,8 @@ const serverEnvSchema = z.object({
   TRAINING_INGEST_SECRET: optionalString,
   ALLOWED_ORIGINS: optionalString,
   TRAINING_STORAGE_BACKEND: z.enum(['local', 'r2']).optional(),
-  GARMIN_USERNAME: optionalString,
-  GARMIN_PASSWORD: optionalString,
   INTERVALS_ICU_API_KEY: optionalString,
   INTERVALS_ICU_ATHLETE_ID: optionalString,
-  STRAVA_CLIENT_ID: optionalString,
-  STRAVA_CLIENT_SECRET: optionalString,
-  STRAVA_REDIRECT_URI: optionalString,
-  STRAVA_ATHLETE_ID: optionalString,
   WHOOP_CLIENT_ID: optionalString,
   WHOOP_CLIENT_SECRET: optionalString,
   WHOOP_REDIRECT_URI: optionalString,
@@ -84,20 +78,6 @@ export function getAllowedOrigins(env: ServerEnv = getServerEnv()): string[] {
   return Array.from(new Set([...defaults, ...configuredOrigins]));
 }
 
-export function requireGarminCredentials(env: ServerEnv = getServerEnv()) {
-  const schema = z.object({
-    GARMIN_USERNAME: z.string().email('Invalid Garmin email address'),
-    GARMIN_PASSWORD: z
-      .string()
-      .min(6, 'Garmin password must be at least 6 characters'),
-  });
-
-  return schema.parse({
-    GARMIN_USERNAME: env.GARMIN_USERNAME,
-    GARMIN_PASSWORD: env.GARMIN_PASSWORD,
-  });
-}
-
 export function requireIntervalsCredentials(env: ServerEnv = getServerEnv()) {
   const schema = z.object({
     INTERVALS_ICU_API_KEY: z
@@ -133,34 +113,6 @@ export function requireWhoopCredentials(env: ServerEnv = getServerEnv()) {
     WHOOP_CLIENT_ID: env.WHOOP_CLIENT_ID,
     WHOOP_CLIENT_SECRET: env.WHOOP_CLIENT_SECRET,
     WHOOP_REDIRECT_URI: env.WHOOP_REDIRECT_URI,
-    WHOOP_TOKEN_ENCRYPTION_KEY: env.WHOOP_TOKEN_ENCRYPTION_KEY,
-    DATABASE_URL: env.DATABASE_URL,
-  });
-}
-
-export function requireStravaCredentials(env: ServerEnv = getServerEnv()) {
-  const schema = z.object({
-    STRAVA_CLIENT_ID: z.string().min(1, 'STRAVA_CLIENT_ID is required'),
-    STRAVA_CLIENT_SECRET: z.string().min(1, 'STRAVA_CLIENT_SECRET is required'),
-    STRAVA_REDIRECT_URI: z
-      .string()
-      .url('STRAVA_REDIRECT_URI must be a valid URL'),
-    WHOOP_TOKEN_ENCRYPTION_KEY: z
-      .string()
-      .min(32, 'WHOOP_TOKEN_ENCRYPTION_KEY must be at least 32 characters'),
-    DATABASE_URL: z
-      .string()
-      .url('DATABASE_URL must be a valid Neon connection URL'),
-  });
-
-  return schema.parse({
-    STRAVA_CLIENT_ID: env.STRAVA_CLIENT_ID,
-    STRAVA_CLIENT_SECRET: env.STRAVA_CLIENT_SECRET,
-    STRAVA_REDIRECT_URI:
-      env.STRAVA_REDIRECT_URI ??
-      (env.NODE_ENV === 'production'
-        ? 'https://summitchronicles.com/api/strava/callback'
-        : 'http://localhost:3001/api/strava/callback'),
     WHOOP_TOKEN_ENCRYPTION_KEY: env.WHOOP_TOKEN_ENCRYPTION_KEY,
     DATABASE_URL: env.DATABASE_URL,
   });

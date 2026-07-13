@@ -25,7 +25,7 @@ describe('getTrainingDashboardResponse', () => {
             average_heartrate: 149,
             type: 'Stairs',
             description: 'Steady climbing volume',
-            source: 'GARMIN',
+            source: 'INTERVALS.ICU',
           },
         ],
         missionLogs: [

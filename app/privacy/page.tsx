@@ -89,8 +89,8 @@ export default function PrivacyPage() {
               <p>
                 Links to external websites and social platforms are governed by
                 their own privacy policies. This policy does not replace the
-                privacy terms of WHOOP, Strava, Intervals.icu, or another
-                service you choose to use.
+                privacy terms of WHOOP, Intervals.icu, or another service you
+                choose to use.
               </p>
             </PolicySection>
 
@@ -152,20 +152,14 @@ export default function PrivacyPage() {
                 access and refresh tokens are also processed to maintain the
                 connection.
               </p>
-              <h3>Strava</h3>
-              <p>
-                If Strava is connected, Summit Chronicles may receive athlete
-                identifiers and authorized activity information such as sport,
-                timestamps, duration, distance, elevation, heart rate, power,
-                route, and location data. OAuth tokens are processed to maintain
-                the connection.
-              </p>
               <h3>Intervals.icu and other sources</h3>
               <p>
                 Intervals.icu may provide aggregated activity and wellness data
-                that originated from an authorized device or fitness account.
-                Summit Chronicles displays source and freshness information when
-                this data is presented.
+                that originated from a fitness account you connected to
+                Intervals.icu. Summit Chronicles does not directly authorize or
+                store credentials for those upstream accounts. Summit Chronicles
+                displays source and freshness information when this data is
+                presented.
               </p>
               <p>
                 Connected-fitness data is used to present the account
@@ -215,7 +209,7 @@ export default function PrivacyPage() {
                   requested newsletters.
                 </li>
                 <li>
-                  WHOOP, Strava, and Intervals.icu when completing an authorized
+                  WHOOP and Intervals.icu when completing an authorized
                   connection or API request.
                 </li>
                 <li>
@@ -286,8 +280,8 @@ export default function PrivacyPage() {
                   email.
                 </li>
                 <li>
-                  Revoke WHOOP or Strava authorization through the
-                  provider&apos;s connected-app settings.
+                  Revoke WHOOP authorization through its connected-app settings,
+                  or manage upstream activity sources through Intervals.icu.
                 </li>
                 <li>
                   Email hello@summitchronicles.com to request access,

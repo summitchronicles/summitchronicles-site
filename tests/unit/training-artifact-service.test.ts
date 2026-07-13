@@ -207,10 +207,8 @@ function createSummaryArtifact(
         by_type: { strength: 1 },
         by_source: {
           historical: 0,
-          garmin: 0,
           intervals: 1,
           whoop: 0,
-          strava: 0,
         },
       },
     },

@@ -14,19 +14,11 @@ import {
   Mountain,
   RefreshCw,
   Route,
-  Watch,
 } from 'lucide-react';
 import { useTrainingSummary } from '@/lib/hooks/useTrainingSummary';
 import { cn } from '@/lib/utils';
 import type { TrainingIntegrationStatus } from '@/modules/training/domain/training-dashboard';
 import type { NormalizedTrainingActivity } from '@/modules/training/domain/training-metrics';
-
-const integrationIcons = {
-  'intervals.icu': Database,
-  whoop: HeartPulse,
-  strava: Route,
-  garmin: Watch,
-};
 
 export function TrainingRedesignPrototype() {
   const { summary, loading, error, refresh } = useTrainingSummary();
@@ -491,13 +483,9 @@ function IntegrationItem({
 }: {
   integration: TrainingIntegrationStatus;
 }) {
-  const Icon = integrationIcons[integration.id];
+  const Icon = integration.id === 'whoop' ? HeartPulse : Database;
   const connectionHref =
-    integration.id === 'whoop'
-      ? '/api/auth/whoop/start'
-      : integration.id === 'strava'
-        ? '/api/auth/strava/start'
-        : null;
+    integration.id === 'whoop' ? '/api/auth/whoop/start' : null;
   return (
     <div className="border-white/10 py-6 md:border-r md:px-6 md:first:pl-0 md:last:border-r-0">
       <div className="flex items-start gap-4">

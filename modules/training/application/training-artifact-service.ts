@@ -20,7 +20,6 @@ import {
 } from '@/modules/training/infrastructure/training-snapshot-store';
 import { getTrainingIntegrationStatuses } from '@/modules/training/application/training-integrations';
 import { enrichTrainingDashboardWithWhoop } from '@/modules/training/application/whoop-training-enrichment';
-import { enrichTrainingDashboardWithStrava } from '@/modules/training/application/strava-training-enrichment';
 
 interface TrainingArtifactDependencies {
   now?: Date;
@@ -90,7 +89,7 @@ export async function getPersistedTrainingDashboardResponse(
   ]);
 
   if (summaryArtifact) {
-    return enrichTrainingDashboardWithFitnessSources(
+    return enrichTrainingDashboardWithWhoop(
       mergeSummaryWithStatus(summaryArtifact.response, statusArtifact),
       now
     );
@@ -106,24 +105,16 @@ export async function getPersistedTrainingDashboardResponse(
       store,
     });
 
-    return enrichTrainingDashboardWithFitnessSources(
+    return enrichTrainingDashboardWithWhoop(
       mergeSummaryWithStatus(ingested.dashboard, ingested.status),
       now
     );
   }
 
-  return enrichTrainingDashboardWithFitnessSources(
+  return enrichTrainingDashboardWithWhoop(
     createUnavailableDashboardResponse(now, statusArtifact),
     now
   );
-}
-
-async function enrichTrainingDashboardWithFitnessSources(
-  response: TrainingDashboardResponse,
-  now: Date
-) {
-  const withWhoop = await enrichTrainingDashboardWithWhoop(response, now);
-  return enrichTrainingDashboardWithStrava(withWhoop, now);
 }
 
 export async function getPersistedTrainingMetricsResponse(
@@ -203,9 +194,9 @@ function mergeSummaryWithStatus(
       ...response,
       summary: {
         ...response.summary,
-        integrations:
-          response.summary.integrations ??
-          getTrainingIntegrationStatuses(response.summary.telemetry.state),
+        integrations: getTrainingIntegrationStatuses(
+          response.summary.telemetry.state
+        ),
       },
     };
   }
@@ -226,9 +217,7 @@ function mergeSummaryWithStatus(
     lastUpdated,
     summary: {
       ...response.summary,
-      integrations:
-        response.summary.integrations ??
-        getTrainingIntegrationStatuses(telemetryState),
+      integrations: getTrainingIntegrationStatuses(telemetryState),
       telemetry: {
         ...response.summary.telemetry,
         isLive: status.state === 'live',

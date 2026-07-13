@@ -5,14 +5,14 @@
 🌐 **Production**: [summitchronicles.com](https://summitchronicles.com)
 🌐 **Staging**: [staging.summit-chronicles.vercel.app](https://staging.summit-chronicles.vercel.app)
 
-A modern Next.js application documenting the Seven Summits journey, featuring real-time Strava integration, AI-powered search, and comprehensive expedition tracking.
+A modern Next.js application documenting the Seven Summits journey, expedition stories, and observed training progress.
 
 ## 🏔️ Project Overview
 
 Summit Chronicles is a full-stack mountaineering blog that combines:
 - **Personal expedition stories** and training logs
-- **Hybrid Data Pipeline** (Intervals.icu + Garmin Python Script)
-- **AI-powered site search** using RAG (Retrieval Augmented Generation)
+- **Intervals.icu training pipeline** for aggregated activity data
+- **WHOOP recovery integration** for sleep, HRV, strain, and recovery
 - **Newsletter subscription** with Buttondown integration
 - **Modern, responsive design** with mountain-themed branding
 
@@ -29,9 +29,10 @@ Summit Chronicles is a full-stack mountaineering blog that combines:
 - **Zod** for runtime validation
 
 **Backend & APIs:**
-- **Supabase** (PostgreSQL with vector extensions)
-- **Intervals.icu API** for fitness data integration
-- **Cohere AI** for embeddings and text generation
+- **Neon PostgreSQL** for encrypted OAuth credential storage
+- **Intervals.icu API** for aggregated fitness activity data
+- **WHOOP API** for authorized recovery observations
+- **Sanity** for managed editorial content
 - **Next.js API Routes** for server-side logic
 
 **Infrastructure:**
@@ -70,8 +71,6 @@ summit-chronicles/
 - npm or yarn
 - Neon account
 - Intervals.icu API Key (Pro or Free)
-- Garmin Connect credentials (for Python script)
-- Cohere API account
 - Vercel account (for deployment)
 
 ### Environment Setup
@@ -86,12 +85,11 @@ DATABASE_URL=your_neon_connection_string
 INTERVALS_ICU_API_KEY=your_api_key
 INTERVALS_ICU_ATHLETE_ID=your_athlete_id
 
-# Garmin (For Python Script)
-GARMIN_USERNAME=your_garmin_email
-GARMIN_PASSWORD=your_garmin_password
-
-# AI Services
-COHERE_API_KEY=your_cohere_api_key
+# WHOOP
+WHOOP_CLIENT_ID=your_client_id
+WHOOP_CLIENT_SECRET=your_client_secret
+WHOOP_REDIRECT_URI=http://localhost:3001/api/auth/whoop/callback
+WHOOP_TOKEN_ENCRYPTION_KEY=your_encryption_key
 
 # Newsletter (Optional)
 NEXT_PUBLIC_BUTTONDOWN_USERNAME=your_buttondown_username
@@ -135,22 +133,13 @@ CREATE TABLE chunks (
 
 ## 🔌 Integrations
 
-### Hybrid Data Pipeline
-The site uses a dual-source approach for training data:
-1. **Intervals.icu**: Fast retrieval of recent activities and wellness data.
-2. **Garmin Connect (Python)**: Deep analysis of health metrics (Body Battery, Sleep) via a background script.
+### Training Data Pipeline
+The site uses two clearly separated sources:
+1. **Intervals.icu** aggregates observed activities from connected training services.
+2. **WHOOP** supplies directly authorized recovery, sleep, HRV, and strain observations.
 
 **Key endpoints:**
 - `GET /api/training/metrics` - Aggregated training and health metrics.
-
-### AI-Powered Search
-
-The search system (`app/api/ask/`) implements RAG with:
-
-- **Content chunking** and vector embedding storage
-- **Semantic search** using pgvector cosine similarity
-- **Context-aware responses** via Cohere AI
-- **Source attribution** with automatic linking
 
 ### Newsletter Integration
 
@@ -218,18 +207,9 @@ The project is configured for Vercel deployment with:
   "framework": "nextjs",
   "buildCommand": "npm run build",
   "outputDirectory": ".next",
-  "installCommand": "npm ci",
-  "crons": [
-    {
-      "path": "/api/strava/stats",
-      "schedule": "0 4 * * *"
-    }
-  ]
+  "installCommand": "npm ci"
 }
 ```
-
-**Scheduled Tasks:**
-- Daily Strava statistics refresh at 4 AM UTC
 
 ### CI/CD Pipeline
 

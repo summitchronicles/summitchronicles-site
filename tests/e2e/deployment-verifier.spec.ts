@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Deployment Verification', () => {
   test.beforeEach(async ({ context }) => {
-    // Mock Garmin metrics API to avoid credential errors/dependency
+    // Mock training metrics to keep route verification deterministic.
     await context.route(/.*\/api\/training\/metrics.*/, async route => {
       await route.fulfill({
         status: 200,

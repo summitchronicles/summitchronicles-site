@@ -1,14 +1,6 @@
-import { getServerEnv, requireGarminCredentials } from '@/shared/env/server';
+import { getServerEnv } from '@/shared/env/server';
 
 class Config {
-  get GARMIN_USERNAME(): string {
-    return requireGarminCredentials().GARMIN_USERNAME;
-  }
-
-  get GARMIN_PASSWORD(): string {
-    return requireGarminCredentials().GARMIN_PASSWORD;
-  }
-
   get NEXT_PUBLIC_SANITY_PROJECT_ID() {
     return getServerEnv().NEXT_PUBLIC_SANITY_PROJECT_ID;
   }

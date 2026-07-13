@@ -23,8 +23,7 @@ await sql`
     expires_at TIMESTAMPTZ NOT NULL,
     connected_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT fitness_oauth_provider_check
-      CHECK (provider IN ('whoop', 'strava')),
+    CONSTRAINT fitness_oauth_provider_check CHECK (provider IN ('whoop')),
     CONSTRAINT fitness_oauth_scopes_array_check
       CHECK (jsonb_typeof(scopes) = 'array')
   )
@@ -36,6 +35,10 @@ await sql`
 `;
 
 await sql`
+  DELETE FROM fitness_oauth_connections WHERE provider = 'strava'
+`;
+
+await sql`
   ALTER TABLE fitness_oauth_connections
     DROP CONSTRAINT IF EXISTS fitness_oauth_provider_check
 `;
@@ -43,7 +46,7 @@ await sql`
 await sql`
   ALTER TABLE fitness_oauth_connections
     ADD CONSTRAINT fitness_oauth_provider_check
-    CHECK (provider IN ('whoop', 'strava'))
+    CHECK (provider IN ('whoop'))
 `;
 
-console.log('Neon fitness OAuth token storage is ready.');
+console.log('Neon WHOOP OAuth token storage is ready.');

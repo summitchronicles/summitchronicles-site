@@ -4,14 +4,13 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Activity,
   BarChart3,
   Calendar,
   Target,
   ChevronRight,
   Home,
   ArrowLeft,
-  Zap
+  Zap,
 } from 'lucide-react';
 
 interface NavigationItem {
@@ -30,16 +29,7 @@ const navigationItems: NavigationItem[] = [
     label: 'Training Overview',
     href: '/training',
     icon: Target,
-    description: 'Training phases and expedition timeline'
-  },
-  {
-    id: 'realtime',
-    label: 'Live Data',
-    href: '/training/realtime',
-    icon: Activity,
-    description: 'Real-time metrics and wellness data',
-    badge: 'Enhanced',
-    isNew: true
+    description: 'Training phases and expedition timeline',
   },
   {
     id: 'analytics',
@@ -47,7 +37,7 @@ const navigationItems: NavigationItem[] = [
     href: '/training/analytics',
     icon: BarChart3,
     description: 'Performance trends and insights',
-    badge: 'Coming Soon'
+    badge: 'Coming Soon',
   },
   {
     id: 'schedule',
@@ -55,8 +45,8 @@ const navigationItems: NavigationItem[] = [
     href: '/training/schedule',
     icon: Calendar,
     description: 'Training calendar and planning',
-    badge: 'Coming Soon'
-  }
+    badge: 'Coming Soon',
+  },
 ];
 
 interface TrainingNavigationProps {
@@ -68,10 +58,10 @@ interface TrainingNavigationProps {
 export function TrainingNavigation({
   variant = 'full',
   showBackButton = false,
-  className = ''
+  className = '',
 }: TrainingNavigationProps) {
   const pathname = usePathname();
-  const currentItem = navigationItems.find(item => item.href === pathname);
+  const currentItem = navigationItems.find((item) => item.href === pathname);
 
   if (variant === 'breadcrumb') {
     return (
@@ -142,11 +132,13 @@ export function TrainingNavigation({
                     <item.icon className="w-4 h-4 mr-2" />
                     {item.label}
                     {item.badge && (
-                      <span className={`ml-2 px-2 py-1 text-xs rounded-full ${
-                        item.isNew
-                          ? 'bg-blue-600 text-white'
-                          : 'bg-gray-800 text-gray-400'
-                      }`}>
+                      <span
+                        className={`ml-2 px-2 py-1 text-xs rounded-full ${
+                          item.isNew
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-800 text-gray-400'
+                        }`}
+                      >
                         {item.badge}
                       </span>
                     )}
@@ -162,7 +154,9 @@ export function TrainingNavigation({
 
   // Full navigation variant
   return (
-    <nav className={`bg-gray-800 border border-gray-700 rounded-lg p-6 ${className}`}>
+    <nav
+      className={`bg-gray-800 border border-gray-700 rounded-lg p-6 ${className}`}
+    >
       <div className="flex items-center justify-between mb-6">
         <h3 className="text-lg font-semibold text-white flex items-center">
           <Target className="w-5 h-5 text-blue-400 mr-2" />
@@ -197,8 +191,12 @@ export function TrainingNavigation({
                     <div className="flex items-center">
                       <item.icon className="w-6 h-6 text-gray-500 mr-3" />
                       <div>
-                        <h4 className="font-medium text-gray-400">{item.label}</h4>
-                        <p className="text-sm text-gray-500 mt-1">{item.description}</p>
+                        <h4 className="font-medium text-gray-400">
+                          {item.label}
+                        </h4>
+                        <p className="text-sm text-gray-500 mt-1">
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                     {item.badge && (
@@ -210,41 +208,53 @@ export function TrainingNavigation({
                 </div>
               ) : (
                 <Link href={item.href}>
-                  <div className={`relative p-4 border rounded-lg transition-all duration-200 hover:scale-[1.02] ${
-                    isActive
-                      ? 'bg-blue-600/20 border-blue-500 shadow-lg shadow-blue-500/20'
-                      : 'bg-gray-800 border-gray-700 hover:border-gray-600 hover:bg-gray-750'
-                  }`}>
+                  <div
+                    className={`relative p-4 border rounded-lg transition-all duration-200 hover:scale-[1.02] ${
+                      isActive
+                        ? 'bg-blue-600/20 border-blue-500 shadow-lg shadow-blue-500/20'
+                        : 'bg-gray-800 border-gray-700 hover:border-gray-600 hover:bg-gray-750'
+                    }`}
+                  >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <item.icon className={`w-6 h-6 mr-3 ${
-                          isActive ? 'text-blue-400' : 'text-gray-400'
-                        }`} />
+                        <item.icon
+                          className={`w-6 h-6 mr-3 ${
+                            isActive ? 'text-blue-400' : 'text-gray-400'
+                          }`}
+                        />
                         <div>
-                          <h4 className={`font-medium ${
-                            isActive ? 'text-blue-300' : 'text-white'
-                          }`}>
+                          <h4
+                            className={`font-medium ${
+                              isActive ? 'text-blue-300' : 'text-white'
+                            }`}
+                          >
                             {item.label}
                           </h4>
-                          <p className="text-sm text-gray-400 mt-1">{item.description}</p>
+                          <p className="text-sm text-gray-400 mt-1">
+                            {item.description}
+                          </p>
                         </div>
                       </div>
                       <div className="flex items-center">
                         {item.badge && (
-                          <span className={`px-2 py-1 text-xs rounded-full mr-2 ${
-                            item.isNew
-                              ? 'bg-blue-600 text-white'
-                              : 'bg-gray-700 text-gray-300'
-                          }`}>
+                          <span
+                            className={`px-2 py-1 text-xs rounded-full mr-2 ${
+                              item.isNew
+                                ? 'bg-blue-600 text-white'
+                                : 'bg-gray-700 text-gray-300'
+                            }`}
+                          >
                             {item.badge}
                           </span>
                         )}
                         {item.isNew && (
                           <Zap className="w-4 h-4 text-yellow-400 animate-pulse" />
                         )}
-                        <ChevronRight className={`w-4 h-4 ml-2 ${
-                          isActive ? 'text-blue-400' : 'text-gray-500'
-                        }`} />
+                        <ChevronRight
+                          className={`w-4 h-4 ml-2 ${
+                            isActive ? 'text-blue-400' : 'text-gray-500'
+                          }`}
+                        />
                       </div>
                     </div>
 
@@ -290,15 +300,19 @@ export function TrainingNavigation({
 }
 
 // Quick action buttons component
-export function TrainingQuickActions({ className = '' }: { className?: string }) {
+export function TrainingQuickActions({
+  className = '',
+}: {
+  className?: string;
+}) {
   return (
     <div className={`flex flex-wrap gap-3 ${className}`}>
       <Link
-        href="/training/realtime"
+        href="/training"
         className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-medium transition-colors"
       >
-        <Activity className="w-4 h-4 mr-2" />
-        View Live Data
+        <Target className="w-4 h-4 mr-2" />
+        View Training Record
       </Link>
       <button className="inline-flex items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-sm font-medium transition-colors">
         <Calendar className="w-4 h-4 mr-2" />

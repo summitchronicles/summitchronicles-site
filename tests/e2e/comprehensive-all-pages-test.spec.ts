@@ -15,7 +15,7 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
     { url: 'http://localhost:3000/support', name: 'Support/Funding', epic: 'Epic 5' }
   ];
 
-  let allPagesResults = [];
+  const allPagesResults = [];
 
   for (const pageTest of pagesToTest) {
     console.log(`\n🎯 TESTING ${pageTest.name.toUpperCase()} PAGE (${pageTest.epic})`);
@@ -57,7 +57,7 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
         };
       } else if (pageTest.name === 'Training') {
         specificFeatures = {
-          hasStravaData: pageContent.includes('Strava') || pageContent.includes('training'),
+          hasTrainingData: pageContent.includes('Intervals.icu') || pageContent.includes('training'),
           hasTrainingCharts: pageContent.includes('chart') || pageContent.includes('progress'),
           hasMethodology: pageContent.includes('methodology') || pageContent.includes('Training')
         };
@@ -157,9 +157,9 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
   console.log('\n🎯 COMPREHENSIVE ALL PAGES TEST RESULTS SUMMARY');
   console.log('='.repeat(60));
 
-  let totalPages = allPagesResults.length;
-  let passedPages = allPagesResults.filter(r => r.status === 'PASS').length;
-  let failedPages = allPagesResults.filter(r => r.status === 'FAIL').length;
+  const totalPages = allPagesResults.length;
+  const passedPages = allPagesResults.filter(r => r.status === 'PASS').length;
+  const failedPages = allPagesResults.filter(r => r.status === 'FAIL').length;
 
   console.log(`📊 TOTAL PAGES TESTED: ${totalPages}`);
   console.log(`✅ PASSED: ${passedPages}`);
@@ -199,7 +199,7 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
     console.log('🎉 ALL PAGES PASS - COMPREHENSIVE SUCCESS!');
     console.log('✅ Epic 1: Foundation & Swiss Spa Design System');
     console.log('✅ Epic 2: Personal Journey Documentation Platform');
-    console.log('✅ Epic 3: Strava Training Data Integration & Visualization');
+    console.log('✅ Epic 3: Training Data Integration & Visualization');
     console.log('✅ Epic 4: Community Engagement & Newsletter System');
     console.log('✅ Epic 5: Multi-Channel Funding & Sponsor Dashboard');
     console.log('✅ ALL EPICS SUCCESSFULLY IMPLEMENTED AND TESTED');

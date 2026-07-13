@@ -9,8 +9,7 @@ CREATE TABLE IF NOT EXISTS fitness_oauth_connections (
   expires_at TIMESTAMPTZ NOT NULL,
   connected_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  CONSTRAINT fitness_oauth_provider_check
-    CHECK (provider IN ('whoop', 'strava')),
+  CONSTRAINT fitness_oauth_provider_check CHECK (provider IN ('whoop')),
   CONSTRAINT fitness_oauth_scopes_array_check
     CHECK (jsonb_typeof(scopes) = 'array')
 );

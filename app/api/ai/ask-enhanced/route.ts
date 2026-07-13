@@ -47,7 +47,6 @@ async function getRelevantTrainingData(question: string): Promise<{
     'progress',
     'performance',
     'improvement',
-    'garmin',
     'activity',
   ];
   const questionLower = question.toLowerCase();
@@ -83,7 +82,6 @@ async function getRelevantTrainingData(question: string): Promise<{
       stats.by_source.historical
         ? `${stats.by_source.historical} historical`
         : null,
-      stats.by_source.garmin ? `${stats.by_source.garmin} Garmin` : null,
     ]
       .filter(Boolean)
       .join(', ');
@@ -125,7 +123,8 @@ async function getRelevantBlogContent(question: string): Promise<{
 
   const relevantBlogs = posts
     .map((post) => {
-      const haystack = `${post.title} ${post.excerpt} ${post.category}`.toLowerCase();
+      const haystack =
+        `${post.title} ${post.excerpt} ${post.category}`.toLowerCase();
       const score = keywords.reduce(
         (total, keyword) => total + (haystack.includes(keyword) ? 1 : 0),
         0
