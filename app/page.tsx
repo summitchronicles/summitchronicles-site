@@ -4,28 +4,18 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react'; // Added ArrowUpRight for the CTA
-import { Header } from './components/organisms/Header';
+import { ArrowRight, ArrowUpRight, Mountain, Wind, Map } from 'lucide-react';
+import { PublicLayout } from './components/layout/PublicLayout';
 import { VisualTransmissions } from './components/home/VisualTransmissions';
+import { LatestChronicles } from './components/home/LatestChronicles';
 import { getDaysToEverest } from '@/lib/everest-countdown';
-import { ArrowRight, Mountain, Wind, Map } from 'lucide-react';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-obsidian text-white flex flex-col selection:bg-summit-gold-900 selection:text-summit-gold-100">
-      {/* Skip link for accessibility */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-summit-gold text-black px-4 py-2 rounded-lg font-medium z-50 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-summit-gold"
-      >
-        Skip to main content
-      </a>
-      <Header />
-
-      {/* Main content - Full screen immersive design */}
-      <main id="main-content" className="flex-1">
-        {/* HERO V3: The Ghost Concept */}
-        <section className="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+    <PublicLayout>
+      <div className="min-h-screen overflow-x-hidden bg-obsidian text-white selection:bg-summit-gold-900 selection:text-summit-gold-100">
+        {/* Hero: visible brand promise over the expedition image */}
+        <section className="relative flex min-h-[82svh] items-end overflow-hidden sm:min-h-[84svh]">
           {/* 1. Background Image - Full Visibility */}
           <div className="absolute inset-0 z-0">
             <Image
@@ -36,29 +26,29 @@ export default function Home() {
               priority
               sizes="100vw"
             />
-            {/* Subtle Gradient only at the very bottom for text readability, keeping image clear */}
-            <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-transparent to-transparent opacity-90"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/45 to-black/20"></div>
+            <div className="absolute inset-0 bg-gradient-to-r from-obsidian/85 via-obsidian/30 to-transparent"></div>
           </div>
 
           <ParallaxHeroContent />
 
           {/* Scroll Indicator */}
-          <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 text-white/30">
+          <div className="absolute bottom-5 right-6 hidden text-white/30 md:block">
             <motion.div
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
               className="flex flex-col items-center gap-2"
             >
-              <div className="text-[10px] uppercase tracking-widest font-oswald text-white/40">
-                Mission Control
+              <div className="text-[10px] uppercase font-oswald text-white/40">
+                Scroll
               </div>
-              <div className="w-px h-12 bg-gradient-to-b from-summit-gold/50 to-transparent"></div>
+              <div className="w-px h-8 bg-gradient-to-b from-summit-gold/50 to-transparent"></div>
             </motion.div>
           </div>
         </section>
 
-        {/* Current Mission Statement - Inverted to Dark Glass */}
-        <section className="py-24 bg-obsidian relative">
+        {/* Current chapter */}
+        <section className="relative bg-obsidian pt-14 pb-24 sm:pt-16">
           {/* Background Grid Texture */}
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]"></div>
 
@@ -69,16 +59,17 @@ export default function Home() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-4xl md:text-5xl font-light text-white mb-8 tracking-wide">
-                Conquering the Seven Summits
+              <div className="mb-4 text-xs font-mono uppercase text-summit-gold">
+                Current chapter
+              </div>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-white mb-8">
+                Recovery, rebuilding, and the road to Everest
               </h2>
 
               <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-16">
-                Every great journey begins with a single step. Mine began in
-                2013, bedridden with tuberculosis, barely able to walk 50
-                meters. A year later, I stood on a Himalayan glacier. That
-                moment sparked a journey to conquer the Seven Summits, one
-                mountain at a time.
+                The objective remains unchanged. The work now is quieter:
+                physiotherapy, gait rebuild, strength, and a deliberate return
+                to mountain training before the next expedition chapter.
               </p>
 
               <div className="grid md:grid-cols-3 gap-6">
@@ -108,15 +99,19 @@ export default function Home() {
                   <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
                     <Map className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
                   </div>
-                  <div className="text-4xl font-light text-white mb-2">∞</div>
+                  <div className="text-4xl font-light text-white mb-2">
+                    2028
+                  </div>
                   <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">
-                    Validations
+                    Everest Target
                   </div>
                 </div>
               </div>
             </motion.div>
           </div>
         </section>
+
+        <LatestChronicles />
 
         {/* Expedition Gallery Preview - Dark & Immersive */}
         <section className="py-0 bg-black relative z-10">
@@ -192,33 +187,8 @@ export default function Home() {
 
         {/* Visual Transmissions - Live Feed */}
         <VisualTransmissions />
-
-        {/* Hidden accessibility elements for testing - SSR-rendered */}
-        <div className="sr-only">
-          <h2>Seven Summits Challenge Progress</h2>
-          <h3>Training Methodology</h3>
-          <h4>Equipment and Safety</h4>
-          <Image
-            src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-            alt="Sunith Kumar climbing Mount Kilimanjaro summit, showing determination and adventure spirit"
-            width={1}
-            height={1}
-          />
-          <Image
-            src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-            alt="Training session data visualization showing progress towards Seven Summits challenge"
-            width={1}
-            height={1}
-          />
-          <Image
-            src="data:image/webp;base64,UklGRhwAAABXRUJQVlA4IBAAAAAwAQCdASoBAAEAAgA0JaQAA3AA/v3AgAA="
-            alt="Mountaineering equipment and gear setup for high-altitude expedition climbing"
-            width={1}
-            height={1}
-          />
-        </div>
-      </main>
-    </div>
+      </div>
+    </PublicLayout>
   );
 }
 
@@ -230,70 +200,67 @@ function ParallaxHeroContent() {
   return (
     <motion.div
       style={{ y, opacity }}
-      className="relative z-10 text-center px-6 w-full max-w-7xl mx-auto flex flex-col items-center justify-center h-full pb-20"
+      className="relative z-10 w-full max-w-7xl mx-auto px-4 pt-24 pb-8 sm:px-8 sm:pb-10 lg:px-12 lg:pb-12"
     >
-      {/* The "Hook" - Minimal Top Label */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.2 }}
-        className="mb-8 flex items-center justify-center gap-4 text-xs font-mono tracking-[0.3em] text-white/60 uppercase"
-      >
+      <div className="mb-5 flex flex-wrap items-center gap-3 text-xs font-mono text-white/80 uppercase">
         <span>Project 7 Summits</span>
         <span className="w-1 h-1 bg-summit-gold rounded-full"></span>
         <span>Est. 2013</span>
-      </motion.div>
+      </div>
 
-      {/* THE GHOST TITLE */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5, ease: 'easeOut' }}
-        className="relative group cursor-default"
-      >
-        {/* "SUMMIT" - Outline Only */}
-        <div className="text-[12vw] md:text-[160px] leading-[0.8] font-oswald font-bold uppercase tracking-tighter text-ghost group-hover:text-white/10 transition-colors duration-700 mb-4 select-none">
-          Summit
-        </div>
-
-        {/* "CHRONICLES" - Outline with Gold Hover Fill */}
-        <div className="text-[12vw] md:text-[160px] leading-[0.8] font-oswald font-bold uppercase tracking-tighter text-ghost group-hover:text-gold-metallic group-hover:!text-stroke-0 transition-all duration-500 select-none">
-          Chronicles
-        </div>
-
-        {/* Semantic H1 for SEO */}
-        <h1 className="sr-only">
-          Summit Chronicles - The Seven Summits Journey
+      <div className="w-full max-w-4xl">
+        <h1 className="font-oswald text-[72px] font-bold uppercase leading-[0.86] text-white drop-shadow-[0_4px_28px_rgba(0,0,0,0.85)] sm:text-7xl md:text-8xl lg:text-9xl">
+          <span className="block">Summit</span>
+          <span className="block">Chronicles</span>
         </h1>
 
-        {/* Hover Hint */}
-        <Link href="/expeditions">
-          <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500 text-xs text-summit-gold font-mono tracking-widest cursor-pointer hover:underline underline-offset-4">
-            EXPLORE THE JOURNEY
+        <p className="mt-5 max-w-xl text-base leading-7 text-white/86 drop-shadow-[0_2px_18px_rgba(0,0,0,0.75)] sm:text-lg md:max-w-2xl md:text-xl">
+          Follow Sunith Kumar&apos;s Seven Summits journey from recovery to
+          high-altitude expedition, with Everest as the next defining climb.
+        </p>
+
+        <div className="mt-6 grid w-full max-w-xl grid-cols-3 gap-4 text-white sm:gap-6">
+          <div>
+            <div className="text-2xl font-oswald font-bold sm:text-3xl">
+              4/7
+            </div>
+            <div className="text-xs uppercase text-white/65">Summits done</div>
           </div>
-        </Link>
-      </motion.div>
+          <div>
+            <div className="text-2xl font-oswald font-bold sm:text-3xl">
+              {getDaysToEverest()}
+            </div>
+            <div className="text-xs uppercase text-white/65">
+              Days to Everest
+            </div>
+          </div>
+          <div>
+            <div className="text-2xl font-oswald font-bold sm:text-3xl">
+              2013
+            </div>
+            <div className="text-xs uppercase text-white/65">
+              Journey started
+            </div>
+          </div>
+        </div>
+      </div>
 
-      {/* New CTA: JOIN THE MISSION */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1 }}
-        className="mt-16"
-      >
+      <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
         <Link
-          href="/support"
-          className="group relative inline-flex items-center gap-4 px-8 py-4 bg-white/5 border border-white/10 rounded-full backdrop-blur-md overflow-hidden transition-all duration-300 hover:bg-white/10 hover:border-summit-gold/50 hover:scale-105 hover:shadow-[0_0_40px_-10px_rgba(212,175,55,0.3)]"
+          href="/expeditions"
+          className="inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-md bg-summit-gold px-5 py-3 text-sm font-oswald font-bold uppercase text-obsidian shadow-[0_18px_45px_-22px_rgba(212,175,55,0.8)] transition-colors hover:bg-summit-gold-300 focus:outline-none focus:ring-2 focus:ring-summit-gold focus:ring-offset-2 focus:ring-offset-obsidian sm:w-auto"
         >
-          <span className="text-sm font-oswald font-bold tracking-widest text-white group-hover:text-summit-gold transition-colors">
-            JOIN THE MISSION
-          </span>
-          <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-summit-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />
-
-          {/* Subtle Glow Effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+          Explore the Journey
+          <ArrowRight className="h-4 w-4" />
         </Link>
-      </motion.div>
+        <Link
+          href="/blog"
+          className="inline-flex min-h-12 w-full items-center justify-center gap-3 rounded-md border border-white/25 bg-black/20 px-5 py-3 text-sm font-oswald font-bold uppercase text-white backdrop-blur-sm transition-colors hover:border-summit-gold hover:text-summit-gold focus:outline-none focus:ring-2 focus:ring-summit-gold focus:ring-offset-2 focus:ring-offset-obsidian sm:w-auto"
+        >
+          Read the Latest
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </div>
     </motion.div>
   );
 }

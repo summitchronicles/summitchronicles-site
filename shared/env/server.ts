@@ -1,19 +1,18 @@
 import { z } from 'zod';
 
-const optionalString = z.preprocess(
-  (value) => {
-    if (typeof value !== 'string') {
-      return value;
-    }
+const optionalString = z.preprocess((value) => {
+  if (typeof value !== 'string') {
+    return value;
+  }
 
-    const trimmed = value.trim();
-    return trimmed.length === 0 ? undefined : trimmed;
-  },
-  z.string().min(1).optional()
-);
+  const trimmed = value.trim();
+  return trimmed.length === 0 ? undefined : trimmed;
+}, z.string().min(1).optional());
 
 const serverEnvSchema = z.object({
-  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'test', 'production'])
+    .default('development'),
   INTERNAL_API_KEY: optionalString,
   TRAINING_INGEST_SECRET: optionalString,
   ALLOWED_ORIGINS: optionalString,
@@ -22,6 +21,12 @@ const serverEnvSchema = z.object({
   GARMIN_PASSWORD: optionalString,
   INTERVALS_ICU_API_KEY: optionalString,
   INTERVALS_ICU_ATHLETE_ID: optionalString,
+  STRAVA_CLIENT_ID: optionalString,
+  STRAVA_CLIENT_SECRET: optionalString,
+  STRAVA_REFRESH_TOKEN: optionalString,
+  WHOOP_CLIENT_ID: optionalString,
+  WHOOP_CLIENT_SECRET: optionalString,
+  WHOOP_REFRESH_TOKEN: optionalString,
   CLOUDFLARE_R2_ACCOUNT_ID: optionalString,
   CLOUDFLARE_R2_ACCESS_KEY_ID: optionalString,
   CLOUDFLARE_R2_SECRET_ACCESS_KEY: optionalString,
@@ -43,7 +48,9 @@ export type ServerEnv = z.infer<typeof serverEnvSchema>;
 
 let cachedEnv: ServerEnv | null = null;
 
-export function getServerEnv(overrides?: Partial<Record<keyof ServerEnv, string | undefined>>): ServerEnv {
+export function getServerEnv(
+  overrides?: Partial<Record<keyof ServerEnv, string | undefined>>
+): ServerEnv {
   if (overrides) {
     return serverEnvSchema.parse({
       ...process.env,
@@ -64,7 +71,9 @@ export function resetServerEnvCache() {
 
 export function getAllowedOrigins(env: ServerEnv = getServerEnv()): string[] {
   const configuredOrigins = env.ALLOWED_ORIGINS
-    ? env.ALLOWED_ORIGINS.split(',').map((origin) => origin.trim()).filter(Boolean)
+    ? env.ALLOWED_ORIGINS.split(',')
+        .map((origin) => origin.trim())
+        .filter(Boolean)
     : [];
 
   const defaults =
@@ -91,7 +100,9 @@ export function requireGarminCredentials(env: ServerEnv = getServerEnv()) {
 
 export function requireIntervalsCredentials(env: ServerEnv = getServerEnv()) {
   const schema = z.object({
-    INTERVALS_ICU_API_KEY: z.string().min(1, 'INTERVALS_ICU_API_KEY is required'),
+    INTERVALS_ICU_API_KEY: z
+      .string()
+      .min(1, 'INTERVALS_ICU_API_KEY is required'),
     INTERVALS_ICU_ATHLETE_ID: z
       .string()
       .min(1, 'INTERVALS_ICU_ATHLETE_ID is required'),

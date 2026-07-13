@@ -2,6 +2,7 @@
 import { blogPost } from './blogPost';
 import { trainingEntry } from './trainingEntry';
 import { expeditionUpdate } from './expeditionUpdate';
+import { expedition } from './expedition';
 import { mediaAsset } from './mediaAsset';
 import { author } from './author';
 import { category } from './category';
@@ -14,6 +15,7 @@ import { weatherSummary } from './weatherSummary';
 export const schemaTypes = [
   // Content Types
   blogPost,
+  expedition,
   trainingEntry,
   expeditionUpdate,
   personalStory,

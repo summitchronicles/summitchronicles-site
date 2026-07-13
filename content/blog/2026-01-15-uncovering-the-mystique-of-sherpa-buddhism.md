@@ -6,7 +6,7 @@ tags:
   - Sherpa Buddhism
   - Mysticism
   - Climbing Culture
-status: published
+status: draft
 image: /uploads/image.jpg
 ---
 

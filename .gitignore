@@ -19,6 +19,12 @@ test-results/
 .env
 .env.*
 .DS_Store
+.codex/
+
+# runtime training artifacts
+data/training/archive/
+data/training/latest-status.json
+data/training/latest-summary.json
 
 # logs
 npm-debug.log*

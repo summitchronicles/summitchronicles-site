@@ -70,7 +70,9 @@ describe('training metrics domain', () => {
   it('returns the documented fallback payload when live data is unavailable', () => {
     const fallback = getFallbackTrainingMetrics();
 
-    expect(fallback.currentStats.totalElevationThisYear.value).toBe('356K m');
+    expect(fallback.currentStats.totalElevationThisYear.value).toBe('--');
+    expect(fallback.currentStats.currentRestingHR.value).toBe('--');
+    expect(fallback.predictions).toHaveLength(0);
     expect(fallback.trainingPhases[0].phase).toBe('Base Training');
     expect(fallback.recentActivities).toHaveLength(0);
   });
@@ -95,9 +97,7 @@ describe('getTrainingMetricsResponse', () => {
     expect(response.success).toBe(false);
     expect(response.degraded).toBe(true);
     expect(response.source).toBe('fallback');
-    expect(response.metrics.currentStats.totalElevationThisYear.value).toBe(
-      '356K m'
-    );
+    expect(response.metrics.currentStats.totalElevationThisYear.value).toBe('--');
     expect(response.errors).toContain('Intervals API Error: Forbidden');
   });
 

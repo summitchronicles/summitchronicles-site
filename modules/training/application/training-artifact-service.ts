@@ -18,6 +18,7 @@ import {
   type PersistedTrainingSummaryArtifact,
   type TrainingArtifactStore,
 } from '@/modules/training/infrastructure/training-snapshot-store';
+import { getTrainingIntegrationStatuses } from '@/modules/training/application/training-integrations';
 
 interface TrainingArtifactDependencies {
   now?: Date;
@@ -179,7 +180,15 @@ function mergeSummaryWithStatus(
   status: PersistedTrainingStatusArtifact | null
 ): TrainingDashboardResponse {
   if (!status) {
-    return response;
+    return {
+      ...response,
+      summary: {
+        ...response.summary,
+        integrations:
+          response.summary.integrations ??
+          getTrainingIntegrationStatuses(response.summary.telemetry.state),
+      },
+    };
   }
 
   const telemetryState =
@@ -198,6 +207,9 @@ function mergeSummaryWithStatus(
     lastUpdated,
     summary: {
       ...response.summary,
+      integrations:
+        response.summary.integrations ??
+        getTrainingIntegrationStatuses(telemetryState),
       telemetry: {
         ...response.summary.telemetry,
         isLive: status.state === 'live',
@@ -232,6 +244,9 @@ function createUnavailableDashboardResponse(
         lastUpdated,
         errors,
       },
+      integrations: getTrainingIntegrationStatuses(
+        status?.state === 'degraded' ? 'degraded' : 'cached'
+      ),
       metrics: getFallbackTrainingMetrics(),
       latestMissionLog: null,
       missionLogs: [],

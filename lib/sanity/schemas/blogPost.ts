@@ -39,6 +39,58 @@ export const blogPost = defineType({
       validation: (Rule) => Rule.required().min(50).max(300),
     }),
     defineField({
+      name: 'contentType',
+      title: 'Entry type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Expedition update', value: 'expedition-update' },
+          { title: 'Training log', value: 'training-log' },
+          { title: 'Field note', value: 'field-note' },
+          { title: 'Essay', value: 'essay' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'field-note',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'workflowStatus',
+      title: 'Editorial status',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Draft', value: 'draft' },
+          { title: 'In review', value: 'review' },
+          { title: 'Scheduled', value: 'scheduled' },
+          { title: 'Published', value: 'published' },
+          { title: 'Corrected', value: 'corrected' },
+          { title: 'Archived', value: 'archived' },
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'draft',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'expedition',
+      title: 'Related expedition',
+      type: 'reference',
+      to: [{ type: 'expedition' }],
+      hidden: ({ document }) => document?.contentType !== 'expedition-update',
+    }),
+    defineField({
+      name: 'occurredAt',
+      title: 'When this happened',
+      type: 'datetime',
+      description: 'The event date, when different from the publication date.',
+    }),
+    defineField({
+      name: 'location',
+      title: 'Location',
+      type: 'string',
+    }),
+    defineField({
       name: 'content',
       title: 'Content',
       type: 'array',
@@ -132,9 +184,10 @@ export const blogPost = defineType({
     }),
     defineField({
       name: 'isPublished',
-      title: 'Published',
+      title: 'Legacy published flag',
       type: 'boolean',
       initialValue: false,
+      hidden: true,
     }),
     defineField({
       name: 'isFeatured',
@@ -168,19 +221,51 @@ export const blogPost = defineType({
         },
       ],
     }),
+    defineField({
+      name: 'sources',
+      title: 'Sources and references',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'label',
+              title: 'Source label',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'url',
+              title: 'Source URL',
+              type: 'url',
+              validation: (Rule) =>
+                Rule.required().uri({ scheme: ['http', 'https'] }),
+            }),
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'correctionNote',
+      title: 'Correction note',
+      type: 'text',
+      rows: 3,
+      hidden: ({ document }) => document?.workflowStatus !== 'corrected',
+    }),
   ],
   preview: {
     select: {
       title: 'title',
       author: 'author.name',
       media: 'featuredImage',
-      published: 'isPublished',
+      status: 'workflowStatus',
     },
     prepare(selection) {
-      const { author, published } = selection;
+      const { author, status } = selection;
       return {
         ...selection,
-        subtitle: `${author ? `by ${author}` : 'No author'} ${published ? '✅' : '🔒'}`,
+        subtitle: `${author ? `by ${author}` : 'No author'} / ${status || 'legacy'}`,
       };
     },
   },

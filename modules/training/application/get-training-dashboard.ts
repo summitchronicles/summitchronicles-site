@@ -15,6 +15,7 @@ import type {
   TrainingSourceSnapshot,
 } from '@/modules/training/application/training-snapshot-service';
 import type { TrainingSnapshotStore } from '@/modules/training/infrastructure/training-snapshot-store';
+import { getTrainingIntegrationStatuses } from '@/modules/training/application/training-integrations';
 
 interface TrainingDashboardDependencies {
   now?: Date;
@@ -64,6 +65,9 @@ export async function getTrainingDashboardResponse(
         lastUpdated: metricsResponse.lastUpdated,
         errors: metricsResponse.errors,
       },
+      integrations: getTrainingIntegrationStatuses(
+        metricsResponse.telemetryState
+      ),
       metrics: metricsResponse.metrics,
       latestMissionLog,
       missionLogs: resolvedSnapshot.missionLogs,
@@ -71,4 +75,3 @@ export async function getTrainingDashboardResponse(
     },
   };
 }
-

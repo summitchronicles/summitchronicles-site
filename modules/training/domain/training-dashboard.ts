@@ -28,14 +28,31 @@ export interface TrainingWorkoutStats {
   by_source: { historical: number; garmin: number; intervals: number };
 }
 
+export type TrainingTelemetryState = 'live' | 'cached' | 'degraded';
+
+export interface TrainingIntegrationStatus {
+  id: 'intervals.icu' | 'whoop' | 'strava' | 'garmin';
+  label: string;
+  role: string;
+  state:
+    | 'live'
+    | 'cached'
+    | 'connected'
+    | 'setup-required'
+    | 'not-configured'
+    | 'paused'
+    | 'unavailable';
+}
+
 export interface TrainingDashboardSummary {
   telemetry: {
     isLive: boolean;
-    state: 'live' | 'cached' | 'degraded';
+    state: TrainingTelemetryState;
     source: 'intervals.icu' | 'fallback';
     lastUpdated: string;
     errors: string[];
   };
+  integrations: TrainingIntegrationStatus[];
   metrics: TrainingMetricsPayload;
   latestMissionLog: TrainingInsight | null;
   missionLogs: TrainingInsight[];
@@ -90,7 +107,9 @@ export function filterInsightsToObservedWeeks(
   insights: TrainingInsight[],
   recentActivities: TrainingMetricsPayload['recentActivities']
 ): TrainingInsight[] {
-  const observedWeekKeys = new Set(getObservedTrainingWeekKeys(recentActivities));
+  const observedWeekKeys = new Set(
+    getObservedTrainingWeekKeys(recentActivities)
+  );
 
   if (observedWeekKeys.size === 0) {
     return [];
@@ -108,7 +127,9 @@ export function findLatestTrainingInsight(
   }
 
   const targetWeekStart = getMondayWeekStart(now);
-  const exactMatch = insights.find((insight) => insight.weekStart === targetWeekStart);
+  const exactMatch = insights.find(
+    (insight) => insight.weekStart === targetWeekStart
+  );
 
   if (exactMatch) {
     return exactMatch;
@@ -153,7 +174,8 @@ export function buildProcessedMissionLogs(
       const totalDistanceKm = sumBy(weekActivities, 'distance') / 1000;
       const totalElevationGain = sumBy(weekActivities, 'elevationGain');
       const dominantActivityType = getDominantActivityType(weekActivities);
-      const distinctActivityTypes = getDistinctActivityTypeCount(weekActivities);
+      const distinctActivityTypes =
+        getDistinctActivityTypeCount(weekActivities);
       const durationHours = totalDurationSeconds / 3600;
 
       const summarySegments = [
@@ -218,8 +240,7 @@ export function calculateTrainingWorkoutStats(
     }
   });
 
-  stats.total_duration_hours =
-    Math.round(stats.total_duration_hours * 10) / 10;
+  stats.total_duration_hours = Math.round(stats.total_duration_hours * 10) / 10;
   stats.total_distance_km = Math.round(stats.total_distance_km * 10) / 10;
   stats.total_elevation_m = Math.round(stats.total_elevation_m);
 
@@ -234,14 +255,19 @@ function sumBy(
   activities: NormalizedTrainingActivity[],
   key: 'duration' | 'distance' | 'elevationGain'
 ): number {
-  return activities.reduce((total, activity) => total + (activity[key] || 0), 0);
+  return activities.reduce(
+    (total, activity) => total + (activity[key] || 0),
+    0
+  );
 }
 
 function getDistinctActivityTypeCount(
   activities: NormalizedTrainingActivity[]
 ): number {
   return new Set(
-    activities.map((activity) => getActivityTypeLabel(activity.activityType?.typeKey))
+    activities.map((activity) =>
+      getActivityTypeLabel(activity.activityType?.typeKey)
+    )
   ).size;
 }
 
@@ -257,9 +283,9 @@ function getDominantActivityType(
     {} as Record<string, number>
   );
 
-  const dominantEntry =
-    Object.entries(counts).sort((left, right) => right[1] - left[1])[0] ??
-    ['Training', 0];
+  const dominantEntry = Object.entries(counts).sort(
+    (left, right) => right[1] - left[1]
+  )[0] ?? ['Training', 0];
 
   return dominantEntry[0];
 }

@@ -16,6 +16,7 @@ interface EditorSection {
 interface PublishPostData {
   title: string;
   subtitle: string;
+  contentType: 'expedition-update' | 'training-log' | 'field-note' | 'essay';
   category: string;
   author: string;
   heroImage: string; // This might be a placeholder path OR a Sanity Asset ID/URL
@@ -30,35 +31,19 @@ export async function publishPost(data: PublishPostData) {
 
     // 2. Fetch or Create Author (Simple lookup by name for now)
     // In a real app, this would be authenticated user
-    const authorQuery = `*[_type == "author" && name match "${data.author}"][0]._id`;
-    let authorId = await sanityWriteClient.fetch(authorQuery);
+    const authorId = await sanityWriteClient.fetch<string | null>(
+      `*[_type == "author" && name == $author][0]._id`,
+      { author: data.author }
+    );
 
     if (!authorId) {
-      // Fallback: Fetch ANY author or create a placeholder
-      const anyAuthor = await sanityWriteClient.fetch(
-        `*[_type == "author"][0]._id`
-      );
-      authorId = anyAuthor;
-
-      if (!authorId) {
-        throw new Error(
-          'No author found. Please create an author in Sanity Studio first.'
-        );
-      }
+      throw new Error(`No Sanity author exists for "${data.author}".`);
     }
 
-    // 3. Fetch Category ID
-    // We'll search for a category matching the input string, or default to "Stories"
-    const categoryQuery = `*[_type == "category" && title match "${data.category}"][0]._id`;
-    let categoryId = await sanityWriteClient.fetch(categoryQuery);
-
-    if (!categoryId) {
-        // Fallback to first category
-       const anyCategory = await sanityWriteClient.fetch(
-        `*[_type == "category"][0]._id`
-      );
-      categoryId = anyCategory;
-    }
+    const categoryId = await sanityWriteClient.fetch<string | null>(
+      `*[_type == "category" && title == $category][0]._id`,
+      { category: data.category }
+    );
 
     // 4. Convert Sections to Portable Text
     const contentBlocks = data.sections.map((section) => {
@@ -78,23 +63,25 @@ export async function publishPost(data: PublishPostData) {
           // Real Sanity Image
           return {
             _type: 'image',
+            _key: section.id,
             asset: {
               _type: 'reference',
               _ref: section.imageId,
             },
+            alt: section.caption || `Story image for ${data.title}`,
             caption: section.caption,
           };
         } else {
           // Placeholder / External Image (fallback to text representation)
           return {
-             _type: 'block',
-             style: 'normal',
-             children: [
-                 {
-                     _type: 'span',
-                     text: `[Image Placeholder: ${section.caption || 'No caption'} - ${section.image}]`
-                 }
-             ]
+            _type: 'block',
+            style: 'normal',
+            children: [
+              {
+                _type: 'span',
+                text: `[Image Placeholder: ${section.caption || 'No caption'} - ${section.image}]`,
+              },
+            ],
           };
         }
       } else {
@@ -115,7 +102,16 @@ export async function publishPost(data: PublishPostData) {
     });
 
     // 5. Construct document payload for Sanity
+    const existingId = await sanityWriteClient.fetch<string | null>(
+      `*[_type == "blogPost" && slug.current == $slug][0]._id`,
+      { slug }
+    );
+    const documentId = (existingId || `blogPost.${slug}`).replace(
+      /^drafts\./,
+      ''
+    );
     const doc: any = {
+      _id: documentId,
       _type: 'blogPost',
       title: data.title,
       slug: {
@@ -123,6 +119,8 @@ export async function publishPost(data: PublishPostData) {
         current: slug,
       },
       excerpt: data.subtitle,
+      contentType: data.contentType,
+      workflowStatus: 'published',
       author: {
         _type: 'reference',
         _ref: authorId,
@@ -140,12 +138,14 @@ export async function publishPost(data: PublishPostData) {
       publishedAt: new Date().toISOString(),
       isPublished: true,
       isFeatured: false,
+      tags: [data.category, 'Summit Chronicles'].filter(Boolean),
     };
 
     // Attach Featured Image if available as a Sanity Asset
     if (data.heroImageId) {
       doc.featuredImage = {
         _type: 'image',
+        alt: `Cover image for ${data.title}`,
         asset: {
           _type: 'reference',
           _ref: data.heroImageId,
@@ -153,7 +153,7 @@ export async function publishPost(data: PublishPostData) {
       };
     }
 
-    const result = await sanityWriteClient.create(doc);
+    const result = await sanityWriteClient.createOrReplace(doc);
 
     revalidatePath('/blog');
     revalidatePath('/blog/cms');

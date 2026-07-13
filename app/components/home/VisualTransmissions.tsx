@@ -21,22 +21,11 @@ import { RecoveryStatus } from './RecoveryStatus';
 
 export const VisualTransmissions = () => {
   const { posts, loading: instaLoading } = useInstagramFeed();
-  const { metrics, loading: metricsLoading } = useTrainingMetrics();
+  const { metrics } = useTrainingMetrics();
 
-  // Parse Garmin Data (or fallback)
-  // Note: metrics comes from useTrainingMetrics. Since we just added bodyBattery to the API
-  // but maybe not the TS interface yet, we cast to any or check safely.
   const apiMetrics = metrics as any;
 
-  const displayData = {
-    // The API now returns bodyBattery and stressScore at the root level of metrics
-    bodyBattery: apiMetrics?.bodyBattery || 53, // Handle 0/null/undefined
-    stressScore: apiMetrics?.stressScore || 24, // Handle 0/null/undefined
-    trainingStatus:
-      metrics?.trainingPhases?.find((p) => p.status === 'current')?.focus ||
-      'Recovery',
-    hrvStatus: apiMetrics?.hrvStatus || 'Balanced', // Default/Fallback
-  };
+  const hrvStatus = apiMetrics?.hrvStatus || 'Unavailable';
 
   // Get latest log from recent activities (description or name)
   const latestActivity = metrics?.recentActivities?.[0];
@@ -63,11 +52,11 @@ export const VisualTransmissions = () => {
           <div className="flex items-center gap-4 text-xs font-mono text-gray-400">
             <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
               <div className="w-2 h-2 bg-summit-gold rounded-full animate-pulse"></div>
-              <span>GARMIN: CONNECTED</span>
+              <span>TRAINING FEED</span>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
               <Activity className="w-3 h-3" />
-              <span>HRV: {displayData.hrvStatus}</span>
+              <span>HRV: {hrvStatus}</span>
             </div>
           </div>
         </div>

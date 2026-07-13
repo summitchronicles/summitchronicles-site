@@ -8,7 +8,6 @@ export const sanityConfig = {
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   useCdn: process.env.NODE_ENV === 'production',
   apiVersion: '2024-01-01',
-  token: process.env.SANITY_API_TOKEN,
 };
 
 // Create Sanity client (public)
@@ -17,6 +16,7 @@ export const sanityClient: SanityClient = createClient(sanityConfig);
 // Write client for CMS operations (requires token)
 export const sanityWriteClient: SanityClient = createClient({
   ...sanityConfig,
+  token: process.env.SANITY_API_TOKEN,
   useCdn: false,
   perspective: 'raw', // See all content including drafts
 });
@@ -24,6 +24,7 @@ export const sanityWriteClient: SanityClient = createClient({
 // Preview client for draft content
 export const sanityPreviewClient: SanityClient = createClient({
   ...sanityConfig,
+  token: process.env.SANITY_API_TOKEN,
   useCdn: false,
   perspective: 'previewDrafts', // See drafts and published content
 });
@@ -38,7 +39,10 @@ export function urlFor(source: any) {
 // GROQ queries for different content types
 export const queries = {
   // Blog posts (updated for new schema)
-  allPosts: `*[_type == "blogPost" && isPublished == true] | order(publishedAt desc) {
+  allPosts: `*[_type == "blogPost" && (
+    workflowStatus in ["published", "corrected"] ||
+    (!defined(workflowStatus) && isPublished == true)
+  )] | order(publishedAt desc) {
     _id,
     title,
     slug,
@@ -56,12 +60,20 @@ export const queries = {
     featuredImage,
     content,
     tags,
-    isFeatured
+    isFeatured,
+    contentType,
+    workflowStatus,
+    occurredAt,
+    location,
+    expedition->{name, slug, mountain},
+    sources,
+    correctionNote
   }`,
 
-  postBySlug: (
-    slug: string
-  ) => `*[_type == "blogPost" && slug.current == "${slug}" && isPublished == true][0] {
+  postBySlug: `*[_type == "blogPost" && slug.current == $slug && (
+    workflowStatus in ["published", "corrected"] ||
+    (!defined(workflowStatus) && isPublished == true)
+  )][0] {
     _id,
     title,
     slug,
@@ -83,7 +95,14 @@ export const queries = {
     content,
     tags,
     seo,
-    isFeatured
+    isFeatured,
+    contentType,
+    workflowStatus,
+    occurredAt,
+    location,
+    expedition->{name, slug, mountain},
+    sources,
+    correctionNote
   }`,
 
   // Training entries
@@ -165,6 +184,24 @@ export const queries = {
     coordinates
   }`,
 
+  allExpeditions: `*[_type == "expedition" && isPublic == true] | order(year desc) {
+    _id,
+    name,
+    slug,
+    mountain,
+    location,
+    elevationFeet,
+    startDate,
+    displayDate,
+    year,
+    status,
+    summary,
+    coverImage,
+    legacyImagePath,
+    isSevenSummit,
+    stats
+  }`,
+
   // Media gallery
   galleryImages: `*[_type == "gallery"] | order(captureDate desc) {
     _id,
@@ -201,7 +238,7 @@ export async function getAllPosts() {
 
 export async function getPostBySlug(slug: string) {
   try {
-    return await sanityClient.fetch(queries.postBySlug(slug));
+    return await sanityClient.fetch(queries.postBySlug, { slug });
   } catch (error) {
     console.error('Error fetching post:', error);
     return null;

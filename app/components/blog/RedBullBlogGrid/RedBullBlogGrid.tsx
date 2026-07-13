@@ -5,15 +5,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
-  Calendar,
-  Clock,
-  Eye,
-  TrendingUp,
+  ArrowRight,
+  BookOpen,
+  CalendarDays,
+  Clock3,
   Mountain,
-  Award,
-  User,
-  ChevronRight,
-  Plus,
+  Search,
+  X,
 } from 'lucide-react';
 
 interface BlogPost {
@@ -24,349 +22,392 @@ interface BlogPost {
   author: string;
   date: string;
   readTime: string;
-  views: string;
   image: string;
-  featured: boolean;
+}
+
+interface ApiPost {
+  slug: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  category?: string;
+  author?: string;
+  date?: string;
+  readTime?: string;
+  image?: string;
+  heroImage?: string;
 }
 
 interface RedBullBlogGridProps {
   className?: string;
 }
 
-export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
-  const [generatedPosts, setGeneratedPosts] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+const FALLBACK_IMAGE = '/images/sunith-visionary-planning.png';
 
-  // Fetch posts from API
+export function RedBullBlogGrid({ className = '' }: RedBullBlogGridProps) {
+  const [posts, setPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [query, setQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
+
   useEffect(() => {
-    const fetchPosts = async () => {
+    async function fetchPosts() {
       try {
         const response = await fetch('/api/posts');
+        if (!response.ok) throw new Error('Stories request failed');
+
         const data = await response.json();
-        if (data.success) {
-          setGeneratedPosts(data.posts);
-        }
-      } catch (error) {
-        console.error('Error fetching posts:', error);
+        if (!data.success) throw new Error('Stories response was unsuccessful');
+
+        setPosts(
+          data.posts.map((post: ApiPost) => ({
+            slug: post.slug,
+            title: post.title || 'Untitled story',
+            subtitle:
+              post.subtitle ||
+              post.description ||
+              'A field note from the Summit Chronicles journey.',
+            category: normalizeCategory(post.category),
+            author: post.author || 'Sunith Kumar',
+            date: formatDate(post.date),
+            readTime: normalizeReadTime(post.readTime),
+            image: post.image || post.heroImage || FALLBACK_IMAGE,
+          }))
+        );
+      } catch (fetchError) {
+        console.error('Error fetching posts:', fetchError);
+        setError(true);
       } finally {
         setLoading(false);
       }
-    };
+    }
 
-    fetchPosts();
+    void fetchPosts();
   }, []);
 
-  // Convert generated posts to component format
-  const convertedPosts: BlogPost[] = generatedPosts.map((post) => ({
-    slug: post.slug,
-    title: post.title || 'Untitled',
-    subtitle: post.subtitle || post.excerpt || '',
-    category: (post.category || 'STORY').toUpperCase(),
-    author: 'Sunith Kumar',
-    date: post.date
-      ? new Date(post.date).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })
-      : 'Recent',
-    readTime: `${post.readTime || 5} min read`,
-    views: '2.1K', // You could track this in the future
-    image: post.heroImage || '/stories/default.jpg',
-    featured: false, // You could add featured flag to frontmatter
-  }));
-
-  // Empty array - no sample posts
-  const samplePosts: BlogPost[] = [];
-
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'PURPOSE':
-        return Mountain;
-      case 'MINDSET':
-        return TrendingUp;
-      case 'STORIES':
-        return User;
-      case 'REALITY':
-        return Eye;
-      default:
-        return Mountain;
-    }
-  };
-
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'PURPOSE':
-        return 'bg-blue-600';
-      case 'MINDSET':
-        return 'bg-purple-600';
-      case 'STORIES':
-        return 'bg-green-600';
-      case 'REALITY':
-        return 'bg-orange-600';
-      default:
-        return 'bg-red-600';
-    }
-  };
-
-  // Use generated posts if available, fallback to sample posts
-  const posts = convertedPosts.length > 0 ? convertedPosts : samplePosts;
-
-  const featuredPost = posts.find((post) => post.featured) || null;
-  const regularPosts = posts.filter((post) => !post.featured);
-
+  const categories = [
+    'All',
+    ...Array.from(new Set(posts.map((post) => post.category))),
+  ];
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredPosts = posts.filter((post) => {
+    const matchesCategory =
+      activeCategory === 'All' || post.category === activeCategory;
+    const matchesQuery =
+      !normalizedQuery ||
+      [post.title, post.subtitle, post.category, post.author]
+        .join(' ')
+        .toLowerCase()
+        .includes(normalizedQuery);
+    return matchesCategory && matchesQuery;
+  });
+  const leadStory = filteredPosts[0];
+  const archive = filteredPosts.slice(1);
   return (
-    <div className={`bg-obsidian text-white min-h-screen ${className}`}>
-      {/* Header */}
-      <section className="relative py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="/images/sunith-visionary-planning.png"
-            alt="Field Stories from the Mountains"
-            fill
-            className="object-cover opacity-60 grayscale scale-105"
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-obsidian"></div>
-        </div>
+    <div className={`min-h-screen bg-[#080808] text-white ${className}`}>
+      <section className="relative flex min-h-[72svh] items-end overflow-hidden border-b border-white/10 sm:min-h-[78svh]">
+        <Image
+          src="/images/sunith-visionary-planning.png"
+          alt="Sunith Kumar reviewing the route and expedition plan"
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-black/55 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/20 to-transparent" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center space-y-6"
-          >
-            <div className="inline-block px-3 py-1 mb-4 text-xs font-mono text-summit-gold-400 border border-summit-gold-900/50 rounded-full bg-summit-gold-900/10 backdrop-blur-md">
-              MISSION REPORTS
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-12 sm:px-8 sm:pb-16 lg:px-12"
+        >
+          <div className="mb-5 flex items-center gap-3 text-xs font-mono uppercase text-summit-gold-300">
+            <BookOpen className="h-4 w-4" />
+            Field Notes · Summit Chronicles
+          </div>
+          <h1 className="max-w-5xl font-oswald text-[64px] font-bold uppercase leading-[0.86] text-white sm:text-8xl lg:text-9xl">
+            Stories From
+            <span className="block text-summit-gold">The Ascent</span>
+          </h1>
+          <p className="mt-6 max-w-2xl text-base leading-7 text-zinc-200 sm:text-xl sm:leading-8">
+            Expedition reports, recovery notes, mountain culture, and the
+            decisions behind a methodical journey toward Everest.
+          </p>
+        </motion.div>
+      </section>
+
+      <section
+        className="border-b border-white/10 bg-[#0c0c0c]"
+        aria-label="Explore stories"
+      >
+        <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8 lg:px-12">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="relative w-full lg:max-w-2xl">
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
+              <label htmlFor="story-search" className="sr-only">
+                Search stories
+              </label>
+              <input
+                id="story-search"
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search expeditions, lessons, places..."
+                className="min-h-12 w-full rounded-md border border-white/10 bg-black/40 py-3 pl-11 pr-11 text-base text-white outline-none transition-colors placeholder:text-zinc-600 focus:border-summit-gold/60 focus:ring-2 focus:ring-summit-gold/20"
+              />
+              {query ? (
+                <button
+                  type="button"
+                  onClick={() => setQuery('')}
+                  className="absolute right-2 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center text-zinc-500 transition-colors hover:text-white"
+                  aria-label="Clear story search"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              ) : null}
             </div>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-light tracking-tight text-white mb-6">
-              FIELD STORIES
-            </h1>
-            <p className="text-xl md:text-2xl font-light max-w-3xl mx-auto leading-relaxed opacity-80 text-gray-300">
-              Raw stories from the mountains. Unfiltered insights from extreme
-              preparation. The human side of systematic mountaineering.
-            </p>
-            <div className="mt-8 flex justify-center">
-              <Link
-                href="/blog/create"
-                className="inline-flex items-center space-x-2 bg-white/10 text-white px-6 py-3 rounded-full font-medium hover:bg-white/20 transition-all border border-white/10 backdrop-blur-sm group"
-              >
-                <Plus className="w-4 h-4 text-summit-gold group-hover:text-white transition-colors" />
-                <span>Write Story</span>
-              </Link>
+          </div>
+
+          {categories.length > 2 ? (
+            <div
+              className="mt-5 flex gap-2 overflow-x-auto pb-1"
+              aria-label="Story categories"
+            >
+              {categories.map((category) => (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() => setActiveCategory(category)}
+                  aria-pressed={activeCategory === category}
+                  className={`min-h-10 shrink-0 rounded-md border px-4 py-2 text-xs font-mono uppercase transition-colors ${
+                    activeCategory === category
+                      ? 'border-summit-gold bg-summit-gold text-black'
+                      : 'border-white/10 bg-white/[0.03] text-zinc-400 hover:border-white/25 hover:text-white'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
-          </motion.div>
+          ) : null}
         </div>
       </section>
 
-      {/* Featured Story */}
-      {featuredPost && (
-        <section className="border-y border-white/5 bg-black/40">
-          <Link href={`/blog/${featuredPost.slug}`} className="block group">
-            <div className="relative">
-              <div className="relative h-[70vh] overflow-hidden">
+      <section className="border-b border-white/10 bg-[#080808]">
+        <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
+          <SectionHeading eyebrow="Latest Dispatch" title="Lead Story" />
+
+          {loading ? (
+            <StoryLoading />
+          ) : error ? (
+            <StoryState
+              title="The archive is temporarily unavailable"
+              body="The story feed could not be reached. The expedition pages and training log remain available."
+            />
+          ) : leadStory ? (
+            <Link
+              href={`/blog/${leadStory.slug}`}
+              className="group mt-10 grid gap-7 border-t border-white/10 pt-7 lg:grid-cols-[1.45fr_0.75fr] lg:gap-12"
+            >
+              <div className="relative aspect-[4/3] overflow-hidden bg-zinc-900 sm:aspect-[16/10]">
                 <Image
-                  src={featuredPost.image}
-                  alt={featuredPost.title}
+                  src={leadStory.image}
+                  alt={leadStory.title}
                   fill
-                  className="object-cover object-center group-hover:scale-105 transition-transform duration-1000 grayscale group-hover:grayscale-0 opacity-80 group-hover:opacity-100"
-                  sizes="100vw"
-                  quality={100}
-                  unoptimized={true}
+                  className="object-cover transition-transform duration-700 group-hover:scale-[1.025]"
+                  sizes="(max-width: 1024px) 100vw, 65vw"
                   priority
+                  unoptimized
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-black/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
               </div>
 
-              <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16">
-                <div className="max-w-5xl mx-auto">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <div
-                      className={`${getCategoryColor(featuredPost.category)}/20 text-${getCategoryColor(featuredPost.category).replace('bg-', '')}-400 border border-${getCategoryColor(featuredPost.category).replace('bg-', '')}-500/30 px-3 py-1 text-xs font-mono tracking-widest uppercase backdrop-blur-md`}
-                    >
-                      FEATURED
-                    </div>
-                    <div className="bg-white/10 text-white border border-white/20 px-3 py-1 text-xs font-mono tracking-widest uppercase backdrop-blur-md">
-                      {featuredPost.category}
-                    </div>
-                  </div>
-
-                  <h2 className="text-4xl md:text-7xl font-light text-white leading-[1.1] mb-6 group-hover:text-summit-gold-100 transition-colors">
-                    {featuredPost.title}
-                  </h2>
-
-                  <p className="text-xl text-gray-300 leading-relaxed mb-8 max-w-3xl font-light">
-                    {featuredPost.subtitle}
-                  </p>
-
-                  <div className="flex items-center space-x-8 text-sm text-gray-400 font-mono tracking-wider">
-                    <div className="flex items-center space-x-2">
-                      <User className="w-4 h-4 text-summit-gold-400" />
-                      <span className="text-gray-300">
-                        {featuredPost.author}
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Calendar className="w-4 h-4 text-summit-gold-400" />
-                      <span>{featuredPost.date}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Clock className="w-4 h-4 text-summit-gold-400" />
-                      <span>{featuredPost.readTime}</span>
-                    </div>
-                  </div>
+              <article className="flex flex-col justify-end pb-2">
+                <StoryMeta post={leadStory} />
+                <h2 className="mt-5 font-oswald text-4xl font-bold uppercase leading-[0.95] text-white transition-colors group-hover:text-summit-gold-200 sm:text-5xl lg:text-6xl">
+                  {leadStory.title}
+                </h2>
+                <p className="mt-5 text-base leading-7 text-zinc-400 sm:text-lg">
+                  {leadStory.subtitle}
+                </p>
+                <div className="mt-8 inline-flex items-center gap-3 text-sm font-bold uppercase text-white">
+                  Read the story
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </div>
-              </div>
-            </div>
-          </Link>
-        </section>
-      )}
-
-      {/* Stories Grid */}
-      <section className="max-w-7xl mx-auto px-6 py-24">
-        <div className="mb-16 text-center">
-          <h2 className="text-sm font-mono tracking-[0.3em] uppercase text-summit-gold-400 mb-4">
-            Archive
-          </h2>
-          <h2 className="text-3xl md:text-4xl font-light text-white mb-6 tracking-wide">
-            EXPEDITION REPORTS
-          </h2>
-          <div className="h-px w-24 bg-gradient-to-r from-transparent via-summit-gold-500 to-transparent mx-auto opacity-50"></div>
+              </article>
+            </Link>
+          ) : posts.length === 0 ? (
+            <StoryState
+              title="The first dispatch is being prepared"
+              body="Expedition stories and training notes will appear here as they are published."
+            />
+          ) : (
+            <StoryState
+              title="No stories match this search"
+              body="Try a broader phrase, choose another category, or ask the AI archive using natural language."
+            />
+          )}
         </div>
+      </section>
 
-        {loading ? (
-          /* Loading State */
-          <div className="text-center py-20">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="max-w-2xl mx-auto"
-            >
-              <div className="animate-spin w-8 h-8 border border-white/20 border-t-summit-gold-400 rounded-full mx-auto mb-4"></div>
-              <p className="text-gray-400 font-mono text-sm tracking-widest">
-                DECRYPTING ARCHIVES...
-              </p>
-            </motion.div>
-          </div>
-        ) : posts.length === 0 ? (
-          /* Empty State */
-          <div className="text-center py-20 bg-glass-panel border border-white/5 rounded-2xl p-12">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="max-w-2xl mx-auto"
-            >
-              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Mountain className="w-8 h-8 text-gray-500" />
-              </div>
-              <h3 className="text-2xl md:text-3xl font-light text-white mb-4">
-                Stories Coming Soon
-              </h3>
-              <p className="text-gray-400 text-lg leading-relaxed mb-8 font-light">
-                Authentic expedition stories, training insights, and mountain
-                wisdom are being prepared. The first story from the Seven
-                Summits journey will be published here soon.
-              </p>
-              <div className="text-xs text-gray-500 font-mono tracking-widest uppercase">
-                Awaiting Transmission
-              </div>
-            </motion.div>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {regularPosts.map((post, index) => {
-              const CategoryIcon = getCategoryIcon(post.category);
-
-              return (
-                <motion.div
+      {!loading && !error && archive.length > 0 ? (
+        <section className="bg-[#0c0c0c]">
+          <div className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24 lg:px-12">
+            <SectionHeading eyebrow="Archive" title="All Stories" />
+            <div className="mt-10 divide-y divide-white/10 border-y border-white/10">
+              {archive.map((post, index) => (
+                <motion.article
                   key={post.slug}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 18 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className="group h-full"
+                  transition={{
+                    duration: 0.45,
+                    delay: Math.min(index * 0.06, 0.24),
+                  }}
                   data-testid="post-card"
                 >
-                  <Link href={`/blog/${post.slug}`} className="block h-full">
-                    <div className="bg-glass-panel border border-white/5 rounded-xl overflow-hidden hover:border-summit-gold/30 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 h-full flex flex-col">
-                      {/* Image */}
-                      <div className="relative aspect-[3/2] overflow-hidden">
-                        <Image
-                          src={post.image}
-                          alt={post.title}
-                          fill
-                          className="object-cover bg-gray-900 group-hover:scale-105 transition-transform duration-700 grayscale group-hover:grayscale-0 opacity-90 group-hover:opacity-100"
-                          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                          quality={100}
-                          unoptimized={true}
-                        />
-                        <div className="absolute top-4 left-4">
-                          <div className="bg-black/60 backdrop-blur-md text-white border border-white/10 px-3 py-1 text-[10px] font-mono font-bold tracking-widest uppercase flex items-center space-x-2 rounded-sm">
-                            <CategoryIcon className="w-3 h-3 text-summit-gold-400" />
-                            <span>{post.category}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-8 flex flex-col flex-grow">
-                        <div className="flex items-center space-x-2 text-xs text-summit-gold-400 font-mono mb-4 tracking-wider uppercase">
-                          <Calendar className="w-3 h-3" />
-                          <span>{post.date}</span>
-                        </div>
-
-                        <h3 className="text-xl font-light text-white leading-tight mb-4 group-hover:text-summit-gold-100 transition-colors">
-                          {post.title}
-                        </h3>
-
-                        <p className="text-gray-400 leading-relaxed mb-6 text-sm font-light line-clamp-3 flex-grow">
-                          {post.subtitle}
-                        </p>
-
-                        <div className="pt-6 border-t border-white/5 flex items-center justify-between text-xs text-gray-500 font-mono tracking-wider mt-auto">
-                          <div className="flex items-center space-x-2">
-                            <Clock className="w-3 h-3" />
-                            <span className="whitespace-nowrap">
-                              {post.readTime}
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2 text-gray-400 group-hover:text-white transition-colors">
-                            <span>READ REPORT</span>
-                            <ChevronRight className="w-3 h-3" />
-                          </div>
-                        </div>
-                      </div>
+                  <Link
+                    href={`/blog/${post.slug}`}
+                    className="group grid gap-5 py-7 sm:grid-cols-[13rem_1fr] sm:items-center lg:grid-cols-[17rem_1fr_auto] lg:gap-9"
+                  >
+                    <div className="relative aspect-[16/10] overflow-hidden bg-zinc-900">
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                        sizes="(max-width: 640px) 100vw, 272px"
+                        unoptimized
+                      />
                     </div>
+                    <div className="min-w-0">
+                      <StoryMeta post={post} />
+                      <h2 className="mt-3 max-w-3xl font-oswald text-2xl font-bold uppercase leading-tight text-white transition-colors group-hover:text-summit-gold-200 sm:text-3xl">
+                        {post.title}
+                      </h2>
+                      <p className="mt-3 line-clamp-2 max-w-3xl text-sm leading-6 text-zinc-500 sm:text-base">
+                        {post.subtitle}
+                      </p>
+                    </div>
+                    <ArrowRight className="hidden h-5 w-5 text-zinc-600 transition-all group-hover:translate-x-1 group-hover:text-summit-gold lg:block" />
                   </Link>
-                </motion.div>
-              );
-            })}
+                </motion.article>
+              ))}
+            </div>
           </div>
-        )}
-      </section>
+        </section>
+      ) : null}
 
-      {/* Newsletter CTA */}
-      <section className="bg-black border-t border-white/10 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] opacity-20 pointer-events-none"></div>
-        <div className="max-w-4xl mx-auto px-6 py-24 text-center relative z-10">
-          <h3 className="text-3xl md:text-4xl font-light tracking-wide text-white mb-6">
-            EXPEDITION UPDATES
-          </h3>
-          <p className="text-lg md:text-xl text-gray-400 mb-10 leading-relaxed font-light max-w-2xl mx-auto">
-            Field reports from the mountains. Training insights and preparation
-            updates. Raw stories from the systematic journey to Everest.
-          </p>
+      <section className="border-t border-white/10 bg-summit-gold text-black">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-14 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-12">
+          <div>
+            <div className="text-xs font-mono uppercase text-black/60">
+              Field Notes · No Noise
+            </div>
+            <h2 className="mt-3 max-w-2xl font-oswald text-4xl font-bold uppercase leading-none sm:text-5xl">
+              Follow the next chapter
+            </h2>
+          </div>
           <Link
             href="/newsletter"
-            className="inline-flex items-center space-x-3 bg-white text-black px-8 py-4 font-medium tracking-widest hover:bg-gray-200 transition-colors uppercase text-sm"
+            className="inline-flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-md bg-black px-6 py-3 text-sm font-bold uppercase text-white transition-colors hover:bg-zinc-800"
           >
-            <span>Initialize Uplink</span>
-            <ChevronRight className="w-4 h-4" />
+            Join the newsletter
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
     </div>
   );
+}
+
+function StoryMeta({ post }: { post: BlogPost }) {
+  return (
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-mono uppercase text-zinc-500">
+      <span className="text-summit-gold-300">{post.category}</span>
+      <span className="inline-flex items-center gap-1.5">
+        <CalendarDays className="h-3.5 w-3.5" />
+        {post.date}
+      </span>
+      <span className="inline-flex items-center gap-1.5">
+        <Clock3 className="h-3.5 w-3.5" />
+        {post.readTime}
+      </span>
+    </div>
+  );
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+}: {
+  eyebrow: string;
+  title: string;
+}) {
+  return (
+    <div className="flex items-end justify-between gap-6">
+      <div>
+        <div className="text-xs font-mono uppercase text-summit-gold-300">
+          {eyebrow}
+        </div>
+        <h2 className="mt-3 font-oswald text-4xl font-bold uppercase text-white sm:text-5xl">
+          {title}
+        </h2>
+      </div>
+      <Mountain className="hidden h-7 w-7 text-white/20 sm:block" />
+    </div>
+  );
+}
+
+function StoryLoading() {
+  return (
+    <div
+      className="mt-10 grid animate-pulse gap-7 border-t border-white/10 pt-7 lg:grid-cols-[1.45fr_0.75fr] lg:gap-12"
+      role="status"
+    >
+      <div className="aspect-[16/10] bg-white/[0.04]" />
+      <div className="flex flex-col justify-end gap-5">
+        <div className="h-3 w-40 bg-white/[0.05]" />
+        <div className="h-14 w-full bg-white/[0.05]" />
+        <div className="h-20 w-full bg-white/[0.04]" />
+        <span className="sr-only">Loading stories</span>
+      </div>
+    </div>
+  );
+}
+
+function StoryState({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="mt-10 border-y border-white/10 py-16">
+      <h2 className="font-oswald text-3xl font-bold uppercase text-white">
+        {title}
+      </h2>
+      <p className="mt-4 max-w-2xl leading-7 text-zinc-400">{body}</p>
+    </div>
+  );
+}
+
+function normalizeCategory(category?: string) {
+  if (!category || category === 'NULL') return 'Field Note';
+  return category.replace(/[-_]/g, ' ');
+}
+
+function normalizeReadTime(readTime?: string) {
+  if (!readTime) return '5 min read';
+  return readTime.includes('read') ? readTime : `${readTime} read`;
+}
+
+function formatDate(date?: string) {
+  if (!date) return 'Recent';
+  const parsed = new Date(date);
+  if (Number.isNaN(parsed.getTime())) return 'Recent';
+  return parsed.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
 }

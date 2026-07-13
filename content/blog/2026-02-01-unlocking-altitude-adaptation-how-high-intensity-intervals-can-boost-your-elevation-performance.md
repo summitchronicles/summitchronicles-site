@@ -1,9 +1,9 @@
-```yml
 ---
 title: "Unlocking Altitude Adaptation: How High-Intensity Intervals Can Boost Your Elevation Performance"
 date: "2026-02-01"
 author: "Summit Explorer"
 tags: ["altitude adaptation", "high-intensity interval training", "mountaineering performance"]
+status: draft
 ---
 
 ## Unlocking Altitude Adaptation: How High-Intensity Intervals Can Boost Your Elevation Performance

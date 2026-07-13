@@ -67,7 +67,10 @@ export class MarkdownContentRepository {
 
         const wordCount = content.split(/\s+/).filter(Boolean).length;
         const readTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
-        let heroImage = data.image || data.heroImage || '/stories/default.jpg';
+        let heroImage =
+          data.image ||
+          data.heroImage ||
+          '/images/sunith-visionary-planning.png';
 
         if (!data.image && !data.heroImage) {
           const imageMatch = content.match(/!\[.*?\]\((.*?)\)/);
@@ -98,12 +101,17 @@ export class MarkdownContentRepository {
       }
     }
 
-    posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    posts.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
 
     return { posts, issues };
   }
 
-  async listDrafts(): Promise<{ drafts: DraftRecord[]; issues: ContentIssue[] }> {
+  async listDrafts(): Promise<{
+    drafts: DraftRecord[];
+    issues: ContentIssue[];
+  }> {
     if (!fs.existsSync(this.blogDir)) {
       return { drafts: [], issues: [] };
     }
@@ -137,7 +145,9 @@ export class MarkdownContentRepository {
       }
     }
 
-    drafts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    drafts.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
 
     return { drafts, issues };
   }

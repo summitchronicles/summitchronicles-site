@@ -109,6 +109,14 @@ function createSummaryArtifact(
     errors: [],
     lastUpdated: '2026-03-09T06:30:00.000Z',
     summary: {
+      integrations: [
+        {
+          id: 'intervals.icu',
+          label: 'Intervals.icu',
+          role: 'Training load and activity aggregation',
+          state: 'live',
+        },
+      ],
       telemetry: {
         isLive: true,
         state: 'live',

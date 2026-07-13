@@ -1,11 +1,12 @@
-import { Header } from '@/app/components/organisms/Header';
+import { PublicLayout } from '@/app/components/layout/PublicLayout';
 import { TrainingRedesignPrototype } from '@/app/components/training/TrainingRedesignPrototype';
 
 export default function TrainingPage() {
   return (
-    <div className="min-h-screen bg-[#050505] text-white">
-      <Header />
-      <TrainingRedesignPrototype />
-    </div>
+    <PublicLayout>
+      <div className="min-h-screen bg-[#050505] text-white">
+        <TrainingRedesignPrototype />
+      </div>
+    </PublicLayout>
   );
 }

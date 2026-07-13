@@ -54,6 +54,7 @@ export function SmartSearch({
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [aiResponse, setAiResponse] = useState<AIResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [systemStatus, setSystemStatus] = useState<
     'checking' | 'ready' | 'error'
@@ -89,6 +90,17 @@ export function SmartSearch({
     checkSystemStatus();
   }, [checkSystemStatus]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const initialQuery = params.get('q');
+    const initialMode = params.get('mode');
+
+    if (initialQuery) setQuery(initialQuery);
+    if (initialMode === 'ask' || initialMode === 'search') {
+      setMode(initialMode);
+    }
+  }, []);
+
   const initializeSystem = async () => {
     try {
       await fetch('/api/ai/status', {
@@ -106,6 +118,7 @@ export function SmartSearch({
   const handleSearch = async () => {
     if (!query.trim() || systemStatus !== 'ready') return;
 
+    setHasSubmitted(true);
     setIsLoading(true);
     setError(null);
     setSearchResults([]);
@@ -158,7 +171,7 @@ export function SmartSearch({
 
   const exampleQueries = [
     'How should I train for high altitude acclimatization?',
-    'What are Sunith\'s preferred techniques for ice climbing?',
+    "What are Sunith's preferred techniques for ice climbing?",
     'Best practices for avalanche risk assessment on expeditions',
     'Nutrition and hydration strategies for multi-day climbs',
     'How to design a 12-week expedition training program?',
@@ -166,9 +179,9 @@ export function SmartSearch({
   ];
 
   const getConfidenceColor = (confidence: number) => {
-    if (confidence >= 0.8) return 'text-green-600';
-    if (confidence >= 0.6) return 'text-yellow-600';
-    return 'text-red-600';
+    if (confidence >= 0.8) return 'text-emerald-300';
+    if (confidence >= 0.6) return 'text-amber-300';
+    return 'text-red-300';
   };
 
   const getConfidenceText = (confidence: number) => {
@@ -180,38 +193,39 @@ export function SmartSearch({
   return (
     <div className={`max-w-4xl mx-auto ${className}`}>
       {/* System Status */}
-      <div className="mb-4 flex items-center justify-center space-x-2 text-sm">
+      <div className="mb-4 flex items-center justify-center">
         {systemStatus === 'checking' && (
-          <>
-            <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-            <span className="text-gray-600">Checking AI system status...</span>
-          </>
+          <div className="inline-flex items-center gap-2 rounded-md border border-alpine-blue-400/30 bg-alpine-blue-950/40 px-3 py-2 text-sm text-alpine-blue-100">
+            <Loader2 className="w-4 h-4 animate-spin text-alpine-blue-200" />
+            <span>Checking AI system status...</span>
+          </div>
         )}
         {systemStatus === 'ready' && (
-          <>
-            <CheckCircle className="w-4 h-4 text-green-500" />
-            <span className="text-green-600">AI system ready</span>
-          </>
+          <div className="inline-flex items-center gap-2 rounded-md border border-emerald-400/30 bg-emerald-950/35 px-3 py-2 text-sm text-emerald-100">
+            <CheckCircle className="w-4 h-4 text-emerald-300" />
+            <span>AI system ready</span>
+          </div>
         )}
         {systemStatus === 'error' && (
-          <>
-            <AlertCircle className="w-4 h-4 text-red-500" />
-            <span className="text-red-600">AI system unavailable</span>
-          </>
+          <div className="inline-flex items-center gap-2 rounded-md border border-red-400/30 bg-red-950/35 px-3 py-2 text-sm text-red-100">
+            <AlertCircle className="w-4 h-4 text-red-300" />
+            <span>AI system unavailable</span>
+          </div>
         )}
       </div>
 
       {/* Search Interface */}
-      <div className="bg-white rounded-xl shadow-spa-soft p-6 mb-6">
+      <div className="rounded-md border border-white/10 bg-black/55 p-4 shadow-[0_24px_90px_-50px_rgba(212,175,55,0.65)] backdrop-blur-sm sm:p-6 mb-6">
         {/* Mode Selector */}
         <div className="flex justify-center mb-4">
-          <div className="bg-gray-100 rounded-lg p-1 flex">
+          <div className="flex rounded-md border border-white/10 bg-white/[0.04] p-1">
             <button
               onClick={() => setMode('search')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all flex items-center space-x-2 ${
+              aria-pressed={mode === 'search'}
+              className={`flex min-h-11 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all sm:px-4 ${
                 mode === 'search'
-                  ? 'bg-alpine-blue text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-summit-gold text-black shadow-sm'
+                  : 'text-zinc-300 hover:bg-white/[0.06] hover:text-white'
               }`}
             >
               <Search className="w-4 h-4" />
@@ -219,10 +233,11 @@ export function SmartSearch({
             </button>
             <button
               onClick={() => setMode('ask')}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all flex items-center space-x-2 ${
+              aria-pressed={mode === 'ask'}
+              className={`flex min-h-11 items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition-all sm:px-4 ${
                 mode === 'ask'
-                  ? 'bg-alpine-blue text-white shadow-sm'
-                  : 'text-gray-600 hover:text-gray-900'
+                  ? 'bg-summit-gold text-black shadow-sm'
+                  : 'text-zinc-300 hover:bg-white/[0.06] hover:text-white'
               }`}
             >
               <MessageCircle className="w-4 h-4" />
@@ -241,13 +256,13 @@ export function SmartSearch({
             onKeyPress={handleKeyPress}
             placeholder={placeholder}
             disabled={systemStatus !== 'ready'}
-            className="w-full px-4 py-3 pl-12 border border-gray-200 rounded-lg focus:ring-2 focus:ring-alpine-blue focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500"
+            className="w-full rounded-md border border-white/15 bg-obsidian px-4 py-4 pl-12 text-white placeholder-zinc-500 outline-none transition-colors focus:border-summit-gold/70 focus:ring-2 focus:ring-summit-gold/25 disabled:border-white/10 disabled:bg-white/[0.04] disabled:text-zinc-500"
           />
           <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
             {mode === 'search' ? (
-              <Search className="w-5 h-5 text-gray-400" />
+              <Search className="w-5 h-5 text-zinc-500" />
             ) : (
-              <Brain className="w-5 h-5 text-gray-400" />
+              <Brain className="w-5 h-5 text-zinc-500" />
             )}
           </div>
         </div>
@@ -257,7 +272,7 @@ export function SmartSearch({
           <button
             onClick={handleSearch}
             disabled={!query.trim() || isLoading || systemStatus !== 'ready'}
-            className="px-6 py-2 bg-alpine-blue text-white rounded-lg hover:bg-alpine-blue/90 disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center space-x-2 transition-all"
+            className="flex min-h-12 items-center gap-2 rounded-md bg-summit-gold px-6 py-3 font-oswald text-sm font-bold uppercase text-black transition-colors hover:bg-summit-gold-300 disabled:cursor-not-allowed disabled:bg-zinc-700 disabled:text-zinc-400"
           >
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -279,15 +294,13 @@ export function SmartSearch({
         {/* Example Queries */}
         {showExamples && !query && (
           <div className="mt-6">
-            <p className="text-sm text-gray-600 mb-3">
-              Try these example queries:
-            </p>
+            <p className="text-sm text-zinc-400 mb-3">Suggested prompts</p>
             <div className="flex flex-wrap gap-2">
               {exampleQueries.map((example, index) => (
                 <button
                   key={index}
                   onClick={() => setQuery(example)}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200 transition-colors"
+                  className="rounded-md border border-white/10 bg-white/[0.05] px-3 py-2 text-left text-sm text-zinc-300 transition-colors hover:border-summit-gold/40 hover:text-white"
                 >
                   {example}
                 </button>
@@ -299,21 +312,21 @@ export function SmartSearch({
 
       {/* Error Display */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
-          <div className="flex items-center space-x-2">
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            <p className="text-red-700">{error}</p>
+        <div className="rounded-md border border-red-400/30 bg-red-950/35 p-4 mb-6">
+          <div className="flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-red-300" />
+            <p className="text-red-100">{error}</p>
           </div>
         </div>
       )}
 
       {/* AI Response */}
       {aiResponse && (
-        <div className="bg-white rounded-xl shadow-spa-soft p-6 mb-6">
+        <div className="rounded-md border border-white/10 bg-white/[0.06] p-5 shadow-spa-soft mb-6 sm:p-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center space-x-2">
-              <Brain className="w-5 h-5 text-alpine-blue" />
-              <h3 className="text-lg font-medium text-spa-charcoal">
+            <div className="flex items-center gap-2">
+              <Brain className="w-5 h-5 text-summit-gold" />
+              <h3 className="text-lg font-medium text-white">
                 Sunith's Expert Guidance
               </h3>
             </div>
@@ -325,21 +338,21 @@ export function SmartSearch({
           </div>
 
           <div className="prose prose-blue max-w-none mb-4">
-            <div className="whitespace-pre-wrap text-spa-charcoal leading-relaxed">
+            <div className="whitespace-pre-wrap leading-relaxed text-zinc-200">
               {aiResponse.answer}
             </div>
           </div>
 
           {aiResponse.sources.length > 0 && (
-            <div className="border-t border-gray-200 pt-4">
-              <h4 className="text-sm font-medium text-gray-700 mb-2">
-                Sources:
+            <div className="border-t border-white/10 pt-4">
+              <h4 className="text-sm font-medium text-zinc-300 mb-2">
+                Sources
               </h4>
               <div className="flex flex-wrap gap-2">
                 {aiResponse.sources.map((source, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-medium"
+                    className="rounded-md border border-alpine-blue-300/20 bg-alpine-blue-950/30 px-2 py-1 text-xs font-medium text-alpine-blue-100"
                   >
                     {source.title}
                   </span>
@@ -353,39 +366,39 @@ export function SmartSearch({
       {/* Search Results */}
       {searchResults.length > 0 && (
         <div className="space-y-4">
-          <div className="flex items-center space-x-2 mb-4">
-            <BookOpen className="w-5 h-5 text-alpine-blue" />
-            <h3 className="text-lg font-medium text-spa-charcoal">
+          <div className="flex items-center gap-2 mb-4">
+            <BookOpen className="w-5 h-5 text-summit-gold" />
+            <h3 className="text-lg font-medium text-white">
               Search Results ({searchResults.length} found)
             </h3>
           </div>
 
-          {searchResults.map((result, index) => (
+          {searchResults.map((result) => (
             <div
               key={result.document.id}
-              className="bg-white rounded-xl shadow-spa-soft p-6"
+              className="rounded-md border border-white/10 bg-white/[0.06] p-5 shadow-spa-soft sm:p-6"
             >
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="text-lg font-medium text-spa-charcoal mb-1">
+                  <h4 className="text-lg font-medium text-white mb-2">
                     {result.document.title}
                   </h4>
-                  <div className="flex items-center space-x-3 text-sm text-gray-500">
-                    <span className="px-2 py-1 bg-gray-100 rounded">
+                  <div className="flex flex-wrap items-center gap-2 text-sm text-zinc-400">
+                    <span className="rounded-md border border-white/10 bg-black/30 px-2 py-1 text-zinc-300">
                       {result.document.category}
                     </span>
-                    <span>
+                    <span className="text-zinc-400">
                       Relevance: {Math.round(result.relevanceScore * 100)}%
                     </span>
                   </div>
                 </div>
               </div>
 
-              <p className="text-spa-charcoal leading-relaxed mb-3">
+              <p className="text-zinc-200 leading-relaxed mb-3">
                 {result.document.content}
               </p>
 
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-zinc-500">
                 Source: {result.document.source}
               </div>
             </div>
@@ -394,15 +407,16 @@ export function SmartSearch({
       )}
 
       {/* No Results */}
-      {query &&
+      {hasSubmitted &&
+        query &&
         !isLoading &&
         searchResults.length === 0 &&
         !aiResponse &&
         !error && (
           <div className="text-center py-8">
-            <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-600">No results found for "{query}"</p>
-            <p className="text-sm text-gray-500 mt-2">
+            <Search className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+            <p className="text-zinc-300">No results found for "{query}"</p>
+            <p className="text-sm text-zinc-500 mt-2">
               Try adjusting your search terms or ask a question instead
             </p>
           </div>

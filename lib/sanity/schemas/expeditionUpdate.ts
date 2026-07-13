@@ -34,8 +34,9 @@ export const expeditionUpdate = defineType({
       name: 'expedition',
       title: 'Expedition',
       type: 'reference',
-      to: [{ type: 'blogPost' }], // Reference to main expedition blog post
-      description: 'Link to the main expedition blog post',
+      to: [{ type: 'expedition' }, { type: 'blogPost' }],
+      description:
+        'Link to an expedition record. Blog post references remain available during migration.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({

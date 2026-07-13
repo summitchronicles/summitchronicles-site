@@ -2,16 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import {
-  Home,
-  BookOpen,
-  Target,
-  User,
-  Menu,
-  X,
-  Brain,
-  Mountain,
-} from 'lucide-react';
+import { Home, BookOpen, Target, User, Menu, X, Mountain } from 'lucide-react';
 import { AnimatedLogo } from './icons/AnimatedLogo';
 
 export default function Navigation() {
@@ -23,7 +14,6 @@ export default function Navigation() {
     { href: '/journey', label: 'Journey', icon: Mountain },
     { href: '/blog', label: 'Blog', icon: BookOpen },
     { href: '/training', label: 'Training', icon: Target },
-    { href: '/ai-search', label: 'AI Coach', icon: Brain },
   ];
 
   return (

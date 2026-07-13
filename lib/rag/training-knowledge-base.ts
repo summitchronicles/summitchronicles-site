@@ -54,6 +54,8 @@ const knowledgeBase: KnowledgeDocument[] = [];
 
 // Initialize with mountaineering training content AND Blog Posts
 export async function initializeKnowledgeBase(): Promise<void> {
+  knowledgeBase.length = 0;
+
   // Load cache at start
   const cache = loadCache();
   let cacheUpdated = false;
@@ -284,6 +286,9 @@ Practical strategies:
         const filePath = path.join(blogsDir, file);
         const fileContent = fs.readFileSync(filePath, 'utf8');
         const { data, content } = matter(fileContent);
+        if ((data.status ?? 'draft') !== 'published') {
+          continue;
+        }
         const title = data.title || file.replace('.md', '');
         const documentId = generateDocumentId(title);
 
@@ -358,7 +363,14 @@ export async function addDocument(
       updated_at: new Date().toISOString(),
     };
 
-    knowledgeBase.push(newDocument);
+    const existingIndex = knowledgeBase.findIndex(
+      (existing) => existing.id === newDocument.id
+    );
+    if (existingIndex >= 0) {
+      knowledgeBase[existingIndex] = newDocument;
+    } else {
+      knowledgeBase.push(newDocument);
+    }
     return newDocument.id;
   } catch (error) {
     console.error('Failed to add document to knowledge base:', error);

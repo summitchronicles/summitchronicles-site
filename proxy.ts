@@ -100,7 +100,8 @@ export async function proxy(request: NextRequest) {
         headers: {
           'Access-Control-Allow-Origin': resolvedCorsOrigin,
           'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-          'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With, X-Internal-Api-Key',
+          'Access-Control-Allow-Headers':
+            'Content-Type, Authorization, X-Requested-With, X-Internal-Api-Key',
           'Access-Control-Max-Age': '86400',
           ...securityHeaders,
         },
@@ -111,7 +112,9 @@ export async function proxy(request: NextRequest) {
   // Admin route protection
   if (
     request.nextUrl.pathname.startsWith('/admin') ||
-    request.nextUrl.pathname.startsWith('/studio')
+    request.nextUrl.pathname.startsWith('/studio') ||
+    request.nextUrl.pathname.startsWith('/blog/create') ||
+    request.nextUrl.pathname.startsWith('/dashboard')
   ) {
     response.headers.set('X-Robots-Tag', 'noindex, nofollow');
 
@@ -122,13 +125,14 @@ export async function proxy(request: NextRequest) {
         timestamp: new Date().toISOString(),
       });
 
-      // Return 401 Unauthorized
-      return new NextResponse('Unauthorized', {
-        status: 401,
-        headers: {
-          'WWW-Authenticate': 'Bearer realm="Admin Area"',
-        },
-      });
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = '/auth/login';
+      loginUrl.search = '';
+      loginUrl.searchParams.set(
+        'next',
+        `${request.nextUrl.pathname}${request.nextUrl.search}`
+      );
+      return NextResponse.redirect(loginUrl);
     }
   }
 
@@ -165,7 +169,10 @@ export async function proxy(request: NextRequest) {
   }
 
   // Monitoring and logging
-  if (env.NODE_ENV === 'production' && request.nextUrl.pathname.startsWith('/api/')) {
+  if (
+    env.NODE_ENV === 'production' &&
+    request.nextUrl.pathname.startsWith('/api/')
+  ) {
     console.log('Security event:', {
       type: 'request',
       ip,

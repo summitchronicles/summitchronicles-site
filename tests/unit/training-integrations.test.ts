@@ -1,0 +1,53 @@
+/**
+ * @jest-environment node
+ */
+
+import { describe, expect, it } from '@jest/globals';
+import { getTrainingIntegrationStatuses } from '@/modules/training/application/training-integrations';
+
+describe('training integration statuses', () => {
+  it('reports configured, authorization, and paused states without inferring connections', () => {
+    const statuses = getTrainingIntegrationStatuses('live', {
+      NODE_ENV: 'test',
+      INTERVALS_ICU_API_KEY: 'intervals-key',
+      INTERVALS_ICU_ATHLETE_ID: 'athlete-id',
+      STRAVA_CLIENT_ID: 'strava-id',
+      STRAVA_CLIENT_SECRET: 'strava-secret',
+    });
+
+    expect(statuses.find((item) => item.id === 'intervals.icu')?.state).toBe(
+      'live'
+    );
+    expect(statuses.find((item) => item.id === 'strava')?.state).toBe(
+      'setup-required'
+    );
+    expect(statuses.find((item) => item.id === 'whoop')?.state).toBe(
+      'not-configured'
+    );
+    expect(statuses.find((item) => item.id === 'garmin')?.state).toBe('paused');
+  });
+
+  it('only reports WHOOP and Strava as connected when refresh tokens exist', () => {
+    const statuses = getTrainingIntegrationStatuses('cached', {
+      NODE_ENV: 'test',
+      INTERVALS_ICU_API_KEY: 'intervals-key',
+      INTERVALS_ICU_ATHLETE_ID: 'athlete-id',
+      STRAVA_CLIENT_ID: 'strava-id',
+      STRAVA_CLIENT_SECRET: 'strava-secret',
+      STRAVA_REFRESH_TOKEN: 'strava-refresh',
+      WHOOP_CLIENT_ID: 'whoop-id',
+      WHOOP_CLIENT_SECRET: 'whoop-secret',
+      WHOOP_REFRESH_TOKEN: 'whoop-refresh',
+    });
+
+    expect(statuses.find((item) => item.id === 'intervals.icu')?.state).toBe(
+      'cached'
+    );
+    expect(statuses.find((item) => item.id === 'strava')?.state).toBe(
+      'connected'
+    );
+    expect(statuses.find((item) => item.id === 'whoop')?.state).toBe(
+      'connected'
+    );
+  });
+});

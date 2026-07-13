@@ -18,12 +18,13 @@ const queries = {
     _updatedAt
   }`,
 
-  allBlogPosts: `*[_type == "blogPost" && category->slug.current == "training"] {
+  allBlogPosts: `*[_type == "blogPost" && isPublished == true] {
     _id,
     title,
+    slug,
     content,
     excerpt,
-    category->{title, slug},
+    categories[]->{title, slug},
     tags,
     publishedAt,
     _createdAt,
@@ -191,18 +192,39 @@ function transformTrainingEntry(
 function transformBlogPost(
   post: any
 ): Omit<KnowledgeDocument, 'id' | 'embedding' | 'created_at' | 'updated_at'> {
+  const plainContent = portableTextToPlainText(post.content);
+  const tags = [
+    ...(post.tags || []),
+    ...(post.categories || []).map((category: any) => category.title),
+  ].filter(Boolean);
+
   return {
     title: post.title,
-    content: post.content || post.excerpt || '',
-    category: 'Training Content',
-    source: 'Blog Post',
+    content: plainContent || post.excerpt || '',
+    category: post.categories?.[0]?.title || 'Story',
+    source: 'Summit Chronicles Story',
     metadata: {
-      difficulty_level: extractDifficultyFromContent(post.content),
-      mountain_type: extractMountainTypeFromTags(post.tags || []),
-      skills: post.tags || [],
-      tags: post.tags || [],
+      difficulty_level: extractDifficultyFromContent(plainContent),
+      mountain_type: extractMountainTypeFromTags(tags),
+      skills: tags,
+      tags,
     },
   };
+}
+
+function portableTextToPlainText(content: unknown) {
+  if (typeof content === 'string') return content;
+  if (!Array.isArray(content)) return '';
+
+  return content
+    .filter((block) => block && typeof block === 'object')
+    .map((block: any) =>
+      Array.isArray(block.children)
+        ? block.children.map((child: any) => child.text || '').join('')
+        : ''
+    )
+    .filter(Boolean)
+    .join('\n\n');
 }
 
 // Transform expedition update to knowledge document

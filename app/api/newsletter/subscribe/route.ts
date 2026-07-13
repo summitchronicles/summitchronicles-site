@@ -1,5 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { checkRateLimit, getClientIp, createRateLimitResponse } from '@/lib/rate-limiter';
+import {
+  checkRateLimit,
+  getClientIp,
+  createRateLimitResponse,
+} from '@/lib/rate-limiter';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,64 +32,53 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Try to use real Buttondown API if configured
     if (
-      process.env.BUTTONDOWN_API_KEY &&
-      process.env.BUTTONDOWN_API_KEY !== 'bd-your-api-key-here'
+      !process.env.BUTTONDOWN_API_KEY ||
+      process.env.BUTTONDOWN_API_KEY === 'bd-your-api-key-here'
     ) {
-      try {
-        const response = await fetch(
-          'https://api.buttondown.email/v1/subscribers',
-          {
-            method: 'POST',
-            headers: {
-              Authorization: `Token ${process.env.BUTTONDOWN_API_KEY}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email,
-              metadata: {
-                referrer: referrer || 'summit-chronicles',
-                subscribed_at: new Date().toISOString(),
-                source: 'website',
-              },
-              tags: ['everest-training', 'website-signup'],
-            }),
-          }
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.message || 'Failed to subscribe to newsletter'
-          );
-        }
-
-        const subscriber = await response.json();
-        console.log('✅ Newsletter subscription successful:', {
-          email,
-          subscriber_id: subscriber.id,
-          referrer,
-        });
-
-        return NextResponse.json({
-          message:
-            'Successfully subscribed to the Summit Chronicles newsletter!',
-          email,
-          subscriber_id: subscriber.id,
-        });
-      } catch (buttondownError) {
-        console.error('Buttondown API error:', buttondownError);
-        // Fall through to mock response
-      }
+      return NextResponse.json(
+        { error: 'Newsletter subscriptions are temporarily unavailable.' },
+        { status: 503 }
+      );
     }
 
-    // Mock response for development or if Buttondown is not configured
-    console.log('📧 Mock newsletter subscription:', { email, referrer });
+    const response = await fetch(
+      'https://api.buttondown.email/v1/subscribers',
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Token ${process.env.BUTTONDOWN_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          metadata: {
+            referrer: referrer || 'summit-chronicles',
+            subscribed_at: new Date().toISOString(),
+            source: 'website',
+          },
+          tags: ['everest-training', 'website-signup'],
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      throw new Error(
+        errorData?.message || 'Newsletter provider rejected the subscription'
+      );
+    }
+
+    const subscriber = await response.json();
+    console.log('Newsletter subscription successful:', {
+      subscriber_id: subscriber.id,
+      referrer,
+    });
 
     return NextResponse.json({
-      message: 'Successfully subscribed to the newsletter!',
+      message: 'Successfully subscribed to the Summit Chronicles newsletter!',
       email,
+      subscriber_id: subscriber.id,
     });
   } catch (error) {
     console.error('Newsletter subscription error:', error);

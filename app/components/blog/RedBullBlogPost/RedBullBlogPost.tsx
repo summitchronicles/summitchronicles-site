@@ -1,22 +1,43 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
-  Calendar,
-  Clock,
   ArrowLeft,
-  Share2,
+  ArrowRight,
+  CalendarDays,
+  Check,
+  Clock3,
   Edit3,
-  Eye,
-  User,
   MapPin,
-  Mountain,
-  TrendingUp,
-  Award,
+  Share2,
+  User,
 } from 'lucide-react';
+
+interface StorySection {
+  title: string;
+  content: string;
+  image?: string;
+  pullQuote?: string;
+}
+
+interface BlogPostData {
+  title: string;
+  subtitle: string;
+  author: string;
+  date: string;
+  readTime: string;
+  category: string;
+  location?: string;
+  heroImage: string;
+  content: {
+    intro: string;
+    sections: StorySection[];
+  };
+  tags: string[];
+}
 
 interface RedBullBlogPostProps {
   post?: any;
@@ -34,27 +55,7 @@ interface RedBullBlogPostProps {
   ) => void;
 }
 
-interface BlogPostData {
-  title: string;
-  subtitle: string;
-  author: string;
-  date: string;
-  readTime: string;
-  category: string;
-  location: string;
-  heroImage: string;
-  content: {
-    intro: string;
-    sections: Array<{
-      title: string;
-      content: string;
-      image?: string;
-      pullQuote?: string;
-    }>;
-  };
-  tags: string[];
-  views: string;
-}
+const FALLBACK_IMAGE = '/images/sunith-visionary-planning.png';
 
 export function RedBullBlogPost({
   post,
@@ -68,435 +69,438 @@ export function RedBullBlogPost({
   onIntroChange,
 }: RedBullBlogPostProps) {
   const [readingProgress, setReadingProgress] = useState(0);
+  const [shareComplete, setShareComplete] = useState(false);
+  const displayPost = useMemo(() => normalizePost(post), [post]);
 
-  // Red Bull-style sample content
-  const samplePost: BlogPostData = {
-    title: 'The Mental Game',
-    subtitle:
-      'Preparing Mind and Body for Everest 2028: A Systematic Approach to Peak Performance',
-    author: 'Sunith Kumar',
-    date: 'December 15, 2024',
-    readTime: '12 min read',
-    category: 'MENTAL PREPARATION',
-    location: 'Training Grounds, California',
-    heroImage: '/stories/everest-prep.jpeg',
-    views: '2.1K',
-    tags: ['Mental Training', 'Everest', 'Peak Performance', 'Mountaineering'],
-    content: {
-      intro:
-        'Every summit begins in the mind. The statistics are sobering: only 29% of climbers who attempt Mount Everest actually reach the summit. Of those who turn back or fail, the majority cite mental challenges rather than physical limitations. This realization fundamentally changed how I approach my preparation for the 2028 objective.',
-      sections: [
-        {
-          title: 'The Psychology of Extreme Altitude',
-          content:
-            "At 8,849 meters above sea level, Everest exists in what mountaineers call the 'Death Zone' — altitudes where the human body literally begins to die. But before your body fails, your mind is tested in ways most people never experience.\n\nDuring my preparation, I've discovered that mental training requires the same systematic approach I apply to physical conditioning. It's not enough to simply 'think positive' — you need structured psychological preparation.",
-          pullQuote:
-            "The mountain doesn't care about your plan — but your preparation does. Mental preparation isn't just helpful; it's the difference between life and death.",
-        },
-        {
-          title: 'Visualization and Mental Rehearsal',
-          content:
-            "Every day, I spend 30 minutes visualizing the Everest climb in intricate detail. I mentally rehearse everything from the technical challenges of the Khumbu Icefall to the psychological pressure of the final summit push.\n\nThis isn't daydreaming — it's systematic mental training. Sports psychology research shows that mental rehearsal activates the same neural pathways as physical practice. When I'm actually on the mountain facing these challenges, my brain will recognize the situations and respond with practiced calm.",
-          image: '/stories/data-training.jpg',
-        },
-        {
-          title: 'Stress Inoculation Training',
-          content:
-            "One of the most valuable aspects of my training has been deliberately exposing myself to controlled stress and discomfort. This includes cold exposure training in near-freezing conditions, altitude simulation in hypoxic chambers, extended periods of physical discomfort during long training sessions, and decision-making exercises under fatigue and pressure.\n\nThe goal isn't to eliminate fear or discomfort — it's to maintain clear thinking and good judgment when these feelings arise.",
-        },
-        {
-          title: 'Data-Driven Mental Training',
-          content:
-            "Just as I track physical metrics like heart rate and VO2 max, I've begun quantifying my mental training. I use apps to monitor meditation consistency, stress response patterns, and decision-making speed under pressure.\n\nThis data reveals patterns I wouldn't notice otherwise. For example, my stress response improves significantly after just 10 minutes of morning meditation, but shows diminishing returns beyond 20 minutes. This allows me to optimize my mental training time.",
-        },
-      ],
-    },
+  useEffect(() => {
+    const updateProgress = () => {
+      const article = document.querySelector('[data-story-body]');
+      if (!article) return;
+      const bounds = article.getBoundingClientRect();
+      const total = Math.max(1, article.scrollHeight - window.innerHeight);
+      const traversed = Math.min(total, Math.max(0, -bounds.top));
+      setReadingProgress((traversed / total) * 100);
+    };
+
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
+    return () => {
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
+    };
+  }, []);
+
+  const handleShare = async () => {
+    const shareData = {
+      title: displayPost.title,
+      text: displayPost.subtitle,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+      }
+      setShareComplete(true);
+      window.setTimeout(() => setShareComplete(false), 1800);
+    } catch (error) {
+      if ((error as Error).name !== 'AbortError') {
+        console.error('Story sharing failed:', error);
+      }
+    }
   };
 
-  const displayPost = post
-    ? {
-        title: post.title,
-        subtitle: post.subtitle || post.excerpt || '',
-        author: post.author?.name || 'Sunith Kumar',
-        date: post.date
-          ? new Date(post.date).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })
-          : new Date().toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }),
-        readTime: post.readTime || '5 min read',
-        category: post.categories?.[0]?.title?.toUpperCase() || 'STORY',
-        location: post.location || 'Training Grounds, California',
-        heroImage: post.mainImage || '/stories/everest-prep.jpeg',
-        views: '2.1K',
-        tags: post.categories?.map((cat: any) => cat.title) || samplePost.tags,
-        content: post.content || samplePost.content, // Use actual post content
-      }
-    : samplePost;
-
-  // Helper for Editable Image Overlay
-  const EditableOverlay = ({ onClick }: { onClick: () => void }) => (
-    <div
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick();
-      }}
-      className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity cursor-pointer z-20 group"
-    >
-      <div className="bg-summit-gold text-black px-4 py-2 rounded-full font-bold flex items-center gap-2 transform group-hover:scale-105 transition-transform">
-        <Edit3 className="w-4 h-4" />
-        <span>Replace Image</span>
-      </div>
-    </div>
-  );
-
-  // ... existing useEffect and helper functions ...
-
   return (
-    <article className={`bg-black min-h-screen ${className}`}>
-      {/* ... existing Reading Progress and Header ... */}
+    <article className={`min-h-screen bg-[#080808] text-white ${className}`}>
+      <div
+        className="fixed left-0 top-0 z-[130] h-1 w-full bg-white/10"
+        aria-hidden="true"
+      >
+        <div
+          className="h-full bg-summit-gold transition-[width] duration-150"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
 
-      {/* Hero Section */}
-      <section className="relative">
-        <div className="relative h-[70vh] overflow-hidden group">
-          {displayPost.heroImage ? (
-            <Image
-              src={displayPost.heroImage}
-              alt={displayPost.title}
-              fill
-              className="object-cover bg-black"
-              sizes="100vw"
-              quality={100}
-              unoptimized={true}
-              priority
-            />
-          ) : (
-            <div className="absolute inset-0 bg-zinc-950 flex items-center justify-center">
-              <span className="text-zinc-700 text-sm font-mono uppercase tracking-widest">No Cover Image</span>
+      <section className="relative flex min-h-[76svh] items-end overflow-hidden border-b border-white/10 sm:min-h-[82svh]">
+        <Image
+          src={displayPost.heroImage}
+          alt={displayPost.title}
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+          unoptimized
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-black/55 to-black/15" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-transparent" />
+
+        {isEditable && onImageClick ? (
+          <button
+            type="button"
+            onClick={() => onImageClick('hero', displayPost.heroImage)}
+            className="absolute right-5 top-5 z-20 inline-flex min-h-11 items-center gap-2 rounded-md border border-white/20 bg-black/70 px-4 py-2 text-sm font-bold text-white backdrop-blur-md"
+          >
+            <Edit3 className="h-4 w-4" />
+            Replace image
+          </button>
+        ) : null}
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="relative z-10 mx-auto w-full max-w-7xl px-5 pb-10 sm:px-8 sm:pb-14 lg:px-12"
+        >
+          <Link
+            href="/blog"
+            className="mb-8 inline-flex items-center gap-2 text-xs font-mono uppercase text-zinc-300 transition-colors hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Stories
+          </Link>
+
+          <div className="max-w-5xl">
+            <div className="text-xs font-mono uppercase text-summit-gold-300">
+              {displayPost.category}
             </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />
-
-          {/* Editable Overlay for Hero Image */}
-          {isEditable && onImageClick && (
-            <EditableOverlay
-              onClick={() => onImageClick('hero', displayPost.heroImage)}
-            />
-          )}
-
-          {/* Hero Content Overlay */}
-          <div className="absolute bottom-0 left-0 w-full p-8 md:p-12 z-10">
-            <div className="max-w-4xl mx-auto">
-              <div className="flex items-center space-x-4 mb-6">
-                <span className="px-3 py-1 bg-summit-gold text-black text-xs font-bold uppercase tracking-wider rounded">
-                  {displayPost.category}
-                </span>
-                <span className="text-gray-300 text-sm flex items-center">
-                  <Mountain className="w-4 h-4 mr-1" />
-                  Story
-                </span>
-              </div>
-
-              <h1
-                className={`text-4xl md:text-6xl font-bold text-white mb-4 leading-tight font-oswald ${isEditable ? 'cursor-text hover:bg-white/10 rounded px-2 -ml-2 ring-2 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
-                contentEditable={isEditable}
-                suppressContentEditableWarning={true}
-                onBlur={(e) =>
-                  isEditable &&
-                  onTitleChange &&
-                  onTitleChange(e.currentTarget.textContent || '')
-                }
-              >
-                {displayPost.title}
-              </h1>
-
+            <h1
+              className={`mt-5 max-w-5xl font-oswald text-5xl font-bold uppercase leading-[0.92] text-white sm:text-7xl lg:text-8xl ${editableClass(isEditable)}`}
+              contentEditable={isEditable}
+              suppressContentEditableWarning
+              onBlur={(event) =>
+                isEditable &&
+                onTitleChange?.(event.currentTarget.textContent || '')
+              }
+            >
+              {displayPost.title}
+            </h1>
+            {displayPost.subtitle ? (
               <p
-                className={`text-xl md:text-2xl text-gray-200 mb-8 font-light ${isEditable ? 'cursor-text hover:bg-white/10 rounded px-2 -ml-2 ring-2 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
+                className={`mt-6 max-w-3xl text-lg leading-8 text-zinc-200 sm:text-2xl sm:leading-9 ${editableClass(isEditable)}`}
                 contentEditable={isEditable}
-                suppressContentEditableWarning={true}
-                onBlur={(e) =>
+                suppressContentEditableWarning
+                onBlur={(event) =>
                   isEditable &&
-                  onSubtitleChange &&
-                  onSubtitleChange(e.currentTarget.textContent || '')
+                  onSubtitleChange?.(event.currentTarget.textContent || '')
                 }
               >
                 {displayPost.subtitle}
               </p>
+            ) : null}
 
-              <div className="flex flex-wrap items-center gap-6 text-sm text-gray-200 font-mono font-medium">
-                <div className="flex items-center">
-                  <User className="w-4 h-4 mr-2 text-summit-gold" />
-                  {displayPost.author}
-                </div>
-                <div className="flex items-center">
-                  <Calendar className="w-4 h-4 mr-2 text-summit-gold" />
-                  {displayPost.date}
-                </div>
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 mr-2 text-summit-gold" />
-                  {displayPost.readTime}
-                </div>
-                {displayPost.location && (
-                  <div className="flex items-center">
-                    <MapPin className="w-4 h-4 mr-2 text-summit-gold" />
-                    {displayPost.location}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Article Content */}
-      <section className="max-w-4xl mx-auto px-6 py-12">
-        {/* Intro */}
-        {displayPost.content.intro && (
-          <div className="mb-12">
-            {displayPost.content.intro
-              .split('\n\n')
-              .map((paragraph: string, index: number) => {
-                const isQuote = paragraph.trim().startsWith('>');
-                const cleanContent = isQuote
-                  ? paragraph.replace(/^>\s?/, '').trim()
-                  : paragraph;
-
-                if (isQuote) {
-                  return (
-                    <div
-                      key={index}
-                      className="my-8 flex flex-col md:flex-row gap-6 items-start"
-                    >
-                      <div className="text-5xl md:text-6xl text-summit-gold leading-none font-serif select-none">
-                        "
-                      </div>
-                      <blockquote className="flex-1">
-                        <p className="text-2xl md:text-3xl lg:text-4xl font-extrabold italic text-white leading-tight">
-                          {cleanContent}
-                        </p>
-                      </blockquote>
-                    </div>
-                  );
-                }
-
-                return (
-                  <p
-                    key={index}
-                    className={`text-xl md:text-2xl text-gray-300 mb-6 leading-relaxed font-serif ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
-                    contentEditable={isEditable}
-                    suppressContentEditableWarning={true}
-                    onBlur={(e) =>
-                      isEditable &&
-                      onIntroChange &&
-                      onIntroChange(e.currentTarget.textContent || '')
-                    }
-                  >
-                    {paragraph}
-                  </p>
-                );
-              })}
-          </div>
-        )}
-
-        {/* Content Sections */}
-        <div className="space-y-12">
-          {displayPost.content.sections.map((section: any, index: number) => (
-            <div key={index} className="space-y-6">
-              <h2
-                className={`text-2xl md:text-3xl font-bold text-white leading-tight ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
-                contentEditable={isEditable}
-                suppressContentEditableWarning={true}
-                onBlur={(e) =>
-                  isEditable &&
-                  onSectionChange &&
-                  onSectionChange(
-                    index,
-                    'title',
-                    e.currentTarget.textContent || ''
-                  )
-                }
-              >
-                {section.title}
-              </h2>
-
-              {section.image && (
-                <div className="my-8 relative group">
-                  {section.image.startsWith('placeholder:') ? (
-                    <div className="w-full h-[400px] bg-gray-900 border-2 border-dashed border-gray-700 rounded-lg flex flex-col items-center justify-center p-8 text-center">
-                      <p className="text-gray-500 font-mono text-sm uppercase tracking-wider mb-2">
-                        Image Placeholder
-                      </p>
-                      <p className="text-gray-300 font-bold text-lg max-w-lg">
-                        &quot;{section.image.replace('placeholder:', '')}&quot;
-                      </p>
-                      {isEditable && (
-                        <button
-                          onClick={() =>
-                            onImageClick &&
-                            onImageClick(`section-${index}`, section.image)
-                          }
-                          className="mt-6 px-6 py-2 bg-summit-gold/10 text-summit-gold border border-summit-gold rounded hover:bg-summit-gold hover:text-black transition-colors font-bold uppercase text-xs tracking-widest"
-                        >
-                          Upload Image
-                        </button>
-                      )}
-                    </div>
-                  ) : (
-                    <>
-                      <Image
-                        src={section.image}
-                        alt={section.title}
-                        width={1200}
-                        height={600}
-                        quality={100}
-                        unoptimized={true}
-                        className="w-full rounded-lg object-contain bg-white/5 border border-white/10"
-                      />
-                      {/* Editable Overlay for Section Image */}
-                      {isEditable && onImageClick && (
-                        <EditableOverlay
-                          onClick={() =>
-                            onImageClick(`section-${index}`, section.image)
-                          }
-                        />
-                      )}
-                    </>
-                  )}
-                </div>
-              )}
-
-              {/* ... existing prose content and pullquote ... */}
-
-              <div className="prose prose-lg prose-invert max-w-none">
-                {section.content
-                  .split('\n\n')
-                  .map((paragraph: string, pIndex: number) => {
-                    // Check if this paragraph is a blockquote (starts with >)
-                    const isQuote = paragraph.trim().startsWith('>');
-                    const cleanContent = isQuote
-                      ? paragraph.replace(/^>\s?/, '').trim()
-                      : paragraph;
-
-                    if (isQuote) {
-                      return (
-                        <div
-                          key={pIndex}
-                          className="my-12 flex flex-col md:flex-row gap-8 items-start"
-                        >
-                          {/* Decorative Quote Mark */}
-                          <div className="text-6xl md:text-8xl text-summit-gold leading-none font-serif select-none">
-                            "
-                          </div>
-                          {/* Quote Content */}
-                          <blockquote className="flex-1">
-                            <p className="text-2xl md:text-3xl lg:text-4xl font-extrabold italic text-white leading-tight mb-4">
-                              {cleanContent}
-                            </p>
-                          </blockquote>
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <p
-                        key={pIndex}
-                        className={`text-gray-300 leading-relaxed mb-6 ${isEditable ? 'cursor-text hover:bg-white/5 rounded px-2 -ml-2 ring-1 ring-transparent focus:ring-summit-gold outline-none' : ''}`}
-                        contentEditable={isEditable}
-                        suppressContentEditableWarning={true}
-                        onBlur={(e) => {
-                          if (isEditable && onSectionChange) {
-                            // Reconstruct content with updated paragraph
-                            const paragraphs = section.content.split('\n\n');
-                            paragraphs[pIndex] =
-                              e.currentTarget.textContent || '';
-                            onSectionChange(
-                              index,
-                              'content',
-                              paragraphs.join('\n\n')
-                            );
-                          }
-                        }}
-                      >
-                        {paragraph}
-                      </p>
-                    );
-                  })}
-              </div>
-
-              {section.pullQuote && (
-                <div className="my-12 flex flex-col md:flex-row gap-8 items-start">
-                  {/* Decorative Quote Mark */}
-                  <div className="text-6xl md:text-8xl text-summit-gold leading-none font-serif select-none">
-                    "
-                  </div>
-                  {/* Quote Content */}
-                  <blockquote className="flex-1">
-                    <p className="text-2xl md:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4">
-                      {section.pullQuote}
-                    </p>
-                  </blockquote>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Tags */}
-        <div className="mt-16 pt-8 border-t border-white/10">
-          <div className="flex flex-wrap gap-3">
-            {displayPost.tags.map((tag: string, index: number) => (
-              <span
-                key={index}
-                className="px-3 py-1 bg-white/5 text-gray-400 text-sm rounded-full hover:bg-summit-gold/20 hover:text-summit-gold transition-colors cursor-pointer border border-white/5 hover:border-summit-gold/30"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        {/* Author Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mt-16 p-8 bg-white/5 rounded-2xl border border-white/10"
-        >
-          <div className="flex items-start space-x-4">
-            <div className="w-16 h-16 bg-summit-gold/20 rounded-full flex items-center justify-center border border-summit-gold/30">
-              <User className="w-8 h-8 text-summit-gold" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-white mb-2">
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 border-t border-white/15 pt-5 text-xs font-mono uppercase text-zinc-300">
+              <span className="inline-flex items-center gap-2">
+                <User className="h-4 w-4 text-summit-gold" />
                 {displayPost.author}
-              </h3>
-              <p className="text-gray-400 leading-relaxed">
-                Mountaineer and systematic athlete pursuing the Seven Summits
-                challenge. Currently rebuilding toward Mount Everest in 2028
-                through physiotherapy, strength work, and data-driven
-                preparation.
-              </p>
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <CalendarDays className="h-4 w-4 text-summit-gold" />
+                {displayPost.date}
+              </span>
+              <span className="inline-flex items-center gap-2">
+                <Clock3 className="h-4 w-4 text-summit-gold" />
+                {displayPost.readTime}
+              </span>
+              {displayPost.location ? (
+                <span className="inline-flex items-center gap-2">
+                  <MapPin className="h-4 w-4 text-summit-gold" />
+                  {displayPost.location}
+                </span>
+              ) : null}
             </div>
           </div>
         </motion.div>
+      </section>
 
-        {/* Navigation */}
-        <div className="mt-16 text-center">
+      <div
+        data-story-body
+        className="relative mx-auto grid max-w-7xl gap-12 px-5 py-14 sm:px-8 sm:py-20 lg:grid-cols-[13rem_minmax(0,46rem)] lg:justify-center lg:px-12"
+      >
+        <aside className="hidden lg:block">
+          <div className="sticky top-28 border-t border-white/10 pt-5">
+            <div className="text-xs font-mono uppercase text-zinc-600">
+              In this story
+            </div>
+            <nav className="mt-4" aria-label="Story chapters">
+              <ol className="space-y-3">
+                {displayPost.content.sections.map((section, index) => (
+                  <li key={`${section.title}-${index}`}>
+                    <a
+                      href={`#chapter-${index + 1}`}
+                      className="text-sm leading-5 text-zinc-500 transition-colors hover:text-summit-gold-200"
+                    >
+                      {section.title || `Chapter ${index + 1}`}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="mt-8 inline-flex min-h-10 items-center gap-2 text-xs font-mono uppercase text-zinc-400 transition-colors hover:text-white"
+            >
+              {shareComplete ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <Share2 className="h-4 w-4" />
+              )}
+              {shareComplete ? 'Link copied' : 'Share story'}
+            </button>
+          </div>
+        </aside>
+
+        <div className="min-w-0">
+          <IntroContent
+            content={displayPost.content.intro}
+            isEditable={isEditable}
+            onChange={onIntroChange}
+          />
+
+          <div className="mt-16 space-y-20 sm:mt-20 sm:space-y-24">
+            {displayPost.content.sections.map((section, index) => (
+              <StoryChapter
+                key={`${section.title}-${index}`}
+                section={section}
+                index={index}
+                isEditable={isEditable}
+                onImageClick={onImageClick}
+                onSectionChange={onSectionChange}
+              />
+            ))}
+          </div>
+
+          {displayPost.tags.length ? (
+            <div className="mt-20 border-y border-white/10 py-6">
+              <div className="flex flex-wrap gap-x-5 gap-y-3 text-xs font-mono uppercase text-zinc-500">
+                {displayPost.tags.map((tag) => (
+                  <span key={tag}>#{tag}</span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="mt-12 flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={handleShare}
+              className="inline-flex min-h-12 items-center justify-center gap-3 rounded-md border border-white/15 px-5 py-3 text-sm font-bold uppercase text-white transition-colors hover:border-white/35"
+            >
+              {shareComplete ? (
+                <Check className="h-4 w-4" />
+              ) : (
+                <Share2 className="h-4 w-4" />
+              )}
+              {shareComplete ? 'Link copied' : 'Share story'}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <section className="border-t border-white/10 bg-[#0c0c0c]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 px-5 py-14 sm:px-8 md:flex-row md:items-center md:justify-between lg:px-12">
+          <div>
+            <div className="text-xs font-mono uppercase text-summit-gold-300">
+              Continue exploring
+            </div>
+            <h2 className="mt-3 font-oswald text-4xl font-bold uppercase text-white sm:text-5xl">
+              More stories from the ascent
+            </h2>
+          </div>
           <Link
             href="/blog"
-            className="inline-flex items-center space-x-2 text-summit-gold hover:text-white transition-colors font-medium border-b border-transparent hover:border-summit-gold pb-0.5"
+            className="inline-flex min-h-12 shrink-0 items-center justify-center gap-3 rounded-md border border-white/15 px-5 py-3 text-sm font-bold uppercase text-white transition-colors hover:border-summit-gold hover:text-summit-gold"
           >
-            <ArrowLeft className="w-4 h-4" />
-            <span>More Mountain Chronicles</span>
+            Open the archive
+            <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
       </section>
     </article>
   );
+}
+
+function IntroContent({
+  content,
+  isEditable,
+  onChange,
+}: {
+  content: string;
+  isEditable: boolean;
+  onChange?: (value: string) => void;
+}) {
+  if (!content) return null;
+  return (
+    <div className="space-y-7">
+      {content.split('\n\n').map((paragraph, index) => {
+        const quote = paragraph.trim().startsWith('>');
+        const text = quote ? paragraph.replace(/^>\s?/, '').trim() : paragraph;
+        if (quote) return <PullQuote key={index} text={text} />;
+        return (
+          <p
+            key={index}
+            className={`font-serif text-xl leading-9 text-zinc-200 sm:text-2xl sm:leading-10 ${editableClass(isEditable)}`}
+            contentEditable={isEditable}
+            suppressContentEditableWarning
+            onBlur={(event) =>
+              isEditable && onChange?.(event.currentTarget.textContent || '')
+            }
+          >
+            {text}
+          </p>
+        );
+      })}
+    </div>
+  );
+}
+
+function StoryChapter({
+  section,
+  index,
+  isEditable,
+  onImageClick,
+  onSectionChange,
+}: {
+  section: StorySection;
+  index: number;
+  isEditable: boolean;
+  onImageClick?: (key: string, currentSrc: string) => void;
+  onSectionChange?: (
+    index: number,
+    field: 'title' | 'content',
+    value: string
+  ) => void;
+}) {
+  return (
+    <section id={`chapter-${index + 1}`} className="scroll-mt-28">
+      <div className="text-xs font-mono uppercase text-summit-gold-300">
+        Chapter {String(index + 1).padStart(2, '0')}
+      </div>
+      <h2
+        className={`mt-4 font-oswald text-4xl font-bold uppercase leading-tight text-white sm:text-5xl ${editableClass(isEditable)}`}
+        contentEditable={isEditable}
+        suppressContentEditableWarning
+        onBlur={(event) =>
+          isEditable &&
+          onSectionChange?.(
+            index,
+            'title',
+            event.currentTarget.textContent || ''
+          )
+        }
+      >
+        {section.title || `Chapter ${index + 1}`}
+      </h2>
+
+      {section.image ? (
+        <div className="group relative my-9 -mx-5 aspect-[4/3] overflow-hidden bg-zinc-900 sm:mx-0 sm:aspect-[16/10]">
+          {section.image.startsWith('placeholder:') ? (
+            <div className="flex h-full items-center justify-center border border-dashed border-white/20 p-8 text-center text-zinc-500">
+              {section.image.replace('placeholder:', '')}
+            </div>
+          ) : (
+            <Image
+              src={section.image}
+              alt={section.title || 'Story image'}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 736px"
+              unoptimized
+            />
+          )}
+          {isEditable && onImageClick ? (
+            <button
+              type="button"
+              onClick={() =>
+                onImageClick(`section-${index}`, section.image || '')
+              }
+              className="absolute inset-0 flex items-center justify-center bg-black/60 text-sm font-bold uppercase text-white opacity-0 transition-opacity group-hover:opacity-100"
+            >
+              Replace image
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className="mt-7 space-y-7">
+        {section.content.split('\n\n').map((paragraph, paragraphIndex) => {
+          const quote = paragraph.trim().startsWith('>');
+          const text = quote
+            ? paragraph.replace(/^>\s?/, '').trim()
+            : paragraph;
+          if (quote) return <PullQuote key={paragraphIndex} text={text} />;
+          return (
+            <p
+              key={paragraphIndex}
+              className={`text-lg leading-8 text-zinc-300 sm:text-xl sm:leading-9 ${editableClass(isEditable)}`}
+              contentEditable={isEditable}
+              suppressContentEditableWarning
+              onBlur={(event) => {
+                if (!isEditable || !onSectionChange) return;
+                const paragraphs = section.content.split('\n\n');
+                paragraphs[paragraphIndex] =
+                  event.currentTarget.textContent || '';
+                onSectionChange(index, 'content', paragraphs.join('\n\n'));
+              }}
+            >
+              {text}
+            </p>
+          );
+        })}
+      </div>
+
+      {section.pullQuote ? <PullQuote text={section.pullQuote} /> : null}
+    </section>
+  );
+}
+
+function PullQuote({ text }: { text: string }) {
+  return (
+    <blockquote className="my-10 border-l-2 border-summit-gold pl-6 sm:pl-8">
+      <p className="font-oswald text-3xl font-bold uppercase leading-tight text-white sm:text-4xl">
+        {text}
+      </p>
+    </blockquote>
+  );
+}
+
+function editableClass(isEditable: boolean) {
+  return isEditable
+    ? 'rounded-sm outline-none transition-colors hover:bg-white/[0.04] focus:bg-white/[0.06] focus:ring-1 focus:ring-summit-gold'
+    : '';
+}
+
+function normalizePost(post: any): BlogPostData {
+  const author =
+    typeof post?.author === 'string'
+      ? post.author
+      : post?.author?.name || 'Sunith Kumar';
+  const category =
+    post?.category || post?.categories?.[0]?.title || 'Field Note';
+  const tags =
+    post?.tags || post?.categories?.map((item: any) => item.title) || [];
+  const date = post?.date
+    ? new Date(post.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : 'Recent';
+
+  return {
+    title: post?.title || 'Untitled story',
+    subtitle: post?.subtitle || post?.excerpt || '',
+    author,
+    date,
+    readTime: post?.readTime || '5 min read',
+    category: String(category).toUpperCase(),
+    location: post?.location,
+    heroImage: post?.mainImage || post?.heroImage || FALLBACK_IMAGE,
+    content: post?.content || { intro: '', sections: [] },
+    tags: tags.filter(Boolean),
+  };
 }

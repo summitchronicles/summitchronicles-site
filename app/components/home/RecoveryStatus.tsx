@@ -42,16 +42,8 @@ export const RecoveryStatus = ({ vo2Max, latestLog }: RecoveryStatusProps) => {
       onHoverEnd={() => setIsHovered(false)}
       className="relative h-full overflow-hidden rounded-2xl bg-black border border-white/10 group"
     >
-      {/* Background Ambience - Living Pulse */}
+      {/* Background texture */}
       <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-20 mix-blend-overlay"></div>
-      <motion.div
-        animate={{
-          opacity: [0.3, 0.5, 0.3],
-          scale: [1, 1.1, 1],
-        }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        className="absolute -top-32 -right-32 w-96 h-96 bg-amber-500/10 rounded-full blur-[100px]"
-      />
 
       {/* Scanning Line Effect */}
       <motion.div

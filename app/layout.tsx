@@ -5,7 +5,6 @@ import {
   OrganizationStructuredData,
   BreadcrumbStructuredData,
 } from './components/seo/StructuredData';
-import { FloatingAIButton } from './components/ai/FloatingAIButton';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://summitchronicles.com'),
@@ -67,11 +66,8 @@ export default function RootLayout({
         <OrganizationStructuredData />
         <BreadcrumbStructuredData />
       </head>
-      <body
-        className="font-sans antialiased text-white bg-black mobile-safe"
-      >
+      <body className="font-sans antialiased text-white bg-black mobile-safe">
         {children}
-        <FloatingAIButton />
       </body>
     </html>
   );

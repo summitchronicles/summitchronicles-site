@@ -89,7 +89,8 @@ export function NotionEditor({
   );
 
   const [frontmatter, setFrontmatter] = useState(initialFrontmatter);
-  const heroImage = frontmatter.image || '/stories/default.jpg';
+  const heroImage =
+    frontmatter.image || '/images/sunith-visionary-planning.png';
   const title = frontmatter.title || 'Untitled';
   const subtitle = frontmatter.description || frontmatter.subtitle || '';
 
@@ -284,10 +285,14 @@ export function NotionEditor({
       {/* Metadata Fields */}
       <div className="max-w-4xl mx-auto px-6 py-4 flex flex-wrap gap-4 border-b border-white/10">
         <div className="flex items-center gap-2">
-          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Date</label>
+          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">
+            Date
+          </label>
           <input
             type="date"
-            value={frontmatter.date ? String(frontmatter.date).split('T')[0] : ''}
+            value={
+              frontmatter.date ? String(frontmatter.date).split('T')[0] : ''
+            }
             onChange={(e) =>
               setFrontmatter((prev) => ({ ...prev, date: e.target.value }))
             }
@@ -295,7 +300,9 @@ export function NotionEditor({
           />
         </div>
         <div className="flex items-center gap-2">
-          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Author</label>
+          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">
+            Author
+          </label>
           <input
             type="text"
             value={frontmatter.author || ''}
@@ -307,14 +314,23 @@ export function NotionEditor({
           />
         </div>
         <div className="flex items-center gap-2">
-          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">Tags</label>
+          <label className="text-[10px] uppercase tracking-widest text-gray-500 font-mono">
+            Tags
+          </label>
           <input
             type="text"
-            value={Array.isArray(frontmatter.tags) ? frontmatter.tags.join(', ') : (frontmatter.tags || '')}
+            value={
+              Array.isArray(frontmatter.tags)
+                ? frontmatter.tags.join(', ')
+                : frontmatter.tags || ''
+            }
             onChange={(e) =>
               setFrontmatter((prev) => ({
                 ...prev,
-                tags: e.target.value.split(',').map((t: string) => t.trim()).filter(Boolean),
+                tags: e.target.value
+                  .split(',')
+                  .map((t: string) => t.trim())
+                  .filter(Boolean),
               }))
             }
             placeholder="tag1, tag2, tag3"

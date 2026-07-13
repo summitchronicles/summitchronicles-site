@@ -128,8 +128,9 @@ export function normalizeTrainingActivities(
     averagePower: activity.averagePower,
     averageRunningPower: activity.averageRunningPower,
     vo2MaxValue: activity.vo2MaxValue,
-    activityType:
-      activity.activityType ?? { typeKey: (activity.type || 'unknown').toLowerCase() },
+    activityType: activity.activityType ?? {
+      typeKey: (activity.type || 'unknown').toLowerCase(),
+    },
     description: activity.description || '',
   }));
 }
@@ -141,9 +142,16 @@ export function createDerivedTrainingWellness(
   return {
     bodyBattery: 0,
     bodyBatteryTimeline: [],
-    stressScore: latestWellness.restingHR ? 100 - latestWellness.restingHR : 50,
+    stressScore:
+      typeof latestWellness.stressScore === 'number'
+        ? latestWellness.stressScore
+        : typeof latestWellness.stress === 'number'
+          ? latestWellness.stress
+          : 0,
     vo2Max: latestWellness.vo2max || manualVo2Max,
-    hrvStatus: latestWellness.hrv ? `${Math.round(latestWellness.hrv)} ms` : 'N/A',
+    hrvStatus: latestWellness.hrv
+      ? `${Math.round(latestWellness.hrv)} ms`
+      : 'N/A',
     restingHR: latestWellness.restingHR,
   };
 }
@@ -183,7 +191,7 @@ export function calculateTrainingMetrics(
         trend: 'up',
       },
       currentRestingHR: {
-        value: wellness.restingHR ? `${wellness.restingHR} bpm` : '55 bpm',
+        value: wellness.restingHR ? `${wellness.restingHR} bpm` : '--',
         description: 'Current resting heart rate',
         trend: 'down',
       },
@@ -222,14 +230,14 @@ export function getFallbackTrainingMetrics(): TrainingMetricsPayload {
         trend: 'up',
       },
       totalElevationThisYear: {
-        value: '356K m',
-        description: 'Estimated total vertical gain',
-        trend: 'up',
+        value: '--',
+        description: 'No observed elevation data',
+        trend: 'stable',
       },
       currentRestingHR: {
-        value: '42 bpm',
-        description: 'Estimated resting heart rate',
-        trend: 'down',
+        value: '--',
+        description: 'No observed recovery data',
+        trend: 'stable',
       },
     },
     trainingPhases: [
@@ -249,14 +257,14 @@ export function getFallbackTrainingMetrics(): TrainingMetricsPayload {
     ],
     recentTrends: {
       weeklyVolume: {
-        value: '15 hrs',
-        description: 'Estimated weekly training',
-        trend: 'up',
+        value: '--',
+        description: 'No observed weekly training',
+        trend: 'stable',
       },
       monthlyActivities: {
-        value: '12',
-        description: 'Estimated monthly activities',
-        trend: 'up',
+        value: '--',
+        description: 'No observed monthly activities',
+        trend: 'stable',
       },
       elevationThisWeek: {
         value: '0 m',
@@ -264,46 +272,24 @@ export function getFallbackTrainingMetrics(): TrainingMetricsPayload {
         trend: 'up',
       },
       currentFitness: {
-        value: '0/100',
-        description: 'Estimated fitness level',
-        trend: 'up',
+        value: '--',
+        description: 'Fitness model unavailable',
+        trend: 'stable',
       },
     },
     expeditionProgress: DEFAULT_EXPEDITION_PROGRESS,
     advancedPerformance: {
-      vo2Max: { value: 58.2, change: 2.1, unit: 'ml/kg/min', trend: 'up' },
-      powerOutput: { value: 285, change: 12, unit: 'watts', trend: 'up' },
-      lactateThreshold: { value: 168, change: -3, unit: 'bpm', trend: 'down' },
-      recoveryRate: { value: 92, change: 0, unit: '%', trend: 'stable' },
+      vo2Max: { value: 0, change: 0, unit: 'ml/kg/min', trend: 'stable' },
+      powerOutput: { value: 0, change: 0, unit: 'watts', trend: 'stable' },
+      lactateThreshold: { value: 0, change: 0, unit: 'bpm', trend: 'stable' },
+      recoveryRate: { value: 0, change: 0, unit: '%', trend: 'stable' },
     },
-    predictions: [
-      {
-        metric: 'Everest Readiness Score',
-        current: 72,
-        predicted: 87,
-        confidence: 0.85,
-        timeframe: '6 months',
-      },
-      {
-        metric: 'Max Altitude Capability',
-        current: 5500,
-        predicted: 6800,
-        confidence: 0.78,
-        timeframe: '4 months',
-      },
-      {
-        metric: 'Endurance Index',
-        current: 8.2,
-        predicted: 9.1,
-        confidence: 0.92,
-        timeframe: '3 months',
-      },
-    ],
+    predictions: [],
     bodyBattery: 0,
     bodyBatteryTimeline: [],
-    stressScore: 50,
+    stressScore: 0,
     hrvStatus: 'N/A',
-    vo2Max: 45,
+    vo2Max: 0,
     recentActivities: [],
   };
 }
@@ -340,50 +326,41 @@ function calculateAdvancedPerformance(
     );
   };
 
-  const currentVo2 = wellness.vo2Max || getAverage(recentActivities, 'vo2MaxValue') || 45;
-  const previousVo2 = getAverage(previousActivities, 'vo2MaxValue') || 56.1;
+  const currentVo2 =
+    wellness.vo2Max || getAverage(recentActivities, 'vo2MaxValue');
+  const previousVo2 = getAverage(previousActivities, 'vo2MaxValue');
 
   const currentPower =
     getAverage(recentActivities, 'averagePower') ||
-    getAverage(recentActivities, 'averageRunningPower') ||
-    285;
+    getAverage(recentActivities, 'averageRunningPower');
   const previousPower =
     getAverage(previousActivities, 'averagePower') ||
-    getAverage(previousActivities, 'averageRunningPower') ||
-    273;
-
-  const currentHeartRate = getAverage(recentActivities, 'averageHR');
-  const previousHeartRate = getAverage(previousActivities, 'averageHR');
-
-  const currentLactate = currentHeartRate ? currentHeartRate * 0.9 : 168;
-  const previousLactate = previousHeartRate ? previousHeartRate * 0.9 : 171;
-  const currentRecovery = 100 - currentHeartRate / 2;
-  const previousRecovery = 100 - previousHeartRate / 2;
+    getAverage(previousActivities, 'averageRunningPower');
 
   return {
     vo2Max: {
       value: Number(currentVo2.toFixed(1)),
-      change: Number((currentVo2 - previousVo2).toFixed(1)),
+      change: previousVo2 ? Number((currentVo2 - previousVo2).toFixed(1)) : 0,
       unit: 'ml/kg/min',
-      trend: currentVo2 >= previousVo2 ? 'up' : 'down',
+      trend: getObservedTrend(currentVo2, previousVo2),
     },
     powerOutput: {
       value: Math.round(currentPower),
-      change: Math.round(currentPower - previousPower),
+      change: previousPower ? Math.round(currentPower - previousPower) : 0,
       unit: 'watts',
-      trend: currentPower >= previousPower ? 'up' : 'down',
+      trend: getObservedTrend(currentPower, previousPower),
     },
     lactateThreshold: {
-      value: Math.round(currentLactate),
-      change: Math.round(currentLactate - previousLactate),
+      value: 0,
+      change: 0,
       unit: 'bpm',
-      trend: currentLactate >= previousLactate ? 'up' : 'down',
+      trend: 'stable',
     },
     recoveryRate: {
-      value: Math.round(currentRecovery),
-      change: Math.round(currentRecovery - previousRecovery),
+      value: 0,
+      change: 0,
       unit: '%',
-      trend: currentRecovery >= previousRecovery ? 'stable' : 'down',
+      trend: 'stable',
     },
   };
 }
@@ -441,47 +418,10 @@ function getTrainingPhases(): TrainingPhase[] {
   ];
 }
 
-function calculatePredictions(activities: NormalizedTrainingActivity[]): PredictionMetric[] {
-  const sortedActivities = [...activities].sort((a, b) => {
-    const left = safeDate(a.startTimeLocal)?.getTime() ?? 0;
-    const right = safeDate(b.startTimeLocal)?.getTime() ?? 0;
-    return right - left;
-  });
-
-  const last30Days = sortedActivities.slice(0, 30);
-  const volume = last30Days.reduce((sum, activity) => sum + (activity.distance || 0), 0);
-  const elevation = last30Days.reduce(
-    (sum, activity) => sum + (activity.elevationGain || 0),
-    0
-  );
-
-  const elevationScore = Math.min(100, (elevation / 8000) * 100);
-  const readiness = Math.round(elevationScore * 0.7 + 30);
-  const maxAltitude = 5000 + elevationScore * 20;
-
-  return [
-    {
-      metric: 'Everest Readiness Score',
-      current: readiness,
-      predicted: Math.min(100, readiness + 15),
-      confidence: 0.85,
-      timeframe: '6 months',
-    },
-    {
-      metric: 'Max Altitude Capability',
-      current: Math.round(maxAltitude),
-      predicted: Math.round(maxAltitude + 1300),
-      confidence: 0.78,
-      timeframe: '4 months',
-    },
-    {
-      metric: 'Endurance Index',
-      current: Number((volume / 100000).toFixed(1)),
-      predicted: Number(((volume / 100000) * 1.2).toFixed(1)),
-      confidence: 0.92,
-      timeframe: '3 months',
-    },
-  ];
+function calculatePredictions(
+  _activities: NormalizedTrainingActivity[]
+): PredictionMetric[] {
+  return [];
 }
 
 function calculateRecentTrends(
@@ -503,7 +443,8 @@ function calculateRecentTrends(
   return {
     weeklyVolume: {
       value: `${Math.round(
-        last7Days.reduce((sum, activity) => sum + (activity.duration || 0), 0) / 3600
+        last7Days.reduce((sum, activity) => sum + (activity.duration || 0), 0) /
+          3600
       )} hrs`,
       description: 'Training hours last 7 days',
       trend: 'up',
@@ -515,44 +456,28 @@ function calculateRecentTrends(
     },
     elevationThisWeek: {
       value: formatElevation(
-        last7Days.reduce((sum, activity) => sum + (activity.elevationGain || 0), 0)
+        last7Days.reduce(
+          (sum, activity) => sum + (activity.elevationGain || 0),
+          0
+        )
       ),
       description: 'Vertical gain this week',
       trend: 'up',
     },
     currentFitness: {
-      value: calculateFitnessScore(activities, now),
-      description: 'Estimated fitness level',
-      trend: 'up',
+      value: '--',
+      description: 'Fitness model unavailable',
+      trend: 'stable',
     },
   };
 }
 
-function calculateFitnessScore(
-  activities: NormalizedTrainingActivity[],
-  now: Date
-): string {
-  const last30Days = activities.filter((activity) => {
-    const activityDate = safeDate(activity.startTimeLocal);
-    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-    return activityDate !== null && activityDate >= thirtyDaysAgo;
-  });
+function getObservedTrend(current: number, previous: number): TrendDirection {
+  if (!current || !previous || current === previous) {
+    return 'stable';
+  }
 
-  const totalTime = last30Days.reduce(
-    (sum, activity) => sum + (activity.duration || 0),
-    0
-  );
-  const totalElevation = last30Days.reduce(
-    (sum, activity) => sum + (activity.elevationGain || 0),
-    0
-  );
-
-  const fitnessScore = Math.min(
-    100,
-    Math.round(totalTime / 3600 + totalElevation / 100)
-  );
-
-  return `${fitnessScore}/100`;
+  return current > previous ? 'up' : 'down';
 }
 
 function formatElevation(meters: number): string {

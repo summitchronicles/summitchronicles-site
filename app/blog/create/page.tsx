@@ -4,14 +4,13 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Save,
-  Eye,
-  Plus,
   Trash2,
   Image as ImageIcon,
   ArrowLeft,
   Type,
   Quote,
-  MoreVertical,
+  AlertTriangle,
+  Check,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -30,6 +29,7 @@ interface BlogSection {
 interface BlogPostForm {
   title: string;
   subtitle: string;
+  contentType: 'expedition-update' | 'training-log' | 'field-note' | 'essay';
   category: string;
   author: string;
   heroImage: string;
@@ -37,20 +37,31 @@ interface BlogPostForm {
   sections: BlogSection[];
 }
 
+const STORY_DRAFT_KEY = 'summit-chronicles:story-draft:v1';
+
 export default function LiveCinematicEditor() {
   const router = useRouter();
   const [isPublishing, setIsPublishing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [draftStatus, setDraftStatus] = useState<
+    'restored' | 'saving' | 'saved'
+  >('saved');
+  const [publishMessage, setPublishMessage] = useState<string | null>(null);
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const draftReadyRef = useRef(false);
 
   // Refs for file inputs
   const heroImageInputRef = useRef<HTMLInputElement>(null);
   const sectionImageInputRef = useRef<HTMLInputElement>(null);
-  const [activeImageSectionId, setActiveImageSectionId] = useState<string | null>(null);
+  const [activeImageSectionId, setActiveImageSectionId] = useState<
+    string | null
+  >(null);
 
   const [formData, setFormData] = useState<BlogPostForm>({
     title: 'The Unwritten Summit',
     subtitle: 'Click here to add your compelling subtitle...',
+    contentType: 'field-note',
     category: 'Mental Preparation',
     author: 'Sunith Kumar',
     heroImage: '',
@@ -65,6 +76,40 @@ export default function LiveCinematicEditor() {
   });
 
   const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const savedDraft = window.localStorage.getItem(STORY_DRAFT_KEY);
+      if (savedDraft) {
+        const parsedDraft = JSON.parse(savedDraft) as Partial<BlogPostForm>;
+        setFormData((current) => ({
+          ...current,
+          ...parsedDraft,
+          contentType: parsedDraft.contentType || 'field-note',
+        }));
+        setDraftStatus('restored');
+      }
+    } catch (error) {
+      console.error('Unable to restore story draft:', error);
+    } finally {
+      draftReadyRef.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!draftReadyRef.current) return;
+    setDraftStatus('saving');
+    const saveTimer = window.setTimeout(() => {
+      try {
+        window.localStorage.setItem(STORY_DRAFT_KEY, JSON.stringify(formData));
+        setDraftStatus('saved');
+      } catch (error) {
+        console.error('Unable to autosave story draft:', error);
+      }
+    }, 650);
+
+    return () => window.clearTimeout(saveTimer);
+  }, [formData]);
 
   const handleInputChange = (field: string, value: string) => {
     setFormData({ ...formData, [field]: value });
@@ -84,7 +129,8 @@ export default function LiveCinematicEditor() {
       id: Date.now().toString(),
       type,
       content: type === 'text' ? '' : 'New section content',
-      image: type === 'image' ? '/placeholder.jpg' : undefined,
+      image:
+        type === 'image' ? '/images/sunith-visionary-planning.png' : undefined,
     };
     setFormData({
       ...formData,
@@ -100,7 +146,11 @@ export default function LiveCinematicEditor() {
   };
 
   // Image Upload Logic
-  const handleImageUpload = async (file: File, isHero: boolean, sectionId?: string) => {
+  const handleImageUpload = async (
+    file: File,
+    isHero: boolean,
+    sectionId?: string
+  ) => {
     setIsUploading(true);
     setUploadError(null);
 
@@ -121,26 +171,25 @@ export default function LiveCinematicEditor() {
 
       if (result.success && result.asset) {
         if (isHero) {
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             heroImage: result.asset.url,
-            heroImageId: result.asset._id
+            heroImageId: result.asset._id,
           }));
         } else if (sectionId) {
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
-            sections: prev.sections.map(s =>
+            sections: prev.sections.map((s) =>
               s.id === sectionId
                 ? { ...s, image: result.asset.url, imageId: result.asset._id }
                 : s
-            )
+            ),
           }));
         }
       }
     } catch (error) {
       console.error('Upload error:', error);
       setUploadError('Failed to upload image. Please try again.');
-        alert('Failed to upload image. Please try again.');
     } finally {
       setIsUploading(false);
       setActiveImageSectionId(null);
@@ -166,25 +215,27 @@ export default function LiveCinematicEditor() {
     sectionImageInputRef.current?.click();
   };
 
-
   const handlePublish = async () => {
-    if (!formData.title || !formData.author) {
-       alert('Please provide a title and author.');
-       return;
-    }
+    const errors = validateStory(formData);
+    setValidationErrors(errors);
+    setPublishMessage(null);
+    if (errors.length) return;
 
     setIsPublishing(true);
     try {
       const result = await publishPost(formData);
       if (result.success) {
-        // Redirect to the new post
-        router.push(`/blog/${result.slug}`);
+        window.localStorage.removeItem(STORY_DRAFT_KEY);
+        setPublishMessage('Story published successfully.');
+        window.setTimeout(() => router.push(`/blog/${result.slug}`), 900);
       } else {
-        alert('Failed to publish: ' + result.error);
+        setPublishMessage(`Publishing failed: ${result.error}`);
       }
     } catch (error) {
       console.error('Publish error:', error);
-      alert('An unexpected error occurred.');
+      setPublishMessage(
+        'Publishing failed unexpectedly. Your draft is still saved.'
+      );
     } finally {
       setIsPublishing(false);
     }
@@ -211,13 +262,13 @@ export default function LiveCinematicEditor() {
         onChange={(e) => {
           const file = e.target.files?.[0];
           if (file && activeImageSectionId) {
-             handleImageUpload(file, false, activeImageSectionId);
+            handleImageUpload(file, false, activeImageSectionId);
           }
         }}
       />
 
       {/* Editor Toolbar (Floating) */}
-      <div className="fixed top-6 right-6 z-50 flex items-center space-x-3 bg-black/80 backdrop-blur-xl border border-white/10 p-2 rounded-full shadow-2xl">
+      <div className="fixed left-4 right-4 top-4 z-50 flex items-center justify-between gap-3 rounded-md border border-white/10 bg-black/90 p-2 shadow-2xl backdrop-blur-xl sm:left-auto sm:right-6 sm:top-6 sm:w-auto">
         <Link
           href="/blog"
           className="p-2 text-gray-400 hover:text-white transition-colors"
@@ -225,17 +276,26 @@ export default function LiveCinematicEditor() {
         >
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <div className="h-6 w-px bg-white/10" />
-        <button
-          className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 rounded-full transition-all"
+        <div className="hidden h-6 w-px bg-white/10 sm:block" />
+        <div
+          className="hidden min-w-28 items-center gap-2 px-2 text-xs font-mono uppercase text-zinc-500 sm:flex"
+          aria-live="polite"
         >
-          <Eye className="w-4 h-4" />
-          <span className="hidden sm:inline">Preview</span>
-        </button>
+          {draftStatus === 'saving' ? (
+            <Save className="h-3.5 w-3.5" />
+          ) : (
+            <Check className="h-3.5 w-3.5" />
+          )}
+          {draftStatus === 'restored'
+            ? 'Draft restored'
+            : draftStatus === 'saving'
+              ? 'Saving draft'
+              : 'Draft saved'}
+        </div>
         <button
           onClick={handlePublish}
           disabled={isPublishing || isUploading}
-          className="flex items-center space-x-2 px-6 py-2 text-sm font-bold text-black bg-summit-gold hover:bg-yellow-500 rounded-full transition-all shadow-lg shadow-summit-gold/20 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex min-h-10 items-center space-x-2 rounded-md bg-summit-gold px-4 py-2 text-sm font-bold text-black shadow-lg shadow-summit-gold/20 transition-all hover:bg-yellow-500 disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
         >
           {isPublishing ? (
             <div className="w-4 h-4 border-2 border-black/30 border-t-black rounded-full animate-spin" />
@@ -247,6 +307,24 @@ export default function LiveCinematicEditor() {
           </span>
         </button>
       </div>
+
+      {(validationErrors.length > 0 || publishMessage || uploadError) && (
+        <div
+          className="fixed left-4 right-4 top-20 z-40 mx-auto max-w-2xl border border-amber-400/30 bg-black/95 p-4 text-sm text-zinc-200 shadow-2xl backdrop-blur-xl sm:top-24"
+          role="status"
+        >
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" />
+            <div>
+              {validationErrors.map((message) => (
+                <p key={message}>{message}</p>
+              ))}
+              {publishMessage ? <p>{publishMessage}</p> : null}
+              {uploadError ? <p>{uploadError}</p> : null}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Hero Section (Live Edit) */}
       <div className="relative h-screen w-full flex items-end">
@@ -273,7 +351,9 @@ export default function LiveCinematicEditor() {
                   ) : (
                     <ImageIcon className="w-4 h-4" />
                   )}
-                  <span>{isUploading ? 'Uploading...' : 'Change Cover Image'}</span>
+                  <span>
+                    {isUploading ? 'Uploading...' : 'Change Cover Image'}
+                  </span>
                 </button>
               </div>
             </>
@@ -303,7 +383,23 @@ export default function LiveCinematicEditor() {
 
         {/* Hero Content Editable */}
         <div className="relative z-10 w-full max-w-4xl mx-auto px-8 pb-24 space-y-6">
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <label htmlFor="entry-type" className="sr-only">
+              Entry type
+            </label>
+            <select
+              id="entry-type"
+              value={formData.contentType}
+              onChange={(event) =>
+                handleInputChange('contentType', event.target.value)
+              }
+              className="min-h-10 rounded-md border border-white/20 bg-black/70 px-4 py-2 text-xs font-mono uppercase text-white focus:border-summit-gold focus:outline-none"
+            >
+              <option value="expedition-update">Expedition update</option>
+              <option value="training-log">Training log</option>
+              <option value="field-note">Field note</option>
+              <option value="essay">Essay</option>
+            </select>
             <input
               type="text"
               value={formData.category}
@@ -388,7 +484,9 @@ export default function LiveCinematicEditor() {
               <div className="relative group/image">
                 <div className="aspect-video relative rounded-lg overflow-hidden bg-white/5 border border-white/10">
                   <Image
-                    src={section.image || '/placeholder.jpg'}
+                    src={
+                      section.image || '/images/sunith-visionary-planning.png'
+                    }
                     alt="Section Image"
                     fill
                     className="object-cover"
@@ -404,7 +502,11 @@ export default function LiveCinematicEditor() {
                       ) : (
                         <ImageIcon className="w-4 h-4" />
                       )}
-                      <span>{isUploading && activeImageSectionId === section.id ? 'Uploading...' : 'Release to Upload'}</span>
+                      <span>
+                        {isUploading && activeImageSectionId === section.id
+                          ? 'Uploading...'
+                          : 'Choose image'}
+                      </span>
                     </button>
                   </div>
                 </div>
@@ -412,8 +514,8 @@ export default function LiveCinematicEditor() {
                   type="text"
                   value={section.caption || ''}
                   onChange={(e) => {
-                     const newCaption = e.target.value;
-                     setFormData({
+                    const newCaption = e.target.value;
+                    setFormData({
                       ...formData,
                       sections: formData.sections.map((s) =>
                         s.id === section.id ? { ...s, caption: newCaption } : s
@@ -459,4 +561,36 @@ export default function LiveCinematicEditor() {
       </div>
     </div>
   );
+}
+
+function validateStory(formData: BlogPostForm) {
+  const errors: string[] = [];
+  if (formData.title.trim().length < 6) {
+    errors.push('Add a descriptive title with at least 6 characters.');
+  }
+  if (formData.subtitle.trim().length < 12) {
+    errors.push(
+      'Add a subtitle that gives readers a clear reason to continue.'
+    );
+  }
+  if (!formData.category.trim()) {
+    errors.push('Choose a story category.');
+  }
+  if (!formData.contentType) {
+    errors.push('Choose an entry type.');
+  }
+  if (!formData.author.trim()) {
+    errors.push('Add the author name.');
+  }
+  if (!formData.heroImage) {
+    errors.push('Add a cover image before publishing.');
+  }
+  const writtenContent = formData.sections
+    .filter((section) => section.type !== 'image')
+    .map((section) => section.content.trim())
+    .join(' ');
+  if (writtenContent.length < 300) {
+    errors.push('Write at least 300 characters before publishing.');
+  }
+  return errors;
 }
