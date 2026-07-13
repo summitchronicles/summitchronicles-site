@@ -4,9 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
-import { Button } from '../atoms/Button';
 import { Icon } from '../atoms/Icon';
-import { H3 } from '../atoms/Typography';
 import { cn } from '@/lib/utils';
 
 interface NavigationItem {
@@ -16,18 +14,22 @@ interface NavigationItem {
 }
 
 const primaryNavigation: NavigationItem[] = [
-  { href: '/', label: 'Home', description: 'Journey overview' },
-  { href: '/about', label: 'About', description: 'My story' },
+  { href: '/blog', label: 'Stories', description: 'Field reports' },
   {
     href: '/expeditions',
     label: 'Expeditions',
     description: 'Mountain documentation',
   },
   { href: '/training', label: 'Training', description: 'Preparation insights' },
-  { href: '/blog', label: 'Stories', description: 'Field reports' },
+  { href: '/about', label: 'About', description: 'My story' },
 ];
 
 const secondaryNavigation: NavigationItem[] = [
+  {
+    href: '/partnerships',
+    label: 'Partnerships',
+    description: 'Work with me',
+  },
   { href: '/media-kit', label: 'Media Kit', description: 'Press resources' },
   { href: '/speaking', label: 'Speaking', description: 'Event bookings' },
 ];
@@ -101,87 +103,62 @@ const Header: React.FC = () => {
     <>
       <header
         className={cn(
-          'fixed top-0 left-0 right-0 z-[110] transition-all duration-400',
+          'fixed inset-x-0 top-0 z-[110] transition-colors duration-300',
           isScrolled || isMobileMenuOpen
-            ? 'bg-black/90 backdrop-blur-md shadow-lg border-b border-white/10'
-            : 'bg-gradient-to-b from-black/80 to-transparent'
+            ? 'border-b border-white/10 bg-obsidian/95 backdrop-blur-xl'
+            : 'border-b border-transparent bg-gradient-to-b from-black/65 to-transparent'
         )}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="flex items-center justify-between min-h-[80px] h-20 w-full">
-            {/* Logo - Left */}
-            <Link href="/" className="group flex items-center gap-3">
-              <div className="relative w-16 h-16 transition-transform duration-300 group-hover:scale-105">
+        <div className="mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-10">
+          <div className="flex h-16 w-full items-center justify-between lg:h-[68px]">
+            <Link
+              href="/"
+              aria-label="Summit Chronicles home"
+              className="group flex min-h-11 items-center gap-3"
+            >
+              <div className="relative h-9 w-9 shrink-0 opacity-90 transition-opacity group-hover:opacity-100 lg:h-10 lg:w-10">
                 <Image
                   src="/images/logo-transparent.png"
-                  alt="Summit Chronicles Logo"
+                  alt=""
                   fill
                   className="object-contain"
                   priority
                 />
               </div>
-              <H3 className="hidden xl:block text-white group-hover:text-summit-gold transition-colors duration-300">
+              <span className="hidden text-[13px] font-medium uppercase tracking-[0.14em] text-white/85 transition-colors group-hover:text-white sm:block">
                 Summit Chronicles
-              </H3>
+              </span>
             </Link>
 
-            {/* Navigation + CTA Buttons - Right */}
-            <div className="flex items-center gap-3 md:gap-6">
-              {/* Desktop Navigation */}
-              <nav className="hidden md:flex items-center gap-4 lg:gap-8">
+            <div className="flex items-center">
+              <nav
+                aria-label="Primary navigation"
+                className="hidden items-center gap-1 md:flex lg:gap-3"
+              >
                 {primaryNavigation.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      'relative px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
+                      'relative flex min-h-11 items-center px-3 text-[11px] font-medium uppercase tracking-[0.14em] transition-colors lg:px-4',
                       isActivePath(item.href)
-                        ? 'text-summit-gold'
-                        : 'text-gray-300 hover:text-white'
+                        ? 'text-white'
+                        : 'text-white/58 hover:text-white'
                     )}
                   >
                     {item.label}
                     {isActivePath(item.href) && (
-                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-summit-gold rounded-full" />
+                      <span className="absolute inset-x-3 bottom-0 h-px bg-summit-gold lg:inset-x-4" />
                     )}
-                    <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0.5 bg-summit-gold transition-all duration-300 group-hover:w-full" />
                   </Link>
                 ))}
-                {/* Partnerships Link - High Value */}
-                <Link
-                  href="/partnerships"
-                  className={cn(
-                    'relative px-3 py-2 text-sm lg:text-base font-medium transition-all duration-300 group min-h-[44px] flex items-center',
-                    isActivePath('/partnerships')
-                      ? 'text-summit-gold'
-                      : 'text-gray-300 hover:text-summit-gold'
-                  )}
-                >
-                  Partnerships
-                </Link>
               </nav>
 
-              {/* CTA Buttons - Desktop */}
-              <div className="hidden lg:flex items-center gap-4">
-                <Button
-                  variant="summit"
-                  size="sm"
-                  asChild
-                  className="bg-summit-gold-600 hover:bg-summit-gold-500 text-black border-none"
-                >
-                  <Link href="/support">
-                    <Icon name="Heart" size="sm" />
-                    Fuel the Journey
-                  </Link>
-                </Button>
-              </div>
-
-              {/* Mobile Menu Button */}
               <button
                 ref={menuButtonRef}
                 type="button"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="md:hidden p-3 text-white hover:text-summit-gold transition-colors duration-300 min-h-[48px] min-w-[48px] flex items-center justify-center rounded-md hover:bg-white/10"
+                className="flex min-h-11 min-w-11 items-center justify-center text-white transition-colors hover:text-summit-gold md:hidden"
                 aria-label={
                   isMobileMenuOpen
                     ? 'Close navigation menu'
@@ -207,41 +184,39 @@ const Header: React.FC = () => {
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
-          className="fixed inset-x-0 bottom-0 top-20 z-[100] overflow-hidden bg-black md:hidden"
+          className="fixed inset-x-0 bottom-0 top-16 z-[100] overflow-hidden bg-obsidian/98 backdrop-blur-xl md:hidden"
         >
           <nav
             aria-label="Mobile navigation"
-            className="mobile-nav h-full overflow-y-auto border-t border-white/10 px-4 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-5"
+            className="mobile-nav h-full overflow-y-auto border-t border-white/10 px-6 pb-[calc(2rem+env(safe-area-inset-bottom))] pt-7"
           >
-            <div className="mb-5 border-b border-white/10 pb-5">
-              <div className="font-oswald text-2xl uppercase leading-none text-white">
-                Summit Chronicles
-              </div>
-              <div className="mt-2 text-sm uppercase text-summit-gold">
-                Project 7 Summits
-              </div>
+            <div className="mb-6 text-[10px] font-mono uppercase tracking-[0.24em] text-summit-gold">
+              Explore Summit Chronicles
             </div>
 
-            <div className="space-y-2">
-              {primaryNavigation.map((item) => (
+            <div className="border-t border-white/10">
+              {primaryNavigation.map((item, index) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  ref={item.href === '/' ? firstMobileLinkRef : undefined}
+                  ref={index === 0 ? firstMobileLinkRef : undefined}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
-                    'rounded-md border border-white/10 bg-white/[0.03] px-4 py-4 text-base font-medium transition-colors duration-300 min-h-[56px] flex items-center',
+                    'flex min-h-[64px] items-center border-b border-white/10 py-3 transition-colors',
                     isActivePath(item.href)
-                      ? 'text-summit-gold border-summit-gold/60 bg-summit-gold/10'
-                      : 'text-gray-200 hover:border-white/25 hover:bg-white/10 hover:text-white'
+                      ? 'text-summit-gold'
+                      : 'text-white/78 hover:text-white'
                   )}
                 >
-                  <div className="flex w-full items-center justify-between gap-4">
-                    <span className="text-base font-semibold">
+                  <div className="flex w-full items-center gap-4">
+                    <span className="w-6 font-mono text-[10px] text-white/35">
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span className="font-oswald text-xl uppercase">
                       {item.label}
                     </span>
                     {item.description && (
-                      <span className="text-right text-sm text-gray-500">
+                      <span className="ml-auto text-right text-xs text-white/35">
                         {item.description}
                       </span>
                     )}
@@ -249,68 +224,38 @@ const Header: React.FC = () => {
                 </Link>
               ))}
 
-              {/* Mobile Partnerships */}
-              <Link
-                href="/partnerships"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={cn(
-                  'rounded-md border border-white/10 bg-white/[0.03] px-4 py-4 text-base font-medium transition-colors duration-300 min-h-[56px] flex items-center',
-                  isActivePath('/partnerships')
-                    ? 'text-summit-gold border-summit-gold/60 bg-summit-gold/10'
-                    : 'text-gray-200 hover:border-white/25 hover:bg-white/10 hover:text-summit-gold'
-                )}
-              >
-                <div className="flex w-full items-center justify-between gap-4">
-                  <span className="text-base font-semibold">Partnerships</span>
-                  <span className="text-right text-sm text-gray-500">
-                    Work with me
-                  </span>
+              <div className="pt-7">
+                <div className="mb-3 text-[10px] font-mono uppercase tracking-[0.2em] text-white/35">
+                  More
                 </div>
-              </Link>
-
-              <div className="mt-6 border-t border-white/10 pt-5">
-                <div className="mb-3 text-sm uppercase text-white/55">More</div>
-                <div className="space-y-2">
+                <div className="flex flex-wrap gap-x-6 gap-y-3">
                   {secondaryNavigation.map((item) => (
                     <Link
                       key={item.href}
                       href={item.href}
                       onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
-                        'rounded-md border border-white/10 px-4 py-3 text-base font-medium transition-colors duration-300 min-h-[52px] flex items-center',
+                        'text-sm transition-colors',
                         isActivePath(item.href)
-                          ? 'text-summit-gold border-summit-gold/60 bg-summit-gold/10'
-                          : 'text-gray-300 hover:border-white/25 hover:bg-white/10 hover:text-white'
+                          ? 'text-summit-gold'
+                          : 'text-white/55 hover:text-white'
                       )}
                     >
-                      <div className="flex w-full items-center justify-between gap-4">
-                        <span>{item.label}</span>
-                        {item.description && (
-                          <span className="text-right text-sm text-gray-500">
-                            {item.description}
-                          </span>
-                        )}
-                      </div>
+                      {item.label}
                     </Link>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-5">
-                <Button
-                  variant="summit"
-                  size="sm"
-                  className="w-full border-none bg-summit-gold-600 text-black hover:bg-summit-gold-500"
-                  asChild
+              <div className="mt-7 border-t border-white/10 pt-6">
+                <Link
+                  href="/support"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex min-h-12 items-center justify-between font-oswald text-lg uppercase text-summit-gold"
                 >
-                  <Link
-                    href="/support"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <Icon name="Heart" size="sm" />
-                    Fuel the Journey
-                  </Link>
-                </Button>
+                  <span>Fuel the Journey</span>
+                  <Icon name="ArrowUpRight" size="sm" />
+                </Link>
               </div>
             </div>
           </nav>
