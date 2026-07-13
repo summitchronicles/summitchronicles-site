@@ -11,7 +11,6 @@ export async function GET() {
   const configured = Boolean(
     env.STRAVA_CLIENT_ID &&
       env.STRAVA_CLIENT_SECRET &&
-      env.STRAVA_REDIRECT_URI &&
       env.WHOOP_TOKEN_ENCRYPTION_KEY &&
       env.DATABASE_URL
   );

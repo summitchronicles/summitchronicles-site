@@ -156,7 +156,11 @@ export function requireStravaCredentials(env: ServerEnv = getServerEnv()) {
   return schema.parse({
     STRAVA_CLIENT_ID: env.STRAVA_CLIENT_ID,
     STRAVA_CLIENT_SECRET: env.STRAVA_CLIENT_SECRET,
-    STRAVA_REDIRECT_URI: env.STRAVA_REDIRECT_URI,
+    STRAVA_REDIRECT_URI:
+      env.STRAVA_REDIRECT_URI ??
+      (env.NODE_ENV === 'production'
+        ? 'https://summitchronicles.com/api/strava/callback'
+        : 'http://localhost:3001/api/strava/callback'),
     WHOOP_TOKEN_ENCRYPTION_KEY: env.WHOOP_TOKEN_ENCRYPTION_KEY,
     DATABASE_URL: env.DATABASE_URL,
   });
