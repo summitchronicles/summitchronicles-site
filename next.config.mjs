@@ -184,6 +184,16 @@ const nextConfig = {
       destination: '/',
       permanent: true,
     },
+    {
+      source: '/realtime',
+      destination: '/training',
+      permanent: true,
+    },
+    {
+      source: '/training/realtime',
+      destination: '/training',
+      permanent: true,
+    },
     // Legacy redirects
     {
       source: '/home',

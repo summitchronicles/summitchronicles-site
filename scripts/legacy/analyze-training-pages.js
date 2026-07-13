@@ -76,7 +76,7 @@ const { chromium } = require('playwright');
 
   try {
     // Navigate to realtime page
-    await page.goto('http://localhost:3002/training/realtime', {
+    await page.goto('http://localhost:3002/training', {
       waitUntil: 'networkidle',
       timeout: 15000
     });

@@ -101,7 +101,7 @@ async function testComprehensiveProductionUpdates() {
 
     // Test 7: Training realtime page
     console.log('\n📝 Test 7: Checking training realtime page...');
-    await page.goto(`${productionUrl}/training/realtime`);
+    await page.goto(`${productionUrl}/training`);
     await page.waitForLoadState('networkidle');
 
     const realtimeContent = await page.textContent('body');

@@ -12,7 +12,7 @@ const { chromium } = require('playwright');
   try {
     // Test the realtime page fix
     console.log('\n--- Testing Realtime Page Header Overlap Fix ---');
-    await page.goto('http://localhost:3002/training/realtime', {
+    await page.goto('http://localhost:3002/training', {
       waitUntil: 'networkidle',
       timeout: 10000
     });

@@ -33,7 +33,7 @@ const { chromium } = require('playwright');
 
     // Test Realtime Page (header overlap fixed)
     console.log('\n--- Testing Realtime Page (header overlap fixed) ---');
-    await page.goto('http://localhost:3002/training/realtime', {
+    await page.goto('http://localhost:3002/training', {
       waitUntil: 'networkidle',
       timeout: 10000
     });

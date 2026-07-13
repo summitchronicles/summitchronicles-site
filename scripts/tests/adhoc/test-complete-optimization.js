@@ -83,7 +83,7 @@ const { chromium } = require('playwright');
   console.log('\n=== TESTING OPTIMIZED REALTIME PAGE ===');
   try {
     const startTime = Date.now();
-    await page.goto('http://localhost:3002/training/realtime', {
+    await page.goto('http://localhost:3002/training', {
       waitUntil: 'networkidle',
       timeout: 15000
     });
