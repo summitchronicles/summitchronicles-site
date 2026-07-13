@@ -26,15 +26,14 @@ const serverEnvSchema = z.object({
   STRAVA_REFRESH_TOKEN: optionalString,
   WHOOP_CLIENT_ID: optionalString,
   WHOOP_CLIENT_SECRET: optionalString,
-  WHOOP_REFRESH_TOKEN: optionalString,
+  WHOOP_REDIRECT_URI: optionalString,
+  WHOOP_TOKEN_ENCRYPTION_KEY: optionalString,
+  DATABASE_URL: optionalString,
   CLOUDFLARE_R2_ACCOUNT_ID: optionalString,
   CLOUDFLARE_R2_ACCESS_KEY_ID: optionalString,
   CLOUDFLARE_R2_SECRET_ACCESS_KEY: optionalString,
   CLOUDFLARE_R2_BUCKET: optionalString,
   CLOUDFLARE_R2_TRAINING_PREFIX: optionalString,
-  NEXT_PUBLIC_SUPABASE_URL: optionalString,
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: optionalString,
-  SUPABASE_SERVICE_ROLE_KEY: optionalString,
   NEXT_PUBLIC_SANITY_PROJECT_ID: optionalString,
   NEXT_PUBLIC_SANITY_DATASET: optionalString,
   SANITY_API_TOKEN: optionalString,
@@ -111,6 +110,30 @@ export function requireIntervalsCredentials(env: ServerEnv = getServerEnv()) {
   return schema.parse({
     INTERVALS_ICU_API_KEY: env.INTERVALS_ICU_API_KEY,
     INTERVALS_ICU_ATHLETE_ID: env.INTERVALS_ICU_ATHLETE_ID,
+  });
+}
+
+export function requireWhoopCredentials(env: ServerEnv = getServerEnv()) {
+  const schema = z.object({
+    WHOOP_CLIENT_ID: z.string().min(1, 'WHOOP_CLIENT_ID is required'),
+    WHOOP_CLIENT_SECRET: z.string().min(1, 'WHOOP_CLIENT_SECRET is required'),
+    WHOOP_REDIRECT_URI: z
+      .string()
+      .url('WHOOP_REDIRECT_URI must be a valid URL'),
+    WHOOP_TOKEN_ENCRYPTION_KEY: z
+      .string()
+      .min(32, 'WHOOP_TOKEN_ENCRYPTION_KEY must be at least 32 characters'),
+    DATABASE_URL: z
+      .string()
+      .url('DATABASE_URL must be a valid Neon connection URL'),
+  });
+
+  return schema.parse({
+    WHOOP_CLIENT_ID: env.WHOOP_CLIENT_ID,
+    WHOOP_CLIENT_SECRET: env.WHOOP_CLIENT_SECRET,
+    WHOOP_REDIRECT_URI: env.WHOOP_REDIRECT_URI,
+    WHOOP_TOKEN_ENCRYPTION_KEY: env.WHOOP_TOKEN_ENCRYPTION_KEY,
+    DATABASE_URL: env.DATABASE_URL,
   });
 }
 

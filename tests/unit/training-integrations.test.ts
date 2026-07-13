@@ -27,7 +27,7 @@ describe('training integration statuses', () => {
     expect(statuses.find((item) => item.id === 'garmin')?.state).toBe('paused');
   });
 
-  it('only reports WHOOP and Strava as connected when refresh tokens exist', () => {
+  it('does not infer a WHOOP connection from environment secrets', () => {
     const statuses = getTrainingIntegrationStatuses('cached', {
       NODE_ENV: 'test',
       INTERVALS_ICU_API_KEY: 'intervals-key',
@@ -37,7 +37,9 @@ describe('training integration statuses', () => {
       STRAVA_REFRESH_TOKEN: 'strava-refresh',
       WHOOP_CLIENT_ID: 'whoop-id',
       WHOOP_CLIENT_SECRET: 'whoop-secret',
-      WHOOP_REFRESH_TOKEN: 'whoop-refresh',
+      WHOOP_REDIRECT_URI: 'http://localhost:3001/api/auth/whoop/callback',
+      WHOOP_TOKEN_ENCRYPTION_KEY: 'a'.repeat(32),
+      DATABASE_URL: 'postgresql://user:password@localhost/database',
     });
 
     expect(statuses.find((item) => item.id === 'intervals.icu')?.state).toBe(
@@ -47,7 +49,7 @@ describe('training integration statuses', () => {
       'connected'
     );
     expect(statuses.find((item) => item.id === 'whoop')?.state).toBe(
-      'connected'
+      'setup-required'
     );
   });
 });

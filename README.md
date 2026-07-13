@@ -55,9 +55,8 @@ summit-chronicles/
 │   └── ask/                    # AI search interface
 ├── lib/                        # Utility libraries
 │   ├── services/intervals.ts   # Intervals.icu integration
-│   ├── embeddings.ts          # AI/vector operations
-│   ├── supabaseServer.ts      # Server-side DB client
-│   └── supabaseBrowser.ts     # Client-side DB client
+│   └── embeddings.ts          # AI/vector operations
+├── database/                  # Neon PostgreSQL migrations
 ├── data/                       # Static data files
 ├── scripts/                    # Automation scripts
 └── e2e/                       # End-to-end tests
@@ -69,7 +68,7 @@ summit-chronicles/
 
 - Node.js 20+
 - npm or yarn
-- Supabase account
+- Neon account
 - Intervals.icu API Key (Pro or Free)
 - Garmin Connect credentials (for Python script)
 - Cohere API account
@@ -80,10 +79,8 @@ summit-chronicles/
 Create `.env.local` with the following variables:
 
 ```env
-# Database
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+# Neon PostgreSQL
+DATABASE_URL=your_neon_connection_string
 
 # Intervals.icu
 INTERVALS_ICU_API_KEY=your_api_key

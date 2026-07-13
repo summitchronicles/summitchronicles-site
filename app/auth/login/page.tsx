@@ -37,6 +37,10 @@ export default function LoginPage() {
         !requestedPath.startsWith('//')
           ? requestedPath
           : '/dashboard/content';
+      if (destination.startsWith('/api/')) {
+        window.location.assign(destination);
+        return;
+      }
       router.replace(destination);
       router.refresh();
     } catch (requestError) {

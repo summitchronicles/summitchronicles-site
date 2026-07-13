@@ -28,7 +28,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'plus.unsplash.com' },
       { protocol: 'https', hostname: 'summitchronicles.com' },
       { protocol: 'https', hostname: 'summitchronicles.s3.amazonaws.com' },
-      { protocol: 'https', hostname: 'nvoljnojiondyjhxwkqq.supabase.co' },
       { protocol: 'https', hostname: 'placehold.co' }
     ],
     minimumCacheTTL: 60,

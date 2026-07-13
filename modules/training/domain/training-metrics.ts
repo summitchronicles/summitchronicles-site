@@ -63,6 +63,16 @@ export interface NormalizedTrainingActivity {
     typeKey?: string;
   };
   description?: string;
+  source?: 'intervals.icu' | 'whoop' | 'strava';
+}
+
+export interface WhoopRecoveryMetrics {
+  recoveryScore: number | null;
+  hrvMs: number | null;
+  restingHeartRate: number | null;
+  sleepPerformance: number | null;
+  dayStrain: number | null;
+  observedAt: string;
 }
 
 export interface DerivedTrainingWellness {
@@ -97,6 +107,7 @@ export interface TrainingMetricsPayload {
   hrvStatus: string;
   vo2Max: number;
   recentActivities: NormalizedTrainingActivity[];
+  whoopRecovery?: WhoopRecoveryMetrics;
 }
 
 interface CalculationOptions {
@@ -132,6 +143,7 @@ export function normalizeTrainingActivities(
       typeKey: (activity.type || 'unknown').toLowerCase(),
     },
     description: activity.description || '',
+    source: activity._source ?? activity.source ?? 'intervals.icu',
   }));
 }
 

@@ -19,6 +19,7 @@ import {
   type TrainingArtifactStore,
 } from '@/modules/training/infrastructure/training-snapshot-store';
 import { getTrainingIntegrationStatuses } from '@/modules/training/application/training-integrations';
+import { enrichTrainingDashboardWithWhoop } from '@/modules/training/application/whoop-training-enrichment';
 
 interface TrainingArtifactDependencies {
   now?: Date;
@@ -88,7 +89,10 @@ export async function getPersistedTrainingDashboardResponse(
   ]);
 
   if (summaryArtifact) {
-    return mergeSummaryWithStatus(summaryArtifact.response, statusArtifact);
+    return enrichTrainingDashboardWithWhoop(
+      mergeSummaryWithStatus(summaryArtifact.response, statusArtifact),
+      now
+    );
   }
 
   const shouldFallbackToLive =
@@ -101,10 +105,16 @@ export async function getPersistedTrainingDashboardResponse(
       store,
     });
 
-    return mergeSummaryWithStatus(ingested.dashboard, ingested.status);
+    return enrichTrainingDashboardWithWhoop(
+      mergeSummaryWithStatus(ingested.dashboard, ingested.status),
+      now
+    );
   }
 
-  return createUnavailableDashboardResponse(now, statusArtifact);
+  return enrichTrainingDashboardWithWhoop(
+    createUnavailableDashboardResponse(now, statusArtifact),
+    now
+  );
 }
 
 export async function getPersistedTrainingMetricsResponse(

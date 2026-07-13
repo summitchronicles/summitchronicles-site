@@ -85,11 +85,8 @@ export function TrainingRedesignPrototype() {
     ...missionArc.map((log) => log.totalDurationSeconds / 3600)
   );
   const whoop = summary?.integrations.find((item) => item.id === 'whoop');
-  const hasRecoveryData = Boolean(
-    summary &&
-      (summary.metrics.hrvStatus !== 'N/A' ||
-        summary.metrics.currentStats.currentRestingHR.value !== '--')
-  );
+  const whoopRecovery = summary?.metrics.whoopRecovery;
+  const hasRecoveryData = Boolean(whoopRecovery);
 
   if (loading) return <TrainingLoading />;
 
@@ -272,10 +269,26 @@ export function TrainingRedesignPrototype() {
               {hasRecoveryData ? (
                 <div className="mt-8 grid grid-cols-2 gap-8">
                   <Metric
-                    label="Resting HR"
-                    value={summary.metrics.currentStats.currentRestingHR.value}
+                    label="Recovery"
+                    value={formatScore(whoopRecovery?.recoveryScore)}
                   />
-                  <Metric label="HRV" value={summary.metrics.hrvStatus} />
+                  <Metric label="HRV" value={formatHrv(whoopRecovery?.hrvMs)} />
+                  <Metric
+                    label="Resting HR"
+                    value={formatHeartRate(whoopRecovery?.restingHeartRate)}
+                  />
+                  <Metric
+                    label="Sleep performance"
+                    value={formatPercent(whoopRecovery?.sleepPerformance)}
+                  />
+                  <Metric
+                    label="Day strain"
+                    value={formatDecimal(whoopRecovery?.dayStrain)}
+                  />
+                  <div className="col-span-2 font-mono text-[10px] uppercase text-zinc-600">
+                    WHOOP observation ·{' '}
+                    {formatObservationDate(whoopRecovery?.observedAt)}
+                  </div>
                 </div>
               ) : (
                 <div className="mt-8 rounded border border-white/10 bg-white/[0.025] p-6">
@@ -291,6 +304,15 @@ export function TrainingRedesignPrototype() {
                   <p className="mt-5 font-mono text-xs uppercase text-zinc-400">
                     WHOOP · {formatState(whoop?.state)}
                   </p>
+                  {whoop?.state !== 'connected' ? (
+                    <a
+                      href="/api/auth/whoop/start"
+                      className="mt-6 inline-flex min-h-11 items-center gap-2 rounded bg-white px-4 py-3 font-oswald text-sm font-bold uppercase text-black transition-colors hover:bg-summit-gold"
+                    >
+                      Connect WHOOP
+                      <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  ) : null}
                 </div>
               )}
             </aside>
@@ -593,6 +615,18 @@ function formatElevation(meters?: number | null) {
 }
 function formatHeartRate(value?: number | null) {
   return value && value > 0 ? `${Math.round(value)} bpm` : '--';
+}
+function formatHrv(value?: number | null) {
+  return value && value > 0 ? `${Math.round(value)} ms` : '--';
+}
+function formatPercent(value?: number | null) {
+  return value && value > 0 ? `${Math.round(value)}%` : '--';
+}
+function formatScore(value?: number | null) {
+  return value && value > 0 ? `${Math.round(value)}%` : '--';
+}
+function formatDecimal(value?: number | null) {
+  return value && value > 0 ? value.toFixed(1) : '--';
 }
 function formatWeekLabel(value?: string | null) {
   if (!value) return '--';

@@ -9,18 +9,6 @@ class Config {
     return requireGarminCredentials().GARMIN_PASSWORD;
   }
 
-  get NEXT_PUBLIC_SUPABASE_URL() {
-    return getServerEnv().NEXT_PUBLIC_SUPABASE_URL;
-  }
-
-  get NEXT_PUBLIC_SUPABASE_ANON_KEY() {
-    return getServerEnv().NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  }
-
-  get SUPABASE_SERVICE_ROLE_KEY() {
-    return getServerEnv().SUPABASE_SERVICE_ROLE_KEY;
-  }
-
   get NEXT_PUBLIC_SANITY_PROJECT_ID() {
     return getServerEnv().NEXT_PUBLIC_SANITY_PROJECT_ID;
   }

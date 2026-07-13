@@ -70,7 +70,13 @@ export async function getWorkoutStats(
     avg_heart_rate: 0,
     avg_intensity: 0,
     by_type: {},
-    by_source: { historical: 0, garmin: 0, intervals: 0 },
+    by_source: {
+      historical: 0,
+      garmin: 0,
+      intervals: 0,
+      whoop: 0,
+      strava: 0,
+    },
   };
 
   let heartRateCount = 0;
@@ -97,7 +103,9 @@ export async function getWorkoutStats(
 
     stats.by_type[workout.exercise_type] =
       (stats.by_type[workout.exercise_type] || 0) + 1;
-    stats.by_source[workout.source === 'historical' ? 'historical' : 'intervals'] += 1;
+    stats.by_source[
+      workout.source === 'historical' ? 'historical' : 'intervals'
+    ] += 1;
   });
 
   if (heartRateCount > 0) {
@@ -137,7 +145,9 @@ export async function getRecentWorkoutsForAI(limit = 20): Promise<string> {
   return `Recent ${workouts.length} workouts:\n${summary}`;
 }
 
-function normalizeIntervalsActivity(activity: IntervalsActivity): UnifiedWorkout {
+function normalizeIntervalsActivity(
+  activity: IntervalsActivity
+): UnifiedWorkout {
   return {
     id: `icu-${activity.id}`,
     date: activity.start_date_local
@@ -158,4 +168,3 @@ function normalizeIntervalsActivity(activity: IntervalsActivity): UnifiedWorkout
     original_id: activity.id,
   };
 }
-

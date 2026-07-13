@@ -18,7 +18,6 @@ export function getTrainingIntegrationStatuses(
   const whoopConfigured = Boolean(
     env.WHOOP_CLIENT_ID && env.WHOOP_CLIENT_SECRET
   );
-  const whoopConnected = Boolean(env.WHOOP_REFRESH_TOKEN);
 
   return [
     {
@@ -37,11 +36,7 @@ export function getTrainingIntegrationStatuses(
       id: 'whoop',
       label: 'WHOOP',
       role: 'Recovery, sleep, HRV and strain',
-      state: whoopConnected
-        ? 'connected'
-        : whoopConfigured
-          ? 'setup-required'
-          : 'not-configured',
+      state: whoopConfigured ? 'setup-required' : 'not-configured',
     },
     {
       id: 'strava',

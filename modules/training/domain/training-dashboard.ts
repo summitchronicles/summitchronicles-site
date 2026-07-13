@@ -14,7 +14,7 @@ export interface TrainingInsight {
   totalDistanceKm: number;
   totalElevationGain: number;
   dominantActivityType: string;
-  source: 'intervals.icu';
+  source: 'intervals.icu' | 'whoop' | 'mixed';
 }
 
 export interface TrainingWorkoutStats {
@@ -25,7 +25,13 @@ export interface TrainingWorkoutStats {
   avg_heart_rate: number;
   avg_intensity: number;
   by_type: Record<string, number>;
-  by_source: { historical: number; garmin: number; intervals: number };
+  by_source: {
+    historical: number;
+    garmin: number;
+    intervals: number;
+    whoop: number;
+    strava: number;
+  };
 }
 
 export type TrainingTelemetryState = 'live' | 'cached' | 'degraded';
@@ -205,7 +211,7 @@ export function buildProcessedMissionLogs(
         totalDistanceKm: Number(totalDistanceKm.toFixed(1)),
         totalElevationGain: Math.round(totalElevationGain),
         dominantActivityType,
-        source: 'intervals.icu',
+        source: getMissionLogSource(weekActivities),
       };
     });
 }
@@ -221,7 +227,13 @@ export function calculateTrainingWorkoutStats(
     avg_heart_rate: 0,
     avg_intensity: 0,
     by_type: {},
-    by_source: { historical: 0, garmin: 0, intervals: activities.length },
+    by_source: {
+      historical: 0,
+      garmin: 0,
+      intervals: 0,
+      whoop: 0,
+      strava: 0,
+    },
   };
 
   let heartRateCount = 0;
@@ -233,6 +245,13 @@ export function calculateTrainingWorkoutStats(
     stats.total_distance_km += (activity.distance || 0) / 1000;
     stats.total_elevation_m += activity.elevationGain || 0;
     stats.by_type[typeKey] = (stats.by_type[typeKey] || 0) + 1;
+    if (activity.source === 'whoop') {
+      stats.by_source.whoop += 1;
+    } else if (activity.source === 'strava') {
+      stats.by_source.strava += 1;
+    } else {
+      stats.by_source.intervals += 1;
+    }
 
     if (typeof activity.averageHR === 'number' && activity.averageHR > 0) {
       stats.avg_heart_rate += activity.averageHR;
@@ -249,6 +268,16 @@ export function calculateTrainingWorkoutStats(
   }
 
   return stats;
+}
+
+function getMissionLogSource(
+  activities: NormalizedTrainingActivity[]
+): TrainingInsight['source'] {
+  const sources = new Set(
+    activities.map((activity) => activity.source ?? 'intervals.icu')
+  );
+  if (sources.size > 1) return 'mixed';
+  return sources.has('whoop') ? 'whoop' : 'intervals.icu';
 }
 
 function sumBy(
