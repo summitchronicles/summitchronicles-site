@@ -11,7 +11,6 @@ test('COMPREHENSIVE ALL PAGES TEST - AI DevOps Pipeline', async ({ page }) => {
     { url: 'http://localhost:3000/blog', name: 'Blog', epic: 'Epic 2' },
     { url: 'http://localhost:3000/training', name: 'Training', epic: 'Epic 3' },
     { url: 'http://localhost:3000/newsletter', name: 'Newsletter', epic: 'Epic 4' },
-    { url: 'http://localhost:3000/community', name: 'Community', epic: 'Epic 4' },
     { url: 'http://localhost:3000/support', name: 'Support/Funding', epic: 'Epic 5' }
   ];
 

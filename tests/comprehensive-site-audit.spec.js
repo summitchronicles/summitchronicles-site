@@ -6,7 +6,6 @@ const PAGES = [
   { path: '/', name: 'Homepage' },
   { path: '/training', name: 'Training Page' },
   { path: '/journey', name: 'Journey Page' },
-  { path: '/ai-search', name: 'AI Search Page' },
   { path: '/about', name: 'About Page' },
   { path: '/blog', name: 'Blog Page' }
 ];
@@ -17,18 +16,18 @@ const checkColorContrast = async (page, element) => {
     const style = window.getComputedStyle(el);
     const bgColor = style.backgroundColor;
     const textColor = style.color;
-    
+
     // Simple contrast check (basic implementation)
     const getBrightness = (color) => {
       const rgb = color.match(/\d+/g);
       if (!rgb || rgb.length < 3) return 0;
       return (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
     };
-    
+
     const bgBrightness = getBrightness(bgColor);
     const textBrightness = getBrightness(textColor);
     const contrast = Math.abs(bgBrightness - textBrightness);
-    
+
     return {
       backgroundColor: bgColor,
       textColor: textColor,
@@ -52,13 +51,13 @@ const testNavigation = async (page) => {
     const allNavs = await page.locator('nav').all();
     const allHeaders = await page.locator('header').all();
     console.log(`Found ${allNavs.length} nav elements, ${allHeaders.length} header elements`);
-    
+
     // Check for navigation
     const nav = await page.locator('nav, [role="navigation"], header nav').first();
     const navExists = await nav.count() > 0;
     results.navigationVisible = navExists ? await nav.isVisible() : false;
     console.log(`Navigation test: exists=${navExists}, visible=${results.navigationVisible}`);
-    
+
     // Check each nav element individually
     for (let i = 0; i < allNavs.length; i++) {
       const navElement = allNavs[i];
@@ -130,7 +129,7 @@ const testDesignAndReadability = async (page) => {
       const fontSize = await heading.evaluate(el => window.getComputedStyle(el).fontSize);
       const fontWeight = await heading.evaluate(el => window.getComputedStyle(el).fontWeight);
       const color = await heading.evaluate(el => window.getComputedStyle(el).color);
-      
+
       results.typography.headings.push({
         tag: tagName,
         fontSize,
@@ -145,7 +144,7 @@ const testDesignAndReadability = async (page) => {
       const fontSize = await p.evaluate(el => window.getComputedStyle(el).fontSize);
       const lineHeight = await p.evaluate(el => window.getComputedStyle(el).lineHeight);
       const color = await p.evaluate(el => window.getComputedStyle(el).color);
-      
+
       results.typography.bodyText.push({
         fontSize,
         lineHeight,
@@ -177,7 +176,7 @@ const testDesignAndReadability = async (page) => {
     for (const viewport of viewports) {
       await page.setViewportSize(viewport);
       await page.waitForTimeout(500); // Increased wait time for layout adjustments
-      
+
       const scrollInfo = await page.evaluate(() => {
         return {
           scrollWidth: document.documentElement.scrollWidth,
@@ -185,14 +184,14 @@ const testDesignAndReadability = async (page) => {
           hasHorizontalScroll: document.documentElement.scrollWidth > document.documentElement.clientWidth
         };
       });
-      
+
       console.log(`Viewport ${viewport.width}x${viewport.height}: scrollWidth=${scrollInfo.scrollWidth}, clientWidth=${scrollInfo.clientWidth}, hasScroll=${scrollInfo.hasHorizontalScroll}`);
-      
+
       if (!scrollInfo.hasHorizontalScroll) {
         responsiveViewports++;
       }
     }
-    
+
     console.log(`Responsive test: ${responsiveViewports}/${viewports.length} viewports passed`);
     // Only mark as responsive if ALL viewports pass
     results.layout.isResponsive = responsiveViewports === viewports.length;
@@ -247,7 +246,7 @@ const testAccessibility = async (page) => {
     for (const heading of headings) {
       const tagName = await heading.evaluate(el => el.tagName);
       const level = parseInt(tagName.substring(1));
-      
+
       if (level > previousLevel + 1 && previousLevel !== 0) {
         results.headingStructure.proper = false;
         results.headingStructure.issues.push(`Skipped from h${previousLevel} to h${level}`);
@@ -336,12 +335,12 @@ const calculateComplianceScore = (testResults) => {
   // Accessibility score (25 points)
   maxPoints += 25;
   let accessPoints = 0;
-  const altTextRatio = testResults.accessibility.altTexts.present / 
+  const altTextRatio = testResults.accessibility.altTexts.present /
     (testResults.accessibility.altTexts.present + testResults.accessibility.altTexts.missing + 1);
   const altTextPoints = Math.round(altTextRatio * 10);
   accessPoints += altTextPoints;
   console.log(`Alt text ratio (${testResults.accessibility.altTexts.present}/${testResults.accessibility.altTexts.present + testResults.accessibility.altTexts.missing}): +${altTextPoints}pts`);
-  
+
   if (testResults.accessibility.headingStructure.proper) { accessPoints += 10; console.log('✓ Proper heading structure: +10pts'); } else { console.log('✗ Heading structure issues: +0pts'); }
   if (testResults.accessibility.focusManagement.focusable > 10) { accessPoints += 5; console.log(`✓ Focusable elements (${testResults.accessibility.focusManagement.focusable}): +5pts`); } else { console.log(`✗ Few focusable elements (${testResults.accessibility.focusManagement.focusable}): +0pts`); }
   totalPoints += accessPoints;
@@ -352,7 +351,7 @@ const calculateComplianceScore = (testResults) => {
   let perfPoints = 0;
   if (testResults.performance.loadTime < 3000) { perfPoints += 10; console.log(`✓ Load time <3s (${testResults.performance.loadTime}ms): +10pts`); } else { console.log(`✗ Load time >3s (${testResults.performance.loadTime}ms): +0pts`); }
   if (testResults.performance.loadTime < 1500) { perfPoints += 5; console.log(`✓ Load time <1.5s: +5pts`); } else { console.log(`✗ Load time >1.5s: +0pts`); }
-  const imageOptRatio = testResults.performance.imageOptimization.optimized / 
+  const imageOptRatio = testResults.performance.imageOptimization.optimized /
     (testResults.performance.imageOptimization.optimized + testResults.performance.imageOptimization.unoptimized + 1);
   const imageOptPoints = Math.round(imageOptRatio * 5);
   perfPoints += imageOptPoints;
@@ -368,7 +367,7 @@ const calculateComplianceScore = (testResults) => {
 
 // Main test suite
 test.describe('Comprehensive Site Audit', () => {
-  let allTestResults = {};
+  const allTestResults = {};
 
   test.beforeAll(async () => {
     console.log('🚀 Starting comprehensive site audit...');
@@ -377,14 +376,14 @@ test.describe('Comprehensive Site Audit', () => {
   for (const page of PAGES) {
     test(`Audit ${page.name}`, async ({ page: playwright }) => {
       console.log(`\n📊 Testing ${page.name} (${page.path})...`);
-      
+
       try {
         // Navigate to page
-        await playwright.goto(`${BASE_URL}${page.path}`, { 
+        await playwright.goto(`${BASE_URL}${page.path}`, {
           waitUntil: 'networkidle',
-          timeout: 10000 
+          timeout: 10000
         });
-        
+
         // Wait for page to be fully loaded
         await playwright.waitForTimeout(2000);
 
@@ -405,7 +404,7 @@ test.describe('Comprehensive Site Audit', () => {
 
         // Calculate compliance score
         const complianceScore = calculateComplianceScore(pageResults);
-        
+
         allTestResults[page.name] = {
           ...pageResults,
           complianceScore,
@@ -421,10 +420,10 @@ test.describe('Comprehensive Site Audit', () => {
 
         // Assert minimum compliance
         expect(complianceScore).toBeGreaterThan(70);
-        
+
       } catch (error) {
         console.log(`❌ Error testing ${page.name}:`, error.message);
-        
+
         // Record failed test
         allTestResults[page.name] = {
           error: error.message,
@@ -438,15 +437,15 @@ test.describe('Comprehensive Site Audit', () => {
   test.afterAll(async () => {
     console.log('\n📋 FINAL AUDIT REPORT');
     console.log('=' .repeat(50));
-    
+
     let totalScore = 0;
     let testedPages = 0;
-    
+
     Object.entries(allTestResults).forEach(([pageName, results]) => {
       console.log(`\n📄 ${pageName}:`);
       console.log(`   URL: ${results.url}`);
       console.log(`   Compliance Score: ${results.complianceScore}%`);
-      
+
       if (results.error) {
         console.log(`   ❌ Error: ${results.error}`);
       } else {
@@ -454,18 +453,18 @@ test.describe('Comprehensive Site Audit', () => {
         console.log(`   ✅ Design: ${results.design.layout.isResponsive ? 'Responsive' : 'Issues'}`);
         console.log(`   ✅ Accessibility: ${results.accessibility.headingStructure.proper ? 'Good' : 'Issues'}`);
         console.log(`   ✅ Performance: ${results.performance.loadTime}ms`);
-        
+
         totalScore += results.complianceScore;
         testedPages++;
       }
     });
-    
+
     const overallScore = testedPages > 0 ? Math.round(totalScore / testedPages) : 0;
-    
+
     console.log('\n🏆 OVERALL COMPLIANCE SCORE');
     console.log('=' .repeat(30));
     console.log(`Overall Score: ${overallScore}%`);
-    
+
     if (overallScore >= 90) {
       console.log('🌟 EXCELLENT - World-class compliance!');
     } else if (overallScore >= 80) {
@@ -475,7 +474,7 @@ test.describe('Comprehensive Site Audit', () => {
     } else {
       console.log('⚠️  NEEDS IMPROVEMENT - Several issues to address');
     }
-    
+
     console.log('\n📊 Detailed recommendations available in test output above.');
   });
 });

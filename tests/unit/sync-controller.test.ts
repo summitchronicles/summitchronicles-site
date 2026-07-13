@@ -25,7 +25,6 @@ function createStatus(
       intervalMinutes: 60,
       enableWeather: true,
       enableCache: true,
-      enableAI: true,
     },
     ...overrides,
   };
@@ -45,7 +44,7 @@ function createService(
     }),
     performSync: jest.fn(async () => ({
       success: true,
-      synced: ['weather', 'ai-knowledge', 'cache-cleanup'],
+      synced: ['weather', 'cache-cleanup'],
       errors: [],
       completedAt: '2026-03-08T10:00:00.000Z',
     })),
@@ -111,7 +110,7 @@ describe('handleSyncPostAction', () => {
         action: 'configure',
         config: {
           intervalMinutes: 15,
-          enableAI: false,
+          enableCache: false,
         },
       },
       service
@@ -119,13 +118,15 @@ describe('handleSyncPostAction', () => {
 
     expect(service.updateConfig).toHaveBeenCalledWith({
       intervalMinutes: 15,
-      enableAI: false,
+      enableCache: false,
     });
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
     expect(response.body.message).toBe('Sync service configuration updated');
     expect((response.body.data as SyncStatusSnapshot).config.intervalMinutes).toBe(15);
-    expect((response.body.data as SyncStatusSnapshot).config.enableAI).toBe(false);
+    expect((response.body.data as SyncStatusSnapshot).config.enableCache).toBe(
+      false
+    );
   });
 
   it('rejects an invalid config patch', async () => {

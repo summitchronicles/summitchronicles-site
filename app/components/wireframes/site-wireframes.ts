@@ -94,7 +94,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Home',
     category: 'Core Journey',
     actualRoute: '/',
-    description: 'Cinematic landing page that frames the expedition, current chapter, and support path.',
+    description:
+      'Cinematic landing page that frames the expedition, current chapter, and support path.',
     hero: {
       eyebrow: 'Summit Chronicles',
       title: 'The Journey To The Summit',
@@ -112,8 +113,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'narrative',
         eyebrow: 'Opening Logic',
         title: 'Start With The Mission, Not The Menu',
-        body:
-          'The homepage should open like a keynote slide: one image, one line of current focus, one title, one sentence. Everything below should feel earned, not immediately exposed.',
+        body: 'The homepage should open like a keynote slide: one image, one line of current focus, one title, one sentence. Everything below should feel earned, not immediately exposed.',
         sideNotes: [
           'No card grid above the fold',
           'One primary action only',
@@ -124,8 +124,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'grid',
         eyebrow: 'Core Modules',
         title: 'Three Quiet Surface Areas',
-        body:
-          'The homepage becomes a calm sequence of current mission, training evidence, and narrative proof.',
+        body: 'The homepage becomes a calm sequence of current mission, training evidence, and narrative proof.',
         columns: 3,
         items: [
           {
@@ -148,8 +147,7 @@ export const siteWireframes: WireframePageDefinition[] = [
       {
         type: 'cta',
         title: 'Support Should Feel Like Participation, Not Donation UI',
-        body:
-          'The homepage should close with one elegant invitation to join the mission, with just enough clarity to establish trust.',
+        body: 'The homepage should close with one elegant invitation to join the mission, with just enough clarity to establish trust.',
         primaryLabel: 'Fuel the Journey',
         secondaryLabel: 'Open support wireframe',
       },
@@ -160,7 +158,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'About',
     category: 'Core Journey',
     actualRoute: '/about',
-    description: 'Personal philosophy page with biography, values, and credibility.',
+    description:
+      'Personal philosophy page with biography, values, and credibility.',
     hero: {
       eyebrow: 'About',
       title: 'A Life Organized Around Difficult Things',
@@ -178,8 +177,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'narrative',
         eyebrow: 'Positioning',
         title: 'The Page Should Answer Why This Journey Is Serious',
-        body:
-          'This is not a résumé and not a motivational essay. It is the page that connects professional discipline, physical ambition, and the reason this expedition deserves attention.',
+        body: 'This is not a résumé and not a motivational essay. It is the page that connects professional discipline, physical ambition, and the reason this expedition deserves attention.',
         metrics: [
           { label: 'Biography', value: 'Condensed' },
           { label: 'Voice', value: 'Calm & exact' },
@@ -237,7 +235,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'My Story',
     category: 'Core Journey',
     actualRoute: '/my-story',
-    description: 'Long-form narrative page focused on personal transformation and motivation.',
+    description:
+      'Long-form narrative page focused on personal transformation and motivation.',
     hero: {
       eyebrow: 'My Story',
       title: 'The Human Story Behind The Expedition',
@@ -255,8 +254,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'list',
         eyebrow: 'Story Chapters',
         title: 'Three Movements, Not Endless Scroll',
-        body:
-          'The page should unfold as three authored chapters with strong image breaks and a disciplined amount of copy.',
+        body: 'The page should unfold as three authored chapters with strong image breaks and a disciplined amount of copy.',
         items: [
           {
             kicker: 'Chapter I',
@@ -310,7 +308,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Journey',
     category: 'Core Journey',
     actualRoute: '/journey',
-    description: 'Master journey page for expedition timeline, milestones, and current phase.',
+    description:
+      'Master journey page for expedition timeline, milestones, and current phase.',
     hero: {
       eyebrow: 'The Journey',
       title: 'A Long Expedition, Clearly Mapped',
@@ -382,7 +381,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Expeditions',
     category: 'Core Journey',
     actualRoute: '/expeditions',
-    description: 'Expedition archive and future ladder toward the summit objective.',
+    description:
+      'Expedition archive and future ladder toward the summit objective.',
     hero: {
       eyebrow: 'Expeditions',
       title: 'The Mountain Ledger',
@@ -400,8 +400,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'grid',
         eyebrow: 'Structure',
         title: 'A More Museum-Like Presentation',
-        body:
-          'Each expedition should feel like an artifact: mountain, altitude, objective, lesson, and visual memory.',
+        body: 'Each expedition should feel like an artifact: mountain, altitude, objective, lesson, and visual memory.',
         columns: 3,
         items: [
           {
@@ -473,8 +472,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'narrative',
         eyebrow: 'Prototype Status',
         title: 'This Page Already Has A Dedicated Live Prototype',
-        body:
-          'The training wireframe is already being developed as a more advanced live route. The broader site system should inherit its restraint, spacing, and sequencing.',
+        body: 'The training wireframe is already being developed as a more advanced live route. The broader site system should inherit its restraint, spacing, and sequencing.',
         sideNotes: [
           'Hero: one image, one title, one metric line',
           'Centerpiece: selected week only',
@@ -516,7 +514,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Stories',
     category: 'Editorial',
     actualRoute: '/blog',
-    description: 'Editorial archive for field reports, essays, and expedition stories.',
+    description:
+      'Editorial archive for field reports, essays, and expedition stories.',
     hero: {
       eyebrow: 'Stories',
       title: 'Field Reports, Not Content Cards',
@@ -606,8 +605,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'narrative',
         eyebrow: 'Article Surface',
         title: 'The Headline Needs Space To Mean Something',
-        body:
-          'Give the title, deck, location, and date their own room. The reader should feel invited into an authored experience, not a compressed CMS template.',
+        body: 'Give the title, deck, location, and date their own room. The reader should feel invited into an authored experience, not a compressed CMS template.',
         sideNotes: [
           'Large title block',
           'One strong image',
@@ -649,7 +647,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Insights',
     category: 'Editorial',
     actualRoute: '/insights',
-    description: 'Analytical page for essays, takeaways, and higher-order interpretations.',
+    description:
+      'Analytical page for essays, takeaways, and higher-order interpretations.',
     hero: {
       eyebrow: 'Insights',
       title: 'Interpretation, Not Mere Update',
@@ -736,8 +735,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'narrative',
         eyebrow: 'Subscription Logic',
         title: 'The Ask Should Feel Earned',
-        body:
-          'Lead with the editorial promise, then show one or two archive examples. Make the subscription form feel like the final decision, not the entire page.',
+        body: 'Lead with the editorial promise, then show one or two archive examples. Make the subscription form feel like the final decision, not the entire page.',
         metrics: [
           { label: 'Input Count', value: 'Minimal' },
           { label: 'Proof', value: 'Archive excerpts' },
@@ -779,7 +777,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Connect',
     category: 'Community',
     actualRoute: '/connect',
-    description: 'Contact page for outreach, collaboration, and communication channels.',
+    description:
+      'Contact page for outreach, collaboration, and communication channels.',
     hero: {
       eyebrow: 'Connect',
       title: 'One Quiet Place To Reach Out',
@@ -818,8 +817,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'narrative',
         eyebrow: 'UX Rule',
         title: 'Contact Forms Should Not Feel Administrative',
-        body:
-          'Reduce fields, make expectations explicit, and keep the interface from looking like a support desk from generic SaaS software.',
+        body: 'Reduce fields, make expectations explicit, and keep the interface from looking like a support desk from generic SaaS software.',
         sideNotes: [
           'Channel selection first',
           'One elegant form surface',
@@ -909,7 +907,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Partnerships',
     category: 'Partnerships',
     actualRoute: '/partnerships',
-    description: 'Brand partnership page for fit, audience, and collaboration model.',
+    description:
+      'Brand partnership page for fit, audience, and collaboration model.',
     hero: {
       eyebrow: 'Partnerships',
       title: 'A Brand Partnership Surface With Taste',
@@ -981,7 +980,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Sponsorship',
     category: 'Partnerships',
     actualRoute: '/sponsorship',
-    description: 'Sponsorship page focused on contribution models and partnership tiers.',
+    description:
+      'Sponsorship page focused on contribution models and partnership tiers.',
     hero: {
       eyebrow: 'Sponsorship',
       title: 'Support Framed As Strategic Enablement',
@@ -1050,7 +1050,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Media Kit',
     category: 'Partnerships',
     actualRoute: '/media-kit',
-    description: 'Media kit and press page for assets, facts, and press angles.',
+    description:
+      'Media kit and press page for assets, facts, and press angles.',
     hero: {
       eyebrow: 'Media Kit',
       title: 'Everything The Press Needs, Elegantly Packed',
@@ -1119,7 +1120,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Support',
     category: 'Partnerships',
     actualRoute: '/support',
-    description: 'Support and transparency page for funding, costs, and ways to contribute.',
+    description:
+      'Support and transparency page for funding, costs, and ways to contribute.',
     hero: {
       eyebrow: 'Support',
       title: 'Transparency Before Request',
@@ -1137,8 +1139,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'narrative',
         eyebrow: 'Trust',
         title: 'Explain The Economics Before The Ask',
-        body:
-          'This page should build confidence through clear explanation of costs, constraints, and exactly what forms of support help.',
+        body: 'This page should build confidence through clear explanation of costs, constraints, and exactly what forms of support help.',
         metrics: [
           { label: 'Cost Lens', value: 'Visible' },
           { label: 'Contribution Paths', value: 'Few but clear' },
@@ -1180,7 +1181,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Realtime',
     category: 'Live Systems',
     actualRoute: '/realtime',
-    description: 'Live systems page for telemetry, AI interpretation, and current status.',
+    description:
+      'Live systems page for telemetry, AI interpretation, and current status.',
     hero: {
       eyebrow: 'Realtime',
       title: 'A Live Surface That Still Feels Calm',
@@ -1219,7 +1221,7 @@ export const siteWireframes: WireframePageDefinition[] = [
         type: 'list',
         eyebrow: 'Page Flow',
         title: 'Three Layers Are Enough',
-        body: 'The page can resolve into status, short-term trend, and AI interpretation.',
+        body: 'The page can resolve into status, short-term trend, and recovery context.',
         items: [
           {
             title: 'Current status',
@@ -1230,8 +1232,8 @@ export const siteWireframes: WireframePageDefinition[] = [
             body: 'A short view of load, recovery, and any notable shifts.',
           },
           {
-            title: 'Interpretation',
-            body: 'What the system believes deserves attention next.',
+            title: 'Recovery context',
+            body: 'What the latest observed recovery signals add to the training record.',
           },
         ],
       },
@@ -1240,75 +1242,6 @@ export const siteWireframes: WireframePageDefinition[] = [
         title: 'Realtime Should Be Legible In Seconds',
         body: 'This page succeeds when a visitor understands the current state almost instantly.',
         primaryLabel: 'Open training wireframe',
-        secondaryLabel: 'Open AI search wireframe',
-      },
-    ],
-  },
-  {
-    slug: 'ai-search',
-    name: 'AI Search',
-    category: 'Live Systems',
-    actualRoute: '/ai-search',
-    description: 'AI-assisted query surface for site knowledge and expedition context.',
-    hero: {
-      eyebrow: 'AI Search',
-      title: 'A Search Experience That Feels Trustworthy',
-      description:
-        'This page should feel more like a premium research console than a chatbot. Search, answer, and citation need a clear hierarchy.',
-      image: '/images/climber_perspective_1769137922664.png',
-      metrics: [
-        { label: 'Input', value: 'Question first' },
-        { label: 'Output', value: 'Answered with sources' },
-        { label: 'Design Goal', value: 'Trust over novelty' },
-      ],
-    },
-    sections: [
-      {
-        type: 'grid',
-        eyebrow: 'Interface',
-        title: 'The Page Should Open With One Search Surface',
-        body: 'Keep the top interaction singular and confident.',
-        columns: 3,
-        items: [
-          {
-            title: 'One central prompt',
-            body: 'A large, beautifully spaced question field without extra controls competing for attention.',
-          },
-          {
-            title: 'Suggested questions',
-            body: 'A few high-quality entry points that clarify the product’s scope.',
-          },
-          {
-            title: 'Source expectation',
-            body: 'Signal clearly that answers are grounded in expedition content and data.',
-          },
-        ],
-      },
-      {
-        type: 'list',
-        eyebrow: 'Answer Design',
-        title: 'Responses Need A Premium Reading Rhythm',
-        body: 'A good answer page feels like a brief, not a chat dump.',
-        items: [
-          {
-            title: 'Short direct answer',
-            body: 'Open with the best distilled response.',
-          },
-          {
-            title: 'Supporting evidence',
-            body: 'A second layer that explains the reasoning or the supporting data.',
-          },
-          {
-            title: 'Citations and next links',
-            body: 'A final layer that opens the underlying source material.',
-          },
-        ],
-      },
-      {
-        type: 'cta',
-        title: 'Search Should Feel Calmly Intelligent',
-        body: 'The design should lower anxiety, not amplify it.',
-        primaryLabel: 'Ask a question',
         secondaryLabel: 'Open stories wireframe',
       },
     ],
@@ -1366,7 +1299,8 @@ export const siteWireframes: WireframePageDefinition[] = [
     name: 'Terms',
     category: 'Legal',
     actualRoute: '/terms',
-    description: 'Minimal legal layout for terms, conditions, and use expectations.',
+    description:
+      'Minimal legal layout for terms, conditions, and use expectations.',
     hero: {
       eyebrow: 'Terms',
       title: 'Conditions Of Use, Reduced To Clarity',

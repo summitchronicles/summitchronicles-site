@@ -2,7 +2,6 @@ export interface SyncRuntimeConfig {
   intervalMinutes: number;
   enableWeather: boolean;
   enableCache: boolean;
-  enableAI: boolean;
 }
 
 export interface SyncStatusSnapshot {
@@ -82,14 +81,6 @@ export function normalizeSyncConfigPatch(
       errors.push('enableCache must be a boolean');
     } else {
       patch.enableCache = input.enableCache;
-    }
-  }
-
-  if ('enableAI' in input) {
-    if (typeof input.enableAI !== 'boolean') {
-      errors.push('enableAI must be a boolean');
-    } else {
-      patch.enableAI = input.enableAI;
     }
   }
 

@@ -1,5 +1,4 @@
 import { sanityWriteClient } from '../sanity/client';
-import { scheduleContentIngestion } from '../rag/content-ingestion';
 import type {
   SyncExecutionResult,
   SyncRuntimeConfig,
@@ -23,7 +22,6 @@ class DataSyncService {
       intervalMinutes: 60,
       enableWeather: true,
       enableCache: true,
-      enableAI: true,
     }
   ) {
     this.config = config;
@@ -75,17 +73,6 @@ class DataSyncService {
           results.synced.push('weather');
         } catch (error) {
           results.errors.push(`Weather sync failed: ${error}`);
-          results.success = false;
-        }
-      }
-
-      // Sync AI knowledge base
-      if (this.config.enableAI) {
-        try {
-          await this.syncAIKnowledgeBase();
-          results.synced.push('ai-knowledge');
-        } catch (error) {
-          results.errors.push(`AI knowledge sync failed: ${error}`);
           results.success = false;
         }
       }
@@ -207,23 +194,6 @@ class DataSyncService {
       if (now - entry.timestamp > entry.ttl) {
         this.cache.delete(key);
       }
-    }
-  }
-
-  // Sync AI knowledge base with latest CMS content
-  private async syncAIKnowledgeBase() {
-    try {
-      await scheduleContentIngestion();
-
-      // Cache AI sync timestamp
-      this.setCache(
-        'ai-last-sync',
-        new Date().toISOString(),
-        24 * 60 * 60 * 1000
-      ); // 24hr TTL
-    } catch (error) {
-      console.error('AI knowledge base sync error:', error);
-      throw error;
     }
   }
 

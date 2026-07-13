@@ -418,13 +418,13 @@ export default function MyStoryPage() {
 
             <div className="grid md:grid-cols-3 gap-4 max-w-2xl mx-auto">
               <Button variant="primary" size="lg" className="w-full" asChild>
-                <Link href="/the-journey">
+                <Link href="/expeditions">
                   <Mountain className="w-5 h-5" />
                   Follow Everest Prep
                 </Link>
               </Button>
               <Button variant="secondary" size="lg" className="w-full" asChild>
-                <Link href="/insights">
+                <Link href="/blog">
                   <BookOpen className="w-5 h-5" />
                   Read My Stories
                 </Link>
@@ -439,7 +439,6 @@ export default function MyStoryPage() {
           </div>
         </section>
       </main>
-
     </div>
   );
 }
