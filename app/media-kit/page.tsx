@@ -2,7 +2,7 @@
 
 import { Header } from '../components/organisms/Header';
 import { motion } from 'framer-motion';
-import { Download, Image as ImageIcon, FileText, Camera, Mail } from 'lucide-react';
+import { Download, Image as ImageIcon, FileText, Mail } from 'lucide-react';
 
 export default function MediaKitPage() {
   return (
@@ -22,8 +22,8 @@ export default function MediaKitPage() {
                 Media Kit
               </h1>
               <p className="text-xl text-spa-slate leading-relaxed max-w-2xl mx-auto">
-                High-resolution assets, biographical information, and expedition photography
-                for media coverage and partnership opportunities.
+                High-resolution assets, biographical information, and expedition
+                photography for media coverage and partnership opportunities.
               </p>
             </motion.div>
           </div>
@@ -34,16 +34,22 @@ export default function MediaKitPage() {
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid md:grid-cols-3 gap-8 text-center">
               <div>
-                <h3 className="text-lg font-medium text-spa-charcoal mb-2">Next Expedition</h3>
-                <p className="text-spa-slate">Mount Everest - Spring 2025</p>
+                <h3 className="text-lg font-medium text-spa-charcoal mb-2">
+                  Next Expedition
+                </h3>
+                <p className="text-spa-slate">Mount Everest - 2028 Objective</p>
               </div>
               <div>
-                <h3 className="text-lg font-medium text-spa-charcoal mb-2">Current Status</h3>
+                <h3 className="text-lg font-medium text-spa-charcoal mb-2">
+                  Current Status
+                </h3>
                 <p className="text-spa-slate">4 of 7 Summits Complete</p>
               </div>
               <div>
-                <h3 className="text-lg font-medium text-spa-charcoal mb-2">Location</h3>
-                <p className="text-spa-slate">Pacific Northwest, USA</p>
+                <h3 className="text-lg font-medium text-spa-charcoal mb-2">
+                  Focus
+                </h3>
+                <p className="text-spa-slate">Seven Summits Documentation</p>
               </div>
             </div>
           </div>
@@ -66,15 +72,21 @@ export default function MediaKitPage() {
               >
                 <div className="flex items-center space-x-3 mb-4">
                   <ImageIcon className="w-6 h-6 text-alpine-blue" />
-                  <h3 className="text-xl font-medium text-spa-charcoal">High-Res Photos</h3>
+                  <h3 className="text-xl font-medium text-spa-charcoal">
+                    High-Res Photos
+                  </h3>
                 </div>
                 <p className="text-spa-slate mb-4">
-                  Professional expedition photography and portraits in various formats.
+                  Professional expedition photography and portraits in various
+                  formats.
                 </p>
-                <button className="inline-flex items-center space-x-2 text-alpine-blue hover:text-blue-800 font-medium">
+                <a
+                  href="mailto:media@summitchronicles.com?subject=Summit%20Chronicles%20Photo%20Pack%20Request"
+                  className="inline-flex items-center space-x-2 text-alpine-blue hover:text-blue-800 font-medium"
+                >
                   <Download className="w-4 h-4" />
-                  <span>Download Photo Pack</span>
-                </button>
+                  <span>Request Photo Pack</span>
+                </a>
               </motion.div>
 
               <motion.div
@@ -86,15 +98,21 @@ export default function MediaKitPage() {
               >
                 <div className="flex items-center space-x-3 mb-4">
                   <FileText className="w-6 h-6 text-alpine-blue" />
-                  <h3 className="text-xl font-medium text-spa-charcoal">Biography & Facts</h3>
+                  <h3 className="text-xl font-medium text-spa-charcoal">
+                    Biography & Facts
+                  </h3>
                 </div>
                 <p className="text-spa-slate mb-4">
-                  Detailed biographical information, achievements, and key statistics.
+                  Detailed biographical information, achievements, and key
+                  statistics.
                 </p>
-                <button className="inline-flex items-center space-x-2 text-alpine-blue hover:text-blue-800 font-medium">
+                <a
+                  href="mailto:media@summitchronicles.com?subject=Summit%20Chronicles%20Bio%20Sheet%20Request"
+                  className="inline-flex items-center space-x-2 text-alpine-blue hover:text-blue-800 font-medium"
+                >
                   <Download className="w-4 h-4" />
-                  <span>Download Bio Sheet</span>
-                </button>
+                  <span>Request Bio Sheet</span>
+                </a>
               </motion.div>
             </div>
           </div>
@@ -108,16 +126,16 @@ export default function MediaKitPage() {
             </h2>
             <div className="prose prose-lg max-w-none text-spa-slate">
               <p>
-                <strong>Sunith Kumar</strong> is a systematic mountaineer and expedition photographer
-                pursuing the Seven Summits through data-driven preparation and methodical training.
-                Based in the Pacific Northwest, he combines engineering principles with extreme adventure
-                sports to document the intersection of systematic thinking and mountaineering excellence.
+                <strong>Sunith Kumar</strong> is a systematic mountaineer and
+                expedition photographer pursuing the Seven Summits through
+                data-driven preparation and methodical training. He combines
+                engineering principles with expedition documentation to examine
+                the intersection of systematic thinking and mountaineering.
               </p>
               <p>
-                After a failed attempt on Mount Whitney in 2021, Sunith developed a comprehensive
-                preparation methodology that has led to successful expeditions on Mount Kilimanjaro,
-                Mount Whitney (redemption), and Mount Washington. His current focus is systematic
-                preparation for Mount Everest in Spring 2025.
+                His Seven Summits record includes Kilimanjaro, Elbrus,
+                Aconcagua, and Denali. The current chapter is rehabilitation and
+                a measured rebuild toward Mount Everest as a 2028 objective.
               </p>
             </div>
           </div>
@@ -134,7 +152,8 @@ export default function MediaKitPage() {
               <span className="text-lg">media@summitchronicles.com</span>
             </div>
             <p className="mt-4 text-spa-slate">
-              Available for interviews, speaking engagements, and partnership discussions.
+              Available for interviews, speaking engagements, and partnership
+              discussions.
             </p>
           </div>
         </section>

@@ -8,7 +8,6 @@ import { ArrowRight, ArrowUpRight, Mountain, Wind, Map } from 'lucide-react';
 import { PublicLayout } from './components/layout/PublicLayout';
 import { VisualTransmissions } from './components/home/VisualTransmissions';
 import { LatestChronicles } from './components/home/LatestChronicles';
-import { getDaysToEverest } from '@/lib/everest-countdown';
 
 export default function Home() {
   return (
@@ -88,10 +87,10 @@ export default function Home() {
                     <Wind className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
                   </div>
                   <div className="text-4xl font-light text-white mb-2">
-                    {getDaysToEverest()}
+                    ACTIVE
                   </div>
                   <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">
-                    Days to Everest
+                    Recovery Block
                   </div>
                 </div>
 
@@ -228,10 +227,10 @@ function ParallaxHeroContent() {
           </div>
           <div>
             <div className="text-2xl font-oswald font-bold sm:text-3xl">
-              {getDaysToEverest()}
+              2028
             </div>
             <div className="text-xs uppercase text-white/65">
-              Days to Everest
+              Everest objective
             </div>
           </div>
           <div>

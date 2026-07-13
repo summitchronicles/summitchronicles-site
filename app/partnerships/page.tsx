@@ -16,9 +16,9 @@ import {
 } from 'lucide-react';
 
 const stats = [
-  { label: 'Summit Target', value: '2028', icon: Target },
-  { label: 'Training Hours', value: '450+', icon: Activity },
-  { label: 'Vertical Gain', value: '45km', icon: Mountain },
+  { label: 'Seven Summits', value: '4/7', icon: Mountain },
+  { label: 'Journey Started', value: '2013', icon: Activity },
+  { label: 'Everest Objective', value: '2028', icon: Target },
 ];
 
 const speakingTopics = [
@@ -71,7 +71,8 @@ export default function PartnershipsPage() {
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 font-light max-w-3xl mx-auto leading-relaxed mb-12">
               Partner with a data-driven expedition to the roof of the world.
-              Authentic storytelling, resilience leadership, and global reach.
+              Authentic storytelling, resilience leadership, and documented
+              preparation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -136,10 +137,9 @@ export default function PartnershipsPage() {
               <span className="text-gray-500">ALTITUDE</span>
             </h3>
             <p className="text-gray-400 text-lg leading-relaxed mb-12">
-              The principles required to survive and thrive in the death zone
-              directly translate to business leadership. Sunith delivers
-              high-impact keynotes on resilience, risk management, and the
-              pursuit of impossible goals.
+              Speaking topics connect expedition preparation with resilience,
+              risk management, and deliberate progress. Formats can be shaped
+              for leadership teams, communities, and event audiences.
             </p>
 
             <div className="space-y-8">
@@ -168,10 +168,10 @@ export default function PartnershipsPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-8 left-8 right-8">
               <div className="text-white text-lg font-medium">
-                Available for Global Keynotes
+                Speaking & Workshop Inquiries
               </div>
               <div className="text-summit-gold">
-                Remote & In-Person • 2025/26 Season
+                Remote & In-Person Inquiries Welcome
               </div>
             </div>
           </div>

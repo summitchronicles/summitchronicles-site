@@ -12,10 +12,6 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import Image from 'next/image';
-import {
-  getDaysToEverest,
-  getEverestCountdownText,
-} from '@/lib/everest-countdown';
 
 export default function NewsletterPage() {
   const [email, setEmail] = useState('');
@@ -99,7 +95,7 @@ export default function NewsletterPage() {
               SUMMIT UPLINK
             </h1>
             <p className="text-xl font-mono tracking-wider text-gray-400">
-              MISSION STATUS • {getEverestCountdownText()}
+              MISSION STATUS • EVEREST 2028
             </p>
           </motion.div>
         </div>
@@ -136,16 +132,16 @@ export default function NewsletterPage() {
               </div>
               <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl backdrop-blur-sm">
                 <div className="text-5xl font-light text-summit-gold-400 mb-2">
-                  {getDaysToEverest()}
+                  2028
                 </div>
                 <div className="text-xs font-mono uppercase tracking-widest text-summit-gold-900/80">
-                  Mission Countdown
+                  Everest Objective
                 </div>
               </div>
               <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl backdrop-blur-sm">
-                <div className="text-5xl font-light text-white mb-2">11</div>
+                <div className="text-5xl font-light text-white mb-2">2013</div>
                 <div className="text-xs font-mono uppercase tracking-widest text-gray-500">
-                  Years Active
+                  Journey Began
                 </div>
               </div>
             </div>
@@ -239,7 +235,7 @@ export default function NewsletterPage() {
                   <div className="flex items-center justify-center space-x-3 py-4">
                     <Target className="w-5 h-5 text-summit-gold-400" />
                     <span className="text-sm font-mono tracking-widest uppercase text-summit-gold-400">
-                      T-Minus {getDaysToEverest()} Days
+                      Everest Objective • 2028
                     </span>
                   </div>
                 </div>

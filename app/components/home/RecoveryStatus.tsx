@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
-import {
-  Target,
-  Activity,
-  Calendar,
-  Brain,
-  TrendingUp,
-  Zap,
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Activity, TrendingUp, Zap } from 'lucide-react';
+import { motion } from 'framer-motion';
 import recoveryData from '@/content/recovery-status.json';
 import { cn } from '@/lib/utils';
 
@@ -23,15 +16,6 @@ export const RecoveryStatus = ({ vo2Max, latestLog }: RecoveryStatusProps) => {
   const now = new Date();
   const daysInPhase = Math.floor(
     (now.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-  );
-
-  const targetDate = new Date(recoveryData.milestone.targetDate);
-  const totalDuration = Math.ceil(
-    (targetDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
-  );
-  const progress = Math.min(
-    100,
-    Math.max(0, (daysInPhase / totalDuration) * 100)
   );
 
   return (
@@ -90,49 +74,27 @@ export const RecoveryStatus = ({ vo2Max, latestLog }: RecoveryStatusProps) => {
           </motion.div>
         </div>
 
-        {/* Dynamic Segmented Progress Bar */}
-        <div className="py-8 space-y-3">
+        {/* Recovery status without a speculative deadline */}
+        <div className="py-8 space-y-4">
           <div className="flex justify-between text-xs font-mono uppercase tracking-wider">
             <span className="text-zinc-400">Current Objective</span>
-            <span className="text-amber-500 animate-pulse">
-              {recoveryData.milestone.title}
+            <span className="text-amber-500">
+              {recoveryData.milestone.status}
             </span>
           </div>
-
-          <div className="relative h-6 flex items-center gap-1 group/bar cursor-crosshair">
-            {Array.from({ length: 40 }).map((_, i) => {
-              const isActive = (i / 40) * 100 <= progress;
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ height: '40%', opacity: 0.3 }}
-                  animate={{
-                    height: isActive ? '100%' : '40%',
-                    opacity: isActive ? 1 : 0.2,
-                    backgroundColor: isActive ? '#F59E0B' : '#52525b',
-                  }}
-                  whileHover={{ scaleY: 1.5, backgroundColor: '#FFF' }}
-                  transition={{ duration: 0.2 }}
-                  className="flex-1 rounded-full"
-                />
-              );
-            })}
-
-            {/* Hover Tooltip/Glow */}
-            <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-8 bg-amber-500/0 group-hover/bar:bg-amber-500/10 transition-colors blur-xl rounded-full"></div>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-[10px] text-zinc-600 font-mono dark:text-zinc-500">
-              {progress.toFixed(0)}% Complete
-            </span>
-            <span className="text-[10px] text-zinc-500 font-mono">
-              ETA:{' '}
-              {new Date(recoveryData.milestone.targetDate).toLocaleDateString(
-                'en-US',
-                { month: 'short', day: 'numeric' }
-              )}
-            </span>
+          <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-5">
+            <div className="flex items-start gap-3">
+              <Activity className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
+              <div>
+                <div className="font-oswald text-xl uppercase text-white">
+                  {recoveryData.milestone.title}
+                </div>
+                <p className="mt-2 text-xs leading-5 text-zinc-400">
+                  Progress is assessed from recovery, gait quality, mobility,
+                  and strength rather than a fixed return-to-running date.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 

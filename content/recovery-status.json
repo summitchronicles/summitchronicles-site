@@ -1,16 +1,27 @@
 {
+  "latestUpdate": "Physiotherapy remains the priority. Strength sessions support the rebuild while gait quality is still under active work.",
+  "metrics": [
+    {
+      "label": "Mobility",
+      "trend": "up",
+      "value": "Rebuilding"
+    },
+    {
+      "label": "Upper Body",
+      "trend": "steady",
+      "value": "Supplemental"
+    },
+    {
+      "label": "VO2 Max",
+      "trend": "steady",
+      "value": "54"
+    }
+  ],
+  "milestone": {
+    "status": "In progress",
+    "title": "Rebuild gait, mobility, and strength"
+  },
   "phase": "Rehabilitation Block",
   "since": "2025-11-10",
-  "status": "active",
-  "milestone": {
-    "title": "Jog with a clean gait",
-    "targetDate": "2026-05-31",
-    "confidence": "High"
-  },
-  "metrics": [
-    { "label": "Mobility", "value": "Rebuilding", "trend": "up" },
-    { "label": "Upper Body", "value": "Supplemental", "trend": "steady" },
-    { "label": "VO2 Max", "value": "54", "trend": "steady" }
-  ],
-  "latestUpdate": "Physiotherapy remains the priority. Strength sessions support the rebuild while gait quality is still under active work."
+  "status": "active"
 }

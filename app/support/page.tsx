@@ -8,55 +8,52 @@ import {
   Shield,
   DollarSign,
   Calendar,
-  Users,
   Zap,
   Mountain,
   CheckCircle,
-  AlertTriangle,
   Target,
   Activity,
   ExternalLink,
   Heart,
 } from 'lucide-react';
 import Image from 'next/image';
-import { getDaysToEverest } from '@/lib/everest-countdown';
 
 export default function SupportPage() {
   const expeditionMetrics = [
     {
       icon: Calendar,
-      value: getDaysToEverest().toString(),
-      label: 'Days Remaining',
-      description: 'Until Everest departure',
-      status: 'ACTIVE',
-    },
-    {
-      icon: DollarSign,
-      value: '$45K-$65K',
-      label: 'Expedition Cost',
-      description: 'Elite Expeditions package',
-      status: 'RESEARCHED',
-    },
-    {
-      icon: Shield,
-      value: '$20K-$30K',
-      label: 'Equipment Budget',
-      description: 'Personal gear & oxygen',
+      value: '2028',
+      label: 'Everest Objective',
+      description: 'Target year; schedule not fixed',
       status: 'PLANNING',
     },
     {
       icon: Mountain,
-      value: '55 Days',
-      label: 'Expedition Length',
-      description: 'Base camp to summit',
-      status: 'CONFIRMED',
+      value: '4/7',
+      label: 'Summits Complete',
+      description: 'Seven Summits journey',
+      status: 'OBSERVED',
+    },
+    {
+      icon: Activity,
+      value: 'ACTIVE',
+      label: 'Recovery Block',
+      description: 'Gait, mobility, and strength',
+      status: 'ACTIVE',
+    },
+    {
+      icon: DollarSign,
+      value: 'QUOTE',
+      label: 'Budget Status',
+      description: 'Current operator quotes required',
+      status: 'PLANNING',
     },
   ];
 
   const fundingCategories = [
     {
       category: 'EXPEDITION PACKAGE',
-      amount: '$45,000 - $65,000',
+      amount: 'Historical range: $45,000 - $65,000',
       description: 'Elite Expeditions (Nims Purja) full-service package',
       items: [
         'Base camp logistics & permits',
@@ -65,24 +62,24 @@ export default function SupportPage() {
         'Base camp meals & accommodation',
       ],
       priority: 'CORE',
-      source: 'Elite Expeditions 2025 pricing',
+      source: 'Historical planning estimate; current operator quote required',
     },
     {
       category: 'PERSONAL EQUIPMENT',
-      amount: '$20,000 - $30,000',
+      amount: 'Historical range: $20,000 - $30,000',
       description: 'Essential high-altitude climbing gear',
       items: [
-        'High-altitude boots ($1,200)',
-        'Down suit system ($2,000+)',
-        'Oxygen system ($3,650)',
+        'High-altitude boots',
+        'Down suit system',
+        'Supplemental oxygen system',
         'Climbing hardware & clothing',
       ],
       priority: 'CRITICAL',
-      source: 'Industry standard 2025 pricing',
+      source: 'Historical planning estimate; current supplier quotes required',
     },
     {
       category: 'PREPARATION & TRAINING',
-      amount: '$5,000 - $15,000',
+      amount: 'Historical range: $5,000 - $15,000',
       description: 'Training expeditions and skill development',
       items: [
         'High-altitude acclimatization',
@@ -91,7 +88,7 @@ export default function SupportPage() {
         'Physical conditioning programs',
       ],
       priority: 'ESSENTIAL',
-      source: 'Estimated based on preparation needs',
+      source: 'Historical planning estimate; scope and quotes not finalized',
     },
   ];
 
@@ -105,6 +102,8 @@ export default function SupportPage() {
         return 'text-orange-400';
       case 'CONFIRMED':
         return 'text-purple-400';
+      case 'OBSERVED':
+        return 'text-green-400';
       default:
         return 'text-gray-400';
     }
@@ -228,8 +227,8 @@ export default function SupportPage() {
                 EXPEDITION <span className="text-gray-500">ECONOMICS</span>
               </h3>
               <p className="text-gray-400 mt-4 max-w-2xl mx-auto font-light">
-                Researched pricing from Elite Expeditions (Nims Purja) and
-                industry sources for 2025.
+                Historical planning ranges only. Final costs depend on current
+                operator, supplier, insurance, travel, and permit quotes.
               </p>
             </div>
 

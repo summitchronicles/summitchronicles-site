@@ -15,10 +15,9 @@ import {
   Heart,
   TrendingUp,
 } from 'lucide-react';
-import { getDaysSinceSurgery, getDaysToEverest } from '@/lib/everest-countdown';
+import { getDaysSinceSurgery } from '@/lib/recovery-timeline';
 
 export default function AboutPage() {
-  const daysToEverest = getDaysToEverest();
   const daysSinceSurgery = getDaysSinceSurgery();
 
   return (
@@ -61,7 +60,7 @@ export default function AboutPage() {
                 return to full mountain training.
                 <span className="text-summit-gold-400">
                   {' '}
-                  {daysToEverest} days to Everest.
+                  Everest remains the 2028 objective.
                 </span>
               </p>
               <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-6 text-sm tracking-[0.3em] text-gray-400 uppercase">
@@ -249,20 +248,17 @@ export default function AboutPage() {
                 <p className="text-xl text-gray-300 font-light leading-relaxed max-w-3xl mx-auto">
                   The Everest objective remains, but the current work is
                   physiotherapy, gait correction, and supplemental strength
-                  while I rebuild toward full mountain training.{' '}
-                  <span className="text-summit-gold-400">
-                    {daysToEverest} days
-                  </span>{' '}
-                  until Everest. The next immediate milestone is simple:
+                  while I rebuild toward full mountain training. Everest remains
+                  the 2028 objective. The immediate work is recovery-led:
                   <span className="text-white">
                     {' '}
-                    jog and run again by the end of May 2026, then build
-                    deliberately from there.
+                    restore gait quality, mobility, and strength before a safe
+                    return to running, then build deliberately from there.
                   </span>
                 </p>
                 <div className="mt-8 text-sm text-gray-500 uppercase tracking-widest">
-                  Current chapter: rehab now • running by end of May 2026 •
-                  Everest 2028
+                  Current chapter: rehabilitation • return when ready • Everest
+                  2028
                 </div>
               </motion.div>
             </div>
