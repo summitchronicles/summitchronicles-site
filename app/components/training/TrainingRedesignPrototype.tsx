@@ -492,6 +492,12 @@ function IntegrationItem({
   integration: TrainingIntegrationStatus;
 }) {
   const Icon = integrationIcons[integration.id];
+  const connectionHref =
+    integration.id === 'whoop'
+      ? '/api/auth/whoop/start'
+      : integration.id === 'strava'
+        ? '/api/auth/strava/start'
+        : null;
   return (
     <div className="border-white/10 py-6 md:border-r md:px-6 md:first:pl-0 md:last:border-r-0">
       <div className="flex items-start gap-4">
@@ -514,6 +520,15 @@ function IntegrationItem({
           <p className="mt-2 text-xs leading-5 text-zinc-500">
             {integration.role}
           </p>
+          {connectionHref && integration.state === 'setup-required' ? (
+            <a
+              href={connectionHref}
+              className="mt-3 inline-flex min-h-9 items-center gap-1.5 font-mono text-[10px] uppercase text-summit-gold transition-colors hover:text-white"
+            >
+              Connect {integration.label}
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
+          ) : null}
         </div>
       </div>
     </div>

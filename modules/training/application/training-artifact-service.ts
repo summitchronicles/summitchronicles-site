@@ -20,6 +20,7 @@ import {
 } from '@/modules/training/infrastructure/training-snapshot-store';
 import { getTrainingIntegrationStatuses } from '@/modules/training/application/training-integrations';
 import { enrichTrainingDashboardWithWhoop } from '@/modules/training/application/whoop-training-enrichment';
+import { enrichTrainingDashboardWithStrava } from '@/modules/training/application/strava-training-enrichment';
 
 interface TrainingArtifactDependencies {
   now?: Date;
@@ -89,7 +90,7 @@ export async function getPersistedTrainingDashboardResponse(
   ]);
 
   if (summaryArtifact) {
-    return enrichTrainingDashboardWithWhoop(
+    return enrichTrainingDashboardWithFitnessSources(
       mergeSummaryWithStatus(summaryArtifact.response, statusArtifact),
       now
     );
@@ -105,16 +106,24 @@ export async function getPersistedTrainingDashboardResponse(
       store,
     });
 
-    return enrichTrainingDashboardWithWhoop(
+    return enrichTrainingDashboardWithFitnessSources(
       mergeSummaryWithStatus(ingested.dashboard, ingested.status),
       now
     );
   }
 
-  return enrichTrainingDashboardWithWhoop(
+  return enrichTrainingDashboardWithFitnessSources(
     createUnavailableDashboardResponse(now, statusArtifact),
     now
   );
+}
+
+async function enrichTrainingDashboardWithFitnessSources(
+  response: TrainingDashboardResponse,
+  now: Date
+) {
+  const withWhoop = await enrichTrainingDashboardWithWhoop(response, now);
+  return enrichTrainingDashboardWithStrava(withWhoop, now);
 }
 
 export async function getPersistedTrainingMetricsResponse(

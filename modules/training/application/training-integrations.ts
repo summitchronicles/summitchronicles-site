@@ -14,7 +14,6 @@ export function getTrainingIntegrationStatuses(
   const stravaConfigured = Boolean(
     env.STRAVA_CLIENT_ID && env.STRAVA_CLIENT_SECRET
   );
-  const stravaConnected = Boolean(env.STRAVA_REFRESH_TOKEN);
   const whoopConfigured = Boolean(
     env.WHOOP_CLIENT_ID && env.WHOOP_CLIENT_SECRET
   );
@@ -42,11 +41,7 @@ export function getTrainingIntegrationStatuses(
       id: 'strava',
       label: 'Strava',
       role: 'Activities, distance, elevation and routes',
-      state: stravaConnected
-        ? 'connected'
-        : stravaConfigured
-          ? 'setup-required'
-          : 'not-configured',
+      state: stravaConfigured ? 'setup-required' : 'not-configured',
     },
     {
       id: 'garmin',

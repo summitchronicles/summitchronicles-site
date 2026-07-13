@@ -3,7 +3,9 @@ import { neon } from '@neondatabase/serverless';
 const databaseUrl = process.env.DATABASE_URL?.trim();
 
 if (!databaseUrl) {
-  console.error('DATABASE_URL is required. Add the Neon connection string to .env.local.');
+  console.error(
+    'DATABASE_URL is required. Add the Neon connection string to .env.local.'
+  );
   process.exit(1);
 }
 
@@ -21,7 +23,8 @@ await sql`
     expires_at TIMESTAMPTZ NOT NULL,
     connected_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    CONSTRAINT fitness_oauth_provider_check CHECK (provider IN ('whoop')),
+    CONSTRAINT fitness_oauth_provider_check
+      CHECK (provider IN ('whoop', 'strava')),
     CONSTRAINT fitness_oauth_scopes_array_check
       CHECK (jsonb_typeof(scopes) = 'array')
   )
@@ -32,4 +35,15 @@ await sql`
     'AES-encrypted owner-authorized fitness OAuth credentials.'
 `;
 
-console.log('Neon WHOOP token storage is ready.');
+await sql`
+  ALTER TABLE fitness_oauth_connections
+    DROP CONSTRAINT IF EXISTS fitness_oauth_provider_check
+`;
+
+await sql`
+  ALTER TABLE fitness_oauth_connections
+    ADD CONSTRAINT fitness_oauth_provider_check
+    CHECK (provider IN ('whoop', 'strava'))
+`;
+
+console.log('Neon fitness OAuth token storage is ready.');

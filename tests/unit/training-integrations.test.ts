@@ -34,7 +34,6 @@ describe('training integration statuses', () => {
       INTERVALS_ICU_ATHLETE_ID: 'athlete-id',
       STRAVA_CLIENT_ID: 'strava-id',
       STRAVA_CLIENT_SECRET: 'strava-secret',
-      STRAVA_REFRESH_TOKEN: 'strava-refresh',
       WHOOP_CLIENT_ID: 'whoop-id',
       WHOOP_CLIENT_SECRET: 'whoop-secret',
       WHOOP_REDIRECT_URI: 'http://localhost:3001/api/auth/whoop/callback',
@@ -46,7 +45,7 @@ describe('training integration statuses', () => {
       'cached'
     );
     expect(statuses.find((item) => item.id === 'strava')?.state).toBe(
-      'connected'
+      'setup-required'
     );
     expect(statuses.find((item) => item.id === 'whoop')?.state).toBe(
       'setup-required'

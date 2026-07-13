@@ -23,7 +23,8 @@ const serverEnvSchema = z.object({
   INTERVALS_ICU_ATHLETE_ID: optionalString,
   STRAVA_CLIENT_ID: optionalString,
   STRAVA_CLIENT_SECRET: optionalString,
-  STRAVA_REFRESH_TOKEN: optionalString,
+  STRAVA_REDIRECT_URI: optionalString,
+  STRAVA_ATHLETE_ID: optionalString,
   WHOOP_CLIENT_ID: optionalString,
   WHOOP_CLIENT_SECRET: optionalString,
   WHOOP_REDIRECT_URI: optionalString,
@@ -132,6 +133,30 @@ export function requireWhoopCredentials(env: ServerEnv = getServerEnv()) {
     WHOOP_CLIENT_ID: env.WHOOP_CLIENT_ID,
     WHOOP_CLIENT_SECRET: env.WHOOP_CLIENT_SECRET,
     WHOOP_REDIRECT_URI: env.WHOOP_REDIRECT_URI,
+    WHOOP_TOKEN_ENCRYPTION_KEY: env.WHOOP_TOKEN_ENCRYPTION_KEY,
+    DATABASE_URL: env.DATABASE_URL,
+  });
+}
+
+export function requireStravaCredentials(env: ServerEnv = getServerEnv()) {
+  const schema = z.object({
+    STRAVA_CLIENT_ID: z.string().min(1, 'STRAVA_CLIENT_ID is required'),
+    STRAVA_CLIENT_SECRET: z.string().min(1, 'STRAVA_CLIENT_SECRET is required'),
+    STRAVA_REDIRECT_URI: z
+      .string()
+      .url('STRAVA_REDIRECT_URI must be a valid URL'),
+    WHOOP_TOKEN_ENCRYPTION_KEY: z
+      .string()
+      .min(32, 'WHOOP_TOKEN_ENCRYPTION_KEY must be at least 32 characters'),
+    DATABASE_URL: z
+      .string()
+      .url('DATABASE_URL must be a valid Neon connection URL'),
+  });
+
+  return schema.parse({
+    STRAVA_CLIENT_ID: env.STRAVA_CLIENT_ID,
+    STRAVA_CLIENT_SECRET: env.STRAVA_CLIENT_SECRET,
+    STRAVA_REDIRECT_URI: env.STRAVA_REDIRECT_URI,
     WHOOP_TOKEN_ENCRYPTION_KEY: env.WHOOP_TOKEN_ENCRYPTION_KEY,
     DATABASE_URL: env.DATABASE_URL,
   });

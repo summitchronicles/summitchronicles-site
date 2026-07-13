@@ -14,7 +14,7 @@ export interface TrainingInsight {
   totalDistanceKm: number;
   totalElevationGain: number;
   dominantActivityType: string;
-  source: 'intervals.icu' | 'whoop' | 'mixed';
+  source: 'intervals.icu' | 'whoop' | 'strava' | 'mixed';
 }
 
 export interface TrainingWorkoutStats {
@@ -277,7 +277,9 @@ function getMissionLogSource(
     activities.map((activity) => activity.source ?? 'intervals.icu')
   );
   if (sources.size > 1) return 'mixed';
-  return sources.has('whoop') ? 'whoop' : 'intervals.icu';
+  if (sources.has('whoop')) return 'whoop';
+  if (sources.has('strava')) return 'strava';
+  return 'intervals.icu';
 }
 
 function sumBy(
