@@ -49,11 +49,6 @@ const footerSections: FooterSection[] = [
         external: true,
       },
       {
-        label: 'Strava',
-        href: 'https://strava.com/athletes/summitchronicles',
-        external: true,
-      },
-      {
         label: 'LinkedIn',
         href: 'https://linkedin.com/in/summitchronicles',
         external: true,
@@ -101,15 +96,6 @@ const Footer: React.FC = () => {
                 aria-label="Subscribe on YouTube"
               >
                 <Icon name="Youtube" size="sm" />
-              </a>
-              <a
-                href="https://strava.com/athletes/summitchronicles"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-gray-400 hover:text-white transition-colors duration-300"
-                aria-label="Follow on Strava"
-              >
-                <Icon name="Activity" size="sm" />
               </a>
             </div>
           </div>

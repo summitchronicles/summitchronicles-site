@@ -2,21 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Prevent double scrollbars */
 html {
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 html,
 body {
-  height: 100%;
-  overflow-y: auto;
+  min-height: 100%;
   overflow-x: hidden;
 }
 
 body {
-  /* Ensure only body scrolls, not nested elements */
   min-height: 100vh;
+  overflow-y: visible;
 }
 
 @layer base {

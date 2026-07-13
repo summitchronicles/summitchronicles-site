@@ -4,9 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Mountain, Wind, Map } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 import { PublicLayout } from './components/layout/PublicLayout';
-import { VisualTransmissions } from './components/home/VisualTransmissions';
 import { LatestChronicles } from './components/home/LatestChronicles';
 
 export default function Home() {
@@ -46,76 +45,17 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Current chapter */}
-        <section className="relative bg-obsidian pt-14 pb-24 sm:pt-16">
-          {/* Background Grid Texture */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_at_center,black_20%,transparent_70%)]"></div>
-
-          <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <div className="mb-4 text-xs font-mono uppercase text-summit-gold">
-                Current chapter
-              </div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-light text-white mb-8">
-                Recovery, rebuilding, and the road to Everest
-              </h2>
-
-              <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed mb-16">
-                The objective remains unchanged. The work now is quieter:
-                physiotherapy, gait rebuild, strength, and a deliberate return
-                to mountain training before the next expedition chapter.
-              </p>
-
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl hover:border-summit-gold/30 transition-colors group">
-                  <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
-                    <Mountain className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
-                  </div>
-                  <div className="text-4xl font-light text-white mb-2">4/7</div>
-                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">
-                    Summits Done
-                  </div>
-                </div>
-
-                <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl hover:border-summit-gold/30 transition-colors group">
-                  <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
-                    <Wind className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
-                  </div>
-                  <div className="text-4xl font-light text-white mb-2">
-                    ACTIVE
-                  </div>
-                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">
-                    Recovery Block
-                  </div>
-                </div>
-
-                <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl hover:border-summit-gold/30 transition-colors group">
-                  <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-summit-gold/10 transition-colors">
-                    <Map className="w-5 h-5 text-gray-400 group-hover:text-summit-gold transition-colors" />
-                  </div>
-                  <div className="text-4xl font-light text-white mb-2">
-                    2028
-                  </div>
-                  <div className="text-xs tracking-[0.2em] text-gray-500 uppercase">
-                    Everest Target
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+        <CurrentFocus />
 
         <LatestChronicles />
 
         {/* Expedition Gallery Preview - Dark & Immersive */}
         <section className="py-0 bg-black relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 h-[600px] md:h-96">
-            <div className="relative group overflow-hidden border-r border-white/5 cursor-pointer">
+            <Link
+              href="/expeditions"
+              className="group relative overflow-hidden border-r border-white/5"
+            >
               <Image
                 src="/stories/kilimanjaro.jpg"
                 alt="Mount Kilimanjaro Expedition"
@@ -136,8 +76,11 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
-            <div className="relative group overflow-hidden border-r border-white/5 cursor-pointer">
+            </Link>
+            <Link
+              href="/expeditions"
+              className="group relative overflow-hidden border-r border-white/5"
+            >
               <Image
                 src="/stories/denali.jpg"
                 alt="Mount Denali Expedition"
@@ -158,8 +101,11 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
-            <div className="relative group overflow-hidden cursor-pointer">
+            </Link>
+            <Link
+              href="/expeditions"
+              className="group relative overflow-hidden"
+            >
               <Image
                 src="/stories/everest-prep.jpeg"
                 alt="Everest Preparation"
@@ -180,14 +126,57 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           </div>
         </section>
-
-        {/* Visual Transmissions - Live Feed */}
-        <VisualTransmissions />
       </div>
     </PublicLayout>
+  );
+}
+
+function CurrentFocus() {
+  return (
+    <section className="border-y border-white/10 bg-obsidian px-5 py-14 sm:px-8 sm:py-16 lg:px-12">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.35fr_0.65fr] lg:items-end"
+      >
+        <div>
+          <div className="text-xs font-mono uppercase text-summit-gold">
+            Current focus
+          </div>
+          <h2 className="mt-4 max-w-3xl font-oswald text-4xl font-bold uppercase leading-[0.96] text-white sm:text-5xl">
+            Recovery is the work right now
+          </h2>
+          <p className="mt-5 max-w-3xl text-base leading-8 text-zinc-400 sm:text-lg">
+            The immediate chapter is physiotherapy, gait quality, mobility, and
+            strength. Running volume and mountain-specific work progress
+            according to how the body responds, not a speculative date.
+          </p>
+        </div>
+
+        <div className="border-l border-white/10 pl-6 sm:pl-8">
+          <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-white/40">
+            The sequence
+          </div>
+          <ol className="mt-4 space-y-3 text-sm text-white/75">
+            <li>01 / Rebuild movement and strength</li>
+            <li>02 / Build running volume as tolerated</li>
+            <li>03 / Resume mountain-specific preparation</li>
+          </ol>
+          <Link
+            href="/training"
+            className="mt-6 inline-flex min-h-11 items-center gap-2 text-xs font-mono uppercase text-summit-gold transition-colors hover:text-white"
+          >
+            Follow the training chapter
+            <ArrowUpRight className="h-4 w-4" />
+          </Link>
+        </div>
+      </motion.div>
+    </section>
   );
 }
 
