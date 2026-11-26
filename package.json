@@ -57,6 +57,7 @@
   },
   "name": "summit-chronicles",
   "scripts": {
+    "prebuild": "npm run truth:check",
     "// --- CHECKS ---": "",
     "// --- LEGACY/GRANULAR TESTS (Kept for reference) ---": "",
     "// --- TESTS: ALL ---": "",
@@ -69,6 +70,7 @@
     "build": "npm run build-posts && next build --webpack",
     "build-posts": "node scripts/process-posts.js",
     "build:analyze": "ANALYZE=true npm run build",
+    "truth:check": "node scripts/truth-check.js",
     "check:all": "run-s lint typecheck format:check",
     "cms:migrate:expeditions": "sanity exec scripts/migrate-expeditions-to-sanity.ts --with-user-token",
     "db:migrate:whoop": "node --env-file=.env.local scripts/migrate-whoop-neon.mjs",

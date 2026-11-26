@@ -1,20 +1,20 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import canonical from '@/data/canonical-climbs.json';
 
-// Ultra-compact data
-const summits = [
-  { completed: true },
-  { completed: true },
-  { completed: true },
-  { completed: true },
-  { completed: false },
-  { completed: false },
-  { completed: false },
-];
+// Ultra-compact data sourced from canonical facts
+const totalSummits = 7;
+const completedCountFromCanonical = Math.max(
+  0,
+  Math.min(totalSummits, canonical.sevenSummitsCompleted || 0)
+);
+const summits = Array.from({ length: totalSummits }, (_, i) => ({
+  completed: i < completedCountFromCanonical
+}));
 
 export const SummitProgress = () => {
-  const completedCount = summits.filter((s) => s.completed).length;
+  const completedCount = completedCountFromCanonical;
 
   return (
     <div className="w-full space-y-3">

@@ -1,0 +1,31 @@
+{
+  "sevenSummitsCompleted": 3,
+  "records": [
+    {
+      "mountain": "Kilimanjaro",
+      "status": "summited",
+      "month": "Aug",
+      "year": 2023
+    },
+    {
+      "mountain": "Aconcagua",
+      "status": "summited",
+      "month": "Jan",
+      "year": 2024
+    },
+    {
+      "mountain": "Elbrus",
+      "status": "summited",
+      "month": "Aug",
+      "year": 2024
+    },
+    {
+      "mountain": "Denali",
+      "status": "turnaround",
+      "month": "Jun",
+      "year": 2025,
+      "note": "Turned back at high camp (~19,000 ft) due to severe weather"
+    }
+  ],
+  "neverSummited": ["Annapurna"]
+}
