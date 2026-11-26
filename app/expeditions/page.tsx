@@ -53,6 +53,8 @@ export default function ExpeditionsPage() {
     switch (status) {
       case 'completed':
         return CheckCircle;
+      case 'attempt':
+        return Target;
       case 'in-progress':
         return Target;
       case 'planned':
@@ -105,6 +107,8 @@ export default function ExpeditionsPage() {
     switch (status) {
       case 'completed':
         return 'SUMMIT ACHIEVED';
+      case 'attempt':
+        return 'ATTEMPT';
       case 'in-progress':
         return 'IN PREPARATION';
       case 'planned':
@@ -157,13 +161,13 @@ export default function ExpeditionsPage() {
 
               <div className="mt-7 grid max-w-xl grid-cols-2 gap-4 text-white sm:grid-cols-3">
                 <div>
-                  <div className="font-oswald text-3xl font-bold">4/7</div>
+                  <div className="font-oswald text-3xl font-bold">3/7</div>
                   <div className="text-xs uppercase text-white/60">
                     Complete
                   </div>
                 </div>
                 <div>
-                  <div className="font-oswald text-3xl font-bold">3</div>
+                  <div className="font-oswald text-3xl font-bold">4</div>
                   <div className="text-xs uppercase text-white/60">
                     Remaining
                   </div>
@@ -492,7 +496,7 @@ export default function ExpeditionsPage() {
               </div>
               <div className="p-6 border-l border-white/10">
                 <div className="text-5xl font-light text-summit-gold-400 mb-2">
-                  4/7
+                  3/7
                 </div>
                 <div className="text-xs font-mono text-gray-500 uppercase tracking-widest">
                   Seven Summits

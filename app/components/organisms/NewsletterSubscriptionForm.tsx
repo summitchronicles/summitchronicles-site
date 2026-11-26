@@ -167,7 +167,7 @@ export function NewsletterSubscriptionForm({
 
         {/* Privacy note */}
         <p className="text-[10px] text-gray-600 font-sans leading-relaxed max-w-md">
-          Join 2,000+ climbers. Weekly dispatches only. No spam, just altitude.
+          Weekly dispatches only. No spam, just altitude.
         </p>
       </form>
     </div>

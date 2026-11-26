@@ -183,14 +183,15 @@ export default function AboutPage() {
                   <p className="text-lg text-gray-400 font-light leading-relaxed">
                     One year after TB, I stood on a Himalayan glacier. That
                     delta—between "impossible" and "done"—became my home.
-                    Kilimanjaro. Elbrus. Aconcagua. Denali.{' '}
+                    Kilimanjaro. Aconcagua. Elbrus.{' '}
                     <span className="text-summit-gold-400">
-                      Four of the Seven Summits conquered.
+                      Denali, June 2025: turned back at high camp (about 19,000
+                      ft) after 5 days due to severe weather. Summits: 3 of 7.
                     </span>
                   </p>
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <Mountain className="w-5 h-5" />
-                    <span>4/7 Seven Summits Completed</span>
+                    <span>3/7 Seven Summits Completed</span>
                   </div>
                 </div>
               </motion.div>

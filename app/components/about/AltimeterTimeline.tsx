@@ -9,7 +9,7 @@ interface Expedition {
   mountain: string;
   elevation: string;
   location: string;
-  status: 'completed' | 'upcoming';
+  status: 'completed' | 'attempt' | 'upcoming';
   description: string;
 }
 
@@ -44,8 +44,9 @@ const expeditions: Expedition[] = [
     mountain: 'DENALI',
     elevation: '20,310 ft',
     location: 'North America',
-    status: 'completed',
-    description: 'Unforgiving arctic conditions. Technical glacier travel.',
+    status: 'attempt',
+    description:
+      'Denali, June 2025: turned back at high camp (about 19,000 ft) after 5 days due to severe weather. Summits: 3 of 7.',
   },
   {
     year: '2028',

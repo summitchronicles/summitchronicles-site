@@ -29,7 +29,7 @@ export default function SupportPage() {
     },
     {
       icon: Mountain,
-      value: '4/7',
+      value: '3/7',
       label: 'Summits Complete',
       description: 'Seven Summits journey',
       status: 'OBSERVED',
