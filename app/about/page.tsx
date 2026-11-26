@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import canonical from '@/data/canonical-climbs.json';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { PublicLayout } from '../components/layout/PublicLayout';
@@ -186,12 +187,12 @@ export default function AboutPage() {
                     Kilimanjaro. Aconcagua. Elbrus.{' '}
                     <span className="text-summit-gold-400">
                       Denali, June 2025: turned back at high camp (about 19,000
-                      ft) after 5 days due to severe weather. Summits: 3 of 7.
+                      ft) after 5 days due to severe weather. Summits: {canonical.sevenSummitsCompleted} of 7.
                     </span>
                   </p>
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <Mountain className="w-5 h-5" />
-                    <span>3/7 Seven Summits Completed</span>
+                    <span>{canonical.sevenSummitsCompleted}/7 Seven Summits Completed</span>
                   </div>
                 </div>
               </motion.div>
