@@ -97,7 +97,8 @@ export default function Home() {
                     DENALI
                   </h3>
                   <p className="text-sm text-gray-400 font-light">
-                    20,310 ft • Completed 2025
+                    Denali, June 2025: turned back at high camp (about 19,000
+                    ft) after 5 days due to severe weather. Summits: 3 of 7.
                   </p>
                 </div>
               </div>
@@ -210,7 +211,7 @@ function ParallaxHeroContent() {
         <div className="mt-6 grid w-full max-w-xl grid-cols-3 gap-4 text-white sm:gap-6">
           <div>
             <div className="text-2xl font-oswald font-bold sm:text-3xl">
-              4/7
+              3/7
             </div>
             <div className="text-xs uppercase text-white/65">Summits done</div>
           </div>

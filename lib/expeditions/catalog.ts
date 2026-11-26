@@ -4,7 +4,7 @@ export interface ExpeditionRecord {
   elevation: string;
   location: string;
   date: string;
-  status: 'completed' | 'in-progress' | 'planned';
+  status: 'completed' | 'attempt' | 'in-progress' | 'planned';
   image: string;
   story: string;
   stats: {
@@ -42,14 +42,14 @@ export const FALLBACK_EXPEDITIONS: ExpeditionRecord[] = [
     location: 'Alaska, USA',
     date: 'June 2025',
     year: '2025',
-    status: 'completed',
+    status: 'attempt',
     image: '/images/sunith-ascent-hero.png',
     story:
-      'Latest Seven Summits achievement. Technical glacier travel and extreme conditions. Three weeks testing every skill learned so far.',
+      'Denali, June 2025: turned back at high camp (about 19,000 ft) after 5 days due to severe weather. Summits: 3 of 7.',
     stats: {
       duration: '21 days',
       difficulty: 'Extreme',
-      temperature: '-40 C summit',
+      temperature: '-40 C',
     },
     isSevenSummit: true,
   },

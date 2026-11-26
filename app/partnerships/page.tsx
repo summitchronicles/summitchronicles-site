@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 
 const stats = [
-  { label: 'Seven Summits', value: '4/7', icon: Mountain },
+  { label: 'Seven Summits', value: '3/7', icon: Mountain },
   { label: 'Journey Started', value: '2013', icon: Activity },
   { label: 'Everest Objective', value: '2028', icon: Target },
 ];

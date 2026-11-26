@@ -115,14 +115,9 @@ interface CalculationOptions {
 }
 
 const DEFAULT_EXPEDITION_PROGRESS: ExpeditionProgress = {
-  completed: [
-    'Kilimanjaro (2022)',
-    'Aconcagua (2023)',
-    'Elbrus (2023)',
-    'Denali (2024)',
-  ],
+  completed: ['Kilimanjaro (2022)', 'Aconcagua (2023)', 'Elbrus (2023)'],
   upcoming: ['Everest (2027)', 'Vinson (TBD)', 'Carstensz Pyramid (TBD)'],
-  progressPercentage: 57,
+  progressPercentage: 43,
 };
 
 export function normalizeTrainingActivities(
@@ -183,8 +178,8 @@ export function calculateTrainingMetrics(
   return {
     currentStats: {
       sevenSummitsCompleted: {
-        value: '4/7',
-        description: 'Kilimanjaro, Aconcagua, Elbrus, Denali completed',
+        value: '3/7',
+        description: 'Kilimanjaro, Aconcagua, Elbrus completed',
         trend: 'up',
       },
       trainingYears: {
@@ -232,8 +227,8 @@ export function getFallbackTrainingMetrics(): TrainingMetricsPayload {
   return {
     currentStats: {
       sevenSummitsCompleted: {
-        value: '4/7',
-        description: 'Kilimanjaro, Aconcagua, Elbrus, Denali completed',
+        value: '3/7',
+        description: 'Kilimanjaro, Aconcagua, Elbrus completed',
         trend: 'up',
       },
       trainingYears: {

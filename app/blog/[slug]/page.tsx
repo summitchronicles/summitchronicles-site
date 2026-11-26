@@ -55,6 +55,8 @@ export default async function BlogPost({
   const fileContent = fs.readFileSync(filepath, 'utf-8');
   const { data, content } = matter(fileContent);
 
+  if ((data.status ?? 'draft') !== 'published') return notFound();
+
   const parsed = parseMarkdownToRedBull(content, slug);
 
   // Calculate read time

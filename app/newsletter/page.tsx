@@ -125,7 +125,7 @@ export default function NewsletterPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               <div className="bg-glass-panel border border-white/5 p-8 rounded-2xl backdrop-blur-sm">
-                <div className="text-5xl font-light text-white mb-2">4/7</div>
+                <div className="text-5xl font-light text-white mb-2">3/7</div>
                 <div className="text-xs font-mono uppercase tracking-widest text-gray-500">
                   Summits Secured
                 </div>

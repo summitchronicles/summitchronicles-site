@@ -156,8 +156,8 @@ function getFallbackMetrics(): TrainingMetrics {
   return {
     currentStats: {
       sevenSummitsCompleted: {
-        value: '4/7',
-        description: 'Kilimanjaro, Aconcagua, Elbrus, Denali completed',
+        value: '3/7',
+        description: 'Kilimanjaro, Aconcagua, Elbrus completed',
         trend: 'up',
       },
       trainingYears: {
@@ -247,14 +247,9 @@ function getFallbackMetrics(): TrainingMetrics {
       },
     },
     expeditionProgress: {
-      completed: [
-        'Kilimanjaro (2022)',
-        'Aconcagua (2023)',
-        'Elbrus (2023)',
-        'Denali (2024)',
-      ],
+      completed: ['Kilimanjaro (2022)', 'Aconcagua (2023)', 'Elbrus (2023)'],
       upcoming: ['Everest (2027)', 'Vinson (TBD)', 'Carstensz Pyramid (TBD)'],
-      progressPercentage: 57,
+      progressPercentage: 43,
     },
     recoveryPhase: {
       surgeryDate: '2025-11-10',

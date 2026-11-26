@@ -43,7 +43,7 @@ export default function MediaKitPage() {
                 <h3 className="text-lg font-medium text-spa-charcoal mb-2">
                   Current Status
                 </h3>
-                <p className="text-spa-slate">4 of 7 Summits Complete</p>
+                <p className="text-spa-slate">3 of 7 Summits Complete</p>
               </div>
               <div>
                 <h3 className="text-lg font-medium text-spa-charcoal mb-2">
@@ -133,9 +133,11 @@ export default function MediaKitPage() {
                 the intersection of systematic thinking and mountaineering.
               </p>
               <p>
-                His Seven Summits record includes Kilimanjaro, Elbrus,
-                Aconcagua, and Denali. The current chapter is rehabilitation and
-                a measured rebuild toward Mount Everest as a 2028 objective.
+                His Seven Summits record includes Kilimanjaro, Aconcagua, and
+                Elbrus. Denali, June 2025: turned back at high camp (about
+                19,000 ft) after 5 days due to severe weather. Summits: 3 of 7.
+                The current chapter is rehabilitation and a measured rebuild
+                toward Mount Everest as a 2028 objective.
               </p>
             </div>
           </div>

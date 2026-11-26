@@ -27,19 +27,6 @@ export default function SpeakingPage() {
     }
   ];
 
-  const testimonials = [
-    {
-      quote: "Sunith's systematic approach to mountaineering provided incredible insights for our product development process.",
-      author: "Sarah Chen",
-      title: "VP Engineering, TechCorp"
-    },
-    {
-      quote: "A compelling story of how methodical preparation can achieve extraordinary results.",
-      author: "Dr. Michael Rodriguez",
-      title: "University of Washington"
-    }
-  ];
-
   return (
     <div className="min-h-screen bg-spa-stone-50">
       <Header />
@@ -192,34 +179,6 @@ export default function SpeakingPage() {
                   </div>
                 </div>
               </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials */}
-        <section className="py-16 bg-spa-stone-100">
-          <div className="max-w-4xl mx-auto px-6">
-            <h2 className="text-3xl font-light text-spa-charcoal mb-12 text-center">
-              What Audiences Say
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              {testimonials.map((testimonial, index) => (
-                <motion.div
-                  key={testimonial.author}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-white rounded-lg p-6 shadow-spa-soft"
-                >
-                  <p className="text-spa-slate italic mb-4">"{testimonial.quote}"</p>
-                  <div>
-                    <div className="font-medium text-spa-charcoal">{testimonial.author}</div>
-                    <div className="text-sm text-spa-slate">{testimonial.title}</div>
-                  </div>
-                </motion.div>
-              ))}
             </div>
           </div>
         </section>
